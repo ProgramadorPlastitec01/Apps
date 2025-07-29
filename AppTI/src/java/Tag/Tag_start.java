@@ -40,11 +40,11 @@ public class Tag_start extends TagSupport {
         try {
             out.print("<section class='section'>");
             out.print("<div class='section-header'>");
-            out.print("<h1 class='text-center'>DashBoard </h1>");
+            out.print("<h1 class='text-center'>DashBoard Pruebas</h1>");
             out.print("</div>");
 
             out.print("<div class='container mt-4'>");
-//            out.print("<div class='row g-4'>"); // g-4 agrega espacio entre columnas/fila
+            out.print("<div class='row g-4'>"); // g-4 agrega espacio entre columnas/fila
             //            //<editor-fold defaultstate="collapsed" desc="GRAFICAS PARA MODULOS">
             //            lst_pending = DashJpa.ConsultPendingDashBoard(NameUser, NameRol);
             //            if (lst_pending != null) {
@@ -352,110 +352,110 @@ public class Tag_start extends TagSupport {
             //            }
             //            //</editor-fold>
 
-//            //<editor-fold defaultstate="collapsed" desc="CONTADORES APPTI">
-//            lst_items = DashJpa.ConsultScheduleFollowItems(CurrYear, (CurrMonth + 1));
-//            if (lst_items != null) {
-//                for (int i = 0; i < lst_items.size(); i++) {
-//                    Object[] ObjItems = (Object[]) lst_items.get(i);
-//                    out.print("<div class=\"col-lg-3 col-md-6 col-sm-6 col-12\">\n"
-//                            + "              <div class=\"card card-statistic-1\">\n"
-//                            + "                <div class=\"card-icon bg-" + ObjItems[3] + "\">\n"
-//                            + "                  <i class=\"" + ObjItems[2] + "\"></i>\n"
-//                            + "                </div>\n"
-//                            + "                <div class=\"card-wrap\">\n"
-//                            + "                  <div class=\"card-header\">\n"
-//                            + "                    <h4>" + ObjItems[0] + "</h4>\n"
-//                            + "                  </div>\n"
-//                            + "                  <div class=\"card-body\">\n"
-//                            + "                    " + (Integer.parseInt(ObjItems[1].toString()) == 0 ? "<i class='fas fa-laugh-beam mr-2' style='color:#399733;font-size:18px'></i><b>¡Al día!</b>" : ObjItems[1]) + "\n"
-//                            + "                  </div>\n"
-//                            + "                </div>\n"
-//                            + "              </div>\n"
-//                            + "            </div>");
-//                }
-//            }
-//            //</editor-fold>
-//            out.print("</div>"); // Fin container
-//
-//            out.print("<div class=\"row\">");
-//            //<editor-fold defaultstate="collapsed" desc="PENDIENTE ANUALES">
-//            lst_follow = DashJpa.ConsultPendingHistory(CurrYear);
-//            if (lst_follow != null) {
-//                String labelData = "", valueData = "";
-//                for (int i = 0; i < lst_follow.size(); i++) {
-//                    Object[] ObjType = (Object[]) lst_follow.get(i);
-//                    CountP += Integer.parseInt(ObjType[2].toString());
-//                    labelData += "'" + ObjType[1].toString() + "', ";
-//                    valueData += ObjType[2].toString() + ", ";
-//                }
-//                out.print("<div class='col-md-7'>");
-//
-//                out.print("<div class=\"card\">\n"
-//                        + "                <div class=\"card-header\">\n"
-//                        + "                  <h4>Pendientes anuales</h4>\n"
-//                        + "                </div>");
-//
-//                out.print("<div class=\"card-body\">");
-//                out.print("<canvas id=\"myChart1\" width=\"400\" height=\"230\"></canvas>");
-//                out.print("<script>");
-//                out.print("var ctx = document.getElementById(\"myChart1\").getContext('2d'); ");
-//                out.print("var myChart = new Chart(ctx, { ");
-//                out.print("  type: 'line', ");
-//                out.print("  data: { ");
-//                out.print("    labels: [" + labelData + "], ");
-//                out.print("    datasets: [{ ");
-//                out.print("      label: 'Mes', ");
-//                out.print("      data: [" + valueData + "], ");
-//                out.print("      backgroundColor: ['#ffffff1f'");
-//                out.print("], borderColor: ['#33bf98'");
-//                out.print("], borderWidth: 1.7 }], ");
-//                out.print("}, options: { "
-//                        + "responsive: true,"
-//                        + "    cutout: '60%', "
-//                        + "    legend: { "
-//                        + "      position: 'bottom', "
-//                        + "    }, ");
-//                out.print("}});");
-//                out.print("</script>");
-//                out.print("</div>");
-//                out.print("</div>");
-//                out.print("</div>");
-//            }
-//            //</editor-fold>
-//            //<editor-fold defaultstate="collapsed" desc="ACTIVIDADES RECIENTES">
-//            lst_activity = DashJpa.ConsultActiviryRecent(CurrYear, (CurrMonth));
-//            if (lst_activity != null) {
-//                out.print("<div class=\"col-md-5\">");
-//                out.print("<div class=\"card\">");
-//                out.print("<div class=\"card-header\">");
-//                out.print("<h4>Actividades recientes</h4>");
-//                out.print("</div>");
-//                out.print("<div class=\"card-body\" style='font-size:11px'>");
-//                for (int i = 0; i < lst_activity.size(); i++) {
-//                    Object[] ObjActivity = (Object[]) lst_activity.get(i);
-//                    String name = ObjActivity[3].toString().replace(" ", "<br>") + "";
-//                    out.print("<div class=\"activities\">");
-//                    out.print("  <div class=\"activity\">");
-//                    lst_module = SettingJpa.ConsultSettingCategorie(ObjActivity[1].toString());
-//                    if (lst_module != null) {
-//                        Object[] ObjModule = (Object[]) lst_module.get(0);
-//                        out.print("    <div class=\"activity-icon " + ObjModule[3] + " text-white shadow-primary\">");
-//                        out.print(ObjModule[2]);
-//                    }
-//                    out.print("    </div>");
-//                    out.print("    <div class=\"activity-detail\" style='margin-bottom:9px !important;'>");
-//                    out.print("      <div class=\"mb-2\">");
-//                    out.print("        <span class=\"text-job text-primary\">" + ObjActivity[3] + "</span>");
-//                    out.print("      </div>");
-//                    out.print("      <p>" + ObjActivity[2] + "</p>");
-//                    out.print("    </div>");
-//                    out.print("  </div>");
-//                    out.print("</div>");
-//
-//                }
-//            }
-//            //</editor-fold>
-//            out.print("</div>");
+            //<editor-fold defaultstate="collapsed" desc="CONTADORES APPTI">
+            lst_items = DashJpa.ConsultScheduleFollowItems(CurrYear, (CurrMonth + 1));
+            if (lst_items != null) {
+                for (int i = 0; i < lst_items.size(); i++) {
+                    Object[] ObjItems = (Object[]) lst_items.get(i);
+                    out.print("<div class=\"col-lg-3 col-md-6 col-sm-6 col-12\">\n"
+                            + "              <div class=\"card card-statistic-1\">\n"
+                            + "                <div class=\"card-icon bg-" + ObjItems[3] + "\">\n"
+                            + "                  <i class=\"" + ObjItems[2] + "\"></i>\n"
+                            + "                </div>\n"
+                            + "                <div class=\"card-wrap\">\n"
+                            + "                  <div class=\"card-header\">\n"
+                            + "                    <h4>" + ObjItems[0] + "</h4>\n"
+                            + "                  </div>\n"
+                            + "                  <div class=\"card-body\">\n"
+                            + "                    " + (Integer.parseInt(ObjItems[1].toString()) == 0 ? "<i class='fas fa-laugh-beam mr-2' style='color:#399733;font-size:18px'></i><b>¡Al día!</b>" : ObjItems[1]) + "\n"
+                            + "                  </div>\n"
+                            + "                </div>\n"
+                            + "              </div>\n"
+                            + "            </div>");
+                }
+            }
+            //</editor-fold>
+            out.print("</div>"); // Fin container
+
+            out.print("<div class=\"row\">");
+            //<editor-fold defaultstate="collapsed" desc="PENDIENTE ANUALES">
+            lst_follow = DashJpa.ConsultPendingHistory(CurrYear);
+            if (lst_follow != null) {
+                String labelData = "", valueData = "";
+                for (int i = 0; i < lst_follow.size(); i++) {
+                    Object[] ObjType = (Object[]) lst_follow.get(i);
+                    CountP += Integer.parseInt(ObjType[2].toString());
+                    labelData += "'" + ObjType[1].toString() + "', ";
+                    valueData += ObjType[2].toString() + ", ";
+                }
+                out.print("<div class='col-md-7'>");
+
+                out.print("<div class=\"card\">\n"
+                        + "                <div class=\"card-header\">\n"
+                        + "                  <h4>Pendientes anuales</h4>\n"
+                        + "                </div>");
+
+                out.print("<div class=\"card-body\">");
+                out.print("<canvas id=\"myChart1\" width=\"400\" height=\"230\"></canvas>");
+                out.print("<script>");
+                out.print("var ctx = document.getElementById(\"myChart1\").getContext('2d'); ");
+                out.print("var myChart = new Chart(ctx, { ");
+                out.print("  type: 'line', ");
+                out.print("  data: { ");
+                out.print("    labels: [" + labelData + "], ");
+                out.print("    datasets: [{ ");
+                out.print("      label: 'Mes', ");
+                out.print("      data: [" + valueData + "], ");
+                out.print("      backgroundColor: ['#ffffff1f'");
+                out.print("], borderColor: ['#33bf98'");
+                out.print("], borderWidth: 1.7 }], ");
+                out.print("}, options: { "
+                        + "responsive: true,"
+                        + "    cutout: '60%', "
+                        + "    legend: { "
+                        + "      position: 'bottom', "
+                        + "    }, ");
+                out.print("}});");
+                out.print("</script>");
+                out.print("</div>");
+                out.print("</div>");
+                out.print("</div>");
+            }
+            //</editor-fold>
+            //<editor-fold defaultstate="collapsed" desc="ACTIVIDADES RECIENTES">
+            lst_activity = DashJpa.ConsultActiviryRecent(CurrYear, (CurrMonth));
+            if (lst_activity != null) {
+                out.print("<div class=\"col-md-5\">");
+                out.print("<div class=\"card\">");
+                out.print("<div class=\"card-header\">");
+                out.print("<h4>Actividades recientes</h4>");
+                out.print("</div>");
+                out.print("<div class=\"card-body\" style='font-size:11px'>");
+                for (int i = 0; i < lst_activity.size(); i++) {
+                    Object[] ObjActivity = (Object[]) lst_activity.get(i);
+                    String name = ObjActivity[3].toString().replace(" ", "<br>") + "";
+                    out.print("<div class=\"activities\">");
+                    out.print("  <div class=\"activity\">");
+                    lst_module = SettingJpa.ConsultSettingCategorie(ObjActivity[1].toString());
+                    if (lst_module != null) {
+                        Object[] ObjModule = (Object[]) lst_module.get(0);
+                        out.print("    <div class=\"activity-icon " + ObjModule[3] + " text-white shadow-primary\">");
+                        out.print(ObjModule[2]);
+                    }
+                    out.print("    </div>");
+                    out.print("    <div class=\"activity-detail\" style='margin-bottom:9px !important;'>");
+                    out.print("      <div class=\"mb-2\">");
+                    out.print("        <span class=\"text-job text-primary\">" + ObjActivity[3] + "</span>");
+                    out.print("      </div>");
+                    out.print("      <p>" + ObjActivity[2] + "</p>");
+                    out.print("    </div>");
+                    out.print("  </div>");
+                    out.print("</div>");
+
+                }
+            }
+            //</editor-fold>
+            out.print("</div>");
 
             out.print("<div class=\"row\">");
             //<editor-fold defaultstate="collapsed" desc="GLPI">
