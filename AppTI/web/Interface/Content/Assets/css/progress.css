@@ -1,0 +1,56 @@
+svg {
+    width: 49px; /* Ajusta el tamaño del SVG */
+    height: 49px; /* Ajusta el tamaño del SVG */
+}
+
+.bg {
+    fill: none;
+    stroke-width: 3px; /* Ajusta el ancho del trazo */
+    stroke: #0b0025;
+}
+
+.meter {
+    fill: none;
+    stroke-width: 6px; /* Ajusta el ancho del trazo */
+    stroke-linecap: round;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+}
+
+.meter {
+    stroke-dasharray: 125.66; /* Circunferencia del nuevo círculo */
+    stroke-dashoffset: 125.66; /* Circunferencia del nuevo círculo */
+    stroke: #33bf98;
+    animation: progress 1s ease-out forwards;
+}
+.meterReport {
+    fill: none;
+    stroke-width: 6px; /* Ajusta el ancho del trazo */
+    stroke-linecap: round;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+}
+
+.meterReport {
+    stroke-dasharray: 125.66; /* Circunferencia del nuevo círculo */
+    stroke-dashoffset: 125.66; /* Circunferencia del nuevo círculo */
+    stroke: #33bf98;
+    animation: progress 1s ease-out forwards;
+}
+
+@keyframes progress {
+    from {
+        stroke-dashoffset: 125.66;
+    }
+    to {
+        stroke-dashoffset: var(--progress);
+    }
+}
+
+.progress-text {
+    font-size: 1em; /* Ajusta el tamaño del texto */
+    fill: black;
+    text-anchor: middle;
+    dominant-baseline: middle;
+    font-weight: bold;
+}
