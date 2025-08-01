@@ -11,6 +11,7 @@
         <link rel="stylesheet" href="Interface/Content/Assets/modules/izitoast/css/iziToast.min.css">
         <link rel="stylesheet" href="Interface/Content/Assets/modules/fullcalendar/fullcalendar.min.css">
         <link rel="stylesheet" href="Interface/Content/Assets/css/main.css">
+        <link rel="stylesheet" href="Interface/Content/Assets/css/start.css">
 
         <link rel="stylesheet" href="Interface/Content/Assets/modules/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css">
         <link rel="stylesheet" href="Interface/Content/Assets/modules/datatables/Select-1.2.4/css/select.bootstrap4.min.css">
@@ -57,17 +58,47 @@
                                 url: '//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json'
                             }
                         };
-
                         const tableConfigs = {
                             '#table-1': {scrollY: '200px'},
                             '#table-2': {scrollY: 'auto'},
                             '#table-3': {scrollY: '200px'}
                         };
-
                         for (const [selector, options] of Object.entries(tableConfigs)) {
                             $(selector).DataTable({...commonOptions, ...options});
                         }
                     });
+                </script>
+
+                <script>
+                    function toggleCustomizer() {
+                        document.getElementById('modPanel').classList.toggle('active');
+                    }
+                </script>
+                <script>
+                    function toggleSection(sectionId) {
+                        const section = document.getElementById(sectionId);
+                        section.style.display = (section.style.display === "none") ? "block" : "none";
+                    }
+                </script>
+                <script>
+                    function selectModule(element, divId) {
+                        const input = document.getElementById('modSelectedInput');
+                        let selected = input.value ? input.value.split(',') : [];
+                        // Si ya está seleccionado, lo quitamos
+                        if (element.classList.contains('active')) {
+                            element.classList.remove('active');
+                            selected = selected.filter(id => id !== divId);
+                        } else {
+                            element.classList.add('active');
+                            if (!selected.includes(divId)) {
+                                selected.push(divId);
+                            }
+                        }
+
+                        // Actualizamos el input
+                        input.value = selected.join(',');
+                    }
+
                 </script>
 
 
@@ -75,9 +106,9 @@
         </div>
         <Alerts:Alert/>
 
-        
+
         <script src="Interface/Content/Assets/modules/chart.min.js"></script>
-        
+
         <script src="Interface/Content/Assets/modules/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js"></script>
         <script src="Interface/Content/Assets/modules/datatables/Select-1.2.4/js/dataTables.select.min.js"></script>
         <script src="Interface/Content/Assets/modules/datatables/datatables.min.js"></script>
