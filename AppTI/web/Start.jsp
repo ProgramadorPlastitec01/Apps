@@ -77,28 +77,56 @@
                 <script>
                     function toggleSection(sectionId) {
                         const section = document.getElementById(sectionId);
-                        section.style.display = (section.style.display === "none") ? "block" : "none";
+
+                        const sections = document.querySelectorAll(".card");
+                        sections.forEach(s => {
+                            if (s.id.startsWith("Card_")) {
+                                s.style.display = "none";
+                            }
+                        });
+
+                        section.style.display = "block";
+                        return true; // ← Devuelve true si se mostró correctamente
                     }
+
                 </script>
+
                 <script>
                     function selectModule(element, divId) {
+                        const section = document.getElementById(divId);
+                        if (!section) {
+                            iziToast.warning({
+                                title: 'Sin información!',
+                                message: 'Este módulo no tiene información disponible actualmente.',
+                                position: 'bottomRight',
+                                time: 5000
+                            });
+                            return;
+                        }
+
                         const input = document.getElementById('modSelectedInput');
                         let selected = input.value ? input.value.split(',') : [];
-                        // Si ya está seleccionado, lo quitamos
+
                         if (element.classList.contains('active')) {
                             element.classList.remove('active');
                             selected = selected.filter(id => id !== divId);
+                            section.classList.add("d-none"); // ⬅️ Oculta el div
                         } else {
                             element.classList.add('active');
                             if (!selected.includes(divId)) {
                                 selected.push(divId);
                             }
+                            section.classList.remove("d-none"); // ⬅️ Muestra el div
                         }
 
-                        // Actualizamos el input
                         input.value = selected.join(',');
                     }
-
+                </script>
+                <script>
+                    function SendForm() {
+                        const form = document.getElementById("miFormulario");
+                        form.submit();
+                    }
                 </script>
 
 

@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import Controller.DashBoardJpaController;
 
 public class Start extends HttpServlet {
 
@@ -13,15 +14,23 @@ public class Start extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession();
+        DashBoardJpaController DashJpa = new DashBoardJpaController();
         String Permission = session.getAttribute("Permisos").toString();
         String IdRol = session.getAttribute("idRol").toString();
         int opt = Integer.parseInt(request.getParameter("opt"));
+        int idUser = Integer.parseInt(session.getAttribute("idUsuario").toString());
+        String Module = "";
+        boolean result = false;
         try {
             switch (opt) {
                 case 1:
                     request.setAttribute("Permisos", Permission);
                     request.setAttribute("idRol", IdRol);
                     request.getRequestDispatcher("Start.jsp").forward(request, response);
+                    break;
+                case 2:
+                    Module = request.getParameter("Module");
+                    result = DashJpa.UpdateModuleUser(Module, idUser);
                     break;
             }
         } catch (IOException | ServletException ex) {

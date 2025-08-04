@@ -169,4 +169,23 @@ public class DashBoardJpaController implements Serializable {
             return null;
         }
     }
+
+    public boolean UpdateModuleUser(String Module,int idUser) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        try {
+            Query q = em.createNativeQuery("CALL `Sp_str_u_UpdateModuleUser`('" + Module + "','" + idUser + "')");
+            int resultado = q.executeUpdate();
+            em.getTransaction().commit();
+            em.clear();
+            em.close();
+            if (resultado == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
