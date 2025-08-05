@@ -14,7 +14,6 @@
             <div class="main-wrapper main-wrapper-1">
                 <jsp:include page="Menu.jsp"></jsp:include>
                     <div class="main-content" style="min-height: 694px;">
-                        <!--<button onclick="exportarExcel()">Exportar a Excel</button>-->
                     <Information:Information/>
                 </div>
             </div>

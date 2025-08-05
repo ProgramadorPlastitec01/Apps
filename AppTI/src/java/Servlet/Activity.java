@@ -21,6 +21,7 @@ public class Activity extends HttpServlet {
 
         HttpSession sesion = request.getSession();
         int idUser = Integer.parseInt(sesion.getAttribute("idUsuario").toString());
+        String UserRol = sesion.getAttribute("idRol").toString();
         ActivityJpaController ActivityJpa = new ActivityJpaController();
         ActivityDetailJpaController ActivityDetail = new ActivityDetailJpaController();
         ComputerControllerJpa ComputerJpa = new ComputerControllerJpa();
@@ -54,6 +55,7 @@ public class Activity extends HttpServlet {
                     request.setAttribute("idAct", idAct);
                     request.setAttribute("event", event);
                     request.setAttribute("temp", temp);
+                    request.setAttribute("idRol", UserRol);
                     request.getRequestDispatcher("Activity.jsp").forward(request, response);
                     break;
                 case 2:

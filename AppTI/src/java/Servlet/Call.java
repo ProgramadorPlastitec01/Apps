@@ -22,6 +22,7 @@ public class Call extends HttpServlet {
             String IdUser = sesion.getAttribute("idUsuario").toString();
             String Nombres = sesion.getAttribute("Nombres").toString();
             int opt = Integer.parseInt(request.getParameter("opt"));
+            String UserRol = sesion.getAttribute("idRol").toString();
             String Module= "";
             int Yar = 0, Mth = 0;
             switch (opt) {
@@ -46,6 +47,7 @@ public class Call extends HttpServlet {
                     request.setAttribute("Yar", Yar);
                     request.setAttribute("Module", Module);
                     request.setAttribute("Mth", Mth);
+                    request.setAttribute("idRol", UserRol);
                     request.getRequestDispatcher("Call.jsp").forward(request, response);
                     //</editor-fold>
                     break;

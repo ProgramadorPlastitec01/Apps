@@ -124,7 +124,7 @@
                 </script>
                 <script>
                     function SendForm() {
-                        const form = document.getElementById("miFormulario");
+                        const form = document.getElementById("MyForm");
                         form.submit();
                     }
                 </script>

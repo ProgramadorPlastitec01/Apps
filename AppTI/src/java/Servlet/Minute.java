@@ -26,6 +26,7 @@ public class Minute extends HttpServlet {
         ConnectionsBd SignatureJpa = new ConnectionsBd();
         HttpSession sesion = request.getSession();
         int idUser = Integer.parseInt(sesion.getAttribute("idUsuario").toString());
+        String UserRol = sesion.getAttribute("idRol").toString();
         int opt = Integer.parseInt(request.getParameter("opt"));
         int idMinu = 0, state = 0, event = 0, idUserReg = 0, idState = 0, flt = 0, temp = 0, docx = 0, codx = 0, idSig = 0;
         String matter = "", staff = "", cont = "", date = "", content = "", idDoc = "", signature = "";
@@ -98,6 +99,7 @@ public class Minute extends HttpServlet {
                     request.setAttribute("temp", temp);
                     request.setAttribute("docx", docx);
                     request.setAttribute("codx", codx);
+                    request.setAttribute("idRol", UserRol);
 
                     request.getRequestDispatcher("minute.jsp").forward(request, response);
                     //</editor-fold>

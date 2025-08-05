@@ -19,6 +19,7 @@ public class Schedule extends HttpServlet {
             HttpSession sesion = request.getSession();
             String IdUser = sesion.getAttribute("idUsuario").toString();
             String Nombres = sesion.getAttribute("Nombres").toString();
+            String UserRol = sesion.getAttribute("idRol").toString();
             ScheduleControllerJpa ScheduleJpa = new ScheduleControllerJpa();
             Calendar cal = Calendar.getInstance();
             int CurrYear = cal.get(Calendar.YEAR);
@@ -69,6 +70,7 @@ public class Schedule extends HttpServlet {
                     request.setAttribute("module", module);
                     request.setAttribute("Year", Year);
                     request.setAttribute("activityFilter", activityFilter);
+                    request.setAttribute("idRol", UserRol);
                     request.getRequestDispatcher("Schedule.jsp").forward(request, response);
                     //</editor-fold>
                     break;

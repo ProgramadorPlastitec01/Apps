@@ -31,6 +31,8 @@ public class Start extends HttpServlet {
                 case 2:
                     Module = request.getParameter("Module");
                     result = DashJpa.UpdateModuleUser(Module, idUser);
+                    request.setAttribute("UserPass", result);
+                    request.getRequestDispatcher("Start?opt=1").forward(request, response);
                     break;
             }
         } catch (IOException | ServletException ex) {

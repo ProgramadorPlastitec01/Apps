@@ -12,6 +12,7 @@ import Controller.SettingControllerJpa;
 import Controller.SupportControllerJpa;
 import Controller.PendingControllerJpa;
 import Controller.UserControllerJpa;
+import Controller.RoleControllerJpa;
 import java.util.List;
 
 public class Tag_menu extends TagSupport {
@@ -23,6 +24,7 @@ public class Tag_menu extends TagSupport {
             SettingControllerJpa SettingJpa = new SettingControllerJpa();
             SupportControllerJpa SupportJpa = new SupportControllerJpa();
             PendingControllerJpa PendingJpa = new PendingControllerJpa();
+            RoleControllerJpa RoleJpa = new RoleControllerJpa();
             UserControllerJpa UserJpa = new UserControllerJpa();
             HttpSession sesion = pageContext.getSession();
             String IdPhpUs = sesion.getAttribute("idUsuario").toString();
@@ -30,7 +32,10 @@ public class Tag_menu extends TagSupport {
             String NameRol = sesion.getAttribute("NombreRol").toString();
             JspWriter out = pageContext.getOut();
             String StartDate = "", EndDate = "", Icon = "";
-            List lst_userA = null, lst_link = null;
+            List lst_userA = null, lst_link = null, lst_role = null;
+            String txtPermissions = "";
+            int idRol = 0;
+
             long creationTime = sesion.getCreationTime();
             long currentTime = System.currentTimeMillis();
             long timeInSession = currentTime - creationTime;
@@ -53,6 +58,15 @@ public class Tag_menu extends TagSupport {
             if (lst_userIcon != null) {
                 Object[] ObjIcon = (Object[]) lst_userIcon.get(0);
                 Icon = ObjIcon[12].toString();
+            }
+            try {
+                idRol = Integer.parseInt(pageContext.getRequest().getAttribute("idRol").toString());
+                lst_role = RoleJpa.ConsultRoleId(idRol);
+                Object[] obj_permi = (Object[]) lst_role.get(0);
+                txtPermissions = obj_permi[2].toString();
+            } catch (Exception e) {
+                idRol = 0;
+                txtPermissions = "";
             }
             //<editor-fold defaultstate="collapsed" desc="FILTER ACTIVITY-TICKET-PENDING">
             out.print("<div class='sweet-local' tabindex='-1' id='Ventana98' style='opacity: 1.03; display:none;'>");
@@ -346,27 +360,36 @@ public class Tag_menu extends TagSupport {
             out.print("<ul class=\"sidebar-menu\">");
             out.print("<li class=\"menu-header\">Gestión</li>");
             out.print("</li>");
-            out.print("<li class=\"dropdown\">");
-            out.print("<a href=\"Pending?opt=1&State=1&Filter=\" class=\"nav-link\"><i class=\"fas fa-bell\"></i> <span>Pendiente</span> <input class='Bounce' value='" + counterPending + "' readonly></a>");
-            out.print("</li>");
+            if (txtPermissions.contains("[33]")) {
+                out.print("<li class=\"dropdown\">");
+                out.print("<a href=\"Pending?opt=1&State=1&Filter=\" class=\"nav-link\"><i class=\"fas fa-bell\"></i> <span>Pendiente</span> <input class='Bounce' value='" + counterPending + "' readonly></a>");
+                out.print("</li>");
+            }
 
-            out.print("<li class=\"dropdown\">");
-            out.print("<a href=\"Binnacle?opt=1\" class=\"nav-link\"><i class=\"fas fa-folder-open\"></i> <span>Bitacora</span></a>");
-            out.print("</li>");
+            if (txtPermissions.contains("[23]")) {
+                out.print("<li class=\"dropdown\">");
+                out.print("<a href=\"Binnacle?opt=1\" class=\"nav-link\"><i class=\"fas fa-folder-open\"></i> <span>Bitacora</span></a>");
+                out.print("</li>");
+            }
 
 //            out.print("<li class=\"dropdown\">");
 //            out.print("<a href=\"Support?opt=1\" class=\"nav-link\"><i class=\"fas fa-ticket-alt\"></i> <span>Ticket</span> <input class='Bounce' value='" + counter + "' readonly></a>");
 //            out.print("</li>");
-
             out.print("<ul class=\"sidebar-menu\">");
             out.print("<li class=\"menu-header\">Documentación</li>");
             out.print("</li>");
             out.print("<li class=\"dropdown\">");
-            out.print("<a  href=\"#\" class=\"nav-link has-dropdown\" data-toggle=\"dropdown\"><i class=\"fas fa-layer-group\"></i> <span>Equipo</span></a>");
+            if (txtPermissions.contains("[60]")) {
+                out.print("<a  href=\"#\" class=\"nav-link has-dropdown\" data-toggle=\"dropdown\"><i class=\"fas fa-layer-group\"></i> <span>Equipo</span></a>");
+            }
             out.print("<ul class=\"dropdown-menu\">");
 
-            out.print("<li><a class=\"nav-link\" href=\"Computer?opt=1\"><i style='margin-right:4px' class=\"fas fa-laptop\"></i>PC</a></li>");
-            out.print("<li><a class=\"nav-link\" href=\"Information?opt=1\"><i style='margin-right:4px' class=\"fas fa-copy\"></i>Información PC</a></li>");
+            if (txtPermissions.contains("[50]")) {
+                out.print("<li><a class=\"nav-link\" href=\"Computer?opt=1\"><i style='margin-right:4px' class=\"fas fa-laptop\"></i>PC</a></li>");
+            }
+            if (txtPermissions.contains("[46]")) {
+                out.print("<li><a class=\"nav-link\" href=\"Information?opt=1\"><i style='margin-right:4px' class=\"fas fa-copy\"></i>Información PC</a></li>");
+            }
 
             out.print("</ul>");
             out.print("</li>");
@@ -374,26 +397,43 @@ public class Tag_menu extends TagSupport {
             out.print("<ul class=\"sidebar-menu\">");
             out.print("</li>");
             out.print("<li class=\"dropdown\">");
-            out.print("<a  href=\"#\" class=\"nav-link has-dropdown\" data-toggle=\"dropdown\"><i class=\"fas fa-layer-group\"></i> <span>Registros</span></a>");
+            if (txtPermissions.contains("[55]")) {
+                out.print("<a  href=\"#\" class=\"nav-link has-dropdown\" data-toggle=\"dropdown\"><i class=\"fas fa-layer-group\"></i> <span>Registros</span></a>");
+            }
             out.print("<ul class=\"dropdown-menu\">");
-            out.print("<li><a class=\"nav-link\" href=\"Call?opt=1&Module=General\"><i style='margin-right:4px' class='fas fa-file-alt'></i>R-TI-001</a></li>");
-            out.print("<li><a class=\"nav-link\" href=\"Activity?opt=1\"><i style='margin-right:4px' class='fas fa-file-alt'></i>R-TI-005</a></li>");
-            out.print("<li><a class=\"nav-link\" href=\"Minute?opt=1\"><i style='margin-right:4px' class='fas fa-file-alt'></i>R-TI-014</a></li>");
-            out.print("<li><a class=\"nav-link\" href=\"Schedule?opt=1&module=Schedule&Year=\"><i style='margin-right:4px' class='fas fa-file-alt'></i>R-TI-026</a></li>");
+            if (txtPermissions.contains("[56]")) {
+                out.print("<li><a class=\"nav-link\" href=\"Call?opt=1&Module=General\"><i style='margin-right:4px' class='fas fa-file-alt'></i>R-TI-001</a></li>");
+
+            }
+            if (txtPermissions.contains("[57]")) {
+                out.print("<li><a class=\"nav-link\" href=\"Activity?opt=1\"><i style='margin-right:4px' class='fas fa-file-alt'></i>R-TI-005</a></li>");
+            }
+            if (txtPermissions.contains("[58]")) {
+                out.print("<li><a class=\"nav-link\" href=\"Minute?opt=1\"><i style='margin-right:4px' class='fas fa-file-alt'></i>R-TI-014</a></li>");
+            }
+            if (txtPermissions.contains("[59]")) {
+                out.print("<li><a class=\"nav-link\" href=\"Schedule?opt=1&module=Schedule&Year=\"><i style='margin-right:4px' class='fas fa-file-alt'></i>R-TI-026</a></li>");
+            }
             out.print("</ul>");
             out.print("</li>");
 
             out.print("<li class=\"dropdown\">");
-            out.print("<a  href=\"#\" class=\"nav-link has-dropdown\" data-toggle=\"dropdown\"><i class=\"fas fa-layer-group\"></i> <span>Inventario</span></a>");
+            if (txtPermissions.contains("[46]")) {
+                out.print("<a  href=\"#\" class=\"nav-link has-dropdown\" data-toggle=\"dropdown\"><i class=\"fas fa-layer-group\"></i> <span>Inventario</span></a>");
+            }
             out.print("<ul class=\"dropdown-menu\">");
-            out.print("<li><a class=\"nav-link\" href=\"Reference?opt=1\" style='padding-left: 50px;'><i style='margin-right:4px' class='fas fa-folder-plus'></i>Ingreso referencias</a></li>");
+            if (txtPermissions.contains("[46]")) {
+                out.print("<li><a class=\"nav-link\" href=\"Reference?opt=1\" style='padding-left: 50px;'><i style='margin-right:4px' class='fas fa-folder-plus'></i>Ingreso referencias</a></li>");
+            }
             out.print("<li><a class=\"nav-link\" href=\"MoveItem?opt=1\" style='padding-left: 50px;'><i style='margin-right:4px' class='fas fa-people-carry'></i>Movimiento items</a></li>");
             out.print("<li><a class=\"nav-link\" href=\"TrackingItem?opt=1\" style='padding-left: 50px;'><i style='margin-right:4px' class='fas fa-dolly-flatbed'></i>Seguimiento items</a></li>");
             out.print("</ul>");
             out.print("</li>");
 
             out.print("<li class=\"dropdown\">");
-            out.print("<a class=\"nav-link\" href=\"AppDetail?opt=1\"><i class=\"fas fa-lightbulb\"></i><span>&nbsp;Aplicativos</span></a>");
+            if (txtPermissions.contains("[37]")) {
+                out.print("<a class=\"nav-link\" href=\"AppDetail?opt=1\"><i class=\"fas fa-lightbulb\"></i><span>&nbsp;Aplicativos</span></a>");
+            }
 //            out.print("<a class=\"nav-link\" href=\"AppDetail?opt=1\"><i style='margin-right:4px' class=\"fab fa-medapps\"></i><span>&nbsp;Aplicativos</span></a>");
             out.print("</li>");
 

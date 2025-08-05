@@ -18,6 +18,7 @@ public class Information extends HttpServlet {
             HttpSession sesion = request.getSession();
             ComputerInformationControllerJpa InformationJpa = new ComputerInformationControllerJpa();
             int opt = Integer.parseInt(request.getParameter("opt"));
+            String UserRol = sesion.getAttribute("idRol").toString();
             int IdInformation = 0, State = 0, Counter = 0;
             String externa_mail = "", bill = "", bill_date = "", licence_date = "", warranty = "", warranty_date = "",
                     skype = "", vlan = "", network_point = "", description = "";
@@ -43,8 +44,10 @@ public class Information extends HttpServlet {
                     request.setAttribute("IdInformation", IdInformation);
                     request.setAttribute("State", State);
                     request.setAttribute("Counter", Counter);
+                    request.setAttribute("idRol", UserRol);
                     request.getRequestDispatcher("Information.jsp").forward(request, response);
                     //</editor-fold>
+                    
                     break;
                 case 2:
                     //<editor-fold defaultstate="collapsed" desc="UPDATE INFORMATION">

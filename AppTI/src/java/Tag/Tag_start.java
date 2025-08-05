@@ -8,11 +8,12 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 import java.util.List;
 import javax.servlet.http.HttpSession;
-import Controller.DashBoardJpaController;
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
 import java.util.Locale;
+import Controller.DashBoardJpaController;
 import Controller.SettingControllerJpa;
+import Controller.UserControllerJpa;
 import SQL.ConnectionsBd;
 
 public class Tag_start extends TagSupport {
@@ -25,6 +26,7 @@ public class Tag_start extends TagSupport {
         DashBoardJpaController DashJpa = new DashBoardJpaController();
         SettingControllerJpa SettingJpa = new SettingControllerJpa();
         ConnectionsBd ConnectionBd = new ConnectionsBd();
+        UserControllerJpa UserJpa = new UserControllerJpa();
         int IdUser = Integer.parseInt(sesion.getAttribute("idUsuario").toString());
         String NameUser = sesion.getAttribute("Nombres").toString();
         String NameRol = sesion.getAttribute("NombreRol").toString();
@@ -34,10 +36,16 @@ public class Tag_start extends TagSupport {
         String[] meses = new DateFormatSymbols(new Locale("es", "ES")).getMonths();
         String nombreMes = meses[CurrMonth];
 //        nombreMes = nombreMes.substring(0, 1).toUpperCase() + nombreMes.substring(1).toLowerCase();
-        List lst_items = null, lst_follow = null, lst_activity = null, lst_module = null, lst_tickets = null;
+        List lst_items = null, lst_follow = null, lst_activity = null, lst_module = null, lst_tickets = null, lst_user = null;
         int CountP = 0;
+        String Module = "";
 
         try {
+            lst_user = UserJpa.ConsultUsersid(IdUser);
+            if (lst_user != null) {
+                Object[] ObjUser = (Object[]) lst_user.get(0);
+                Module = ObjUser[13].toString();
+            }
             out.print("<section class='section'>");
 
             out.print("<div class='section-header'>");
@@ -47,13 +55,13 @@ public class Tag_start extends TagSupport {
             out.print("<div class='container mt-4'>");
 
             out.print("<div class='row g-4'>"); // g-4 agrega espacio entre columnas/fila
-            
+
             //<editor-fold defaultstate="collapsed" desc="CONTADORES APPTI">
             lst_items = DashJpa.ConsultScheduleFollowItems(CurrYear, (CurrMonth + 1));
             if (lst_items != null) {
                 for (int i = 0; i < lst_items.size(); i++) {
                     Object[] ObjItems = (Object[]) lst_items.get(i);
-                    out.print("<div id='Card_" + ObjItems[4] + "' class=\"col-lg-3 col-md-6 col-sm-6 col-12\" style='display:none' >"
+                    out.print("<div id='Card_" + ObjItems[4] + "' class=\"col-lg-3 col-md-6 col-sm-6 col-12\" style='display:" + (Module.contains(ObjItems[4].toString()) ? "block" : "none") + "' >"
                             + "              <div class=\"card card-statistic-1\">"
                             + "                <div class=\"card-icon bg-" + ObjItems[3] + "\">"
                             + "                  <i class=\"" + ObjItems[2] + "\"></i>"
@@ -86,7 +94,8 @@ public class Tag_start extends TagSupport {
                 }
                 out.print("<div class='col-md-7'>");
 
-                out.print("<div class=\"card\" id='Card_9' style='display:none'>"
+                out.print("<div class=\"card\" id='Card_9' style='display:" + (Module.contains("Card_9") ? "block" : "none") + "'>"
+                        
                         + "                <div class=\"card-header\">"
                         + "                  <h4>Pendientes anuales</h4>"
                         + "                </div>");
@@ -122,7 +131,7 @@ public class Tag_start extends TagSupport {
             lst_activity = DashJpa.ConsultActiviryRecent(CurrYear, (CurrMonth));
             if (lst_activity != null) {
                 out.print("<div class=\"col-md-5\">");
-                out.print("<div class=\"card\" id='Card_10' style='display:none'>");
+                out.print("<div class=\"card\" id='Card_10' style='display:" + (Module.contains("Card_10") ? "block" : "none") + "'>");
                 out.print("<div class=\"card-header\">");
                 out.print("<h4>Actividades recientes</h4>");
                 out.print("</div>");
@@ -189,25 +198,25 @@ public class Tag_start extends TagSupport {
 
             for (int i = 0; i < ArgModule.length; i++) {
                 out.print("<div class='col-4 text-center mb-3'>");
-                out.print("<div class='mod-icon-card' onclick=\"selectModule(this, '" + DivOpenClose[i] + "'); toggleSection('" + DivOpenClose[i] + "')\">");
+                out.print("<div class='mod-icon-card " + (Module.contains(DivOpenClose[i]) ? "active" : "") + "' onclick=\"selectModule(this, '" + DivOpenClose[i] + "'); toggleSection('" + DivOpenClose[i] + "')\">");
                 out.print("<i class='fas " + ArgIcon[i] + "'></i><br>");
                 out.print("<small>" + ArgModule[i] + "</small>");
                 out.print("</div>");
                 out.print("</div>");
             }
-            
+
             out.print("</div>"); // cierre row
-            
-            out.print("<form id='miFormulario' action='ControladorServlet' method='POST'>");
-            out.print("<input type=\"hidden\" id=\"modSelectedInput\" name=\"modSelectedInput\" value=\"\">");
+
+            out.print("<form id='MyForm' action='Start?opt=2' method='POST'>");
+            out.print("<input type=\"hidden\" id=\"modSelectedInput\" name='Module' value='" + Module + "'>");
             out.print("</form>");
-            
+
             out.print("<div class='text-center'>");
-            out.print("<button class='btn btn-green' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top'><i class=\"fas fa-save\"></i>Guardar</button>");
+            out.print("<button class='btn btn-green' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' onclick='SendForm()'><i class=\"fas fa-save\"></i>Guardar</button>");
             out.print("</div>");
             out.print("</div>"); // cierre panel
             //</editor-fold>
-            
+
             out.print("</div>");
 
             out.print("</div>");

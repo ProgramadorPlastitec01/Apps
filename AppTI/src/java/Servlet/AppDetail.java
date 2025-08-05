@@ -17,6 +17,7 @@ import Controller.SettingControllerJpa;
 import Controller.AppControllerJpa;
 
 import SQL.ConnectionsBd;
+import javax.servlet.http.HttpSession;
 
 public class AppDetail extends HttpServlet {
 
@@ -25,6 +26,7 @@ public class AppDetail extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("utf-8");
 
+        HttpSession sesion = request.getSession();
         AppDetailControllerJpa AppDetail = new AppDetailControllerJpa();
         FormatControllerJpa FormatJpa = new FormatControllerJpa();
         AppHeaderControllerJpa AppHeader = new AppHeaderControllerJpa();
@@ -32,6 +34,7 @@ public class AppDetail extends HttpServlet {
         SettingControllerJpa SettingJpa = new SettingControllerJpa();
         AppControllerJpa AppJpa = new AppControllerJpa();
 
+        String UserRol = sesion.getAttribute("idRol").toString();
         int opt = Integer.parseInt(request.getParameter("opt"));
         int module = 0, idApp = 0, idDoc = 0, swpt = 0, idHead = 0, idDet = 0, inCount = 0, docx = 0, codx = 0, idSignatue = 0, step = 0;
         String date = "", affair = "", personal = "", content = "", format = "", type = "", typeVers = "",
@@ -109,6 +112,7 @@ public class AppDetail extends HttpServlet {
                     request.setAttribute("codx", codx);
                     request.setAttribute("type", type);
                     request.setAttribute("step", step);
+                    request.setAttribute("idRol", UserRol);
                     request.getRequestDispatcher("appDetail.jsp").forward(request, response);
                     //</editor-fold>
                     break;

@@ -17,6 +17,7 @@ public class Report extends HttpServlet {
         try {
             HttpSession sesion = request.getSession();
             FilterInfoReport FilterMethod = new FilterInfoReport();
+            String UserRol = sesion.getAttribute("idRol").toString();
             int opt = Integer.parseInt(request.getParameter("opt"));
             //<editor-fold defaultstate="collapsed" desc="VARIABLE">
             String Affair = "", Charge = "", Person = "", Description = "", Solution = "", DateR = "", DateInitialR = "", DateFinalR = "",
@@ -102,6 +103,7 @@ public class Report extends HttpServlet {
                     request.setAttribute("Txt_description", Description);
                     request.setAttribute("Txt_solution", Solution);
                     request.setAttribute("Report", "Pending");
+                    request.setAttribute("idRol", UserRol);
                     request.getRequestDispatcher("Report.jsp").forward(request, response);
                     //</editor-fold>
                     break;
@@ -260,6 +262,7 @@ public class Report extends HttpServlet {
                     }
                     request.setAttribute("Report", "Information");
                     request.setAttribute("Filter", Filter);
+                    request.setAttribute("idRol", UserRol);
                     request.getRequestDispatcher("Report.jsp").forward(request, response);
                     //</editor-fold>
                     break;

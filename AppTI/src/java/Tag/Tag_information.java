@@ -9,6 +9,7 @@ import javax.servlet.jsp.tagext.TagSupport;
 import Controller.ComputerInformationControllerJpa;
 import java.util.List;
 import Controller.SettingControllerJpa;
+import Controller.RoleControllerJpa;
 
 public class Tag_information extends TagSupport {
 
@@ -17,12 +18,23 @@ public class Tag_information extends TagSupport {
         JspWriter out = pageContext.getOut();
         HttpSession sesion = pageContext.getSession();
         ComputerInformationControllerJpa InformationJpa = new ComputerInformationControllerJpa();
+        RoleControllerJpa RoleJpa = new RoleControllerJpa();
         List lst_information = null, lst_Id_information = null;
         SettingControllerJpa SettingJpa = new SettingControllerJpa();
-        int State = 0, IdInformation = 0, StateInf = 0, Counter = 0;
+        int State = 0, IdInformation = 0, StateInf = 0, Counter = 0, idRol = 0;
         String TypeAct = "", CantAct = "";
-        List lst_setting = null, view_antivirus = null, view_red = null, view_state = null, view_warranty = null, view_process = null, view_type = null;
+        String txtPermissions = "";
+        List lst_setting = null, lst_role = null, view_antivirus = null, view_red = null, view_state = null, view_warranty = null, view_process = null, view_type = null;
         try {
+            try {
+                idRol = Integer.parseInt(pageContext.getRequest().getAttribute("idRol").toString());
+                lst_role = RoleJpa.ConsultRoleId(idRol);
+                Object[] obj_permi = (Object[]) lst_role.get(0);
+                txtPermissions = obj_permi[2].toString();
+            } catch (Exception e) {
+                idRol = 0;
+                txtPermissions = "";
+            }
             try {
                 IdInformation = Integer.parseInt(pageContext.getRequest().getAttribute("IdInformation").toString());
             } catch (NumberFormatException e) {
@@ -325,7 +337,7 @@ public class Tag_information extends TagSupport {
                     out.print("      data: [" + valueData + "], ");
                     out.print("      backgroundColor: [");
 
-                    String[] colors = {"'#0d2259'", "'#153b9a'", "'#0d3dc6'", "'#0943f1'", "'#1653ff'", "'#5da4ff'","'#a8ddb5'","'#ccebc5'"};
+                    String[] colors = {"'#0d2259'", "'#153b9a'", "'#0d3dc6'", "'#0943f1'", "'#1653ff'", "'#5da4ff'", "'#a8ddb5'", "'#ccebc5'"};
                     for (int i = 0; i < view_process.size(); i++) {
                         out.print(colors[i % colors.length]);
                         if (i < view_process.size() - 1) {
@@ -541,9 +553,11 @@ public class Tag_information extends TagSupport {
             out.print("<div class='card-header justify-content-between'>");
             out.print("<div><h4>PC Información</h4></div>");
             out.print("<div class='d-flex'>"
-                    + "<div class='mr-2'><button class=\"btn btn-green btn-sm\" style=\"border-radius: 4px;\"  onclick='window.location.href=\"Information?opt=1&State="+State+"&Counter=1\"' ><i class=\"fas fa-chart-bar\"></i></button></div>");
-            out.print("<div><button class=\"btn btn-green btn-sm\" style=\"border-radius: 4px;\"  onclick=\"exportarExcel()\" ><i class=\"fas fa-file-excel\"></i></button></div>"
-                    + "</div>");
+                    + "<div class='mr-2'><button class=\"btn btn-green btn-sm\" style=\"border-radius: 4px;\"  onclick='window.location.href=\"Information?opt=1&State=" + State + "&Counter=1\"' ><i class=\"fas fa-chart-bar\"></i></button></div>");
+            if (txtPermissions.contains("[48]")) {
+                out.print("<div><button class=\"btn btn-green btn-sm\" style=\"border-radius: 4px;\"  onclick=\"exportarExcel()\" ><i class=\"fas fa-file-excel\"></i></button></div>");
+            }
+            out.print("</div>");
             out.print("</div>");
             out.print("<div class='card'>");
             out.print("<div class='d-flex  m-2 justify-content-between'>");
@@ -617,9 +631,11 @@ public class Tag_information extends TagSupport {
                     out.print("<div class=\"accordion-body collapse\" id=\"panel-body-" + i + "\" style='background-color: rgb(251 251 251);max-width: 99%;' data-parent=\"#accordion\">");
                     out.print("<div style='display:flex; padding-top:16px; justify-content: space-evenly;'>");
                     out.print("<div style='width:85%;text-align:center;'><h5>Especificaciones</h5></div>");
-                    out.print("<div>"
-                            + ((StateInf == 1) ? "<a href='Information?opt=1&IdInformation=" + obj_info[0] + "'><i style='font-size:22px; color:black;' class=\"fas fa-pencil-alt\"></i></a>" : "")
-                            + "</div>");
+                    if (txtPermissions.contains("[47]")) {
+                        out.print("<div>"
+                                + ((StateInf == 1) ? "<a href='Information?opt=1&IdInformation=" + obj_info[0] + "'><i style='font-size:22px; color:black;' class=\"fas fa-pencil-alt\"></i></a>" : "")
+                                + "</div>");
+                    }
                     out.print("</div>");
 
                     out.print("<hr class='hr_sheet'>");

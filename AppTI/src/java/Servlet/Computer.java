@@ -11,6 +11,7 @@ import Controller.ComputerHeaderControllerJpa;
 
 import Controller.SettingControllerJpa;
 import java.util.List;
+import javax.servlet.http.HttpSession;
 
 public class Computer extends HttpServlet {
 
@@ -22,6 +23,8 @@ public class Computer extends HttpServlet {
         ComputerDetailJpaController CompDetailJpa = new ComputerDetailJpaController();
         ComputerHeaderControllerJpa CompHeader = new ComputerHeaderControllerJpa();
         SettingControllerJpa SettingJpa = new SettingControllerJpa();
+        HttpSession sesion = request.getSession();
+        String UserRol = sesion.getAttribute("idRol").toString();
 
         List lst_setting = null;
 
@@ -102,6 +105,7 @@ public class Computer extends HttpServlet {
                     request.setAttribute("NmbDoc", docx);
                     request.setAttribute("NmbCod", codx);
                     request.setAttribute("SigMode", SigMode);
+                    request.setAttribute("idRol", UserRol);
                     request.getRequestDispatcher("Computer.jsp").forward(request, response);
                     //</editor-fold>
                     break;
