@@ -10,11 +10,13 @@ import javax.servlet.jsp.tagext.TagSupport;
 import Controller.ActivityJpaController;
 import Controller.ActivityDetailJpaController;
 import Controller.ComputerControllerJpa;
+import Controller.RoleControllerJpa;
 import java.util.List;
 
 import java.time.LocalDate;
 import java.time.temporal.WeekFields;
 import java.util.Locale;
+import javax.servlet.http.HttpSession;
 
 public class Tag_activity extends TagSupport {
 
@@ -23,12 +25,27 @@ public class Tag_activity extends TagSupport {
         ActivityJpaController ActivityJpa = new ActivityJpaController();
         ComputerControllerJpa ComputerJpa = new ComputerControllerJpa();
         ActivityDetailJpaController ActivityDetail = new ActivityDetailJpaController();
+        RoleControllerJpa RoleJpa = new RoleControllerJpa();
+        HttpSession sesion = pageContext.getSession();
+
         List lst_activity = null;
         List lst_computer = null;
         List lst_activityDet = null;
         JspWriter out = pageContext.getOut();
         int event = 0, idAct = 0, temp = 0;
         int year = LocalDate.now().getYear();
+        int idRol = 0;
+        String txtPermissions = "";
+        List lst_role = null;
+        try {
+            idRol = Integer.parseInt(sesion.getAttribute("idRol").toString());
+            lst_role = RoleJpa.ConsultRoleId(idRol);
+            Object[] obj_permi = (Object[]) lst_role.get(0);
+            txtPermissions = obj_permi[2].toString();
+        } catch (Exception e) {
+            idRol = 0;
+            txtPermissions = "";
+        }
         try {
             event = Integer.parseInt(pageContext.getRequest().getAttribute("event").toString());
         } catch (Exception e) {
@@ -57,8 +74,7 @@ public class Tag_activity extends TagSupport {
                 out.print("<h2>R-TI-005</h2>");
                 out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(4)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
                 out.print("</div>");
-                
-                
+
                 out.print("<div class='cont_form_user' id='dataDocument'>");
 
                 lst_activity = ActivityJpa.ConsultActivityId(idAct);
@@ -275,7 +291,11 @@ public class Tag_activity extends TagSupport {
                             out.print("<td class='text-center text-warning'><b>Pendiente por ejecutar</b></td>");
                             out.print("<td class='text-center text-warning'><b>---</b></td>");
                             out.print("<td id='orangeToggle" + i + "' class='text-center'>");
-                            out.print("<input id='checkOrange" + i + "' class='checkOrange' style='margin: auto;' type='checkbox' onclick='switchColorOrg( " + i + ", " + ObjDeta[0] + ")' data-toggle='tooltip' data-placement='top' title='Ejecutar Actividad'>");
+                            if (txtPermissions.contains("[63]")) {
+                                out.print("<input id='checkOrange" + i + "' class='checkOrange' style='margin: auto;' type='checkbox' onclick='switchColorOrg( " + i + ", " + ObjDeta[0] + ")' data-toggle='tooltip' data-placement='top' title='Ejecutar Actividad'>");
+                            } else {
+                                out.print("<input class='checkOrange' disabled style='margin: auto;' type='checkbox' data-toggle='tooltip' data-placement='top' title='Sin permisos'>");
+                            }
                             out.print("</td>");
                         } else {
                             if (ObjDeta[7] == null) {
@@ -286,7 +306,11 @@ public class Tag_activity extends TagSupport {
                                 out.print("</div>");
                                 out.print("</td>");
                                 out.print("<td id='orangeToggle" + i + "' class='text-center'>");
-                                out.print("<input id='checkOrange" + i + "' class='checkOrange' style='margin: auto;' type='checkbox' onclick='switchColorOrg( " + i + ", " + ObjDeta[0] + ")' data-toggle='tooltip' data-placement='top' title='Modiifcar Actividad'>");
+                                if (txtPermissions.contains("[63]")) {
+                                    out.print("<input id='checkOrange" + i + "' class='checkOrange' style='margin: auto;' type='checkbox' onclick='switchColorOrg( " + i + ", " + ObjDeta[0] + ")' data-toggle='tooltip' data-placement='top' title='Modiifcar Actividad'>");
+                                } else {
+                                    out.print("<input class='checkOrange' disabled style='margin: auto;' type='checkbox' data-toggle='tooltip' data-placement='top' title='Sin permisos'>");
+                                }
                                 out.print("</td>");
                             } else {
                                 out.print("<td class='text-center'><span>" + ObjDeta[4] + "</span></td>");
@@ -311,7 +335,11 @@ public class Tag_activity extends TagSupport {
                                 out.print("<td class='text-info text-center'><b>Pendiente por verificar</b></td>");
                                 out.print("<td class='text-info text-center'><b>---</b></td>");
                                 out.print("<td  id='blueToggle" + i + "' class='text-center '>");
-                                out.print("<input id='checkBlue" + i + "' class='checkBlue' style='margin: auto;' type='checkbox' onclick='switchColorBle(" + i + ", " + ObjDeta[0] + ")' data-toggle='tooltip' data-placement='top' title='Verificar Actividad'>");
+                                if (txtPermissions.contains("[64]")) {
+                                    out.print("<input id='checkBlue" + i + "' class='checkBlue' style='margin: auto;' type='checkbox' onclick='switchColorBle(" + i + ", " + ObjDeta[0] + ")' data-toggle='tooltip' data-placement='top' title='Verificar Actividad'>");
+                                } else {
+                                    out.print("<input class='checkBlue' disabled style='margin: auto;' type='checkbox' data-toggle='tooltip' data-placement='top' title='Sin permisos'>");
+                                }
                                 out.print("</td>");
                             } else {
                                 out.print("<td class='text-center'>" + ObjDeta[8] + "</td>");
@@ -321,7 +349,11 @@ public class Tag_activity extends TagSupport {
                                 out.print("</div>");
                                 out.print("</td>");
                                 out.print("<td id='blueToggle" + i + "' class='text-center '>");
-                                out.print("<input id='checkBlue" + i + "' class='checkBlue' style='margin: auto;' type='checkbox' onclick='switchColorBle(" + i + ", " + ObjDeta[0] + ")' data-toggle='tooltip' data-placement='top' title='Modificar Verificación'>");
+                                if (txtPermissions.contains("[64]")) {
+                                    out.print("<input id='checkBlue" + i + "' class='checkBlue' style='margin: auto;' type='checkbox' onclick='switchColorBle(" + i + ", " + ObjDeta[0] + ")' data-toggle='tooltip' data-placement='top' title='Verificar Actividad'>");
+                                } else {
+                                    out.print("<input class='checkBlue' disabled style='margin: auto;' type='checkbox' data-toggle='tooltip' data-placement='top' title='Sin permisos'>");
+                                }
                                 out.print("</td>");
                             }
                         }
@@ -534,7 +566,9 @@ public class Tag_activity extends TagSupport {
                 out.print("<div class='card'>");
                 out.print("<div class='card-header' style='justify-content: space-between;'>");
                 out.print("<h2>Actividades programadas</h2>");
-                out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1)'><i class='fas fa-plus'></i></button>");
+                if (txtPermissions.contains("[61]")) {
+                    out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1)'><i class='fas fa-plus'></i></button>");
+                }
                 out.print("</div>");
                 out.print("<div class='card-body'>");
                 out.print("<div class='table-responsive'>");
@@ -594,7 +628,11 @@ public class Tag_activity extends TagSupport {
 
                         out.print("<td>");
                         out.print("<div class='d-flex text-center'>");
-                        out.print("<button class='btn btn-warning btn-sm' onclick='window.location.href=\"Activity?opt=1&idAct=" + ObjAct[0] + "\"'><i class='fas fa-edit'></i></button>");
+                        if (txtPermissions.contains("[62]")) {
+                            out.print("<button class='btn btn-warning btn-sm' onclick='window.location.href=\"Activity?opt=1&idAct=" + ObjAct[0] + "\"'><i class='fas fa-edit'></i></button>");
+                        } else {
+                            out.print("<button class='btn btn-warning disabled btn-sm'><i class='fas fa-edit'></i></button>");
+                        }
                         out.print("</div>");
                         out.print("</td>");
                         out.print("</tr>");

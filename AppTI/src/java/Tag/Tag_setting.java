@@ -18,9 +18,7 @@ public class Tag_setting extends TagSupport {
         JspWriter out = pageContext.getOut();
         RoleControllerJpa RoleJpa = new RoleControllerJpa();
         List lst_role = null;
-
         HttpSession sesion = pageContext.getSession();
-
         int idRol = 0;
         String txtPermissions = "";
         try {

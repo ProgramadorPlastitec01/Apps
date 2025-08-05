@@ -10,19 +10,23 @@ import javax.servlet.jsp.tagext.TagSupport;
 import Controller.MinuteJpaController;
 import Controller.UserControllerJpa;
 import Controller.FormatControllerJpa;
+import Controller.RoleControllerJpa;
 import SQL.ConnectionsBd;
 import com.google.gson.Gson;
 import java.util.List;
+import javax.servlet.http.HttpSession;
 
 public class Tag_minute extends TagSupport {
 
     @Override
     public int doStartTag() throws JspException {
         JspWriter out = pageContext.getOut();
+        HttpSession sesion = pageContext.getSession();
         MinuteJpaController MinuteJpa = new MinuteJpaController();
         ConnectionsBd SirhJpa = new ConnectionsBd();
         UserControllerJpa UserJpa = new UserControllerJpa();
         FormatControllerJpa formatJpa = new FormatControllerJpa();
+        RoleControllerJpa RoleJpa = new RoleControllerJpa();
         List lst_minute = null;
         List lst_sirh = null;
         List lst_user = null;
@@ -31,7 +35,18 @@ public class Tag_minute extends TagSupport {
         int event = 0, idMinu = 0, idUserReg = 0, idState = 0, flt = 0, temp = 0;
         int docx = 0, codx = 0;
         String matter = "", staff = "", cont = "", date = "", content = "";
-
+        int idRol = 0;
+        String txtPermissions = "";
+        List lst_role = null;
+        try {
+            idRol = Integer.parseInt(sesion.getAttribute("idRol").toString());
+            lst_role = RoleJpa.ConsultRoleId(idRol);
+            Object[] obj_permi = (Object[]) lst_role.get(0);
+            txtPermissions = obj_permi[2].toString();
+        } catch (Exception e) {
+            idRol = 0;
+            txtPermissions = "";
+        }
         try {
             idMinu = Integer.parseInt(pageContext.getRequest().getAttribute("idMinu").toString());
         } catch (Exception e) {
@@ -418,10 +433,12 @@ public class Tag_minute extends TagSupport {
                 out.print("<button class='btn btn-green' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Volver a actas' onclick='window.location.href=\"Minute?opt=1&idMinu=" + idMinu + "&temp=1\"'><i class='fas fa-arrow-left'></i></button>");
                 out.print("<h2>Detalle del acta</h2>");
                 out.print("<div class=''>");
-                if (validSing == 0) {
-                    out.print("<button class='btn btn-info mr-2' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Acta firmada' onclick='window.location.href=\"Minute?opt=1&idMinu=" + idMinu + "&event=1&temp=1\"'><i class='fas fa-signature'></i></button>");
-                } else {
-                    out.print("<button class='btn btn-warning mr-2' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Faltan " + validSing + " firma(s)' onclick='window.location.href=\"Minute?opt=1&idMinu=" + idMinu + "&event=1&temp=1\"'><i class='fas fa-signature'></i></button>");
+                if (txtPermissions.contains("[67]")) {
+                    if (validSing == 0) {
+                        out.print("<button class='btn btn-info mr-2' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Acta firmada' onclick='window.location.href=\"Minute?opt=1&idMinu=" + idMinu + "&event=1&temp=1\"'><i class='fas fa-signature'></i></button>");
+                    } else {
+                        out.print("<button class='btn btn-warning mr-2' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Faltan " + validSing + " firma(s)' onclick='window.location.href=\"Minute?opt=1&idMinu=" + idMinu + "&event=1&temp=1\"'><i class='fas fa-signature'></i></button>");
+                    }
                 }
                 out.print("<button class='btn btn-green' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Ver acta completa' onclick='mostrarConvencion(4)'><i class='fas fa-eye'></i></button>");
                 out.print("</div>");
@@ -453,7 +470,7 @@ public class Tag_minute extends TagSupport {
                     out.print("<div class='mt-2'>");
 
                     int stae = Integer.parseInt(ObjMin[5].toString());
-                    if (stae < 3 ) {
+                    if (stae < 3) {
                         out.print("<div class='continueLine'>");
                         out.print("<h6>CONTENIDO DEL ACTA</h6>");
                         out.print("</div>");
@@ -814,7 +831,9 @@ public class Tag_minute extends TagSupport {
                 out.print("<h4>Actas</h4>");
                 out.print("<div class=''>");
                 out.print("<button class='btn btn-yellow mr-2' style='border-radius: 4px;' onclick='mostrarConvencion(3)' data-toggle='tooltip' data-placement='top' title='Filtro'><i class='fas fa-search'></i></button>");
-                out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1)' data-toggle='tooltip' data-placement='top' title='Agregar una nueva acta'><i class='fas fa-plus'></i></button>");
+                if (txtPermissions.contains("[65]")) {
+                    out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1)' data-toggle='tooltip' data-placement='top' title='Agregar una nueva acta'><i class='fas fa-plus'></i></button>");
+                }
                 out.print("</div>");
                 out.print("</div>");
                 out.print("<div class='card-body'>");
@@ -881,12 +900,13 @@ public class Tag_minute extends TagSupport {
                         }
                         out.print("<td>");
                         out.print("<div class='d-flex' style='justify-content: center;'>");
-//                        out.print("<button class='btn btn-info mr-2' data-toggle='tooltip' data-placement='top' title='" + persn + "'><i class='fas fa-signature'></i></button>");
                         out.print("<button class='btn btn-green mr-2' data-toggle='tooltip' data-placement='top' title='Ver acta' onclick='window.location.href=\"Minute?opt=1&idMinu=" + ObjMinu[0] + "&event=1\"'><i class='fas fa-eye'></i></button>");
                         if (counter > 0) {
                             out.print("<button class='btn btn-warning' data-toggle='tooltip' data-placement='top' title='No se puede editar, ya hay al menos una firma en el acta' disabled><i class='fas fa-edit'></i></button>");
                         } else {
-                            out.print("<button class='btn btn-warning'  onclick='window.location.href=\"Minute?opt=1&idMinu=" + ObjMinu[0] + "\"'><i class='fas fa-edit'></i></button>");
+                            if (txtPermissions.contains("[66]")) {
+                                out.print("<button class='btn btn-warning'  onclick='window.location.href=\"Minute?opt=1&idMinu=" + ObjMinu[0] + "\"'><i class='fas fa-edit'></i></button>");
+                            }
                         }
 
                         out.print("</div>");

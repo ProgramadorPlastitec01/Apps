@@ -53,14 +53,14 @@ public class Tag_menu extends TagSupport {
             if (lst_pending != null) {
                 counterPending = lst_pending.size();
             }
-            int IdUs = Integer.parseInt(sesion.getAttribute("idUsuario").toString());
+            int IdUs = Integer.parseInt(sesion.getAttribute("idRol").toString());
             List lst_userIcon = UserJpa.ConsultUsersid(IdUs);
             if (lst_userIcon != null) {
                 Object[] ObjIcon = (Object[]) lst_userIcon.get(0);
                 Icon = ObjIcon[12].toString();
             }
             try {
-                idRol = Integer.parseInt(pageContext.getRequest().getAttribute("idRol").toString());
+                idRol = Integer.parseInt(sesion.getAttribute("idRol").toString());
                 lst_role = RoleJpa.ConsultRoleId(idRol);
                 Object[] obj_permi = (Object[]) lst_role.get(0);
                 txtPermissions = obj_permi[2].toString();
@@ -401,10 +401,9 @@ public class Tag_menu extends TagSupport {
                 out.print("<a  href=\"#\" class=\"nav-link has-dropdown\" data-toggle=\"dropdown\"><i class=\"fas fa-layer-group\"></i> <span>Registros</span></a>");
             }
             out.print("<ul class=\"dropdown-menu\">");
-            if (txtPermissions.contains("[56]")) {
-                out.print("<li><a class=\"nav-link\" href=\"Call?opt=1&Module=General\"><i style='margin-right:4px' class='fas fa-file-alt'></i>R-TI-001</a></li>");
-
-            }
+//            if (txtPermissions.contains("[56]")) {
+//                out.print("<li><a class=\"nav-link\" href=\"Call?opt=1&Module=General\"><i style='margin-right:4px' class='fas fa-file-alt'></i>R-TI-001</a></li>");
+//            }
             if (txtPermissions.contains("[57]")) {
                 out.print("<li><a class=\"nav-link\" href=\"Activity?opt=1\"><i style='margin-right:4px' class='fas fa-file-alt'></i>R-TI-005</a></li>");
             }
