@@ -158,7 +158,7 @@ public class Tag_computer extends TagSupport {
                     idDetail = Integer.parseInt(ObjDetail[0].toString());
                     stetx = Integer.parseInt(ObjDetail[6].toString());
                     if (code.contains("-004")) {
-                        contentHtml = ObjDetail[4].toString();
+                        format = ObjDetail[4].toString();
                     }
                     try {
                         String[] usrs = ObjDetail[5].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
@@ -167,13 +167,19 @@ public class Tag_computer extends TagSupport {
                             String[] usrx = usrs[i].split("/");
                             String temId = usrx[1].toString();
                             if (temId.equals("XX")) {
-                                format = format.replace("XXX" + usrx[0] + "XXX", "<b class='text-warning'>Pendiente Firma</b>");
+                                format = format.replace("XXX" + usrx[0] + "XXX", "<b class='text-warning'>Firma " + usrx[0] + "</b>");
                             } else {
                                 int idSigx = Integer.parseInt(temId.toString());
                                 List lst_signa = ConnectJpa.Consultar_firmas(idSigx);
                                 if (lst_signa != null) {
                                     String[] ObjSi = lst_signa.toString().split("///");
-                                    format = format.replace("XXX" + usrx[0] + "XXX", "<canvas id='signaCanvas" + i + "' width='200' height='100' style='border: 1px solid #fff;'></canvas>");
+                                    if (code.contains("-004")) {
+//                                        format = contentHtml;
+                                        format = format.replace("Firma " + usrx[0] + "", "<canvas id='signaCanvas" + i + "' width='200' height='100' style='border: 1px solid #fff;'></canvas>");
+                                    } else {
+                                        format = format.replace("XXX" + usrx[0] + "XXX", "<canvas id='signaCanvas" + i + "' width='200' height='100' style='border: 1px solid #fff;'></canvas>");
+                                    }
+
                                     String json = ObjSi[3].toString();
                                     out.print("<input type='hidden' class='form-control' name='' id='coor" + i + "' value='" + json + "'>");
                                     post_script += "<script>"
@@ -809,7 +815,7 @@ public class Tag_computer extends TagSupport {
                                 .replace("XXXCOLUMM3XXX", "<b>" + DtaFormat[15].toString() + "</b>")
                                 .replace("XXXCOLUMM4XXX", "<b>" + DtaFormat[16].toString() + "</b>")
                                 .replace("XXXCOLUMM5XXX", "<b>" + DtaFormat[17].toString()) + "</b>";
-                        
+
 //                        en este momento se viene el remplazo de las firmas realizadas y validacion del modulo en general
 //                        try {
 //                            String[] usrs = ObjFormat[5].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
@@ -859,7 +865,6 @@ public class Tag_computer extends TagSupport {
 //                            format = format.replace("XXXUsuarioXXX", "<b class='text-warning'>Pendiente Firma</b>");
 //                            format = format.replace("XXXJefe o DirectorXXX", "<b class='text-warning'><b class='text-warning'>Pendiente Firma</b></b>");
 //                        }
-
                         //</editor-fold>
                         //<editor-fold defaultstate="collapsed" desc="ITEMS PLUS">
                         String ItmsPlus = DtaFormat[0].toString();
@@ -1076,28 +1081,32 @@ public class Tag_computer extends TagSupport {
                         //</editor-fold>
                     }
                     //</editor-fold>
-                } else if (code.contains("-004")) {
+                } else if (code.contains("-004") || code.contains("-029")) {
                     //<editor-fold defaultstate="collapsed" desc="PREVENTIVE MAINTENANCE">
                     if (contentHtml.equals("")) {
-                        format = format.replace("XXXDATEXXX", CurrentDate);
-                        format = format.replace("XXXRealizadoXXX", "<b class='text-warning'>Pendiente Firma</b>");
-                        format = format.replace("XXXUsuarioXXX", "<b class='text-warning'>Pendiente Firma</b>");
+                        format = format.replace("XXXRealizadoXXX", "<b class='text-warning'>Firma Realizado</b>");
+                        format = format.replace("XXXUsuarioXXX", "<b class='text-warning'>Firma Usuario</b>");
                     } else {
-                        format = contentHtml;
+//                        format = contentHtml;
                     }
+                    format = format.replace("XXXDATEXXX", CurrentDate);
                     format = format.replace("XXXAREAXXX", area);
                     format = format.replace("XXXUSUARIOXXX", usuario);
                     format = format.replace("XXXEQUIPOXXX", NroPC);
-                    
+                    if (stetx == 1) {
+                        format = format.replace("id=\"idtabla\"", "id=\"idtabla\" class='inactive004'");
+                    }
                     out.print(format);
                     out.print(post_script);
 
-                    out.print("<form action='Computer?opt=9&IdComputer=" + IdComputer + "&idDetail=" + idDetail + "&idpcHead=" + idPcHead + "&type=" + type + "' method='post' id='Form04'>");
-                    out.print("<input type='hidden' name='htmlTabla' id='htmlTabla' value=''>");
-                    out.print("<div class='text-center mt-4' style='position: fixed;right: 17px;bottom: 17px;'>");
-                    out.print("<button type='button' class='btn btn-green' onclick='guardarHTMLTabla()'><i class=\"fas fa-save\"></i> Modificar</button>");
-                    out.print("</div>");
-                    out.print("</form>");
+                    if (stetx != 1) {
+                        out.print("<form action='Computer?opt=9&IdComputer=" + IdComputer + "&idDetail=" + idDetail + "&idpcHead=" + idPcHead + "&type=" + type + "' method='post' id='Form04'>");
+                        out.print("<input type='hidden' name='htmlTabla' id='htmlTabla' value=''>");
+                        out.print("<div class='text-center mt-4' style='position: fixed;right: 17px;bottom: 17px;'>");
+                        out.print("<button type='button' class='btn btn-green' onclick='guardarHTMLTabla()'><i class=\"fas fa-save\"></i> Modificar</button>");
+                        out.print("</div>");
+                        out.print("</form>");
+                    }
                     //</editor-fold>
                 }
                 //</editor-fold>

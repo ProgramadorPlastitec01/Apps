@@ -1658,14 +1658,38 @@ public class Tag_alert extends TagSupport {
                     out.print("</script>");
                 }
             }
-            if (pageContext.getRequest().getAttribute("Signature003") != null) {
-                boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("Signature003").toString());
+            if (pageContext.getRequest().getAttribute("Register004") != null) {
+                boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("Register004").toString());
                 if (result) {
                     out.print("<script type='text/javascript'>");
                     out.print("$(\"#toastr-2\").ready(function() {\n"
                             + "  iziToast.success({\n"
                             + "    title: 'Correcto',\n"
-                            + "    message: 'Se ha firmado la asignación.',\n"
+                            + "    message: 'Se ha actualizado la información.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                } else {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-4\").ready(function() {\n"
+                            + "  iziToast.error({\n"
+                            + "    title: 'Error',\n"
+                            + "    message: 'Ha ocurrido un error al registrar. ',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                }
+            }
+            if (pageContext.getRequest().getAttribute("SignatureRegs") != null) {
+                boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("SignatureRegs").toString());
+                if (result) {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-2\").ready(function() {\n"
+                            + "  iziToast.success({\n"
+                            + "    title: 'Correcto',\n"
+                            + "    message: 'Se ha firmado el documento.',\n"
                             + "    position: 'bottomRight'\n"
                             + "  });\n"
                             + "});");
@@ -1682,6 +1706,7 @@ public class Tag_alert extends TagSupport {
                     out.print("</script>");
                 }
             }
+            
             //</editor-fold>
             //<editor-fold defaultstate="collapsed" desc="SCHEDULE">
             if (pageContext.getRequest().getAttribute("ExecuteSchedule") != null) {

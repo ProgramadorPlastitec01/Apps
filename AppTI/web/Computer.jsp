@@ -13,6 +13,7 @@
         <link rel="stylesheet" href="Interface/Content/Assets/modules/izitoast/css/iziToast.min.css">
         <link rel="stylesheet" href="Interface/Content/Assets/modules/select2/dist/css/select2.min.css" >
         <link rel="stylesheet" href="Interface/Content/Assets/css/main.css">
+        <link rel="stylesheet" href="Interface/Content/Assets/css/computer.css">
         <style>
             .nav-link .active {
                 background: #5ecbeb;

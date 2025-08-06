@@ -383,7 +383,7 @@ public class Computer extends HttpServlet {
                         Result = CompDetailJpa.ComputerSignaturxe(idDetail, Signature, 0);
                     }
 
-                    request.setAttribute("Signature003", Result);
+                    request.setAttribute("SignatureRegs", Result);
                     request.getRequestDispatcher("Computer?opt=1&IdComputer=" + IdComputer + "&mod=3&idpcHead=" + idPcHead + "&type=" + type + "&NmbDoc=0").forward(request, response);
                     //</editor-fold>
                     break;
@@ -429,6 +429,7 @@ public class Computer extends HttpServlet {
                     } else {
                         Result = CompDetailJpa.registerPcDetail(idPcHead, type, htmlTabla, respo, 1, 0);
                     }
+                    request.setAttribute("PreventiveMain", opt);
                     request.getRequestDispatcher("Computer?opt=1&IdComputer=" + IdComputer + "&mod=3&idpcHead=" + idPcHead + "&type=" + type + "").forward(request, response);
                     //</editor-fold>
                     break;
