@@ -1658,8 +1658,8 @@ public class Tag_alert extends TagSupport {
                     out.print("</script>");
                 }
             }
-            if (pageContext.getRequest().getAttribute("Register004") != null) {
-                boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("Register004").toString());
+            if (pageContext.getRequest().getAttribute("Register004_029") != null) {
+                boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("Register004_029").toString());
                 if (result) {
                     out.print("<script type='text/javascript'>");
                     out.print("$(\"#toastr-2\").ready(function() {\n"

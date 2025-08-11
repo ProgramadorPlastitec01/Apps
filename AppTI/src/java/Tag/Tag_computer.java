@@ -125,7 +125,7 @@ public class Tag_computer extends TagSupport {
                 }
 //</editor-fold>
 
-                //<editor-fold defaultstate="collapsed" desc="DECLARATIONS">
+                    //<editor-fold defaultstate="collapsed" desc="DECLARATIONS">
                 lst_computerHeader = ComputerHeaderJpa.ConsulteComputerHeader(idPcHead);
                 if (lst_computerHeader != null) {
                     Object[] ObjComp = (Object[]) lst_computerHeader.get(0);
@@ -157,7 +157,7 @@ public class Tag_computer extends TagSupport {
                     ObjDetail = (Object[]) lst_compDetail.get(0);
                     idDetail = Integer.parseInt(ObjDetail[0].toString());
                     stetx = Integer.parseInt(ObjDetail[6].toString());
-                    if (code.contains("-004")) {
+                    if (code.contains("-004") || code.contains("-029") || code.contains("-031")) {
                         format = ObjDetail[4].toString();
                     }
                     try {
@@ -173,7 +173,7 @@ public class Tag_computer extends TagSupport {
                                 List lst_signa = ConnectJpa.Consultar_firmas(idSigx);
                                 if (lst_signa != null) {
                                     String[] ObjSi = lst_signa.toString().split("///");
-                                    if (code.contains("-004")) {
+                                    if (code.contains("-004") || code.contains("-029") || code.contains("-031")) {
 //                                        format = contentHtml;
                                         format = format.replace("Firma " + usrx[0] + "", "<canvas id='signaCanvas" + i + "' width='200' height='100' style='border: 1px solid #fff;'></canvas>");
                                     } else {
@@ -203,7 +203,7 @@ public class Tag_computer extends TagSupport {
                                             + " window.addEventListener('load', dibujarCoordenadas" + i + "); "
                                             + "</script>";
                                 } else {
-                                    format = format.replace("XXX" + usrx[1] + "XXX", "<b class='text-warning'>Pendiente Firma</b>");
+                                    format = format.replace("XXX" + usrx[1] + "XXX", "<b class='text-warning'>Firma "+ usrx[1] +"</b>");
                                 }
                             }
                             //</editor-fold>
@@ -1081,11 +1081,16 @@ public class Tag_computer extends TagSupport {
                         //</editor-fold>
                     }
                     //</editor-fold>
-                } else if (code.contains("-004") || code.contains("-029")) {
-                    //<editor-fold defaultstate="collapsed" desc="PREVENTIVE MAINTENANCE">
+                } else if (code.contains("-004") || code.contains("-029") || code.contains("-031")) {
+                    //<editor-fold defaultstate="collapsed" desc="PREVENTIVE MAINTENANCE 004 // INSTALLED PROGRAMS 029">
                     if (contentHtml.equals("")) {
                         format = format.replace("XXXRealizadoXXX", "<b class='text-warning'>Firma Realizado</b>");
                         format = format.replace("XXXUsuarioXXX", "<b class='text-warning'>Firma Usuario</b>");
+                        
+                        format = format.replace("XXXTurno1XXX", "<b class='text-warning'>Firma Turno1</b>");
+                        format = format.replace("XXXTurno2XXX", "<b class='text-warning'>Firma Turno2</b>");
+                        format = format.replace("XXXTurno3XXX", "<b class='text-warning'>Firma Turno3</b>");
+                        format = format.replace("XXXXJefeXXX", "<b class='text-warning'>Firma Jefe</b>");
                     } else {
 //                        format = contentHtml;
                     }
@@ -1102,6 +1107,7 @@ public class Tag_computer extends TagSupport {
                     if (stetx != 1) {
                         out.print("<form action='Computer?opt=9&IdComputer=" + IdComputer + "&idDetail=" + idDetail + "&idpcHead=" + idPcHead + "&type=" + type + "' method='post' id='Form04'>");
                         out.print("<input type='hidden' name='htmlTabla' id='htmlTabla' value=''>");
+                        out.print("<input type='hidden' name='DocCode' id='' value='" + code.split("-")[2] + "'>");
                         out.print("<div class='text-center mt-4' style='position: fixed;right: 17px;bottom: 17px;'>");
                         out.print("<button type='button' class='btn btn-green' onclick='guardarHTMLTabla()'><i class=\"fas fa-save\"></i> Modificar</button>");
                         out.print("</div>");

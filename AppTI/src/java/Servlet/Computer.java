@@ -31,7 +31,7 @@ public class Computer extends HttpServlet {
         int opt = Integer.parseInt(request.getParameter("opt"));
         int IdComputer = 0, module = 0, StateCmp = 0, idPcHead = 0, step = 0, idDoc = 0, temp = 0, idDetail = 0, idItem = 0,
                 docx = 0, codx = 0, idSign = 0, udpate004 = 0;
-        String NumberPC = "", Mail = "", Description = "", typeDoc = "", dte_doc = "", type = "", DocFiles = "", SigMode = "", htmlTabla = "";
+        String NumberPC = "", Mail = "", Description = "", typeDoc = "", dte_doc = "", type = "", DocFiles = "", SigMode = "", htmlTabla = "", DocCode = "";
         boolean Result = false;
 
         try {
@@ -412,24 +412,28 @@ public class Computer extends HttpServlet {
                     } catch (Exception e) {
                         htmlTabla = "<div id=\"idtabla\">" + htmlTabla + "</div>";
                     }
-                    
-                    lst_setting = SettingJpa.ConsultSettingCategorie("DocSig004");
-                    respo = "";
-                    if (lst_setting != null) {
-                        if (lst_setting != null) {
-                            Object[] ObjSett = (Object[]) lst_setting.get(0);
-                            respo = ObjSett[2].toString();
-                        } else {
-                            respo = "";
-                        }
-                    }
 
                     if (idDetail > 0) {
                         Result = CompDetailJpa.UpdatePcDetailContent(idDetail, htmlTabla, 0);
                     } else {
+                        try {
+                            DocCode = request.getParameter("DocCode");
+                        } catch (Exception e) {
+                            DocCode = "";
+                        }
+                        lst_setting = SettingJpa.ConsultSettingCategorie("DocSig" + DocCode + "");
+                        respo = "";
+                        if (lst_setting != null) {
+                            if (lst_setting != null) {
+                                Object[] ObjSett = (Object[]) lst_setting.get(0);
+                                respo = ObjSett[2].toString();
+                            } else {
+                                respo = "";
+                            }
+                        }
                         Result = CompDetailJpa.registerPcDetail(idPcHead, type, htmlTabla, respo, 1, 0);
                     }
-                    request.setAttribute("PreventiveMain", opt);
+                    request.setAttribute("Register004_029", Result);
                     request.getRequestDispatcher("Computer?opt=1&IdComputer=" + IdComputer + "&mod=3&idpcHead=" + idPcHead + "&type=" + type + "").forward(request, response);
                     //</editor-fold>
                     break;
