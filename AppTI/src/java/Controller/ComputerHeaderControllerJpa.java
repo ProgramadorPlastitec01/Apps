@@ -95,6 +95,24 @@ public class ComputerHeaderControllerJpa {
             return false;
         }
     }
+    public boolean DleeCalificationComputerHeader(int idH) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        try {
+            Query q = em.createNativeQuery("CALL `Sp_chd_u_DeleteCalificationComputerHead`(" + idH + ")");
+            int resultado = q.executeUpdate();
+            em.getTransaction().commit();
+            em.clear();
+            em.close();
+            if (resultado == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
     //</editor-fold>
 }

@@ -24,6 +24,7 @@ public class Tag_computer extends TagSupport {
     @Override
     public int doStartTag() throws JspException {
         JspWriter out = pageContext.getOut();
+
         ComputerControllerJpa ComputerJpa = new ComputerControllerJpa();
         SettingControllerJpa SettingJpa = new SettingControllerJpa();
         ComputerDetailJpaController ComDetail = new ComputerDetailJpaController();
@@ -125,7 +126,7 @@ public class Tag_computer extends TagSupport {
                 }
 //</editor-fold>
 
-                    //<editor-fold defaultstate="collapsed" desc="DECLARATIONS">
+                //<editor-fold defaultstate="collapsed" desc="DECLARATIONS">
                 lst_computerHeader = ComputerHeaderJpa.ConsulteComputerHeader(idPcHead);
                 if (lst_computerHeader != null) {
                     Object[] ObjComp = (Object[]) lst_computerHeader.get(0);
@@ -153,15 +154,22 @@ public class Tag_computer extends TagSupport {
                 Object[] ObjDetail = {};
                 int stetx = 0, idDetail = 0;
                 String contentHtml = "";
+                String singExits = "";
                 try {
                     ObjDetail = (Object[]) lst_compDetail.get(0);
                     idDetail = Integer.parseInt(ObjDetail[0].toString());
                     stetx = Integer.parseInt(ObjDetail[6].toString());
-                    if (code.contains("-004") || code.contains("-029") || code.contains("-031")) {
+                    try {
+                        singExits = ObjDetail[5].toString();
+                    } catch (Exception e) {
+                        singExits = "";
+                    }
+
+                    if (code.contains("-004") || code.contains("-029") || code.contains("-031") || code.contains("-032")) {
                         format = ObjDetail[4].toString();
                     }
                     try {
-                        String[] usrs = ObjDetail[5].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                        String[] usrs = singExits.toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
                         for (int i = 0; i < usrs.length; i++) {
                             //<editor-fold defaultstate="collapsed" desc="BUILD SIGNATURE BY DOC">
                             String[] usrx = usrs[i].split("/");
@@ -173,9 +181,9 @@ public class Tag_computer extends TagSupport {
                                 List lst_signa = ConnectJpa.Consultar_firmas(idSigx);
                                 if (lst_signa != null) {
                                     String[] ObjSi = lst_signa.toString().split("///");
-                                    if (code.contains("-004") || code.contains("-029") || code.contains("-031")) {
+                                    if (code.contains("-004") || code.contains("-029") || code.contains("-031") || code.contains("-032")) {
 //                                        format = contentHtml;
-                                        format = format.replace("Firma " + usrx[0] + "", "<canvas id='signaCanvas" + i + "' width='200' height='100' style='border: 1px solid #fff;'></canvas>");
+                                        format = format.replace("Firma " + usrx[0] + "", "<canvas id='signaCanvas" + i + "' width='120' height='60' style='border: 1px solid #fff;'></canvas>");
                                     } else {
                                         format = format.replace("XXX" + usrx[0] + "XXX", "<canvas id='signaCanvas" + i + "' width='200' height='100' style='border: 1px solid #fff;'></canvas>");
                                     }
@@ -203,7 +211,7 @@ public class Tag_computer extends TagSupport {
                                             + " window.addEventListener('load', dibujarCoordenadas" + i + "); "
                                             + "</script>";
                                 } else {
-                                    format = format.replace("XXX" + usrx[1] + "XXX", "<b class='text-warning'>Firma "+ usrx[1] +"</b>");
+                                    format = format.replace("XXX" + usrx[1] + "XXX", "<b class='text-warning'>Firma " + usrx[1] + "</b>");
                                 }
                             }
                             //</editor-fold>
@@ -277,7 +285,7 @@ public class Tag_computer extends TagSupport {
                     //</editor-fold>
 
                     out.print("<div class='sweet-local' tabindex='-1' id='Ventana4' style='opacity: 1.03; display:" + ((docx > 0) ? "block" : "none") + ";'>");
-                    out.print("<div class='contGeneral' style='width: 44%;'>");
+                    out.print("<div class='contGeneral' style='width: 38%;'>");
                     out.print("<div style='display: flex; justify-content: space-between'>");
                     out.print("<h2>Firmar</h2>");
                     out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(4)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
@@ -387,20 +395,20 @@ public class Tag_computer extends TagSupport {
                         } else {
                             //<editor-fold defaultstate="collapsed" desc="CONSULT SIGNATURE">
                             out.print("<form action='Computer?opt=1&mod=3&type=" + type + "&idpcHead=" + idPcHead + "&IdComputer=" + IdComputer + "' method='post' class='needs-validation' novalidate=''>");
-                            out.print("<input type='text' class='form-control' name='txtSigMode' id='idSigMode' value='" + SigMode + "'>");
-                            out.print("<div class='d-flex'>");
-                            out.print("<div class='col-lg-5 mr-2'>");
+                            out.print("<span class=''>Firma seleccionada:</span> <input type='text' class='form-control inpMode' name='txtSigMode' id='idSigMode' value='" + SigMode + "'>");
+                            out.print("<div class='text-center'>");
+                            out.print("<div class='mr-2'>");
                             out.print("<span class=''>Documento: </span>");
-                            out.print("<input type='text' class='form-control' name='NmbDoc' id='' data-toggle='tooltip' data-placement='top' title='' value=''>");
+                            out.print("<input type='text' class='form-control inputTextdt' name='NmbDoc' id='' data-toggle='tooltip' data-placement='top' title='' value=''>");
                             out.print("</div>");
 
-                            out.print("<div class='col-lg-5'>");
+                            out.print("<div class=''>");
                             out.print("<span class=''>Codigo: </span>");
-                            out.print("<input type='text' class='form-control' name='NmbCod' id='' data-toggle='tooltip' data-placement='top' title='' value=''>");
+                            out.print("<input type='text' class='form-control inputTextdt' name='NmbCod' id='' data-toggle='tooltip' data-placement='top' title='' value=''>");
                             out.print("</div>");
 
                             out.print("<div style='margin: auto;'>");
-                            out.print("<button class='btn btn-green'><i class='fas fa-search '></i></button>");
+                            out.print("<button class='btn btn-green'> Consultar <i class='fas fa-search '></i></button>");
                             out.print("</div>");
 
                             out.print("</div>");
@@ -431,19 +439,21 @@ public class Tag_computer extends TagSupport {
                 out.print("<div class='text-center'>");
                 out.print("<h4>Documentacion " + NroPC + "</h4><h1>" + typeSc[1] + "</h1><h4>" + nameDoc + "</h4>");
                 out.print("</div>");
+
+                out.print("<div class='d-flex'>");
                 if (stetx != 99) {
+                    if (singExits.contains("XX")) {
+                        out.print("<button class='btn btn-warning mr-2' style='border-radius: 4px;' onclick='mostrarConvencion(3)'><i class='fas fa-signature'></i></button>");
+                    }
                     if (stetx == 0 && (code.equals("A") || code.contains("-019"))) {
-                        out.print("<button class='btn btn-green mr-2' style='border-radius: 4px;' onclick='window.location.href=\"Computer?opt=5&IdComputer=" + IdComputer + "&idpcHead=" + idPcHead + "&idDetail=" + ObjDetail[0] + "&type=" + type + "&mod=2" + ((code.contains("-19") || code.equals("A")) ? "&xtemp=1" : "") + "\"'><i class='fas fa-share'></i></button>");
-                    } else {
-                        if (stetx == 0) {
-                            out.print("<button class='btn btn-warning mr-2' style='border-radius: 4px;' onclick='mostrarConvencion(3)'><i class='fas fa-signature'></i></button>");
-                        } else if (stetx == 1) {
-                            out.print("<button class='btn btn-green mr-2' style='border-radius: 4px;' onclick='window.location.href=\"Computer?opt=5&IdComputer=" + IdComputer + "&idpcHead=" + idPcHead + "&idDetail=" + ObjDetail[0] + "&type=" + type + "&mod=2" + ((code.contains("-19") || code.equals("A")) ? "&xtemp=1" : "") + "\"'><i class='fas fa-share'></i></button>");
-                        }
+                        out.print("<button class='btn btn-green mr-2' style='border-radius: 4px;' onclick='window.location.href=\"Computer?opt=5&IdComputer=" + IdComputer + "&idpcHead=" + idPcHead + "&idDetail=" + ObjDetail[0] + "&type=" + type + "&mod=2&xtemp=1\"'><i class='fas fa-share'></i></button>");
+                    } else if (stetx == 1) {
+                        out.print("<button class='btn btn-green mr-2' style='border-radius: 4px;' onclick='window.location.href=\"Computer?opt=5&IdComputer=" + IdComputer + "&idpcHead=" + idPcHead + "&idDetail=" + ObjDetail[0] + "&type=" + type + "&mod=2&xtemp=1\"'><i class='fas fa-share'></i></button>");
                     }
                 } else {
                     out.print("<span> </span>");
                 }
+                out.print("</div>");
                 out.print("</div>");
                 out.print("<div class='card-body'>");
                 //</editor-fold>
@@ -1081,12 +1091,12 @@ public class Tag_computer extends TagSupport {
                         //</editor-fold>
                     }
                     //</editor-fold>
-                } else if (code.contains("-004") || code.contains("-029") || code.contains("-031")) {
+                } else if (code.contains("-004") || code.contains("-029") || code.contains("-031") || code.contains("-032")) {
                     //<editor-fold defaultstate="collapsed" desc="PREVENTIVE MAINTENANCE 004 // INSTALLED PROGRAMS 029">
                     if (contentHtml.equals("")) {
                         format = format.replace("XXXRealizadoXXX", "<b class='text-warning'>Firma Realizado</b>");
                         format = format.replace("XXXUsuarioXXX", "<b class='text-warning'>Firma Usuario</b>");
-                        
+
                         format = format.replace("XXXTurno1XXX", "<b class='text-warning'>Firma Turno1</b>");
                         format = format.replace("XXXTurno2XXX", "<b class='text-warning'>Firma Turno2</b>");
                         format = format.replace("XXXTurno3XXX", "<b class='text-warning'>Firma Turno3</b>");
@@ -1098,13 +1108,13 @@ public class Tag_computer extends TagSupport {
                     format = format.replace("XXXAREAXXX", area);
                     format = format.replace("XXXUSUARIOXXX", usuario);
                     format = format.replace("XXXEQUIPOXXX", NroPC);
-                    if (stetx == 1) {
+                    if (stetx == 2) {
                         format = format.replace("id=\"idtabla\"", "id=\"idtabla\" class='inactive004'");
                     }
                     out.print(format);
                     out.print(post_script);
 
-                    if (stetx != 1) {
+                    if (stetx == 1) {
                         out.print("<form action='Computer?opt=9&IdComputer=" + IdComputer + "&idDetail=" + idDetail + "&idpcHead=" + idPcHead + "&type=" + type + "' method='post' id='Form04'>");
                         out.print("<input type='hidden' name='htmlTabla' id='htmlTabla' value=''>");
                         out.print("<input type='hidden' name='DocCode' id='' value='" + code.split("-")[2] + "'>");
@@ -1197,9 +1207,7 @@ public class Tag_computer extends TagSupport {
                             lst_compDetail = ComDetail.ConsultComputerDetailxPCxType(idPcHead, name);
                             if (lst_compDetail != null) {
                                 Object[] ObSt = (Object[]) lst_compDetail.get(0);
-                                int steDet = Integer.parseInt(ObSt[6].toString());
-                                if (steDet == 0) {
-//                                    out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"AppDetail?opt=1&mod=3&idApp=\"' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
+                                if (ObSt[5].toString().contains("XX")) {
                                     out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"Computer?opt=1&mod=3&IdComputer=" + IdComputer + "&idDoc=" + id + "&idpcHead=" + idPcHead + "&type=" + structure[i] + "&step=" + i + "\"' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
                                     out.print("<div class=\"wizard-step-icon\">");
                                     out.print("<i class=\"" + ico + "\"></i>");
@@ -1207,23 +1215,50 @@ public class Tag_computer extends TagSupport {
                                     out.print("<div class=\"wizard-step-label\" style='margin-bottom: 6px;'>");
                                     out.print(name);
                                     out.print("<div style='position: absolute;bottom: 5px;left: -5px;'>");
-                                    out.print("<p style='margin: 0; width: 170px; background: #ffa426;border-radius: 3px;'><b><b class='text-warning'>Pendiente Firma</b></b> &nbsp; <i class='fas fa-signature'></i></p>");
+                                    out.print("<p style='margin: 0; width: 170px; background: #ffa426;border-radius: 3px;'><b><b class='text-black'>Pendiente Firma</b></b> &nbsp; <i class='fas fa-signature'></i></p>");
                                     out.print("</div>");
                                     out.print("</div>");
                                     out.print("</div>");
-                                } else if (steDet == 1) {
+                                } else {
+                                    int steDet = Integer.parseInt(ObSt[6].toString());
+                                    if (steDet == 0) {
+                                        out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"Computer?opt=1&mod=3&IdComputer=" + IdComputer + "&idDoc=" + id + "&idpcHead=" + idPcHead + "&type=" + structure[i] + "&step=" + i + "\"' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
+                                        out.print("<div class=\"wizard-step-icon\">");
+                                        out.print("<i class=\"" + ico + "\"></i>");
+                                        out.print("</div>");
+                                        out.print("<div class=\"wizard-step-label\" style='margin-bottom: 6px;'>");
+                                        out.print(name);
+                                        out.print("<div style='position: absolute;bottom: 5px;left: -5px;'>");
+                                        out.print("<p style='margin: 0; width: 170px; background: #ffa426;border-radius: 3px;'><b><b class='text-warning'>Pendiente Firma</b></b> &nbsp; <i class='fas fa-signature'></i></p>");
+                                        out.print("</div>");
+                                        out.print("</div>");
+                                        out.print("</div>");
+                                    } else if (steDet == 2) {
 //                                    out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"AppDetail?opt=1&mod=3&idApp\"' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
-                                    out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"Computer?opt=1&mod=3&IdComputer=" + IdComputer + "&idDoc=" + id + "&idpcHead=" + idPcHead + "&type=" + structure[i] + "&step=" + i + "\"' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
-                                    out.print("<div class=\"wizard-step-icon\">");
-                                    out.print("<i class=\"" + ico + "\"></i>");
-                                    out.print("</div>");
-                                    out.print("<div class=\"wizard-step-label\" style='margin-bottom: 6px;'>");
-                                    out.print(name);
-                                    out.print("<div style='position: absolute;bottom: 5px;left: -5px;'>");
-                                    out.print("<p style='margin: 0; width: 170px; background: #33bf98;border-radius: 3px;'><b>Realizado</b> &nbsp; <i class=\"fas fa-check\"></i></p>");
-                                    out.print("</div>");
-                                    out.print("</div>");
-                                    out.print("</div>");
+                                        out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"Computer?opt=1&mod=3&IdComputer=" + IdComputer + "&idDoc=" + id + "&idpcHead=" + idPcHead + "&type=" + structure[i] + "&step=" + i + "\"' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
+                                        out.print("<div class=\"wizard-step-icon\">");
+                                        out.print("<i class=\"" + ico + "\"></i>");
+                                        out.print("</div>");
+                                        out.print("<div class=\"wizard-step-label\" style='margin-bottom: 6px;'>");
+                                        out.print(name);
+                                        out.print("<div style='position: absolute;bottom: 5px;left: -5px;'>");
+                                        out.print("<p style='margin: 0; width: 170px; background: #33bf98;border-radius: 3px;'><b>Realizado</b> &nbsp; <i class=\"fas fa-check\"></i></p>");
+                                        out.print("</div>");
+                                        out.print("</div>");
+                                        out.print("</div>");
+                                    } else {
+                                        out.print("<div class=\"wizard-step wizard-step-active addStepCls\" style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
+                                        out.print("<div class=\"wizard-step-icon\">");
+                                        out.print("<i class='<i class=\"fas fa-exclamation-triangle\"></i>'></i>");
+                                        out.print("</div>");
+                                        out.print("<div class=\"wizard-step-label\" style='margin-bottom: 6px;'>");
+                                        out.print("Error");
+                                        out.print("<div style='position: absolute;bottom: 5px;left: -5px;'>");
+                                        out.print("<p style='margin: 0; width: 170px; background: #33bf98;border-radius: 3px;'><b>Error</b> &nbsp; <i class=\"fas fa-check\"></i></p>");
+                                        out.print("</div>");
+                                        out.print("</div>");
+                                        out.print("</div>");
+                                    }
                                 }
                             }
                         }
@@ -1354,7 +1389,13 @@ public class Tag_computer extends TagSupport {
                         String[] states = ObjHeader[3].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
                         String[] stat = {};
                         if (sta >= states.length) {
-                            out.print("<td>Documento Finalizado</td>");
+                            if (ObjHeader[9] != null) {
+                                String[] dataDetail = ObjHeader[9].toString().split("--");
+                                out.print("<td>Pendiente documento por firmar<br> &nbsp; <i class=\"fas fa-signature\"></i> <b class='text-warning'>" + dataDetail[0] + "</b></td>");
+                            } else {
+                                out.print("<td>Documento Finalizado</td>");
+                            }
+
                         } else {
                             stat = states[sta].split("/");
                             out.print("<td>" + stat[1] + "</td>");

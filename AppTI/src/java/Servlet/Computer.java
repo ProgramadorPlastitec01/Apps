@@ -31,7 +31,7 @@ public class Computer extends HttpServlet {
         int opt = Integer.parseInt(request.getParameter("opt"));
         int IdComputer = 0, module = 0, StateCmp = 0, idPcHead = 0, step = 0, idDoc = 0, temp = 0, idDetail = 0, idItem = 0,
                 docx = 0, codx = 0, idSign = 0, udpate004 = 0;
-        String NumberPC = "", Mail = "", Description = "", typeDoc = "", dte_doc = "", type = "", DocFiles = "", SigMode = "", htmlTabla = "", DocCode = "";
+        String NumberPC = "", Mail = "", Description = "", typeDoc = "", dte_doc = "", type = "", DocFiles = "", SigMode = "", htmlTabla = "", DocCode = "", xtemp = "";
         boolean Result = false;
 
         try {
@@ -207,11 +207,11 @@ public class Computer extends HttpServlet {
                     Result = CompHeader.ChangueStateComputerHeader(idPcHead);
                     if (Result) {
                         try {
-                            temp = Integer.parseInt(request.getParameter("xtemp"));
+                            xtemp = request.getParameter("xtemp");
                         } catch (Exception e) {
-                            temp = 0;
+                            xtemp = "";
                         }
-                        if (temp == 1) {
+                        if (xtemp.equals("1")) {
                             Result = CompDetailJpa.ComputerDetailFinishState(idDetail);
                         }
                     }
@@ -327,7 +327,10 @@ public class Computer extends HttpServlet {
                             respo = "[NoN]";
                         }
                     }
-                    Result = CompDetailJpa.registerPcDetail(idPcHead, type, structure, respo, 1, 0);
+                    if (!textcal.equals("Si")) {
+                        CompHeader.DleeCalificationComputerHeader(idPcHead);
+                    }
+                    Result = CompDetailJpa.registerPcDetail(idPcHead, type, structure, respo, 1, 1);
                     request.setAttribute("Register003", Result);
                     request.getRequestDispatcher("Computer?opt=1&IdComputer=" + IdComputer + "&mod=3&idpcHead=" + idPcHead + "&type=" + type + "").forward(request, response);
                     //</editor-fold>
@@ -377,11 +380,11 @@ public class Computer extends HttpServlet {
                         Object[] ObjDet = (Object[]) lst_detail.get(0);
                         Signature = ObjDet[5].toString().replace(SigMode + "/XX", SigMode + "/" + idSign);
                     }
-                    if (!Signature.contains("/XX")) {
-                        Result = CompDetailJpa.ComputerSignaturxe(idDetail, Signature, 1);
-                    } else {
-                        Result = CompDetailJpa.ComputerSignaturxe(idDetail, Signature, 0);
-                    }
+//                    if (!Signature.contains("/XX")) {
+                        Result = CompDetailJpa.ComputerSignaturxe(idDetail, Signature);
+//                    } else {
+//                        Result = CompDetailJpa.ComputerSignaturxe(idDetail, Signature, 0);
+//                    }
 
                     request.setAttribute("SignatureRegs", Result);
                     request.getRequestDispatcher("Computer?opt=1&IdComputer=" + IdComputer + "&mod=3&idpcHead=" + idPcHead + "&type=" + type + "&NmbDoc=0").forward(request, response);
@@ -403,6 +406,11 @@ public class Computer extends HttpServlet {
                         type = request.getParameter("type");
                     } catch (Exception e) {
                         type = "";
+                    }
+                    try {
+                        textcal = request.getParameter("textcal");
+                    } catch (Exception e) {
+                        textcal = "";
                     }
                     try {
                         htmlTabla = request.getParameter("htmlTabla");
@@ -431,7 +439,7 @@ public class Computer extends HttpServlet {
                                 respo = "";
                             }
                         }
-                        Result = CompDetailJpa.registerPcDetail(idPcHead, type, htmlTabla, respo, 1, 0);
+                        Result = CompDetailJpa.registerPcDetail(idPcHead, type, htmlTabla, respo, 1, 1);
                     }
                     request.setAttribute("Register004_029", Result);
                     request.getRequestDispatcher("Computer?opt=1&IdComputer=" + IdComputer + "&mod=3&idpcHead=" + idPcHead + "&type=" + type + "").forward(request, response);

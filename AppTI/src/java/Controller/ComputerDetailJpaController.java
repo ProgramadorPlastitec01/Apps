@@ -192,11 +192,11 @@ public class ComputerDetailJpaController implements Serializable {
         }
     }
 
-    public boolean ComputerSignaturxe(int idDetail, String Personal, int ste) {
+    public boolean ComputerSignaturxe(int idDetail, String Personal) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
-            Query q = em.createNativeQuery("CALL `Sp_cdt_u_UpdatePersonalSignature`(" + idDetail + ", '" + Personal + "', " + ste + ")");
+            Query q = em.createNativeQuery("CALL `Sp_cdt_u_UpdatePersonalSignature`(" + idDetail + ", '" + Personal + "')");
             int resultado = q.executeUpdate();
             em.getTransaction().commit();
             em.clear();
