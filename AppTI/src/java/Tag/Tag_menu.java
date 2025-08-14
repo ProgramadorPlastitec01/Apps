@@ -324,7 +324,7 @@ public class Tag_menu extends TagSupport {
                     + "              <a href=\"Profile?opt=1\" class=\"dropdown-item has-icon\">\n"
                     + "                <i class=\"far fa-user\"></i> Perfil\n"
                     + "              </a>\n"
-                    + "              <a href=\"features-activities.html\" class=\"dropdown-item has-icon\">\n"
+                    + "              <a href=\"ActivitySystem.jsp\" class=\"dropdown-item has-icon\">\n"
                     + "                <i class=\"fas fa-bolt\"></i> Actividades\n"
                     + "              </a>\n"
                     + "              <a href=\"Setting.jsp\" class=\"dropdown-item has-icon\">\n"

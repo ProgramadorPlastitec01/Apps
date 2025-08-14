@@ -303,6 +303,7 @@ public class Tag_schedule extends TagSupport {
 
             out.print("<input type='hidden' name='module' value='" + module + "'>");
             out.print("<input type='hidden' name='type' value='" + type + "'>");
+            out.print("<input type='hidden' name='Year' value='" + Year + "'>");
 
             out.print("<input type='hidden' id='IdMasive' name='IdMasive' value=''>");
             out.print("<input type='hidden' name='validation' value='2'>");
@@ -344,6 +345,7 @@ public class Tag_schedule extends TagSupport {
             out.print("<input type='hidden' id='Validation' name='validation' value=''>");
             out.print("<input type='hidden' id='' name='module' value='" + module + "'>");
             out.print("<input type='hidden' id='' name='type' value='" + type + "'>");
+            out.print("<input type='text' id='' name='Year' value='" + Year + "'>");
             out.print("<div class='d-flex'>");
 
             out.print("<div class='col-lg-6'>");
@@ -449,6 +451,7 @@ public class Tag_schedule extends TagSupport {
                     Format = Format.replace("XTPOX", ((type == 1) ? "HARDWARE" : "SOFTWARE"));
                     Format = Format.replace("XANIOX", ((Integer.parseInt(Year.toString()) > 0) ? Year : "SOFTWARE"));
                     out.print(Format);
+                    out.print("<table style=\"width:100%\" class='table table-sm table-hover table026'>");
                     out.print("<tr class='tr026' >");
                     out.print("<td class='p-2 sticky2'><input type='checkbox' id='masterCheckbox' onclick='toggleAllCheckboxes(this)'></td>");
                     out.print("<td class='p-2 sticky2'>ACTIVIDAD</td>");
@@ -658,7 +661,7 @@ public class Tag_schedule extends TagSupport {
                                             out.print("<b class='title'><i style='font-size:16px;' class='fas fa-times mt-2'></i></b>");
                                         }
                                     }
-                                }else{
+                                } else {
                                     out.print("<b>Fallo en estructura</b>");
                                 }
                                 out.print("</td>");
@@ -667,6 +670,7 @@ public class Tag_schedule extends TagSupport {
                         }
 
                     }
+                    out.print("<tr><td colspan='16' class='footpage'>La información personal en este documento será tratada y protegida de acuerdo con nuestras políticas de protección de datos personales.</td></tr>");
                     out.print("</table>");
                 }
 
