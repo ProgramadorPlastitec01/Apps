@@ -17,7 +17,7 @@
 .mod-panel {
     position: fixed;
     top: 70px; /* ajusta según navbar */
-     right: -364px;
+    right: -364px;
     background: #fff;
     width: auto;
     max-width: 340px;
@@ -68,4 +68,31 @@
     background-color: #d1f2eb; /* color de fondo diferente */
     border: 2px solid #33bf98;
     transform: scale(1.05);
+}
+.scrollActivities{
+    height: 211px;
+    max-height: 211px;
+    overflow-y: auto;
+}
+.scrollActivities::-webkit-scrollbar {
+    width: 10px;     /* Tamaño del scroll en vertical */
+    height: 8px;    /* Tamaño del scroll en horizontal */
+    /*display: none;   Ocultar scroll */
+}
+
+.scrollActivities::-webkit-scrollbar-thumb {
+    background: #0b0025;
+    border-radius: 4px;
+    border: 1px solid white;
+}
+
+/* Cambiamos el fondo y agregamos una sombra cuando esté en hover */
+.scrollActivities::-webkit-scrollbar-thumb:hover {
+    background: #0b0025;
+    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+/* Cambiamos el fondo cuando esté en active */
+.scrollActivities::-webkit-scrollbar-thumb:active {
+    background-color: #0b0025;
 }

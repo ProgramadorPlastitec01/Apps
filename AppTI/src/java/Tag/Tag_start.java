@@ -99,7 +99,6 @@ public class Tag_start extends TagSupport {
                 out.print("<div class='col-md-7'>");
 
                 out.print("<div class=\"card\" id='I' style='display:" + (Module.contains("I") ? "block" : "none") + "'>"
-                        
                         + "                <div class=\"card-header\">"
                         + "                  <h4>Pendientes anuales</h4>"
                         + "                </div>");
@@ -132,15 +131,15 @@ public class Tag_start extends TagSupport {
             }
             //</editor-fold>
             //<editor-fold defaultstate="collapsed" desc="ACTIVIDADES RECIENTES">
-            lst_activity = DashJpa.ConsultActiviryRecent(CurrYear, (CurrMonth+1));
+            lst_activity = DashJpa.ConsultActiviryRecent(CurrYear, (CurrMonth + 1));
             if (lst_activity != null) {
                 out.print("<div class=\"col-md-5\">");
                 out.print("<div class=\"card\" id='J' style='display:" + (Module.contains("J") ? "block" : "none") + "'>");
                 out.print("<div class=\"card-header\">");
                 out.print("<h4>Actividades recientes</h4>");
                 out.print("</div>");
-                out.print("<div class=\"card-body\" style='font-size:11px'>");
-                out.print("<div class=\"activities\">");
+                out.print("<div class=\"card-body scrollActivities\" style='font-size:11px'>");
+                out.print("<div class=\" activities\" >");
                 for (int i = 0; i < lst_activity.size(); i++) {
                     Object[] ObjActivity = (Object[]) lst_activity.get(i);
                     String name = ObjActivity[3].toString().replace(" ", "<br>") + "";
@@ -154,7 +153,7 @@ public class Tag_start extends TagSupport {
                     }
                     out.print("    <div class=\"activity-detail\" style='margin-bottom:9px !important;'>");
                     out.print("      <div class=\"mb-2\">");
-                    out.print("        <span class=\"text-job text-primary\">" + ObjActivity[3] + "</span>");
+                    out.print("        <span class=\"text-job text-primary\">" + ObjActivity[3] + "</span><span class=\"bullet\"></span><span class=\"text-job text-warning\">" + ObjActivity[4] + "</span>");
                     out.print("      </div>");
                     out.print("      <p>" + ObjActivity[2] + "</p>");
                     out.print("    </div>");
