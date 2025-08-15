@@ -72,21 +72,21 @@
                 <script>
                     function toggleCustomizer() {
                         document.getElementById('modPanel').classList.toggle('active');
+                        document.body.classList.add('no-scroll');
                     }
                 </script>
                 <script>
                     function toggleSection(sectionId) {
                         const section = document.getElementById(sectionId);
 
-                        const sections = document.querySelectorAll(".card");
-                        sections.forEach(s => {
-                            if (s.id.startsWith("Card_")) {
-                                s.style.display = "none";
-                            }
-                        });
+                        // Alternar visibilidad solo de la sección seleccionada
+                        if (section.style.display === "block") {
+                            section.style.display = "none"; // Ocultar si ya estaba visible
+                        } else {
+                            section.style.display = "block"; // Mostrar si estaba oculta
+                        }
 
-                        section.style.display = "block";
-                        return true; // ← Devuelve true si se mostró correctamente
+                        return true;
                     }
 
                 </script>

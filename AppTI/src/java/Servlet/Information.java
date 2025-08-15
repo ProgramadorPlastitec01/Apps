@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import Controller.ComputerInformationControllerJpa;
+import Controller.ActivitySystemControllerJpa;
 
 public class Information extends HttpServlet {
 
@@ -17,8 +18,11 @@ public class Information extends HttpServlet {
         try {
             HttpSession sesion = request.getSession();
             ComputerInformationControllerJpa InformationJpa = new ComputerInformationControllerJpa();
+            ActivitySystemControllerJpa ActivityJpa = new ActivitySystemControllerJpa();
             int opt = Integer.parseInt(request.getParameter("opt"));
             String UserRol = sesion.getAttribute("idRol").toString();
+            int IdUser = Integer.parseInt(sesion.getAttribute("idUsuario").toString());
+            String NameUser = sesion.getAttribute("Nombres").toString();
             int IdInformation = 0, State = 0, Counter = 0;
             String externa_mail = "", bill = "", bill_date = "", licence_date = "", warranty = "", warranty_date = "",
                     skype = "", vlan = "", network_point = "", description = "";
@@ -47,7 +51,7 @@ public class Information extends HttpServlet {
                     request.setAttribute("idRol", UserRol);
                     request.getRequestDispatcher("Information.jsp").forward(request, response);
                     //</editor-fold>
-                    
+
                     break;
                 case 2:
                     //<editor-fold defaultstate="collapsed" desc="UPDATE INFORMATION">
@@ -107,6 +111,9 @@ public class Information extends HttpServlet {
                         description = "N/A";
                     }
                     Result = InformationJpa.UpdateInformation(IdInformation, externa_mail, bill, bill_date, licence_date, warranty, warranty_date, skype, vlan, network_point, description);
+                    if (Result) {
+                        ActivityJpa.ActivityRegister(IdUser, 5, "Informacion PC", "Se realiza modificación en el Id #" + IdInformation + ".", 1, NameUser);
+                    }
                     request.setAttribute("UpdateInformation", Result);
                     request.getRequestDispatcher("Information?opt=1&IdInformation=0").forward(request, response);
                     //</editor-fold>

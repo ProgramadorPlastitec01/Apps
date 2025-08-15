@@ -44,7 +44,11 @@ public class Tag_start extends TagSupport {
             lst_user = UserJpa.ConsultUsersid(IdUser);
             if (lst_user != null) {
                 Object[] ObjUser = (Object[]) lst_user.get(0);
-                Module = ObjUser[13].toString();
+                try {
+                    Module = ObjUser[13].toString();
+                } catch (Exception e) {
+                    Module = "";
+                }
             }
             out.print("<section class='section'>");
 
@@ -61,7 +65,7 @@ public class Tag_start extends TagSupport {
             if (lst_items != null) {
                 for (int i = 0; i < lst_items.size(); i++) {
                     Object[] ObjItems = (Object[]) lst_items.get(i);
-                    out.print("<div id='Card_" + ObjItems[4] + "' class=\"col-lg-3 col-md-6 col-sm-6 col-12\" style='display:" + (Module.contains(ObjItems[4].toString()) ? "block" : "none") + "' >"
+                    out.print("<div id='" + ObjItems[4] + "' class=\"col-lg-3 col-md-6 col-sm-6 col-12\" style='display:" + (Module.contains(ObjItems[4].toString()) ? "block" : "none") + "' >"
                             + "              <div class=\"card card-statistic-1\">"
                             + "                <div class=\"card-icon bg-" + ObjItems[3] + "\">"
                             + "                  <i class=\"" + ObjItems[2] + "\"></i>"
@@ -94,14 +98,14 @@ public class Tag_start extends TagSupport {
                 }
                 out.print("<div class='col-md-7'>");
 
-                out.print("<div class=\"card\" id='Card_9' style='display:" + (Module.contains("Card_9") ? "block" : "none") + "'>"
+                out.print("<div class=\"card\" id='I' style='display:" + (Module.contains("I") ? "block" : "none") + "'>"
                         
                         + "                <div class=\"card-header\">"
                         + "                  <h4>Pendientes anuales</h4>"
                         + "                </div>");
 
                 out.print("<div class=\"card-body\">");
-                out.print("<canvas id=\"myChart1\" width=\"400\" height=\"230\"></canvas>");
+                out.print("<canvas id=\"myChart1\" width=\"400\" height=\"auto\"></canvas>");
                 out.print("<script>");
                 out.print("var ctx = document.getElementById(\"myChart1\").getContext('2d'); ");
                 out.print("var myChart = new Chart(ctx, { ");
@@ -128,18 +132,18 @@ public class Tag_start extends TagSupport {
             }
             //</editor-fold>
             //<editor-fold defaultstate="collapsed" desc="ACTIVIDADES RECIENTES">
-            lst_activity = DashJpa.ConsultActiviryRecent(CurrYear, (CurrMonth));
+            lst_activity = DashJpa.ConsultActiviryRecent(CurrYear, (CurrMonth+1));
             if (lst_activity != null) {
                 out.print("<div class=\"col-md-5\">");
-                out.print("<div class=\"card\" id='Card_10' style='display:" + (Module.contains("Card_10") ? "block" : "none") + "'>");
+                out.print("<div class=\"card\" id='J' style='display:" + (Module.contains("J") ? "block" : "none") + "'>");
                 out.print("<div class=\"card-header\">");
                 out.print("<h4>Actividades recientes</h4>");
                 out.print("</div>");
                 out.print("<div class=\"card-body\" style='font-size:11px'>");
+                out.print("<div class=\"activities\">");
                 for (int i = 0; i < lst_activity.size(); i++) {
                     Object[] ObjActivity = (Object[]) lst_activity.get(i);
                     String name = ObjActivity[3].toString().replace(" ", "<br>") + "";
-                    out.print("<div class=\"activities\">");
                     out.print("  <div class=\"activity\">");
                     lst_module = SettingJpa.ConsultSettingCategorie(ObjActivity[1].toString());
                     if (lst_module != null) {
@@ -155,9 +159,9 @@ public class Tag_start extends TagSupport {
                     out.print("      <p>" + ObjActivity[2] + "</p>");
                     out.print("    </div>");
                     out.print("  </div>");
-                    out.print("</div>");
 
                 }
+                out.print("</div>");
             }
             //</editor-fold>
             out.print("</div>");
@@ -191,14 +195,14 @@ public class Tag_start extends TagSupport {
                 "fa-list", "fa-comments"
             };
             String[] DivOpenClose = {
-                "Card_1", "Card_2", "Card_3", "Card_4",
-                "Card_5", "Card_6", "Card_7", "Card_8",
-                "Card_9", "Card_10"
+                "A", "B", "C", "D",
+                "E", "F", "G", "H",
+                "I", "J"
             };
 
             for (int i = 0; i < ArgModule.length; i++) {
                 out.print("<div class='col-4 text-center mb-3'>");
-                out.print("<div class='mod-icon-card " + (Module.contains(DivOpenClose[i]) ? "active" : "") + "' onclick=\"selectModule(this, '" + DivOpenClose[i] + "'); toggleSection('" + DivOpenClose[i] + "')\">");
+                out.print("<div class='mod-icon-card " + (Module.contains(DivOpenClose[i]) ? "active" : "") + "' onclick=\"selectModule(this, '" + DivOpenClose[i] + "'); toggleSection('" + DivOpenClose[i] + "');reorganizeCards()\">");
                 out.print("<i class='fas " + ArgIcon[i] + "'></i><br>");
                 out.print("<small>" + ArgModule[i] + "</small>");
                 out.print("</div>");

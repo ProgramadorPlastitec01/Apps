@@ -13,6 +13,32 @@ public class Tag_alert extends TagSupport {
     public int doStartTag() throws JspException {
         JspWriter out = pageContext.getOut();
         try {
+            //<editor-fold defaultstate="collapsed" desc="START">
+            if (pageContext.getRequest().getAttribute("SaveModuleStart") != null) {
+                boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("SaveModuleStart").toString());
+                if (result) {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-2\").ready(function() {\n"
+                            + "  iziToast.success({\n"
+                            + "    title: 'Correcto',\n"
+                            + "    message: 'Se ha registrado el usuario.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                } else {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-4\").ready(function() {\n"
+                            + "  iziToast.error({\n"
+                            + "    title: 'Error',\n"
+                            + "    message: 'Ha ocurrido un problema en el registro.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                }
+            }
+            //</editor-fold>
             //<editor-fold defaultstate="collapsed" desc="SESSION">
             if (pageContext.getRequest().getAttribute("Non_existent_user") != null) {
                 boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("Non_existent_user").toString());

@@ -88,11 +88,11 @@ public class Pending extends HttpServlet {
                     Description = request.getParameter("Txt_description");
                     if (IdPending > 0) {
                         Result = PendingJpa.PendingUpdate(IdPending, Affair, Priority, Managed, Description);
-                        ActivityJpa.ActivityRegister(IdUser, 3, "ModulePending", "Se modifico el pendiente #" + IdPending + ".", 1, NameUser);
+                        ActivityJpa.ActivityRegister(IdUser, 3, "Pendiente", "Se modifico el pendiente #" + IdPending + ".", 1, NameUser);
                         request.setAttribute("UpdatePending", Result);
                     } else {
                         Result = PendingJpa.PendingRegister(Affair, Priority, Managed, Description, IdUser);
-                        ActivityJpa.ActivityRegister(IdUser, 3, "ModulePending", "Registro un nuevo pendiente.", 1, NameUser);
+                        ActivityJpa.ActivityRegister(IdUser, 3, "Pendiente", "Registro un nuevo pendiente.", 1, NameUser);
                         request.setAttribute("RegisterPending", Result);
                     }
                     request.getRequestDispatcher("Pending?opt=1&IdPending=0&State=1").forward(request, response);
@@ -122,10 +122,10 @@ public class Pending extends HttpServlet {
                     Result = PendingJpa.SolutionPending(IdPending, DateSolution, Solver, SolutionEnd, Progress);
                     if (Progress == 100) {
                         request.setAttribute("SolutionPending", Result);
-                        ActivityJpa.ActivityRegister(IdUser, 3, "ModulePending", "Se solución el pendiente #" + IdPending + ".", 1, NameUser);
+                        ActivityJpa.ActivityRegister(IdUser, 3, "Pendiente", "Se solución el pendiente #" + IdPending + ".", 1, NameUser);
                     } else {
                         request.setAttribute("SolutionPendingAdvance", Result);
-                        ActivityJpa.ActivityRegister(IdUser, 3, "ModulePending", "Se registro un avance al pendiente con un porcentaje de " + Progress + "%.", 1, NameUser);
+                        ActivityJpa.ActivityRegister(IdUser, 3, "Pendiente", "Se registro un avance al pendiente con un porcentaje de " + Progress + "%.", 1, NameUser);
                     }
                     request.getRequestDispatcher("Pending?opt=1&IdPending=0&State=1").forward(request, response);
                     //</editor-fold>

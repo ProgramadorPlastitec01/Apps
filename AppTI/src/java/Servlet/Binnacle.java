@@ -66,13 +66,15 @@ public class Binnacle extends HttpServlet {
                     shift = request.getParameter("txtshift");
                     if (idBinn > 0) {
                         result = binnacleJpa.BinnacleUpdate(idBinn, datIn, dateFin, shift);
+                        activitySystem.ActivityRegister(idUser, 2, "Bitacora", "Se modificado la bitacora Id #" + idBinn + "", 1, userSession);
                         request.setAttribute("UpdateBinnacle", result);
                     } else {
                         result = binnacleJpa.BinnacleRegister(datIn, dateFin, shift, idUser);
+                        activitySystem.ActivityRegister(idUser, 2, "Bitacora", "Se registra bitacora del día", 1, userSession);
                         request.setAttribute("RegisterBinnacle", result);
                     }
                     request.getRequestDispatcher("Binnacle?opt=1&idBinn=0").forward(request, response);
-//</editor-fold>
+                    //</editor-fold>
                     break;
                 case 3:
                     //<editor-fold defaultstate="collapsed" desc="UPDATE BINNACLE DATA">
@@ -116,6 +118,9 @@ public class Binnacle extends HttpServlet {
                     }
                     ste = Integer.parseInt(request.getParameter("state"));
                     result = binnacleJpa.BinnacleUpdateState(idBinn, ste);
+                    if (result) {
+                        activitySystem.ActivityRegister(idUser, 2, "Bitacora", "Se cambio estado a la bitacora", 1, userSession);
+                    }
                     if (ste == 0) {
                         request.setAttribute("GetBackBinnacle", result);
                     } else if (ste == 2) {

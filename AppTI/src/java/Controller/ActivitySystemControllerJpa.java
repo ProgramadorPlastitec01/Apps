@@ -56,6 +56,24 @@ public class ActivitySystemControllerJpa implements Serializable {
             return null;
         }
     }
+    public List ConsultActivitySystem(int IdUser, int Year, int Month) {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_adt_c_ConsultActivitySystem`('" + IdUser + "','" + Year + "','" + Month + "')");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="PROCESS">

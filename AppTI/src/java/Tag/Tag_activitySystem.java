@@ -9,7 +9,7 @@ import java.util.Calendar;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Locale;
-import Controller.ActivitySystemJpaController;
+import Controller.ActivitySystemControllerJpa;
 
 public class Tag_activitySystem extends TagSupport {
 
@@ -17,7 +17,7 @@ public class Tag_activitySystem extends TagSupport {
     public int doStartTag() throws JspException {
         HttpSession sesion = pageContext.getSession();
         JspWriter out = pageContext.getOut();
-        ActivitySystemJpaController ActivityJpa = new ActivitySystemJpaController();
+        ActivitySystemControllerJpa ActivityJpa = new ActivitySystemControllerJpa();
         Calendar cal = Calendar.getInstance();
         int CurrYear = cal.get(Calendar.YEAR);
         int CurrMonth = (cal.get(Calendar.MONTH));
@@ -40,7 +40,7 @@ public class Tag_activitySystem extends TagSupport {
             out.print("<div class=\"col-12\">");
 
             out.print("<div class=\"activities\">");
-            lst_activitySys = ActivityJpa.ConsultActivitySystem(idUser, CurrYear, CurrMonth);
+            lst_activitySys = ActivityJpa.ConsultActivitySystem(idUser, CurrYear, (CurrMonth + 1));
             if (lst_activitySys != null) {
                 for (int i = 0; i < lst_activitySys.size(); i++) {
                     Object[] ObjActivity = (Object[]) lst_activitySys.get(i);

@@ -2497,13 +2497,13 @@ thead.sticky-top {
     overflow-x: auto;
 }
 
-.collapsed{
+/*.collapsed{
     background-color: #33bf98 !important;
     border-radius: 3px;
     cursor: pointer;
     transition: all .5s;
     color: black;
-}
+}*/
 
 .itemEnt{
     /*background: #33bf9847;*/

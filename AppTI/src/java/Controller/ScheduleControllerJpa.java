@@ -131,7 +131,7 @@ public class ScheduleControllerJpa {
         }
     }
 
-    public boolean ScheduleUpdateExecute(int IdSchedule, String idU, String date) {
+    public boolean ScheduleUpdateExecute(int IdSchedule, int idU, String date) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
@@ -150,7 +150,7 @@ public class ScheduleControllerJpa {
         }
     }
 
-    public boolean ScheduleUpdateRevised(int IdSchedule, String idU, String date) {
+    public boolean ScheduleUpdateRevised(int IdSchedule, int idU, String date) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {

@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import Controller.ScheduleControllerJpa;
+import Controller.ActivitySystemControllerJpa;
 import java.util.Calendar;
 
 public class Schedule extends HttpServlet {
@@ -17,10 +18,11 @@ public class Schedule extends HttpServlet {
         request.setCharacterEncoding("utf-8");
         try {
             HttpSession sesion = request.getSession();
-            String IdUser = sesion.getAttribute("idUsuario").toString();
             String Nombres = sesion.getAttribute("Nombres").toString();
             String UserRol = sesion.getAttribute("idRol").toString();
             ScheduleControllerJpa ScheduleJpa = new ScheduleControllerJpa();
+            int IdUser = Integer.parseInt(sesion.getAttribute("idUsuario").toString());
+            ActivitySystemControllerJpa ActivityJpa = new ActivitySystemControllerJpa();
             Calendar cal = Calendar.getInstance();
             int CurrYear = cal.get(Calendar.YEAR);
             int opt = Integer.parseInt(request.getParameter("opt"));
@@ -112,6 +114,9 @@ public class Schedule extends HttpServlet {
                             monthFormatter = CurrYear + "-" + monthArrg[i];
                             result = ScheduleJpa.ScheduleUpdate(IdSchedule, app, activity, monthFormatter, color, Nombres);
                         }
+                        if (result) {
+                            ActivityJpa.ActivityRegister(IdUser, 4, "R-TI-026", "Se modifica actividad " + activity + " con Id #" + IdSchedule + "", 1, Nombres);
+                        }
                         request.setAttribute("UserRegister", result);
                         request.getRequestDispatcher("Schedule?opt=1&IdSchedule=0&temp=" + 0 + "&type=" + type + "&module=" + module + "&Year=" + Year + "").forward(request, response);
                         //</editor-fold>
@@ -120,6 +125,9 @@ public class Schedule extends HttpServlet {
                         for (int i = 0; i < monthArrg.length; i++) {
                             monthFormatter = CurrYear + "-" + monthArrg[i];
                             result = ScheduleJpa.ScheduleRegister(type, app, activity, monthFormatter, color, Nombres);
+                        }
+                        if (result) {
+                            ActivityJpa.ActivityRegister(IdUser, 4, "R-TI-026", "Se registro actividad(es) dentro del cronograma", 1, Nombres);
                         }
                         request.setAttribute("UserRegister", result);
                         request.getRequestDispatcher("Schedule?opt=1&IdSchedule=0&temp=" + SaveContinue + "&type=" + type + "&module=" + module + "&Year=" + Year + "").forward(request, response);
@@ -153,9 +161,15 @@ public class Schedule extends HttpServlet {
                     date = request.getParameter("date");
                     if (validation == 1) {
                         result = ScheduleJpa.ScheduleUpdateExecute(IdSchedule, IdUser, date);
+                        if (result) {
+                            ActivityJpa.ActivityRegister(IdUser, 4, "R-TI-026", "Se ejecuta actividad mensual", 1, Nombres);
+                        }
                         request.setAttribute("ExecuteSchedule", result);
                     } else {
                         result = ScheduleJpa.ScheduleUpdateRevised(IdSchedule, IdUser, date);
+                        if (result) {
+                            ActivityJpa.ActivityRegister(IdUser, 4, "R-TI-026", "Se revisa actividad mensual", 1, Nombres);
+                        }
                         request.setAttribute("RevisedSchedule", result);
                     }
                     request.getRequestDispatcher("Schedule?opt=1&IdSchedule=0&temp=0&type=" + type + "&module=" + module + "&Year=" + Year + "").forward(request, response);
