@@ -30,7 +30,26 @@
         <!--        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-94034622-3"></script>-->
         <!--        <script type="text/javascript" src="Interface/Alertas/dist/sweetalert.min.js"></script>
                 <link href="Interfaz/Alertas/dist/sweetalert.css" rel="stylesheet" type="text/css"/>-->
+        
+        <style>
+            #lottie-loader {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: rgba(255, 255, 255, 0.9);
+                display: none;
+                justify-content: center;
+                align-items: center;
+                z-index: 9999;
+            }
 
+            #lottie-animation {
+                width: 200px;
+                height: 200px;
+            }
+        </style>
 
         <!-- Editores -->
         <link rel="stylesheet" href="Interface/Editor/samples/toolbarconfigurator/lib/codemirror/neo.css">
@@ -226,13 +245,13 @@
         </script>
         <script>
             function ViewAlertREDEAC() {
-                 $("#toastr-2").ready(function () {
-                        iziToast.warning({
-                            title: '¡Fallo!',
-                            message: 'Se debe configurar la nueva ruta del app historica, informar al administrador.',
-                            position: 'bottomRight'
-                        });
+                $("#toastr-2").ready(function () {
+                    iziToast.warning({
+                        title: '¡Fallo!',
+                        message: 'Se debe configurar la nueva ruta del app historica, informar al administrador.',
+                        position: 'bottomRight'
                     });
+                });
             }
         </script>
 
@@ -253,6 +272,33 @@
         <script src="Interface/Content/Assets/modules/bootstrap-daterangepicker/daterangepicker.js"></script>
         <script src="Interface/Content/Assets/modules/select2/dist/js/select2.full.min.js"></script>
 
+        <script src="Interface/Content/Assets/js/lottie.min.js"></script>
+
+        <script>
+            const animation = lottie.loadAnimation({
+                container: document.getElementById('lottie-animation'),
+                renderer: 'svg',
+                loop: true,
+                autoplay: false,
+                path: 'https://lottie.host/24b3f2ff-747e-4b3f-bc89-a065bd3bb00f/61L1Ea73FZ.json' // Puedes cambiar esta animación
+            });
+
+            function showLoader() {
+                document.getElementById('lottie-loader').style.display = 'flex';
+                animation.play();
+            }
+
+            function hideLoader() {
+                animation.stop();
+                document.getElementById('lottie-loader').style.display = 'none';
+            }
+
+            // Simulación de proceso de carga
+            function cargarDatos() {
+                showLoader();
+
+            }
+        </script>
 
         <!--         Page Specific JS File -->
         <script src="Interface/Content/Assets/js/page/index.js"></script>

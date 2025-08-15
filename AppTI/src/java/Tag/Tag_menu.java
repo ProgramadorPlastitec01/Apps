@@ -68,6 +68,10 @@ public class Tag_menu extends TagSupport {
                 idRol = 0;
                 txtPermissions = "";
             }
+            out.print("<div id=\"lottie-loader\">\n"
+                    + "            <div id=\"lottie-animation\"></div>\n"
+                    + "        </div>");
+
             //<editor-fold defaultstate="collapsed" desc="FILTER ACTIVITY-TICKET-PENDING">
             out.print("<div class='sweet-local' tabindex='-1' id='Ventana98' style='opacity: 1.03; display:none;'>");
             out.print("<div class='contGeneral'>");
@@ -352,7 +356,7 @@ public class Tag_menu extends TagSupport {
             out.print("</div>");
 
             out.print("<div class=\"mt-0 p-3 hide-sidebar-mini\">");
-            out.print("<a style='color:black' href=\"Start?opt=1\" class=\"btn btn-yellow btn-lg btn-block btn-icon-split\">");
+            out.print("<a style='color:black' href=\"Start?opt=1\" onclick='cargarDatos()' class=\"btn btn-yellow btn-lg btn-block btn-icon-split\">");
             out.print("<i style='color:black' class=\"fas fa-home\"></i> Inicio");
             out.print("</a>");
             out.print("</div>");
@@ -362,13 +366,13 @@ public class Tag_menu extends TagSupport {
             out.print("</li>");
             if (txtPermissions.contains("[33]")) {
                 out.print("<li class=\"dropdown\">");
-                out.print("<a href=\"Pending?opt=1&State=1&Filter=\" class=\"nav-link\"><i class=\"fas fa-bell\"></i> <span>Pendiente</span> <input class='Bounce' value='" + counterPending + "' readonly></a>");
+                out.print("<a href=\"Pending?opt=1&State=1&Filter=\" class=\"nav-link\" onclick='cargarDatos()'><i class=\"fas fa-bell\"></i> <span>Pendiente</span> <input class='Bounce' value='" + counterPending + "' readonly></a>");
                 out.print("</li>");
             }
 
             if (txtPermissions.contains("[23]")) {
                 out.print("<li class=\"dropdown\">");
-                out.print("<a href=\"Binnacle?opt=1\" class=\"nav-link\"><i class=\"fas fa-folder-open\"></i> <span>Bitacora</span></a>");
+                out.print("<a href=\"Binnacle?opt=1\" class=\"nav-link\"><i class=\"fas fa-folder-open\" onclick='cargarDatos()'></i> <span>Bitacora</span></a>");
                 out.print("</li>");
             }
 
@@ -385,10 +389,10 @@ public class Tag_menu extends TagSupport {
             out.print("<ul class=\"dropdown-menu\">");
 
             if (txtPermissions.contains("[50]")) {
-                out.print("<li><a class=\"nav-link\" href=\"Computer?opt=1\"><i style='margin-right:4px' class=\"fas fa-laptop\"></i>PC</a></li>");
+                out.print("<li><a class=\"nav-link\" href=\"Computer?opt=1\" onclick='cargarDatos()'><i style='margin-right:4px' class=\"fas fa-laptop\"></i>PC</a></li>");
             }
             if (txtPermissions.contains("[46]")) {
-                out.print("<li><a class=\"nav-link\" href=\"Information?opt=1\"><i style='margin-right:4px' class=\"fas fa-copy\"></i>Información PC</a></li>");
+                out.print("<li><a class=\"nav-link\" href=\"Information?opt=1\" onclick='cargarDatos()'><i style='margin-right:4px' class=\"fas fa-copy\"></i>Información PC</a></li>");
             }
 
             out.print("</ul>");
@@ -405,13 +409,13 @@ public class Tag_menu extends TagSupport {
 //                out.print("<li><a class=\"nav-link\" href=\"Call?opt=1&Module=General\"><i style='margin-right:4px' class='fas fa-file-alt'></i>R-TI-001</a></li>");
 //            }
             if (txtPermissions.contains("[57]")) {
-                out.print("<li><a class=\"nav-link\" href=\"Activity?opt=1\"><i style='margin-right:4px' class='fas fa-file-alt'></i>R-TI-005</a></li>");
+                out.print("<li><a class=\"nav-link\" href=\"Activity?opt=1\" onclick='cargarDatos()'><i style='margin-right:4px' class='fas fa-file-alt'></i>R-TI-005</a></li>");
             }
             if (txtPermissions.contains("[58]")) {
-                out.print("<li><a class=\"nav-link\" href=\"Minute?opt=1\"><i style='margin-right:4px' class='fas fa-file-alt'></i>R-TI-014</a></li>");
+                out.print("<li><a class=\"nav-link\" href=\"Minute?opt=1\" onclick='cargarDatos()'><i style='margin-right:4px' class='fas fa-file-alt'></i>R-TI-014</a></li>");
             }
             if (txtPermissions.contains("[59]")) {
-                out.print("<li><a class=\"nav-link\" href=\"Schedule?opt=1&module=Schedule&Year=\"><i style='margin-right:4px' class='fas fa-file-alt'></i>R-TI-026</a></li>");
+                out.print("<li><a class=\"nav-link\" href=\"Schedule?opt=1&module=Schedule&Year=\" onclick='cargarDatos()'><i style='margin-right:4px' class='fas fa-file-alt'></i>R-TI-026</a></li>");
             }
             out.print("</ul>");
             out.print("</li>");
@@ -422,16 +426,16 @@ public class Tag_menu extends TagSupport {
             }
             out.print("<ul class=\"dropdown-menu\">");
             if (txtPermissions.contains("[46]")) {
-                out.print("<li><a class=\"nav-link\" href=\"Reference?opt=1\" style='padding-left: 50px;'><i style='margin-right:4px' class='fas fa-folder-plus'></i>Ingreso referencias</a></li>");
+                out.print("<li><a class=\"nav-link\" href=\"Reference?opt=1\" style='padding-left: 50px;' onclick='cargarDatos()'><i style='margin-right:4px' class='fas fa-folder-plus'></i>Ingreso referencias</a></li>");
             }
-            out.print("<li><a class=\"nav-link\" href=\"MoveItem?opt=1\" style='padding-left: 50px;'><i style='margin-right:4px' class='fas fa-people-carry'></i>Movimiento items</a></li>");
-            out.print("<li><a class=\"nav-link\" href=\"TrackingItem?opt=1\" style='padding-left: 50px;'><i style='margin-right:4px' class='fas fa-dolly-flatbed'></i>Seguimiento items</a></li>");
+            out.print("<li><a class=\"nav-link\" href=\"MoveItem?opt=1\" style='padding-left: 50px;' onclick='cargarDatos()'><i style='margin-right:4px' class='fas fa-people-carry'></i>Movimiento items</a></li>");
+            out.print("<li><a class=\"nav-link\" href=\"TrackingItem?opt=1\" style='padding-left: 50px;' onclick='cargarDatos()'><i style='margin-right:4px' class='fas fa-dolly-flatbed'></i>Seguimiento items</a></li>");
             out.print("</ul>");
             out.print("</li>");
 
             out.print("<li class=\"dropdown\">");
             if (txtPermissions.contains("[37]")) {
-                out.print("<a class=\"nav-link\" href=\"AppDetail?opt=1\"><i class=\"fas fa-lightbulb\"></i><span>&nbsp;Aplicativos</span></a>");
+                out.print("<a class=\"nav-link\" href=\"AppDetail?opt=1\" onclick='cargarDatos()'><i class=\"fas fa-lightbulb\"></i><span>&nbsp;Aplicativos</span></a>");
             }
 //            out.print("<a class=\"nav-link\" href=\"AppDetail?opt=1\"><i style='margin-right:4px' class=\"fab fa-medapps\"></i><span>&nbsp;Aplicativos</span></a>");
             out.print("</li>");
@@ -446,8 +450,8 @@ public class Tag_menu extends TagSupport {
             out.print("<li class=\"dropdown\">");
             out.print("<a  href=\"#\" class=\"nav-link has-dropdown\" data-toggle=\"dropdown\"><i class=\"fas fa-layer-group\"></i> <span>Reportes</span></a>");
             out.print("<ul class=\"dropdown-menu\">");
-            out.print("<li><a class=\"nav-link\" href=\"Report?opt=2\"><i style='margin-right:4px' class=\"fas fa-search\"></i>Informacion PC</a></li>");
-            out.print("<li><a class=\"nav-link\" href=\"Report?opt=1\"><i style='margin-right:4px' class=\"fas fa-search\"></i>Pendiente</a></li>");
+            out.print("<li><a class=\"nav-link\" href=\"Report?opt=2\" onclick='cargarDatos()'><i style='margin-right:4px' class=\"fas fa-search\"></i>Informacion PC</a></li>");
+            out.print("<li><a class=\"nav-link\" href=\"Report?opt=1\" onclick='cargarDatos()'><i style='margin-right:4px' class=\"fas fa-search\"></i>Pendiente</a></li>");
             out.print("</ul>");
             out.print("</li>");
 
