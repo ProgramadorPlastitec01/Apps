@@ -150,8 +150,8 @@ public class Tag_start extends TagSupport {
                         Object[] ObjModule = (Object[]) lst_module.get(0);
                         out.print("    <div class=\"activity-icon " + ObjModule[3] + " text-white shadow-primary\">");
                         out.print(ObjModule[2]);
+                        out.print("    </div>");
                     }
-                    out.print("    </div>");
                     out.print("    <div class=\"activity-detail\" style='margin-bottom:9px !important;'>");
                     out.print("      <div class=\"mb-2\">");
                     out.print("        <span class=\"text-job text-primary\">" + ObjActivity[3] + "</span>");
