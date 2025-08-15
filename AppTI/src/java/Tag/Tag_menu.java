@@ -372,7 +372,7 @@ public class Tag_menu extends TagSupport {
 
             if (txtPermissions.contains("[23]")) {
                 out.print("<li class=\"dropdown\">");
-                out.print("<a href=\"Binnacle?opt=1\" class=\"nav-link\"><i class=\"fas fa-folder-open\" onclick='cargarDatos()'></i> <span>Bitacora</span></a>");
+                out.print("<a href=\"Binnacle?opt=1\" class=\"nav-link\" onclick='cargarDatos()'><i class=\"fas fa-folder-open\" ></i> <span>Bitacora</span></a>");
                 out.print("</li>");
             }
 
