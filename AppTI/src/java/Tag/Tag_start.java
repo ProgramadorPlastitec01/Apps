@@ -151,11 +151,13 @@ public class Tag_start extends TagSupport {
                         out.print(ObjModule[2]);
                         out.print("    </div>");
                     }
-                    out.print("    <div class=\"activity-detail\" style='margin-bottom:9px !important;'>");
-                    out.print("      <div class=\"mb-2\">");
-                    out.print("        <span class=\"text-job text-primary\">" + ObjActivity[3] + "</span><span class=\"bullet\"></span><span class=\"text-job text-warning\">" + ObjActivity[4] + "</span>");
-                    out.print("      </div>");
-                    out.print("      <p>" + ObjActivity[2] + "</p>");
+                    out.print("    <div class=\"activity-detail w-100\" style='margin-bottom:9px !important;'>");
+                    out.print("  <div class='d-flex justify-content-between mb-2'>");
+                    out.print("    <span class='text-job text-primary'>" + ObjActivity[1] + "</span>");
+                    out.print("    <span class='text-job text-warning'>" + ObjActivity[4] + "</span>");
+                    out.print("  </div>");
+                    out.print("        <span class=\"text-job text-primary\">" + ObjActivity[3] + "</span>");
+                    out.print("      <div class='d-flex align-items-baseline'><span class=\"bullet \"></span><p>" + ObjActivity[2] + "</p></div>");
                     out.print("    </div>");
                     out.print("  </div>");
 
