@@ -7,8 +7,8 @@
         <title>JSP Page</title>
         <style>
             .card-stats {
-   margin-bottom: 1rem; /* se adapta al contenido */
-}
+                margin-bottom: 1rem; /* se adapta al contenido */
+            }
         </style>
     </head>
     <body>
