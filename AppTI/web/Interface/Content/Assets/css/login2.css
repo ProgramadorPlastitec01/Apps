@@ -57,9 +57,9 @@ a {
     position: relative;
     height: 100vh;
     width: 100%;
-    background-image: url("Img/B8.jpg");
+    /*background-image: url("Img/B10.jpeg");*/
     /*background-image: url("Img/B5.jpg");*/
-    /*background-image: url("Img/B2.jpg");*/
+    background-image: url("Img/B2.jpg");
     /*background-color: gray;*/
     background-size: cover;
     background-position: center;

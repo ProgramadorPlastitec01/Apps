@@ -1,12 +1,12 @@
 package Servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import Controller.ActivitySystemControllerJpa;
 
 import Controller.ReferenceControllerJpa;
 
@@ -18,9 +18,11 @@ public class Reference extends HttpServlet {
 
         HttpSession sesion = request.getSession();
         int idUser = Integer.parseInt(sesion.getAttribute("idUsuario").toString());
-        
+        String userSession = sesion.getAttribute("Nombres").toString();
+
         ReferenceControllerJpa ReferenceJpa = new ReferenceControllerJpa();
-        
+        ActivitySystemControllerJpa activitySystem = new ActivitySystemControllerJpa();
+
         int opt = Integer.parseInt(request.getParameter("opt"));
         boolean result = false;
         String ref = "", refName = "", Supplier = "", Brand = "", Location = "";
@@ -45,8 +47,11 @@ public class Reference extends HttpServlet {
                     Supplier = request.getParameter("txt_supplier");
                     Brand = request.getParameter("txt_brand");
                     Location = request.getParameter("txt_location");
-                    
+
                     result = ReferenceJpa.RegisterReference(ref, refName, Supplier, Brand, Location, idUser);
+                    if (result) {
+                        activitySystem.ActivityRegister(idUser, 2, "Inventarios", "Se crea nueva referencia", 1, userSession);
+                    }
                     request.setAttribute("RegisterReference", result);
                     request.getRequestDispatcher("Reference?opt=1&txt_Ref=").forward(request, response);
                     break;

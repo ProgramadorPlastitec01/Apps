@@ -71,21 +71,21 @@ public class Tag_activitySystem extends TagSupport {
             if (lst_group != null) {
                 StringBuilder labels = new StringBuilder();
                 StringBuilder values = new StringBuilder();
-
-                String[] colors = {"'#ffcd56'", "'#36a2eb'", "'#ff6384'", "'#0943f1'"};
+                StringBuilder classes = new StringBuilder();
 
                 out.print("<div class=\"card card-statistic-2\">");
-                out.print("  <div class=\"card-stats\">");
-                out.print("    <div class=\"card-stats-title\"><h6>Actividades</h6></div>");
-                out.print("    <div class=\"card-stats-items\">");
+                out.print("  <div class=\"card-stats\" style='margin-bottom:0px'>");
+                out.print("    <div class=\"card-stats-title row\"><h6>Actividades</h6></div>");
+                out.print("    <div class=\"row card-stats-items\" style='height:auto'>");
 
                 for (int i = 0; i < lst_group.size(); i++) {
                     Object[] ObjGroup = (Object[]) lst_group.get(i);
 
                     labels.append("'").append(ObjGroup[1].toString()).append("',");
                     values.append(ObjGroup[0].toString()).append(",");
+                    classes.append("'").append(ObjGroup[2].toString()).append("',");
 
-                    out.print("      <div class=\"card-stats-item\">");
+                    out.print("      <div class=\"col-6 col-md-4 col-lg-3 card-stats-item\">");
                     out.print("        <div class=\"card-stats-item-count\">" + ObjGroup[0] + "</div>");
                     out.print("        <div class=\"card-stats-item-label\">" + ObjGroup[1] + "</div>");
                     out.print("      </div>");
@@ -93,9 +93,23 @@ public class Tag_activitySystem extends TagSupport {
 
                 out.print("    </div>");
                 out.print("  </div>");
-                out.print("  <div class=\"card-wrap mt-3\">");
+                out.print("  <div class=\"card-wrap mt-3\" st>");
                 out.print("    <canvas id=\"myChart1\" class='mb-2' width=\"400\" height=\"230\"></canvas>");
                 out.print("    <script>");
+                out.print("      function getColorFromClass(className) {");
+                out.print("        return getComputedStyle(document.querySelector('.' + className)).backgroundColor;");
+                out.print("      }");
+
+                // Array de clases que vienen desde el servidor
+                out.print("      var classNames = [" + classes.substring(0, classes.length() - 1) + "];");
+
+                // Construimos los colores dinámicamente
+                out.print("      var chartColors = []; ");
+                out.print("      for (var i = 0; i < classNames.length; i++) {");
+                out.print("        chartColors.push(getColorFromClass(classNames[i]));");
+                out.print("      }");
+
+                // Chart.js
                 out.print("      var ctx = document.getElementById('myChart1').getContext('2d');");
                 out.print("      new Chart(ctx, {");
                 out.print("        type: 'doughnut',");
@@ -104,26 +118,9 @@ public class Tag_activitySystem extends TagSupport {
                 out.print("          datasets: [{");
                 out.print("            label: 'Proceso',");
                 out.print("            data: [" + values.substring(0, values.length() - 1) + "],");
-
-                // Colores
-                out.print("            backgroundColor: [");
-                for (int i = 0; i < lst_group.size(); i++) {
-                    out.print(colors[i % colors.length]);
-                    if (i < lst_group.size() - 1) {
-                        out.print(",");
-                    }
-                }
-                out.print("],");
-
-                out.print("            borderColor: [");
-                for (int i = 0; i < lst_group.size(); i++) {
-                    out.print(colors[i % colors.length]);
-                    if (i < lst_group.size() - 1) {
-                        out.print(",");
-                    }
-                }
-                out.print("], borderWidth: 1.7");
-
+                out.print("            backgroundColor: chartColors,");
+                out.print("            borderColor: chartColors,");
+                out.print("            borderWidth: 1.7");
                 out.print("          }]"); // datasets
                 out.print("        },");
                 out.print("        options: { responsive: true, cutout: '60%', plugins: { legend: { position: 'bottom' } } }");

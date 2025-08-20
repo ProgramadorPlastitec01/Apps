@@ -1,7 +1,6 @@
 package Servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import Controller.ActivityJpaController;
 import Controller.ActivityDetailJpaController;
+import Controller.ActivitySystemControllerJpa;
 import Controller.ComputerControllerJpa;
 import java.util.List;
 import javax.servlet.http.HttpSession;
@@ -22,8 +22,10 @@ public class Activity extends HttpServlet {
         HttpSession sesion = request.getSession();
         int idUser = Integer.parseInt(sesion.getAttribute("idUsuario").toString());
         String UserRol = sesion.getAttribute("idRol").toString();
+        String userSession = sesion.getAttribute("Nombres").toString();
         ActivityJpaController ActivityJpa = new ActivityJpaController();
         ActivityDetailJpaController ActivityDetail = new ActivityDetailJpaController();
+        ActivitySystemControllerJpa activitySystem = new ActivitySystemControllerJpa();
         ComputerControllerJpa ComputerJpa = new ComputerControllerJpa();
         int opt = Integer.parseInt(request.getParameter("opt"));
         int idAct = 0, event = 0, typeSelect = 0, action = 0, temp = 0;
@@ -67,11 +69,14 @@ public class Activity extends HttpServlet {
                     }
                     activity = request.getParameter("txtAct");
                     weekx = request.getParameter("cbxWeek");
-                    
+
                     result = ActivityJpa.UpdateAcivity(idAct, activity, weekx, idUser);
+                    if (result) {
+                        activitySystem.ActivityRegister(idUser, 2, "R-TI-005", "Se modifico actividad " + activity + " #" + idAct + "", 1, userSession);
+                    }
                     request.setAttribute("EditAcivity", result);
                     request.getRequestDispatcher("Activity?opt=1&idAct=0").forward(request, response);
-//</editor-fold>
+                    //</editor-fold>
                     break;
 
                 case 4:
@@ -146,7 +151,7 @@ public class Activity extends HttpServlet {
                                     if (typePcCons == 1) {
                                         lst_pc_dev = ComputerJpa.ConsulteComputerB_R();
                                     } else if (typePcCons == 2) {
-                                        lst_pc_dev = ComputerJpa.ConsulteComputerCritical(); 
+                                        lst_pc_dev = ComputerJpa.ConsulteComputerCritical();
                                     }
                                     if (lst_pc_dev != null) {
                                         for (int i = 0; i < lst_pc_dev.size(); i++) {
@@ -194,6 +199,7 @@ public class Activity extends HttpServlet {
                                 //</editor-fold>
                             }
                         }
+                        activitySystem.ActivityRegister(idUser, 2, "R-TI-005", "Se registrar nueva actividad programada", 1, userSession);
                     } else {
 
                     }
@@ -217,10 +223,16 @@ public class Activity extends HttpServlet {
                     if (action == 1) {
                         idEjec = request.getParameter("idEject").replace("][", ",").replace("[", "").replace("]", "");
                         result = ActivityDetail.UpdateActivityDetail_Act(idEjec, txtDate, txtComent, idUser);
+                        if (result) {
+                            activitySystem.ActivityRegister(idUser, 2, "R-TI-005", "Se ejecuta actividad #" + idAct + "", 1, userSession);
+                        }
                         request.setAttribute("EjectAct", result);
                     } else if (action == 2) {
                         idVerf = request.getParameter("idVerf").replace("][", ",").replace("[", "").replace("]", "");
                         result = ActivityDetail.UpdateActivityDetail_Ver(idVerf, txtDate, txtComent, idUser);
+                        if (result) {
+                            activitySystem.ActivityRegister(idUser, 2, "R-TI-005", "Se revisa actividad #" + idAct + "", 1, userSession);
+                        }
                         request.setAttribute("VerfAct", result);
                     }
                     request.getRequestDispatcher("Activity?opt=1").forward(request, response);

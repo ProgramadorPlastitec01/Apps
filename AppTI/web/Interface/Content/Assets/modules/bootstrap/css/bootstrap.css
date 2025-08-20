@@ -6102,6 +6102,16 @@ button.bg-success:focus {
   background-color: #1e7e34 !important;
 }
 
+.bg-purple {
+  background-color: #976cff !important;
+}
+
+a.bg-purple:hover, a.bg-purple:focus,
+button.bg-purple:hover,
+button.bg-purple:focus {
+  background-color: #976cff !important;
+}
+
 .bg-info {
   background-color: #17a2b8 !important;
 }

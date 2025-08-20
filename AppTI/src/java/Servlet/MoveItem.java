@@ -1,5 +1,6 @@
 package Servlet;
 
+import Controller.ActivitySystemControllerJpa;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -19,17 +20,18 @@ public class MoveItem extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession sesion = request.getSession();
         int idUser = Integer.parseInt(sesion.getAttribute("idUsuario").toString());
+        String userSession = sesion.getAttribute("Nombres").toString();
         int opt = Integer.parseInt(request.getParameter("opt"));
 
         ItemJpaController ItemJpa = new ItemJpaController();
         MoveItemJpaController MoveItemJpa = new MoveItemJpaController();
+        ActivitySystemControllerJpa activitySystem = new ActivitySystemControllerJpa();
         List lst_item = null;
-
 
         boolean result = false;
         int id_ref = 0, item = 0, idItem = 0, count = 0;
-        String ref = "", dtIn = "", dtFn = "", numEnt = "", dateMov = "", locationMov = "", 
-                obsMov = "", typeMov = "", dateMove = "", moveValid = "", itm = "", loc = "", 
+        String ref = "", dtIn = "", dtFn = "", numEnt = "", dateMov = "", locationMov = "",
+                obsMov = "", typeMov = "", dateMove = "", moveValid = "", itm = "", loc = "",
                 obs = "", model = "", serial = "";
         String[] dataMove = {};
 
@@ -110,6 +112,9 @@ public class MoveItem extends HttpServlet {
                             Object[] obItm = (Object[]) lst_item.get(0);
                             idItem = Integer.parseInt(obItm[0].toString());
                             result = MoveItemJpa.RegisterItemMoveNew(idItem, typeMov, numEnt, dateMov, locationMov, obsMov, idUser, idUser);
+                            if (result) {
+                                activitySystem.ActivityRegister(idUser, 2, "Movimiento Items", "Se registro un movimiento de items " + item + "", 1, userSession);
+                            }
                             request.setAttribute("RegisterItem", item);
                             request.getRequestDispatcher("MoveItem?opt=1").forward(request, response);
                         } else {
@@ -149,6 +154,9 @@ public class MoveItem extends HttpServlet {
                         }
                     }
                     result = MoveItemJpa.RegisterItemMove(q);
+                    if (result) {
+                        activitySystem.ActivityRegister(idUser, 2, "Movimiento Items", "Se realizo un movimiento de item", 1, userSession);
+                    }
                     request.setAttribute("RegisterMove", result);
                     request.getRequestDispatcher("MoveItem?opt=1&numEnt=").forward(request, response);
                     //</editor-fold>

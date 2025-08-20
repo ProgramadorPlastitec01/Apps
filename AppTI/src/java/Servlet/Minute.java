@@ -1,7 +1,6 @@
 package Servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +9,8 @@ import javax.servlet.http.HttpSession;
 
 import Controller.MinuteJpaController;
 import Controller.FormatControllerJpa;
+import Controller.ActivitySystemControllerJpa;
+
 import java.util.List;
 
 import SQL.ConnectionsBd;
@@ -23,10 +24,12 @@ public class Minute extends HttpServlet {
 
         MinuteJpaController MinuteJpa = new MinuteJpaController();
         FormatControllerJpa FormaJpa = new FormatControllerJpa();
+        ActivitySystemControllerJpa activitySystem = new ActivitySystemControllerJpa();
         ConnectionsBd SignatureJpa = new ConnectionsBd();
         HttpSession sesion = request.getSession();
         int idUser = Integer.parseInt(sesion.getAttribute("idUsuario").toString());
         String UserRol = sesion.getAttribute("idRol").toString();
+        String userSession = sesion.getAttribute("Nombres").toString();
         int opt = Integer.parseInt(request.getParameter("opt"));
         int idMinu = 0, state = 0, event = 0, idUserReg = 0, idState = 0, flt = 0, temp = 0, docx = 0, codx = 0, idSig = 0;
         String matter = "", staff = "", cont = "", date = "", content = "", idDoc = "", signature = "";
@@ -117,6 +120,9 @@ public class Minute extends HttpServlet {
 
                     if (idMinu > 0) {
                         result = MinuteJpa.UpdateMinute(idMinu, matter, date, staff, idUser);
+                        if (result) {
+                            activitySystem.ActivityRegister(idUser, 2, "R-TI-014", "Se modifico acta Id: " + idMinu + "", 1, userSession);
+                        }
                         request.setAttribute("updateMinute", result);
                     } else {
                         List lst_format = FormaJpa.ConsultFormatName("R-TI-014");
@@ -128,6 +134,9 @@ public class Minute extends HttpServlet {
                             idDocx = "[5]";
                         }
                         result = MinuteJpa.MinuteRegister(matter, date, staff, idDocx, idUser);
+                        if (result) {
+                            activitySystem.ActivityRegister(idUser, 2, "R-TI-014", "Se registro acta", 1, userSession);
+                        }
                         request.setAttribute("registerMinute", result);
                     }
                     request.getRequestDispatcher("Minute?opt=1&idMinu=" + idMinu + "").forward(request, response);
@@ -160,6 +169,7 @@ public class Minute extends HttpServlet {
                     if (idSig == 0) {
                         signature = request.getParameter("txtSignature").replace("[[", "[").replace("]]", "]");
                         result = SignatureJpa.New_signature(docx, codx, signature);
+
                         lst_signature = SignatureJpa.Consultar_firmasDoc(docx, codx);
                         if (lst_signature.size() > 0) {
                             String[] DataSign = lst_signature.toString().replace("[", "").replace("]", "").split("///");
@@ -167,7 +177,7 @@ public class Minute extends HttpServlet {
                         }
                         request.setAttribute("SignatureNew", result);
                     }
-                    
+
                     int contSig = 0;
                     for (int i = 0; i < People.length; i++) {
                         String[] dat = People[i].toString().split(" / ");
@@ -182,6 +192,9 @@ public class Minute extends HttpServlet {
                         }
                     }
                     result = MinuteJpa.UpdateMinuteStaff(idMinu, staff_rw);
+                    if (result) {
+                        activitySystem.ActivityRegister(idUser, 2, "R-TI-014", "Se actualiza firma en acta Id: " + idMinu + "", 1, userSession);
+                    }
                     if (result && contSig == 0) {
                         result = MinuteJpa.UpdateMinuteState(idMinu, 3);
                         request.setAttribute("ChangueStateMinute", result);
@@ -201,6 +214,9 @@ public class Minute extends HttpServlet {
                     idDoc = request.getParameter("txtIdDoc");
                     cont = idDoc + "[" + cont + "]";
                     result = MinuteJpa.UpdateMinuteContent(idMinu, 2, cont, idUser);
+                    if (result) {
+                        activitySystem.ActivityRegister(idUser, 2, "R-TI-014", "Se actualiza contenido de acta Id: " + idMinu + "", 1, userSession);
+                    }
                     request.setAttribute("UpdateContentDoc", result);
                     request.getRequestDispatcher("Minute?opt=1").forward(request, response);
                     //</editor-fold>
