@@ -349,7 +349,7 @@ public class Tag_menu extends TagSupport {
             out.print("<div style='height:92%;'>");
             out.print("<aside id=\"sidebar-wrapper\">");
             out.print("<div class=\"sidebar-brand\">");
-            out.print("<a style='color:#fff' href=\"Start?opt=1\">Tecnología Información</a>");
+            out.print("<a style='color:#fff' href=\"Start?opt=1\"><img src=\"Interface/Imagen/Logo_app/LogoSideW.fw.png\" alt=\"\" style=\"width: 50%;\"/></a>");
             out.print("</div>");
             out.print("<div class=\"sidebar-brand sidebar-brand-sm\">");
             out.print("<a style='color:#fff' href=\"Start.jsp\">T.I</a>");

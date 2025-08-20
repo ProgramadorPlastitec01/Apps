@@ -1,7 +1,6 @@
 package Servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -66,11 +65,15 @@ public class Binnacle extends HttpServlet {
                     shift = request.getParameter("txtshift");
                     if (idBinn > 0) {
                         result = binnacleJpa.BinnacleUpdate(idBinn, datIn, dateFin, shift);
-                        activitySystem.ActivityRegister(idUser, 2, "Bitacora", "Se modificado la bitacora Id #" + idBinn + "", 1, userSession);
+                        if (result) {
+                            activitySystem.ActivityRegister(idUser, 2, "Bitacora", "Se modificado la bitacora Id #" + idBinn + "", 1, userSession);
+                        }
                         request.setAttribute("UpdateBinnacle", result);
                     } else {
                         result = binnacleJpa.BinnacleRegister(datIn, dateFin, shift, idUser);
-                        activitySystem.ActivityRegister(idUser, 2, "Bitacora", "Se registra bitacora del día", 1, userSession);
+                        if (result) {
+                            activitySystem.ActivityRegister(idUser, 2, "Bitacora", "Se registra bitacora del día", 1, userSession);
+                        }
                         request.setAttribute("RegisterBinnacle", result);
                     }
                     request.getRequestDispatcher("Binnacle?opt=1&idBinn=0").forward(request, response);
@@ -103,7 +106,7 @@ public class Binnacle extends HttpServlet {
                     idAct = request.getParameter("txtiIdAct");
 
                     result = binnacleJpa.BinnacleUpdateStateFinal(idBinn, idAct, 1);
-
+                    
 //                    ------------------------ PENDIENTE CREAR METODOS DE CORREO -------------------
                     request.setAttribute("SendBinnacle", result);
                     request.getRequestDispatcher("Binnacle?opt=1&idBinn=0").forward(request, response);

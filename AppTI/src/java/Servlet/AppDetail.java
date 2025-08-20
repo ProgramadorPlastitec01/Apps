@@ -1,5 +1,6 @@
 package Servlet;
 
+import Controller.ActivitySystemControllerJpa;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -28,6 +29,7 @@ public class AppDetail extends HttpServlet {
 
         HttpSession sesion = request.getSession();
         AppDetailControllerJpa AppDetail = new AppDetailControllerJpa();
+        ActivitySystemControllerJpa activitySystem = new ActivitySystemControllerJpa();
         FormatControllerJpa FormatJpa = new FormatControllerJpa();
         AppHeaderControllerJpa AppHeader = new AppHeaderControllerJpa();
         ConnectionsBd SignatureJpa = new ConnectionsBd();
@@ -35,6 +37,8 @@ public class AppDetail extends HttpServlet {
         AppControllerJpa AppJpa = new AppControllerJpa();
 
         String UserRol = sesion.getAttribute("idRol").toString();
+        int idUser = Integer.parseInt(sesion.getAttribute("idUsuario").toString());
+        String userSession = sesion.getAttribute("Nombres").toString();
         int opt = Integer.parseInt(request.getParameter("opt"));
         int module = 0, idApp = 0, idDoc = 0, swpt = 0, idHead = 0, idDet = 0, inCount = 0, docx = 0, codx = 0, idSignatue = 0, step = 0;
         String date = "", affair = "", personal = "", content = "", format = "", type = "", typeVers = "",
@@ -156,9 +160,15 @@ public class AppDetail extends HttpServlet {
                     format = "[" + affair + "][" + content + "]";
                     if (idDet == 0) {
                         result = AppDetail.NewDocumentByHead(idHead, date, type, format, personal, "ADMIN");
+                        if (result) {
+                            activitySystem.ActivityRegister(idUser, 2, "Aplicativo", "Se registro un nuevo proceso en App con ID " + idApp + " ", 1, userSession);
+                        }
                         request.setAttribute("RegisterDocument14", result);
                     } else {
                         result = AppDetail.UpdateDocument(idDet, date, format, personal, 1, "ADMIN");
+                        if (result) {
+                            activitySystem.ActivityRegister(idUser, 2, "Aplicativo", "Se modifico proceso en App con ID " + idApp + " ", 1, userSession);
+                        }
                         request.setAttribute("UpdateDocument14", result);
                     }
 
@@ -179,6 +189,9 @@ public class AppDetail extends HttpServlet {
                     }
                     typeVers = request.getParameter("CbxApp");
                     result = AppHeader.registerAppHeader(idApp, typeVers, "ADMIN");
+                    if (result) {
+                        activitySystem.ActivityRegister(idUser, 2, "Aplicativo", "Se registrar cabecera en App con ID " + idApp + " ", 1, userSession);
+                    }
                     request.setAttribute("registerAppHeader", result);
                     request.getRequestDispatcher("AppDetail?opt=1&mod=" + module + "&idApp=" + idApp + "&idDet=0").forward(request, response);
                     //</editor-fold>
@@ -220,6 +233,9 @@ public class AppDetail extends HttpServlet {
                         if (xtemp.equals("1")) {
                             result = AppDetail.UpdateDetailState(idDet);
                         }
+                    }
+                    if (result) {
+                        activitySystem.ActivityRegister(idUser, 2, "Aplicativo", "Se realiza cambio de estado o proceso en App con ID " + idApp + " ", 1, userSession);
                     }
 
                     request.setAttribute("UpdateStateHead", result);
@@ -264,6 +280,9 @@ public class AppDetail extends HttpServlet {
                         DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                         String fechaFormateada = fechaActual.format(formato);
                         result = AppDetail.registerDetailAnnexes(idHead, fechaFormateada, type, content, 1, "ADMIN");
+                        if (result) {
+                            activitySystem.ActivityRegister(idUser, 2, "Aplicativo", "Se registrar anexao en App con ID " + idApp + " ", 1, userSession);
+                        }
                         request.setAttribute("RegisterDetailAnnexes", result);
                     }
 
@@ -380,8 +399,14 @@ public class AppDetail extends HttpServlet {
                     if (idDet > 0) {
                         result = AppDetail.UpdateDocument33(idDet, content, personRecap, "ADMIN");
                         request.setAttribute("UpdateDocument33", result);
+                        if (result) {
+                            activitySystem.ActivityRegister(idUser, 2, "Aplicativo", "Se realiza modificación en 033 en App con ID " + idApp + " ", 1, userSession);
+                        }
                     } else {
                         result = AppDetail.registerDocument33(idHead, dateAct, type, content, personRecap, "ADMIN");
+                        if (result) {
+                            activitySystem.ActivityRegister(idUser, 2, "Aplicativo", "Se realiza registro de cambios en App con ID " + idApp + " ", 1, userSession);
+                        }
                         request.setAttribute("RegisterDocument33", result);
                     }
                     request.getRequestDispatcher("AppDetail?opt=1&mod=3&swpt=0&idDet=0").forward(request, response);

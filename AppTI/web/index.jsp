@@ -28,9 +28,9 @@
                     <ul class="nav_items">
                         <li class="nav_item">
                             <a href="#" class="nav_link">Manuales</a>
-                            <a href="#" class="nav_link">Soporte</a>
+                            <a href="http://172.16.5.99:8084/AppSupport/" class="nav_link">Soporte</a>
                             <a href="#" class="nav_link">Videos</a>
-                            <a href="#" class="nav_link" onclick="ViewWindows(1)">¡Contactenos!</a>
+                            <a href="#" class="nav_link">Sugerencia</a>
                         </li>
                     </ul>
 
@@ -61,7 +61,7 @@
                             <div class="input_box">
                                 <i class="fas fa-lock ml-2" style="font-size: 16px;"></i>
                                 <input type="password"  name="Txt_password" id="txtPassword" placeholder="Ingresa tu contraseña" required />
-                                <div class="StlViewPass" onclick="mostrarPass()" id="show_password" style="cursor: pointer;margin-left:88%">
+                                <div onclick="mostrarPass()" id="show_password" style="cursor: pointer;margin-left:88%">
                                     <i id="icon" class="fas fa-eye iconEye"></i>
                                 </div>
                             </div>
