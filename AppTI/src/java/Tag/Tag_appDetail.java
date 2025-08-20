@@ -1664,7 +1664,7 @@ public class Tag_appDetail extends TagSupport {
                                         out.print("</div>");
                                         out.print("</div>");
                                         out.print("</div>");
-                                    }else{
+                                    } else {
                                         out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"AppDetail?opt=1&mod=3&idApp=" + idApp + "&idDoc=" + id + "&idHead=" + idHead + "&type=" + structure[i] + "&step=" + i + "\"' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
                                         out.print("<div class=\"wizard-step-icon\">");
                                         out.print("<i class=\"" + ico + "\"></i>");

@@ -797,8 +797,8 @@ public class Tag_computer extends TagSupport {
                 } else if (code.contains("-003")) {
                     //<editor-fold defaultstate="collapsed" desc="ASSIGN PC">
                     lst_computer = ComputerJpa.ConsultInfoComputerId(IdComputer);
-                    Object[] ObInfo = (Object[]) lst_computer.get(0);
                     if (lst_compDetail != null) {
+                        Object[] ObInfo = (Object[]) lst_computer.get(0);
                         //<editor-fold defaultstate="collapsed" desc="CONSULT DOCUMENT">
                         Object[] ObjFormat = (Object[]) lst_compDetail.get(0);
                         String[] DtaFormat = ObjFormat[4].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
@@ -926,6 +926,7 @@ public class Tag_computer extends TagSupport {
                     } else {
                         //<editor-fold defaultstate="collapsed" desc="NEW REGISTER">
                         if (lst_computer != null) {
+                            Object[] ObInfo = (Object[]) lst_computer.get(0);
                             out.print("<button class='btn btn-green' style='position: fixed; bottom: 12px; right: 71px;' onclick='formR03.submit()'>Guardar <i class='fas fa-save'></i></button>");
 
                             //<editor-fold defaultstate="collapsed" desc="SEARCH ITEMS">
@@ -1094,7 +1095,7 @@ public class Tag_computer extends TagSupport {
                     //</editor-fold>
                 } else if (code.contains("-004") || code.contains("-013") || code.contains("-029") || code.contains("-031") || code.contains("-032")) {
                     //<editor-fold defaultstate="collapsed" desc="PREVENTIVE MAINTENANCE 004 // INSTALLED PROGRAMS 029">
-                    
+
                     format = format.replace("XXXDATEXXX", CurrentDate);
                     format = format.replace("XXXAREAXXX", area);
                     format = format.replace("XXXUSUARIOXXX", usuario);
@@ -1102,7 +1103,7 @@ public class Tag_computer extends TagSupport {
                     format = format.replace("XXXUSERXXX", usuario);
                     format = format.replace("XXXPOSITIONXXX", cargouser);
                     format = format.replace("XXXUSERNAMEXXX", nameUser);
-                    
+
                     if (stetx == 2) {
                         format = format.replace("id=\"idtabla\"", "id=\"idtabla\" class='inactive004'");
                     }
