@@ -20,7 +20,10 @@
             <!-- Header -->
             <header class="header">
                 <nav class="nav">
-                    <a href="index.jsp" class="nav_logo">AppTI</a>
+                    <!--<a href="index.jsp" class="nav_logo">AppTI</a>-->
+                    <!--<img src="Interface/Imagen/Logo_app/Icon.fw.png" alt=""/>-->
+                    <!--<img src="Interface/Imagen/Logo_app/LogoTitle.fw.png" alt=""/>-->
+                    <img src="Interface/Imagen/Logo_app/LogoSideW.fw.png" alt="" style="width: 13%;"/>
 
                     <ul class="nav_items">
                         <li class="nav_item">

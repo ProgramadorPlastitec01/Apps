@@ -40,7 +40,7 @@ public class AppDetail extends HttpServlet {
         String date = "", affair = "", personal = "", content = "", format = "", type = "", typeVers = "",
                 areasUx = "", rols = "", requer = "", moveX = "", moveY = "", moveJ = "", ara = "", dteSol = "", dteEjec = "",
                 devlop = "", dteCap = "", Obs = "", finalvers = "", newRols = "", newAreas = "", cobianBD = "", cobiaFls = "",
-                signature = "", sustance = "";
+                signature = "", sustance = "", xtemp = "";
         boolean result = false;
 
         List lst_format = null;
@@ -205,7 +205,23 @@ public class AppDetail extends HttpServlet {
                     } catch (Exception e) {
                         step = 0;
                     }
-                    result = AppHeader.UpdateStateHead(idHead, step);
+                    try {
+                        idDet = Integer.parseInt(request.getParameter("idDetail"));
+                    } catch (Exception e) {
+                        idDet = 0;
+                    }
+                    result = AppHeader.UpdateStateHead(idHead);
+                    if (result) {
+                        try {
+                            xtemp = request.getParameter("xtemp");
+                        } catch (Exception e) {
+                            xtemp = "";
+                        }
+                        if (xtemp.equals("1")) {
+                            result = AppDetail.UpdateDetailState(idDet);
+                        }
+                    }
+
                     request.setAttribute("UpdateStateHead", result);
                     request.getRequestDispatcher("AppDetail?opt=1&mod=" + module + "&idApp=" + idApp + "&idHead=" + idHead + "").forward(request, response);
 

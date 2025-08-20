@@ -122,7 +122,7 @@ public class Tag_appDetail extends TagSupport {
                     format = "";
                 }
                 String[] typeSc = type.toString().split("/");
-                
+
                 if (swpt == 2) {
                     //<editor-fold defaultstate="collapsed" desc="LIST ASISTENTS">
                     //<editor-fold defaultstate="collapsed" desc="ASISTENTS">
@@ -425,14 +425,14 @@ public class Tag_appDetail extends TagSupport {
                         out.print("</div>");
                         out.print("<div class=\"accordion-body collapse\" id=\"panel-body-97\" data-parent=\"#accordion\" style='max-height: 300px; overflow-y: auto;'>");
                         //<editor-fold defaultstate="collapsed" desc="DOCUMENT CONTENT">
-                        out.print("<textarea id='editorNext' name='txtContent' placeholder='Contenidon del acta'></textarea>");
+                        out.print("<textarea id='editorCK' name='txtContent' placeholder='Contenidon del acta'></textarea>");
                         //</editor-fold>
                         out.print("</div>");
                         out.print("</div>");
                         out.print("</div>");
 
                         out.print("<div class='mt-2 text-center'>");
-                        out.print("<button type='button' class='btn btn-green' onclick='validForm(\"idDateForm\",\"idAffair\",\"assigned-person-ids\",\"editorNext\")'>Registrar</button>");
+                        out.print("<button type='button' class='btn btn-green' onclick='validForm(\"idDateForm\",\"idAffair\",\"assigned-person-ids\",\"cke_editable\")'>Registrar</button>");
                         out.print("</div>");
 
                         out.print("</form>");
@@ -552,7 +552,7 @@ public class Tag_appDetail extends TagSupport {
                             out.print("</div>");
                             out.print("<div class=\"accordion-body collapse\" id=\"panel-body-97\" data-parent=\"#accordion\" style='max-height: 300px; overflow-y: auto;'>");
                             //<editor-fold defaultstate="collapsed" desc="DOCUMENT CONTENT">
-                            out.print("<textarea id='editorNext' name='txtContent' placeholder=''>" + content[1] + "</textarea>");
+                            out.print("<textarea id='editorCK' name='txtContent' placeholder=''>" + content[1] + "</textarea>");
                             //</editor-fold>
                             out.print("</div>");
                             out.print("</div>");
@@ -1077,10 +1077,27 @@ public class Tag_appDetail extends TagSupport {
                         //</editor-fold>
                     }
                 }
-                
+
                 //<editor-fold defaultstate="collapsed" desc="LOAD DOCUMENT">
                 //<editor-fold defaultstate="collapsed" desc="HEADER">
                 lst_appDetail = AppDetail.ConsultDocumentType(idHead, typeSc[0] + "/" + typeSc[1]);
+                Object[] ObjDetail = {};
+                int stetx = 0, idDetail = 0;
+                String singExits = "";
+                try {
+                    ObjDetail = (Object[]) lst_appDetail.get(0);
+                    idDetail = Integer.parseInt(ObjDetail[0].toString());
+                    stetx = Integer.parseInt(ObjDetail[6].toString());
+                    try {
+                        singExits = ObjDetail[5].toString();
+                    } catch (Exception e) {
+                        singExits = "";
+                    }
+                } catch (Exception e) {
+                    stetx = 99;
+                    idDetail = 0;
+                }
+
                 out.print("<section class='section'>");
                 out.print("<div class='section-body'>");
                 out.print("<div class='row'>");
@@ -1094,14 +1111,14 @@ public class Tag_appDetail extends TagSupport {
                 out.print("<h4>Documentacion</h4><h1>" + typeSc[1] + "</h1><h4>" + nameDoc + "</h4>");
                 out.print("</div>");
                 out.print("<div style='position: absolute; right: 26px;top: 32px;'>");
+
                 if (code.contains("-014") && type.contains("Levantamiento")) {
                     out.print("<button class='btn btn-green mr-2' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Agregar acta' onclick='window.location.href=\"AppDetail?opt=1&mod=3&idDoc=" + idDoc + "&idApp=" + idApp + "&swpt=1&idHead=" + idHead + "&type=" + type + "\"'><i class='fas fa-plus'></i></button>");
                 }
-                if (lst_appDetail != null) {
-                    out.print("<button class='btn btn-yellow' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Continuar' onclick='window.location.href=\"AppDetail?opt=4&idApp=" + idApp + "&mod=2&swpt=1&idHead=" + idHead + "&step=" + step + "\"'><i class=\"fas fa-share\"></i></button>");
-                } else {
-                    out.print("<button class='btn btn-yellow' style='border-radius: 4px;' disabled><i class=\"fas fa-share\"></i></button>");
+                if (stetx == 1) {
+                    out.print("<button class='btn btn-yellow' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Continuar' onclick='window.location.href=\"AppDetail?opt=4&idApp=" + idApp + "&idDetail=" + idDetail + "&mod=2&swpt=1&idHead=" + idHead + "&step=" + step + "&xtemp=1\"'><i class=\"fas fa-share\"></i></button>");
                 }
+
                 out.print("</div>");
                 out.print("</div>");
                 //</editor-fold>
@@ -1264,7 +1281,13 @@ public class Tag_appDetail extends TagSupport {
                             out.print("<h6>Contenido del documento</h6>");
                             out.print("</div>");
                             out.print("<div class='d-flex mb-2'>");
-                            out.print("<button class='btn btn-info mr-2' data-toggle='tooltip' data-placement='top' title='Firmar' onclick='window.location.href=\"AppDetail?opt=1&mod=3&idDoc=" + idDoc + "&idApp=" + idApp + "&idHead=" + idHead + "&type=" + type + "&idDet=" + Objdet[0] + "&swpt=2&step=" + step + "\"'><i class=\"fas fa-signature\"></i></button>");
+
+                            if (stetx != 99) {
+                                if (singExits.contains("XX")) {
+                                    out.print("<button class='btn btn-info mr-2' data-toggle='tooltip' data-placement='top' title='Firmar' onclick='window.location.href=\"AppDetail?opt=1&mod=3&idDoc=" + idDoc + "&idApp=" + idApp + "&idHead=" + idHead + "&type=" + type + "&idDet=" + Objdet[0] + "&swpt=2&step=" + step + "\"'><i class=\"fas fa-signature\"></i></button>");
+                                }
+                            }
+
                             if (sigCount == 0) {
                                 out.print("<button class='btn btn-warning mr-2' style='border-radius: 4px; opacity: 0.6;' disabled data-toggle='tooltip' data-placement='top' title='El documento ya tiene al menos una firma'><i class='fas fa-edit'></i></button>");
                             } else {
@@ -1310,14 +1333,14 @@ public class Tag_appDetail extends TagSupport {
                     if (lst_appDetail != null) {
                         Object[] ObjDe = (Object[]) lst_appDetail.get(0);
                         out.print("<form action='AppDetail?opt=5&idDet=" + ObjDe[0] + "&idHead=" + idHead + "&idApp=" + idApp + "&idDoc=" + idDoc + "&type=" + type + "&step=" + step + "' method='post' class=''>");
-                        out.print("<textarea id='editorNext' name='txtProtoData' placeholder=''>" + ObjDe[4] + "</textarea>");
+                        out.print("<textarea id='editorCK' name='txtProtoData' class='form-control'>" + ObjDe[4] + "</textarea>");
                         out.print("<div class='text-center'>");
                         out.print("<button class='btn btn-green mt-2'>Actualizar</button>");
                         out.print("</div>");
                         out.print("</form>");
                     } else {
                         out.print("<form action='AppDetail?opt=5&idHead=" + idHead + "&idApp=" + idApp + "&idDoc=" + idDoc + "&type=" + type + "&step=" + step + "' method='post' class=''>");
-                        out.print("<textarea id='editorNext' name='txtProtoData' placeholder='' required></textarea>");
+                        out.print("<textarea id='editorCK' name='txtProtoData' class='form-control' required></textarea>");
                         out.print("<div class='text-center'>");
                         out.print("<button class='btn btn-green mt-2'>Registrar</button>");
                         out.print("</div>");
@@ -1421,11 +1444,14 @@ public class Tag_appDetail extends TagSupport {
                         }
                         //</editor-fold>
                         out.print("<div class='mb-2 d-flex' style='justify-content: end;'>");
-                        out.print("<button class='btn btn-info mr-2' data-toggle='tooltip' data-placement='top' title='Firmar' onclick='window.location.href=\"AppDetail?opt=1&mod=3&idDoc=" + idDoc + "&idApp=" + idApp + "&idHead=" + idHead + "&type=" + type + "&idDet=" + ObjAp[0] + "&swpt=2&step=" + step + "\"'><i class=\"fas fa-signature\"></i></button>");
-                        if (thrSing) {
+
+                        if (stetx != 99) {
+                            if (singExits.contains("XX")) {
+                                out.print("<button class='btn btn-info mr-2' data-toggle='tooltip' data-placement='top' title='Firmar' onclick='window.location.href=\"AppDetail?opt=1&mod=3&idDoc=" + idDoc + "&idApp=" + idApp + "&idHead=" + idHead + "&type=" + type + "&idDet=" + ObjAp[0] + "&swpt=2&step=" + step + "\"'><i class=\"fas fa-signature\"></i></button>");
+                            }
+                        }
+                        if (stetx == 1) {
                             out.print("<button class='btn btn-warning' onclick='window.location.href=\"AppDetail?opt=1&mod=3&idDoc=" + idDoc + "&idApp=" + idApp + "&idHead=" + idHead + "&type=" + type + "&idDet=" + ObjAp[0] + "&step=" + step + "\"'><i class='fas fa-edit'></i></button>");
-                        } else {
-                            out.print("<button class='btn btn-warning' disabled data-toggle='tooltip' data-placement='top' title='Hay al menos una firma'><i class='fas fa-edit'></i></button>");
                         }
                         out.print("</div>");
                         //<editor-fold defaultstate="collapsed" desc="BUILD DOCUMENT">
@@ -1473,29 +1499,29 @@ public class Tag_appDetail extends TagSupport {
 
                         lst_appDetail = AppDetail.ConsultDocumentTypeRpt(idHead, "Presentación prototipo");
                         if (lst_appDetail != null) {
-                            Object[] ObjDetail = (Object[]) lst_appDetail.get(0);
-                            format = format.replace("XXXPRESENTATIONXXX", ObjDetail[2].toString());
+                            Object[] ObjDetailx = (Object[]) lst_appDetail.get(0);
+                            format = format.replace("XXXPRESENTATIONXXX", ObjDetailx[2].toString());
                         } else {
                             format = format.replace("XXXPRESENTATIONXXX", "-");
                         }
                         lst_appDetail = AppDetail.ConsultDocumentTypeRpt(idHead, "Verificación");
                         if (lst_appDetail != null) {
-                            Object[] ObjDetail = (Object[]) lst_appDetail.get(0);
-                            format = format.replace("XXXVERIFICADOXXX", ObjDetail[2].toString());
+                            Object[] ObjDetailx = (Object[]) lst_appDetail.get(0);
+                            format = format.replace("XXXVERIFICADOXXX", ObjDetailx[2].toString());
                         } else {
                             format = format.replace("XXXVERIFICADOXXX", "-");
                         }
                         lst_appDetail = AppDetail.ConsultDocumentTypeRpt(idHead, "XXXXX");
                         if (lst_appDetail != null) {
-                            Object[] ObjDetail = (Object[]) lst_appDetail.get(0);
-                            format = format.replace("XXXIQOXXX", ObjDetail[2].toString());
+                            Object[] ObjDetailx = (Object[]) lst_appDetail.get(0);
+                            format = format.replace("XXXIQOXXX", ObjDetailx[2].toString());
                         } else {
                             format = format.replace("XXXIQOXXX", "-");
                         }
                         lst_appDetail = AppDetail.ConsultDocumentTypeRpt(idHead, "Validacion");
                         if (lst_appDetail != null) {
-                            Object[] ObjDetail = (Object[]) lst_appDetail.get(0);
-                            format = format.replace("XXXVALIDATIONOXXX", ObjDetail[2].toString());
+                            Object[] ObjDetailx = (Object[]) lst_appDetail.get(0);
+                            format = format.replace("XXXVALIDATIONOXXX", ObjDetailx[2].toString());
                         } else {
                             format = format.replace("XXXVALIDATIONOXXX", "-");
                         }
@@ -1503,8 +1529,8 @@ public class Tag_appDetail extends TagSupport {
                         format = format.replace("XXXOBSXXX", conten[5].toString());
                         lst_appDetail = AppDetail.ConsultDocumentTypeRpt(idHead, "Lanzamiento");
                         if (lst_appDetail != null) {
-                            Object[] ObjDetail = (Object[]) lst_appDetail.get(0);
-                            format = format.replace("XXXDATELANZAXXX", ObjDetail[2].toString());
+                            Object[] ObjDetailx = (Object[]) lst_appDetail.get(0);
+                            format = format.replace("XXXDATELANZAXXX", ObjDetailx[2].toString());
                         } else {
                             format = format.replace("XXXDATELANZAXXX", "-");
                         }
@@ -1625,50 +1651,89 @@ public class Tag_appDetail extends TagSupport {
                             lst_appDetail = AppDetail.ConsultDocumentTypeRpt(idHead, name);
                             if (lst_appDetail != null) {
                                 Object[] ObSte = (Object[]) lst_appDetail.get(0);
-                                int steDet = Integer.parseInt(ObSte[6].toString());
-                                if (steDet == 0) {
-                                    out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"AppDetail?opt=1&mod=3&idApp=" + idApp + "&idDoc=" + id + "&idHead=" + idHead + "&type=" + structure[i] + "&step=" + i + "\"' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
-                                    out.print("<div class=\"wizard-step-icon\">");
-                                    out.print("<i class=\"" + ico + "\"></i>");
-                                    out.print("</div>");
-                                    out.print("<div class=\"wizard-step-label\" style='margin-bottom: 6px;'>");
-                                    out.print(name);
-                                    out.print("<div style='position: absolute;bottom: 5px;left: -5px;'>");
-                                    out.print("<p style='margin: 0; width: 170px; background: #ffa426;border-radius: 3px;'><b>Pendiente Firma</b> &nbsp; <i class='fas fa-signature'></i></p>");
-                                    out.print("</div>");
-                                    out.print("</div>");
-                                    out.print("</div>");
-                                } else if (steDet == 1) {
-                                    out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"AppDetail?opt=1&mod=3&idApp=" + idApp + "&idDoc=" + id + "&idHead=" + idHead + "&type=" + structure[i] + "&step=" + i + "\"' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
-                                    out.print("<div class=\"wizard-step-icon\">");
-                                    out.print("<i class=\"" + ico + "\"></i>");
-                                    out.print("</div>");
-                                    out.print("<div class=\"wizard-step-label\" style='margin-bottom: 6px;'>");
-                                    out.print(name);
-                                    out.print("<div style='position: absolute;bottom: 5px;left: -5px;'>");
-                                    out.print("<p style='margin: 0; width: 170px; background: #33bf98;border-radius: 3px;'><b>Realizado</b> &nbsp; <i class=\"fas fa-check\"></i></p>");
-                                    out.print("</div>");
-                                    out.print("</div>");
-                                    out.print("</div>");
+                                if (ObSte[5] != null) {
+                                    if (ObSte[5].toString().contains("XX")) {
+                                        out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"AppDetail?opt=1&mod=3&idApp=" + idApp + "&idDoc=" + id + "&idHead=" + idHead + "&type=" + structure[i] + "&step=" + i + "\"' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
+                                        out.print("<div class=\"wizard-step-icon\">");
+                                        out.print("<i class=\"" + ico + "\"></i>");
+                                        out.print("</div>");
+                                        out.print("<div class=\"wizard-step-label\" style='margin-bottom: 6px;'>");
+                                        out.print(name);
+                                        out.print("<div style='position: absolute;bottom: 5px;left: -5px;'>");
+                                        out.print("<p style='margin: 0; width: 170px; background: #ffa426;border-radius: 3px;'><b>Pendiente Firma</b> &nbsp; <i class='fas fa-signature'></i></p>");
+                                        out.print("</div>");
+                                        out.print("</div>");
+                                        out.print("</div>");
+                                    }else{
+                                        out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"AppDetail?opt=1&mod=3&idApp=" + idApp + "&idDoc=" + id + "&idHead=" + idHead + "&type=" + structure[i] + "&step=" + i + "\"' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
+                                        out.print("<div class=\"wizard-step-icon\">");
+                                        out.print("<i class=\"" + ico + "\"></i>");
+                                        out.print("</div>");
+                                        out.print("<div class=\"wizard-step-label\" style='margin-bottom: 6px;'>");
+                                        out.print(name);
+                                        out.print("<div style='position: absolute;bottom: 5px;left: -5px;'>");
+                                        out.print("<p style='margin: 0; width: 170px; background: #33bf98;border-radius: 3px;'><b>Realizado</b> &nbsp; <i class=\"fas fa-check\"></i></p>");
+                                        out.print("</div>");
+                                        out.print("</div>");
+                                        out.print("</div>");
+                                    }
+                                } else {
+                                    int steDet = Integer.parseInt(ObSte[6].toString());
+                                    if (steDet == 0) {
+                                        out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"AppDetail?opt=1&mod=3&idApp=" + idApp + "&idDoc=" + id + "&idHead=" + idHead + "&type=" + structure[i] + "&step=" + i + "\"' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
+                                        out.print("<div class=\"wizard-step-icon\">");
+                                        out.print("<i class=\"" + ico + "\"></i>");
+                                        out.print("</div>");
+                                        out.print("<div class=\"wizard-step-label\" style='margin-bottom: 6px;'>");
+                                        out.print(name);
+                                        out.print("<div style='position: absolute;bottom: 5px;left: -5px;'>");
+                                        out.print("<p style='margin: 0; width: 170px; background: #ffa426;border-radius: 3px;'><b><b class='text-warning'>Pendiente Firma</b></b> &nbsp; <i class='fas fa-signature'></i></p>");
+                                        out.print("</div>");
+                                        out.print("</div>");
+                                        out.print("</div>");
+                                    } else if (steDet == 2) {
+                                        out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"AppDetail?opt=1&mod=3&idApp=" + idApp + "&idDoc=" + id + "&idHead=" + idHead + "&type=" + structure[i] + "&step=" + i + "\"' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
+                                        out.print("<div class=\"wizard-step-icon\">");
+                                        out.print("<i class=\"" + ico + "\"></i>");
+                                        out.print("</div>");
+                                        out.print("<div class=\"wizard-step-label\" style='margin-bottom: 6px;'>");
+                                        out.print(name);
+                                        out.print("<div style='position: absolute;bottom: 5px;left: -5px;'>");
+                                        out.print("<p style='margin: 0; width: 170px; background: #33bf98;border-radius: 3px;'><b>Realizado</b> &nbsp; <i class=\"fas fa-check\"></i></p>");
+                                        out.print("</div>");
+                                        out.print("</div>");
+                                        out.print("</div>");
+                                    } else {
+                                        out.print("<div class=\"wizard-step wizard-step-active addStepCls\" style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
+                                        out.print("<div class=\"wizard-step-icon\">");
+                                        out.print("<i class='<i class=\"fas fa-exclamation-triangle\"></i>'></i>");
+                                        out.print("</div>");
+                                        out.print("<div class=\"wizard-step-label\" style='margin-bottom: 6px;'>");
+                                        out.print("Error");
+                                        out.print("<div style='position: absolute;bottom: 5px;left: -5px;'>");
+                                        out.print("<p style='margin: 0; width: 170px; background: #33bf98;border-radius: 3px;'><b>Error</b> &nbsp; <i class=\"fas fa-check\"></i></p>");
+                                        out.print("</div>");
+                                        out.print("</div>");
+                                        out.print("</div>");
+                                    }
                                 }
 
                             }
                         }
                     }
 
-                    if (state == structure.length) {
-                        out.print("<div class='fieldDiv'>");
-                        out.print("<div class=\"circleDiv\" onclick='window.location.href=\"AppDetail?opt=8&mod=3&idApp=" + idApp + "&idHead=" + idHead + "\"' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
-                        out.print("<div class=\"wizard-step-icon\">");
-                        out.print("</div>");
-                        out.print("<div class=\"wizard-step-label\" style='margin-bottom: 6px;'><br>");
-                        out.print("<i style='font-size: 27px;' class=\"fas fa-flag-checkered\"></i><br>");
-                        out.print("<span style='font-size: 12px;'>FINALIZAR</span>");
-                        out.print("</div>");
-                        out.print("</div>");
-                        out.print("</div>");
-                    }
-
+//                    if (state == structure.length) {
+//                        out.print("<div class='fieldDiv'>");
+//                        out.print("<div class=\"circleDiv\" onclick='window.location.href=\"AppDetail?opt=8&mod=3&idApp=" + idApp + "&idHead=" + idHead + "\"' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
+//                        out.print("<div class=\"wizard-step-icon\">");
+//                        out.print("</div>");
+//                        out.print("<div class=\"wizard-step-label\" style='margin-bottom: 6px;'><br>");
+//                        out.print("<i style='font-size: 27px;' class=\"fas fa-flag-checkered\"></i><br>");
+//                        out.print("<span style='font-size: 12px;'>FINALIZAR</span>");
+//                        out.print("</div>");
+//                        out.print("</div>");
+//                        out.print("</div>");
+//                    }
                     out.print("</div>");
                     out.print("</div>");
                     out.print("</div>");
@@ -1843,7 +1908,7 @@ public class Tag_appDetail extends TagSupport {
                         int ste = 0;
                         if (ObjApp[5] != null) {
                             ste = Integer.parseInt(ObjApp[5].toString());
-                        }else{
+                        } else {
                             ste = 0;
                         }
                         out.print("<p class='textSquare'>Estado <code>." + ((ObjApp[4] == null) ? "Sin estado" : ((ste < 9) ? "En proceso" : "Activo")) + "</code></p>");

@@ -41,7 +41,7 @@ public class Tag_computer extends TagSupport {
         List lst_item = null;
         List lst_connect = null;
         int module = 0, IdComputer = 0, StateCmp = 0, state = 0;
-        String usuario = "", area = "";
+        String usuario = "", area = "", cargouser = "", nameUser = "";
         String[] structure = {};
 
         boolean isActive = false;
@@ -74,7 +74,9 @@ public class Tag_computer extends TagSupport {
             if (lst_compDetail != null) {
                 Object[] ObjDetail = (Object[]) lst_compDetail.get(0);
                 String[] strc = ObjDetail[3].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                cargouser = strc[2].toString();
                 area = strc[3].toString();;
+                nameUser = strc[6].toString();
                 usuario = strc[9].toString();
                 hvInfo = true;
             } else {
@@ -153,7 +155,6 @@ public class Tag_computer extends TagSupport {
                 lst_compDetail = ComDetail.ConsultComputerDetailxPCxType(idPcHead, typeSc[0] + "/" + typeSc[1]); // CONSULTA PRINCIPAL DEL DETALLE
                 Object[] ObjDetail = {};
                 int stetx = 0, idDetail = 0;
-                String contentHtml = "";
                 String singExits = "";
                 try {
                     ObjDetail = (Object[]) lst_compDetail.get(0);
@@ -165,7 +166,7 @@ public class Tag_computer extends TagSupport {
                         singExits = "";
                     }
 
-                    if (code.contains("-004") || code.contains("-029") || code.contains("-031") || code.contains("-032")) {
+                    if (code.contains("-004") || code.contains("-013") || code.contains("-029") || code.contains("-031") || code.contains("-032")) {
                         format = ObjDetail[4].toString();
                     }
                     try {
@@ -181,8 +182,8 @@ public class Tag_computer extends TagSupport {
                                 List lst_signa = ConnectJpa.Consultar_firmas(idSigx);
                                 if (lst_signa != null) {
                                     String[] ObjSi = lst_signa.toString().split("///");
-                                    if (code.contains("-004") || code.contains("-029") || code.contains("-031") || code.contains("-032")) {
-//                                        format = contentHtml;
+                                    if (code.contains("-004") || code.contains("-013") || code.contains("-029") || code.contains("-031") || code.contains("-032")) {
+//                                      
                                         format = format.replace("Firma " + usrx[0] + "", "<canvas id='signaCanvas" + i + "' width='120' height='60' style='border: 1px solid #fff;'></canvas>");
                                     } else {
                                         format = format.replace("XXX" + usrx[0] + "XXX", "<canvas id='signaCanvas" + i + "' width='200' height='100' style='border: 1px solid #fff;'></canvas>");
@@ -1091,30 +1092,24 @@ public class Tag_computer extends TagSupport {
                         //</editor-fold>
                     }
                     //</editor-fold>
-                } else if (code.contains("-004") || code.contains("-029") || code.contains("-031") || code.contains("-032")) {
+                } else if (code.contains("-004") || code.contains("-013") || code.contains("-029") || code.contains("-031") || code.contains("-032")) {
                     //<editor-fold defaultstate="collapsed" desc="PREVENTIVE MAINTENANCE 004 // INSTALLED PROGRAMS 029">
-                    if (contentHtml.equals("")) {
-                        format = format.replace("XXXRealizadoXXX", "<b class='text-warning'>Firma Realizado</b>");
-                        format = format.replace("XXXUsuarioXXX", "<b class='text-warning'>Firma Usuario</b>");
-
-                        format = format.replace("XXXTurno1XXX", "<b class='text-warning'>Firma Turno1</b>");
-                        format = format.replace("XXXTurno2XXX", "<b class='text-warning'>Firma Turno2</b>");
-                        format = format.replace("XXXTurno3XXX", "<b class='text-warning'>Firma Turno3</b>");
-                        format = format.replace("XXXXJefeXXX", "<b class='text-warning'>Firma Jefe</b>");
-                    } else {
-//                        format = contentHtml;
-                    }
+                    
                     format = format.replace("XXXDATEXXX", CurrentDate);
                     format = format.replace("XXXAREAXXX", area);
                     format = format.replace("XXXUSUARIOXXX", usuario);
                     format = format.replace("XXXEQUIPOXXX", NroPC);
+                    format = format.replace("XXXUSERXXX", usuario);
+                    format = format.replace("XXXPOSITIONXXX", cargouser);
+                    format = format.replace("XXXUSERNAMEXXX", nameUser);
+                    
                     if (stetx == 2) {
                         format = format.replace("id=\"idtabla\"", "id=\"idtabla\" class='inactive004'");
                     }
                     out.print(format);
                     out.print(post_script);
 
-                    if (stetx == 1) {
+                    if (stetx == 1 || stetx == 99) {
                         out.print("<form action='Computer?opt=9&IdComputer=" + IdComputer + "&idDetail=" + idDetail + "&idpcHead=" + idPcHead + "&type=" + type + "' method='post' id='Form04'>");
                         out.print("<input type='hidden' name='htmlTabla' id='htmlTabla' value=''>");
                         out.print("<input type='hidden' name='DocCode' id='' value='" + code.split("-")[2] + "'>");

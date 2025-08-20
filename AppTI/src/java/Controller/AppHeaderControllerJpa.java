@@ -96,11 +96,11 @@ public class AppHeaderControllerJpa implements Serializable {
         }
     }
 
-    public boolean UpdateStateHead(int idHead, int ste) {
+    public boolean UpdateStateHead(int idHead) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
-            Query q = em.createNativeQuery("CALL `Sp_aph_u_UpdateState`(" + idHead + ", " + ste + ")");
+            Query q = em.createNativeQuery("CALL `Sp_aph_u_UpdateState`(" + idHead + ")");
             int resultado = q.executeUpdate();
             em.getTransaction().commit();
             em.clear();

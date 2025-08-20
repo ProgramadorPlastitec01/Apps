@@ -249,92 +249,14 @@
                 </script>-->
 
 
-        <script type="text/javascript">
-            $(function () {
-                moment.locale('es');
-                var start = moment().subtract(29, 'days');
-                var end = moment();
-                function cb(start, end) {
-                    $('#reportrange span').html(start.format('D [de] MMMM [de] YYYY') + ' - ' + end.format('D [de] MMMM [de] YYYY'));
-                    // Actualizar los campos ocultos del formulario
-                    $('#startDate').val(start.format('YYYY-MM-DD'));
-                    $('#endDate').val(end.format('YYYY-MM-DD'));
-                }
-
-                $('#reportrange').daterangepicker({
-                    startDate: start,
-                    endDate: end,
-                    locale: {
-                        format: 'YYYY/MM/DD',
-                        separator: ' - ',
-                        applyLabel: 'Aplicar',
-                        cancelLabel: 'Cancelar',
-                        fromLabel: 'Desde',
-                        toLabel: 'Hasta',
-                        customRangeLabel: 'Personalizado',
-                        daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-                        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-                        firstDay: 1
-                    },
-                    ranges: {
-                        'Hoy': [moment(), moment()],
-                        'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                        'Últimos 7 Días': [moment().subtract(6, 'days'), moment()],
-                        'Últimos 30 Días': [moment().subtract(29, 'days'), moment()],
-                        'Este Mes': [moment().startOf('month'), moment().endOf('month')],
-                        'Mes Pasado': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-                    }
-                }, cb);
-                cb(start, end);
-            });
-        </script>
-
-        <script type="text/javascript">
-            new FroalaEditor('#editorNext', {
-                Flmngr: {
-                    apiKey: 'z5tCL8YdVd99dhc5MQCNlQlo',
-                    urlFileManager: 'http://172.16.1.164/flmngr/flmngr.php',
-                    urlFiles: 'http://172.16.1.164/flmngr/files/'
-                }
-            });
-        </script>
-        <script>
-            function uploadFiles() {
-                // Obtener la última fecha de subida del storage
-                let lastUploadTime = localStorage.getItem('lastUploadTime') || new Date().toISOString();
-                // Guardar el valor actual de lastUploadTime como valor anterior
-                localStorage.setItem('previousUploadTime', lastUploadTime);
-                // Guardar la fecha y hora actual como nueva última subida
-                lastUploadTime = new Date().toISOString();
-                localStorage.setItem('lastUploadTime', lastUploadTime);
-                // Obtener archivos en el intervalo de tiempo
-                let filesToUpload = []; // Aquí puedes agregar lógica para llenar este array con los archivos que desees subir
-
-                var xhr = new XMLHttpRequest();
-                xhr.open("POST", "http://172.16.1.153/PMP_MI/flmngr/envio.php", true);
-                xhr.setRequestHeader("Content-Type", "application/json");
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState === 4 && xhr.status === 200) {
-                        alert("Archivos subidos correctamente.");
-                    }
-                };
-                // Enviar los datos en formato JSON
-                xhr.send(JSON.stringify({
-                    files: filesToUpload,
-                    lastUploadTime: lastUploadTime,
-                    previousUploadTime: localStorage.getItem('previousUploadTime')
-                }));
-            }
-
-            // Aquí puedes llamar a uploadFiles() cuando lo necesites, por ejemplo, en un botón
-            // document.getElementById('uploadButton').addEventListener('click', uploadFiles);
-        </script>
+       
+<!--        
         <script>
             function dataPass() {
                 document.getElementById("NewData").value = document.getElementById("editorNext").value;
                 document.FromNew.submit();
             }
-        </script>
+        </script>-->
 
 
         <script>
@@ -477,8 +399,7 @@
                     });
                 } else {
                     var personal = document.getElementById(per).value;
-                    var cont = document.getElementById(edi).value;
-                    if (personal == "[]" || personal == "" || cont == "") {
+                    if (personal == "[]" || personal == "") {
                         if (personal == "[]" || personal == "") {
                             $("#toastr-2").ready(function () {
                                 iziToast.warning({
@@ -502,6 +423,99 @@
                 }
             }
         </script>
+        
+        
+        
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Se crean variables que permitirán tener control de permisos y carpetas por usuarios dentro del PHP del gestor.
+                let Rol = document.getElementById("PhpRol").value;
+                let IdUsPhp = document.getElementById("IdPhpUser").value;
+                console.log("Rol obtenido:", Rol);
+
+                // Sobrescribir la etiqueta del botón "Ver servidor" por "Gestor de archivos"
+                CKEDITOR.on('dialogDefinition', function (ev) {
+                    var dialogName = ev.data.name;
+                    var dialogDefinition = ev.data.definition;
+
+                    if (dialogDefinition.getContents('info')) {
+                        var browseButton = dialogDefinition.getContents('info').get('browse');
+                        if (browseButton) {
+                            browseButton.label = 'Gestor de archivos';
+                        }
+                    }
+                });
+
+                // Inicializa por ID los editores dentro de un mismo contexto.
+                const editorIDs = ['editorCK', 'editorCK1', 'editorCK2'];
+                editorIDs.forEach(function (id) {
+                    let element = document.getElementById(id);
+                    if (element) {
+                        CKEDITOR.replace(id, {
+                            filebrowserBrowseUrl: 'http://172.16.1.164/elFinder/elfinder.html?rol=' + Rol + '&idusuario=' + IdUsPhp,
+                            filebrowserImageBrowseUrl: 'http://172.16.1.164/elFinder/elfinder.html?type=Images&rol=' + Rol + '&idusuario=' + IdUsPhp,
+                            removeDialogTabs: 'link:upload;image:upload',
+                            language: 'es',
+                            height: 150,
+                            toolbarGroups: [
+                                {name: 'document', groups: ['mode', 'document', 'doctools']},
+                                {name: 'clipboard', groups: ['clipboard', 'undo']},
+                                {name: 'editing', groups: ['find', 'selection', 'spellchecker', 'editing']},
+                                {name: 'forms', groups: ['forms']},
+                                {name: 'basicstyles', groups: ['basicstyles', 'cleanup']},
+                                {name: 'paragraph', groups: ['list', 'indent', 'blocks', 'align', 'bidi', 'paragraph']},
+                                {name: 'links', groups: ['links']},
+                                {name: 'colors', groups: ['colors']},
+                                {name: 'insert', groups: ['insert']},
+                                {name: 'tools', groups: ['tools']},
+                                {name: 'others', groups: ['others']},
+                                {name: 'about', groups: ['about']},
+                                '/',
+                                {name: 'styles', groups: ['styles']}
+                            ],
+                            removeButtons: 'Save,NewPage,Preview,Source,Templates,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,Subscript,Superscript,Blockquote,CreateDiv,BidiLtr,BidiRtl,Anchor,HorizontalRule,SpecialChar,PageBreak,Iframe,ShowBlocks,Language,Styles,About,Font,ExportPdf,Print,Replace',
+                            on: {
+                                instanceReady: function (evt) {
+                                    var editor = evt.editor;
+
+                                    editor.on('paste', function (pasteEvt) {
+                                        let content = pasteEvt.data.dataValue;
+
+                                        if (content && content.includes('src="data:image/')) {
+                                            pasteEvt.data.dataValue = content.replace(/<img[^>]+src="data:image\/[^">]+"[^>]*>/gi, '');
+                                            iziToast.warning({
+                                                title: 'No se permite copiar y pegar archivos o imagenes!',
+                                                message: 'Por favor suba la archivo o imagen al gestor de archivos.',
+                                                position: 'bottomRight',
+                                                time: 5000
+                                            });
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+        </script>
+        <!-- Este script escucha los mensajes enviados desde elFinder (por postMessage) -->
+        <script>
+            window.addEventListener('message', function (event) {
+                // Recomendado: validar origen si solo aceptas desde elFinder
+                // if (event.origin !== 'http://172.16.1.164') return;
+
+                const data = event.data;
+                if (data && data.funcNum && data.url) {
+                    // Llama la función de CKEditor con la URL recibida
+                    if (typeof CKEDITOR !== 'undefined') {
+                        CKEDITOR.tools.callFunction(data.funcNum, data.url);
+                    }
+                }
+            }, false);
+        </script>
+        
+        
+        
         
         <!-- Cargar jQuery -->
         <!--<script src="Interface/Content/Assets/modules/jquery.min.js"></script>-->
