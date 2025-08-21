@@ -22,7 +22,7 @@ public class Mail_Session {
     SettingControllerJpa SettingJpa = new SettingControllerJpa();
     List lst_mail = SettingJpa.ConsultSettingCategorie("DataMail");
 
-    public void RememeberPassword(String Usuario, int Pass, String Mail, ServletContext context) throws MessagingException {
+    public void RememeberPassword(String Usuario, String Pass, String Mail, ServletContext context) throws MessagingException {
         if (lst_mail != null) {
             Object[] obj_mail = (Object[]) lst_mail.get(0);
             String[] ArrMail = obj_mail[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
@@ -40,27 +40,27 @@ public class Mail_Session {
                 MimeMessage message = new MimeMessage(session);
                 message.setFrom(new InternetAddress(ArrMail[4]));
                 message.addRecipient(Message.RecipientType.TO, new InternetAddress(Mail));
-                message.setSubject("Aplicativo APPTI - Restablecer Contraseña");
+                message.setSubject("Aplicativo Nexus - Restablecer Contraseña");
 
                 // HTML content
                 MimeBodyPart htmlPart = new MimeBodyPart();
                 String htmlContent = "<div style=\"text-align: center; font-family:Segoe UI;\">\n"
-                        + "  <div style=\"border: 1px solid #33bf98; border-radius: 4px; width: 80%; margin: auto;\">\n"
+                        + "  <div style=\"border: 1px solid #33bf98; border-radius:3%; width: 80%; margin: auto;\">\n"
+                        + "     <img src=\"cid:logo\" width=\"260\" height=\"100\" style=\"display:block; margin-right:10px; margin-top:10px\">\n"
                         + "    <h2 style=\"color:#0b0025\">Restablecer Contraseña</h2>\n"
                         + "    <div style=\"display: flex; align-items: center; justify-content: center;\">\n"
-                        + "      <h3>¡Hola " + Usuario + ", soy <b style='color:#0b0025;'>PETTI</b>!</h3>\n"
-                        + "      <img src='cid:logo' style=\"width: 50px; margin-right: 10px;\">\n"
+                        + "      <h3>¡Hola " + Usuario + "!\n"
                         + "    </div>\n"
-                        + "    <p>Has solicitado restablecer tu contraseña. La contraseña actual es:</p>\n"
+                        + "    <p style=\"color:#555555 \">Has solicitado restablecer tu contraseña. La contraseña actual es:</p>\n"
                         + "    <p><b>" + Pass + "</b></p>\n"
-                        + "    <p>Ingresa al aplicativo y realiza el cambio. La contraseña es privada y no debe ser divulgada.</p>\n"
+                        + "    <p style=\"color:#555555 \">Ingresa al aplicativo y realiza el cambio. La contraseña es privada y no debe ser divulgada.</p>\n"
                         + "    <a href=\"http://localhost:8089/AppTI/\">\n"
-                        + "      <button style=\"background-color: #4D4AE8; border: none; border-radius: 3px; color: white; padding: 10px 20px; cursor: pointer;\">Ir a APPTI</button>\n"
+                        + "      <button style=\"background-color: #4D4AE8; border: none; border-radius: 3px; color: white; padding: 10px 20px; cursor: pointer;\">Ir a Nexus</button>\n"
                         + "    </a>\n"
                         + "    <br><br>\n"
-                        + "    <b style='color:#0b0025;'>Cordialmente,<br> Sistema de Información APPTI</b>\n"
+                        + "    <b style='color:#555555;'>Cordialmente,<br> Nexus</b>\n"
                         + "        <div style='width: 80%; display: inline-block;'>\n"
-                        + "            <p style='font-size: 11px; color: #BDBDBD;'>La Informacion contenida en este mensaje es confidencial y solo puede ser utilizada por la persona u organizacion a la cual esta dirigida. Si usted no es el receptor autorizado, cualquier retencion, difusion, distribucion o copia de este mensaje es prohibida y sancionada por la ley. Si por error recibe este mensaje, le agradecemos reenviarlo al remitente y borrar el mensaje recibido inmediatamente. PLASTITEC S.A.S, sus subsidiarios y/o empleados no son responsables por la transmision incorrecta o incompleta de este correo electronico o cualquiera de sus adjuntos, ni responsable por cualquier retraso en su recepcion.</p>\n"
+                        + "            <p style='font-size: 11px; color: #BDBDBD;margin-bottom:10px'>La Informacion contenida en este mensaje es confidencial y solo puede ser utilizada por la persona u organizacion a la cual esta dirigida. Si usted no es el receptor autorizado, cualquier retencion, difusion, distribucion o copia de este mensaje es prohibida y sancionada por la ley. Si por error recibe este mensaje, le agradecemos reenviarlo al remitente y borrar el mensaje recibido inmediatamente. PLASTITEC S.A.S, sus subsidiarios y/o empleados no son responsables por la transmision incorrecta o incompleta de este correo electronico o cualquiera de sus adjuntos, ni responsable por cualquier retraso en su recepcion.</p>\n"
                         + "        </div>\n"
                         + "  </div>\n"
                         + "</div>";
@@ -69,7 +69,7 @@ public class Mail_Session {
 
                 // Imagen embebida
                 MimeBodyPart imagePart = new MimeBodyPart();
-                String imagePath = context.getRealPath("/Interface/Imagen/LogoPETIT-min.jpg");
+                String imagePath = context.getRealPath("/Interface/Imagen/Logo_app/LogoSide.fw.png");
                 FileDataSource fds = new FileDataSource(imagePath);
                 imagePart.setDataHandler(new DataHandler(fds));
                 imagePart.setHeader("Content-ID", "<logo>");

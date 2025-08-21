@@ -211,6 +211,7 @@ public class UserControllerJpa implements Serializable {
             return null;
         }
     }
+
     public List ConsultSupportCalification(int IdUser) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
@@ -229,6 +230,7 @@ public class UserControllerJpa implements Serializable {
             return null;
         }
     }
+
     public List ConsultStadisticProfile(int IdUser) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
@@ -307,11 +309,11 @@ public class UserControllerJpa implements Serializable {
         }
     }
 
-    public boolean RestorePassUser(int idUser) {
+    public boolean RestorePassUser(int idUser, String psw) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
-            Query q = em.createNativeQuery("CALL `Sp_usr_u_RestarPasswordUser`(" + idUser + ")");
+            Query q = em.createNativeQuery("CALL `Sp_usr_u_RestarPasswordUser`(" + idUser + ",'" + psw + "')");
             int resultado = q.executeUpdate();
             em.getTransaction().commit();
             em.clear();
@@ -344,6 +346,7 @@ public class UserControllerJpa implements Serializable {
             return false;
         }
     }
+
     public boolean UpdataUserProfile(int idUser, String Code, String nme, String lnm, String usr, String pass, String ico) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();

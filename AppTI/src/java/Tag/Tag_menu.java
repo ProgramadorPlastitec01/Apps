@@ -352,7 +352,7 @@ public class Tag_menu extends TagSupport {
             out.print("<a style='color:#fff' href=\"Start?opt=1\"><img src=\"Interface/Imagen/Logo_app/LogoSideW.fw.png\" alt=\"\" style=\"width: 50%;\"/></a>");
             out.print("</div>");
             out.print("<div class=\"sidebar-brand sidebar-brand-sm\">");
-            out.print("<a style='color:#fff' href=\"Start.jsp\">T.I</a>");
+            out.print("<a style='color:#fff' href=\"Start.jsp\"><img src=\"Interface/Imagen/Logo_app/IconW.fw.png\" alt=\"\" style=\"width: 50%;\"/></a>");
             out.print("</div>");
 
             out.print("<div class=\"mt-0 p-3 hide-sidebar-mini\">");

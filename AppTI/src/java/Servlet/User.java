@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import Controller.UserControllerJpa;
+import java.time.LocalDate;
 import javax.servlet.http.HttpSession;
 
 public class User extends HttpServlet {
@@ -79,7 +80,8 @@ public class User extends HttpServlet {
                     } catch (Exception e) {
                         idUser = 0;
                     }
-                    result = UserJpa.RestorePassUser(idUser);
+                    int currentYear = LocalDate.now().getYear();
+                    result = UserJpa.RestorePassUser(idUser, currentYear + "");
                     request.setAttribute("UserPass", result);
                     request.getRequestDispatcher("User?opt=1&idUser=0").forward(request, response);
                     break;

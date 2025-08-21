@@ -1,0 +1,33 @@
+.StlDiv{
+    overflow: auto;
+    height: 520px;
+    max-height: 550px;
+}
+.StlDiv::-webkit-scrollbar {
+    width: 10px;     /* Tamaño del scroll en vertical */
+    height: 8px;    /* Tamaño del scroll en horizontal */
+    /*display: none;   Ocultar scroll */
+}
+
+.StlDiv::-webkit-scrollbar-thumb {
+    background: #0b0025;
+    border-radius: 4px;
+    border: 1px solid white;
+}
+
+/* Cambiamos el fondo y agregamos una sombra cuando esté en hover */
+.StlDiv::-webkit-scrollbar-thumb:hover {
+    background: #0b0025;
+    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+/* Cambiamos el fondo cuando esté en active */
+.StlDiv::-webkit-scrollbar-thumb:active {
+    background-color: #0b0025;
+}
+.card-stats {
+    margin-bottom: 1rem; /* se adapta al contenido */
+}
+.marginTilte{
+    margin:13px 0 18px 0 !important;
+}

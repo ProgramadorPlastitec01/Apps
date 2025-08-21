@@ -103,32 +103,36 @@ a:not(.btn-social-icon):not(.btn-social):not(.page-link) .fab {
     background-color: #33bf98 !important; }
 .bg-green {
     background-color: #33bf98 !important; }
+
 .bg-1 {
-    background-color: #001e35 !important;
+    background-color: #cd84f1 !important;
 }
 .bg-2 {
-    background-color: #004367 !important;
+    background-color: #32ff7e !important;
 }
 .bg-3 {
-    background-color: #0074a3 !important;
+    background-color: #ffcccc !important;
 }
 .bg-4 {
-    background-color: #00b2ea !important;
+    background-color: #7efff5 !important;
 }
 .bg-5 {
-    background-color: #2f69ec !important;
+    background-color: #ff4d4d !important;
 }
 .bg-6 {
-    background-color: #0e2449 !important;
+    background-color: #18dcff !important;
 }
 .bg-7 {
-    background-color: #3260b1 !important;
+    background-color: #ffaf40 !important;
 }
 .bg-8 {
-    background-color: #64a6fe !important;
+    background-color: #7d5fff !important;
 }
 .bg-9 {
-    background-color: #62a9d8 !important;
+    background-color: #fffa65 !important;
+}
+.bg-10 {
+    background-color: #0652DD !important;
 }
 
 .text-primary, .text-primary-all *, .text-primary-all *:before, .text-primary-all *:after {

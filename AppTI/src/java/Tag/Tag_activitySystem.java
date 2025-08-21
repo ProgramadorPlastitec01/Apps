@@ -24,7 +24,7 @@ public class Tag_activitySystem extends TagSupport {
         String[] meses = new DateFormatSymbols(new Locale("es", "ES")).getMonths();
         String nombreMes = meses[CurrMonth];
         int idUser = Integer.parseInt(sesion.getAttribute("idUsuario").toString());
-        List lst_activitySys = null, lst_group = null;
+        List lst_activitySys = null, lst_group = null, lst_filter = null;
         try {
             out.print("<section class='section'>");
             out.print("<div class='section-header'>");
@@ -33,11 +33,37 @@ public class Tag_activitySystem extends TagSupport {
 
             out.print("<div class=\"section-body\">");
 
-            out.print("<h2 class=\"section-title\"><span style='text-transform: capitalize;'>" + nombreMes + "</span> " + CurrYear + "</h2>");
+            out.print("<div class='d-flex justify-content-between'>");
+            out.print("<h2 class=\"section-title marginTilte\"><span style='text-transform: capitalize;'>" + nombreMes + "</span> " + CurrYear + "</h2>");
+
+            out.print("<div>");
+            out.print("<select class='form-control select2'>");
+            try {
+                lst_filter = ActivityJpa.ConsultActivityFilter(idUser);
+            } catch (Exception e) {
+                lst_filter = null;
+            }
+            if (lst_filter != null) {
+                for (int i = 0; i < lst_filter.size(); i++) {
+                    Object[] ObjFilter = (Object[]) lst_filter.get(i);
+                    int YearFilter = Integer.parseInt(ObjFilter[0].toString());
+                    int MonthFilter = Integer.parseInt(ObjFilter[1].toString());
+                    String MonthTrasform = ObjFilter[2].toString().toUpperCase();
+                    if (YearFilter == CurrYear && MonthFilter == CurrMonth) {
+                        out.print("<option selected style='text-transform: capitalize;'>" + ObjFilter[0] + " | " + MonthTrasform + " | " + ObjFilter[3] + "</option>");
+                    } else {
+                        out.print("<option style='text-transform: capitalize;'>" + ObjFilter[0] + " | " + MonthTrasform + " | " + ObjFilter[3] + "</option>");
+                    }
+                }
+            }
+            out.print("</select>");
+            out.print("</div>");
+
+            out.print("</div>");
 
             out.print("<div class=\"row\">");
 
-            out.print("<div class=\"col-5\">");
+            out.print("<div class=\"col-5 StlDiv\">");
             out.print("<div class=\"activities\">");
             //<editor-fold defaultstate="collapsed" desc="ACTIVITIES">
 

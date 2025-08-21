@@ -5,11 +5,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
-        <style>
-            .card-stats {
-                margin-bottom: 1rem; /* se adapta al contenido */
-            }
-        </style>
+        <link rel="stylesheet" href="Interface/Content/Assets/css/activitysystem.css">
     </head>
     <body>
         <div id="app">

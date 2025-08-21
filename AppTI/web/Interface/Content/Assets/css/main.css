@@ -2979,7 +2979,7 @@ thead.sticky-top {
     margin-right: 4px;
 }
 .ButtomFloat{
-    position: absolute;
+    position: fixed;
     right: 14px;
     bottom: 20px;
     display: inline-block;

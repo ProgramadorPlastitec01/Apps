@@ -189,7 +189,7 @@ public class Tag_alert extends TagSupport {
 
                 out.print("<div>");
                 out.print("</div>");
-                out.print("<p style='text-align: center;'>Recordar que la protección de datos, usuario y contraseña, ayuda a evitar fraudes o alteraciones en la Organización (Platitec) y en este Aplicativo.</p>");
+                out.print("<p style='text-align: center;'>Recordar que la protección de datos, usuario y contraseña, ayuda a evitar fraudes o alteraciones en la Organización (PLASTITEC) y en este Aplicativo.</p>");
                 out.print("<div style='width:100%' class='camb_body'>");
                 out.print("<form action='Session?opt=2' method='post'>");
                 
