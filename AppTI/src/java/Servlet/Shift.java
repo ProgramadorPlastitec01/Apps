@@ -55,7 +55,7 @@ public class Shift extends HttpServlet {
                     } catch (Exception e) {
                         ValWeek = "";
                     }
-                    for (int i = 1; i < 9; i++) {
+                    for (int i = 1; i < 11; i++) {
                         hiddenTurnoId = request.getParameter("hiddenTurnoId" + i + "");
                         try {
                             hiddenTurnoId = hiddenTurnoId.replace("][", ",").replace("[", "").replace("]", "");
@@ -129,9 +129,10 @@ public class Shift extends HttpServlet {
                     //</editor-fold>
                     break;
                 case 3:
+                    //<editor-fold defaultstate="collapsed" desc="UPDATE SHIFT">
                     idShift = Integer.parseInt(request.getParameter("idShift").toString());
                     weekSelect = request.getParameter("weekSelect");
-                    for (int i = 1; i < 9; i++) {
+                    for (int i = 1; i < 11; i++) {
                         hiddenTurnoId = request.getParameter("hiddenTurnoId" + i + "");
                         try {
                             hiddenTurnoId = hiddenTurnoId.replace("][", ",").replace("[", "").replace("]", "");
@@ -146,6 +147,7 @@ public class Shift extends HttpServlet {
                     result = ShiftJpa.ShiftUpdate(idShift, weekSelect, sortedShiftsy);
                     request.setAttribute("ShiftUpdate", result);
                     request.getRequestDispatcher("Shift?opt=1&idShift=0").forward(request, response);
+                    //</editor-fold>
                     break;
 
             }

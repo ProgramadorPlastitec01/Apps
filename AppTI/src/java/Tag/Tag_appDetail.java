@@ -207,7 +207,7 @@ public class Tag_appDetail extends TagSupport {
                     out.print("<input type='number' class='form-control' name='codx' id='FinCodx' placeholder='Codigo' value='' onkeyup='FindCod()' required>");
                     out.print("</div>");
                     out.print("<div class='col-lg-2'>");
-                    out.print("<button class='btn btn-green'><i class='fas fa-search'></i></button>");
+                    out.print("<button class='btn btn-green' onclick='cargarDatos()'><i class='fas fa-search'></i></button>");
                     out.print("</div>");
                     out.print("</div>");
                     out.print("</form>");
@@ -296,7 +296,7 @@ public class Tag_appDetail extends TagSupport {
                         out.print("<input type='hidden' name='docx' id='' value='" + docx + "'>");
                         out.print("<input type='hidden' name='codx' value='" + codx + "'>");
                         out.print("<div class='text-center'>");
-                        out.print("<button class='btn btn-green'>Firmar</button>");
+                        out.print("<button class='btn btn-green' onclick='cargarDatos()'>Firmar</button>");
                         out.print("</div>");
                         out.print("</form>");
                         //</editor-fold>
@@ -321,7 +321,7 @@ public class Tag_appDetail extends TagSupport {
                         out.print("<input type='hidden' name='codx' value='" + codx + "'>");
                         out.print("<input type='hidden' class='form-control' name='txtSignature' id='coordenadas-hidden' value='" + signt + "'>");
                         out.print("<div class='text-center'>");
-                        out.print("<button class='btn btn-green'>Guardar y Firmar</button>");
+                        out.print("<button class='btn btn-green' onclick='cargarDatos()'>Guardar y Firmar</button>");
                         out.print("</div>");
                         out.print("</form>");
                         //</editor-fold>
@@ -432,7 +432,7 @@ public class Tag_appDetail extends TagSupport {
                         out.print("</div>");
 
                         out.print("<div class='mt-2 text-center'>");
-                        out.print("<button type='button' class='btn btn-green' onclick='validForm(\"idDateForm\",\"idAffair\",\"assigned-person-ids\",\"cke_editable\")'>Registrar</button>");
+                        out.print("<button type='button' class='btn btn-green' onclick='validForm(\"idDateForm\",\"idAffair\",\"assigned-person-ids\",\"cke_editable\");cargarDatos()'>Registrar</button>");
                         out.print("</div>");
 
                         out.print("</form>");
@@ -558,7 +558,7 @@ public class Tag_appDetail extends TagSupport {
                             out.print("</div>");
                             out.print("</div>");
                             out.print("<div class='mt-2 text-center'>");
-                            out.print("<button type='button' class='btn btn-green' onclick='validForm(\"idDateForm\",\"idAffair\",\"assigned-person-ids\",\"editorNext\")'>Actualizar</button>");
+                            out.print("<button type='button' class='btn btn-green' onclick='validForm(\"idDateForm\",\"idAffair\",\"assigned-person-ids\",\"editorNext\");cargarDatos()'>Actualizar</button>");
                             out.print("</div>");
                         }
 
@@ -789,7 +789,7 @@ public class Tag_appDetail extends TagSupport {
                         out.print("</div>");
                         out.print("</div>");
                         out.print("<div class='text-center'>");
-                        out.print("<button class='btn btn-green'>Registrar</button>");
+                        out.print("<button class='btn btn-green' onclick='cargarDatos()'>Registrar</button>");
                         out.print("</div>");
                         out.print("</div>");
                         out.print("</form>");
@@ -1051,7 +1051,7 @@ public class Tag_appDetail extends TagSupport {
                             out.print("</div>");
                             out.print("</div>");
                             out.print("<div class='text-center'>");
-                            out.print("<button class='btn btn-green'>Actualizar</button>");
+                            out.print("<button class='btn btn-green' onclick='cargarDatos()'>Actualizar</button>");
                             out.print("</div>");
                             out.print("</div>");
                             out.print("</form>");
@@ -1105,7 +1105,7 @@ public class Tag_appDetail extends TagSupport {
                 out.print("<div class='card'>");
                 out.print("<div class='card-header' style='justify-content: center;'>");
                 out.print("<div style='position: absolute;left: 26px;top: 32px;'>");
-                out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='window.location.href=\"AppDetail?opt=1&mod=2&idApp=" + idApp + "&idHead=" + idHead + "\"'><i class='fas fa-arrow-left'></i></button>");
+                out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='window.location.href=\"AppDetail?opt=1&mod=2&idApp=" + idApp + "&idHead=" + idHead + "\";cargarDatos()'><i class='fas fa-arrow-left'></i></button>");
                 out.print("</div>");
                 out.print("<div class='text-center'>");
                 out.print("<h4>Documentacion</h4><h1>" + typeSc[1] + "</h1><h4>" + nameDoc + "</h4>");
@@ -1113,10 +1113,10 @@ public class Tag_appDetail extends TagSupport {
                 out.print("<div style='position: absolute; right: 26px;top: 32px;'>");
 
                 if (code.contains("-014") && type.contains("Levantamiento")) {
-                    out.print("<button class='btn btn-green mr-2' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Agregar acta' onclick='window.location.href=\"AppDetail?opt=1&mod=3&idDoc=" + idDoc + "&idApp=" + idApp + "&swpt=1&idHead=" + idHead + "&type=" + type + "\"'><i class='fas fa-plus'></i></button>");
+                    out.print("<button class='btn btn-green mr-2' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Agregar acta' onclick='window.location.href=\"AppDetail?opt=1&mod=3&idDoc=" + idDoc + "&idApp=" + idApp + "&swpt=1&idHead=" + idHead + "&type=" + type + "\";cargarDatos()'><i class='fas fa-plus'></i></button>");
                 }
                 if (stetx == 1) {
-                    out.print("<button class='btn btn-yellow' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Continuar' onclick='window.location.href=\"AppDetail?opt=4&idApp=" + idApp + "&idDetail=" + idDetail + "&mod=2&swpt=1&idHead=" + idHead + "&step=" + step + "&xtemp=1\"'><i class=\"fas fa-share\"></i></button>");
+                    out.print("<button class='btn btn-yellow' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Continuar' onclick='window.location.href=\"AppDetail?opt=4&idApp=" + idApp + "&idDetail=" + idDetail + "&mod=2&swpt=1&idHead=" + idHead + "&step=" + step + "&xtemp=1\";cargarDatos()'><i class=\"fas fa-share\"></i></button>");
                 }
 
                 out.print("</div>");
@@ -1284,14 +1284,14 @@ public class Tag_appDetail extends TagSupport {
 
                             if (stetx != 99) {
                                 if (singExits.contains("XX")) {
-                                    out.print("<button class='btn btn-info mr-2' data-toggle='tooltip' data-placement='top' title='Firmar' onclick='window.location.href=\"AppDetail?opt=1&mod=3&idDoc=" + idDoc + "&idApp=" + idApp + "&idHead=" + idHead + "&type=" + type + "&idDet=" + Objdet[0] + "&swpt=2&step=" + step + "\"'><i class=\"fas fa-signature\"></i></button>");
+                                    out.print("<button class='btn btn-info mr-2' data-toggle='tooltip' data-placement='top' title='Firmar' onclick='window.location.href=\"AppDetail?opt=1&mod=3&idDoc=" + idDoc + "&idApp=" + idApp + "&idHead=" + idHead + "&type=" + type + "&idDet=" + Objdet[0] + "&swpt=2&step=" + step + "\";cargarDatos()'><i class=\"fas fa-signature\"></i></button>");
                                 }
                             }
 
                             if (sigCount == 0) {
                                 out.print("<button class='btn btn-warning mr-2' style='border-radius: 4px; opacity: 0.6;' disabled data-toggle='tooltip' data-placement='top' title='El documento ya tiene al menos una firma'><i class='fas fa-edit'></i></button>");
                             } else {
-                                out.print("<button class='btn btn-warning mr-2' data-toggle='tooltip' data-placement='top' title='Editar' onclick='window.location.href=\"AppDetail?opt=1&mod=3&idDoc=" + idDoc + "&idApp=" + idApp + "&idHead=" + idHead + "&type=" + type + "&idDet=" + Objdet[0] + "&step=" + step + "\"'><i class=\"fas fa-edit\"></i></button>");
+                                out.print("<button class='btn btn-warning mr-2' data-toggle='tooltip' data-placement='top' title='Editar' onclick='window.location.href=\"AppDetail?opt=1&mod=3&idDoc=" + idDoc + "&idApp=" + idApp + "&idHead=" + idHead + "&type=" + type + "&idDet=" + Objdet[0] + "&step=" + step + "\";cargarDatos()'><i class=\"fas fa-edit\"></i></button>");
                             }
                             out.print("</div>");
                             //</editor-fold>                        
@@ -1317,7 +1317,7 @@ public class Tag_appDetail extends TagSupport {
                         out.print("<h6>Contenido del documento</h6>");
                         out.print("</div>");
                         out.print("<div class='mb-2'>");
-                        out.print("<button class='btn btn-green mr-2' data-toggle='tooltip' data-placement='top' title='Datos de la acta' onclick='window.location.href=\"AppDetail?opt=1&mod=3&idDoc=" + idDoc + "&idApp=" + idApp + "&swpt=1&idHead=" + idHead + "&type=" + type + "&step=" + step + "\"'><i class=\"fas fa-file-alt\"></i></button>");
+                        out.print("<button class='btn btn-green mr-2' data-toggle='tooltip' data-placement='top' title='Datos de la acta' onclick='window.location.href=\"AppDetail?opt=1&mod=3&idDoc=" + idDoc + "&idApp=" + idApp + "&swpt=1&idHead=" + idHead + "&type=" + type + "&step=" + step + "\";cargarDatos()'><i class=\"fas fa-file-alt\"></i></button>");
                         out.print("</div>");
                         out.print("</div>");
                         format = format.replace("XXXPERSONALASIGXXX", "").replace("XXXDATEXXX", "").replace("XXXAFFAIRXXX", "").replace("XXXCONTENTXXX", "").replace("XXXMADEBYXXX", "");
@@ -1447,11 +1447,11 @@ public class Tag_appDetail extends TagSupport {
 
                         if (stetx != 99) {
                             if (singExits.contains("XX")) {
-                                out.print("<button class='btn btn-info mr-2' data-toggle='tooltip' data-placement='top' title='Firmar' onclick='window.location.href=\"AppDetail?opt=1&mod=3&idDoc=" + idDoc + "&idApp=" + idApp + "&idHead=" + idHead + "&type=" + type + "&idDet=" + ObjAp[0] + "&swpt=2&step=" + step + "\"'><i class=\"fas fa-signature\"></i></button>");
+                                out.print("<button class='btn btn-info mr-2' data-toggle='tooltip' data-placement='top' title='Firmar' onclick='window.location.href=\"AppDetail?opt=1&mod=3&idDoc=" + idDoc + "&idApp=" + idApp + "&idHead=" + idHead + "&type=" + type + "&idDet=" + ObjAp[0] + "&swpt=2&step=" + step + "\";cargarDatos()'><i class=\"fas fa-signature\"></i></button>");
                             }
                         }
                         if (stetx == 1) {
-                            out.print("<button class='btn btn-warning' onclick='window.location.href=\"AppDetail?opt=1&mod=3&idDoc=" + idDoc + "&idApp=" + idApp + "&idHead=" + idHead + "&type=" + type + "&idDet=" + ObjAp[0] + "&step=" + step + "\"'><i class='fas fa-edit'></i></button>");
+                            out.print("<button class='btn btn-warning' onclick='window.location.href=\"AppDetail?opt=1&mod=3&idDoc=" + idDoc + "&idApp=" + idApp + "&idHead=" + idHead + "&type=" + type + "&idDet=" + ObjAp[0] + "&step=" + step + "\";cargarDatos()'><i class='fas fa-edit'></i></button>");
                         }
                         out.print("</div>");
                         //<editor-fold defaultstate="collapsed" desc="BUILD DOCUMENT">
@@ -1594,7 +1594,7 @@ public class Tag_appDetail extends TagSupport {
                 out.print("<div class='card'>");
                 out.print("<div class='card-header' style='justify-content: center;'>");
                 out.print("<div style='position: absolute;left: 26px;top: 32px;'>");
-                out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='window.location.href=\"AppDetail?opt=1&mod=1&idApp=" + idApp + "\"'><i class='fas fa-arrow-left'></i></button>");
+                out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='window.location.href=\"AppDetail?opt=1&mod=1&idApp=" + idApp + "\";cargarDatos()'><i class='fas fa-arrow-left'></i></button>");
                 out.print("</div>");
                 out.print("<div class='text-center'>");
                 out.print("<h4>Documentacion aplicativo</h4> <h1>" + nameApp + "</h1>");
@@ -1604,11 +1604,11 @@ public class Tag_appDetail extends TagSupport {
                 out.print("<div class='card-body'>");
                 out.print("<div class='table-responsive'>");
 
-                lst_apph = AppheadJpa.ConsultHeadbyIdApp(idApp);
+                lst_apph = AppheadJpa.ConsultHeadId(idHead);
                 if (lst_apph != null) {
                     Object[] ObjApp = (Object[]) lst_apph.get(0);
-                    state = Integer.parseInt(ObjApp[4].toString());
-                    structure = ObjApp[3].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                    state = Integer.parseInt(ObjApp[3].toString());
+                    structure = ObjApp[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
 
                     out.print("<div class='card'>");
                     out.print("<div class=\"row mt-4\" style='width: 100%; justify-content: center;'>");
@@ -1624,7 +1624,7 @@ public class Tag_appDetail extends TagSupport {
                             id = Integer.parseInt(idxNamexIco[0].toString());
                         }
                         if (i == state) {
-                            out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"AppDetail?opt=1&mod=3&idApp=" + idApp + "&idDoc=" + id + "&idHead=" + idHead + "&type=" + structure[i] + "&step=" + i + "\"' style='background: #33bf98; color:#0b0025; cursor: pointer;' data-toggle='tooltip' data-placement='top' title='En proceso'>");
+                            out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"AppDetail?opt=1&mod=3&idApp=" + idApp + "&idDoc=" + id + "&idHead=" + idHead + "&type=" + structure[i] + "&step=" + i + "\";cargarDatos()' style='background: #33bf98; color:#0b0025; cursor: pointer;' data-toggle='tooltip' data-placement='top' title='En proceso'>");
                             out.print("<div class=\"wizard-step-icon\">");
                             out.print("<i class=\"" + ico + "\"></i>");
                             out.print("</div>");
@@ -1653,7 +1653,7 @@ public class Tag_appDetail extends TagSupport {
                                 Object[] ObSte = (Object[]) lst_appDetail.get(0);
                                 if (ObSte[5] != null) {
                                     if (ObSte[5].toString().contains("XX")) {
-                                        out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"AppDetail?opt=1&mod=3&idApp=" + idApp + "&idDoc=" + id + "&idHead=" + idHead + "&type=" + structure[i] + "&step=" + i + "\"' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
+                                        out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"AppDetail?opt=1&mod=3&idApp=" + idApp + "&idDoc=" + id + "&idHead=" + idHead + "&type=" + structure[i] + "&step=" + i + "\";cargarDatos()' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
                                         out.print("<div class=\"wizard-step-icon\">");
                                         out.print("<i class=\"" + ico + "\"></i>");
                                         out.print("</div>");
@@ -1665,7 +1665,7 @@ public class Tag_appDetail extends TagSupport {
                                         out.print("</div>");
                                         out.print("</div>");
                                     } else {
-                                        out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"AppDetail?opt=1&mod=3&idApp=" + idApp + "&idDoc=" + id + "&idHead=" + idHead + "&type=" + structure[i] + "&step=" + i + "\"' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
+                                        out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"AppDetail?opt=1&mod=3&idApp=" + idApp + "&idDoc=" + id + "&idHead=" + idHead + "&type=" + structure[i] + "&step=" + i + "\";cargarDatos()' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
                                         out.print("<div class=\"wizard-step-icon\">");
                                         out.print("<i class=\"" + ico + "\"></i>");
                                         out.print("</div>");
@@ -1680,7 +1680,7 @@ public class Tag_appDetail extends TagSupport {
                                 } else {
                                     int steDet = Integer.parseInt(ObSte[6].toString());
                                     if (steDet == 0) {
-                                        out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"AppDetail?opt=1&mod=3&idApp=" + idApp + "&idDoc=" + id + "&idHead=" + idHead + "&type=" + structure[i] + "&step=" + i + "\"' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
+                                        out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"AppDetail?opt=1&mod=3&idApp=" + idApp + "&idDoc=" + id + "&idHead=" + idHead + "&type=" + structure[i] + "&step=" + i + "\";cargarDatos()' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
                                         out.print("<div class=\"wizard-step-icon\">");
                                         out.print("<i class=\"" + ico + "\"></i>");
                                         out.print("</div>");
@@ -1692,7 +1692,7 @@ public class Tag_appDetail extends TagSupport {
                                         out.print("</div>");
                                         out.print("</div>");
                                     } else if (steDet == 2) {
-                                        out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"AppDetail?opt=1&mod=3&idApp=" + idApp + "&idDoc=" + id + "&idHead=" + idHead + "&type=" + structure[i] + "&step=" + i + "\"' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
+                                        out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"AppDetail?opt=1&mod=3&idApp=" + idApp + "&idDoc=" + id + "&idHead=" + idHead + "&type=" + structure[i] + "&step=" + i + "\";cargarDatos()' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
                                         out.print("<div class=\"wizard-step-icon\">");
                                         out.print("<i class=\"" + ico + "\"></i>");
                                         out.print("</div>");
@@ -1796,7 +1796,7 @@ public class Tag_appDetail extends TagSupport {
                 out.print("</div>");
 
                 out.print("<div class='text-center mt-4'>");
-                out.print("<button class='btn btn-green'>Registrar</button>");
+                out.print("<button class='btn btn-green' onclick='cargarDatos()'>Registrar</button>");
                 out.print("</div>");
 
                 out.print("</form>");
@@ -1814,7 +1814,7 @@ public class Tag_appDetail extends TagSupport {
                 out.print("<div class='card-header' style='justify-content: space-between;'>");
 
                 out.print("<div class='d-flex'>");
-                out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='window.location.href=\"AppDetail?opt=1\"'><i class='fas fa-arrow-left'></i></button>");
+                out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='window.location.href=\"AppDetail?opt=1\";cargarDatos()'><i class='fas fa-arrow-left'></i></button>");
                 out.print("</div>");
                 out.print("<div class='text-center'>");
                 out.print("<h4>Aplicativo</h4> <h1>" + nameApp + "</h1>");
@@ -1856,7 +1856,7 @@ public class Tag_appDetail extends TagSupport {
                         }
                         out.print("<td class=''>");
                         out.print("<div class='d-flex' style='justify-content: center;'>");
-                        out.print("<button class='btn btn-yellow' onclick='window.location.href=\"AppDetail?opt=1&idApp=" + idApp + "&mod=2&idHead=" + ObjHead[1] + "\"'><i class='fas fa-folder-open'></i></button>");
+                        out.print("<button class='btn btn-yellow' onclick='window.location.href=\"AppDetail?opt=1&idApp=" + idApp + "&mod=2&idHead=" + ObjHead[1] + "\";cargarDatos()'><i class='fas fa-folder-open'></i></button>");
                         out.print("</div>");
                         out.print("</td>");
                         out.print("</tr>");
@@ -1912,7 +1912,7 @@ public class Tag_appDetail extends TagSupport {
                             ste = 0;
                         }
                         out.print("<p class='textSquare'>Estado <code>." + ((ObjApp[4] == null) ? "Sin estado" : ((ste < 9) ? "En proceso" : "Activo")) + "</code></p>");
-                        out.print("<button class='btn btn-green btn-sm' style='position: absolute;right: 0;bottom: 0px;' onclick='window.location.href=\"AppDetail?opt=1&idApp=" + ObjApp[0] + "&mod=1\"'><i class='fas fa-arrow-right'></i></button>");
+                        out.print("<button class='btn btn-green btn-sm' style='position: absolute;right: 0;bottom: 0px;' onclick='window.location.href=\"AppDetail?opt=1&idApp=" + ObjApp[0] + "&mod=1\";cargarDatos()'><i class='fas fa-arrow-right'></i></button>");
                         out.print("</div>");
                         out.print("</div>");
                         out.print("</div>");

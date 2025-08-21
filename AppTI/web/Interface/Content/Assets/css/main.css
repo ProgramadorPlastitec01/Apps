@@ -1549,6 +1549,17 @@ div:empty:not(:focus):before {
     background-color: #4ad0e54a; 
     border: 1px solid #a7a5a5;
 }
+
+.selectGreenLiv{
+    background-color: #65ff004a; 
+    border: 1px solid #a7a5a5;
+}
+
+.selectCyanLive{
+    background-color: #00ffb554; 
+    border: 1px solid #a7a5a5;
+}
+
 .InputDatepicker{
     background: #fff;
     cursor: pointer;

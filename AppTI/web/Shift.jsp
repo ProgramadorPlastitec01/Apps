@@ -174,7 +174,9 @@
                     document.getElementById("hiddenTurnoId5").value,
                     document.getElementById("hiddenTurnoId6").value,
                     document.getElementById("hiddenTurnoId7").value,
-                    document.getElementById("hiddenTurnoId8").value
+                    document.getElementById("hiddenTurnoId8").value,
+                    document.getElementById("hiddenTurnoId8").value,
+                    document.getElementById("hiddenTurnoId10").value
                 ];
 
                 var hasValue = shift.some(function (turno) {
@@ -208,6 +210,7 @@
                         });
                     });
                 } else {
+                    cargarDatos();
                     document.getElementById("formShift").submit();
                 }
             }
@@ -221,7 +224,9 @@
                     document.getElementById("hiddenTurnoxId5").value,
                     document.getElementById("hiddenTurnoxId6").value,
                     document.getElementById("hiddenTurnoxId7").value,
-                    document.getElementById("hiddenTurnoxId8").value
+                    document.getElementById("hiddenTurnoxId8").value,
+                    document.getElementById("hiddenTurnoxId9").value,
+                    document.getElementById("hiddenTurnoxId10").value
                 ];
 
                 var hasValue = shift.some(function (turno) {
@@ -257,6 +262,7 @@
                         });
                     });
                 } else {
+                    cargarDatos();
                     document.getElementById("formShiftx").submit();
                 }
             }
