@@ -12,6 +12,7 @@
         <link rel="stylesheet" href="Interface/Content/Assets/modules/datatables/Select-1.2.4/css/select.bootstrap4.min.css">
         <link rel="stylesheet" href="Interface/Content/Assets/css/main.css">
         <script src="Interface/Content/Assets/modules/jquery.min.js"></script>
+        <link rel="icon" type="image/png" href="Interface/Imagen/Logo_app/IconW.fw.png">
         <style>
             /* Aplica el estilo del scrollbar al área de desplazamiento de la tabla */
             #table-1_wrapper .dataTables_scrollBody::-webkit-scrollbar {

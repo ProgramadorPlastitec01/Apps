@@ -5,11 +5,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
-        <style>
-            .card-stats {
-                margin-bottom: 1rem; /* se adapta al contenido */
-            }
-        </style>
+        <link rel="stylesheet" href="Interface/Content/Assets/css/activitysystem.css">
     </head>
     <body>
         <div id="app">
@@ -20,5 +16,27 @@
                 </div>
             </div>
         </div>
+        <script>
+            function SendFormSelect(selectElement) {
+                let selectedOption = selectElement.options[selectElement.selectedIndex];
+                let year = selectedOption.getAttribute("data-year");
+                let month = selectedOption.getAttribute("data-month");
+
+                let form = document.createElement("form");
+                form.method = "POST";
+                form.action = "ActivitySystem?opt=1";
+
+                let input = document.createElement("input");
+                input.type = "hidden";
+                input.name = "Data";     // nombre que recibes en el servlet
+                input.value = year + "/" + month;
+
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+            }
+
+        </script>
+
     </body>
 </html>

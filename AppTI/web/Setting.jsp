@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="Interface/Content/Assets/css/main.css">
         <link rel="stylesheet" href="Interface/Content/Assets/modules/fullcalendar/fullcalendar.min.css">
         <link rel="shortcut icon" href="Interfaz/Contenido/Imagen/Icon1.png" />
+        <link rel="icon" type="image/png" href="Interface/Imagen/Logo_app/IconW.fw.png">
     </head>
     <body>
         

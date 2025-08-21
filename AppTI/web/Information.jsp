@@ -8,6 +8,7 @@
         <title>Informacion</title>
         <link rel="stylesheet" href="Interface/Content/Assets/css/main.css">
         <link rel="stylesheet" href="Interface/Content/Assets/modules/izitoast/css/iziToast.min.css">
+        <link rel="icon" type="image/png" href="Interface/Imagen/Logo_app/IconW.fw.png">
     </head>
     <body>
         <div id="app">

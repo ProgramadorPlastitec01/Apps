@@ -11,6 +11,7 @@ import Controller.UserControllerJpa;
 import Mail.Mail_Session;
 import java.util.List;
 import java.time.LocalDate;
+import Method.generateRandomPassword;
 
 import SQL.ConnectionsBd;
 
@@ -154,12 +155,12 @@ public class Session extends HttpServlet {
                     lst_userRest = UserJpa.ConsultUsersRestarPassword(document, user);
                     if (lst_userRest != null) {
                         Object[] obj_user = (Object[]) lst_userRest.get(0);
-                        int currentYear = LocalDate.now().getYear();
                         String name = obj_user[1].toString() + " " + obj_user[2].toString();
+                        String newPassword = generateRandomPassword.generate(10);
                         IdUser = Integer.parseInt(obj_user[0].toString());
-                        result = UserJpa.RestorePassUser(IdUser);
+                        result = UserJpa.RestorePassUser(IdUser, newPassword);
                         Mail_Session mailer = new Mail_Session();
-                        mailer.RememeberPassword(name, currentYear, mail, getServletContext());
+                        mailer.RememeberPassword(name, newPassword, mail, getServletContext());
                         request.setAttribute("Mail_Reset_Pass", result);
                         request.getRequestDispatcher("index.jsp").forward(request, response);
                     } else {

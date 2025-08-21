@@ -426,11 +426,13 @@ public class Tag_pending extends TagSupport {
             out.print("</div>");
             out.print("<div class='card-body'>");
             out.print("<div class=\"tickets\">");
-            if (Priority >= 0) {
-                if (Filter.equals("")) {
-                    lst_pending = PendingJpa.ConsultPendingFilter(Priority, State, NameUser, NameRol, Search);
-                } else {
-                    lst_pending = PendingJpa.ConsultPendingFilterManaged(Priority, State, Filter, Search);
+            if (!Filter.equals("")) {
+                if (Priority >= 0) {
+                    if (Filter.equals("")) {
+                        lst_pending = PendingJpa.ConsultPendingFilter(Priority, State, NameUser, NameRol, Search);
+                    } else {
+                        lst_pending = PendingJpa.ConsultPendingFilterManaged(Priority, State, Filter, Search);
+                    }
                 }
             } else if (State == 0) {
                 lst_pending = PendingJpa.ConsultPendingClose(NameUser, NameRol);

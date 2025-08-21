@@ -12,6 +12,7 @@
         <link rel="stylesheet" href="Interface/Content/Assets/css/main.css">
         <link rel="stylesheet" href="Interface/Content/Assets/css/progress.css">
         <link rel="stylesheet" href="Interface/Content/Assets/css/RangeInput.css">
+        <link rel="icon" type="image/png" href="Interface/Imagen/Logo_app/IconW.fw.png">
         <!-- CKEditor -->
         <script src="Interface/Editor/ckeditor.js"></script>
 

@@ -39,7 +39,7 @@ public class LocalChatBotServlet extends HttpServlet {
     private String obtenerUsuariosEnTurno() {
 
         String UnionShift = "";
-        List<Object[]> lst_shift = ShiftJpa.ConsultcurrentShift();
+        List<Object[]> lst_shift = ShiftJpa.ConsultShiftStart();
         if (lst_shift != null && !lst_shift.isEmpty()) {
             Object[] ObjShift = lst_shift.get(0);
             if (ObjShift[2].toString().contains("[")) {
@@ -70,7 +70,7 @@ public class LocalChatBotServlet extends HttpServlet {
                             }
                         }
                     }
-                    UnionShift += "<div><b>" + ArgT + ":</b> " + TextUserFormatter + "</div>";
+                    UnionShift += "<div><b>" + ArgT + ":</b> " + TextUserFormatter + "</div><div class='text-center m-2'><button onclick='showMenu()' class='btn btn-green CustomBtn'>Volver al Menú</button></div>";
                     FinalShift = UnionShift;
                 }
             }

@@ -15,6 +15,7 @@
         <link rel="stylesheet" href="Interface/Content/Assets/css/components.css">
         <link rel="stylesheet" href="assets/modules/bootstrap/css/bootstrap.min.css">
         <script src="Interface/Content/Assets/js/sweetalert2.js"></script>
+        <link rel="icon" type="image/png" href="Interface/Imagen/Logo_app/IconW.fw.png">
         <style>
             .swal2-html-container {
                 overflow: hidden !important;

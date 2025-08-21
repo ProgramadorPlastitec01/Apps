@@ -14,6 +14,7 @@
         <link rel="stylesheet" href="Interface/Content/Assets/modules/select2/dist/css/select2.min.css" >
         <link rel="stylesheet" href="Interface/Content/Assets/css/main.css">
         <link rel="stylesheet" href="Interface/Content/Assets/css/computer.css">
+        <link rel="icon" type="image/png" href="Interface/Imagen/Logo_app/IconW.fw.png">
         <style>
             .nav-link .active {
                 background: #5ecbeb;

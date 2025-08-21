@@ -11,5 +11,6 @@
         <script src="Interface/Content/Assets/modules/izitoast/js/iziToast.min.js"></script>
         <script src="Interface/Content/Assets/js/page/modules-toastr.js"></script>
         <script src="Interface/Content/Assets/modules/jquery.min.js"></script>
+        <link rel="icon" type="image/png" href="Interface/Imagen/Logo_app/IconW.fw.png">
     </body>
 </html>
