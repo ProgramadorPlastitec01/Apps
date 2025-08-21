@@ -140,6 +140,10 @@
         <servlet-name>CheckerMail</servlet-name>
         <servlet-class>Servlet.CheckerMail</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ActivitySystem</servlet-name>
+        <servlet-class>Servlet.ActivitySystem</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>User</servlet-name>
         <url-pattern>/User</url-pattern>
@@ -279,6 +283,10 @@
     <servlet-mapping>
         <servlet-name>CheckerMail</servlet-name>
         <url-pattern>/CheckerMail</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ActivitySystem</servlet-name>
+        <url-pattern>/ActivitySystem</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

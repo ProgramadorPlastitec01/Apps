@@ -11,6 +11,7 @@
         <link rel="stylesheet" href="Interface/Content/Assets/modules/datatables/datatables.min.css">
         <link rel="stylesheet" href="Interface/Content/Assets/modules/izitoast/css/iziToast.min.css">
         <link rel="stylesheet" href="Interface/Content/Assets/css/main.css">
+        <link rel="icon" type="image/png" href="Interface/Imagen/Logo_app/IconW.fw.png">
 
 
         <link rel="stylesheet" href="Interface/Content/FlmngrFroala/css/froala_editor.pkgd.min.css">

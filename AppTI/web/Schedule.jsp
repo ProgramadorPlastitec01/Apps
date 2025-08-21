@@ -12,7 +12,7 @@
         <link rel="stylesheet" href="Interface/Content/Assets/modules/fullcalendar/fullcalendar.min.css">
         <link rel="shortcut icon" href="Interface/Content/Imagen/Icon1.png" />
         <link rel="" href="Interface/Content/Assets/modules/izitoast/css/iziToast.min.css">
-
+        <link rel="icon" type="image/png" href="Interface/Imagen/Logo_app/IconW.fw.png">
         <link rel="stylesheet" href="Interface/Content/Assets/modules/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css">
         <title>R-TI-026</title>
         <style>

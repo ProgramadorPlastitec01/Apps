@@ -6,6 +6,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Filtro General</title>
+        <link rel="icon" type="image/png" href="Interface/Imagen/Logo_app/IconW.fw.png">
     </head>
     <body>
         <div id="app">

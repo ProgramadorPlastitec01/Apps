@@ -16,5 +16,27 @@
                 </div>
             </div>
         </div>
+        <script>
+            function SendFormSelect(selectElement) {
+                let selectedOption = selectElement.options[selectElement.selectedIndex];
+                let year = selectedOption.getAttribute("data-year");
+                let month = selectedOption.getAttribute("data-month");
+
+                let form = document.createElement("form");
+                form.method = "POST";
+                form.action = "ActivitySystem?opt=1";
+
+                let input = document.createElement("input");
+                input.type = "hidden";
+                input.name = "Data";     // nombre que recibes en el servlet
+                input.value = year + "/" + month;
+
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+            }
+
+        </script>
+
     </body>
 </html>

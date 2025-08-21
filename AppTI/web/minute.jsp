@@ -15,6 +15,7 @@
         <link rel="stylesheet" href="Interface/Content/FlmngrFroala/css/froala_editor.pkgd.min.css">
         <link rel="stylesheet" href="Interface/Content/FlmngrFroala/css/file.min.css">
         <link rel="stylesheet" href="Interface/Content/FlmngrFroala/css/image.min.css">
+        <link rel="icon" type="image/png" href="Interface/Imagen/Logo_app/IconW.fw.png">
 
 
         <style>

@@ -211,20 +211,20 @@ public class Tag_menu extends TagSupport {
                     Object[] obj_pending = (Object[]) lst_pending.get(i);
                     out.print("      <a href=\"Pending?opt=1&State=1&Priority=&Search=" + obj_pending[0] + "\" class=\"dropdown-item dropdown-item-unread\">\n");
                     out.print("        <div class=\"dropdown-item-avatar\">\n");
-                    out.print("          <img alt=\"image\" src=\"Interface/Content/Assets/img/avatar/avatar-1.png\" style='height:100%' class=\"rounded-circle\">\n");
+                    out.print("          <img alt=\"image\" src=\"Interface/Imagen/Profile/" + obj_pending[14] + "\" style='height:100%' class=\"rounded-circle\">\n");
                     out.print("          <div class=\"is-online\"></div>\n");
                     out.print("        </div>\n");
                     out.print("        <div class=\"dropdown-item-desc\">\n");
-                    out.print("          <b>" + ((obj_pending[1] == null) ? "Sin asunto" : obj_pending[1]) + "</b>\n");
+                    out.print("          <div class='d-flex justify-content-between'><b>" + ((obj_pending[1] == null) ? "Sin asunto" : obj_pending[1]) + "</b><span class=\"time\" style='margin-top:0px' data-toggle=\"tooltip\" data-placement=\"top\" title='Registrado por'>" + obj_pending[13] + "</span></div>\n");
                     out.print("          <p>" + ((obj_pending[11] == null) ? "Sin contenido" : obj_pending[11]) + " " + ((obj_pending[11].toString().length() > 20) ? "...." : "") + "</p>\n");
                     int minuteP = Integer.parseInt(obj_pending[12].toString());
                     if (minuteP < 60) {
-                        out.print("<div class=\"time\">Hace " + minuteP + " Min</div>");
+                        out.print("<div class=\"time text-warning\">Hace " + minuteP + " Min</div>");
                     } else {
                         int hoursP = minuteP / 60;
                         int remainingMinutes = minuteP % 60;
                         int secondsP = 0;
-                        out.print("<div class=\"time\">");
+                        out.print("<div class=\"time  text-warning\">");
                         if (hours > 0) {
                             out.print("Hace " + hoursP + ((hoursP == 1) ? " Hr " : " Hrs "));
                         }
@@ -325,17 +325,17 @@ public class Tag_menu extends TagSupport {
                     + "            <div class=\"d-sm-none d-lg-inline-block\">" + NameUser + "</div></a>\n"
                     + "            <div class=\"dropdown-menu dropdown-menu-right\">\n"
                     + "              <div class=\"dropdown-title\">Acceso hace " + hours + " hr - " + minutes + " min</div>\n"
-                    + "              <a href=\"Profile?opt=1\" class=\"dropdown-item has-icon\">\n"
+                    + "              <a href=\"Profile?opt=1\" onclick='cargarDatos()' class=\"dropdown-item has-icon\">\n"
                     + "                <i class=\"far fa-user\"></i> Perfil\n"
                     + "              </a>\n"
-                    + "              <a href=\"ActivitySystem.jsp\" class=\"dropdown-item has-icon\">\n"
+                    + "              <a href=\"ActivitySystem.jsp\" onclick='cargarDatos()' class=\"dropdown-item has-icon\">\n"
                     + "                <i class=\"fas fa-bolt\"></i> Actividades\n"
                     + "              </a>\n"
-                    + "              <a href=\"Setting.jsp\" class=\"dropdown-item has-icon\">\n"
+                    + "              <a href=\"Setting.jsp\" onclick='cargarDatos()' class=\"dropdown-item has-icon\">\n"
                     + "                <i class=\"fas fa-cog\"></i> Configuración\n"
                     + "              </a>\n"
                     + "              <div class=\"dropdown-divider\"></div>\n"
-                    + "              <a href=\"Leave.jsp\" class=\"dropdown-item has-icon text-danger\">\n"
+                    + "              <a href=\"Leave.jsp\"  class=\"dropdown-item has-icon text-danger\">\n"
                     + "                <i class=\"fas fa-sign-out-alt\"></i> Salir\n"
                     + "              </a>\n"
                     + "            </div>\n"

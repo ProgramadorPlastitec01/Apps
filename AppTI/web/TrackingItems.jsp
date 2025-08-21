@@ -12,6 +12,7 @@
         <link rel="stylesheet" href="Interface/Content/Assets/modules/izitoast/css/iziToast.min.css">
         <link rel="stylesheet" href="Interface/Content/Assets/css/main.css">
         <script src="Interface/Content/Assets/js/sweetalert2.js"></script>
+        <link rel="icon" type="image/png" href="Interface/Imagen/Logo_app/IconW.fw.png">
         <style>
             button:focus {
                 outline: none;

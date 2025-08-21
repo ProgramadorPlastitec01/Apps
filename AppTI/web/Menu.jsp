@@ -11,6 +11,7 @@
         <link rel="stylesheet" href="Interface/Content/Assets/modules/fontawesome/css/all.min.css">
         <link rel="stylesheet" href="Interface/Content/Assets/css/main.css">
         <link rel="stylesheet" href="Interface/Content/Assets/modules/ionicons/css/ionicons.min.css">
+        <link rel="icon" type="image/png" href="Interface/Imagen/Logo_app/IconW.fw.png">
 
         <!-- CSS Libraries -->
         <link rel="stylesheet" href="Interface/Content/Assets/modules/jqvmap/dist/jqvmap.min.css">
