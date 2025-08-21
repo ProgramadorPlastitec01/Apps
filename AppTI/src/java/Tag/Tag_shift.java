@@ -15,7 +15,7 @@ import java.util.Locale;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import Controller.UserControllerJpa; 
+import Controller.UserControllerJpa;
 import Controller.ShiftControllerJpa;
 import Controller.SettingControllerJpa;
 import java.util.ArrayList;
@@ -105,7 +105,7 @@ public class Tag_shift extends TagSupport {
                 Object[] ObjSft = {};
                 String[] Shiftids = {};
                 String ShiftAll = "";
-                String UserIn = "", shiftOne = "", shiftTwo = "", shiftThree = "", shiftFour = "", shiftFive = "", 
+                String UserIn = "", shiftOne = "", shiftTwo = "", shiftThree = "", shiftFour = "", shiftFive = "",
                         shiftSix = "", shiftSeven = "", shiftEight = "", shiftNine = "", shiftTen = "";
                 if (lst_shift2 != null) {
                     ObjSft = (Object[]) lst_shift2.get(0);
@@ -142,9 +142,9 @@ public class Tag_shift extends TagSupport {
                         shiftSeven = datShift[i];
                     } else if (datShift[i].contains("Turno 2/12: 6pm - 6am")) {
                         shiftEight = datShift[i];
-                    }else if (datShift[i].contains("Turno Lab: 7am - 5pm")) {
+                    } else if (datShift[i].contains("Turno Lab: 7am - 5pm")) {
                         shiftNine = datShift[i];
-                    }else if (datShift[i].contains("Turno Apoyo: 7am - 5pm")) {
+                    } else if (datShift[i].contains("Turno Apoyo: 7am - 5pm")) {
                         shiftTen = datShift[i];
                     }
                 }
@@ -155,11 +155,11 @@ public class Tag_shift extends TagSupport {
                 out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(2)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
                 out.print("</div>");
                 out.print("<div class='cont_form_user'>");
-                
+
                 out.print("<div class='d-flex'>");
-                
+
                 out.print("<div class='col-lg-4' style='box-shadow: 0px 1px 9px -1px #979797;border-radius: 5px;margin-top: 2%;padding-bottom: 10px;margin-bottom: 10px;'>");
-                
+
                 out.print("<div class='mt-3'>");
                 //<editor-fold defaultstate="collapsed" desc="SELECT WEEK">
                 out.print("<h4>Seleccionar semana</h4>");
@@ -186,10 +186,8 @@ public class Tag_shift extends TagSupport {
                 out.print("</select>");
                 //</editor-fold>
                 out.print("</div>");
-                
-                
-                //<editor-fold defaultstate="collapsed" desc="TUNROS SELECCIONABLES">
 
+                //<editor-fold defaultstate="collapsed" desc="TUNROS SELECCIONABLES">
                 out.print("<h5 class='text-center mt-3'>Turno</h5>");
                 lst_setting = SettingJps.ConsultSettingCategorie("Shift");
                 String ShiftColors = "";
@@ -278,7 +276,7 @@ public class Tag_shift extends TagSupport {
                 out.print("</div>");
                 out.print("</div>");
 //                out.print("</div>");
-                
+
                 out.print("<form action='Shift?opt=3&idShift=" + ObjSft[0] + "' method='post' id='formShiftx'>");
                 //<editor-fold defaultstate="collapsed" desc="FORM EJECT">
                 out.print("<input type='hidden' class='form-control' id='ClassDatax' name='tempClass' placeholder='class'>");
@@ -305,7 +303,7 @@ public class Tag_shift extends TagSupport {
                 out.print("</div>");
                 out.print("</div>");
                 out.print("</div>");
-            //</editor-fold>
+                //</editor-fold>
             }
             //<editor-fold defaultstate="collapsed" desc="NEW PROGRAMATION">
             lst_shift = ShiftJap.ConsultShiftValidation();
@@ -323,10 +321,10 @@ public class Tag_shift extends TagSupport {
             out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(1)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
             out.print("</div>");
             out.print("<div class='cont_form_user'>");
-            
+
             out.print("<div class='d-flex'>");
             out.print("<div class='col-lg-4' style='box-shadow: 0px 1px 9px -1px #979797;border-radius: 5px;margin-top: 2%;padding-bottom: 10px;margin-bottom: 10px;'>");
-            
+
             out.print("<div class='mt-3'>");
             //<editor-fold defaultstate="collapsed" desc="SELECT SEMANA">
             out.print("<div class='col-lg-12 text-center' data-toggle='tooltip' data-placemente='top' title=''>");
@@ -355,7 +353,7 @@ public class Tag_shift extends TagSupport {
             out.print("</div>");
             //</editor-fold>
             out.print("</div>");
-            
+
             //<editor-fold defaultstate="collapsed" desc="TURNOS SELECCIONABLES">
             out.print("<h5 class='text-center mt-3'>Turno</h5>");
             lst_setting = SettingJps.ConsultSettingCategorie("Shift");
@@ -412,7 +410,7 @@ public class Tag_shift extends TagSupport {
             //</editor-fold>
             out.print("</div>");
             out.print("</div>");
-            
+
             out.print("<form action='Shift?opt=2' method='post' id='formShift'>");
             //<editor-fold defaultstate="collapsed" desc="FORM">
             out.print("<input type='hidden' class='form-control' id='ClassData' name='tempClass' placeholder='class'>");
@@ -485,34 +483,65 @@ public class Tag_shift extends TagSupport {
                     }
                     out.print("</div>");
 
-                    out.print("<div class='d-flex justify-content-around'>");
-                    for (int j = 0; j < DataShift.length; j++) {
-                        out.print("<div class='contShift' style='width:" + ((DataShift.length <= 4) ? "20%;" : (DataShift.length == 5) ? "19%;" : (DataShift.length == 6) ? "16%;" : "14%;") + "'>");
-                        out.print("<div class='contShiftHead'>");
-                        String tittle = DataShift[j].toString().replace("am/", "am///").replace("pm/", "pm///").split("///")[0];
-                        out.print("<h4><b style='color: black;'>" + tittle.split(":")[0] + "</b></h4>");
-                        out.print("<p class='text-dark'>" + tittle.split(":")[1] + "</p>");
-                        out.print("</div>");
+                    out.print("<div class=''>");
+                    out.print("<table class='table table-sm' id='table-1'>");
+                    out.print("<tr style='background: #33bf98;color: black; text-align: center;'>");
+                    out.print("<th>TURNO PROGRAMADO</th>");
+                    out.print("<th>PERSONAL PROGRAMADO</th>");
+                    out.print("</tr>");
 
-                        out.print("<div class=''>");
+                    for (int j = 0; j < DataShift.length; j++) {
+                        String tittle = DataShift[j].toString().replace("am/", "am///").replace("pm/", "pm///").split("///")[0];
+                        out.print("<tr>");
+                        out.print("<th class='text-center'><b>" + tittle.replace("Turno", "").split(":")[0] + "</b>&nbsp;&nbsp; <i class=\"fas fa-arrow-right\"></i> &nbsp; <span style='font-weight: lighter;'>" + tittle.split(":")[1] + "</span></th>");
+
                         String userId = DataShift[j].replace("am/", "am///").replace("pm/", "pm///").split("///")[1];
                         lst_user = UserJpa.ConsultUsersMultiple(userId);
+                        out.print("<td>");
                         if (lst_user != null) {
-                            out.print("<ul class='list-group list-group-flush text-center'>");
                             for (int k = 0; k < lst_user.size(); k++) {
                                 Object[] ObjUser = (Object[]) lst_user.get(k);
-                                out.print("<li class='list-group-item' style='padding: 0.1rem 0.25rem;'>" + ObjUser[1] + " " + ObjUser[2] + " </li>");
+                                out.print("<span class='bullet'></span><span>" + ObjUser[1] + " " + ObjUser[2] + "</span>&nbsp;");
                             }
-                            out.print("</ul>");
                         } else {
                             out.print("<h4>Error al consultar usuarios</h4>");
                         }
-
-                        out.print("</div>");
-                        out.print("</div>");
+                        out.print("</td>");
+                        out.print("</tr>");
                     }
+                    out.print("</table>");
                     out.print("</div>");
 
+                    //<editor-fold defaultstate="collapsed" desc="OLD">
+//                    out.print("<div class='d-flex justify-content-around'>");
+//                    for (int j = 0; j < DataShift.length; j++) {
+//                        out.print("<div class='contShift' style='width:" + ((DataShift.length <= 4) ? "20%;" : (DataShift.length == 5) ? "19%;" : (DataShift.length == 6) ? "16%;" : "14%;") + "'>");
+//                        
+//                        out.print("<div class='contShiftHead'>");
+//                        String tittle = DataShift[j].toString().replace("am/", "am///").replace("pm/", "pm///").split("///")[0];
+//                        out.print("<h4><b style='color: black;'>" + tittle.split(":")[0] + "</b></h4>");
+//                        out.print("<p class='text-dark'>" + tittle.split(":")[1] + "</p>");
+//                        out.print("</div>");
+//
+//                        out.print("<div class=''>");
+//                        String userId = DataShift[j].replace("am/", "am///").replace("pm/", "pm///").split("///")[1];
+//                        lst_user = UserJpa.ConsultUsersMultiple(userId);
+//                        if (lst_user != null) {
+//                            out.print("<ul class='list-group list-group-flush text-center'>");
+//                            for (int k = 0; k < lst_user.size(); k++) {
+//                                Object[] ObjUser = (Object[]) lst_user.get(k);
+//                                out.print("<li class='list-group-item' style='padding: 0.1rem 0.25rem;'>" + ObjUser[1] + " " + ObjUser[2] + " </li>");
+//                            }
+//                            out.print("</ul>");
+//                        } else {
+//                            out.print("<h4>Error al consultar usuarios</h4>");
+//                        }
+//                        out.print("</div>");
+//                        
+//                        out.print("</div>");
+//                    }
+//                    out.print("</div>");
+                    //</editor-fold>
                     out.print("</div>");
                 }
                 out.print("</div>");
