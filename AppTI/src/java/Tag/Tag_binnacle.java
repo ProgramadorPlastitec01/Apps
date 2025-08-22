@@ -214,7 +214,7 @@ public class Tag_binnacle extends TagSupport {
                     out.print("");
                 }
                 if (state == 0) {
-                    out.print("<textarea class='summernote' name='txtBinnacle'>");
+                    out.print("<textarea id='editorCK' name='txtBinnacle'>");
                     if (datos.equals("")) {
                         out.print(template);
                     } else {

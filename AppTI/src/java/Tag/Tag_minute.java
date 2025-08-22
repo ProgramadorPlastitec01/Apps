@@ -493,10 +493,10 @@ public class Tag_minute extends TagSupport {
                         if (counter > 0) {
                             out.print(Str_data[1]);
                         } else {
-                            out.print("<textarea id='editorNext' class='form-control' name='txtCont'>" + Str_data[1] + "</textarea>");
+                            out.print("<textarea id='editorCK' class='form-control' name='txtCont'>" + Str_data[1] + "</textarea>");
                         }
                     } catch (Exception e) {
-                        out.print("<textarea id='editorNext' class='form-control' name='txtCont'></textarea>");
+                        out.print("<textarea id='editorCK' class='form-control' name='txtCont'></textarea>");
                     }
                     out.print("</div>");
                     out.print("</div>");

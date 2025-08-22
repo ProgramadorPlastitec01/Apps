@@ -40,20 +40,20 @@ public class ConnectionFactory {
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             Connection con = DriverManager.getConnection("jdbc:sqlserver://172.16.2.116:1433;databaseName=EMP001_MANT", "sa", "plast");
-            String query = "SELECT k.COD as 'Cod', k.DOC as 'Doc', CONVERT(DATE, k.FECHA) as 'Date', k.DES as 'desc', k.tipo as 'Type' "
+            String query = "SELECT k.COD as 'Cod', k.DOC as 'Doc', CONVERT(DATE, k.FECHA) as 'Date', k.DES as 'desc', k.tipo as 'Type', cast(k.cant as INT) as 'cant' "
                     + "FROM kardex k "
-                    + "WHERE k.COD LIKE '" + Ref + "%' AND (k.tipo = '8051' OR k.tipo = '1051') AND  k.FECHA BETWEEN CONVERT(DATETIME,'" + dtIn + "', 120) AND CONVERT(DATETIME,'" + dtFn + "', 120) "
-                    + "GROUP BY k.FECHA, k.DES, k.COD, k.DOC, k.tipo  "
+                    + "WHERE k.COD LIKE '" + Ref + "%' AND (k.tipo = '8051' OR k.tipo = '1051' OR k.tipo = '3051' OR k.tipo = '1151') AND  k.FECHA BETWEEN CONVERT(DATETIME,'" + dtIn + "', 120) AND CONVERT(DATETIME,'" + dtFn + "', 120) "
+                    + "GROUP BY k.FECHA, k.DES, k.COD, k.DOC, k.tipo, k.cant  "
                     + "UNION ALL  "
-                    + "SELECT k.COD as 'Cod', k.DOC as 'Doc', CONVERT(DATE, k.FECHA) as 'Date', k.DES as 'desc', k.tipo as 'Type' "
+                    + "SELECT k.COD as 'Cod', k.DOC as 'Doc', CONVERT(DATE, k.FECHA) as 'Date', k.DES as 'desc', k.tipo as 'Type', cast(k.cant as INT) as 'Cantidad' "
                     + "FROM kardexa k "
-                    + "WHERE k.COD LIKE '" + Ref + "%' AND (k.tipo = '8051' OR k.tipo = '1051') AND  k.FECHA BETWEEN CONVERT(DATETIME,'" + dtIn + "', 120) AND CONVERT(DATETIME,'" + dtFn + "', 120) "
-                    + "GROUP BY k.FECHA, k.DES, k.COD, k.DOC, k.tipo  "
+                    + "WHERE k.COD LIKE '" + Ref + "%' AND (k.tipo = '8051' OR k.tipo = '1051' OR k.tipo = '3051' OR k.tipo = '1151') AND  k.FECHA BETWEEN CONVERT(DATETIME,'" + dtIn + "', 120) AND CONVERT(DATETIME,'" + dtFn + "', 120) "
+                    + "GROUP BY k.FECHA, k.DES, k.COD, k.DOC, k.tipo, k.cant  "
                     + "UNION ALL "
-                    + "SELECT k.COD as 'Cod', k.DOC as 'Doc', CONVERT(DATE, k.FECHA) as 'Date', k.DES as 'desc', k.tipo as 'Type' "
+                    + "SELECT k.COD as 'Cod', k.DOC as 'Doc', CONVERT(DATE, k.FECHA) as 'Date', k.DES as 'desc', k.tipo as 'Type', cast(k.cant as INT) as 'Cantidad' "
                     + "FROM kardexhi k "
-                    + "WHERE k.COD LIKE '" + Ref + "%' AND (k.tipo = '8051' OR k.tipo = '1051') AND  k.FECHA BETWEEN CONVERT(DATETIME,'" + dtIn + "', 120) AND CONVERT(DATETIME,'" + dtFn + "', 120) "
-                    + "GROUP BY k.FECHA, k.DES, k.COD, k.DOC, k.tipo  "
+                    + "WHERE k.COD LIKE '" + Ref + "%' AND (k.tipo = '8051' OR k.tipo = '1051' OR k.tipo = '3051' OR k.tipo = '1151') AND  k.FECHA BETWEEN CONVERT(DATETIME,'" + dtIn + "', 120) AND CONVERT(DATETIME,'" + dtFn + "', 120) "
+                    + "GROUP BY k.FECHA, k.DES, k.COD, k.DOC, k.tipo, k.cant  "
                     + "ORDER BY k.DOC ASC ";
             Statement sttm = con.createStatement();
             ResultSet rs = sttm.executeQuery(query);
@@ -62,7 +62,7 @@ public class ConnectionFactory {
             int count = 0;
             while (rs.next()) {
                 lst_orden_factory.add(count, rs.getString("Cod").trim() + " / " + rs.getString("Doc").trim() + " / " + rs.getString("Date").trim()
-                        + " / " + rs.getString("desc").trim() + " / " + rs.getString("Type").trim() + "---");
+                        + " / " + rs.getString("desc").trim() + " / " + rs.getString("Type").trim() + " / " + rs.getString("cant").trim() + "---");
                 count++;
             }
             return lst_orden_factory;

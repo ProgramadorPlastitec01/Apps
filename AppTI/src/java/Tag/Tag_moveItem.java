@@ -165,28 +165,26 @@ public class Tag_moveItem extends TagSupport {
                 out.print("<input type='date' class='form-control' name='txt_date' id='' data-toggle='tooltip' data-placement='top' title='' value='" + moveDate + "' required>");
                 out.print("</div>");
                 out.print("</div>");
-                
+
                 out.print("<div class='d-flex'>");
-                
+
                 out.print("<div class='col-lg-4 mt-2'>");
                 out.print("<span class=''>Ubicación</span>");
                 out.print("<input type='text' class='form-control' name='txt_location' id='' data-toggle='tooltip' data-placement='top' title='' value='' required>");
                 out.print("</div>");
-                
+
                 out.print("<div class='col-lg-4 mt-2'>");
                 out.print("<span class=''>Modelo</span>");
                 out.print("<input type='text' class='form-control' name='txt_model' id='' data-toggle='tooltip' data-placement='top' title='' value='' required>");
                 out.print("</div>");
-                
+
                 out.print("<div class='col-lg-4 mt-2'>");
                 out.print("<span class=''>Serial</span>");
                 out.print("<input type='text' class='form-control' name='txt_serial' id='' data-toggle='tooltip' data-placement='top' title='' value='' required>");
                 out.print("</div>");
-                
-                
+
                 out.print("</div>");
-                
-                
+
                 out.print("<div class='col-lg-12 mt-2'>");
                 out.print("<span class=''>Observaciones</span>");
                 out.print("<textarea class='form-control' style='margin: auto; margin-left: 12px;' name='txt_Obs' placeholder='' required></textarea>");
@@ -195,8 +193,7 @@ public class Tag_moveItem extends TagSupport {
                 out.print("<div class='text-center mt-2'>");
                 out.print("<button class='btn btn-green'>Registrar</button>");
                 out.print("</div>");
-                
-                
+
                 out.print("</form>");
                 out.print("</div>");
                 out.print("</div>");
@@ -324,6 +321,7 @@ public class Tag_moveItem extends TagSupport {
                     out.print("<th>ENT</th>");
                     out.print("<th>FECHA</th>");
                     out.print("<th>OBS</th>");
+                    out.print("<th>CANT</th>");
                     out.print("<th>-</th>");
                     out.print("</tr>");
                     out.print("</thead>");
@@ -357,6 +355,13 @@ public class Tag_moveItem extends TagSupport {
                                         out.print("<td>" + entDat[1] + "</td>");
                                         out.print("<td>" + entDat[2] + "</td>");
                                         out.print("<td>" + entDat[3] + "</td>");
+                                        int cantMov = 0;
+                                        try {
+                                            cantMov = Integer.parseInt(entDat[5].toString());
+                                        } catch (Exception e) {
+                                            cantMov = 0;
+                                        }
+                                        out.print("<td>" + cantMov + "</td>");
                                         out.print("<td><button class='btn btn-success btn-sm' onclick='window.location.href=\"MoveItem?opt=1&txt_ref=" + ref + "&numEnt=" + entDat[1] + "&txtDateIni=" + dtIn + "&txtDateFin=" + dtFn + "&dateMove=" + entDat[2] + "\"'><i class=\"fas fa-reply\"></i></button></td>");
                                         out.print("</tr>");
                                     }
@@ -369,6 +374,16 @@ public class Tag_moveItem extends TagSupport {
                                     out.print("<td>" + entDat[1] + "</td>");
                                     out.print("<td>" + entDat[2] + "</td>");
                                     out.print("<td>" + entDat[3] + "</td>");
+                                    int cantMov = 0;
+                                    try {
+                                        cantMov = Integer.parseInt(entDat[5].toString());
+                                        
+                                        
+                                        
+                                    } catch (Exception e) {
+                                        cantMov = 0;
+                                    }
+                                    out.print("<td>" + cantMov + "</td>");
                                     out.print("<td><button class='btn btn-success btn-sm' onclick='window.location.href=\"MoveItem?opt=1&txt_ref=" + ref + "&numEnt=" + entDat[1] + "&txtDateIni=" + dtIn + "&txtDateFin=" + dtFn + "&dateMove=" + entDat[2] + "\"'><i class=\"fas fa-reply\"></i></button></td>");
                                     out.print("</tr>");
                                 }
