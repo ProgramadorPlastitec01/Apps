@@ -192,17 +192,17 @@ public class Tag_alert extends TagSupport {
                 out.print("<p style='text-align: center;'>Recordar que la protección de datos, usuario y contraseña, ayuda a evitar fraudes o alteraciones en la Organización (PLASTITEC) y en este Aplicativo.</p>");
                 out.print("<div style='width:100%' class='camb_body'>");
                 out.print("<form action='Session?opt=2' method='post'>");
-                
+
                 out.print("<div class='d-flex'>");
                 out.print("<input type='hidden' name='IdUser' id='IdUser' value='" + IdUser + "'>");
                 out.print("<input class='form-control' type='password' id='pass-input' placeholder='Nueva Contraseña' style='margin-right: 4%;'>");
-                
+
                 out.print("<script>");
                 out.print("var validatedObj = new LiveValidation('pass-input');");
                 out.print("validatedObj.add(Validate.Password);");
                 out.print("validatedObj.add(Validate.Presence);");
                 out.print("</script>");
-                
+
                 out.print("<input class='form-control' type='password' name='Txt_password' id='confpass-input' placeholder='Confirmar Contraseña' >");
                 out.print("<script>");
                 out.print("var validatedObj = new LiveValidation('confpass-input');");
@@ -1780,7 +1780,7 @@ public class Tag_alert extends TagSupport {
                     out.print("</script>");
                 }
             }
-            
+
             //</editor-fold>
             //<editor-fold defaultstate="collapsed" desc="SCHEDULE">
             if (pageContext.getRequest().getAttribute("ExecuteSchedule") != null) {
@@ -2106,6 +2106,80 @@ public class Tag_alert extends TagSupport {
                             + "  iziToast.error({\n"
                             + "    title: 'Error',\n"
                             + "    message: 'Ha ocurrido un error al actualizar.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                }
+            }
+            //</editor-fold>
+            //<editor-fold defaultstate="collapsed" desc="KNOWLEDGE_BASE">
+            if (pageContext.getRequest().getAttribute("RegisterKnowledge") != null) {
+                boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("RegisterKnowledge").toString());
+                if (result) {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-2\").ready(function() {\n"
+                            + "  iziToast.success({\n"
+                            + "    title: 'Correcto',\n"
+                            + "    message: 'Se ha registrado el manual correctamente.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                } else {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-4\").ready(function() {\n"
+                            + "  iziToast.error({\n"
+                            + "    title: 'Error',\n"
+                            + "    message: 'Ha ocurrido un error al registrar.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                }
+            }
+            if (pageContext.getRequest().getAttribute("UpdateKnowledge") != null) {
+                boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("UpdateKnowledge").toString());
+                if (result) {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-2\").ready(function() {\n"
+                            + "  iziToast.success({\n"
+                            + "    title: 'Correcto',\n"
+                            + "    message: 'Se modifico el manual correctamente.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                } else {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-4\").ready(function() {\n"
+                            + "  iziToast.error({\n"
+                            + "    title: 'Error',\n"
+                            + "    message: 'Ha ocurrido un error al registrar.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                }
+            }
+            if (pageContext.getRequest().getAttribute("ChangeStateKnowlegde") != null) {
+                boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("ChangeStateKnowlegde").toString());
+                if (result) {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-2\").ready(function() {\n"
+                            + "  iziToast.success({\n"
+                            + "    title: 'Correcto',\n"
+                            + "    message: 'Se cambio el estado correctamente.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                } else {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-4\").ready(function() {\n"
+                            + "  iziToast.error({\n"
+                            + "    title: 'Error',\n"
+                            + "    message: 'Ha ocurrido un error al registrar.',\n"
                             + "    position: 'bottomRight'\n"
                             + "  });\n"
                             + "});");

@@ -144,6 +144,14 @@
         <servlet-name>ActivitySystem</servlet-name>
         <servlet-class>Servlet.ActivitySystem</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Knowledge</servlet-name>
+        <servlet-class>Servlet.Knowledge</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DownloadKnowledge</servlet-name>
+        <servlet-class>Servlet.DownloadKnowledge</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>User</servlet-name>
         <url-pattern>/User</url-pattern>
@@ -287,6 +295,14 @@
     <servlet-mapping>
         <servlet-name>ActivitySystem</servlet-name>
         <url-pattern>/ActivitySystem</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Knowledge</servlet-name>
+        <url-pattern>/Knowledge</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DownloadKnowledge</servlet-name>
+        <url-pattern>/DownloadKnowledge</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
