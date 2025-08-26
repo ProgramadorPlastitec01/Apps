@@ -2259,11 +2259,10 @@ DivSignatureAct::-webkit-scrollbar-thumb:active {
 
 
 .minuteDetail{
-    box-shadow: 0px 0px 11px -1px #b1b1b1;
+    box-shadow: 0px 0px 11px -1px #d3d3d3;
     border-radius: 6px;
     padding: 20px;
     margin-bottom: 3%;
-    border: 1px solid #33bf9852;
 }
 
 .continueLine h6{

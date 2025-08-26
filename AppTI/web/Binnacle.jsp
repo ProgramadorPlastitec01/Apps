@@ -11,6 +11,7 @@
         <link rel="stylesheet" href="Interface/Content/Assets/modules/datatables/datatables.min.css">
         <link rel="stylesheet" href="Interface/Content/Assets/modules/izitoast/css/iziToast.min.css">
         <link rel="stylesheet" href="Interface/Content/Assets/css/main.css">
+        <link rel="stylesheet" href="Interface/Content/Assets/css/template.css">
         <link rel="stylesheet" href="Interface/Content/Assets/modules/summernote/summernote-bs4.css">
         <link rel="icon" type="image/png" href="Interface/Imagen/Logo_app/IconW.fw.png">
     </head>
@@ -102,7 +103,7 @@
                             filebrowserImageBrowseUrl: 'http://172.16.1.164/elFinder/elfinder.html?type=Images&rol=' + Rol + '&idusuario=' + IdUsPhp,
                             removeDialogTabs: 'link:upload;image:upload',
                             language: 'es',
-                            height: 150,
+                            height: 380,
                             toolbarGroups: [
                                 {name: 'document', groups: ['mode', 'document', 'doctools']},
                                 {name: 'clipboard', groups: ['clipboard', 'undo']},

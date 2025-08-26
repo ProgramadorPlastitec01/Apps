@@ -449,21 +449,29 @@ public class Tag_minute extends TagSupport {
                 if (lst_minute != null) {
                     Object[] ObjMin = (Object[]) lst_minute.get(0);
                     out.print("<div class='minuteDetail'>");
-                    out.print("<div class='row'>");
+                    
+                    out.print("<div class='d-flex align-items-center text-center'>");
+                    
                     out.print("<div class='col-lg-2'>");
                     out.print("<h6><b>Fecha:</b></h6>&nbsp;" + ObjMin[2] + "");
                     out.print("</div>");
+                    
                     out.print("<div class='col-lg-6'>");
                     out.print("<h6><b>Asunto:</b></h6>&nbsp;" + ObjMin[1] + "");
                     out.print("</div>");
-                    out.print("<div class='col-lg-4 d-flex'>");
+                    
+                    out.print("<div class='col-lg-4'>");
                     out.print("<h6><b>Usuario registro: &nbsp;</b></h6>");
                     out.print("<div class=''>");
                     out.print(ObjMin[7] + "<br>");
                     out.print("<i style='font-size: 10px;color: gray;'>" + ObjMin[8] + "</i>");
                     out.print("</div>");
                     out.print("</div>");
+                    
+                    
                     out.print("</div>");
+                    
+                    
                     out.print("</div>");
 
                     out.print("<form action='Minute?opt=4&idMinu=" + ObjMin[0] + "&event=1' method='post' class='needs-validation' novalidate=''>");

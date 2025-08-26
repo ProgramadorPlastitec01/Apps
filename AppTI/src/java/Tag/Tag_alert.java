@@ -700,6 +700,54 @@ public class Tag_alert extends TagSupport {
                     out.print("</script>");
                 }
             }
+            if (pageContext.getRequest().getAttribute("RegisterTemplate") != null) {
+                boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("RegisterTemplate").toString());
+                if (result) {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-2\").ready(function() {\n"
+                            + "  iziToast.success({\n"
+                            + "    title: 'Correcto',\n"
+                            + "    message: 'Registro exitoso.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                } else {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-4\").ready(function() {\n"
+                            + "  iziToast.error({\n"
+                            + "    title: 'Error',\n"
+                            + "    message: 'Ha ocurrido un problema en el registro.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                }
+            }
+            if (pageContext.getRequest().getAttribute("UpdateTemplateState") != null) {
+                boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("UpdateTemplateState").toString());
+                if (result) {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-2\").ready(function() {\n"
+                            + "  iziToast.success({\n"
+                            + "    title: 'Correcto',\n"
+                            + "    message: 'Se ha realizado acambio de estado.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                } else {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-4\").ready(function() {\n"
+                            + "  iziToast.error({\n"
+                            + "    title: 'Error',\n"
+                            + "    message: 'Ha ocurrido un problema.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                }
+            }
 //</editor-fold>
             //<editor-fold defaultstate="collapsed" desc="FORMAT">
             if (pageContext.getRequest().getAttribute("RegisterFormat") != null) {

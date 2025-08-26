@@ -53,7 +53,7 @@ public class Tag_setting extends TagSupport {
                 out.print("<div class='card-body'>");
                 out.print("<h4>Formatos</h4>");
                 out.print("<p>Modulo encargado de crear, gestionar y modificar los formatos de registros que se manejan en el área.</p>");
-                out.print("<a href='Format?opt=1' class='card-cta'>Configuración<i class='fas fa-chevron-right'></i></a>");
+                out.print("<a href='Format?opt=1' class='card-cta' onclick='cargarDatos()'>Configuración<i class='fas fa-chevron-right'></i></a>");
                 out.print("</div>");
                 out.print("</div>");
                 out.print("</div>");
@@ -68,7 +68,7 @@ public class Tag_setting extends TagSupport {
                 out.print("<div class='card-body'>");
                 out.print("<h4>Roles y permisos</h4>");
                 out.print("<p>Módulo encargado de crear, gestionar los roles y pemisos del sistema.</p>");
-                out.print("<a href='Role?opt=1' class='card-cta'>Configuración <i class='fas fa-chevron-right'></i></a>");
+                out.print("<a href='Role?opt=1' class='card-cta' onclick='cargarDatos()'>Configuración <i class='fas fa-chevron-right'></i></a>");
                 out.print("</div>");
                 out.print("</div>");
                 out.print("</div>");
@@ -83,7 +83,7 @@ public class Tag_setting extends TagSupport {
                 out.print("<div class='card-body'>");
                 out.print("<h4>Programacion de turnos</h4>");
                 out.print("<p>Modulo encargado de la programación semanal de turnos para el personal del área.</p>");
-                out.print("<a href='Shift?opt=1' class='card-cta'>Configurar <i class='fas fa-chevron-right'></i></a>");
+                out.print("<a href='Shift?opt=1' class='card-cta' onclick='cargarDatos()'>Configurar <i class='fas fa-chevron-right'></i></a>");
                 out.print("</div>");
                 out.print("</div>");
                 out.print("</div>");
@@ -98,7 +98,7 @@ public class Tag_setting extends TagSupport {
                 out.print("<div class='card-body'>");
                 out.print("<h4>Mi plantilla</h4>");
                 out.print("<p>Modulo encargado de administrar la plantilla que aparece al registrar su bitacora.</p>");
-                out.print("<a href='Template?opt=1' class='card-cta'>Configurar <i class='fas fa-chevron-right'></i></a>");
+                out.print("<a href='Template?opt=1' class='card-cta' onclick='cargarDatos()'>Configurar <i class='fas fa-chevron-right'></i></a>");
                 out.print("</div>");
                 out.print("</div>");
                 out.print("</div>");
@@ -113,7 +113,7 @@ public class Tag_setting extends TagSupport {
                 out.print("<div class='card-body'>");
                 out.print("<h4>Configuracion Avanzada</h4>");
                 out.print("<p>Modulo encargado de gestionar parametros de configuracion del sistema.</p>");
-                out.print("<a href='advConfig?opt=1' class='card-cta'>Configurar <i class='fas fa-chevron-right'></i></a>");
+                out.print("<a href='advConfig?opt=1' class='card-cta' onclick='cargarDatos()'>Configurar <i class='fas fa-chevron-right'></i></a>");
                 out.print("</div>");
                 out.print("</div>");
                 out.print("</div>");
@@ -128,7 +128,7 @@ public class Tag_setting extends TagSupport {
                 out.print("<div class='card-body'>");
                 out.print("<h4>Usuarios</h4>");
                 out.print("<p>Modulo encargado de crear y gestionar los usuarios del sistema.</p>");
-                out.print("<a href='User?opt=1' class='card-cta text-primary'>Configurar <i class='fas fa-chevron-right'></i></a>");
+                out.print("<a href='User?opt=1' class='card-cta text-primary' onclick='cargarDatos()'>Configurar <i class='fas fa-chevron-right'></i></a>");
                 out.print("</div>");
                 out.print("</div>");
                 out.print("</div>");
@@ -143,7 +143,7 @@ public class Tag_setting extends TagSupport {
                 out.print("<div class='card-body'>");
                 out.print("<h4>Aplicativos</h4>");
                 out.print("<p>Modulo encargado de crear y gestionar los aplicativos de Tecnología de Información.</p>");
-                out.print("<a href='Application?opt=1' class='card-cta text-primary'>Configurar <i class='fas fa-chevron-right'></i></a>");
+                out.print("<a href='Application?opt=1' class='card-cta text-primary' onclick='cargarDatos()'>Configurar <i class='fas fa-chevron-right'></i></a>");
                 out.print("</div>");
                 out.print("</div>");
                 out.print("</div>");
@@ -158,7 +158,7 @@ public class Tag_setting extends TagSupport {
                 out.print("<div class='card-body'>");
                 out.print("<h4>Verificador Correo</h4>");
                 out.print("<p>Modulo encargado de crear y gestionar los aplicativos de Tecnología de Información.</p>");
-                out.print("<a href='CheckerMail?opt=1' class='card-cta text-primary'>Configurar <i class='fas fa-chevron-right'></i></a>");
+                out.print("<a href='CheckerMail?opt=1' class='card-cta text-primary' onclick='cargarDatos()'>Configurar <i class='fas fa-chevron-right'></i></a>");
                 out.print("</div>");
                 out.print("</div>");
                 out.print("</div>");

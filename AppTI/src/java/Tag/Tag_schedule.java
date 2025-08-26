@@ -345,7 +345,7 @@ public class Tag_schedule extends TagSupport {
             out.print("<input type='hidden' id='Validation' name='validation' value=''>");
             out.print("<input type='hidden' id='' name='module' value='" + module + "'>");
             out.print("<input type='hidden' id='' name='type' value='" + type + "'>");
-            out.print("<input type='text' id='' name='Year' value='" + Year + "'>");
+            out.print("<input type='hidden' id='' name='Year' value='" + Year + "'>");
             out.print("<div class='d-flex'>");
 
             out.print("<div class='col-lg-6'>");

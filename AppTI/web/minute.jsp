@@ -268,7 +268,7 @@
             }
         </script>
 
-        <script type="text/javascript">
+<!--        <script type="text/javascript">
             new FroalaEditor('#editorNext', {
                 Flmngr: {
                     apiKey: 'z5tCL8YdVd99dhc5MQCNlQlo',
@@ -276,7 +276,7 @@
                     urlFiles: 'http://172.16.1.164/flmngr/files/'
                 }
             });
-        </script>
+        </script>-->
 
         <script>
             function validForm(dte, aff, per) {
@@ -309,7 +309,7 @@
         </script>
 
 
-        <script>
+<!--        <script>
             function uploadFiles() {
                 // Obtener la última fecha de subida del storage
                 let lastUploadTime = localStorage.getItem('lastUploadTime') || new Date().toISOString();
@@ -339,7 +339,7 @@
 
             // Aquí puedes llamar a uploadFiles() cuando lo necesites, por ejemplo, en un botón
             // document.getElementById('uploadButton').addEventListener('click', uploadFiles);
-        </script>
+        </script>-->
 
         <script>
             function dataPass() {

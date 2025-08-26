@@ -39,7 +39,7 @@ public class Tag_binnacle extends TagSupport {
         List lst_system = null;
 
         int id_user = 0;
-        int idRol = 0, temp = 0, idbinn = 0;
+        int idRol = 0, temp = 0, idbinn = 0, empyData = 0;
         String txtPermissions = "";
         String NameUser = "";
 
@@ -74,6 +74,11 @@ public class Tag_binnacle extends TagSupport {
             idbinn = Integer.parseInt(pageContext.getRequest().getAttribute("idbinn").toString());
         } catch (Exception e) {
             idbinn = 0;
+        }
+        try {
+            empyData = Integer.parseInt(pageContext.getRequest().getAttribute("empyData").toString());
+        } catch (Exception e) {
+            empyData = 0;
         }
         try {
             if (idbinn > 0 && temp == 0) {
@@ -178,7 +183,6 @@ public class Tag_binnacle extends TagSupport {
 //</editor-fold>
             } else if (idbinn > 0 && temp == 1) {
                 //<editor-fold defaultstate="collapsed" desc="BINNACLE">
-                lst_template = TemplategJpa.ConsultTemplateId(id_user);
                 String datos = "";
                 int state = 0;
                 lst_binnacle = binnacleJpa.ConsultBinnacleId(idbinn);
@@ -194,50 +198,84 @@ public class Tag_binnacle extends TagSupport {
                     state = 99;
                 }
                 out.print("<div class='sweet-local' tabindex='-1' id='Ventana3' style='opacity: 1.03; display:block;'>");
-                out.print("<div class='contGeneral'>");
+                out.print("<div class='contGeneral' style='width: 64%; right: 9%;'>");
                 out.print("<div style='display: flex; justify-content: space-between'>");
                 if (state == 0) {
                     out.print("<h3>Contenido de la bitácora</h3>");
                 } else if (state > 0) {
                     out.print("<h3>Bitácora</h3>");
                 }
+                out.print("<div class=''>");
+                if (datos.equals("") && empyData == 0) {
+                    out.print("<button class='btn btn-info mr-2' onclick='window.location.href=\"Template?opt=1\";cargarDatos()'>Gestionar plantillas</button>");
+                }
                 out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(3)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
                 out.print("</div>");
-                out.print("<div class='cont_form_user'>");
-                out.print("<form action='Binnacle?opt=3&idBinn=" + idbinn + "' method='post'>");
-                out.print("<div style='max-height: 540px;overflow: auto;'>");
-                String template = "";
-                if (lst_template != null) {
-                    Object[] ObjTemop = (Object[]) lst_template.get(0);
-                    template = ObjTemop[2].toString();
-                } else {
-                    out.print("");
-                }
-                if (state == 0) {
-                    out.print("<textarea id='editorCK' name='txtBinnacle'>");
-                    if (datos.equals("")) {
-                        out.print(template);
+                out.print("</div>");
+                if (datos.equals("") && empyData == 0) {
+                    //<editor-fold defaultstate="collapsed" desc="SELECT TEMPLATE">
+                    lst_template = TemplategJpa.ConsultTemplatexIdUser(id_user);
+                    out.print("<div class=''>");
+                    if (lst_template != null) {
+                        out.print("<div class='row' style='justify-content: center;'>");
+                        for (int i = 0; i < lst_template.size(); i++) {
+                            Object[] ObjTem = (Object[]) lst_template.get(i);
+                            int ste = Integer.parseInt(ObjTem[4].toString());
+//                            if (ste == 1) {
+                            out.print("<div class='col-lg-4 SquareTemplate mr-4 mt-4'>");
+                            out.print("<div class='d-flex' style='align-items: center;'>");
+                            out.print("<div class='col-lg-8'>");
+                            out.print("<h6 style='margin: 0px;'>" + ObjTem[2] + "</h6>");
+                            out.print("<span class=''>" + ((ste == 1) ? "Activo" : "Inactivo") + " <span class='bullet text-" + ((ste == 1) ? "success" : "danger") + "'></span> </span>");
+                            out.print("</div>");
+                            out.print("<div class='col-lg-4'>");
+                            out.print("<div class='d-flex' style='justify-content: flex-end;'>");
+                            if (ste == 1) {
+                                out.print("<form action='Binnacle?opt=3' method='post' class='needs-validation' novalidate=''>");
+                                out.print("<input type='hidden' class='form-control' name='idBinn' value='" + idbinn + "'>");
+                                out.print("<input type='hidden' class='form-control' name='txtBinnacle' value='" + ObjTem[3] + "'>");
+                                out.print("<button class='btn btn-green btn-sm mr-2' onclick='cargarDatos()'><i class='fas fa-check'></i> Usar</button>");
+                                out.print("</form>");
+                            } else {
+                                out.print("<button type='button' disabled class='btn btn-green btn-sm mr-2'> Inactivo </button>");
+                            }
+                            out.print("</div>");
+                            out.print("</div>");
+                            out.print("</div>");
+                            out.print("</div>");
+//                            }
+                        }
+                        out.print("</div>");
                     } else {
-                        out.print(datos);
-                    }
-                    out.print("</textarea>");
-                } else if (state > 0) {
-                    out.print("<div class='max-height: 540px;overflow-y: auto;'>");
-                    if (datos.equals("")) {
-                        out.print(template);
-                    } else {
-                        out.print(datos);
+                        out.print("<div class='text-center'>");
+                        out.print("<h5>No se ha encontrado plantillas asociadas al usuario!</h5>");
+                        out.print("<h4>¿Desea registrar su plantilla o desea continuar en blanco?</h4>");
+                        out.print("<div class='d-flex text-center' style='justify-content: space-evenly;'>");
+                        out.print("<button class='btn btn-info' onclick='window.location.href=\"Template?opt=1\";cargarDatos()'>Registrar plantillas</button>");
+                        out.print("<button class='btn btn-info' onclick='window.location.href=\"Binnacle?opt=1&idBinn=" + idbinn + "&temp=1&empyData=1\";cargarDatos()'>Seguir sin plantilla</button>");
+                        out.print("</div>");
+                        out.print("</div>");
                     }
                     out.print("</div>");
+                    //</editor-fold>
+                } else {
+                    out.print("<div class='cont_form_user'>");
+                    //<editor-fold defaultstate="collapsed" desc="LOAD BINNACLE">
+                    out.print("<form action='Binnacle?opt=3&idBinn=" + idbinn + "' method='post'>");
+                    out.print("<div style='max-height: 540px;overflow: auto;'>");
+                    out.print("<textarea id='editorCK' name='txtBinnacle'>");
+                    out.print(datos);
+                    out.print("</textarea>");
+                    out.print("</div>");
+                    out.print("<div class='text-center'>");
+                    if (state == 0) {
+                        out.print("<button class='btn btn-green'>Guardar <i class='fas fa-save'></i></button>");
+                    }
+                    out.print("</div>");
+                    out.print("</form>");
+                    //</editor-fold>
+                    out.print("</div>");
                 }
-                out.print("</div>");
-                out.print("<div class='text-center'>");
-                if (state == 0) {
-                    out.print("<button class='btn btn-green'>Guardar <i class='fas fa-save'></i></button>");
-                }
-                out.print("</div>");
-                out.print("</form>");
-                out.print("</div>");
                 out.print("</div>");
                 out.print("</div>");
                 out.print("<script>"

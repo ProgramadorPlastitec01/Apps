@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import Controller.TemplateControllerJpa;
+import javax.servlet.jsp.PageContext;
+import javax.servlet.http.HttpSession;
 
 public class Template extends HttpServlet {
 
@@ -15,55 +17,70 @@ public class Template extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("utf-8");
-        
+        HttpSession sesion = request.getSession();
+        int idUser = Integer.parseInt(sesion.getAttribute("idUsuario").toString());
         TemplateControllerJpa TemplateJpa = new TemplateControllerJpa();
         
         try {
-
             int opt = Integer.parseInt(request.getParameter("opt"));
-            int idUser = 0;
-            String template = "";
+            int idTempl = 0;
+            String template = "", titleTem = "";
             boolean result = false;
             switch (opt) {
                 case 1:
+                    //<editor-fold defaultstate="collapsed" desc="MAIN MODULE">
                     try {
-                        idUser = Integer.parseInt(request.getParameter("idUSer"));
+                        idTempl = Integer.parseInt(request.getParameter("idTempl"));
                     } catch (Exception e) {
-                        idUser = 1;
+                        idTempl = 0;
                     }
                     request.setAttribute("IdUser", idUser);
+                    request.setAttribute("idTempl", idTempl);
                     request.getRequestDispatcher("Template.jsp").forward(request, response);
+                    //</editor-fold>
                     break;
                 case 2:
+                    //<editor-fold defaultstate="collapsed" desc="EDIT TEMPLATE">
                     try {
-                        idUser = Integer.parseInt(request.getParameter("idUser"));
+                        idTempl = Integer.parseInt(request.getParameter("idTempl"));
                     } catch (Exception e) {
-                        idUser = 0;
+                        idTempl = 0;
                     }
+                    titleTem = request.getParameter("txtTitle");
                     template = request.getParameter("txtTemplate").toString();
-                    result = TemplateJpa.UpdateTemplateUser(idUser, template);
+                    
+                    result = TemplateJpa.UpdateTemplateUser(idTempl, titleTem, template);
+                    
                     request.setAttribute("UpdateTemplate", result);
-                    request.getRequestDispatcher("Template?opt=1").forward(request, response);
+                    request.getRequestDispatcher("Template?opt=1&idTempl=0").forward(request, response);
+                    //</editor-fold>
                     break;
                 case 3:
-                    try {
-                        idUser = Integer.parseInt(request.getParameter("idUser"));
-                    } catch (Exception e) {
-                        idUser = 0;
-                    }
-                    template = request.getParameter("txtTemplate");
-                    result = TemplateJpa.RegisterTemplateUser(idUser, template);
-                    request.setAttribute("UpdateTemplate", result);
+                    //<editor-fold defaultstate="collapsed" desc="REGISTER TEMPLATE">
+                    titleTem = request.getParameter("txtTitle");
+                    result = TemplateJpa.RegisterTemplateUser(idUser, titleTem);
+                    request.setAttribute("RegisterTemplate", result);
                     request.getRequestDispatcher("Template?opt=1").forward(request, response);
+                    //</editor-fold>
+                    break;
+                case 4:
+                    //<editor-fold defaultstate="collapsed" desc="CHANGE STATE">
+                    try {
+                        idTempl = Integer.parseInt(request.getParameter("idTempl"));
+                    } catch (Exception e) {
+                        idTempl = 0;
+                    }                    
+                    result = TemplateJpa.UpdateTemplateState(idTempl);
                     
+                    request.setAttribute("UpdateTemplateState", result);
+                    request.getRequestDispatcher("Template?opt=1&idTempl=0").forward(request, response);
+//</editor-fold>
                     break;
             }
         } catch (Exception ex) {
             request.getRequestDispatcher("Template.jsp").forward(request, response);
         }
-
     }
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -102,5 +119,4 @@ public class Template extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }

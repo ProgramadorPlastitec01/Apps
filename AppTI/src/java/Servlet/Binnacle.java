@@ -25,7 +25,7 @@ public class Binnacle extends HttpServlet {
             int idUser = Integer.parseInt(sesion.getAttribute("idUsuario").toString());
             String userSession = sesion.getAttribute("Nombres").toString();
             int opt = Integer.parseInt(request.getParameter("opt"));
-            int idBinn = 0, temp = 0, ste = 0;
+            int idBinn = 0, temp = 0, ste = 0, empyData = 0;
             String datIn = "", dateFin = "", hourIn = "", hourFin = "", shift = "", binnacle = "", idAct = "", idRec = "";
             boolean result = false;
             switch (opt) {
@@ -42,10 +42,16 @@ public class Binnacle extends HttpServlet {
                     } catch (Exception e) {
                         temp = 0;
                     }
+                    try {
+                        empyData = Integer.parseInt(request.getParameter("empyData"));
+                    } catch (Exception e) {
+                        empyData = 0;
+                    }
                     request.setAttribute("idRol", UserRol);
                     request.setAttribute("idUser", idUser);
                     request.setAttribute("idbinn", idBinn);
                     request.setAttribute("temp", temp);
+                    request.setAttribute("empyData", empyData);
                     request.getRequestDispatcher("Binnacle.jsp").forward(request, response);
 //</editor-fold>
                     break;
@@ -93,7 +99,7 @@ public class Binnacle extends HttpServlet {
                     if (result) {
                         activitySystem.ActivityRegister(idUser, 2, "Bitacora", "Se registra bitacora del día", 1, userSession);
                     }
-                    request.getRequestDispatcher("Binnacle?opt=1&idBinn=0").forward(request, response);
+                    request.getRequestDispatcher("Binnacle?opt=1&idBinn=" + idBinn + "&temp=1").forward(request, response);
                     //</editor-fold>
                     break;
                 case 4:
@@ -106,7 +112,7 @@ public class Binnacle extends HttpServlet {
                     idAct = request.getParameter("txtiIdAct");
 
                     result = binnacleJpa.BinnacleUpdateStateFinal(idBinn, idAct, 1);
-                    
+
 //                    ------------------------ PENDIENTE CREAR METODOS DE CORREO -------------------
                     request.setAttribute("SendBinnacle", result);
                     request.getRequestDispatcher("Binnacle?opt=1&idBinn=0").forward(request, response);

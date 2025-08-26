@@ -97,7 +97,7 @@ public class Tag_moveItem extends TagSupport {
                         String idItem = dta.split(" / ")[0];
                         String numItm = dta.split(" / ")[1];
                         out.print("<div class='d-flex mt-2' style='justify-content: space-evenly'>");
-                        out.print("<input type='text' class='form-control' name='txtIdItem" + count + "' id=''  value='" + idItem + "'>");
+                        out.print("<input type='hidden' class='form-control' name='txtIdItem" + count + "' id=''  value='" + idItem + "'>");
                         out.print("<div class=''>");
                         out.print("<span>Item</span>");
                         out.print("<input type='text' class='form-control disabled' name='' id='' value='" + numItm + "'>");
@@ -114,7 +114,7 @@ public class Tag_moveItem extends TagSupport {
                     }
                     out.print("</div>");
 
-                    out.print("<input type='text' class='form-control' name='txtCountData' id='' value='" + count + "'>");
+                    out.print("<input type='hidden' class='form-control' name='txtCountData' id='' value='" + count + "'>");
 
                     out.print("<div class='text-center mt-2'>");
                     out.print("<button class='btn btn-green'>Confirmar movimiento</button>");
