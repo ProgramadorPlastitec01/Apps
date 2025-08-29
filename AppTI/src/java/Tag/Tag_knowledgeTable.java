@@ -68,7 +68,7 @@ public class Tag_knowledgeTable extends TagSupport {
                     out.print("</div>");
 
                     out.print("<div class='col-lg-6'>"
-                            + "<input type='text' class='form-control' name='Title' id='Title' placeholder='Tilte' data-toggle='tooltip' data-placement='top' title='Titulo' value='" + ObjKnowledge[2] + "'>"
+                            + "<input type='text' class='form-control' name='Title' id='Title' placeholder='Titulo / Sub Categoria' data-toggle='tooltip' data-placement='top' title='Titulo / Sub Categoria' value='" + ObjKnowledge[2] + "'>"
                             + "</div>");
 
                     out.print("</div>");
@@ -145,7 +145,7 @@ public class Tag_knowledgeTable extends TagSupport {
             out.print("</div>");
 
             out.print("<div class='col-lg-6'>"
-                    + "<input type='text' class='form-control' name='Title' id='Title' placeholder='Tilte' data-toggle='tooltip' data-placement='top' title='Titulo' >"
+                    + "<input type='text' class='form-control' name='Title' id='Title' placeholder='Titulo / Sub Categoria' data-toggle='tooltip' data-placement='top' title='Titulo / Sub Categoria' >"
                     + "</div>");
 
             out.print("</div>");
@@ -218,7 +218,7 @@ public class Tag_knowledgeTable extends TagSupport {
             out.print("<tr>");
             out.print("<th>Id</th>");
             out.print("<th>Categoria</th>");
-            out.print("<th>Titulo</th>");
+            out.print("<th>Titulo / Sub Categoria</th>");
             out.print("<th>Adjunto</th>");
             out.print("<th>Descripción</th>");
             out.print("<th>Estado</th>");

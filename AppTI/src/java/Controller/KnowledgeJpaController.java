@@ -56,6 +56,63 @@ public class KnowledgeJpaController implements Serializable {
         }
     }
 
+    public List ConsultKnowledgeBaseActive(String Category, String Title) {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_kbs_c_ConsultKnowledgeBaseActive`('" + Category + "','" + Title + "')");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public List ConsultKnowledgeBaseGroup() {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_kbs_c_ConsultKnowledgeGroup`()");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public List ConsultKnowledgeBaseGroupTitle(String Category) {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_kbs_c_ConsultKnowledgeGroupTilte`('" + Category + "')");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
     public boolean RegisterKnowlegde(String category, String title, String attach, String description, String user_register) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
