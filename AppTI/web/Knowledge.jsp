@@ -62,12 +62,13 @@
                                         if (lst_detail != null) {
                                             for (int d = 0; d < lst_detail.size(); d++) {
                                                 Object[] ObjDetail = (Object[]) lst_detail.get(d);
+                                                int Id = Integer.parseInt(ObjDetail[0].toString());
                                                 String Attach = ObjDetail[3].toString();
                                                 String Description = ObjDetail[4].toString();
                                     %>
                             <ul class="fw-no-bullet ms-36">
                                 <li>
-                                    <a href="Interface/Content/KnowledgeFiles/<%= Attach%>" class="d-flex" target="_blank" rel="noopener noreferrer">
+                                    <a href="Interface/Content/KnowledgeFiles/<%= Attach%>"   onclick="enviarId(<%= Id%>); return false;"  class="d-flex" target="_blank" rel="noopener noreferrer">
                                         <div class="pe-8">
                                             <span class="icon-article"></span>
                                         </div>
@@ -112,6 +113,23 @@
                     }
                 });
             });
+        </script>
+        <script>
+            function enviarId(id) {
+                var form = document.createElement("form");
+                form.method = "post";
+                form.action = "KnowledgeView?opt=1";
+
+                var input = document.createElement("input");
+                input.type = "hidden";
+                input.name = "IdKnowledge";
+                input.value = id;
+                form.appendChild(input);
+
+                document.body.appendChild(form);
+                form.submit();
+            }
+
         </script>
         <script src="Interface/Content/Assets/js/knowledge.js"></script>
         <script src="Interface/Content/Assets/modules/jquery.min.js"></script>

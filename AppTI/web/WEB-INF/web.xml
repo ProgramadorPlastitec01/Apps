@@ -152,6 +152,10 @@
         <servlet-name>DownloadKnowledge</servlet-name>
         <servlet-class>Servlet.DownloadKnowledge</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>KnowledgeView</servlet-name>
+        <servlet-class>Servlet.KnowledgeView</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>User</servlet-name>
         <url-pattern>/User</url-pattern>
@@ -303,6 +307,10 @@
     <servlet-mapping>
         <servlet-name>DownloadKnowledge</servlet-name>
         <url-pattern>/DownloadKnowledge</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>KnowledgeView</servlet-name>
+        <url-pattern>/KnowledgeView</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

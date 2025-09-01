@@ -78,6 +78,15 @@ public class Knowledge extends HttpServlet {
                     }
                     request.getRequestDispatcher("Knowledge?opt=1&IdKnowledge=0").forward(request, response);
                     break;
+                case 4:
+                    try {
+                        IdKnowledge = Integer.parseInt(request.getParameter("IdKnowledge"));
+                    } catch (Exception e) {
+                        IdKnowledge = 0;
+                    }
+                    Result = KnowlegdeJpa.UpdateView(IdKnowledge);
+                    request.getRequestDispatcher("Knowledge?opt=1&IdKnowledge=0").forward(request, response);
+                    break;
             }
         } catch (IOException | ServletException ex) {
             request.getRequestDispatcher("Knowledge_table.jsp").forward(request, response);

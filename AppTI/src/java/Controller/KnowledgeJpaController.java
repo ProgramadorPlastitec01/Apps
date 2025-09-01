@@ -169,4 +169,22 @@ public class KnowledgeJpaController implements Serializable {
             return false;
         }
     }
+    public boolean UpdateView(int IdKnowlegde) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        try {
+            Query q = em.createNativeQuery("CALL `Sp_kbs_u_UpdateView`('" + IdKnowlegde + "')");
+            int resultado = q.executeUpdate();
+            em.getTransaction().commit();
+            em.clear();
+            em.close();
+            if (resultado == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
