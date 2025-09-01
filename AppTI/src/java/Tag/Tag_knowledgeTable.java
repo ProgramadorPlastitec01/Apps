@@ -19,7 +19,7 @@ public class Tag_knowledgeTable extends TagSupport {
         KnowledgeJpaController KnowledgeJpa = new KnowledgeJpaController();
         int idUser = 0, idRol = 0;
         String txtPermissions = "";
-        List lst_role = null, lst_knowledge = null, lst_knowledgeId = null;
+        List lst_role = null, lst_knowledge = null, lst_knowledgeId = null, lst_group = null, lst_title = null;
         int IdKnowledge = 0;
         try {
             idRol = Integer.parseInt(pageContext.getRequest().getAttribute("idRol").toString());
@@ -37,6 +37,7 @@ public class Tag_knowledgeTable extends TagSupport {
         }
         try {
             lst_knowledge = KnowledgeJpa.ConsultKnowledgeBase();
+            lst_group = KnowledgeJpa.ConsultKnowledgeBaseGroup();
             if (IdKnowledge > 0) {
                 //<editor-fold defaultstate="collapsed" desc="EDITER">
                 out.print("<div class='sweet-local' tabindex='-1' id='Ventana2' style='opacity: 1.03; display:block;'>");
@@ -58,18 +59,26 @@ public class Tag_knowledgeTable extends TagSupport {
                     out.print("<div class='col-lg-6'>");
                     out.print("<input class='form-control' list='datalistOptions' name='Category' placeholder='Seleccione o escriba actividad' autocomplete='off' value='" + ObjKnowledge[1] + "'>");
                     out.print("<datalist id='datalistOptions'>");
-                    if (lst_knowledge != null) {
-                        for (int i = 0; i < lst_knowledge.size(); i++) {
-                            Object[] ObjCategory = (Object[]) lst_knowledge.get(i);
-                            out.print("<option value='" + ObjCategory[1] + "'></option>");
+                    if (lst_group != null) {
+                        for (int i = 0; i < lst_group.size(); i++) {
+                            Object[] ObjCategory = (Object[]) lst_group.get(i);
+                            out.print("<option value='" + ObjCategory[2] + "'></option>");
                         }
                     }
                     out.print("</datalist>");
                     out.print("</div>");
 
-                    out.print("<div class='col-lg-6'>"
-                            + "<input type='text' class='form-control' name='Title' id='Title' placeholder='Titulo / Sub Categoria' data-toggle='tooltip' data-placement='top' title='Titulo / Sub Categoria' value='" + ObjKnowledge[2] + "'>"
-                            + "</div>");
+                    out.print("<div class='col-lg-6'>");
+                    out.print("<input class='form-control' list='datalistTitle' name='Title' placeholder='Seleccione o escriba titulo' autocomplete='off' value='" + ObjKnowledge[2] + "'>");
+                    out.print("<datalist id='datalistTitle'>");
+                    if (lst_knowledge != null) {
+                        for (int i = 0; i < lst_knowledge.size(); i++) {
+                            Object[] ObjTitle = (Object[]) lst_knowledge.get(i);
+                            out.print("<option value='" + ObjTitle[2] + "'></option>");
+                        }
+                    }
+                    out.print("</datalist>");
+                    out.print("</div>");
 
                     out.print("</div>");
 
@@ -135,18 +144,26 @@ public class Tag_knowledgeTable extends TagSupport {
             out.print("<div class='col-lg-6'>");
             out.print("<input class='form-control' list='datalistOptions' name='Category' placeholder='Seleccione o escriba actividad' autocomplete='off'>");
             out.print("<datalist id='datalistOptions'>");
-            if (lst_knowledge != null) {
-                for (int i = 0; i < lst_knowledge.size(); i++) {
-                    Object[] ObjCategory = (Object[]) lst_knowledge.get(i);
-                    out.print("<option value='" + ObjCategory[1] + "'></option>");
+            if (lst_group != null) {
+                for (int i = 0; i < lst_group.size(); i++) {
+                    Object[] ObjCategory = (Object[]) lst_group.get(i);
+                    out.print("<option value='" + ObjCategory[2] + "'></option>");
                 }
             }
             out.print("</datalist>");
             out.print("</div>");
 
-            out.print("<div class='col-lg-6'>"
-                    + "<input type='text' class='form-control' name='Title' id='Title' placeholder='Titulo / Sub Categoria' data-toggle='tooltip' data-placement='top' title='Titulo / Sub Categoria' >"
-                    + "</div>");
+            out.print("<div class='col-lg-6'>");
+            out.print("<input class='form-control' list='datalistTitle' name='Title' placeholder='Seleccione o escriba titulo' autocomplete='off'>");
+            out.print("<datalist id='datalistTitle'>");
+            if (lst_knowledge != null) {
+                for (int i = 0; i < lst_knowledge.size(); i++) {
+                    Object[] ObjTitle = (Object[]) lst_knowledge.get(i);
+                    out.print("<option value='" + ObjTitle[2] + "'></option>");
+                }
+            }
+            out.print("</datalist>");
+            out.print("</div>");
 
             out.print("</div>");
 
@@ -169,7 +186,7 @@ public class Tag_knowledgeTable extends TagSupport {
             out.print("</script>");
 
             out.print("<div class='col-lg-6'>");
-            out.print("<input type='text' class='form-control' name='Description' id='' placeholder='Descripción' data-toggle='tooltip' data-placement='top' title='Descripción'>");
+            out.print("<input type='text' class='form-control' name='Description' id='' autocomplete='off' placeholder='Descripción' data-toggle='tooltip' data-placement='top' title='Descripción'>");
             out.print("</div>");
 
             out.print("</div>");
