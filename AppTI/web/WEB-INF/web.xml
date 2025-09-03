@@ -144,6 +144,10 @@
         <servlet-name>ActivitySystem</servlet-name>
         <servlet-class>Servlet.ActivitySystem</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Device</servlet-name>
+        <servlet-class>Servlet.Device</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>User</servlet-name>
         <url-pattern>/User</url-pattern>
@@ -287,6 +291,10 @@
     <servlet-mapping>
         <servlet-name>ActivitySystem</servlet-name>
         <url-pattern>/ActivitySystem</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Device</servlet-name>
+        <url-pattern>/Device</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

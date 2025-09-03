@@ -1,0 +1,129 @@
+.contDataList{
+    padding: 10px 5px;
+    box-shadow: 1px 1px 6px 0px #c5c5c5;
+    border-radius: 5px;
+    line-height: 2;
+}
+
+.devDet{
+    padding: 1px 18px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+
+.devDet:hover{
+    color: black;
+    background: #e7e7e7;
+    border-bottom: 1px solid #cfcfcf;
+}
+
+.devfx{
+    background: #e7e7e7;
+    padding: 5px 10px;
+    align-items: center;
+    margin-bottom: 6px;
+    border-radius: 5px;
+}
+
+.devfx h5, h6{
+    margin:0;
+}
+
+.divCount{
+    box-shadow: 1px 1px 6px 0px #c5c5c5;
+    border-radius: 5px;
+    padding: 10px 10px;
+}
+
+.DivCounter{
+    justify-content: space-evenly;
+    text-align: center;
+    margin-top: 15px;
+}
+
+.boxCount{
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 1px 1px 6px 0px #c5c5c5;
+}
+
+.boxCount h2, p{
+    margin:0 !important;
+}
+
+.bgRed{
+    background: #ff45457d;
+    color: black;
+    box-shadow: 1px 1px 8px 0px #eb8c8c;
+}
+
+.bgGreen{
+    background: #2cbf2b87;
+    color: black;
+    box-shadow: 1px 1px 8px 0px #2cbf2b87;
+}
+
+.bgOrange{
+    background: #ff700787;
+    color: black;
+    box-shadow: 1px 1px 8px 0px #e3762687;
+}
+
+.boxCount:hover{
+    transform: scale(1.03);
+}
+
+.divList{
+    box-shadow: 1px 1px 6px 0px #c5c5c5;
+    border-radius: 5px;
+    padding: 10px 10px;
+}
+
+.divButton{
+    box-shadow: 1px 1px 6px 0px #c5c5c5;
+    border-radius: 5px;
+    padding: 18px 18px;
+}
+
+.dvList{
+    box-shadow: 0px 1px 3px 1px #9d9d9d;
+    border-radius: 5px;
+    padding: 11px;
+}
+
+
+.dvListBtn{
+    justify-content: space-between;
+    height: 28px;
+    align-items: center;  
+}
+
+.dvListBtn button{
+    /*position: absolute;*/
+    right: 18px;
+    bottom: 18px;
+}
+
+.gnDiv{
+    position: absolute;
+    width: 90%;
+    bottom: 10px;
+}
+
+.textdv{
+    margin-bottom: 30px;
+}
+
+
+.conscDv{
+    position: absolute;
+    top: -9px;
+    left: -9px;
+    background: white;
+    border-radius: 12px;
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    box-shadow: 0px 1px 3px 1px #9d9d9d;
+}

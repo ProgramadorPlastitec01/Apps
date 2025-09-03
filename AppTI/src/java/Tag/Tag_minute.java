@@ -183,7 +183,7 @@ public class Tag_minute extends TagSupport {
                         out.print("</div>");
                         out.print("<div class='cont_form_user'>");
                         lst_sirh = SirhJpa.Consultar_SIRH(docx, codx);
-                        if (lst_sirh != null) {
+                        if (lst_sirh.size() > 0) {
                             //<editor-fold defaultstate="collapsed" desc="PERSONAL INFORMATION">
                             String[] ObjSr = lst_sirh.toString().replace("[", "").replace("]", "").split("///");
                             out.print("<div class='d-flex' style='justify-content: end;'>");
@@ -202,10 +202,10 @@ public class Tag_minute extends TagSupport {
                             out.print("</div>");
                             docx = Integer.parseInt(ObjSr[1].toString().trim());
                         } else {
-                            out.print("<div class=''>");
-                            out.print("<h4>Se ha presentado un error al consultar la información del empleado.</h4>");
-                            out.print("<i class='fas fa-exclamation-triangle' style='font-size: 80px;'></i>");
-                            out.print("</div>");
+//                            out.print("<div class='text-center'>");
+//                            out.print("<h4>Se ha presentado un error al consultar la información del empleado.</h4>");
+//                            out.print("<i class='fas fa-exclamation-triangle' style='font-size: 60px;'></i>");
+//                            out.print("</div>");
                             //</editor-fold>
                         }
 
@@ -260,13 +260,13 @@ public class Tag_minute extends TagSupport {
                         } else {
                             //<editor-fold defaultstate="collapsed" desc="NEW SIGNATURE">
                             out.print("<div class='text-center mt-4'>");
-                            out.print("<h5><b class='text-warning'>Firma no Encontrada &nbsp;</b> <i class='fas fa-exclamation-triangle' style='font-size: 20px;'></i></h5>");
+                            out.print("<h4><b class='text-warning'>Firma no Encontrada &nbsp;</b> <i class='fas fa-exclamation-triangle' style='font-size: 20px;'></i></h4>");
                             out.print("<h6>Debe dibujar la firma en el siguiente recuadro! </h6>");
                             out.print("</div>");
 
                             out.print("<div class='d-flex' style='justify-content: center;margin-top: 40px;'>");
                             out.print("<div class='signature-pad' style='margin-bottom: 20px;'>");
-                            out.print("<canvas id='signature-canvas' width='500' height='250'></canvas>");
+                            out.print("<canvas id='signature-canvas' width='500' height='250' style='border: 1px solid black;'></canvas>");
                             out.print("</div>");
                             out.print("<div class=''>");
                             out.print("<button class='btn btn-warning ml-4' onclick='clearCanvas()'><i class='fas fa-eraser'></i></button>");
@@ -449,17 +449,17 @@ public class Tag_minute extends TagSupport {
                 if (lst_minute != null) {
                     Object[] ObjMin = (Object[]) lst_minute.get(0);
                     out.print("<div class='minuteDetail'>");
-                    
+
                     out.print("<div class='d-flex align-items-center text-center'>");
-                    
+
                     out.print("<div class='col-lg-2'>");
                     out.print("<h6><b>Fecha:</b></h6>&nbsp;" + ObjMin[2] + "");
                     out.print("</div>");
-                    
+
                     out.print("<div class='col-lg-6'>");
                     out.print("<h6><b>Asunto:</b></h6>&nbsp;" + ObjMin[1] + "");
                     out.print("</div>");
-                    
+
                     out.print("<div class='col-lg-4'>");
                     out.print("<h6><b>Usuario registro: &nbsp;</b></h6>");
                     out.print("<div class=''>");
@@ -467,11 +467,9 @@ public class Tag_minute extends TagSupport {
                     out.print("<i style='font-size: 10px;color: gray;'>" + ObjMin[8] + "</i>");
                     out.print("</div>");
                     out.print("</div>");
-                    
-                    
+
                     out.print("</div>");
-                    
-                    
+
                     out.print("</div>");
 
                     out.print("<form action='Minute?opt=4&idMinu=" + ObjMin[0] + "&event=1' method='post' class='needs-validation' novalidate=''>");
@@ -537,9 +535,11 @@ public class Tag_minute extends TagSupport {
                     out.print("</div>");
                     out.print("<div class='cont_form_user'>");
                     lst_minute = MinuteJpa.ConsultMinuteId(idMinu);
+                    String ExPersonal = "";
                     if (lst_minute != null) {
                         Object[] ObjMin = (Object[]) lst_minute.get(0);
                         out.print("<form action='Minute?opt=2&idMinu=" + ObjMin[0] + "' method='post' id='formData'>");
+
                         out.print("<div id=\"accordion\">");
                         out.print("<div class='accordion'>");
                         out.print("<div class=\"accordion-header\" role=\"button\" data-toggle=\"collapse\" data-target=\"#panel-body-97\" aria-expanded=\"true\" style='box-shadow: 0px 1px 4px 0px #a7a7a7;'>");
@@ -557,9 +557,10 @@ public class Tag_minute extends TagSupport {
                         out.print("<input type='text' id='idAffair' class='form-control' placeholder='Asunto del acta' name='txtMatter' value='" + ObjMin[1] + "' required>");
                         out.print("</div>");
                         out.print("</div>");
-                        out.print("</div>");
                         //</editor-fold>
                         out.print("</div>");
+                        out.print("</div>");
+
                         out.print("<div class=\"accordion\">");
                         out.print("<div class=\"accordion-header\" role=\"button\" data-toggle=\"collapse\" data-target=\"#panel-body-96\" style='box-shadow: 0px 1px 4px 0px #a7a7a7;'>");
                         out.print("<h4>Asignar personal</h4>");
@@ -597,35 +598,114 @@ public class Tag_minute extends TagSupport {
                             out.print("</ul>");
                             out.print("</div>");
                         }
-                        //</editor-fold>
+//                        //</editor-fold>
                         out.print("</div>");
                         out.print("<div class='col-lg-6 contSwtch'>");
                         //<editor-fold defaultstate="collapsed" desc="PERSONAL SELECTED">
                         out.print("<span class='titlePers'>Seleccionado</span>");
                         out.print("<div id='tabSelected' class='mt-2' style='max-height: 280px;overflow-y: auto;'>");
                         out.print("<ul id='assigned-persons' class='list-group'>");
+                        String intPersonal = "";
                         if (docPersonal.length > 0) {
                             for (int i = 0; i < docPersonal.length; i++) {
                                 String[] datUsr = docPersonal[i].toString().split(" / ");
-                                out.print("<li class=\"list-group-item\" data-person-id='user" + i + "' data-person-info='" + datUsr[0] + " / " + datUsr[1] + " / " + datUsr[2] + "  / " + datUsr[3] + " / " + datUsr[4] + " '>");
-                                out.print(datUsr[3] + " / " + datUsr[0] + " / " + datUsr[1]);
-                                out.print("</li>");
+                                String posit = datUsr[1].toString();
+                                if (posit.contains("Ext.")) {
+                                    ExPersonal += "[" + docPersonal[i] + "]";
+                                } else {
+                                    out.print("<li class=\"list-group-item\" data-person-id='user" + i + "' data-person-info='" + datUsr[0] + " / " + datUsr[1] + " / " + datUsr[2] + "  / " + datUsr[3] + " / " + datUsr[4] + " '>");
+                                    out.print(datUsr[3] + " / " + datUsr[0] + " / " + datUsr[1]);
+                                    out.print("</li>");
+                                    intPersonal += "[" + docPersonal[i] + "]";
+                                }
                             }
                         }
                         out.print("</ul>");
                         out.print("</div>");
-                        out.print("<input type=\"hidden\" id=\"assigned-person-ids\" name=\"txtStaff\" value='" + ObjMin[3] + "'>");
+                        out.print("</div>");
+                        out.print("<input type=\"hidden\" id=\"assigned-person-ids\" name=\"txtStaff\" value='" + intPersonal + "'>");
+//                        //</editor-fold>
+                        out.print("</div>");
+                        out.print("</div>");
                         //</editor-fold>
                         out.print("</div>");
                         out.print("</div>");
+
+                        out.print("<div class=\"accordion\">");
+                        out.print("<div class=\"accordion-header\" role=\"button\" data-toggle=\"collapse\" data-target=\"#panel-body-95\" style='box-shadow: 0px 1px 4px 0px #a7a7a7;'>");
+                        out.print("<h4>Personal externo</h4>");
+                        out.print("</div>");
+                        out.print("<div class=\"accordion-body collapse\" id=\"panel-body-95\" data-parent=\"#accordion\">");
+                        //<editor-fold defaultstate="collapsed" desc="EXTERNAL PERSONAL">
+
+                        out.print("<div id='contDataExt'>");
+                        int countExt = 0;
+                        if (ExPersonal.equals("")) {
+                            out.print("<div class='d-flex' style='justify-content: center;'>");
+                            out.print("<div class='col-lg-3'>");
+                            out.print("<span class=''>Nombre y Apellido</span>");
+                            out.print("<input type='text' class='form-control' name='txtNames_ex0' id='' value=''>");
+                            out.print("</div>");
+                            out.print("<div class='col-lg-3'>");
+                            out.print("<span class=''>Cargo del externo</span>");
+                            out.print("<input type='text' class='form-control' name='txtPosi_ex0' id='' value=''>");
+                            out.print("</div>");
+                            out.print("<div class='col-lg-3'>");
+                            out.print("<span class=''>Nro cedula</span>");
+                            out.print("<input type='number' class='form-control' name='NroCed_ex0' id='' value=''>");
+                            out.print("</div>");
+                            out.print("</div>");
+                        } else {
+
+                            String[] Personal_ex = ExPersonal.replace("][", "///").replace("[", "").replace("]", "").split("///");
+                            if (Personal_ex.length > 0) {
+                                for (int i = 0; i < Personal_ex.length; i++) {
+                                    String[] detail = Personal_ex[i].toString().split(" / ");
+                                    out.print("<div class='d-flex align-items-center' style='justify-content: center;' id='PersonalExt" + i + "'>");
+                                    out.print("<div class='col-lg-3'>");
+                                    out.print("<span class=''>Nombre y Apellido</span>");
+                                    out.print("<input type='text' class='form-control' name='txtNames_ex" + i + "' id='' value='" + detail[0] + "'>");
+                                    out.print("</div>");
+                                    out.print("<div class='col-lg-3'>");
+                                    out.print("<span class=''>Cargo del externo</span>");
+                                    out.print("<input type='text' class='form-control' name='txtPosi_ex" + i + "' id='' value='" + detail[1] + "'>");
+                                    out.print("</div>");
+                                    out.print("<div class='col-lg-3'>");
+                                    out.print("<span class=''>Nro cedula</span>");
+                                    out.print("<input type='number' class='form-control' name='NroCed_ex" + i + "' id='' value='" + detail[2] + "'>");
+                                    out.print("</div>");
+                                    out.print("<div class=''>");
+                                    out.print("<div class='ml-2'>");
+                                    out.print("<span>Eliminar</span><br>");
+                                    out.print("<button type='button' class='btn btn-danger ml-2' onclick='deleteDivPost(\"PersonalExt" + i + "\")'>");
+                                    out.print("<i class='fas fa-trash'></i>");
+                                    out.print("</button>");
+                                    out.print("</div>");
+                                    out.print("</div>");
+                                    out.print("</div>");
+                                    countExt = i;
+                                }
+                            }
+                        }
+
+                        out.print("</div>");
+
+                        out.print("<div class='text-center'>");
+                        out.print("<button class='btn btn-info mt-3' id='btnPlus' type='button'>Agregar personal externo <i class='fas fa-plus'></i></button>");
+                        out.print("</div>");
+
+                        out.print("<input type='hidden' name='CountExt' id='idCountExt'  value='" + countExt + "'>");
+//
+//                        //</editor-fold>
                         out.print("</div>");
                         out.print("</div>");
+
                         out.print("</div>");
-                        out.print("</div>");
+
                         out.print("<div class='mt-2 text-center'>");
                         out.print("<button class='btn btn-green'>Actualizar</button>");
                         out.print("</div>");
-                        //</editor-fold>
+//                        out.print("</div>");
                         out.print("</form>");
                     } else {
                         out.print("<div class='text-center'>");
@@ -673,8 +753,8 @@ public class Tag_minute extends TagSupport {
                 out.print("</div>");
                 out.print("<div class=\"accordion-body collapse\" id=\"panel-body-98\" data-parent=\"#accordion\">");
                 //<editor-fold defaultstate="collapsed" desc="PERSONAL">
-                out.print("<div class=''>");
                 lst_sirh = SirhJpa.Consultar_SIRHPersonal();
+                out.print("<div class=''>");
                 out.print("<div class='d-flex'>");
                 out.print("<div class='col-lg-6 mr-3 contSwtch' style='margin-left: -8px;' >");
                 //<editor-fold defaultstate="collapsed" desc="CONSULT PERSONAL">
@@ -714,15 +794,52 @@ public class Tag_minute extends TagSupport {
                 //</editor-fold>
                 out.print("</div>");
                 out.print("</div>");
+
+                out.print("<div class=\"accordion\">");
+                out.print("<div class=\"accordion-header\" role=\"button\" data-toggle=\"collapse\" data-target=\"#panel-body-97\" style='box-shadow: 0px 1px 4px 0px #a7a7a7;'>");
+                out.print("<h4>Personal externo</h4>");
+                out.print("</div>");
+                out.print("<div class=\"accordion-body collapse\" id=\"panel-body-97\" data-parent=\"#accordion\">");
+                //<editor-fold defaultstate="collapsed" desc="EXTERNAL PERSONAL">
+
+                out.print("<div id='contDataExt'>");
+
+                out.print("<div class='d-flex' style='justify-content: center;'>");
+                out.print("<div class='col-lg-3'>");
+                out.print("<span class=''>Nombre y Apellido</span>");
+                out.print("<input type='text' class='form-control' name='txtNames_ex0' id='' value=''>");
+                out.print("</div>");
+                out.print("<div class='col-lg-3'>");
+                out.print("<span class=''>Cargo del externo</span>");
+                out.print("<input type='text' class='form-control' name='txtPosi_ex0' id='' value=''>");
+                out.print("</div>");
+                out.print("<div class='col-lg-3'>");
+                out.print("<span class=''>Nro cedula</span>");
+                out.print("<input type='number' class='form-control' name='NroCed_ex0' id='' value=''>");
+                out.print("</div>");
+                out.print("</div>");
+
+                out.print("</div>");
+
+                out.print("<div class='text-center'>");
+                out.print("<button class='btn btn-info mt-3' id='btnPlus' type='button'>Agregar personal externo <i class='fas fa-plus'></i></button>");
+                out.print("</div>");
+
+                out.print("<input type='hidden' name='CountExt' id='idCountExt'  value='0'>");
+
+                //</editor-fold>
+                out.print("</div>");
+                out.print("</div>");
+
                 out.print("</div>");
                 out.print("<div class='mt-2 text-center'>");
-                out.print("<button type='button' class='btn btn-green' onclick='validForm(\"idDateForm\",\"idAffair\",\"assigned-person-ids\")'>Registrar</button>");
+                out.print("<button type='button' class='btn btn-green' onclick='validForm(\"idDateForm\",\"idAffair\",\"assigned-person-ids\");cargarDatos()'>Registrar</button>");
                 out.print("</div>");
                 out.print("</form>");
                 out.print("</div>");
                 out.print("</div>");
                 out.print("</div>");
-//</editor-fold>
+                //</editor-fold>
                 //<editor-fold defaultstate="collapsed" desc="FILTER DATA CONTAINER">
                 //<editor-fold defaultstate="collapsed" desc="FILTER DATA">
                 try {
@@ -836,7 +953,8 @@ public class Tag_minute extends TagSupport {
                 out.print("<div class='col-12'>");
                 out.print("<div class='card'>");
                 out.print("<div class='card-header' style='justify-content: space-between;'>");
-                out.print("<h4>Actas</h4>");
+                out.print("<span class=''></span>");
+                out.print("<h2>ACTAS TECNOLOGIA</h2>");
                 out.print("<div class=''>");
                 out.print("<button class='btn btn-yellow mr-2' style='border-radius: 4px;' onclick='mostrarConvencion(3)' data-toggle='tooltip' data-placement='top' title='Filtro'><i class='fas fa-search'></i></button>");
                 if (txtPermissions.contains("[65]")) {
@@ -860,7 +978,7 @@ public class Tag_minute extends TagSupport {
                     out.print("<table class='table table-bordered' id='table-1'>");
                     out.print("<thead>");
                     out.print("<tr class='text-center'>");
-                    out.print("<th>Id</th>");
+                    out.print("<th>Nro Acta</th>");
                     out.print("<th>Asunto</th>");
                     out.print("<th>Fecha</th>");
                     out.print("<th>Estado</th>");
@@ -875,7 +993,7 @@ public class Tag_minute extends TagSupport {
                         Object[] ObjMinu = (Object[]) lst_minute.get(i);
                         if (idMinu > 0 && i == 0) {
                             out.print("<tr style='background:#33bf9826;'>");
-                            out.print("<td><i class='fas fa-clock' data-toggle='tooltip' data-placement='top' title='Abierto recientemente!'></i> &nbsp;" + ObjMinu[0] + "</td>");
+                            out.print("<td>" + ObjMinu[0] + " &nbsp; <i class='fas fa-clock' data-toggle='tooltip' data-placement='top' title='Abierto recientemente!'></i> </td>");
                         } else {
                             out.print("<tr>");
                             out.print("<td>" + ObjMinu[0] + "</td>");
@@ -908,12 +1026,13 @@ public class Tag_minute extends TagSupport {
                         }
                         out.print("<td>");
                         out.print("<div class='d-flex' style='justify-content: center;'>");
-                        out.print("<button class='btn btn-green mr-2' data-toggle='tooltip' data-placement='top' title='Ver acta' onclick='window.location.href=\"Minute?opt=1&idMinu=" + ObjMinu[0] + "&event=1\"'><i class='fas fa-eye'></i></button>");
+                        out.print("<button class='btn btn-info btn-sm mr-2' data-toggle='tooltip' data-placement='top' title='Ver acta' onclick='window.location.href=\"Minute?opt=1&idMinu=" + ObjMinu[0] + "&event=1\";cargarDatos()'><i class=\"fas fa-file\"></i></button>");
+
                         if (counter > 0) {
-                            out.print("<button class='btn btn-warning' data-toggle='tooltip' data-placement='top' title='No se puede editar, ya hay al menos una firma en el acta' disabled><i class='fas fa-edit'></i></button>");
+                            out.print("<button class='btn btn-secondary btn-sm' data-toggle='tooltip' data-placement='top' title='No se puede editar, ya hay al menos una firma en el acta' disabled><i class='fas fa-edit'></i></button>");
                         } else {
                             if (txtPermissions.contains("[66]")) {
-                                out.print("<button class='btn btn-warning'  onclick='window.location.href=\"Minute?opt=1&idMinu=" + ObjMinu[0] + "\"'><i class='fas fa-edit'></i></button>");
+                                out.print("<button class='btn btn-warning btn-sm'  onclick='window.location.href=\"Minute?opt=1&idMinu=" + ObjMinu[0] + "\";cargarDatos()'><i class='fas fa-edit'></i></button>");
                             }
                         }
 

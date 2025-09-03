@@ -31,8 +31,8 @@ public class Minute extends HttpServlet {
         String UserRol = sesion.getAttribute("idRol").toString();
         String userSession = sesion.getAttribute("Nombres").toString();
         int opt = Integer.parseInt(request.getParameter("opt"));
-        int idMinu = 0, state = 0, event = 0, idUserReg = 0, idState = 0, flt = 0, temp = 0, docx = 0, codx = 0, idSig = 0;
-        String matter = "", staff = "", cont = "", date = "", content = "", idDoc = "", signature = "";
+        int idMinu = 0, state = 0, event = 0, idUserReg = 0, idState = 0, flt = 0, temp = 0, docx = 0, codx = 0, idSig = 0, idContEx = 0;
+        String matter = "", staff = "", cont = "", date = "", content = "", idDoc = "", signature = "", exStaff = "";
         boolean result = false;
         List dataResult = null;
         List lst_signature = null;
@@ -118,6 +118,26 @@ public class Minute extends HttpServlet {
                     matter = request.getParameter("txtMatter");
                     staff = request.getParameter("txtStaff");
 
+                    try {
+                        idContEx = Integer.parseInt(request.getParameter("CountExt"));
+                        for (int i = 0; i <= idContEx; i++) {
+                            try {
+                                String nameEx = request.getParameter("txtNames_ex" + i + "");
+                                String positEx = request.getParameter("txtPosi_ex" + i + "");
+                                int ceduEx = Integer.parseInt(request.getParameter("NroCed_ex" + i + ""));
+                                if (positEx.contains("Ext.")) {
+                                    exStaff += "[ " + nameEx + " / " + positEx + " / " + ceduEx + " / " + ceduEx + " / " + "XX]";
+                                } else {
+                                    exStaff += "[ " + nameEx + " / Ext. " + positEx + " / " + ceduEx + " / " + ceduEx + " / " + "XX]";
+                                }
+                            } catch (Exception e) {
+                                exStaff += "";
+                            }
+                        }
+                    } catch (Exception e) {
+                        exStaff = "";
+                    }
+                    staff = staff + exStaff;
                     if (idMinu > 0) {
                         result = MinuteJpa.UpdateMinute(idMinu, matter, date, staff, idUser);
                         if (result) {

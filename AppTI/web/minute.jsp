@@ -268,15 +268,6 @@
             }
         </script>
 
-<!--        <script type="text/javascript">
-            new FroalaEditor('#editorNext', {
-                Flmngr: {
-                    apiKey: 'z5tCL8YdVd99dhc5MQCNlQlo',
-                    urlFileManager: 'http://172.16.1.164/flmngr/flmngr.php',
-                    urlFiles: 'http://172.16.1.164/flmngr/files/'
-                }
-            });
-        </script>-->
 
         <script>
             function validForm(dte, aff, per) {
@@ -308,38 +299,6 @@
             }
         </script>
 
-
-<!--        <script>
-            function uploadFiles() {
-                // Obtener la última fecha de subida del storage
-                let lastUploadTime = localStorage.getItem('lastUploadTime') || new Date().toISOString();
-                // Guardar el valor actual de lastUploadTime como valor anterior
-                localStorage.setItem('previousUploadTime', lastUploadTime);
-                // Guardar la fecha y hora actual como nueva última subida
-                lastUploadTime = new Date().toISOString();
-                localStorage.setItem('lastUploadTime', lastUploadTime);
-                // Obtener archivos en el intervalo de tiempo
-                let filesToUpload = []; // Aquí puedes agregar lógica para llenar este array con los archivos que desees subir
-
-                var xhr = new XMLHttpRequest();
-                xhr.open("POST", "http://172.16.1.153/PMP_MI/flmngr/envio.php", true);
-                xhr.setRequestHeader("Content-Type", "application/json");
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState === 4 && xhr.status === 200) {
-                        alert("Archivos subidos correctamente.");
-                    }
-                };
-                // Enviar los datos en formato JSON
-                xhr.send(JSON.stringify({
-                    files: filesToUpload,
-                    lastUploadTime: lastUploadTime,
-                    previousUploadTime: localStorage.getItem('previousUploadTime')
-                }));
-            }
-
-            // Aquí puedes llamar a uploadFiles() cuando lo necesites, por ejemplo, en un botón
-            // document.getElementById('uploadButton').addEventListener('click', uploadFiles);
-        </script>-->
 
         <script>
             function dataPass() {
@@ -489,6 +448,82 @@
                     }
                 }
             }, false);
+        </script>
+
+
+
+        <script>
+            let index = 1; // empieza en 1 porque ya tienes el primer bloque (0)
+
+            document.getElementById("btnPlus").addEventListener("click", function () {
+
+                const cont = document.getElementById("contDataExt");
+
+                // crear el div contenedor
+                const wrapper = document.createElement("div");
+                wrapper.className = "d-flex mt-2 align-items-center";
+                wrapper.style.justifyContent = "center";
+
+                // plantilla de inputs con el nuevo index
+
+                wrapper.innerHTML = `
+                            <div class="col-lg-3">
+                                <span>Nombre y Apellido</span>
+                                <input type="text" class="form-control" name="txtNames_ex0">
+                            </div>
+                            <div class="col-lg-3">
+                                <span>Cargo del externo</span>
+                                <input type="text" class="form-control" name="txtPosi_ex0">
+                            </div>
+                            <div class="col-lg-3">
+                                <span>Nro cedula</span>
+                                <input type="number" class="form-control" name="NroCed_ex0">
+                            </div>
+                            <div class="ml-2">
+                                <span>Eliminar</span><br>        
+                                <button type="button" class="btn btn-danger ml-2 btnRemove">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        `;
+
+                // agregarlo al contenedor principal
+                cont.appendChild(wrapper);
+
+                // evento para eliminar el bloque
+                wrapper.querySelector(".btnRemove").addEventListener("click", function () {
+                    wrapper.remove();
+                    renumerarInputs();
+                });
+                
+                renumerarInputs(); // incrementar el contador
+            });
+            
+
+            function renumerarInputs() {
+                const cont = document.getElementById("contDataExt");
+                // ⬇️ Solo filas DIRECTAS, no los d-flex internos
+                const blocks = cont.querySelectorAll("#contDataExt > .d-flex");
+
+                blocks.forEach((block, i) => {
+                    const n = block.querySelector("input[name^='txtNames_ex']");
+                    const p = block.querySelector("input[name^='txtPosi_ex']");
+                    const c = block.querySelector("input[name^='NroCed_ex']");
+                    if (n)
+                        n.name = "txtNames_ex" + i;
+                    if (p)
+                        p.name = "txtPosi_ex" + i;
+                    if (c)
+                        c.name = "NroCed_ex" + i;
+                    document.getElementById("idCountExt").value = i;
+                });
+            }
+            
+            function deleteDivPost(idDiv){
+                document.getElementById(idDiv).remove();
+                renumerarInputs();
+            }
+            
         </script>
 
 

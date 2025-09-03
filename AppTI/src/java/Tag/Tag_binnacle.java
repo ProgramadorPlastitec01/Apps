@@ -12,6 +12,7 @@ import Controller.RoleControllerJpa;
 import Controller.SettingControllerJpa;
 import Controller.TemplateControllerJpa;
 import Controller.ActivitySystemControllerJpa;
+import Controller.ShiftControllerJpa;
 
 import java.util.List;
 import javax.servlet.http.HttpSession;
@@ -19,7 +20,12 @@ import javax.servlet.http.HttpSession;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
+import java.util.Locale;
 
 public class Tag_binnacle extends TagSupport {
 
@@ -32,16 +38,19 @@ public class Tag_binnacle extends TagSupport {
         SettingControllerJpa SettingJpa = new SettingControllerJpa();
         TemplateControllerJpa TemplategJpa = new TemplateControllerJpa();
         ActivitySystemControllerJpa SystemJpa = new ActivitySystemControllerJpa();
+        ShiftControllerJpa ShiftJpa = new ShiftControllerJpa();
         List lst_role = null;
         List lst_binnacle = null;
         List lst_setting = null;
         List lst_template = null;
         List lst_system = null;
+        List lst_shift = null;
 
         int id_user = 0;
         int idRol = 0, temp = 0, idbinn = 0, empyData = 0;
         String txtPermissions = "";
         String NameUser = "";
+        String ActualWeek = "";
 
         LocalDate today = LocalDate.now();
         String formattedDate = today.toString();
@@ -80,6 +89,18 @@ public class Tag_binnacle extends TagSupport {
         } catch (Exception e) {
             empyData = 0;
         }
+
+        //<editor-fold defaultstate="collapsed" desc="DECLARATIONS">
+//        int currentMonth = today.getMonthValue();
+        LocalDate startDate = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
+        LocalDate endDate = startDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));
+        String formattedStart = startDate.format(DateTimeFormatter.ofPattern("d MMM", Locale.getDefault()));
+        String formattedEnd = endDate.format(DateTimeFormatter.ofPattern("d MMM", Locale.getDefault()));
+        if ((today.isEqual(startDate) || today.isAfter(startDate)) && (today.isEqual(endDate) || today.isBefore(endDate))) {
+            ActualWeek = "Semana " + formattedStart + " / " + formattedEnd;
+        }
+//</editor-fold>
+
         try {
             if (idbinn > 0 && temp == 0) {
                 //<editor-fold defaultstate="collapsed" desc="EDIT BINNACLE">
@@ -394,7 +415,34 @@ public class Tag_binnacle extends TagSupport {
             out.print("<div class='col-lg-6' style='margin: auto;' data-toggle='tooltip' data-placemente='top' title='Seleccionar turno'>");
             lst_setting = SettingJpa.ConsultSettingCategorie("Shift");
             out.print("<select class='form-control' name='txtshift' id='shiftSelect' style='margin-top: 12px;margin-bottom: 12px;' onchange='updateTimeFields()'>");
-            out.print("<option selected disabled>Seleccione turno </option>");
+            boolean valid = false;
+            String shiftx = "";
+            lst_shift = ShiftJpa.ConsultShift();
+            if (lst_shift != null) {
+                for (int i = 0; i < lst_shift.size(); i++) {
+                    Object[] Obwk = (Object[]) lst_shift.get(i);
+                    if (ActualWeek.equals(Obwk[1])) {
+                        String[] shift = Obwk[2].toString().replace("][", "]///[").split("///");
+                        for (int j = 0; j < shift.length; j++) {
+                            String[] tempShift = shift[j].split("/");
+                            shiftx = tempShift[0].toString().replace("]", "").replace("[", "");
+                            String users = tempShift[1].toString();
+                            if (users.contains("," + id_user + ",") || users.contains("," + id_user + "]") || users.contains("/" + id_user + ",") || users.contains("/" + id_user + "]")) {
+                                String[] parts = shiftx.split(": | - ");
+                                String startTime = convertTo24HourFormat(parts[1].trim());
+                                String endTime = convertTo24HourFormat(parts[2].trim());
+                                out.print("<option value='" + shiftx + "' data-start='" + startTime + "' data-end='" + endTime + "'>" + shiftx + "</option>");
+                                valid = true;
+                            }
+                        }
+                    }
+                }
+                if (!valid) {
+                    out.print("<option selected disabled>Seleccione turno </option>");
+                }
+            } else {
+                out.print("<option selected disabled>Seleccione turno </option>");
+            }
             if (lst_setting != null) {
                 for (int i = 0; i < lst_setting.size(); i++) {
                     Object[] ObjSett = (Object[]) lst_setting.get(i);
@@ -402,10 +450,11 @@ public class Tag_binnacle extends TagSupport {
                     String[] parts = shift.split(": | - ");
                     String startTime = convertTo24HourFormat(parts[1].trim());
                     String endTime = convertTo24HourFormat(parts[2].trim());
-                    out.print("<option value='" + shift + "' data-start='" + startTime + "' data-end='" + endTime + "'>" + shift + "</option>");
+                    if (!shift.equals(shiftx)) {
+                        out.print("<option value='" + shift + "' data-start='" + startTime + "' data-end='" + endTime + "'>" + shift + "</option>");
+                    }
                 }
             }
-
             out.print("</select>");
             out.print("</div>");
             out.print("</div>");
@@ -452,6 +501,11 @@ public class Tag_binnacle extends TagSupport {
                     + "    }"
                     + "}"
                     + "</script>");
+            if (valid) {
+                out.print("<script>");
+                out.print("updateTimeFields()");
+                out.print("</script>");
+            }
             out.print("</div>");
             //</editor-fold>
             //<editor-fold defaultstate="collapsed" desc="MAIN LIST">

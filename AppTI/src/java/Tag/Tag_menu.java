@@ -394,6 +394,7 @@ public class Tag_menu extends TagSupport {
             if (txtPermissions.contains("[46]")) {
                 out.print("<li><a class=\"nav-link\" href=\"Information?opt=1\" onclick='cargarDatos()'><i style='margin-right:4px' class=\"fas fa-copy\"></i>Información PC</a></li>");
             }
+                out.print("<li><a class=\"nav-link\" href=\"Device?opt=1\" onclick='cargarDatos()'><i style='margin-right:4px' class=\"fas fa-microchip\"></i>Dispositivos</a></li>");
 
             out.print("</ul>");
             out.print("</li>");
