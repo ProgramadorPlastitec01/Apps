@@ -34,7 +34,7 @@ public class Tag_setting extends TagSupport {
         try {
             out.print("<section class='section'>");
             out.print("<div class='section-header'>");
-            
+
             out.print("<h1>Configuración del sistema</h1>");
             out.print("</div>");
             out.print("<div class='section-body'>");
@@ -133,7 +133,7 @@ public class Tag_setting extends TagSupport {
                 out.print("</div>");
                 out.print("</div>");
             }
-            
+
             if (txtPermissions.contains("[1]")) {
                 out.print("<div class='col-lg-6'>");
                 out.print("<div class='card card-large-icons'>");
@@ -148,7 +148,7 @@ public class Tag_setting extends TagSupport {
                 out.print("</div>");
                 out.print("</div>");
             }
-            
+
             if (txtPermissions.contains("[1]")) {
                 out.print("<div class='col-lg-6'>");
                 out.print("<div class='card card-large-icons'>");
@@ -163,7 +163,20 @@ public class Tag_setting extends TagSupport {
                 out.print("</div>");
                 out.print("</div>");
             }
-            
+            if (txtPermissions.contains("[1]")) {
+                out.print("<div class='col-lg-6'>");
+                out.print("<div class='card card-large-icons'>");
+                out.print("<div class='card-icon bg-primary text-white'>");
+                out.print("<i class=\"fas fa-folder-open\"></i>");
+                out.print("</div>");
+                out.print("<div class='card-body'>");
+                out.print("<h4>Base de conocimiento</h4>");
+                out.print("<p>Modulo encargado de crear y gestionar la base de conocimientos de casos, instructivos o procesos.</p>");
+                out.print("<a href='Knowledge?opt=1' class='card-cta text-primary'>Configurar <i class='fas fa-chevron-right'></i></a>");
+                out.print("</div>");
+                out.print("</div>");
+                out.print("</div>");
+            }
 
             out.print("</div>");
             out.print("</div>");

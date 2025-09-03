@@ -28,7 +28,7 @@
 
                     <ul class="nav_items">
                         <li class="nav_item">
-                            <a href="#" class="nav_link">Manuales</a>
+                            <a href="Knowledge.jsp" class="nav_link">Documentación Técnica</a>
                             <a href="http://172.16.5.99:8084/AppSupport/" class="nav_link" target="_blank">Soporte</a>
                             <a href="#" class="nav_link">Videos</a>
                             <a href="#" class="nav_link">Sugerencia</a>
