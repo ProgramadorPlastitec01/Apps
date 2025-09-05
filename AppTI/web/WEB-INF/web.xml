@@ -160,6 +160,14 @@
         <servlet-name>KnowledgeView</servlet-name>
         <servlet-class>Servlet.KnowledgeView</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>GeneralNotSession</servlet-name>
+        <servlet-class>Servlet.GeneralNotSession</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Idea</servlet-name>
+        <servlet-class>Servlet.Idea</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>User</servlet-name>
         <url-pattern>/User</url-pattern>
@@ -319,8 +327,12 @@
     </servlet-mapping>
     
     <servlet-mapping>
-        <servlet-name>KnowledgeView</servlet-name>
-        <url-pattern>/KnowledgeView</url-pattern>
+        <servlet-name>GeneralNotSession</servlet-name>
+        <url-pattern>/GeneralNotSession</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Idea</servlet-name>
+        <url-pattern>/Idea</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

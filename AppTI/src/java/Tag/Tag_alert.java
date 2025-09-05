@@ -2187,6 +2187,56 @@ public class Tag_alert extends TagSupport {
                 }
             }
             //</editor-fold>
+            //<editor-fold defaultstate="collapsed" desc="IDEA">
+             if (pageContext.getRequest().getAttribute("RegisterIdea") != null) {
+                boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("RegisterIdea").toString());
+                if (result) {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-2\").ready(function() {\n"
+                            + "  iziToast.success({\n"
+                            + "    title: 'Correcto',\n"
+                            + "    message: 'Se registro la idea correctamente.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                } else {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-4\").ready(function() {\n"
+                            + "  iziToast.error({\n"
+                            + "    title: 'Error',\n"
+                            + "    message: 'Ha ocurrido un error al registrar.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                }
+            }
+             if (pageContext.getRequest().getAttribute("CloseTempIdea") != null) {
+                boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("CloseTempIdea").toString());
+                if (result) {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-2\").ready(function() {\n"
+                            + "  iziToast.success({\n"
+                            + "    title: 'Correcto',\n"
+                            + "    message: 'Se registro la idea correctamente.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                } else {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-4\").ready(function() {\n"
+                            + "  iziToast.error({\n"
+                            + "    title: 'Error',\n"
+                            + "    message: 'Ha ocurrido un error al registrar.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                }
+            }
+            //</editor-fold>
         } catch (IOException ex) {
             Logger.getLogger(Tag_alert.class.getName()).log(Level.SEVERE, null, ex);
         }

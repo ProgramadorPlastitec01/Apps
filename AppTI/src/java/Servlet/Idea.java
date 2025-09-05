@@ -1,34 +1,58 @@
 package Servlet;
 
-import Controller.KnowledgeJpaController;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import Controller.IdeaJpaController;
 
-public class KnowledgeView extends HttpServlet {
+public class Idea extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        KnowledgeJpaController KnowlegdeJpa = new KnowledgeJpaController();
+        HttpSession sesion = request.getSession();
         int opt = Integer.parseInt(request.getParameter("opt"));
-        int IdKnowledge = 0;
+        String UserRol = sesion.getAttribute("idRol").toString();
+        IdeaJpaController IdeaJpa = new IdeaJpaController();
+        int idIdea = 0, State = 0;
+        String Description = "";
+        boolean Result = false;
         try {
             switch (opt) {
                 case 1:
                     try {
-                        IdKnowledge = Integer.parseInt(request.getParameter("IdKnowledge"));
+                        idIdea = Integer.parseInt(request.getParameter("idIdea"));
                     } catch (Exception e) {
-                        IdKnowledge = 0;
+                        idIdea = 0;
                     }
-                    KnowlegdeJpa.UpdateView(IdKnowledge);
-                    request.getRequestDispatcher("Knowledge.jsp").forward(request, response);
+                    request.setAttribute("idIdea", idIdea);
+                    request.setAttribute("idRol", UserRol);
+                    request.getRequestDispatcher("Idea.jsp").forward(request, response);
+                    break;
+                case 2:
+                    try {
+                        idIdea = Integer.parseInt(request.getParameter("idIdea"));
+                    } catch (Exception e) {
+                        idIdea = 0;
+                    }
+                    try {
+                        State = Integer.parseInt(request.getParameter("state"));
+                    } catch (Exception e) {
+                        State = 0;
+                    }
+                    Description = request.getParameter("Txt_description");
+                    Result = IdeaJpa.CloseIdea(idIdea, State ,Description);
+                    if (Result) {
+                        request.setAttribute("CloseTempIdea", Result);
+                    }
+                    request.getRequestDispatcher("Idea?opt=1&idIdea=0").forward(request, response);
                     break;
             }
-        } catch (IOException | ServletException ex) {
-            request.getRequestDispatcher("Knowledge_table.jsp").forward(request, response);
+        } catch (IOException ex) {
+            request.getRequestDispatcher("Idea.jsp").forward(request, response);
         }
     }
 

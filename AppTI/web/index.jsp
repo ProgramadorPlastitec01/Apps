@@ -14,6 +14,7 @@
         <link rel="stylesheet" href="Interface/Content/Assets/modules/fontawesome/css/all.min.css">
         <link rel="stylesheet" href="Interface/Content/Assets/css/style.css">
         <link rel="stylesheet" href="Interface/Content/Assets/css/components.css">
+        <link rel="stylesheet" href="Interface/Content/Assets/css/Suggestion.css">
         <link rel="icon" type="image/png" href="Interface/Imagen/Logo_app/IconW.fw.png">
     </head>
     <body>
@@ -31,7 +32,7 @@
                             <a href="Knowledge.jsp" class="nav_link">Documentación Técnica</a>
                             <a href="http://172.16.5.99:8084/AppSupport/" class="nav_link" target="_blank">Soporte</a>
                             <a href="#" class="nav_link">Videos</a>
-                            <a href="#" class="nav_link">Sugerencia</a>
+                            <a href="#"  onclick="ViewWindows(2)" class="nav_link">Idea</a>
                         </li>
                     </ul>
 
@@ -109,6 +110,44 @@
                         </div>
                         <div class="cont_form_user">
                             <p>Este sistema de información, es el encargado de facilitar el manejo y control de la documentación del areá con los registros <b>R-TI-001</b>,<b>R-TI-005</b>,<b>R-TI-031</b>,<b>R-TI-014</b> entre otros.</br> El sistema como ayuda virtual, permite al usuario acceder a la información de manera <b style="color:#00281b">segura, rapida</b> y <b style="color:#00281b">confiable</b> para poder realizar en cada uno de los procesos del registros una adecuada manipulación.</p>
+                        </div>
+                    </div>
+                </div>
+                <div  id="Window2" class="DivSuggestion">
+                    <div class="cont_reg">
+                        <div class="cont_form_user">
+                            <form action="GeneralNotSession?opt=2" method="post" class="p-2  rounded " style="max-width: 600px; margin:auto;">
+                                <h5 class="mb-3 text-center">💡 Tu opinión nos ayuda a mejorar</h5>
+
+                                <!-- Nombre del usuario -->
+                                <div class="mb-3">
+                                    <label for="nombre" class="form-label">Nombre</label>
+                                    <input type="text" class="form-control" id="nombre" name="Name" placeholder="Escribe tu nombre">
+                                </div>
+
+                                <!-- Tipo de aporte -->
+                                <div class="mb-3">
+                                    <label for="tipo" class="form-label">Tipo de aporte</label>
+                                    <select class="form-control" id="tipo" name="Type" required>
+                                        <option value="">Selecciona una opción</option>
+                                        <option value="sugerencia">Sugerencia</option>
+                                        <option value="idea">Idea</option>
+                                        <option value="mejora">Mejora</option>
+                                        <option value="otro">Otro</option>
+                                    </select>
+                                </div>
+
+                                <!-- Texto de la sugerencia -->
+                                <div class="mb-3">
+                                    <label for="detalle" class="form-label">Escribe tu aporte</label>
+                                    <textarea class="form-control" id="detalle"  style="margin-left: 12px;" name="Detail" rows="5" placeholder="Cuéntanos tu sugerencia, idea o mejora..." required></textarea>
+                                </div>
+
+                                <!-- Botón de envío -->
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary">Enviar</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>

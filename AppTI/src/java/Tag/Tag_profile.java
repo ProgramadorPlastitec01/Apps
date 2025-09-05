@@ -241,98 +241,98 @@ public class Tag_profile extends TagSupport {
                 out.print("</div>");
                 //</editor-fold>
 
-                //<editor-fold defaultstate="collapsed" desc="DIV CALIFICATION">
-                lst_calification = UserJpa.ConsultSupportCalification(IdUser);
-                if (lst_calification != null) {
-                    Object[] ObjCalification = (Object[]) lst_calification.get(0);
-                    out.print("<div class=\"card profile-widget mt-2\">");
-                    out.print("<div class=\"profile-widget-header\">");
-                    out.print("<h5 class='text-center mt-2'>Tickets</h5>");
-                    out.print("<div class=\"profile-widget-items\">");
-                    out.print("<div class=\"profile-widget-item\">");
-                    out.print("<div class=\"profile-widget-item-label\">"
-                            + "<i class=\"fas fa-star StarColor\"></i>"
-                            + "<i class=\"fas fa-star StarColor\"></i>"
-                            + "<i class=\"fas fa-star StarColor\"></i><br/>"
-                            + "<i class=\"fas fa-star StarColor\"></i>"
-                            + "<i class=\"fas fa-star StarColor\"></i>"
-                            + "</div>");
-                    out.print("<div class=\"profile-widget-item-value\">" + ObjCalification[0] + "</div>");
-                    out.print("</div>");
-                    out.print("<div class=\"profile-widget-item\">");
-                    out.print("<div class=\"profile-widget-item-label\">"
-                            + "<i class=\"fas fa-star StarColor\"></i>"
-                            + "<i class=\"fas fa-star StarColor\"></i><br/>"
-                            + "<i class=\"fas fa-star StarColor\"></i>"
-                            + "<i class=\"fas fa-star StarColor\"></i>"
-                            + "</div>");
-                    out.print("<div class=\"profile-widget-item-value\">" + ObjCalification[1] + "</div>");
-                    out.print("</div>");
-                    out.print("<div class=\"profile-widget-item\">");
-                    out.print("<div class=\"profile-widget-item-label\"><i class=\"fas fa-star StarColor\"></i><i class=\"fas fa-star StarColor\"></i><i class=\"fas fa-star StarColor\"></i></div>");
-                    out.print("<div class=\"profile-widget-item-value\">" + ObjCalification[2] + "</div>");
-                    out.print("</div>");
-                    out.print("<div class=\"profile-widget-item\">");
-                    out.print("<div class=\"profile-widget-item-label\"><i class=\"fas fa-star StarColor\"></i><i class=\"fas fa-star StarColor\"></i></div>");
-                    out.print("<div class=\"profile-widget-item-value\">" + ObjCalification[3] + "</div>");
-                    out.print("</div>");
-                    out.print("<div class=\"profile-widget-item\">");
-                    out.print("<div class=\"profile-widget-item-label\"><i class=\"fas fa-star StarColor\"></i></div>");
-                    out.print("<div class=\"profile-widget-item-value\">" + ObjCalification[4] + "</div>");
-                    out.print("</div>");
-                    out.print("</div>");
-
-                    out.print("</div>");
-
-                    String ArgCnt = ObjCalification[0] + ","
-                            + ObjCalification[1] + ","
-                            + ObjCalification[3] + ","
-                            + ObjCalification[4];
-
-                    out.print("<div class=\"profile-widget-description\">");
-                    out.print("<canvas id=\"myChart3\" width=\"400\" height=\"230\"></canvas>");
-                    out.print("<script>");
-                    out.print("var ctx = document.getElementById(\"myChart3\").getContext('2d');");
-                    out.print("var myChart = new Chart(ctx, {");
-                    out.print("  type: 'pie',");
-                    out.print("  data: {");
-                    out.print("    labels: ['5', '4', '3', '2', '1'],");
-                    out.print("    datasets: [{");
-                    out.print("      label: 'Proceso',");
-                    out.print("      data: [" + ArgCnt + "],");
-                    out.print("      backgroundColor: [");
-                    out.print("        'rgba(255, 99, 132, 0.6)',");
-                    out.print("        'rgba(54, 162, 235, 0.6)',");
-                    out.print("        'rgba(255, 206, 86, 0.6)',");
-                    out.print("        'rgba(75, 192, 192, 0.6)',");
-                    out.print("        'rgba(153, 102, 255, 0.6)'");
-                    out.print("      ],");
-                    out.print("      borderColor: [");
-                    out.print("        'rgba(255, 99, 132, 1)',");
-                    out.print("        'rgba(54, 162, 235, 1)',");
-                    out.print("        'rgba(255, 206, 86, 1)',");
-                    out.print("        'rgba(75, 192, 192, 1)',");
-                    out.print("        'rgba(153, 102, 255, 1)'");
-                    out.print("      ],");
-                    out.print("      borderWidth: 1.7");
-                    out.print("    }]");
-                    out.print("  },");
-                    out.print("  options: {");
-                    out.print("    responsive: true,");
-                    out.print("    plugins: {");
-                    out.print("      legend: {");
-                    out.print("        position: 'bottom'");
-                    out.print("      }");
-                    out.print("    }");
-                    out.print("  }");
-                    out.print("});");
-                    out.print("</script>");
-
-                    out.print("</div>");
-
-                    out.print("</div>");
-                }
-                //</editor-fold>
+//                //<editor-fold defaultstate="collapsed" desc="DIV CALIFICATION">
+//                lst_calification = UserJpa.ConsultSupportCalification(IdUser);
+//                if (lst_calification != null) {
+//                    Object[] ObjCalification = (Object[]) lst_calification.get(0);
+//                    out.print("<div class=\"card profile-widget mt-2\">");
+//                    out.print("<div class=\"profile-widget-header\">");
+//                    out.print("<h5 class='text-center mt-2'>Tickets</h5>");
+//                    out.print("<div class=\"profile-widget-items\">");
+//                    out.print("<div class=\"profile-widget-item\">");
+//                    out.print("<div class=\"profile-widget-item-label\">"
+//                            + "<i class=\"fas fa-star StarColor\"></i>"
+//                            + "<i class=\"fas fa-star StarColor\"></i>"
+//                            + "<i class=\"fas fa-star StarColor\"></i><br/>"
+//                            + "<i class=\"fas fa-star StarColor\"></i>"
+//                            + "<i class=\"fas fa-star StarColor\"></i>"
+//                            + "</div>");
+//                    out.print("<div class=\"profile-widget-item-value\">" + ObjCalification[0] + "</div>");
+//                    out.print("</div>");
+//                    out.print("<div class=\"profile-widget-item\">");
+//                    out.print("<div class=\"profile-widget-item-label\">"
+//                            + "<i class=\"fas fa-star StarColor\"></i>"
+//                            + "<i class=\"fas fa-star StarColor\"></i><br/>"
+//                            + "<i class=\"fas fa-star StarColor\"></i>"
+//                            + "<i class=\"fas fa-star StarColor\"></i>"
+//                            + "</div>");
+//                    out.print("<div class=\"profile-widget-item-value\">" + ObjCalification[1] + "</div>");
+//                    out.print("</div>");
+//                    out.print("<div class=\"profile-widget-item\">");
+//                    out.print("<div class=\"profile-widget-item-label\"><i class=\"fas fa-star StarColor\"></i><i class=\"fas fa-star StarColor\"></i><i class=\"fas fa-star StarColor\"></i></div>");
+//                    out.print("<div class=\"profile-widget-item-value\">" + ObjCalification[2] + "</div>");
+//                    out.print("</div>");
+//                    out.print("<div class=\"profile-widget-item\">");
+//                    out.print("<div class=\"profile-widget-item-label\"><i class=\"fas fa-star StarColor\"></i><i class=\"fas fa-star StarColor\"></i></div>");
+//                    out.print("<div class=\"profile-widget-item-value\">" + ObjCalification[3] + "</div>");
+//                    out.print("</div>");
+//                    out.print("<div class=\"profile-widget-item\">");
+//                    out.print("<div class=\"profile-widget-item-label\"><i class=\"fas fa-star StarColor\"></i></div>");
+//                    out.print("<div class=\"profile-widget-item-value\">" + ObjCalification[4] + "</div>");
+//                    out.print("</div>");
+//                    out.print("</div>");
+//
+//                    out.print("</div>");
+//
+//                    String ArgCnt = ObjCalification[0] + ","
+//                            + ObjCalification[1] + ","
+//                            + ObjCalification[3] + ","
+//                            + ObjCalification[4];
+//
+//                    out.print("<div class=\"profile-widget-description\">");
+//                    out.print("<canvas id=\"myChart3\" width=\"400\" height=\"230\"></canvas>");
+//                    out.print("<script>");
+//                    out.print("var ctx = document.getElementById(\"myChart3\").getContext('2d');");
+//                    out.print("var myChart = new Chart(ctx, {");
+//                    out.print("  type: 'pie',");
+//                    out.print("  data: {");
+//                    out.print("    labels: ['5', '4', '3', '2', '1'],");
+//                    out.print("    datasets: [{");
+//                    out.print("      label: 'Proceso',");
+//                    out.print("      data: [" + ArgCnt + "],");
+//                    out.print("      backgroundColor: [");
+//                    out.print("        'rgba(255, 99, 132, 0.6)',");
+//                    out.print("        'rgba(54, 162, 235, 0.6)',");
+//                    out.print("        'rgba(255, 206, 86, 0.6)',");
+//                    out.print("        'rgba(75, 192, 192, 0.6)',");
+//                    out.print("        'rgba(153, 102, 255, 0.6)'");
+//                    out.print("      ],");
+//                    out.print("      borderColor: [");
+//                    out.print("        'rgba(255, 99, 132, 1)',");
+//                    out.print("        'rgba(54, 162, 235, 1)',");
+//                    out.print("        'rgba(255, 206, 86, 1)',");
+//                    out.print("        'rgba(75, 192, 192, 1)',");
+//                    out.print("        'rgba(153, 102, 255, 1)'");
+//                    out.print("      ],");
+//                    out.print("      borderWidth: 1.7");
+//                    out.print("    }]");
+//                    out.print("  },");
+//                    out.print("  options: {");
+//                    out.print("    responsive: true,");
+//                    out.print("    plugins: {");
+//                    out.print("      legend: {");
+//                    out.print("        position: 'bottom'");
+//                    out.print("      }");
+//                    out.print("    }");
+//                    out.print("  }");
+//                    out.print("});");
+//                    out.print("</script>");
+//
+//                    out.print("</div>");
+//
+//                    out.print("</div>");
+//                }
+//                //</editor-fold>
                 out.print("</div>");
                 out.print("</div>");
                 //</editor-fold>

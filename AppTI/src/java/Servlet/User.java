@@ -28,6 +28,7 @@ public class User extends HttpServlet {
         try {
             switch (opt) {
                 case 1:
+                    //<editor-fold defaultstate="collapsed" desc="MODULE USER">
                     try {
                         idUser = Integer.parseInt(request.getParameter("idUser").toString());
                     } catch (Exception e) {
@@ -36,6 +37,7 @@ public class User extends HttpServlet {
                     request.setAttribute("IdUser", idUser);
                     request.setAttribute("idRol", UserRol);
                     request.getRequestDispatcher("User.jsp").forward(request, response);
+                    //</editor-fold>
                     break;
                 case 2:
                     //<editor-fold defaultstate="collapsed" desc="REGISTER && EDIT USER">
@@ -75,6 +77,7 @@ public class User extends HttpServlet {
 //</editor-fold>
                     break;
                 case 4:
+                    //<editor-fold defaultstate="collapsed" desc="RETOREPASS">
                     try {
                         idUser = Integer.parseInt(request.getParameter("idUser").toString());
                     } catch (Exception e) {
@@ -84,6 +87,7 @@ public class User extends HttpServlet {
                     result = UserJpa.RestorePassUser(idUser, currentYear + "");
                     request.setAttribute("UserPass", result);
                     request.getRequestDispatcher("User?opt=1&idUser=0").forward(request, response);
+                    //</editor-fold>
                     break;
             }
         } catch (Exception ex) {
