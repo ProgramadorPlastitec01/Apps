@@ -112,6 +112,24 @@ public class PendingControllerJpa {
             return null;
         }
     }
+    public List ConsultPendingAlert(String Managed, String User) {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_pdg_c_ConsultPedingCountAlert`('" + Managed + "','" + User + "')");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
 
 
     //</editor-fold>

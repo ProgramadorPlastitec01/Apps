@@ -46,7 +46,7 @@ public class Tag_application extends TagSupport {
 
                 out.print("<div style='display: flex; justify-content: space-between'>");
                 out.print("<h4>Modificar Aplicacion</h4>");
-                out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(2)' data-toggle='tooltip' data-placement='top' title='Cerrar' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
+                out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(2);' data-toggle='tooltip' data-placement='top' title='Cerrar' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
                 out.print("</div>");
 
                 if (lst_appId != null) {
@@ -75,7 +75,7 @@ public class Tag_application extends TagSupport {
                     out.print("</div>");
 
                     out.print("<div class='' style='width: 100%; text-align:center;'>");
-                    out.print("<button class='btn btn-green btn-lg'>Modificar</button>");
+                    out.print("<button class='btn btn-green btn-lg' onclick='cargarDatos()'>Modificar</button>");
                     out.print("</div>");
 
                     out.print("</form>");
@@ -91,7 +91,7 @@ public class Tag_application extends TagSupport {
 
             out.print("<div style='display: flex; justify-content: space-between'>");
             out.print("<h4>Registrar Aplicacion</h4>");
-            out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(1)' data-toggle='tooltip' data-placement='top' title='Cerrar' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
+            out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(1);' data-toggle='tooltip' data-placement='top' title='Cerrar' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
             out.print("</div>");
 
             out.print("<form action='Application?opt=2' method='post' name='FormPending' id='FormPending' class='needs-validation' novalidate=''>");
@@ -116,7 +116,7 @@ public class Tag_application extends TagSupport {
             out.print("</div>");
 
             out.print("<div class='' style='width: 100%; text-align:center;'>");
-            out.print("<button class='btn btn-green btn-lg'>Registrar</button>");
+            out.print("<button class='btn btn-green btn-lg' onclick='cargarDatos()'>Registrar</button>");
             out.print("</div>");
 
             out.print("</form>");
@@ -132,7 +132,7 @@ public class Tag_application extends TagSupport {
             out.print("<div class='card-header' style='justify-content: space-between;'>");
             out.print("<div class='d-flex'>"
                     + "<div class='mr-2'>"
-                    + "<button class='btn btn-outline-primary btn-sm' style='border-radius: 4px; padding: 2px 9px;'  onclick=\"javascript:location.href='Setting.jsp'\" >"
+                    + "<button class='btn btn-outline-primary btn-sm' style='border-radius: 4px; padding: 2px 9px;'  onclick=\"javascript:location.href='Setting.jsp';cargarDatos()\"  >"
                     + "<i class=\"far fa-hand-point-left\"></i>"
                     + "</button>"
                     + "</div>"
@@ -171,12 +171,12 @@ public class Tag_application extends TagSupport {
                     out.print("<td>" + ((State == 1) ? "<div class='badge badge-success'>Activo</div>" : "<div class='badge badge-danger'>Inactivo</div>") + "</td>");
                     out.print("<td class=\"text-center\">");
                     if (txtPermissions.contains("[35]")) {
-                        out.print("<a href='Application?opt=1&IdApplication=" + ObjApp[0] + "' style='background: orange;' class='btn btn-warning btn-icon btn-sm' data-toggle='tooltip' data-placement='top' title='Editar'><i class='fas fa-edit'></i></a> &nbsp;&nbsp;");
+                        out.print("<a href='Application?opt=1&IdApplication=" + ObjApp[0] + "' onclick='cargarDatos()' style='background: orange;' class='btn btn-warning btn-icon btn-sm' data-toggle='tooltip' data-placement='top' title='Editar'><i class='fas fa-edit'></i></a> &nbsp;&nbsp;");
                     } else {
                         out.print("<a href='#' style='background: orange;opacity: 0.5;' class='btn btn-warning btn-icon btn-sm' data-toggle='tooltip' data-placement='top' title='No tiene permisos'><i class='fas fa-edit'></i></a> &nbsp;&nbsp;");
                     }
                     if (txtPermissions.contains("[36]")) {
-                        out.print("<a href='Application?opt=3&IdApplication=" + ObjApp[0] + "&State=" + State + "' class='btn btn-" + ((State == 1) ? "success" : "danger") + " btn-sm' data-toggle='tooltip' data-placement='top' title='Cambiar estado'><i class='" + ((State == 1) ? "fas fa-check-circle" : "fas fa-times-circle") + "'></i></a>");
+                        out.print("<a href='Application?opt=3&IdApplication=" + ObjApp[0] + "&State=" + State + "' class='btn btn-" + ((State == 1) ? "success" : "danger") + " btn-sm' onclick='cargarDatos()' data-toggle='tooltip' data-placement='top' title='Cambiar estado'><i class='" + ((State == 1) ? "fas fa-check-circle" : "fas fa-times-circle") + "'></i></a>");
                     } else {
                         out.print("<a style='opacity: 0.5;' href='#' class='btn btn-" + ((State == 1) ? "success" : "danger") + " btn-sm' data-toggle='tooltip' data-placement='top' title='No tiene permisos'><i class='" + ((State == 1) ? "fas fa-check-circle" : "fas fa-times-circle") + "'></i></a>");
                     }

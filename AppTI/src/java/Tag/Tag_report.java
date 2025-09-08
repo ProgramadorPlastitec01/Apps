@@ -266,8 +266,8 @@ public class Tag_report extends TagSupport {
 
                 out.print("</div>");
                 out.print("<div class='mr-0' style='float: inline-end;'>");
-                out.print("<button type='button' class='btn btn-warning mr-3' data-toggle='tooltip' data-placement='top' title='Limpiar' onclick='limpiarFormulario()'><i class='fas fa-eraser mr-2'></i>Limpiar</button>");
-                out.print("<button type='button' class='btn btn-green' data-toggle='tooltip' data-placement='top' title='Registar' onclick=\"validarFormulario()\"><i class='fas fa-search mr-2'></i>Buscar</button>");
+                out.print("<button type='button' class='btn btn-warning mr-3' data-toggle='tooltip' data-placement='top' title='Limpiar' onclick='limpiarFormulario();cargarDatos()'><i class='fas fa-eraser mr-2'></i>Limpiar</button>");
+                out.print("<button type='button' class='btn btn-green' data-toggle='tooltip' data-placement='top' title='Registar' onclick=\"validarFormulario();cargarDatos()\"><i class='fas fa-search mr-2'></i>Buscar</button>");
                 out.print("</div>");
                 out.print("<input type='hidden' name='Filter' value='1'>");
                 out.print("</form>");
@@ -843,8 +843,8 @@ public class Tag_report extends TagSupport {
                 out.print("</div>");
 
                 out.print("<div class='mr-0' style='float: inline-end;'>");
-                out.print("<button type='button' class='btn btn-warning mr-3' data-toggle='tooltip' data-placement='top' title='Limpiar' onclick='ClearInforData()'><i class='fas fa-eraser mr-2'></i>Limpiar</button>");
-                out.print("<button type='button' class='btn btn-green' onclick=\"validateFormInfo()\"><i class='fas fa-search mr-2'></i>Buscar</button>");
+                out.print("<button type='button' class='btn btn-warning mr-3' data-toggle='tooltip' data-placement='top' title='Limpiar' onclick='ClearInforData();cargarDatos()'><i class='fas fa-eraser mr-2'></i>Limpiar</button>");
+                out.print("<button type='button' class='btn btn-green' onclick=\"validateFormInfo();cargarDatos()\"><i class='fas fa-search mr-2'></i>Buscar</button>");
                 out.print("</div>");
                 out.print("<input type='hidden' name='Filter' value='1'>");
                 out.print("</form>");

@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 import java.util.List;
 
@@ -117,7 +115,7 @@ public class Tag_moveItem extends TagSupport {
                     out.print("<input type='hidden' class='form-control' name='txtCountData' id='' value='" + count + "'>");
 
                     out.print("<div class='text-center mt-2'>");
-                    out.print("<button class='btn btn-green'>Confirmar movimiento</button>");
+                    out.print("<button class='btn btn-green' onclick='cargarDatos()'>Confirmar movimiento</button>");
                     out.print("</div>");
                     out.print("</form>");
 
@@ -191,7 +189,7 @@ public class Tag_moveItem extends TagSupport {
                 out.print("</div>");
                 out.print("</div>");
                 out.print("<div class='text-center mt-2'>");
-                out.print("<button class='btn btn-green'>Registrar</button>");
+                out.print("<button class='btn btn-green' onclick='cargarDatos()'>Registrar</button>");
                 out.print("</div>");
 
                 out.print("</form>");
@@ -296,7 +294,7 @@ public class Tag_moveItem extends TagSupport {
             out.print("</div>");
             out.print("</div>");
             out.print("<div class='text-center mt-2'>");
-            out.print("<button type='button' class='btn btn-green' onclick='SearchItems()'>Buscar.. <i class='fas fa-search'></i></button>");
+            out.print("<button type='button' class='btn btn-green' onclick='SearchItems();cargarDatos()'>Buscar.. <i class='fas fa-search'></i></button>");
             out.print("</div>");
             out.print("</form>");
             out.print("</div>");

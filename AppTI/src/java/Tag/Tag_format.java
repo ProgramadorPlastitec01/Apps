@@ -59,7 +59,7 @@ public class Tag_format extends TagSupport {
                     out.print("<form action='Format?opt=4&idfmt=" + ObjFomt[0] + "' method='post'>");
                     out.print("<textarea class='codeeditor' name='txtFormat'>" + ((ObjFomt[3] == null) ? "" : ObjFomt[3]) + "</textarea>");
                     out.print("<div style='position: absolute;margin-top: 9px;right: 50%;'>");
-                    out.print("<button class='btn btn-green'>Actualizar</button>");
+                    out.print("<button class='btn btn-green' onclick='cargarDatos()'>Actualizar</button>");
                     out.print("</div>");
                     out.print("</form>");
                     out.print("</div>");
@@ -103,7 +103,7 @@ public class Tag_format extends TagSupport {
                     out.print("<input type='number' class='form-control col-lg-3' name='nmbVersion' id='' value='" + val + "' placeholder='Version' data-toggle='tooltip' data-placement='top' title='Version' >");
                     out.print("</div>");
                     out.print("<div class='text-center'>");
-                    out.print("<button class='btn btn-green'>Registrar</button>");
+                    out.print("<button class='btn btn-green' onclick='cargarDatos()'>Registrar</button>");
                     out.print("</div>");
                     out.print("</form>");
                 } else {
@@ -132,7 +132,7 @@ public class Tag_format extends TagSupport {
                     out.print("<input type='number' class='form-control col-lg-3' name='nmbVersion' id='' value='" + Objform[4] + "' placeholder='Version' data-toggle='tooltip' data-placement='top' title='Version' >");
                     out.print("</div>");
                     out.print("<div class='text-center'>");
-                    out.print("<button class='btn btn-green'>Confirmar</button>");
+                    out.print("<button class='btn btn-green' onclick='cargarDatos()'>Confirmar</button>");
                     out.print("</div>");
                     out.print("</form>");
                 } else {
@@ -158,7 +158,7 @@ public class Tag_format extends TagSupport {
             out.print("<input type='number' class='form-control col-lg-3' name='nmbVersion' id='' placeholder='Version' data-toggle='tooltip' data-placement='top' title='Version' >");
             out.print("</div>");
             out.print("<div class='text-center'>");
-            out.print("<button class='btn btn-green'>Registrar</button>");
+            out.print("<button class='btn btn-green' onclick='cargarDatos()'>Registrar</button>");
             out.print("</div>");
             out.print("</form>");
             out.print("</div>");
@@ -174,8 +174,8 @@ public class Tag_format extends TagSupport {
             out.print("<div class='card-header' style='justify-content: space-between;'>");
             out.print("<div class='d-flex'>"
                     + "<div class='mr-2'>"
-                    + "<button class='btn btn-outline-primary btn-sm' style='border-radius: 4px; padding: 2px 9px;'  onclick=\"javascript:location.href='Setting.jsp'\" >"
-                    + "<i class=\"far fa-hand-point-left\"></i>"
+                    + "<button class='btn btn-outline-primary btn-sm' style='border-radius: 4px; padding: 2px 9px;'  onclick=\"javascript:location.href='Setting.jsp';cargarDatos()\" >"
+                    + "<i class='fas fa-arrow-left'></i>"
                     + "</button>"
                     + "</div>"
                     + "<h4>Listado de registros</h4>"
@@ -212,9 +212,9 @@ public class Tag_format extends TagSupport {
                     } else {
                         out.print("<button class='btn btn-danger btn-sm' onclick='window.location.href=\"Format?opt=3&idfmt=" + ObjFormat[0] + "&state=1\"' data-toggle='tooltip' data-placement='top' title='Cambiar estado'><i class='fas fa-times'></i></button>");
                     }
-                    out.print("<button class='btn btn-info btn-sm' onclick='window.location.href=\"Format?opt=1&idfmt=" + ObjFormat[0] + "&temp=1\"' data-toggle='tooltip' data-placement='top' title='Formato'><i class='fas fa-file'></i></button>");
-                    out.print("<button class='btn btn-green btn-sm' onclick='window.location.href=\"Format?opt=1&idfmt=" + ObjFormat[0] + "&temp=2\"' data-toggle='tooltip' data-placement='top' title='Formato'><i class=\"fas fa-arrow-alt-circle-up\"></i></button>");
-                    out.print("<button class='btn btn-warning btn-sm' onclick='window.location.href=\"Format?opt=1&idfmt=" + ObjFormat[0] + "\"' data-toggle='tooltip' data-placement='top' title='Editar'><i class='fas fa-edit'></i></button>");
+                    out.print("<button class='btn btn-info btn-sm' onclick='window.location.href=\"Format?opt=1&idfmt=" + ObjFormat[0] + "&temp=1\";cargarDatos()' data-toggle='tooltip' data-placement='top' title='Formato'><i class='fas fa-file'></i></button>");
+                    out.print("<button class='btn btn-green btn-sm' onclick='window.location.href=\"Format?opt=1&idfmt=" + ObjFormat[0] + "&temp=2\";cargarDatos()' data-toggle='tooltip' data-placement='top' title='Formato'><i class=\"fas fa-arrow-alt-circle-up\"></i></button>");
+                    out.print("<button class='btn btn-warning btn-sm' onclick='window.location.href=\"Format?opt=1&idfmt=" + ObjFormat[0] + "\";cargarDatos()' data-toggle='tooltip' data-placement='top' title='Editar'><i class='fas fa-edit'></i></button>");
                     out.print("</div>");
                     out.print("</td>");
                     out.print("</tr>");

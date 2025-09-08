@@ -118,7 +118,7 @@
             function enviarId(id) {
                 var form = document.createElement("form");
                 form.method = "post";
-                form.action = "KnowledgeView?opt=1";
+                form.action = "GeneralNotSession?opt=1";
 
                 var input = document.createElement("input");
                 input.type = "hidden";

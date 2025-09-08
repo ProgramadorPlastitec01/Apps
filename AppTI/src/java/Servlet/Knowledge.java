@@ -67,11 +67,6 @@ public class Knowledge extends HttpServlet {
                     } catch (Exception e) {
                         State = 0;
                     }
-                    if (State == 1) {
-                        State = 0;
-                    } else {
-                        State = 1;
-                    }
                     Result = KnowlegdeJpa.ChangeStateKnowlegde(IdKnowledge, State);
                     if (Result) {
                         request.setAttribute("ChangeStateKnowlegde", Result);

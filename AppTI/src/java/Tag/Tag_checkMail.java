@@ -100,7 +100,7 @@ public class Tag_checkMail extends TagSupport {
             out.print("</div>");
 
             out.print("<div class='text-center'>");
-            out.print("<button class='btn btn-green' type='button' onclick='ValidMail()'>Comprobar</button>");
+            out.print("<button class='btn btn-green' type='button' onclick='ValidMail();cargarDatos()'>Comprobar</button>");
             out.print("</div>");
 
             out.print("</form>");
@@ -164,7 +164,6 @@ public class Tag_checkMail extends TagSupport {
             out.print("</div>");
             out.print("</div>");
 
-//            out.print("</div>");
             out.print("</div>");
             out.print("</div>");
             out.print("</div>");

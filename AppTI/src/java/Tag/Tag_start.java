@@ -14,6 +14,7 @@ import java.util.Locale;
 import Controller.DashBoardJpaController;
 import Controller.SettingControllerJpa;
 import Controller.UserControllerJpa;
+import Controller.PendingControllerJpa;
 import SQL.ConnectionsBd;
 
 public class Tag_start extends TagSupport {
@@ -25,18 +26,18 @@ public class Tag_start extends TagSupport {
         HttpSession sesion = pageContext.getSession();
         DashBoardJpaController DashJpa = new DashBoardJpaController();
         SettingControllerJpa SettingJpa = new SettingControllerJpa();
+        PendingControllerJpa PedingJpa = new PendingControllerJpa();
         ConnectionsBd ConnectionBd = new ConnectionsBd();
         UserControllerJpa UserJpa = new UserControllerJpa();
         int IdUser = Integer.parseInt(sesion.getAttribute("idUsuario").toString());
         String NameUser = sesion.getAttribute("Nombres").toString();
         String NameRol = sesion.getAttribute("NombreRol").toString();
+        int CheckPending = Integer.parseInt(sesion.getAttribute("CheckPending").toString());
         Calendar cal = Calendar.getInstance();
         int CurrYear = cal.get(Calendar.YEAR);
         int CurrMonth = (cal.get(Calendar.MONTH));
-        String[] meses = new DateFormatSymbols(new Locale("es", "ES")).getMonths();
-        String nombreMes = meses[CurrMonth];
 //        nombreMes = nombreMes.substring(0, 1).toUpperCase() + nombreMes.substring(1).toLowerCase();
-        List lst_items = null, lst_follow = null, lst_activity = null, lst_module = null, lst_tickets = null, lst_user = null;
+        List lst_items = null, lst_follow = null, lst_activity = null, lst_module = null, lst_tickets = null, lst_user = null, lst_pending = null;
         int CountP = 0;
         String Module = "";
 
@@ -56,10 +57,48 @@ public class Tag_start extends TagSupport {
             out.print("<h1 class='text-center'>Inicio </h1>");
             out.print("</div>");
 
+            if (CheckPending > 0) {
+                lst_pending = PedingJpa.ConsultPendingAlert(NameRol, NameUser);
+                if (lst_pending != null) {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("<div class='container-fluid' style='max-height:250px; overflow-y:auto;'>");
+                    sb.append("<ul class='list-group'>");
+
+                    for (int i = 0; i < lst_pending.size(); i++) {
+                        Object[] ObjCount = (Object[]) lst_pending.get(i);
+                        sb.append("<li class='list-group-item d-flex justify-content-between align-items-center'>")
+                                .append("<span style='font-weight:500;'>").append(ObjCount[1]).append("</span>")
+                                .append("<span class='badge badge-warning badge-pill'>").append(ObjCount[0]).append("</span>")
+                                .append("</li>");
+                    }
+
+                    sb.append("</ul>");
+                    sb.append("</div>");
+
+                    String htmlContent = sb.toString().replace("\"", "\\\"");
+
+                    out.print("<div>");
+                    out.print("<script>");
+                    out.print("$(document).ready(function () {");
+                    out.print("  var wrapper = document.createElement('div');");
+                    out.print("  wrapper.innerHTML = \"" + htmlContent + "\";");
+                    out.print("  swal({");
+                    out.print("    title: 'Pendientes',");
+                    out.print("    content: wrapper,");
+                    out.print("    icon: 'warning',");
+                    out.print("    buttons: false");
+                    out.print("  }).then(function(){");  // callback cuando se cierra la alerta
+                    out.print("    $.post('Session?opt=6', function(resp){ console.log('CheckPending reiniciado a 0'); });");
+                    out.print("  });");
+                    out.print("});");
+                    out.print("</script>");
+                    out.print("</div>");
+                }
+            }
+
             out.print("<div class='container mt-4'>");
 
             out.print("<div class='row g-4'>"); // g-4 agrega espacio entre columnas/fila
-
             //<editor-fold defaultstate="collapsed" desc="CONTADORES APPTI">
             lst_items = DashJpa.ConsultScheduleFollowItems(CurrYear, (CurrMonth + 1));
             if (lst_items != null) {

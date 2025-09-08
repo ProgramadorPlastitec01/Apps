@@ -14,7 +14,18 @@
         <link rel="stylesheet" href="Interface/Content/Assets/modules/fontawesome/css/all.min.css">
         <link rel="stylesheet" href="Interface/Content/Assets/css/style.css">
         <link rel="stylesheet" href="Interface/Content/Assets/css/components.css">
+        <link rel="stylesheet" href="Interface/Content/Assets/css/Suggestion.css">
         <link rel="icon" type="image/png" href="Interface/Imagen/Logo_app/IconW.fw.png">
+        <style>
+            .home {
+                position: relative;
+                height: 100vh;
+                width: 100%;
+                background-size: cover;
+                background-position: center;
+                transition: background-image 1s ease-in-out; /* efecto suave */
+            }
+        </style>
     </head>
     <body>
         <jsp:include page="Library.jsp"></jsp:include>
@@ -30,8 +41,7 @@
                         <li class="nav_item">
                             <a href="Knowledge.jsp" class="nav_link">Documentación Técnica</a>
                             <a href="http://172.16.5.99:8084/AppSupport/" class="nav_link" target="_blank">Soporte</a>
-                            <a href="#" class="nav_link">Videos</a>
-                            <a href="#" class="nav_link">Sugerencia</a>
+                            <a href="#"  onclick="ViewWindows(2)" class="nav_link">Idea</a>
                         </li>
                     </ul>
 
@@ -104,11 +114,49 @@
                 <div class="sweet-local" tabindex="-1" id="Ventana1" style="opacity: 1.03; display:none;">
                     <div class="cont_reg">
                         <div style="display: flex; justify-content: space-between">
-                            <h2>App T.I</h2>
+                            <h2>Nexus</h2>
                             <button class="btn btn-outline-secondary" onclick="mostrarConvencion(1)" style="height: 30px;padding: 3px;width: 30px;"><i class="fas fa-times"></i></button>
                         </div>
                         <div class="cont_form_user">
                             <p>Este sistema de información, es el encargado de facilitar el manejo y control de la documentación del areá con los registros <b>R-TI-001</b>,<b>R-TI-005</b>,<b>R-TI-031</b>,<b>R-TI-014</b> entre otros.</br> El sistema como ayuda virtual, permite al usuario acceder a la información de manera <b style="color:#00281b">segura, rapida</b> y <b style="color:#00281b">confiable</b> para poder realizar en cada uno de los procesos del registros una adecuada manipulación.</p>
+                        </div>
+                    </div>
+                </div>
+                <div  id="Window2" class="DivSuggestion">
+                    <div class="cont_reg">
+                        <div class="cont_form_user">
+                            <form action="GeneralNotSession?opt=2" method="post" class="p-2  rounded " style="max-width: 600px; margin:auto;">
+                                <h5 class="mb-3 text-center">💡 Tu opinión nos ayuda a mejorar</h5>
+
+                                <!-- Nombre del usuario -->
+                                <div class="mb-3">
+                                    <label for="nombre" class="form-label">Nombre</label>
+                                    <input type="text" class="form-control" id="nombre" name="Name" placeholder="Escribe tu nombre">
+                                </div>
+
+                                <!-- Tipo de aporte -->
+                                <div class="mb-3">
+                                    <label for="tipo" class="form-label">Tipo de aporte</label>
+                                    <select class="form-control" id="tipo" name="Type" required>
+                                        <option value="">Selecciona una opción</option>
+                                        <option value="sugerencia">Sugerencia</option>
+                                        <option value="idea">Idea</option>
+                                        <option value="mejora">Mejora</option>
+                                        <option value="otro">Otro</option>
+                                    </select>
+                                </div>
+
+                                <!-- Texto de la sugerencia -->
+                                <div class="mb-3">
+                                    <label for="detalle" class="form-label">Escribe tu aporte</label>
+                                    <textarea class="form-control" id="detalle"  style="margin-left: 12px;" name="Detail" rows="5" placeholder="Cuéntanos tu sugerencia, idea o mejora..." required></textarea>
+                                </div>
+
+                                <!-- Botón de envío -->
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary">Enviar</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -267,6 +315,40 @@
                 chatArea.innerHTML = "<em>Bienvenido al ChatBot, soy BOTTI, tu Guia virtual. En las siguientes opciones encontrara el menu de opciones. Si desea volver la opciones escriba en el mensaje <b>Menu</b></em><br>";
                 showMenu();
             }
+        </script>
+        <script>
+             document.addEventListener("DOMContentLoaded", () => {
+                const totalImages = 12;
+                let index = 1;
+                const homeSection = document.querySelector(".home");
+
+                if (!homeSection) {
+                    console.error("No se encontró el elemento con clase 'home'");
+                    return;
+                }
+
+                function changeBackground() {
+                    console.log("Valor de index:", index);
+                    const imageUrl = "Interface/Content/Assets/css/Img/B" + index + ".jpg";
+                    console.log("Usando imagen:", imageUrl);
+                    homeSection.style.backgroundImage = 'url("' + imageUrl + '")';
+                    index = index >= totalImages ? 1 : index + 1;
+                    console.log("Nuevo valor de index:", index);
+                }
+
+                // Precarga de imágenes (opcional, para evitar parpadeo por carga)
+                const images = [];
+                for (let i = 1; i <= totalImages; i++) {
+                    images[i] = new Image();
+                    images[i].src = "Interface/Content/Assets/css/Img/B" + i + ".jpg";
+                }
+
+                // Ejecuta la función inmediatamente
+                changeBackground();
+
+                // Configura el intervalo para cambiar la imagen cada 5 segundos
+                setInterval(changeBackground, 30000);
+            });
         </script>
         <script src="Interface/Content/Assets/modules/jquery.min.js"></script>
         <script src="Interface/Content/Assets/modules/bootstrap/js/bootstrap.min.js"></script>

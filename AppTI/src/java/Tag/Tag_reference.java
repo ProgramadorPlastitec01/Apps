@@ -46,7 +46,7 @@ public class Tag_reference extends TagSupport {
             out.print("<input type='text' class='form-control text-center col-lg-6' name='txt_Ref' style='margin: auto; margin-bottom: 10px;' data-toggle='tooltip' data-placement='top' title='Referencia' placeholder='Referencia' value='' autocomplete='off' >");
             out.print("</div>");
             out.print("<div class='text-center'>");
-            out.print("<button class='btn btn-green'>Consultar <i class='fas fa-search'></i></button>");
+            out.print("<button class='btn btn-green' onclick='cargarDatos()'>Consultar <i class='fas fa-search'></i></button>");
             out.print("</div>");
             out.print("</form>");
 
@@ -91,7 +91,7 @@ public class Tag_reference extends TagSupport {
                         out.print("</div>");
                         out.print("</div>");
                         out.print("<div class='text-center mt2'>");
-                        out.print("<button class='btn btn-yellow'>Registrar Referencia</button>");
+                        out.print("<button class='btn btn-yellow' onclick='cargarDatos()'>Registrar Referencia</button>");
                         out.print("</div>");
                         out.print("</form>");
                     } else {

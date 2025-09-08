@@ -43,7 +43,6 @@ public class Tag_setting extends TagSupport {
             out.print("<div class='card'>");
             out.print("<div class='card-body'>");
             out.print("<div class='row'>");
-
             if (txtPermissions.contains("[22]")) {
                 out.print("<div class='col-lg-6'>");
                 out.print("<div class='card card-large-icons'>");
@@ -58,7 +57,6 @@ public class Tag_setting extends TagSupport {
                 out.print("</div>");
                 out.print("</div>");
             }
-
             if (txtPermissions.contains("[6]")) {
                 out.print("<div class='col-lg-6'>");
                 out.print("<div class='card card-large-icons'>");
@@ -73,7 +71,6 @@ public class Tag_setting extends TagSupport {
                 out.print("</div>");
                 out.print("</div>");
             }
-
             if (txtPermissions.contains("[17]")) {
                 out.print("<div class='col-lg-6'>");
                 out.print("<div class='card card-large-icons'>");
@@ -88,7 +85,6 @@ public class Tag_setting extends TagSupport {
                 out.print("</div>");
                 out.print("</div>");
             }
-
             if (txtPermissions.contains("21")) {
                 out.print("<div class='col-lg-6'>");
                 out.print("<div class='card card-large-icons'>");
@@ -103,7 +99,6 @@ public class Tag_setting extends TagSupport {
                 out.print("</div>");
                 out.print("</div>");
             }
-
             if (txtPermissions.contains("[20]")) {
                 out.print("<div class='col-lg-6'>");
                 out.print("<div class='card card-large-icons'>");
@@ -118,7 +113,6 @@ public class Tag_setting extends TagSupport {
                 out.print("</div>");
                 out.print("</div>");
             }
-
             if (txtPermissions.contains("[1]")) {
                 out.print("<div class='col-lg-6'>");
                 out.print("<div class='card card-large-icons'>");
@@ -133,8 +127,7 @@ public class Tag_setting extends TagSupport {
                 out.print("</div>");
                 out.print("</div>");
             }
-
-            if (txtPermissions.contains("[1]")) {
+            if (txtPermissions.contains("[37]")) {
                 out.print("<div class='col-lg-6'>");
                 out.print("<div class='card card-large-icons'>");
                 out.print("<div class='card-icon bg-primary text-white'>");
@@ -148,8 +141,7 @@ public class Tag_setting extends TagSupport {
                 out.print("</div>");
                 out.print("</div>");
             }
-
-            if (txtPermissions.contains("[1]")) {
+            if (txtPermissions.contains("[72]")) {
                 out.print("<div class='col-lg-6'>");
                 out.print("<div class='card card-large-icons'>");
                 out.print("<div class='card-icon bg-primary text-white'>");
@@ -163,7 +155,7 @@ public class Tag_setting extends TagSupport {
                 out.print("</div>");
                 out.print("</div>");
             }
-            if (txtPermissions.contains("[1]")) {
+            if (txtPermissions.contains("[70]")) {
                 out.print("<div class='col-lg-6'>");
                 out.print("<div class='card card-large-icons'>");
                 out.print("<div class='card-icon bg-primary text-white'>");
@@ -172,7 +164,21 @@ public class Tag_setting extends TagSupport {
                 out.print("<div class='card-body'>");
                 out.print("<h4>Base de conocimiento</h4>");
                 out.print("<p>Modulo encargado de crear y gestionar la base de conocimientos de casos, instructivos o procesos.</p>");
-                out.print("<a href='Knowledge?opt=1' class='card-cta text-primary'>Configurar <i class='fas fa-chevron-right'></i></a>");
+                out.print("<a href='Knowledge?opt=1' class='card-cta text-primary' onclick='cargarDatos()'>Configurar <i class='fas fa-chevron-right'></i></a>");
+                out.print("</div>");
+                out.print("</div>");
+                out.print("</div>");
+            }
+            if (txtPermissions.contains("[70]")) {
+                out.print("<div class='col-lg-6'>");
+                out.print("<div class='card card-large-icons'>");
+                out.print("<div class='card-icon bg-primary text-white'>");
+                out.print("<i class=\"fas fa-lightbulb\"></i>");
+                out.print("</div>");
+                out.print("<div class='card-body'>");
+                out.print("<h4>Buzon de sugerencias</h4>");
+                out.print("<p>Modulo encargado de crear y gestionar la base de conocimientos de casos, instructivos o procesos.</p>");
+                out.print("<a href='Idea?opt=1' class='card-cta text-primary' onclick='cargarDatos()'>Configurar <i class='fas fa-chevron-right'></i></a>");
                 out.print("</div>");
                 out.print("</div>");
                 out.print("</div>");

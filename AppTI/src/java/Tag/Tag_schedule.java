@@ -425,16 +425,16 @@ public class Tag_schedule extends TagSupport {
             out.print("<div><h4>Módulo R-TI-026</h4></div>");
             //<editor-fold defaultstate="collapsed" desc="OPTION">
             out.print("<div class='d-flex'>");
-            out.print("<div><button class=\"btn btn-green mr-4\" style=\"border-radius: 4px;\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\" onclick=\"location.href='Schedule?opt=1&type=" + ((type == 1) ? 2 : 1) + "&module=" + module + "&Year=" + Year + "'\" data-original-title=\"Tipo\"><i class=\"fas fa-" + ((type == 1) ? "server" : "database") + "\"></i></button></div>");
+            out.print("<div><button class=\"btn btn-green mr-4\" style=\"border-radius: 4px;\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\" onclick=\"location.href='Schedule?opt=1&type=" + ((type == 1) ? 2 : 1) + "&module=" + module + "&Year=" + Year + "';cargarDatos()\" data-original-title=\"Tipo\"><i class=\"fas fa-" + ((type == 1) ? "server" : "database") + "\"></i></button></div>");
             if (!activityFilter.equals("")) {
-                out.print("<div><button class=\"btn btn-danger mr-4\" style=\"border-radius: 4px;\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\" onclick=\"location.href='Schedule?opt=1&type=" + type + "&module=" + module + "&Year=" + Year + "'\" data-original-title=\"Filtrar\"><i class=\"fas fa-times\"></i></button></div>");
+                out.print("<div><button class=\"btn btn-danger mr-4\" style=\"border-radius: 4px;\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\" onclick=\"location.href='Schedule?opt=1&type=" + type + "&module=" + module + "&Year=" + Year + "';cargarDatos()\" data-original-title=\"Filtrar\"><i class=\"fas fa-times\"></i></button></div>");
             }
             out.print("<div><button class=\"btn btn-green mr-4\" style=\"border-radius: 4px;\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\" onclick=\"mostrarConvencion(5)\" data-original-title=\"Filtrar\"><i class=\"fas fa-search\"></i></button></div>");
             if (module.equals("Report")) {
-                out.print("<div><button class=\"btn btn-info mr-4\" style=\"border-radius: 4px;\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\"  onclick=\"location.href='Schedule?opt=1&type=" + type + "&module=Schedule&Year=" + Year + "'\" data-original-title=\"Calendario\"><i class=\"fas fa-calendar\"></i></button></div>");
+                out.print("<div><button class=\"btn btn-info mr-4\" style=\"border-radius: 4px;\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\"  onclick=\"location.href='Schedule?opt=1&type=" + type + "&module=Schedule&Year=" + Year + "';cargarDatos()\" data-original-title=\"Calendario\"><i class=\"fas fa-calendar\"></i></button></div>");
                 out.print("<div><button class=\"btn btn-green mr-4\" style=\"border-radius: 4px;\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\"  onclick='EnableDivView(1)' data-original-title=\"Firma Masiva\"><i class=\"fas fa-signature\"></i></button></div>");
             } else {
-                out.print("<div><button class=\"btn btn-info mr-4\" style=\"border-radius: 4px;\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\"  onclick=\"location.href='Schedule?opt=1&type=" + type + "&module=Report&Year=" + Year + "'\" data-original-title=\"Reporte\"><i class=\"fas fa-file-contract\"></i></button></div>");
+                out.print("<div><button class=\"btn btn-info mr-4\" style=\"border-radius: 4px;\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\"  onclick=\"location.href='Schedule?opt=1&type=" + type + "&module=Report&Year=" + Year + "';cargarDatos()\" data-original-title=\"Reporte\"><i class=\"fas fa-file-contract\"></i></button></div>");
             }
             out.print("<div><button class=\"btn btn-green\" style=\"border-radius: 4px;\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\" onclick=\"mostrarConvencion(1)\" data-original-title=\"Registar\"><i class=\"fas fa-plus\"></i></button></div>");
             out.print("</div>");
@@ -478,8 +478,12 @@ public class Tag_schedule extends TagSupport {
                                 out.print("<td class='p-2'><input type='checkbox' class='form-control' disabled></td>");
                                 out.print("<td class='p-2'><span>" + (obj_schedule[4].equals("VERIFICACION DE CONTROL") ? (obj_schedule[4] + " " + obj_schedule[3]) : obj_schedule[4]) + "</span></td>");
                             } else {
-                                out.print("<td class='p-2'><input type='checkbox' class='form-control tst' data-id='" + obj_schedule[0] + "' data-act='" + obj_schedule[4] + "' onclick='MasiveActivity(" + obj_schedule[0] + ");ActivityTextarea(\"" + obj_schedule[4] + "\")'></td>");
-                                out.print("<td class='p-2'><span onclick=\"location.href='Schedule?opt=1&IdSchedule=" + obj_schedule[0] + "&temp=" + temp + "&type=" + type + "&module=" + module + "'\">" + (obj_schedule[4].equals("VERIFICACION DE CONTROL") ? (obj_schedule[4] + " " + obj_schedule[3]) : obj_schedule[4]) + "</span></td>");
+                                out.print("<td class='p-2'>"
+                                        + "<input type='checkbox' class='form-control tst' "
+                                        + "data-id='" + obj_schedule[0] + "' data-act='" + obj_schedule[4] + "' "
+                                        + "onclick='MasiveActivity(" + obj_schedule[0] + ");ActivityTextarea(\"" + obj_schedule[0] + "\", \"" + obj_schedule[4] + "\")'>"
+                                        + "</td>");
+                                out.print("<td class='p-2'><span onclick=\"location.href='Schedule?opt=1&IdSchedule=" + obj_schedule[0] + "&temp=" + temp + "&type=" + type + "&module=" + module + "';cargarDatos()\">" + (obj_schedule[4].equals("VERIFICACION DE CONTROL") ? (obj_schedule[4] + " " + obj_schedule[3]) : obj_schedule[4]) + "</span></td>");
                             }
 
                             if (obj_schedule[6] != null && obj_schedule[10] != null) {

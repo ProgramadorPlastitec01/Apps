@@ -118,7 +118,7 @@ public class Tag_pending extends TagSupport {
                             + "</div>");
                     out.print("<div class='invalid-feedback'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp;¡Indique la solución!.</div>");
                     out.print("<div class='mt-3' style='width: 100%; text-align:center;'>");
-                    out.print("<button class='btn btn-green btn-lg'>Solucionar</button>");
+                    out.print("<button class='btn btn-green btn-lg' onclick='cargarDatos()'>Solucionar</button>");
                     out.print("</div>");
 
                     out.print("</form>");
@@ -243,7 +243,7 @@ public class Tag_pending extends TagSupport {
                             + "</div>");
                     out.print("<div class='invalid-feedback'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp;Debe seleccionar una persona.</div>");
                     out.print("<div class='mt-3' style='width: 100%; text-align:center;'>");
-                    out.print("<button class='btn btn-green btn-lg'>Modificar</button>");
+                    out.print("<button class='btn btn-green btn-lg' onclick='cargarDatos()'>Modificar</button>");
                     out.print("</div>");
                     out.print("</form>");
                 }
@@ -335,7 +335,7 @@ public class Tag_pending extends TagSupport {
                     + "</div>");
 //
             out.print("<div class='' style='width: 100%; text-align:center;'>");
-            out.print("<button class='btn btn-green btn-lg' onclick=''>Registrar</button>");
+            out.print("<button class='btn btn-green btn-lg' onclick='cargarDatos()'>Registrar</button>");
             out.print("</div>");
 
             out.print("</form>");
@@ -392,7 +392,7 @@ public class Tag_pending extends TagSupport {
             out.print("</div>");
 
             out.print("<div class='mt-3' style='width: 100%; text-align:center;'>");
-            out.print("<button class='btn btn-green btn-lg'>Consultar</button>");
+            out.print("<button class='btn btn-green btn-lg' onclick='cargarDatos()'>Consultar</button>");
             out.print("</div>");
 
             out.print("</form>");
@@ -409,13 +409,13 @@ public class Tag_pending extends TagSupport {
             out.print("<h4>Listado de Pendientes " + ((State == 0) ? "Cerrados" : "Abiertos") + "</h4>");
             out.print("<div style='display:flex;'>");
             if (!Search.equals("") || !Filter.equals("")) {
-                out.print("<button class='btn btn-danger mr-4' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Quitar Filtro' onclick='window.location.href=\"Pending?opt=1&State=" + State + "\"' ><i class=\"fas fa-times\"></i></button>");
+                out.print("<button class='btn btn-danger mr-4' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Quitar Filtro' onclick='window.location.href=\"Pending?opt=1&State=" + State + "\";cargarDatos()' ><i class=\"fas fa-times\"></i></button>");
             }
             out.print("<button class='btn btn-green mr-4' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title=' Filtro' onclick='mostrarConvencion(4)' ><i class=\"fas fa-search\"></i></button>");
             if (State == 0) {
-                out.print("<button class='btn btn-green mr-4' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title=' Pendiente Abiertos' onclick='window.location.href=\"Pending?opt=1&State=1\"'><i class=\"fas fa-external-link-alt\"></i></button>");
+                out.print("<button class='btn btn-green mr-4' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title=' Pendiente Abiertos' onclick='window.location.href=\"Pending?opt=1&State=1\";cargarDatos()'><i class=\"fas fa-external-link-alt\"></i></button>");
             } else {
-                out.print("<button class='btn btn-green mr-4' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title=' Pendiente Cerrados' onclick='window.location.href=\"Pending?opt=1&State=0\"'><i class=\"fas fa-history\"></i></button>");
+                out.print("<button class='btn btn-green mr-4' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title=' Pendiente Cerrados' onclick='window.location.href=\"Pending?opt=1&State=0\";cargarDatos()'><i class=\"fas fa-history\"></i></button>");
             }
             if (Permissions.contains("[30]")) {
                 out.print("<button class='btn btn-green' style='border-radius: 4px;'  data-toggle='tooltip' data-placement='top' title='Registar' onclick='mostrarConvencion(1)'><i class='fas fa-plus'></i></button>");
@@ -570,10 +570,10 @@ public class Tag_pending extends TagSupport {
                     if (State == 1) {
                         out.print("<div class='DivButtonPending'>");
                         if (Permissions.contains("[31]")) {
-                            out.print("<div class='buttomsPending'><button class='btn btn-info' type='button' data-toggle='tooltip' data-placement='top' onclick=\"javascript:location.href='Pending?opt=1&IdPending=" + obj_pending[0] + "&State=1'\" title='Editar'><i class='fas fa-edit'></i></button></div>");
+                            out.print("<div class='buttomsPending'><button class='btn btn-info' type='button' data-toggle='tooltip' data-placement='top' onclick=\"javascript:location.href='Pending?opt=1&IdPending=" + obj_pending[0] + "&State=1';cargarDatos()\" title='Editar'><i class='fas fa-edit'></i></button></div>");
                         }
                         if (Permissions.contains("[32]")) {
-                            out.print("<div class='buttomsPending'><button class='btn btn-success' type='button' data-toggle='tooltip' data-placement='top' onclick=\"javascript:location.href='Pending?opt=1&IdPending=" + obj_pending[0] + "&Temp=3&State=1'\"  title='Ejecutar'><i class='far fa-paper-plane' ></i></button></div>");
+                            out.print("<div class='buttomsPending'><button class='btn btn-success' type='button' data-toggle='tooltip' data-placement='top' onclick=\"javascript:location.href='Pending?opt=1&IdPending=" + obj_pending[0] + "&Temp=3&State=1';cargarDatos()\"  title='Ejecutar'><i class='far fa-paper-plane' ></i></button></div>");
                         }
                         out.print("</div>");
                     }

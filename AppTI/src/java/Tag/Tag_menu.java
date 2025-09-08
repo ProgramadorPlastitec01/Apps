@@ -139,7 +139,7 @@ public class Tag_menu extends TagSupport {
             out.print("<label><b>Modulo</b></label>");
             out.print("<div class=\"form-group\">\n"
                     + "                      <div class=\"row gutters-sm\">\n"
-                    + "                        <div class=\"col-7 col-sm-4\" data-toggle='tooltip' data-placement='top' title='Bitacora'>\n"
+                    + "                        <div class=\"col-7 col-sm-6\" data-toggle='tooltip' data-placement='top' title='Bitacora'>\n"
                     + "                          <label class=\"imagecheck mb-4\">\n"
                     + "                            <input name=\"imagecheck\" type=\"checkbox\"  onclick='MassiveId(this.value)' value=\"1\" class=\"imagecheck-input\"  />\n"
                     + "                            <figure class=\"imagecheck-figure\">\n"
@@ -147,19 +147,11 @@ public class Tag_menu extends TagSupport {
                     + "                            </figure>\n"
                     + "                          </label>\n"
                     + "                        </div>\n"
-                    + "                        <div class=\"col-7 col-sm-4\" data-toggle='tooltip' data-placement='top' title='Pendiente'>\n"
+                    + "                        <div class=\"col-7 col-sm-6\" data-toggle='tooltip' data-placement='top' title='Pendiente'>\n"
                     + "                          <label class=\"imagecheck mb-4\">\n"
                     + "                            <input name=\"imagecheck\" type=\"checkbox\" onclick='MassiveId(this.value)' value=\"2\" class=\"imagecheck-input\" />\n"
                     + "                            <figure class=\"imagecheck-figure\">\n"
                     + "                              <img src=\"Interface/Imagen/Bell.jpg\" alt=\"}\" class=\"imagecheck-image ImgFilter\">\n"
-                    + "                            </figure>\n"
-                    + "                          </label>\n"
-                    + "                        </div>\n"
-                    + "                        <div class=\"col-7 col-sm-4\" data-toggle='tooltip' data-placement='top' title='Ticket'>\n"
-                    + "                          <label class=\"imagecheck mb-4\">\n"
-                    + "                            <input name=\"imagecheck\" type=\"checkbox\" onclick='MassiveId(this.value)' value=\"3\" class=\"imagecheck-input\"  />\n"
-                    + "                            <figure class=\"imagecheck-figure\">\n"
-                    + "                              <img src=\"Interface/Imagen/Ticket.jpg\" alt=\"}\" class=\"imagecheck-image ImgFilter\">\n"
                     + "                            </figure>\n"
                     + "                          </label>\n"
                     + "                        </div>\n"
@@ -169,7 +161,7 @@ public class Tag_menu extends TagSupport {
             out.print("</div>");
 
             out.print("<div class='mt-2 text-center'>");
-            out.print("<button class='btn btn-green'>Consulta</button>");
+            out.print("<button class='btn btn-green' onclick='cargarDatos()'>Consulta</button>");
             out.print("</div>");
 
             out.print("<input type='hidden' name='Module' id='IdModule'>");
