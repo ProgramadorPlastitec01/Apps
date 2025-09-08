@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import Controller.ItemJpaController;
+import Controller.AreaControllerJpa;
+
 public class Tag_device extends TagSupport {
 
     @Override
@@ -17,7 +20,11 @@ public class Tag_device extends TagSupport {
         JspWriter out = pageContext.getOut();
         //<editor-fold defaultstate="collapsed" desc="DECLARATIONS">
         DeviceJpaController DeviceJpa = new DeviceJpaController();
+        ItemJpaController ItemJpa = new ItemJpaController();
+        AreaControllerJpa AreaJpa = new AreaControllerJpa();
         List lst_device = null;
+        List lst_item = null;
+        List lst_area = null;
         int action = 0, idTypeDv = 0, steDv = 0;
         try {
             action = Integer.parseInt(pageContext.getRequest().getAttribute("act").toString());
@@ -47,6 +54,91 @@ public class Tag_device extends TagSupport {
                 //</editor-fold>
             } else if (action == 1) {
                 //<editor-fold defaultstate="collapsed" desc="LIST DEVICE">
+
+                //<editor-fold defaultstate="collapsed" desc="DEVICE REGISTER">
+                out.print("<div class='sweet-local' tabindex='-1' id='Ventana1' style='opacity: 1.03; display:block;'>");
+                out.print("<div class='contGeneral' style='width: 50%; right: 18%;'>");
+                out.print("<div style='display: flex; justify-content: space-between'>");
+                out.print("<h4>Registrar Dispositivos </h4>");
+                out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(1)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
+                out.print("</div>");
+                out.print("<div class='cont_form_user'>");
+
+                out.print("<div class='d-flex' style='justify-content: space-evenly;'>");
+                out.print("<div class=''>");
+
+                out.print("<span class=''>Item</span>");
+                out.print("<div class='' data-toggle='tooltip' data-placement='top' title='' style='margin: 12px -12px 12px 12px;'>");
+                out.print("<select id='slctDta2' class='form-control select2' name='cbx_Item' >");
+                out.print("<option selected disabled>Seleccionar</option>");
+                lst_item = ItemJpa.ConsultItemAvaibleDetail();
+                if (lst_item != null) {
+                    for (int i = 0; i < lst_item.size(); i++) {
+                        Object[] Objitm = (Object[]) lst_item.get(i);
+                        out.print("<option value='" + Objitm[0] + "'> " + Objitm[1].toString() + " - " + Objitm[2].toString() + "</option>");
+                    }
+                } else {
+                    out.print("<option value='0'></option>");
+                }
+                out.print("</select>");
+                out.print("</div>");
+
+                out.print("<span class=''>Cargo</span>");
+                out.print("<input type='text' class='form-control' name='txt_chargue' id='' data-toggle='tooltip' data-placement='top' title='' value=''>");
+
+                out.print("<span class=''>Nombre</span>");
+                out.print("<input type='text' class='form-control' name='txt_name' id='' data-toggle='tooltip' data-placement='top' title='' value=''>");
+
+                out.print("<span class=''>Serial</span>");
+                out.print("<input type='text' class='form-control' name='txt_serial' id='' data-toggle='tooltip' data-placement='top' title='' value=''>");
+                out.print("</div>");
+
+                out.print("<div class=''>");
+
+                out.print("<span class=''>Consecutivo</span>");
+                lst_item = ItemJpa.ConsultLastItem();
+                int consec = 0;
+                if (lst_item != null) {
+                    Object[] Objit = (Object[]) lst_item.get(0);
+                    consec = Integer.parseInt(Objit[1].toString()) + 1;
+                }
+                out.print("<input type='number' class='form-control' name='nmb_consec' id='' data-toggle='tooltip' data-placement='top' title='' value='" + consec + "'>");
+
+                out.print("<span class=''>Responsable</span>");
+                out.print("<input type='text' class='form-control' name='txt_respo' id='' data-toggle='tooltip' data-placement='top' title='' value=''>");
+
+                out.print("<span class=''>Area</span>");
+                out.print("<div class='' data-toggle='tooltip' data-placement='top' title='' style='margin: 12px -12px 12px 12px;'>");
+                out.print("<select id='slctDta' class='form-control select2' name='cbx_area'>");
+                out.print("<option selected disabled>Seleccionar area</option>");
+                lst_area = AreaJpa.ConsultAreaActive();
+                if (lst_area != null) {
+                    for (int i = 0; i < lst_area.size(); i++) {
+                        Object[] ObjArea = (Object[]) lst_area.get(i);
+                        out.print("<option value='" + ObjArea[0] + "' data-toggle='tooltip' data-placement='top' title='prueba'>" + ObjArea[1].toString() + "</option>");
+                    }
+                } else {
+                    out.print("<option value='0'>Error</option>");
+
+                }
+                out.print("</select>");
+                out.print("</div>");
+
+                out.print("<span class=''>Ubicación</span>");
+                out.print("<input type='text' class='form-control' name='txt_location' id='' data-toggle='tooltip' data-placement='top' title='' value=''>");
+                out.print("</div>");
+                out.print("</div>");
+
+                out.print("<div class='text-center'>");
+                out.print("<button class='btn btn-green'>Registrar</button>");
+                out.print("</div>");
+
+                out.print("</div>");
+                out.print("</div>");
+                out.print("</div>");
+
+                //</editor-fold>
+                //<editor-fold defaultstate="collapsed" desc="DEVICE LIST">
                 out.print("<section class='section'>");
                 out.print("<div class='section-body'>");
                 out.print("<div class='row'>");
@@ -58,24 +150,48 @@ public class Tag_device extends TagSupport {
                 out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1)'><i class='fas fa-plus'></i></button>");
                 out.print("</div>");
 
-                out.print("<div class='mt-2 w-100'>");
-                out.print("<input type='text' class='form-control col-lg-8' style='margin: auto;text-align:center;' name='' id='' data-toggle='tooltip' data-placement='top' placeholder='Buscar...' title='Buscar...' value=''>");
+                out.print("<div class='mt-4 w-100 d-flex' style='justify-content: space-between;'>");
+                //<editor-fold defaultstate="collapsed" desc="FILTER AND BUTTONS">
+                int est1 = 0, est2 = 0, est3 = 0;
+                lst_device = DeviceJpa.ConsultDeviceCouter();
+                if (lst_device != null) {
+                    try {
+                        Object[] ObDv = (Object[]) lst_device.get(0);
+                        est1 = Integer.parseInt(ObDv[0].toString());
+                        est2 = Integer.parseInt(ObDv[1].toString());
+                        est3 = Integer.parseInt(ObDv[2].toString());
+                    } catch (Exception e) {
+                    }
+                }
+
+                out.print("<div class='col-lg-4'>");
+                out.print("<input type='text' class='form-control' name='' id='myInput' placeholder='Buscar...' style='border: 1px solid #afafaf;' >");
+                out.print("</div>");
+                out.print("<div class='col-lg-4 d-flex justify-content-end'>");
+                if (steDv > 0) {
+                    out.print("<button class='btn btn-green mr-2' onclick='window.location.href=\"Device?opt=1&act=1&idTypeDv=" + idTypeDv + "\"'><i class=\"fas fa-times\"></i> </button>");
+                }
+                out.print("<button class='btn btn-success mr-2' onclick='window.location.href=\"Device?opt=1&act=1&idTypeDv=" + idTypeDv + "&steDv=1\"'><i class=\"fas fa-clipboard-check\"></i> Bueno (" + est1 + ")</button>");
+                out.print("<button class='btn btn-warning mr-2' onclick='window.location.href=\"Device?opt=1&act=1&idTypeDv=" + idTypeDv + "&steDv=2\"'><i class=\"fas fa-folder-open\"></i> Revisión (" + est2 + ")</button>");
+                out.print("<button class='btn btn-danger mr-2' onclick='window.location.href=\"Device?opt=1&act=1&idTypeDv=" + idTypeDv + "&steDv=3\"'><i class=\"fas fa-folder-minus\"></i> De baja (" + est3 + ")</button>");
+                out.print("</div>");
+                //</editor-fold>
                 out.print("</div>");
 
-                out.print("<div class='card-body'>");
-                if (steDv > 1) {
+                out.print("<div class='card-body mt-3'>");
+                //<editor-fold defaultstate="collapsed" desc="LSIT DATA">
+                if (steDv > 0) {
                     lst_device = DeviceJpa.ConsultDevice_type_ste(idTypeDv, steDv);
                 } else {
                     lst_device = DeviceJpa.ConsultDevice_type_All(idTypeDv);
                 }
                 out.print("<div class='row justify-content-around' id='container'>");
                 if (lst_device != null) {
-
                     for (int i = 0; i < lst_device.size(); i++) {
+                        //<editor-fold defaultstate="collapsed" desc="SQUARE LIST">
                         Object[] ObjDev = (Object[]) lst_device.get(i);
                         int stedv = Integer.parseInt(ObjDev[5].toString());
-                        out.print("<div class='col-lg-3 mb-4 mr-2 dvList' style='border-bottom: 1px solid #"+ ((stedv == 1) ? "63ed7a" : (stedv == 2) ? "ffa426" : "fc544b") +";'>");
-
+                        out.print("<div class='col-lg-3 mb-4 mr-2 dvList single-item' style='border-bottom: 1px solid #" + ((stedv == 1) ? "63ed7a" : (stedv == 2) ? "ffa426" : "fc544b") + ";'>");
                         out.print("<div class='conscDv'>");
                         out.print("<span>" + ObjDev[3] + "</span>");
                         out.print("</div>");
@@ -96,14 +212,15 @@ public class Tag_device extends TagSupport {
                         out.print("<button class='btn btn-green btn-sm'><i class=\"fas fa-link\"></i></button>");
                         out.print("</div>");
                         out.print("</div>");
-
                         out.print("</div>");
+                        //</editor-fold>
                     }
                 } else {
                     out.print("<div class='col-lg-5 mb-4 mr-2 dvList'>");
                     out.print("<h5>No se ha encontrado información relacionada!</h5>");
                     out.print("</div>");
                 }
+                //</editor-fold>
                 out.print("</div>");
 
                 out.print("</div>");
@@ -112,6 +229,8 @@ public class Tag_device extends TagSupport {
                 out.print("</div>");
                 out.print("</div>");
                 out.print("</section>");
+                //</editor-fold>
+
                 //</editor-fold>
             } else if (action == 0) {
                 //<editor-fold defaultstate="collapsed" desc="MAIN LIST">

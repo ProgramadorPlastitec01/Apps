@@ -9,20 +9,27 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+
+import Controller.DeviceJpaController;
+
 public class Device extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("utf-8");
-
+        
+        DeviceJpaController DeviceJpa = new DeviceJpaController();
+        
         HttpSession sesion = request.getSession();
         int opt = Integer.parseInt(request.getParameter("opt"));
-        int idTypeDv = 0, steDv = 0, act = 0;
-
+        int idTypeDv = 0, steDv = 0, act = 0, itm = 0, consect = 0, idArea = 0;
+        String chargue = "", respon = "", nameDv = "", serial = "", location = "";
+        boolean result = false;
         try {
             switch (opt) {
                 case 1:
+                    //<editor-fold defaultstate="collapsed" desc="MAIN MODULE">
                     try {
                         act = Integer.parseInt(request.getParameter("act"));
                     } catch (Exception e) {
@@ -42,6 +49,62 @@ public class Device extends HttpServlet {
                     request.setAttribute("idTypeDv", idTypeDv);
                     request.setAttribute("steDv", steDv);
                     request.getRequestDispatcher("Device.jsp").forward(request, response);
+                    //</editor-fold>
+                    break;
+                case 2:
+                    //<editor-fold defaultstate="collapsed" desc="REGISTER">
+                    try {
+                        act = Integer.parseInt(request.getParameter("act"));
+                    } catch (Exception e) {
+                        act = 0;
+                    }
+                    try {
+                        idTypeDv = Integer.parseInt(request.getParameter("idTypeDv"));
+                    } catch (Exception e) {
+                        idTypeDv = 0;
+                    }
+                    try {
+                        consect = Integer.parseInt(request.getParameter("idTypeDv"));
+                    } catch (Exception e) {
+                        consect = 0;
+                    }
+                    
+                    try {
+                        chargue = request.getParameter("idTypeDv");
+                    } catch (Exception e) {
+                        chargue = "";
+                    }
+                    try {
+                        respon = request.getParameter("idTypeDv");
+                    } catch (Exception e) {
+                        respon = "";
+                    }
+                    try {
+                        nameDv = request.getParameter("idTypeDv");
+                    } catch (Exception e) {
+                        nameDv = "";
+                    }
+                    try {
+                        idArea = Integer.parseInt(request.getParameter("idTypeDv"));
+                    } catch (Exception e) {
+                        idArea = 0;
+                    }
+                    try {
+                        serial = request.getParameter("idTypeDv");
+                    } catch (Exception e) {
+                        serial = "";
+                    }
+                    try {
+                        location = request.getParameter("idTypeDv");
+                    } catch (Exception e) {
+                        location = "";
+                    }
+                    
+                    
+                    
+
+                    request.getRequestDispatcher("Device?opt=1&act=" + act + "&idTypeDv=" + idTypeDv + "").forward(request, response);
+//</editor-fold>
                     break;
             }
         } catch (Exception e) {

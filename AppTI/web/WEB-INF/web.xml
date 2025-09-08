@@ -145,10 +145,10 @@
         <servlet-class>Servlet.ActivitySystem</servlet-class>
     </servlet>
     <servlet>
-<<<<<<< HEAD
         <servlet-name>Device</servlet-name>
         <servlet-class>Servlet.Device</servlet-class>
-=======
+    </servlet>
+    <servlet>
         <servlet-name>Knowledge</servlet-name>
         <servlet-class>Servlet.Knowledge</servlet-class>
     </servlet>
@@ -159,7 +159,6 @@
     <servlet>
         <servlet-name>KnowledgeView</servlet-name>
         <servlet-class>Servlet.KnowledgeView</servlet-class>
->>>>>>> e5f48512871417c0ccc9aa3eb965f549bf827d85
     </servlet>
     <servlet-mapping>
         <servlet-name>User</servlet-name>
@@ -308,14 +307,17 @@
     <servlet-mapping>
         <servlet-name>Device</servlet-name>
         <url-pattern>/Device</url-pattern>
-
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>Knowledge</servlet-name>
         <url-pattern>/Knowledge</url-pattern>
     </servlet-mapping>
+    
     <servlet-mapping>
         <servlet-name>DownloadKnowledge</servlet-name>
         <url-pattern>/DownloadKnowledge</url-pattern>
     </servlet-mapping>
+    
     <servlet-mapping>
         <servlet-name>KnowledgeView</servlet-name>
         <url-pattern>/KnowledgeView</url-pattern>

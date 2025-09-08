@@ -80,7 +80,7 @@ public class DeviceJpaController implements Serializable {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
         try {
-            Query q = etm.createNativeQuery("CALL `Sp_dce_c_ConsultDevice_ste`(" + idTypeDv + ")");
+            Query q = etm.createNativeQuery("CALL `Sp_dce_c_ConsultDevice_ste`(" + idTypeDv + ", " + ste + ")");
             List consulta = q.getResultList();
             etm.getTransaction().commit();
             etm.clear();
@@ -119,6 +119,25 @@ public class DeviceJpaController implements Serializable {
         etm.getTransaction().begin();
         try {
             Query q = etm.createNativeQuery("CALL `Sp_dce_c_ConsultDevice_steR`(" + idTypeDv + ")");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public List ConsultDeviceCouter() {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_dce_c_ConsultCouterDeviceSte`()");
             List consulta = q.getResultList();
             etm.getTransaction().commit();
             etm.clear();
