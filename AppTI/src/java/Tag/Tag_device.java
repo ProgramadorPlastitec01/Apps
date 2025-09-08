@@ -12,6 +12,8 @@ import java.util.logging.Logger;
 
 import Controller.ItemJpaController;
 import Controller.AreaControllerJpa;
+import Controller.DeviceHeaderJpaController;
+import Controller.TypeSecuenceJpaController;
 
 public class Tag_device extends TagSupport {
 
@@ -22,10 +24,19 @@ public class Tag_device extends TagSupport {
         DeviceJpaController DeviceJpa = new DeviceJpaController();
         ItemJpaController ItemJpa = new ItemJpaController();
         AreaControllerJpa AreaJpa = new AreaControllerJpa();
+        DeviceHeaderJpaController DeviceHead = new DeviceHeaderJpaController();
+        TypeSecuenceJpaController SecuenceJpa = new TypeSecuenceJpaController();
+
         List lst_device = null;
+        List lst_deviceHead = null;
+        List lst_typeDevice = null;
         List lst_item = null;
         List lst_area = null;
-        int action = 0, idTypeDv = 0, steDv = 0;
+        List lst_secuence = null;
+
+        int action = 0, idTypeDv = 0, steDv = 0, idDevice = 0, state = 0;
+        String nameDevice = "", typeDvName = "";
+        String[] structure = {};
         try {
             action = Integer.parseInt(pageContext.getRequest().getAttribute("act").toString());
         } catch (Exception e) {
@@ -42,21 +53,304 @@ public class Tag_device extends TagSupport {
             steDv = 0;
         }
 
+        try {
+            idDevice = Integer.parseInt(pageContext.getRequest().getAttribute("idDevice").toString());
+        } catch (Exception e) {
+            idDevice = 0;
+        }
+        lst_device = DeviceJpa.ConsultDevicexId(idDevice);
+        if (lst_device != null) {
+            Object[] ObjDvGen = (Object[]) lst_device.get(0);
+            nameDevice = ObjDvGen[3].toString();
+            typeDvName = ObjDvGen[14].toString();
+        }
+
         //</editor-fold>
         try {
-            if (action == 3) {
+            if (action == 4) {
                 //<editor-fold defaultstate="collapsed" desc="DEVICE DOCUMENT">
+
+//</editor-fold>
+            } else if (action == 3) {
+                //<editor-fold defaultstate="collapsed" desc="DEVICE DETAIL">
+                int idDeviceHead = 0;
+                try {
+                    idDeviceHead = Integer.parseInt(pageContext.getRequest().getAttribute("idDeviceHead").toString());
+                } catch (Exception e) {
+                    idDeviceHead = 0;
+                }
+
+                out.print("<section class='section'>");
+                out.print("<div class='section-body'>");
+                out.print("<div class='row'>");
+                out.print("<div class='col-12'>");
+                out.print("<div class='card'>");
+                out.print("<div class='card-header' style='justify-content: space-between;'>");
+                out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1)'><i class='fas fa-plus'></i></button>");
+                out.print("<div><h4>Documentacion</h4><h2>" + nameDevice + "</h2></div>");
+                out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1)'><i class='fas fa-plus'></i></button>");
+                out.print("</div>");
+                out.print("<div class='card-body'>");
+                out.print("<div class='table-responsive'>");
+
+                lst_deviceHead = DeviceHead.ConsultDeviceHeaderIdHead(idDeviceHead);
+                if (lst_deviceHead != null) {
+                    Object[] ObjDvHe= (Object[]) lst_deviceHead.get(0);
+                    structure = ObjDvHe[3].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+
+                    out.print("<div class='card'>");
+                    out.print("<div class=\"row mt-4\" style='width: 100%; justify-content: center;'>");
+                    out.print("<div class=\"col-12\">");
+                    out.print("<div class=\"wizard-steps\" style='display: flex; flex-wrap: wrap; justify-content: center;'>");
+                    
+                    state = Integer.parseInt(ObjDvHe[4].toString());
+                    for (int i = 1; i < structure.length; i++) {
+                        String[] idxnamexico = structure[i].toString().split("/");
+                        int id = 0;
+                        String name = idxnamexico[1].toString();
+                        String ico = idxnamexico[2].toString();
+                        if (!idxnamexico[0].toString().equals("A")) {
+                            id = Integer.parseInt(idxnamexico[0].toString());
+                        }
+
+                        if (i == state) {
+                            out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"Computer?opt=1&mod=3&IdComputer=" + IdComputer + "&idDoc=" + id + "&idpcHead=" + idPcHead + "&type=" + structure[i] + "&step=" + i + "\"' style='background: #33bf98; color:#0b0025; cursor: pointer;' data-toggle='tooltip' data-placement='top' title='En proceso'>");
+                            out.print("<div class=\"wizard-step-icon\">");
+                            out.print("<i class=\"" + ico + "\"></i>");
+                            out.print("</div>");
+                            out.print("<div class=\"wizard-step-label\">");
+                            out.print(name);
+                            out.print("<div style='position: absolute;bottom: 2px;left: 47%;'>");
+                            out.print("<p style='margin: 0;'><i class=\"fas fa-spinner fa-spin\"></i></p>");
+                            out.print("</div>");
+                            out.print("</div>");
+                            out.print("</div>");
+                        } else if (i > state) {
+                            out.print("<div class=\"wizard-step wizard-step-active addStepCls\" style='opacity: 0.5;background: #0b002599; cursor: no-drop;' data-toggle='tooltip' data-placement='top' title='Aún no disponible'>");
+                            out.print("<div class=\"wizard-step-icon\">");
+                            out.print("<i class=\"" + ico + "\"></i>");
+                            out.print("</div>");
+                            out.print("<div class=\"wizard-step-label\">");
+                            out.print(name);
+                            out.print("<div style='position: absolute;bottom: 2px;left: 24%;'>");
+                            out.print("<p style='margin: 0;'>-&nbsp;Pendiente&nbsp;-</p>");
+                            out.print("</div>");
+                            out.print("</div>");
+                            out.print("</div>");
+                        } else {
+                            lst_compDetail = ComDetail.ConsultComputerDetailxPCxType(idPcHead, name);
+                            if (lst_compDetail != null) {
+                                Object[] ObSt = (Object[]) lst_compDetail.get(0);
+                                if (ObSt[5].toString().contains("XX")) {
+                                    out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"Computer?opt=1&mod=3&IdComputer=" + IdComputer + "&idDoc=" + id + "&idpcHead=" + idPcHead + "&type=" + structure[i] + "&step=" + i + "\"' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
+                                    out.print("<div class=\"wizard-step-icon\">");
+                                    out.print("<i class=\"" + ico + "\"></i>");
+                                    out.print("</div>");
+                                    out.print("<div class=\"wizard-step-label\" style='margin-bottom: 6px;'>");
+                                    out.print(name);
+                                    out.print("<div style='position: absolute;bottom: 5px;left: -5px;'>");
+                                    out.print("<p style='margin: 0; width: 170px; background: #ffa426;border-radius: 3px;'><b><b class='text-black'>Pendiente Firma</b></b> &nbsp; <i class='fas fa-signature'></i></p>");
+                                    out.print("</div>");
+                                    out.print("</div>");
+                                    out.print("</div>");
+                                } else {
+                                    int steDet = Integer.parseInt(ObSt[6].toString());
+                                    if (steDet == 0) {
+                                        out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"Computer?opt=1&mod=3&IdComputer=" + IdComputer + "&idDoc=" + id + "&idpcHead=" + idPcHead + "&type=" + structure[i] + "&step=" + i + "\"' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
+                                        out.print("<div class=\"wizard-step-icon\">");
+                                        out.print("<i class=\"" + ico + "\"></i>");
+                                        out.print("</div>");
+                                        out.print("<div class=\"wizard-step-label\" style='margin-bottom: 6px;'>");
+                                        out.print(name);
+                                        out.print("<div style='position: absolute;bottom: 5px;left: -5px;'>");
+                                        out.print("<p style='margin: 0; width: 170px; background: #ffa426;border-radius: 3px;'><b><b class='text-warning'>Pendiente Firma</b></b> &nbsp; <i class='fas fa-signature'></i></p>");
+                                        out.print("</div>");
+                                        out.print("</div>");
+                                        out.print("</div>");
+                                    } else if (steDet == 2) {
+//                                    out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"AppDetail?opt=1&mod=3&idApp\"' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
+                                        out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"Computer?opt=1&mod=3&IdComputer=" + IdComputer + "&idDoc=" + id + "&idpcHead=" + idPcHead + "&type=" + structure[i] + "&step=" + i + "\"' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
+                                        out.print("<div class=\"wizard-step-icon\">");
+                                        out.print("<i class=\"" + ico + "\"></i>");
+                                        out.print("</div>");
+                                        out.print("<div class=\"wizard-step-label\" style='margin-bottom: 6px;'>");
+                                        out.print(name);
+                                        out.print("<div style='position: absolute;bottom: 5px;left: -5px;'>");
+                                        out.print("<p style='margin: 0; width: 170px; background: #33bf98;border-radius: 3px;'><b>Realizado</b> &nbsp; <i class=\"fas fa-check\"></i></p>");
+                                        out.print("</div>");
+                                        out.print("</div>");
+                                        out.print("</div>");
+                                    } else {
+                                        out.print("<div class=\"wizard-step wizard-step-active addStepCls\" style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
+                                        out.print("<div class=\"wizard-step-icon\">");
+                                        out.print("<i class='<i class=\"fas fa-exclamation-triangle\"></i>'></i>");
+                                        out.print("</div>");
+                                        out.print("<div class=\"wizard-step-label\" style='margin-bottom: 6px;'>");
+                                        out.print("Error");
+                                        out.print("<div style='position: absolute;bottom: 5px;left: -5px;'>");
+                                        out.print("<p style='margin: 0; width: 170px; background: #33bf98;border-radius: 3px;'><b>Error</b> &nbsp; <i class=\"fas fa-check\"></i></p>");
+                                        out.print("</div>");
+                                        out.print("</div>");
+                                        out.print("</div>");
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                    
+                }
+
+                out.print("</div>");
+                out.print("</div>");
+                out.print("</div>");
+                out.print("</div>");
+                out.print("</div>");
+                out.print("</div>");
+                out.print("</section>");
 
                 //</editor-fold>
             } else if (action == 2) {
-                //<editor-fold defaultstate="collapsed" desc="DEVICE DETAIL">
+                //<editor-fold defaultstate="collapsed" desc="DEVICE LIST DETAIL">
+
+                //<editor-fold defaultstate="collapsed" desc="REGISTER EVENT">
+                out.print("<div class='sweet-local' tabindex='-1' id='Ventana1' style='opacity: 1.03; display:none;'>");
+                out.print("<div class='contGeneral' style='width: 44%;'>");
+                out.print("<div style='display: flex; justify-content: space-between'>");
+                out.print("<h2>Nuevo evento</h2>");
+                out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(1)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
+                out.print("</div>");
+                out.print("<div class='cont_form_user'>");
+
+                out.print("<form action='Device?opt=3' method='post' class='needs-validation' novalidate=''>");
+
+                out.print("<input type='hidden' name='idTypeDv' value='" + idTypeDv + "'>");
+                out.print("<input type='hidden' name='idDevice' value='" + idDevice + "'>");
+
+                out.print("<div class='text-center' style='justify-content: center;'>");
+                out.print("<span class='mb-2 mt-2'><b>Fecha</b></span>");
+                out.print("<input type='date' style='margin: auto;' class='form-control col-lg-8 mb-2' name='txtDte' id='' data-toggle='tooltip' data-placement='top' title='' value='' required>");
+                out.print("</div>");
+
+                out.print("<div class='text-center mt-4'>");
+                out.print("<span class=''><b>Seleccionar tipo de proceso</b></span>");
+                out.print("<div class='mt-2'>");
+                lst_secuence = SecuenceJpa.ConsultSecuenceByType("Device");
+                out.print("<select class='form-control col-lg-8' name='CbxDvType' style='margin: auto;' required>");
+                out.print("<option value='' disabled selected >Seleccionar un tipo</option>");
+                if (lst_secuence != null) {
+                    for (int i = 0; i < lst_secuence.size(); i++) {
+                        Object[] ObjAp = (Object[]) lst_secuence.get(i);
+                        String struc = ObjAp[2].toString();
+                        out.print("<option value='" + struc + "'>" + struc.replace("][", "///").replace("[", "").replace("]", "").split("///")[0] + "</option>");
+                    }
+
+                } else {
+                    out.print("<option value='' disabled>Ha ocurrido un error.</option>");
+                }
+                out.print("</select>");
+                out.print("</div>");
+                out.print("</div>");
+
+                out.print("<div class='text-center mt-4'>");
+                out.print("<button class='btn btn-green'>Registrar</button>");
+                out.print("</div>");
+
+                out.print("</form>");
+
+                out.print("</div>");
+                out.print("</div>");
+                out.print("</div>");
+//</editor-fold>
+
+                //<editor-fold defaultstate="collapsed" desc="LIST EVENTS">
+                out.print("<section class='section'>");
+                out.print("<div class='section-body'>");
+                out.print("<div class='row'>");
+                out.print("<div class='col-12'>");
+                out.print("<div class='card'>");
+                out.print("<div class='card-header' style='justify-content: space-between;'>");
+                out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='window.location.href=\"Device?opt=1&act=1&idTypeDv=" + idTypeDv + "\"'><i class='fas fa-arrow-left'></i></button>");
+                out.print("<h2> " + nameDevice + " </h2>");
+                out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1)'><i class='fas fa-plus'></i></button>");
+                out.print("</div>");
+                out.print("<div class='card-body'>");
+                out.print("<div class='table-responsive'>");
+
+                out.print("<table class='table table-bordered' id='table-1'>");
+                out.print("<thead>");
+                out.print("<tr>");
+                out.print("<th>Fecha</th>");
+                out.print("<th>Tipo</th>");
+                out.print("<th>Usuario Registro</th>");
+                out.print("<th>Fecha Registro</th>");
+                out.print("<th>Estado</th>");
+                out.print("<th>Opc</th>");
+                out.print("</tr>");
+                out.print("</thead>");
+                out.print("<tbody>");
+
+                lst_deviceHead = DeviceHead.ConsultDeviceHeaderId(idDevice);
+                if (lst_deviceHead != null) {
+                    for (int i = 0; i < lst_deviceHead.size(); i++) {
+                        Object[] Objdevice = (Object[]) lst_deviceHead.get(i);
+                        out.print("<tr>");
+                        int sta = Integer.parseInt(Objdevice[4].toString());
+                        out.print("<td>" + Objdevice[2] + "</td>");
+                        String struc = Objdevice[3].toString().replace("][", "///").replace("[", "").replace("]", "").split("///")[0];
+                        out.print("<td><b>" + struc + "</b></td>");
+                        out.print("<td>" + Objdevice[7] + "</td>");
+                        out.print("<td>" + Objdevice[8] + "</td>");
+                        String[] states = Objdevice[3].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                        String[] stat = {};
+                        if (sta >= states.length) {
+                            if (Objdevice[9] != null) {
+                                String[] dataDetail = Objdevice[9].toString().split("--");
+                                out.print("<td>Pendiente documento por firmar<br> &nbsp; <i class=\"fas fa-signature\"></i> <b class='text-warning'>" + dataDetail[0] + "</b></td>");
+                            } else {
+                                out.print("<td>Documento Finalizado</td>");
+                            }
+
+                        } else {
+                            stat = states[sta].split("/");
+                            out.print("<td>" + stat[1] + "</td>");
+                        }
+                        out.print("<td class='text-center'>");
+                        out.print("<button class='btn btn-yellow' onclick='window.location.href=\"\"'><i class='fas fa-folder-open'></i></button>");
+                        out.print("</td>");
+                        out.print("</tr>");
+                    }
+                } else {
+                    out.print("<tr>");
+                    out.print("<td class='text-center' colspan='6'><span style='font-size: 20px; font-weight: bold;'>No se han encontrado eventos, puedes registrar el primero haciendo clic sobre el boton <i class='fas fa-plus'></i></span></td>");
+                    out.print("</tr>");
+                }
+                out.print("</tbody>");
+                out.print("</table>");
+
+                out.print("</div>");
+                out.print("</div>");
+                out.print("</div>");
+                out.print("</div>");
+                out.print("</div>");
+                out.print("</div>");
+                out.print("</section>");
+                //</editor-fold>
 
                 //</editor-fold>
             } else if (action == 1) {
                 //<editor-fold defaultstate="collapsed" desc="LIST DEVICE">
+                String nameDv = "";
+                lst_typeDevice = DeviceJpa.ConsultTypeDeviceId(idTypeDv);
+                if (lst_typeDevice != null) {
+                    Object[] Objtpe = (Object[]) lst_typeDevice.get(0);
+                    nameDv = Objtpe[1].toString();
+                } else {
+                    nameDv = "";
+                }
 
                 //<editor-fold defaultstate="collapsed" desc="DEVICE REGISTER">
-                out.print("<div class='sweet-local' tabindex='-1' id='Ventana1' style='opacity: 1.03; display:block;'>");
+                out.print("<div class='sweet-local' tabindex='-1' id='Ventana1' style='opacity: 1.03; display:none;'>");
                 out.print("<div class='contGeneral' style='width: 50%; right: 18%;'>");
                 out.print("<div style='display: flex; justify-content: space-between'>");
                 out.print("<h4>Registrar Dispositivos </h4>");
@@ -64,6 +358,8 @@ public class Tag_device extends TagSupport {
                 out.print("</div>");
                 out.print("<div class='cont_form_user'>");
 
+                out.print("<form action='Device?opt=2' method='post' class='needs-validation' novalidate=''>");
+                out.print("<input type='hidden' name='idTypeDv' id='' value='" + idTypeDv + "'>");
                 out.print("<div class='d-flex' style='justify-content: space-evenly;'>");
                 out.print("<div class=''>");
 
@@ -75,7 +371,7 @@ public class Tag_device extends TagSupport {
                 if (lst_item != null) {
                     for (int i = 0; i < lst_item.size(); i++) {
                         Object[] Objitm = (Object[]) lst_item.get(i);
-                        out.print("<option value='" + Objitm[0] + "'> " + Objitm[1].toString() + " - " + Objitm[2].toString() + "</option>");
+                        out.print("<option value='" + Objitm[1] + "'> " + Objitm[1].toString() + " - " + Objitm[2].toString() + "</option>");
                     }
                 } else {
                     out.print("<option value='0'></option>");
@@ -132,6 +428,7 @@ public class Tag_device extends TagSupport {
                 out.print("<div class='text-center'>");
                 out.print("<button class='btn btn-green'>Registrar</button>");
                 out.print("</div>");
+                out.print("</form>");
 
                 out.print("</div>");
                 out.print("</div>");
@@ -146,7 +443,7 @@ public class Tag_device extends TagSupport {
                 out.print("<div class='card'>");
                 out.print("<div class='card-header' style='justify-content: space-between;'>");
                 out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='window.location.href=\"Device?opt=1\"'><i class='fas fa-arrow-left'></i></button>");
-                out.print("<h2>Listado de dispositivos</h2>");
+                out.print("<div class='text-center'><h2>Listado de dispositivos</h2><h6>" + nameDv + "</h6></div>");
                 out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1)'><i class='fas fa-plus'></i></button>");
                 out.print("</div>");
 
@@ -200,16 +497,23 @@ public class Tag_device extends TagSupport {
                         out.print("<h5>" + ObjDev[4] + "</h5>");
                         out.print("</div>");
 
-                        out.print("<div class='textdv'>");
-                        out.print("<span>Cargo: " + ObjDev[7] + "</span><br>");
+                        out.print("<div id='dvDetFront" + i + "' class='textdv' style='display: block;'>");
+                        out.print("<span>Area: " + ObjDev[11] + "</span><br>");
                         out.print("<span>Ubicacion: " + ObjDev[9] + "</span><br>");
+                        out.print("<span>Cargo: " + ObjDev[7] + "</span><br>");
                         out.print("<span><span class='bullet text-" + ((stedv == 1) ? "success" : (stedv == 2) ? "warning" : "danger") + "'></span> " + ((stedv == 1) ? "Bueno" : (stedv == 2) ? "Revisión" : "De baja") + "</span><br>");
+                        out.print("</div>");
+
+                        out.print("<div id='dvDetBack" + i + "' class='textdv dvBack' style='display: none;'>");
+                        out.print("<span>Serial: " + ObjDev[6] + "</span><br>");
+                        out.print("<span>Usuario registro: " + ObjDev[12] + "</span><br>");
+                        out.print("<span>Fecha registro: " + ObjDev[13] + "</span><br>");
                         out.print("</div>");
 
                         out.print("<div class='gnDiv'>");
                         out.print("<div class='d-flex dvListBtn'>");
-                        out.print("<a href='#'>Ver detalle</a>");
-                        out.print("<button class='btn btn-green btn-sm'><i class=\"fas fa-link\"></i></button>");
+                        out.print("<a href='#' onclick='showDetail(" + i + ")'><i id='arrow" + i + "' class='fas fa-chevron-down'></i> Ver detalle</a>");
+                        out.print("<button class='btn btn-green btn-sm' onclick='window.location.href=\"Device?opt=1&act=2&idTypeDv=" + idTypeDv + "&idDevice=" + ObjDev[0] + "\"'><i class=\"fas fa-link\"></i></button>");
                         out.print("</div>");
                         out.print("</div>");
                         out.print("</div>");

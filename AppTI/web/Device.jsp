@@ -24,6 +24,21 @@
                 </div>
             </div>
         </div>
+        <script>
+            function showDetail(cont) {
+                if (document.getElementById("dvDetFront" + cont).style.display === "block") {
+                    document.getElementById("dvDetFront" + cont).style.display = "none";
+                    document.getElementById("dvDetBack" + cont).style.display = "block";
+                    document.getElementById("arrow"+ cont).classList.remove("fa-chevron-down");
+                    document.getElementById("arrow"+ cont).classList.add("fa-chevron-up");
+                } else {
+                    document.getElementById("dvDetFront" + cont).style.display = "block";
+                    document.getElementById("dvDetBack" + cont).style.display = "none";
+                    document.getElementById("arrow"+ cont).classList.remove("fa-chevron-up");
+                    document.getElementById("arrow"+ cont).classList.add("fa-chevron-down");
+                }
+            }
+        </script>
         <Alerts:Alert/>
         <script src="Interface/Content/Assets/modules/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js"></script>
         <script src="Interface/Content/Assets/modules/datatables/Select-1.2.4/js/dataTables.select.min.js"></script>

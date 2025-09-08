@@ -38,6 +38,44 @@ public class DeviceJpaController implements Serializable {
         }
     }
 
+    public List ConsultDevicexId(int idDevice) {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_dce_c_ConsultDeviceIdv2`(" + idDevice + ")");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public List ConsultTypeDeviceId(int idType) {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_dce_c_ConsultTypeDeviceid`(" + idType + ")");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
     public List ConsultAllStateDeviceCount() {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
@@ -154,5 +192,24 @@ public class DeviceJpaController implements Serializable {
 
 //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="EJECTIONS">
+    public boolean RegisterDevice(int idTypeDevice, int consecutivo, String nameDev, int item, String serial, String incharg, String respon, String location, int idArea, int usReg) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        try {
+            Query q = em.createNativeQuery("CALL `Sp_dce_r_RgisterDevice`(" + idTypeDevice + ", " + consecutivo + ", '" + nameDev + "', " + item + ", '" + serial + "', '" + incharg + "', '" + respon + "', '" + location + "', " + idArea + ", " + usReg + ")");
+            int resultado = q.executeUpdate();
+            em.getTransaction().commit();
+            em.clear();
+            em.close();
+            if (resultado == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
 //</editor-fold>
 }

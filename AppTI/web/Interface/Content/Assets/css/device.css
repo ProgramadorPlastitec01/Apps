@@ -136,9 +136,9 @@
 }
 
 #slctDta option {
-  white-space: nowrap;     /* no permite que el texto se parta */
-  overflow: hidden;        /* oculta el exceso */
-  text-overflow: ellipsis; /* agrega "..." al final */
+    white-space: nowrap;     /* no permite que el texto se parta */
+    overflow: hidden;        /* oculta el exceso */
+    text-overflow: ellipsis; /* agrega "..." al final */
 }
 
 #slctDta2{
@@ -146,7 +146,14 @@
 }
 
 #slctDta2 option {
-  white-space: nowrap;     /* no permite que el texto se parta */
-  overflow: hidden;        /* oculta el exceso */
-  text-overflow: ellipsis; /* agrega "..." al final */
+    white-space: nowrap;     /* no permite que el texto se parta */
+    overflow: hidden;        /* oculta el exceso */
+    text-overflow: ellipsis; /* agrega "..." al final */
+}
+
+.dvBack{
+    background: rgb(225, 225, 225);
+    padding: 6px;
+    border-radius: 5px;
+    color: rgb(59, 59, 59);
 }

@@ -2187,6 +2187,56 @@ public class Tag_alert extends TagSupport {
                 }
             }
             //</editor-fold>
+            //<editor-fold defaultstate="collapsed" desc="DEVICE">
+            if (pageContext.getRequest().getAttribute("RegisterDevice") != null) {
+                boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("RegisterDevice").toString());
+                if (result) {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-2\").ready(function() {\n"
+                            + "  iziToast.success({\n"
+                            + "    title: 'Correcto',\n"
+                            + "    message: 'Se ha registrado el dispositivo.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                } else {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-4\").ready(function() {\n"
+                            + "  iziToast.error({\n"
+                            + "    title: 'Error',\n"
+                            + "    message: 'Ha ocurrido un error al registrar.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                }
+            }
+            if (pageContext.getRequest().getAttribute("DeviceHeaderReg") != null) {
+                boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("DeviceHeaderReg").toString());
+                if (result) {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-2\").ready(function() {\n"
+                            + "  iziToast.success({\n"
+                            + "    title: 'Correcto',\n"
+                            + "    message: 'Se ha registrado el evento.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                } else {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-4\").ready(function() {\n"
+                            + "  iziToast.error({\n"
+                            + "    title: 'Error',\n"
+                            + "    message: 'Ha ocurrido un error al registrar.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                }
+            }
+//</editor-fold>
         } catch (IOException ex) {
             Logger.getLogger(Tag_alert.class.getName()).log(Level.SEVERE, null, ex);
         }
