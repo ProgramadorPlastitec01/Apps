@@ -123,17 +123,13 @@
                     document.getElementById("IdMasive").value += id;
                 }
             }
-            function ActivityTextarea(nameAct) {
+            function ActivityTextarea(idAct, nameAct) {
                 const container = document.getElementById("ContAct");
 
-                if (!nameAct) {
-                    alert("El campo de actividad está vacío.");
-                    return; // Detenemos la ejecución si no hay contenido
-                }
 
-                // Buscar si ya existe un elemento con este texto
+                // Buscar si ya existe un elemento con este ID
                 const existingItem = Array.from(container.children).find(
-                        (child) => child.getAttribute("data-act") === nameAct
+                        (child) => child.getAttribute("data-id") === idAct
                 );
 
                 if (existingItem) {
@@ -142,11 +138,13 @@
                 } else {
                     // Si no existe, lo creamos y lo añadimos
                     const newItem = document.createElement("div");
-                    newItem.setAttribute("data-act", nameAct); // Atributo para identificar
-                    newItem.innerHTML = `<i class='fas fa-star'></i>` + nameAct; // Agregar texto y el ícono
+                    newItem.setAttribute("data-id", idAct);   // ID único
+                    newItem.setAttribute("data-act", nameAct); // Referencia adicional
+                    newItem.innerHTML = `<i class='fas fa-star'></i>` + nameAct;
                     container.appendChild(newItem);
                 }
             }
+
 
         </script>
         <script>
@@ -177,7 +175,7 @@
                     // Solo ejecutar si el checkbox está seleccionado
                     if (isChecked && id && act) {
                         MasiveActivity(id);
-                        ActivityTextarea(act);
+                        ActivityTextarea(id, act);
                     } else if (!isChecked && id && act) {
                         // Si se desmarca, eliminar la actividad individualmente (si es necesario)
                         const content = idMasive.value;

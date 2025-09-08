@@ -24,7 +24,6 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
-import java.util.ArrayList;
 import java.util.Locale;
 
 public class Tag_binnacle extends TagSupport {
@@ -159,7 +158,7 @@ public class Tag_binnacle extends TagSupport {
                     out.print("</div>");
 
                     out.print("<div class='text-center mt-4'>");
-                    out.print("<button class='btn btn-green'>Actualizar</button>");
+                    out.print("<button class='btn btn-green' onclick='cargarDatos()'>Actualizar</button>");
                     out.print("</div>");
 
                     out.print("</form>");
@@ -290,7 +289,7 @@ public class Tag_binnacle extends TagSupport {
                     out.print("</div>");
                     out.print("<div class='text-center'>");
                     if (state == 0) {
-                        out.print("<button class='btn btn-green'>Guardar <i class='fas fa-save'></i></button>");
+                        out.print("<button class='btn btn-green' onclick='cargarDatos()'>Guardar <i class='fas fa-save'></i></button>");
                     }
                     out.print("</div>");
                     out.print("</form>");
@@ -334,7 +333,7 @@ public class Tag_binnacle extends TagSupport {
                 out.print("<div class=''>");
                 out.print("<h5>Actividades del día</h5>");
                 out.print("</div>");
-                out.print("<div class='' style='overflow-y: auto; padding: 6px;'>");
+                out.print("<div class='' style='overflow-y: auto; padding: 6px;max-height:40%'>");
                 lst_system = SystemJpa.ConsultActivitySystemByUser(id_user, DteIni);
                 String idActy = "";
                 if (lst_system != null) {
@@ -379,12 +378,12 @@ public class Tag_binnacle extends TagSupport {
                 if (state == 0) {
                     out.print("<form action='Binnacle?opt=4&idBinn=" + idbinn + "' method='post'>");
                     out.print("<input type='hidden' class='form-control' name='txtiIdAct' value='" + idActy + "'>");
-                    out.print("<button class='btn btn-green' onclick='AlertMail()'>Enviar <i class=\"fas fa-share\"></i></button>");
+                    out.print("<button class='btn btn-green' onclick='AlertMail();cargarDatos()'>Enviar <i class=\"fas fa-share\"></i></button>");
                     out.print("</form>");
                 }
                 out.print("</div>");
                 out.print("</div>");
-//</editor-fold>
+                //</editor-fold>
                 out.print("</div>");
                 out.print("</div>");
 
@@ -482,7 +481,7 @@ public class Tag_binnacle extends TagSupport {
             out.print("</div>");
 
             out.print("<div class='text-center mt-4'>");
-            out.print("<button class='btn btn-green'>Registrar</button>");
+            out.print("<button class='btn btn-green' onclick='cargarDatos()'>Registrar</button>");
             out.print("</div>");
 
             out.print("</form>");
@@ -587,25 +586,25 @@ public class Tag_binnacle extends TagSupport {
                     out.print("</td>");
                     out.print("<td class='text-center'>");
                     if (state == 0) {
-                        out.print("<button class='btn btn-yellow mr-2 btn-sm' data-toggle='tooltip' data-placement='top' title='Bitácora' onclick='window.location.href=\"Binnacle?opt=1&idBinn=" + Objbin[0] + "&temp=1\"'><i class='fas fa-eye'></i></button>");
+                        out.print("<button class='btn btn-yellow mr-2 btn-sm' data-toggle='tooltip' data-placement='top' title='Bitácora' onclick='window.location.href=\"Binnacle?opt=1&idBinn=" + Objbin[0] + "&temp=1\";cargarDatos()'><i class='fas fa-eye'></i></button>");
                         if (txtPermissions.contains("[25]")) {
-                            out.print("<button class='btn btn-warning mr-2 btn-sm' data-toggle='tooltip' data-placement='top' title='Editar' onclick='window.location.href=\"Binnacle?opt=1&idBinn=" + Objbin[0] + "\"'><i class='fas fa-pencil-alt'></i></button>");
+                            out.print("<button class='btn btn-warning mr-2 btn-sm' data-toggle='tooltip' data-placement='top' title='Editar' onclick='window.location.href=\"Binnacle?opt=1&idBinn=" + Objbin[0] + "\";cargarDatos()'><i class='fas fa-pencil-alt'></i></button>");
                         } else {
                             out.print("<button class='btn btn-warning mr-2 btn-sm' style='border-radius: 4px; opacity: 0.6;' disabled data-toggle='tooltip' data-placement='top' title='No tiene permisos'><i class='fas fa-pencil-alt'></i></button>");
                         }
                         if (txtPermissions.contains("[26]")) {
-                            out.print("<button class='btn btn-dark mr-2 btn-sm' data-toggle='tooltip' data-placement='top' title='Enviar bitácora' onclick='window.location.href=\"Binnacle?opt=1&idBinn=" + Objbin[0] + "&temp=2\"'><i class='fas fa-share'></i></button>");
+                            out.print("<button class='btn btn-dark mr-2 btn-sm' data-toggle='tooltip' data-placement='top' title='Enviar bitácora' onclick='window.location.href=\"Binnacle?opt=1&idBinn=" + Objbin[0] + "&temp=2\";cargarDatos()'><i class='fas fa-share'></i></button>");
                         } else {
                             out.print("<button class='btn btn-dark mr-2 btn-sm' style='border-radius: 4px; opacity: 0.6;' disabled data-toggle='tooltip' data-placement='top' title='No tiene permisos'><i class='fas fa-share'></i></button>");
                         }
                     } else if (state == 1) {
                         if (txtPermissions.contains("[27]")) {
-                            out.print("<button class='btn btn-yellow mr-2 btn-sm' data-toggle='tooltip' data-placement='top' title='Aprobar' onclick='window.location.href=\"Binnacle?opt=5&idBinn=" + Objbin[0] + "&state=2\"'><i class='fas fa-check'></i></button>");
+                            out.print("<button class='btn btn-yellow mr-2 btn-sm' data-toggle='tooltip' data-placement='top' title='Aprobar' onclick='window.location.href=\"Binnacle?opt=5&idBinn=" + Objbin[0] + "&state=2\";cargarDatos()'><i class='fas fa-check'></i></button>");
                         }
-                        out.print("<button class='btn btn-light mr-2 btn-sm' data-toggle='tooltip' data-placement='top' title='Ver Bitacora' onclick='window.location.href=\"Binnacle?opt=1&idBinn=" + Objbin[0] + "&temp=2\"'><i class='fas fa-eye'></i></button>");
+                        out.print("<button class='btn btn-light mr-2 btn-sm' data-toggle='tooltip' data-placement='top' title='Ver Bitacora' onclick='window.location.href=\"Binnacle?opt=1&idBinn=" + Objbin[0] + "&temp=2\";cargarDatos()'><i class='fas fa-eye'></i></button>");
                         out.print("<button class='btn btn-danger btn-sm' style='width: 30px;' data-toggle='tooltip' data-placement='top' title='Cancelar envio..' onclick='window.location.href=\"Binnacle?opt=5&idBinn=" + Objbin[0] + "&state=0\"'><i class='fas fa-times'></i></button>");
                     } else if (state == 2) {
-                        out.print("<button class='btn btn-light mr-2 btn-sm' data-toggle='tooltip' data-placement='top' title='Ver Bitacora' onclick='window.location.href=\"Binnacle?opt=1&idBinn=" + Objbin[0] + "&temp=2\"'><i class='fas fa-eye'></i></button>");
+                        out.print("<button class='btn btn-light mr-2 btn-sm' data-toggle='tooltip' data-placement='top' title='Ver Bitacora' onclick='window.location.href=\"Binnacle?opt=1&idBinn=" + Objbin[0] + "&temp=2\";cargarDatos()'><i class='fas fa-eye'></i></button>");
                     }
                     out.print("</td>");
                     out.print("</tr>");

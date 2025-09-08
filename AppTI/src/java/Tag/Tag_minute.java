@@ -253,7 +253,7 @@ public class Tag_minute extends TagSupport {
                             out.print("<input type='hidden' name='docx' id='' value='" + docx + "'>");
                             out.print("<input type='hidden' name='codx' value='" + codx + "'>");
                             out.print("<div class='text-center'>");
-                            out.print("<button class='btn btn-green'>Firmar</button>");
+                            out.print("<button class='btn btn-green' onclick='cargarDatos()'>Firmar</button>");
                             out.print("</div>");
                             out.print("</form>");
                             //</editor-fold>
@@ -278,7 +278,7 @@ public class Tag_minute extends TagSupport {
                             out.print("<input type='hidden' name='codx' value='" + codx + "'>");
                             out.print("<input type='hidden' class='form-control' name='txtSignature' id='coordenadas-hidden' value='" + signt + "'>");
                             out.print("<div class='text-center'>");
-                            out.print("<button class='btn btn-green'>Guardar y Firmar</button>");
+                            out.print("<button class='btn btn-green' onclick='cargarDatos()'>Guardar y Firmar</button>");
                             out.print("</div>");
                             out.print("</form>");
                             //</editor-fold>
@@ -508,7 +508,7 @@ public class Tag_minute extends TagSupport {
                     out.print("</div>");
 
                     out.print("<div style='position: fixed; right: 32px; bottom: 32px; z-index: 1;'>");
-                    out.print("<button class='btn btn-green' " + ((counter > 0) ? "disabled data-toggle='tooltip' data-placement='top' title='Ya hay " + counter + " firma(s) no se puede modificar el contenido.'" : "") + " >Guardar &nbsp;<i class='fas fa-save'></i></button>");
+                    out.print("<button class='btn btn-green' " + ((counter > 0) ? "disabled data-toggle='tooltip' data-placement='top' title='Ya hay " + counter + " firma(s) no se puede modificar el contenido.'" : "") + " onclick='cargarDatos()' >Guardar &nbsp;<i class='fas fa-save'></i></button>");
                     out.print("</div>");
 
                     out.print("</form>");
@@ -703,7 +703,7 @@ public class Tag_minute extends TagSupport {
                         out.print("</div>");
 
                         out.print("<div class='mt-2 text-center'>");
-                        out.print("<button class='btn btn-green'>Actualizar</button>");
+                        out.print("<button class='btn btn-green' onclick='cargarDatos()'>Actualizar</button>");
                         out.print("</div>");
 //                        out.print("</div>");
                         out.print("</form>");
@@ -937,7 +937,7 @@ public class Tag_minute extends TagSupport {
                 out.print("</div>");
 
                 out.print("<div class='text-center'>");
-                out.print("<button class='btn btn-green'>Filtrar <i class='fas fa-search'></i></button>");
+                out.print("<button class='btn btn-green' onclick='cargarDatos()'>Filtrar <i class='fas fa-search'></i></button>");
                 out.print("</div>");
 
                 out.print("</form>");

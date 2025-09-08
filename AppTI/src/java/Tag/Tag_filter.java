@@ -230,141 +230,141 @@ public class Tag_filter extends TagSupport {
             //</editor-fold>
             out.print("</div>");
 
-            out.print("<div class=\"tab-pane fade\" id=\"ticket2\" role=\"tabpanel\" aria-labelledby=\"ticket\" style='border:none;'>");
-            out.print("<div class='InputFilter'><input style='width:91%' type=\"text\" class='form-control' id=\"myInput3\" placeholder=\"Buscar...\"></div>");
-            //<editor-fold defaultstate="collapsed" desc="TICKET">
-            if (lst_ticket != null) {
-                out.print("<div id='container3' class=\"container\">");
-                for (int i = 0; i < lst_ticket.size(); i++) {
-                    Object[] ObjTicket = (Object[]) lst_ticket.get(i);
-                    out.print("<div class=\"single-item3\">");
-                    out.print("<div class='d-flex justify-content-around DivHeadTicket '>");
-                    out.print("<div class='TxtHeadTicket'><b class='b_the_black'>#Ticket: </b><span class='b_the_black'>" + ((ObjTicket[0] == null) ? "" : ObjTicket[0]) + "</span></div>");
-                    out.print("<div class='TxtHeadTicket' style='width:23%'><b class='b_the_black'>Fecha: </b><span class='b_the_black'>" + ((ObjTicket[1] == null) ? "" : ObjTicket[1]) + "</span></div>");
-                    out.print("<div class='TxtHeadTicket'><b class='b_the_black'>Área: </b><span class='b_the_black'>" + ((ObjTicket[4] == null) ? "" : ObjTicket[4]) + "</span></div>");
-                    out.print("<div class='TxtHeadTicket' style='width:37%'><b class='b_the_black'>Solicitante: </b><span class='b_the_black'>" + ((ObjTicket[6] == null) ? "" : ObjTicket[6]) + "</span></div>");
-                    out.print("<div class='TxtHeadTicket'><b class='b_the_black'>Prioridad: </b><span class='b_the_black'>" + ((ObjTicket[2] == null) ? "" : ((ObjTicket[2] == "1") ? "ALTA" : (ObjTicket[2] == "2") ? "MEDIA" : "BAJA") + "") + "</span></div>");
-                    out.print("</div>");
-                    //<editor-fold defaultstate="collapsed" desc="MAJOR TICKET">
-                    String FormatterTicket = "";
-                    FormatterTicket = ObjTicket[7].toString().trim().replaceAll("(?i)<p>(&nbsp;|\\s)*</p>", "");
-                    if (Data.length > 0) {
-                        for (int j = 0; j < Data.length; j++) {
-                            String palabra = Pattern.quote(Data[j]); // Escapar caracteres especiales
-                            Pattern pattern = Pattern.compile("(?i)" + palabra); // Ignorar mayúsculas
-                            Matcher matcher = pattern.matcher(FormatterTicket);
-                            FormatterTicket = matcher.replaceAll("<b style='background: #f0ff05;'>" + Data[j].toUpperCase() + "</b>");
-                        }
-                    }
-
-                    FormatterTicket = FormatterTicket.replace("<img", "<img style='width:30%'");
-                    out.print("<div class='m-2 TextTicket DivPedingS'>" + FormatterTicket + "</div>");
-
-                    String FormatterTicketSolution = "";
-                    FormatterTicketSolution = ObjTicket[14].toString().trim().replaceAll("(?i)<p>(&nbsp;|\\s)*</p>", "");
-                    if (Data.length > 0) {
-                        for (int j = 0; j < Data.length; j++) {
-                            String palabra = Pattern.quote(Data[j]); // Escapar caracteres especiales
-                            Pattern pattern = Pattern.compile("(?i)" + palabra); // Ignorar mayúsculas
-                            Matcher matcher = pattern.matcher(FormatterTicketSolution);
-                            FormatterTicketSolution = matcher.replaceAll("<b style='background: #f0ff05;'>" + Data[j].toUpperCase() + "</b>");
-                        }
-                    }
-                    FormatterTicketSolution = FormatterTicketSolution.replace("<img", "<img style='width:30%'");
-
-                    out.print("<div class='DivFolowUp'>");
-
-                    out.print("<div class='d-flex justify-content-between'>");
-
-                    out.print("<div>");
-                    out.print("<b>Funcionario T.I:</b> " + ObjTicket[13]);
-                    out.print("</div>");
-
-                    out.print("<div>");
-                    out.print("<b>Fecha:</b> " + ObjTicket[15]);
-                    out.print("</div>");
-
-                    out.print("</div>");
-
-                    out.print("<div class='d-flex justify-content-between'>");
-
-                    out.print("<div><b>Descripción:</b> " + FormatterTicketSolution + "</div>");
-
-                    out.print("<div>"
-                            + "<div><b>Parada PC: </b>" + ((ObjTicket[16] == null) ? "" : ObjTicket[16]) + "</div>"
-                            + "<div><b>Parada Producción: </b>" + ((ObjTicket[17] == null) ? "" : ObjTicket[17]) + "</div>"
-                            + "</div>");
-
-                    out.print("</div>");
-
-                    out.print("</div>");
-                    //</editor-fold>
-                    //<editor-fold defaultstate="collapsed" desc="TICKET RE-OPEN">
-                    lst_supportId = CustomerJpa.ConsultReopeningTicket(Integer.parseInt(ObjTicket[0].toString()));
-                    if (lst_supportId != null) {
-                        String SumTicket = "";
-                        for (int j = 0; j < lst_supportId.size(); j++) {
-                            Object[] ObjTicketOpen = (Object[]) lst_supportId.get(j);
-                            SumTicket = (j + 1) + "";
-                            if (ObjTicketOpen[3] != null) {
-                                String FormatterTicketOpen = "";
-                                FormatterTicketOpen = ObjTicketOpen[3].toString().trim().replaceAll("(?i)<p>(&nbsp;|\\s)*</p>", "");
-                                if (Data.length > 0) {
-                                    for (int y = 0; y < Data.length; y++) {
-                                        String palabra = Pattern.quote(Data[y]); // Escapar caracteres especiales
-                                        Pattern pattern = Pattern.compile("(?i)" + palabra); // Ignorar mayúsculas
-                                        Matcher matcher = pattern.matcher(FormatterTicketOpen);
-                                        FormatterTicketOpen = matcher.replaceAll("<b style='background: #f0ff05;'>" + Data[y].toUpperCase() + "</b>");
-                                    }
-                                }
-
-                                FormatterTicketOpen = FormatterTicketOpen.replace("<img", "<img style='width:30%'");
-                                out.print("<div class='ml-2 mr-2 mb-2 TextTicket DivPedingS'><div><b class='b_black'>Re-apertura #</b>" + SumTicket + "</div>" + FormatterTicketOpen + "</div>");
-                            }
-                            if (ObjTicketOpen[4] != null) {
-                                String FormatterTicketSolutionOpen = "";
-                                FormatterTicketSolutionOpen = ObjTicketOpen[4].toString().trim().replaceAll("(?i)<p>(&nbsp;|\\s)*</p>", "");
-                                if (Data.length > 0) {
-                                    for (int k = 0; k < Data.length; k++) {
-                                        String palabra = Pattern.quote(Data[k]); // Escapar caracteres especiales
-                                        Pattern pattern = Pattern.compile("(?i)" + palabra); // Ignorar mayúsculas
-                                        Matcher matcher = pattern.matcher(FormatterTicketSolutionOpen);
-                                        FormatterTicketSolutionOpen = matcher.replaceAll("<b style='background: #f0ff05;'>" + Data[k].toUpperCase() + "</b>");
-                                    }
-                                }
-                                FormatterTicketSolutionOpen = FormatterTicketSolutionOpen.replace("<img", "<img style='width:30%'");
+//            out.print("<div class=\"tab-pane fade\" id=\"ticket2\" role=\"tabpanel\" aria-labelledby=\"ticket\" style='border:none;'>");
+//            out.print("<div class='InputFilter'><input style='width:91%' type=\"text\" class='form-control' id=\"myInput3\" placeholder=\"Buscar...\"></div>");
+//            //<editor-fold defaultstate="collapsed" desc="TICKET">
+//            if (lst_ticket != null) {
+//                out.print("<div id='container3' class=\"container\">");
+//                for (int i = 0; i < lst_ticket.size(); i++) {
+//                    Object[] ObjTicket = (Object[]) lst_ticket.get(i);
+//                    out.print("<div class=\"single-item3\">");
+//                    out.print("<div class='d-flex justify-content-around DivHeadTicket '>");
+//                    out.print("<div class='TxtHeadTicket'><b class='b_the_black'>#Ticket: </b><span class='b_the_black'>" + ((ObjTicket[0] == null) ? "" : ObjTicket[0]) + "</span></div>");
+//                    out.print("<div class='TxtHeadTicket' style='width:23%'><b class='b_the_black'>Fecha: </b><span class='b_the_black'>" + ((ObjTicket[1] == null) ? "" : ObjTicket[1]) + "</span></div>");
+//                    out.print("<div class='TxtHeadTicket'><b class='b_the_black'>Área: </b><span class='b_the_black'>" + ((ObjTicket[4] == null) ? "" : ObjTicket[4]) + "</span></div>");
+//                    out.print("<div class='TxtHeadTicket' style='width:37%'><b class='b_the_black'>Solicitante: </b><span class='b_the_black'>" + ((ObjTicket[6] == null) ? "" : ObjTicket[6]) + "</span></div>");
+//                    out.print("<div class='TxtHeadTicket'><b class='b_the_black'>Prioridad: </b><span class='b_the_black'>" + ((ObjTicket[2] == null) ? "" : ((ObjTicket[2] == "1") ? "ALTA" : (ObjTicket[2] == "2") ? "MEDIA" : "BAJA") + "") + "</span></div>");
+//                    out.print("</div>");
+//                    //<editor-fold defaultstate="collapsed" desc="MAJOR TICKET">
+//                    String FormatterTicket = "";
+//                    FormatterTicket = ObjTicket[7].toString().trim().replaceAll("(?i)<p>(&nbsp;|\\s)*</p>", "");
+//                    if (Data.length > 0) {
+//                        for (int j = 0; j < Data.length; j++) {
+//                            String palabra = Pattern.quote(Data[j]); // Escapar caracteres especiales
+//                            Pattern pattern = Pattern.compile("(?i)" + palabra); // Ignorar mayúsculas
+//                            Matcher matcher = pattern.matcher(FormatterTicket);
+//                            FormatterTicket = matcher.replaceAll("<b style='background: #f0ff05;'>" + Data[j].toUpperCase() + "</b>");
+//                        }
+//                    }
 //
-                                out.print("<div class='DivFolowUp'>");
-
-                                out.print("<div class='d-flex justify-content-between'>");
-
-                                out.print("<div class='d-flex '>");
-                                out.print("<b>Funcionario T.I:</b> " + ObjTicketOpen[7]);
-                                out.print("</div>");
-
-                                out.print("<div>");
-                                out.print("<b>Fecha</b> " + ObjTicketOpen[2]);
-                                out.print("</div>");
-
-                                out.print("</div>");
-
-                                out.print("<div class='d-flex justify-content-between'>");
-                                out.print("<div><b>Solución:</b> " + FormatterTicketSolutionOpen + "</div>");
-                                out.print("</div>");
-
-                                out.print("</div>");
-                            }
-                        }
-                    }
+//                    FormatterTicket = FormatterTicket.replace("<img", "<img style='width:30%'");
+//                    out.print("<div class='m-2 TextTicket DivPedingS'>" + FormatterTicket + "</div>");
+//
+//                    String FormatterTicketSolution = "";
+//                    FormatterTicketSolution = ObjTicket[14].toString().trim().replaceAll("(?i)<p>(&nbsp;|\\s)*</p>", "");
+//                    if (Data.length > 0) {
+//                        for (int j = 0; j < Data.length; j++) {
+//                            String palabra = Pattern.quote(Data[j]); // Escapar caracteres especiales
+//                            Pattern pattern = Pattern.compile("(?i)" + palabra); // Ignorar mayúsculas
+//                            Matcher matcher = pattern.matcher(FormatterTicketSolution);
+//                            FormatterTicketSolution = matcher.replaceAll("<b style='background: #f0ff05;'>" + Data[j].toUpperCase() + "</b>");
+//                        }
+//                    }
+//                    FormatterTicketSolution = FormatterTicketSolution.replace("<img", "<img style='width:30%'");
+//
+//                    out.print("<div class='DivFolowUp'>");
+//
+//                    out.print("<div class='d-flex justify-content-between'>");
+//
+//                    out.print("<div>");
+//                    out.print("<b>Funcionario T.I:</b> " + ObjTicket[13]);
+//                    out.print("</div>");
+//
+//                    out.print("<div>");
+//                    out.print("<b>Fecha:</b> " + ObjTicket[15]);
+//                    out.print("</div>");
+//
+//                    out.print("</div>");
+//
+//                    out.print("<div class='d-flex justify-content-between'>");
+//
+//                    out.print("<div><b>Descripción:</b> " + FormatterTicketSolution + "</div>");
+//
+//                    out.print("<div>"
+//                            + "<div><b>Parada PC: </b>" + ((ObjTicket[16] == null) ? "" : ObjTicket[16]) + "</div>"
+//                            + "<div><b>Parada Producción: </b>" + ((ObjTicket[17] == null) ? "" : ObjTicket[17]) + "</div>"
+//                            + "</div>");
+//
+//                    out.print("</div>");
+//
+//                    out.print("</div>");
 //                    //</editor-fold>
-                    out.print("</div>");
-                }
-                out.print("</div>");
-            } else {
-                out.print("<h5 class='text-center'><i style='font-size:20px' class=\"far fa-surprise\"></i>&nbsp;SIN DATOS FILTRADOS O ENCONTRADOS</h5>");
-            }
-            //</editor-fold>
-            out.print("</div>");
+//                    //<editor-fold defaultstate="collapsed" desc="TICKET RE-OPEN">
+//                    lst_supportId = CustomerJpa.ConsultReopeningTicket(Integer.parseInt(ObjTicket[0].toString()));
+//                    if (lst_supportId != null) {
+//                        String SumTicket = "";
+//                        for (int j = 0; j < lst_supportId.size(); j++) {
+//                            Object[] ObjTicketOpen = (Object[]) lst_supportId.get(j);
+//                            SumTicket = (j + 1) + "";
+//                            if (ObjTicketOpen[3] != null) {
+//                                String FormatterTicketOpen = "";
+//                                FormatterTicketOpen = ObjTicketOpen[3].toString().trim().replaceAll("(?i)<p>(&nbsp;|\\s)*</p>", "");
+//                                if (Data.length > 0) {
+//                                    for (int y = 0; y < Data.length; y++) {
+//                                        String palabra = Pattern.quote(Data[y]); // Escapar caracteres especiales
+//                                        Pattern pattern = Pattern.compile("(?i)" + palabra); // Ignorar mayúsculas
+//                                        Matcher matcher = pattern.matcher(FormatterTicketOpen);
+//                                        FormatterTicketOpen = matcher.replaceAll("<b style='background: #f0ff05;'>" + Data[y].toUpperCase() + "</b>");
+//                                    }
+//                                }
+//
+//                                FormatterTicketOpen = FormatterTicketOpen.replace("<img", "<img style='width:30%'");
+//                                out.print("<div class='ml-2 mr-2 mb-2 TextTicket DivPedingS'><div><b class='b_black'>Re-apertura #</b>" + SumTicket + "</div>" + FormatterTicketOpen + "</div>");
+//                            }
+//                            if (ObjTicketOpen[4] != null) {
+//                                String FormatterTicketSolutionOpen = "";
+//                                FormatterTicketSolutionOpen = ObjTicketOpen[4].toString().trim().replaceAll("(?i)<p>(&nbsp;|\\s)*</p>", "");
+//                                if (Data.length > 0) {
+//                                    for (int k = 0; k < Data.length; k++) {
+//                                        String palabra = Pattern.quote(Data[k]); // Escapar caracteres especiales
+//                                        Pattern pattern = Pattern.compile("(?i)" + palabra); // Ignorar mayúsculas
+//                                        Matcher matcher = pattern.matcher(FormatterTicketSolutionOpen);
+//                                        FormatterTicketSolutionOpen = matcher.replaceAll("<b style='background: #f0ff05;'>" + Data[k].toUpperCase() + "</b>");
+//                                    }
+//                                }
+//                                FormatterTicketSolutionOpen = FormatterTicketSolutionOpen.replace("<img", "<img style='width:30%'");
+////
+//                                out.print("<div class='DivFolowUp'>");
+//
+//                                out.print("<div class='d-flex justify-content-between'>");
+//
+//                                out.print("<div class='d-flex '>");
+//                                out.print("<b>Funcionario T.I:</b> " + ObjTicketOpen[7]);
+//                                out.print("</div>");
+//
+//                                out.print("<div>");
+//                                out.print("<b>Fecha</b> " + ObjTicketOpen[2]);
+//                                out.print("</div>");
+//
+//                                out.print("</div>");
+//
+//                                out.print("<div class='d-flex justify-content-between'>");
+//                                out.print("<div><b>Solución:</b> " + FormatterTicketSolutionOpen + "</div>");
+//                                out.print("</div>");
+//
+//                                out.print("</div>");
+//                            }
+//                        }
+//                    }
+////                    //</editor-fold>
+//                    out.print("</div>");
+//                }
+//                out.print("</div>");
+//            } else {
+//                out.print("<h5 class='text-center'><i style='font-size:20px' class=\"far fa-surprise\"></i>&nbsp;SIN DATOS FILTRADOS O ENCONTRADOS</h5>");
+//            }
+//            //</editor-fold>
+//            out.print("</div>");
 
             out.print("</div>");
 

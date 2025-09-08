@@ -71,7 +71,7 @@ public class LocalChatBotServlet extends HttpServlet {
                         }
                     }
                     UnionShift += "<div><b>" + ArgT + ":</b> " + TextUserFormatter + "</div>";
-                    FinalShift = UnionShift + "<div class='text-center m-2'><button onclick='showMenu()' class='btn btn-green CustomBtn'>Volver al Menú</button></div>";
+                    FinalShift = UnionShift;
                 }
             }
         }

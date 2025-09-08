@@ -54,26 +54,25 @@ a {
 
 /* Home */
 .home {
-    position: relative;
-    height: 100vh;
     width: 100%;
-    /*background-image: url("Img/B10.jpeg");*/
-    /*background-image: url("Img/B5.jpg");*/
-    background-image: url("Img/B9.jpg");
-    /*background-color: gray;*/
+    height: 400px; /* Ajusta según necesites */
     background-size: cover;
     background-position: center;
+    transition: background-image 1s ease-in-out; /* Transición suave de 1 segundo */
+    position: relative;
 }
+
+/* Capa adicional para manejar la transición */
 .home::before {
-    content: "";
+    content: '';
     position: absolute;
-    height: 100%;
+    top: 0;
+    left: 0;
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
-    z-index: 100;
-    opacity: 0;
-    pointer-events: none;
-    transition: all 0.5s ease-out;
+    height: 100%;
+    background: inherit;
+    opacity: 1;
+    transition: opacity 1s ease-in-out; /* Transición de opacidad */
 }
 .home.show::before {
     opacity: 1;
@@ -203,7 +202,7 @@ a {
     margin-top: 15px;
 }
 .button2{
-       background: #33bf98;
+    background: #33bf98;
     width: 100%;
     border-radius: 10px;
     padding: 2px 7px;

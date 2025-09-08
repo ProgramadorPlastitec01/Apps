@@ -108,7 +108,7 @@ public class Tag_template extends TagSupport {
                     out.print("<div class='col-lg-4'>");
                     out.print("<div class='d-flex' style='justify-content: flex-end;'>");
                     out.print("<button class='btn btn-green btn-sm mr-2' onclick='window.location.href=\"Template?opt=4&idTempl=" + ObjTem[0] + "\";cargarDatos()'><i class='fas fa-" + ((ste == 1) ? "times" : "check") + "'></i></button>");
-                    out.print("<button class='btn btn-warning btn-sm' onclick='window.location.href=\"Template?opt=1&idTempl=" + ObjTem[0] + "\"'><i class='fas fa-pen'></i></button>");
+                    out.print("<button class='btn btn-warning btn-sm' onclick='window.location.href=\"Template?opt=1&idTempl=" + ObjTem[0] + "\";cargarDatos()'><i class='fas fa-pen'></i></button>");
                     out.print("</div>");
                     out.print("</div>");
                     out.print("</div>");

@@ -165,7 +165,7 @@ public class Tag_information extends TagSupport {
                     out.print("</div>");
                     //</editor-fold>
                     out.print("<div class='' style='width: 100%; text-align:center;'>");
-                    out.print("<button class='btn btn-green btn-lg' >Actualizar</button>");
+                    out.print("<button class='btn btn-green btn-lg' onclick='cargarDatos()' >Actualizar</button>");
                     out.print("</div>");
                 }
 
@@ -633,7 +633,7 @@ public class Tag_information extends TagSupport {
                     out.print("<div style='width:85%;text-align:center;'><h5>Especificaciones</h5></div>");
                     if (txtPermissions.contains("[47]")) {
                         out.print("<div>"
-                                + ((StateInf == 1) ? "<a href='Information?opt=1&IdInformation=" + obj_info[0] + "'><i style='font-size:22px; color:black;' class=\"fas fa-pencil-alt\"></i></a>" : "")
+                                + ((StateInf == 1) ? "<a href='Information?opt=1&IdInformation=" + obj_info[0] + "' onclick='cargarDatos()'><i style='font-size:22px; color:black;' class=\"fas fa-pencil-alt\"></i></a>" : "")
                                 + "</div>");
                     }
                     out.print("</div>");

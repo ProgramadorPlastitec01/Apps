@@ -33,7 +33,7 @@ public class Tag_advConfig extends TagSupport {
                 out.print("<div class='contGeneral'>");
                 out.print("<div style='display: flex; justify-content: space-between'>");
                 out.print("<h2>Editar parametro </h2>");
-                out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(2)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
+                out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(2);' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
                 out.print("</div>");
                 out.print("<div class='cont_form_user'>");
                 if (lst_setting != null) {
@@ -45,7 +45,7 @@ public class Tag_advConfig extends TagSupport {
                     out.print("<textarea class='form-control col-lg-5' name='txtDescription' data-toggle='tooltip' data-placement='top' title='Descripción'>"+ ObjSetting[3] +"</textarea>");
                     out.print("</div>");
                     out.print("<div class='text-center mt-4'>");
-                    out.print("<button class='btn btn-green'>Confirmar</button>");
+                    out.print("<button class='btn btn-green' onclick='cargarDatos()'>Confirmar</button>");
                     out.print("</div>");
                     out.print("</form>");
                 } else {
@@ -61,7 +61,7 @@ public class Tag_advConfig extends TagSupport {
             out.print("<div class='contGeneral'>");
             out.print("<div style='display: flex; justify-content: space-between'>");
             out.print("<h2>Nuevo parametro </h2>");
-            out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(1)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
+            out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(1);' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
             out.print("</div>");
             out.print("<div class='cont_form_user'>");
             out.print("<form action='advConfig?opt=2' method='post'>");
@@ -71,7 +71,7 @@ public class Tag_advConfig extends TagSupport {
             out.print("<textarea class='form-control col-lg-5' name='txtDescription' placeholder='Descripción' data-toggle='tooltip' data-placement='top' title='Descripción'></textarea>");
             out.print("</div>");
             out.print("<div class='text-center mt-4'>");
-            out.print("<button class='btn btn-green'>Registrar</button>");
+            out.print("<button class='btn btn-green' onclick='cargarDatos()'>Registrar</button>");
             out.print("</div>");
             out.print("</form>");
             out.print("</div>");
@@ -86,13 +86,13 @@ public class Tag_advConfig extends TagSupport {
             out.print("<div class='card-header' style='justify-content: space-between;'>");
             out.print("<div class='d-flex'>"
                     + "<div class='mr-2'>"
-                    + "<button class='btn btn-outline-primary btn-sm' style='border-radius: 4px; padding: 2px 9px;'  onclick=\"javascript:location.href='Setting.jsp'\" >"
+                    + "<button class='btn btn-outline-primary btn-sm' style='border-radius: 4px; padding: 2px 9px;'  onclick=\"javascript:location.href='Setting.jsp';cargarDatos()\" >"
                     + "<i class=\"far fa-hand-point-left\"></i>"
                     + "</button>"
                     + "</div>"
                     + "<h4>Configuración Avanzada</h4>"
                     + "</div>");
-            out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1)'><i class='fas fa-plus'></i></button>");
+            out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1);'><i class='fas fa-plus'></i></button>");
             out.print("</div>");
             out.print("<div class='card-body'>");
             out.print("<div class='table-responsive'>");
@@ -122,11 +122,11 @@ public class Tag_advConfig extends TagSupport {
                     out.print("<td class='text-center'>");
                     out.print("<div class='d-flex justify-content-around'>");
                     if (state == 1) {
-                        out.print("<a class='btn btn-success btn-sm' href='advConfig?opt=3&idSett=" + Objset[0] + "&state=0'><i class='fas fa-check'></i></a>");
+                        out.print("<a class='btn btn-success btn-sm' href='advConfig?opt=3&idSett=" + Objset[0] + "&state=0' onclick='cargarDatos()'><i class='fas fa-check'></i></a>");
                     } else {
-                        out.print("<a class='btn btn-danger btn-sm' href='advConfig?opt=3&idSett=" + Objset[0] + "&state=1'><i class='fas fa-times'></i></a>");
+                        out.print("<a class='btn btn-danger btn-sm' href='advConfig?opt=3&idSett=" + Objset[0] + "&state=1' onclick='cargarDatos()'><i class='fas fa-times'></i></a>");
                     }
-                    out.print("<button class='btn btn-warning btn-sm' onclick='window.location.href=\"advConfig?opt=1&idSett=" + Objset[0] + "\"'><i class='fas fa-user-edit'></i></button>");
+                    out.print("<button class='btn btn-warning btn-sm' onclick='window.location.href=\"advConfig?opt=1&idSett=" + Objset[0] + "\";cargarDatos()'><i class='fas fa-user-edit'></i></button>");
                     out.print("</div>");
                     out.print("</td>");
                     out.print("</tr>");
@@ -143,7 +143,7 @@ public class Tag_advConfig extends TagSupport {
             out.print("</div>");
             out.print("</div>");
             out.print("</section>");
-//</editor-fold>
+        //</editor-fold>
         } catch (IOException ex) {
             Logger.getLogger(Tag_advConfig.class.getName()).log(Level.SEVERE, null, ex);
         }

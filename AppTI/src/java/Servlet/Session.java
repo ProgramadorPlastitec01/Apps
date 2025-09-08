@@ -83,6 +83,7 @@ public class Session extends HttpServlet {
                                 session.setAttribute("Apellido", obj_session[10]);
                                 session.setAttribute("Permisos", obj_session[14]);
                                 session.setAttribute("Estado", obj_session[11]);
+                                session.setAttribute("CheckPending", 1);
                                 request.setAttribute("welcome", true);
                                 request.getRequestDispatcher("Start?opc=1").forward(request, response);
                             }
@@ -167,6 +168,12 @@ public class Session extends HttpServlet {
                         request.setAttribute("Unidentified_User", true);
                         request.getRequestDispatcher("Start?opc=1").forward(request, response);
                     }
+                    //</editor-fold>
+                    break;
+                case 6:
+                    //<editor-fold defaultstate="collapsed" desc="UPDATE CHECKPENDING">
+                    session.setAttribute("CheckPending", 0);
+                    response.getWriter().write("OK");
                     //</editor-fold>
                     break;
             }

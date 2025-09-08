@@ -16,6 +16,16 @@
         <link rel="stylesheet" href="Interface/Content/Assets/css/components.css">
         <link rel="stylesheet" href="Interface/Content/Assets/css/Suggestion.css">
         <link rel="icon" type="image/png" href="Interface/Imagen/Logo_app/IconW.fw.png">
+        <style>
+            .home {
+                position: relative;
+                height: 100vh;
+                width: 100%;
+                background-size: cover;
+                background-position: center;
+                transition: background-image 1s ease-in-out; /* efecto suave */
+            }
+        </style>
     </head>
     <body>
         <jsp:include page="Library.jsp"></jsp:include>
@@ -31,7 +41,6 @@
                         <li class="nav_item">
                             <a href="Knowledge.jsp" class="nav_link">Documentación Técnica</a>
                             <a href="http://172.16.5.99:8084/AppSupport/" class="nav_link" target="_blank">Soporte</a>
-                            <a href="#" class="nav_link">Videos</a>
                             <a href="#"  onclick="ViewWindows(2)" class="nav_link">Idea</a>
                         </li>
                     </ul>
@@ -105,7 +114,7 @@
                 <div class="sweet-local" tabindex="-1" id="Ventana1" style="opacity: 1.03; display:none;">
                     <div class="cont_reg">
                         <div style="display: flex; justify-content: space-between">
-                            <h2>App T.I</h2>
+                            <h2>Nexus</h2>
                             <button class="btn btn-outline-secondary" onclick="mostrarConvencion(1)" style="height: 30px;padding: 3px;width: 30px;"><i class="fas fa-times"></i></button>
                         </div>
                         <div class="cont_form_user">
@@ -306,6 +315,40 @@
                 chatArea.innerHTML = "<em>Bienvenido al ChatBot, soy BOTTI, tu Guia virtual. En las siguientes opciones encontrara el menu de opciones. Si desea volver la opciones escriba en el mensaje <b>Menu</b></em><br>";
                 showMenu();
             }
+        </script>
+        <script>
+             document.addEventListener("DOMContentLoaded", () => {
+                const totalImages = 12;
+                let index = 1;
+                const homeSection = document.querySelector(".home");
+
+                if (!homeSection) {
+                    console.error("No se encontró el elemento con clase 'home'");
+                    return;
+                }
+
+                function changeBackground() {
+                    console.log("Valor de index:", index);
+                    const imageUrl = "Interface/Content/Assets/css/Img/B" + index + ".jpg";
+                    console.log("Usando imagen:", imageUrl);
+                    homeSection.style.backgroundImage = 'url("' + imageUrl + '")';
+                    index = index >= totalImages ? 1 : index + 1;
+                    console.log("Nuevo valor de index:", index);
+                }
+
+                // Precarga de imágenes (opcional, para evitar parpadeo por carga)
+                const images = [];
+                for (let i = 1; i <= totalImages; i++) {
+                    images[i] = new Image();
+                    images[i].src = "Interface/Content/Assets/css/Img/B" + i + ".jpg";
+                }
+
+                // Ejecuta la función inmediatamente
+                changeBackground();
+
+                // Configura el intervalo para cambiar la imagen cada 5 segundos
+                setInterval(changeBackground, 30000);
+            });
         </script>
         <script src="Interface/Content/Assets/modules/jquery.min.js"></script>
         <script src="Interface/Content/Assets/modules/bootstrap/js/bootstrap.min.js"></script>

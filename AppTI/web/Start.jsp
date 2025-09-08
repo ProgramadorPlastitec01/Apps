@@ -129,14 +129,13 @@
                         form.submit();
                     }
                 </script>
-
-
             </div>
         </div>
         <Alerts:Alert/>
 
 
         <script src="Interface/Content/Assets/modules/chart.min.js"></script>
+        <script src="Interface/Content/Assets/modules/sweetalert/sweetalert.min.js"></script>
 
         <script src="Interface/Content/Assets/modules/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js"></script>
         <script src="Interface/Content/Assets/modules/datatables/Select-1.2.4/js/dataTables.select.min.js"></script>

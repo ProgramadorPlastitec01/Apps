@@ -54,8 +54,8 @@ public class Tag_idea extends TagSupport {
                     out.print("</form>");
 
                     out.print("<div class='mt-2 d-flex justify-content-around'>");
-                    out.print("<button class='btn btn-info' onclick='ValidationSave(1)'>En gestión</button>");
-                    out.print("<button class='btn btn-green'onclick='ValidationSave(0)'>Finalizar</button>");
+                    out.print("<button class='btn btn-info' onclick='ValidationSave(1);cargarDatos()'>En gestión</button>");
+                    out.print("<button class='btn btn-green'onclick='ValidationSave(0);cargarDatos()'>Finalizar</button>");
                     out.print("</div>");
 
                 } else {
@@ -83,7 +83,7 @@ public class Tag_idea extends TagSupport {
             out.print("<div class='card-header' style='justify-content: space-between;'>");
             out.print("<div class='d-flex'>"
                     + "<div class='mr-2'>"
-                    + "<button class='btn btn-outline-primary btn-sm' style='border-radius: 4px; padding: 2px 9px;'  onclick=\"javascript:location.href='Setting.jsp'\" >"
+                    + "<button class='btn btn-outline-primary btn-sm' style='border-radius: 4px; padding: 2px 9px;'  onclick=\"javascript:location.href='Setting.jsp';cargarDatos()\" >"
                     + "<i class=\"far fa-hand-point-left\"></i>"
                     + "</button>"
                     + "</div>"
@@ -126,7 +126,7 @@ public class Tag_idea extends TagSupport {
                         if (state == 0) {
                             out.print("<button class='btn btn-green' ><i class=\"fas fa-check\"></i></button>");
                         } else {
-                            out.print("<a class='btn btn-green' href='Idea?opt=1&idIdea=" + ObjIdea[0] + "'><i class=\"fas fa-thumbs-up\"></i></a>");
+                            out.print("<a class='btn btn-green' href='Idea?opt=1&idIdea=" + ObjIdea[0] + "' onclick='cargarDatos()'><i class=\"fas fa-thumbs-up\"></i></a>");
                         }
                     } else {
                         out.print("<button class='btn btn-success btn-sm' style='border-radius: 4px; opacity: 0.6;' disabled data-toggle='tooltip' data-placement='top' title='No tiene permisos'><i class='fas fa-check'></i></button>");

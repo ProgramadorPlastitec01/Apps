@@ -129,7 +129,7 @@ public class Tag_profile extends TagSupport {
 
                 out.print("</div>");
                 out.print("<div class=\"card-footer text-right\">");
-                out.print("<button class=\"btn btn-green\">Guarda cambios</button>");
+                out.print("<button class=\"btn btn-green\" onclick='cargarDatos()'>Guarda cambios</button>");
                 out.print("</div>");
                 out.print("</div>");
                 out.print("</form>");

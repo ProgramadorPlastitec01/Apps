@@ -107,7 +107,7 @@ public class Tag_knowledgeTable extends TagSupport {
                     out.print("</div>");
 
                     out.print("<div class='text-center mt-2'>");
-                    out.print("<button class='btn btn-green'>Confirmar</button>");
+                    out.print("<button class='btn btn-green' onclick='cargarDatos()'>Confirmar</button>");
                     out.print("</div>");
                     out.print("</form>");
                 } else {
@@ -192,7 +192,7 @@ public class Tag_knowledgeTable extends TagSupport {
             out.print("</div>");
 
             out.print("<div class='text-center mt-2'>");
-            out.print("<button class='btn btn-green'>Confirmar</button>");
+            out.print("<button class='btn btn-green' onclick='cargarDatos()'>Confirmar</button>");
             out.print("</div>");
             out.print("</form>");
             out.print("</div>");
@@ -216,8 +216,8 @@ public class Tag_knowledgeTable extends TagSupport {
             out.print("<div class='card-header' style='justify-content: space-between;'>");
             out.print("<div class='d-flex'>"
                     + "<div class='mr-2'>"
-                    + "<button class='btn btn-outline-primary btn-sm' style='border-radius: 4px; padding: 2px 9px;'  onclick=\"javascript:location.href='Setting.jsp'\" >"
-                    + "<i class=\"far fa-hand-point-left\"></i>"
+                    + "<button class='btn btn-green btn-sm' style='border-radius: 4px; padding: 2px 9px;'  onclick=\"javascript:location.href='Setting.jsp';cargarDatos()\" >"
+                    + "<i class='fas fa-arrow-left'></i>"
                     + "</button>"
                     + "</div>"
                     + "<h4>Base de conocimiento</h4>"
@@ -250,24 +250,24 @@ public class Tag_knowledgeTable extends TagSupport {
                     out.print("<td>" + ObjKnow[0] + "</td>");
                     out.print("<td>" + ObjKnow[1] + "</td>");
                     out.print("<td>" + ObjKnow[2] + "</td>");
-                    out.print("<td><a class=\"btn btn-info\" onclick='window.location.href=\"DownloadKnowledge?File_name=" + ObjKnow[3] + "\"'><i class=\"fas fa-download\" style='color:white'></i></a></div></td>");
+                    out.print("<td><a class=\"btn btn-info\" onclick='window.location.href=\"DownloadKnowledge?File_name=" + ObjKnow[3] + "\"' target='_blank'><i class=\"fas fa-download\" style='color:white'></i></a></div></td>");
                     out.print("<td>" + ObjKnow[4] + "</td>");
                     int state = Integer.parseInt(ObjKnow[5].toString());
                     out.print("<td><div class='badge badge-" + ((state == 1) ? "success'>Activo" : "danger'>Inactivo") + "</div></td>");
                     out.print("<td class='text-center'>");
                     out.print("<div class='d-flex justify-content-around'>");
                     if (txtPermissions.contains("[69]")) {
-                        out.print("<button class='btn btn-warning btn-sm'  onclick='window.location.href=\"Knowledge?opt=1&IdKnowledge=" + ObjKnow[0] + "\"'><i class='fas fa-user-edit' ></i></button>");
+                        out.print("<button class='btn btn-warning btn-sm'  onclick='window.location.href=\"Knowledge?opt=1&IdKnowledge=" + ObjKnow[0] + "\";cargarDatos()'><i class='fas fa-user-edit' ></i></button>");
                     }
                     if (state == 1) {
                         if (txtPermissions.contains("[71]")) {
-                            out.print("<a class='btn btn-success btn-sm' href='Knowledge?opt=3&IdKnowledge=" + ObjKnow[0] + "&State=0'><i class='fas fa-check'></i></a>");
+                            out.print("<a class='btn btn-success btn-sm' href='Knowledge?opt=3&IdKnowledge=" + ObjKnow[0] + "&State=0' onclick='cargarDatos()'><i class='fas fa-check'></i></a>");
                         } else {
                             out.print("<button class='btn btn-success btn-sm' style='border-radius: 4px; opacity: 0.6;' disabled data-toggle='tooltip' data-placement='top' title='No tiene permisos'><i class='fas fa-check'></i></button>");
                         }
                     } else {
                         if (txtPermissions.contains("[71]")) {
-                            out.print("<a class='btn btn-danger btn-sm' href='Knowledge?opt=3&IdKnowledge=" + ObjKnow[0] + "&State=1'><i class='fas fa-times'></i></a>");
+                            out.print("<a class='btn btn-danger btn-sm' href='Knowledge?opt=3&IdKnowledge=" + ObjKnow[0] + "&State=1' onclick='cargarDatos()'><i class='fas fa-times'></i></a>");
                         } else {
                             out.print("<button class='btn btn-danger' style='border-radius: 4px; opacity: 0.6;' disabled data-toggle='tooltip' data-placement='top' title='No tiene permisos'><i class='fas fa-times'></i></button>");
                         }

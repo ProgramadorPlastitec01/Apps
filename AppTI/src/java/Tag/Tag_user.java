@@ -75,7 +75,7 @@ public class Tag_user extends TagSupport {
                     out.print("</div>");
                     out.print("</div>");
                     out.print("<div class='text-center mt-2'>");
-                    out.print("<button class='btn btn-green'>Confirmar</button>");
+                    out.print("<button class='btn btn-green' onclick='cargarDatos()'>Confirmar</button>");
                     out.print("</div>");
                     out.print("</form>");
                 } else {
@@ -128,7 +128,7 @@ public class Tag_user extends TagSupport {
             out.print("</div>");
             out.print("</div>");
             out.print("<div class='text-center mt-2'>");
-            out.print("<button class='btn btn-green'>Registrar</button>");
+            out.print("<button class='btn btn-green' onclick='cargarDatos()'>Registrar</button>");
             out.print("</div>");
             out.print("</form>");
             out.print("</div>");
@@ -187,24 +187,24 @@ public class Tag_user extends TagSupport {
                     out.print("<div class='d-flex justify-content-around'>");
                     if (state == 1) {
                         if (txtPermissions.contains("[4]")) {
-                            out.print("<a class='btn btn-success btn-sm' href='User?opt=3&idUser=" + ObjUser[0] + "&state=0'><i class='fas fa-check'></i></a>");
+                            out.print("<a class='btn btn-success btn-sm' href='User?opt=3&idUser=" + ObjUser[0] + "&state=0' onclick='cargarDatos()'><i class='fas fa-check'></i></a>");
                         } else {
                             out.print("<button class='btn btn-success btn-sm' style='border-radius: 4px; opacity: 0.6;' disabled data-toggle='tooltip' data-placement='top' title='No tiene permisos'><i class='fas fa-check'></i></button>");
                         }
                     } else {
                         if (txtPermissions.contains("[4]")) {
-                            out.print("<a class='btn btn-danger btn-sm' href='User?opt=3&idUser=" + ObjUser[0] + "&state=1'><i class='fas fa-times'></i></a>");
+                            out.print("<a class='btn btn-danger btn-sm' href='User?opt=3&idUser=" + ObjUser[0] + "&state=1' onclick='cargarDatos()'><i class='fas fa-times'></i></a>");
                         } else {
                             out.print("<button class='btn btn-danger' style='border-radius: 4px; opacity: 0.6;' disabled data-toggle='tooltip' data-placement='top' title='No tiene permisos'><i class='fas fa-times'></i></button>");
                         }
                     }
                     if (txtPermissions.contains("[5]")) {
-                        out.print("<button class='btn btn-warning btn-sm' onclick='window.location.href=\"User?opt=1&idUser=" + ObjUser[0] + "\"'><i class='fas fa-user-edit'></i></button>");
+                        out.print("<button class='btn btn-warning btn-sm' onclick='window.location.href=\"User?opt=1&idUser=" + ObjUser[0] + "\";cargarDatos()'><i class='fas fa-user-edit'></i></button>");
                     } else {
                         out.print("<button class='btn btn-warinig btn-sm' style='border-radius: 4px; opacity: 0.6;' disabled data-toggle='tooltip' data-placement='top' title='No tiene permisos'><i class='fas fa-edit'></i></button>");
                     }
                     if (txtPermissions.contains("[3]")) {
-                        out.print("<button class='btn btn-info btn-sm' onclick='window.location.href=\"User?opt=4&idUser=" + ObjUser[0] + "\"'><i class=\"fas fa-key\"></i></button>");
+                        out.print("<button class='btn btn-info btn-sm' onclick='window.location.href=\"User?opt=4&idUser=" + ObjUser[0] + "\";cargarDatos()'><i class=\"fas fa-key\"></i></button>");
                     } else {
                         out.print("<button class='btn btn-info btn-sm' style='border-radius: 4px; opacity: 0.6;' disabled data-toggle='tooltip' data-placement='top' title='No tiene permisos'><i class='fas fa-key'></i></button>");
                     }

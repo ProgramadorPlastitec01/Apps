@@ -10,6 +10,8 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Locale;
 import Controller.ActivitySystemControllerJpa;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Tag_activitySystem extends TagSupport {
 
@@ -20,7 +22,9 @@ public class Tag_activitySystem extends TagSupport {
         ActivitySystemControllerJpa ActivityJpa = new ActivitySystemControllerJpa();
         Calendar cal = Calendar.getInstance();
         int CurrYear = 0;
+        int CurrYearF = 0;
         int CurrMonth = 0;
+        int CurrMonthF = 0;
         String nombreMes = "";
         String[] meses = new DateFormatSymbols(new Locale("es", "ES")).getMonths();
         int idUser = Integer.parseInt(sesion.getAttribute("idUsuario").toString());
@@ -30,14 +34,14 @@ public class Tag_activitySystem extends TagSupport {
             try {
                 Data = pageContext.getRequest().getParameter("Data");
                 if (Data.contains("/")) {
-                    CurrYear = Integer.parseInt(Data.split("/")[0]);
-                    CurrMonth = Integer.parseInt(Data.split("/")[1]);
-                    nombreMes = meses[(CurrMonth-1)];
+                    CurrYearF = Integer.parseInt(Data.split("/")[0]);
+                    CurrMonthF = Integer.parseInt(Data.split("/")[1]);
+                    nombreMes = meses[(CurrMonthF - 1)];
                 }
             } catch (Exception e) {
                 Data = "";
                 CurrYear = cal.get(Calendar.YEAR);
-                CurrMonth = (cal.get(Calendar.MONTH)) + 1;
+                CurrMonth = (cal.get(Calendar.MONTH));
                 nombreMes = meses[CurrMonth];
             }
             out.print("<section class='section'>");
@@ -48,7 +52,7 @@ public class Tag_activitySystem extends TagSupport {
             out.print("<div class=\"section-body\">");
 
             out.print("<div class='d-flex justify-content-between'>");
-            out.print("<h2 class=\"section-title marginTilte\"><span style='text-transform: capitalize;'>" + nombreMes + "</span> " + CurrYear + "</h2>");
+            out.print("<h2 class=\"section-title marginTilte\"><span style='text-transform: capitalize;'>" + nombreMes + "</span> " + (CurrYearF > 0 ? CurrYearF : CurrYear) + "</h2>");
 
             out.print("<div>");
             try {
@@ -56,28 +60,20 @@ public class Tag_activitySystem extends TagSupport {
             } catch (Exception e) {
                 lst_filter = null;
             }
-            out.print("<select id='mySelect' class='form-control select2' onchange='SendFormSelect(this)'>");
+            out.print("<select id='mySelect' class='form-control select2' onchange='SendFormSelect(this); cargarDatos()'>");
+            out.print("<option style='text-transform: capitalize;' value='' selected disabled>SELECCIONAR MES</option>");
             if (lst_filter != null) {
                 for (int i = 0; i < lst_filter.size(); i++) {
                     Object[] ObjFilter = (Object[]) lst_filter.get(i);
                     int YearFilter = Integer.parseInt(ObjFilter[0].toString());
                     int MonthFilter = Integer.parseInt(ObjFilter[1].toString());
                     String MonthTrasform = ObjFilter[2].toString().toUpperCase();
-
-                    if (YearFilter == CurrYear && MonthFilter == CurrMonth) {
-                        out.print("<option selected style='text-transform: capitalize;' "
-                                + "data-year='" + YearFilter + "' data-month='" + MonthFilter + "'>"
-                                + ObjFilter[0] + " | " + MonthTrasform + " | " + ObjFilter[3]
-                                + "</option>");
-                    } else {
-                        out.print("<option style='text-transform: capitalize;' "
-                                + "data-year='" + YearFilter + "' data-month='" + MonthFilter + "'>"
-                                + ObjFilter[0] + " | " + MonthTrasform + " | " + ObjFilter[3]
-                                + "</option>");
-                    }
+                    out.print("<option style='text-transform: capitalize;' " + (CurrMonthF == MonthFilter ? "selected" : "") + " "
+                            + "data-year='" + YearFilter + "' data-month='" + MonthFilter + "'>"
+                            + ObjFilter[0] + " | " + MonthTrasform + " | " + ObjFilter[3]
+                            + "</option>");
                 }
             }
-            out.print("</select>");
             out.print("</select>");
             out.print("</div>");
 
@@ -89,7 +85,7 @@ public class Tag_activitySystem extends TagSupport {
             out.print("<div class=\"activities\">");
             //<editor-fold defaultstate="collapsed" desc="ACTIVITIES">
 
-            lst_activitySys = ActivityJpa.ConsultActivitySystem(idUser, CurrYear, CurrMonth);
+            lst_activitySys = ActivityJpa.ConsultActivitySystem(idUser, (CurrYearF > 0 ? CurrYearF : CurrYear), (CurrMonthF > 0 ? CurrMonthF : (CurrMonth + 1)));
             if (lst_activitySys != null) {
                 for (int i = 0; i < lst_activitySys.size(); i++) {
                     Object[] ObjActivity = (Object[]) lst_activitySys.get(i);
@@ -115,7 +111,7 @@ public class Tag_activitySystem extends TagSupport {
             out.print("</div>");
 
             out.print("<div class=\"col-7\">");
-            lst_group = ActivityJpa.ConsultActivityGroupUser(idUser, CurrYear, CurrMonth);
+            lst_group = ActivityJpa.ConsultActivityGroupUser(idUser, (CurrYearF > 0 ? CurrYearF : CurrYear), (CurrMonthF > 0 ? CurrMonthF : (CurrMonth + 1)));
             if (lst_group != null) {
                 StringBuilder labels = new StringBuilder();
                 StringBuilder values = new StringBuilder();
@@ -186,6 +182,7 @@ public class Tag_activitySystem extends TagSupport {
 
             out.print("</section>");
         } catch (IOException e) {
+            Logger.getLogger(Tag_activitySystem.class.getName()).log(Level.SEVERE, null, e);
         }
         return super.doStartTag();
     }

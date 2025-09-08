@@ -52,7 +52,6 @@ public class Tag_shift extends TagSupport {
             idRol = 0;
             txtPermissions = "";
         }
-
         //<editor-fold defaultstate="collapsed" desc="WEEK ACTUAL">
         LocalDate today = LocalDate.now();
         int currentMonth = today.getMonthValue();
@@ -296,7 +295,7 @@ public class Tag_shift extends TagSupport {
                 out.print("<input type='hidden' class='form-control' name='WeekAct' id='' value='" + weekAct + "' placeholder='Semanas iniciales'>");
                 out.print("<input type='hidden' class='form-control' name='WeekNext' id='' value='" + weekNext + "' placeholder='Semanas finales'>");
                 out.print("<div class='text-center'>");
-                out.print("<button type='button' class='btn btn-green' onclick='ejectForm2()'>Actualizar</button>");
+                out.print("<button type='button' class='btn btn-green' onclick='ejectForm2();cargarDatos()' >Actualizar</button>");
                 out.print("</div>");
                 //</editor-fold>
                 out.print("</form>");
@@ -430,7 +429,7 @@ public class Tag_shift extends TagSupport {
             out.print("<input type='hidden' class='form-control' name='WeekAct' id='' value='" + weekAct + "' placeholder='Semanas iniciales'>");
             out.print("<input type='hidden' class='form-control' name='WeekNext' id='' value='" + weekNext + "' placeholder='Semanas finales'>");
             out.print("<div class='text-center'>");
-            out.print("<button type='button' class='btn btn-green' onclick='ejectForm()'>Programar</button>");
+            out.print("<button type='button' class='btn btn-green' onclick='ejectForm();cargarDatos()'>Programar</button>");
             out.print("</div>");
             //</editor-fold>
             out.print("</form>");

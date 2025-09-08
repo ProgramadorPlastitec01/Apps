@@ -162,7 +162,7 @@ public class Tag_activity extends TagSupport {
                 out.print("</div>");
                 out.print("<input type='hidden' class='form-control' name='idEject' id='idAct'>");
                 out.print("<div class='text-center'>");
-                out.print("<button class='btn btn-warning mt-2'>Ejecutar</button>");
+                out.print("<button class='btn btn-warning mt-2' onclick='cargarDatos()' >Ejecutar</button>");
                 out.print("</div>");
                 out.print("</form>");
                 out.print("</div>");
@@ -184,7 +184,7 @@ public class Tag_activity extends TagSupport {
                 out.print("</div>");
                 out.print("<input type='hidden' class='form-control' name='idVerf' id='idVer'>");
                 out.print("<div class='text-center'>");
-                out.print("<button class='btn btn-info mt-2'>Verificar</button>");
+                out.print("<button class='btn btn-info mt-2' onclick='cargarDatos()'>Verificar</button>");
                 out.print("</div>");
                 out.print("</form>");
                 out.print("</div>");
@@ -428,7 +428,7 @@ public class Tag_activity extends TagSupport {
                     //</editor-fold>
 
                     out.print("<div class='text-center'>");
-                    out.print("<button class='btn btn-green'>Confirmar</button>");
+                    out.print("<button class='btn btn-green' onclick='cargarDatos()'>Confirmar</button>");
                     out.print("</div>");
 
                     out.print("</form>");
@@ -550,7 +550,7 @@ public class Tag_activity extends TagSupport {
                 out.print("</div>");
                 out.print("<input type='hidden' class='form-control' name='typeSelect' id='typeSelec' value=''>");
                 out.print("<div class='mt-4 text-center'>");
-                out.print("<button type='button' class='btn btn-green' onclick='validForm()'>Registrar</button>");
+                out.print("<button type='button' class='btn btn-green' onclick='validForm();cargarDatos()' >Registrar</button>");
                 out.print("</div>");
 
                 out.print("</form>");
@@ -567,7 +567,7 @@ public class Tag_activity extends TagSupport {
                 out.print("<div class='card-header' style='justify-content: space-between;'>");
                 out.print("<h2>Actividades programadas</h2>");
                 if (txtPermissions.contains("[61]")) {
-                    out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1)'><i class='fas fa-plus'></i></button>");
+                    out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1);cargarDatos()'><i class='fas fa-plus'></i></button>");
                 }
                 out.print("</div>");
                 out.print("<div class='card-body'>");
@@ -629,7 +629,7 @@ public class Tag_activity extends TagSupport {
                         out.print("<td>");
                         out.print("<div class='d-flex text-center'>");
                         if (txtPermissions.contains("[62]")) {
-                            out.print("<button class='btn btn-warning btn-sm' onclick='window.location.href=\"Activity?opt=1&idAct=" + ObjAct[0] + "\"'><i class='fas fa-edit'></i></button>");
+                            out.print("<button class='btn btn-warning btn-sm' onclick='window.location.href=\"Activity?opt=1&idAct=" + ObjAct[0] + "\";cargarDatos()'><i class='fas fa-edit'></i></button>");
                         } else {
                             out.print("<button class='btn btn-warning disabled btn-sm'><i class='fas fa-edit'></i></button>");
                         }
