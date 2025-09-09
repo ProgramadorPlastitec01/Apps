@@ -1,5 +1,6 @@
 package Servlet;
 
+import Controller.DeviceDetailJpaController;
 import Controller.UserControllerJpa;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -11,6 +12,8 @@ import javax.servlet.http.HttpSession;
 
 import Controller.DeviceJpaController;
 import Controller.DeviceHeaderJpaController;
+import Controller.SettingControllerJpa;
+import java.util.List;
 
 public class Device extends HttpServlet {
 
@@ -21,13 +24,19 @@ public class Device extends HttpServlet {
         
         DeviceJpaController DeviceJpa = new DeviceJpaController();
         DeviceHeaderJpaController DeviceHeaderJpa = new DeviceHeaderJpaController();
+        DeviceDetailJpaController DeviceDetailJpa = new DeviceDetailJpaController();
+        SettingControllerJpa SettingJpa = new SettingControllerJpa();
+        
+        List lst_setting = null;
         
         HttpSession sesion = request.getSession();
         int id_user = Integer.parseInt(sesion.getAttribute("idUsuario").toString());
         String name_user = sesion.getAttribute("Nombres").toString();
         int opt = Integer.parseInt(request.getParameter("opt"));
-        int idTypeDv = 0, steDv = 0, act = 0, itm = 0, consect = 0, idArea = 0, idDevice = 0, idDeviceHead = 0;
+        int idTypeDv = 0, steDv = 0, act = 0, itm = 0, consect = 0, idArea = 0, idDevice = 0, idDeviceHead = 0, idDeviceDetail = 0, temp = 0,idItem = 0,
+                idSign = 0, docx = 0, codx = 0;
         String chargue = "", respon = "", nameDv = "", serial = "", location = "", date = "", Structure = "";
+        String NumberPC = "", Mail = "", Description = "", typeDoc = "", dte_doc = "", type = "", DocFiles = "", SigMode = "", htmlTabla = "", DocCode = "", xtemp = "";
         boolean result = false;
         try {
             switch (opt) {
@@ -126,7 +135,7 @@ public class Device extends HttpServlet {
 //</editor-fold>
                     break;
                 case 3:
-                    //<editor-fold defaultstate="collapsed" desc="REGISTER EVENT">
+                    //<editor-fold defaultstate="collapsed" desc="REGISTER HEADER">
                     try {
                         idTypeDv = Integer.parseInt(request.getParameter("idTypeDv"));
                     } catch (Exception e) {
@@ -152,6 +161,302 @@ public class Device extends HttpServlet {
                     request.getRequestDispatcher("Device?opt=1&act=2&idTypeDv=" + idTypeDv + "&idDevice="+ idDevice +"").forward(request, response);
                     //</editor-fold>
                     break;
+                case 4:
+                    //<editor-fold defaultstate="collapsed" desc="UPLOAD FILES">                    
+                    try {
+                        idDeviceHead = Integer.parseInt(request.getParameter("idDeviceHead"));
+                    } catch (NumberFormatException e) {
+                        idDeviceHead = 0;
+                    }
+                    try {
+                        idDeviceDetail = Integer.parseInt(request.getParameter("idDeviceDetail"));
+                    } catch (NumberFormatException e) {
+                        idDeviceDetail = 0;
+                    }
+                    try {
+                        type = request.getParameter("type");
+                    } catch (Exception e) {
+                        type = "";
+                    }
+                    try {
+                        DocFiles = request.getParameter("fileDocs");
+                    } catch (Exception e) {
+                        DocFiles = "";
+                    }
+                    try {
+                        temp = Integer.parseInt(request.getParameter("xtemp"));
+                    } catch (Exception e) {
+                        temp = 0;
+                    }
+                    if (temp == 1) {
+//                        result = CompDetailJpa.UpdatePcDetailContent(idDetail, DocFiles, 1);
+                        request.setAttribute("UploadFile_update", result);
+                    } else {
+//                        result = CompDetailJpa.registerPcDetail(idDeviceHead, type, DocFiles, "N/A", 1, 0);
+//                        result = CompHeader.ChangueStateComputerHeader(idDeviceHead);
+                        request.setAttribute("UploadFile_new", result);
+                    }
+                    request.getRequestDispatcher("Device?opt=1&act=4&IdDevice=" + idDevice + "&idDet=0").forward(request, response);
+                    //</editor-fold>
+                    break;
+                case 5:
+                    //<editor-fold defaultstate="collapsed" desc="CHANGE STATE">
+                    try {
+                        idDeviceHead = Integer.parseInt(request.getParameter("idpcHead"));
+                    } catch (NumberFormatException e) {
+                        idDeviceHead = 0;
+                    }
+                    try {
+                        type = request.getParameter("type");
+                    } catch (Exception e) {
+                        type = "";
+                    }
+                    try {
+                        idDeviceDetail = Integer.parseInt(request.getParameter("idDetail"));
+                    } catch (NumberFormatException e) {
+                        idDeviceDetail = 0;
+                    }
+//                    result = CompHeader.ChangueStateComputerHeader(idDeviceHead);
+                    if (result) {
+                        try {
+                            xtemp = request.getParameter("xtemp");
+                        } catch (Exception e) {
+                            xtemp = "";
+                        }
+                        if (xtemp.equals("1")) {
+//                            result = CompDetailJpa.ComputerDetailFinishState(idDetail);
+                        }
+                    }
+                    request.setAttribute("ComputerState", result);
+                    request.getRequestDispatcher("Device?opt=1&IdDevice=" + idDevice + "&act=3&idDet=0").forward(request, response);
+                    //</editor-fold>
+                    break;
+                case 6:
+                    //<editor-fold defaultstate="collapsed" desc="ASIGN ITEM">
+                    try {
+                        idDeviceHead = Integer.parseInt(request.getParameter("idpcHead"));
+                    } catch (NumberFormatException e) {
+                        idDeviceHead = 0;
+                    }
+                    try {
+                        type = request.getParameter("type");
+                    } catch (Exception e) {
+                        type = "";
+                    }
+
+                    idItem = Integer.parseInt(request.getParameter("cbxItem"));
+
+//                    result = ComputerJpa.UpdateComputerItem(IdComputer, idItem);
+
+                    if (result) {
+//                        result = CompDetailJpa.registerPcDetail(idDeviceHead, type, idItem + "", "N/A", 1, 1);
+//                        result = CompHeader.ChangueStateComputerHeader(idDeviceHead);
+                    }
+
+                    request.setAttribute("ComputerItem", result);
+                    request.getRequestDispatcher("Device?opt=1&IdDevice=" + idDevice + "&act=4&IdDeviceHead=" + idDeviceHead + "&type=" + type + "").forward(request, response);
+                    //</editor-fold>
+                    break;
+                case 7:
+                    //<editor-fold defaultstate="collapsed" desc="REGISTER ASIG">
+                    try {
+                        idDeviceHead = Integer.parseInt(request.getParameter("idpcHead"));
+                    } catch (NumberFormatException e) {
+                        idDeviceHead = 0;
+                    }
+                    try {
+                        type = request.getParameter("type");
+                    } catch (Exception e) {
+                        type = "";
+                    }
+                    String structure = "";
+                    //<editor-fold defaultstate="collapsed" desc="DECLARATIONS">
+                    String txt_post = "",
+                     txt_area = "",
+                     txt_location = "",
+                     txt_bossname = "",
+                     txt_name = "",
+                     txt_indentity = "",
+                     txt_place = "",
+                     txt_user = "",
+                     txt_day = "",
+                     txt_month = "",
+                     txt_anio = "",
+                     txt_comm1 = "",
+                     txt_comm2 = "",
+                     txt_comm3 = "",
+                     txt_comm4 = "",
+                     txt_comm5 = "",
+                     textcal = "",
+                     textFll = "";
+
+                    String txt_otherItem = "",
+                     txt_soft = "";
+
+                    int CounterSoftware = 0;
+
+                    txt_post = "[" + request.getParameter("txt_post") + "]";
+                    txt_area = "[" + request.getParameter("txt_area") + "]";
+                    txt_location = "[" + request.getParameter("txt_location") + "]";
+                    txt_bossname = "[" + request.getParameter("txt_bossname") + "]";
+                    txt_name = "[" + request.getParameter("txt_name") + "]";
+                    txt_indentity = "[" + request.getParameter("txt_indentity") + "]";
+                    txt_place = "[" + request.getParameter("txt_place") + "]";
+                    txt_user = "[" + request.getParameter("txt_user") + "]";
+                    txt_day = "[" + request.getParameter("txt_day") + "]";
+                    txt_month = "[" + request.getParameter("txt_month") + "]";
+                    txt_anio = "[" + request.getParameter("txt_anio") + "]";
+                    txt_comm1 = "[" + request.getParameter("txt_comm1") + "]";
+                    txt_comm2 = "[" + request.getParameter("txt_comm2") + "]";
+                    txt_comm3 = "[" + request.getParameter("txt_comm3") + "]";
+                    txt_comm4 = "[" + request.getParameter("txt_comm4") + "]";
+                    txt_comm5 = "[" + request.getParameter("txt_comm5") + "]";
+                    textcal = "[" + request.getParameter("textcal") + "]";
+                    textFll = "[" + request.getParameter("textFll") + "]";
+                    //</editor-fold>
+
+                    try {
+                        txt_otherItem = request.getParameter("txt_otherItem").replace("] [", ",");
+                    } catch (Exception e) {
+                        txt_otherItem = "[NoN]";
+                    }
+                    try {
+                        txt_soft = request.getParameter("txt_soft").replace("] [", "---");
+                    } catch (Exception e) {
+                        txt_soft = "[NoN]";
+                    }
+
+                    structure = txt_otherItem + txt_soft + txt_post + txt_area + txt_location + txt_bossname + txt_name + txt_indentity + txt_place + txt_user
+                            + txt_day + txt_month + txt_anio + txt_comm1 + txt_comm2 + txt_comm3 + txt_comm4 + txt_comm5 + textcal + textFll;
+
+                    lst_setting = SettingJpa.ConsultSettingCategorie("DocSig003");
+                    String respo = "";
+                    if (lst_setting != null) {
+                        if (lst_setting != null) {
+                            Object[] ObjSett = (Object[]) lst_setting.get(0);
+                            respo = ObjSett[2].toString();
+                        } else {
+                            respo = "[NoN]";
+                        }
+                    }
+                    if (!textcal.equals("Si")) {
+//                        CompHeader.DleeCalificationComputerHeader(idDeviceHead);
+                    }
+//                    result = CompDetailJpa.registerPcDetail(idDeviceHead, type, structure, respo, 1, 1);
+                    request.setAttribute("Register003", result);
+                    request.getRequestDispatcher("Device?opt=1&IdDevice=" + idDevice + "&act=4&IdDeviceHead=" + idDeviceHead + "&type=" + type + "").forward(request, response);
+                    //</editor-fold>
+                    break;
+                case 8:
+                    //<editor-fold defaultstate="collapsed" desc="SIGNATURE DOCUMENT">
+                    try {
+                        idDeviceDetail = Integer.parseInt(request.getParameter("idDetail"));
+                    } catch (NumberFormatException e) {
+                        idDeviceDetail = 0;
+                    }
+                    try {
+                        idDeviceHead = Integer.parseInt(request.getParameter("idpcHead"));
+                    } catch (NumberFormatException e) {
+                        idDeviceHead = 0;
+                    }
+                    try {
+                        type = request.getParameter("type");
+                    } catch (Exception e) {
+                        type = "";
+                    }
+                    try {
+                        idSign = Integer.parseInt(request.getParameter("idSignature"));
+                    } catch (Exception e) {
+                        idSign = 0;
+                    }
+                    try {
+                        docx = Integer.parseInt(request.getParameter("NmbDoc"));
+                    } catch (Exception e) {
+                        docx = 0;
+                    }
+                    try {
+                        codx = Integer.parseInt(request.getParameter("NmbCod"));
+                    } catch (Exception e) {
+                        codx = 0;
+                    }
+                    try {
+                        SigMode = request.getParameter("SigMode");
+                    } catch (Exception e) {
+                        SigMode = "";
+                    }
+
+                    String Signature = "";
+List lst_detail = null;
+//                    List lst_detail = DeviceDetailJpa.ConsultComputerDetailxid(idDetail);
+                    if (lst_detail != null) {
+                        Object[] ObjDet = (Object[]) lst_detail.get(0);
+                        Signature = ObjDet[5].toString().replace(SigMode + "/XX", SigMode + "/" + idSign);
+                    }
+//                    if (!Signature.contains("/XX")) {
+//                        result = CompDetailJpa.ComputerSignaturxe(idDetail, Signature);
+//                    } else {
+//                        result = CompDetailJpa.ComputerSignaturxe(idDetail, Signature, 0);
+//                    }
+
+                    request.setAttribute("SignatureRegs", result);
+                    request.getRequestDispatcher("Device?opt=1&IdDevice=" + idDevice + "&act=4&IdDeviceHead=" + idDeviceHead + "&type=" + type + "&NmbDoc=0").forward(request, response);
+                    //</editor-fold>
+                    break;
+                case 9:
+                    //<editor-fold defaultstate="collapsed" desc="REGISTER PREVENTIVE MAINTENANCE">
+                    try {
+                        idDeviceHead = Integer.parseInt(request.getParameter("idpcHead"));
+                    } catch (NumberFormatException e) {
+                        idDeviceHead = 0;
+                    }
+                    try {
+                        idDeviceDetail = Integer.parseInt(request.getParameter("idDetail"));
+                    } catch (NumberFormatException e) {
+                        idDeviceDetail = 0;
+                    }
+                    try {
+                        type = request.getParameter("type");
+                    } catch (Exception e) {
+                        type = "";
+                    }
+                    try {
+                        textcal = request.getParameter("textcal");
+                    } catch (Exception e) {
+                        textcal = "";
+                    }
+                    try {
+                        htmlTabla = request.getParameter("htmlTabla");
+                        if (!htmlTabla.contains("<div id='idtabla'>")) {
+                            htmlTabla = "<div id=\"idtabla\">" + htmlTabla + "</div>";
+                        }
+                    } catch (Exception e) {
+                        htmlTabla = "<div id=\"idtabla\">" + htmlTabla + "</div>";
+                    }
+
+                    if (idDeviceDetail > 0) {
+//                        result = CompDetailJpa.UpdatePcDetailContent(idDetail, htmlTabla, 0);
+                    } else {
+                        try {
+                            DocCode = request.getParameter("DocCode");
+                        } catch (Exception e) {
+                            DocCode = "";
+                        }
+                        lst_setting = SettingJpa.ConsultSettingCategorie("DocSig" + DocCode + "");
+                        respo = "";
+                        if (lst_setting != null) {
+                            if (lst_setting != null) {
+                                Object[] ObjSett = (Object[]) lst_setting.get(0);
+                                respo = ObjSett[2].toString();
+                            } else {
+                                respo = "";
+                            }
+                        }
+//                        result = CompDetailJpa.registerPcDetail(idDeviceHead, type, htmlTabla, respo, 1, 1);
+                    }
+                    request.setAttribute("Register004_029", result);
+                    request.getRequestDispatcher("Device?opt=1&IdDevice=" + idDevice + "&act=4&IdDeviceHead=" + idDeviceHead + "&type=" + type + "").forward(request, response);
+                    //</editor-fold>
+                    break;    
             }
         } catch (Exception e) {
         }
