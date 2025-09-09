@@ -26,7 +26,7 @@ public class Device extends HttpServlet {
         int id_user = Integer.parseInt(sesion.getAttribute("idUsuario").toString());
         String name_user = sesion.getAttribute("Nombres").toString();
         int opt = Integer.parseInt(request.getParameter("opt"));
-        int idTypeDv = 0, steDv = 0, act = 0, itm = 0, consect = 0, idArea = 0, idDevice = 0;
+        int idTypeDv = 0, steDv = 0, act = 0, itm = 0, consect = 0, idArea = 0, idDevice = 0, idDeviceHead = 0;
         String chargue = "", respon = "", nameDv = "", serial = "", location = "", date = "", Structure = "";
         boolean result = false;
         try {
@@ -53,10 +53,16 @@ public class Device extends HttpServlet {
                     } catch (Exception e) {
                         idDevice = 0;
                     }
+                    try {
+                        idDeviceHead = Integer.parseInt(request.getParameter("idDeviceHead"));
+                    } catch (Exception e) {
+                        idDeviceHead = 0;
+                    }
                     request.setAttribute("act", act);
                     request.setAttribute("idTypeDv", idTypeDv);
                     request.setAttribute("steDv", steDv);
                     request.setAttribute("idDevice", idDevice);
+                    request.setAttribute("idDeviceHead", idDeviceHead);
                     request.getRequestDispatcher("Device.jsp").forward(request, response);
                     //</editor-fold>
                     break;

@@ -14,6 +14,7 @@ import Controller.ItemJpaController;
 import Controller.AreaControllerJpa;
 import Controller.DeviceHeaderJpaController;
 import Controller.TypeSecuenceJpaController;
+import Controller.DeviceDetailJpaController;
 
 public class Tag_device extends TagSupport {
 
@@ -25,6 +26,7 @@ public class Tag_device extends TagSupport {
         ItemJpaController ItemJpa = new ItemJpaController();
         AreaControllerJpa AreaJpa = new AreaControllerJpa();
         DeviceHeaderJpaController DeviceHead = new DeviceHeaderJpaController();
+        DeviceDetailJpaController DeviceDetailJpa = new DeviceDetailJpaController();
         TypeSecuenceJpaController SecuenceJpa = new TypeSecuenceJpaController();
 
         List lst_device = null;
@@ -33,6 +35,7 @@ public class Tag_device extends TagSupport {
         List lst_item = null;
         List lst_area = null;
         List lst_secuence = null;
+        List lst_DeviceDetail = null;
 
         int action = 0, idTypeDv = 0, steDv = 0, idDevice = 0, state = 0;
         String nameDevice = "", typeDvName = "";
@@ -95,14 +98,14 @@ public class Tag_device extends TagSupport {
 
                 lst_deviceHead = DeviceHead.ConsultDeviceHeaderIdHead(idDeviceHead);
                 if (lst_deviceHead != null) {
-                    Object[] ObjDvHe= (Object[]) lst_deviceHead.get(0);
+                    Object[] ObjDvHe = (Object[]) lst_deviceHead.get(0);
                     structure = ObjDvHe[3].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
 
                     out.print("<div class='card'>");
                     out.print("<div class=\"row mt-4\" style='width: 100%; justify-content: center;'>");
                     out.print("<div class=\"col-12\">");
                     out.print("<div class=\"wizard-steps\" style='display: flex; flex-wrap: wrap; justify-content: center;'>");
-                    
+
                     state = Integer.parseInt(ObjDvHe[4].toString());
                     for (int i = 1; i < structure.length; i++) {
                         String[] idxnamexico = structure[i].toString().split("/");
@@ -114,7 +117,7 @@ public class Tag_device extends TagSupport {
                         }
 
                         if (i == state) {
-                            out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"Computer?opt=1&mod=3&IdComputer=" + IdComputer + "&idDoc=" + id + "&idpcHead=" + idPcHead + "&type=" + structure[i] + "&step=" + i + "\"' style='background: #33bf98; color:#0b0025; cursor: pointer;' data-toggle='tooltip' data-placement='top' title='En proceso'>");
+                            out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"Computer?opt=1&mod=3&IdComputer=" + "&idDoc=" + id + "&idpcHead=" + "&type=" + structure[i] + "&step=" + i + "\"' style='background: #33bf98; color:#0b0025; cursor: pointer;' data-toggle='tooltip' data-placement='top' title='En proceso'>");
                             out.print("<div class=\"wizard-step-icon\">");
                             out.print("<i class=\"" + ico + "\"></i>");
                             out.print("</div>");
@@ -138,11 +141,11 @@ public class Tag_device extends TagSupport {
                             out.print("</div>");
                             out.print("</div>");
                         } else {
-                            lst_compDetail = ComDetail.ConsultComputerDetailxPCxType(idPcHead, name);
-                            if (lst_compDetail != null) {
-                                Object[] ObSt = (Object[]) lst_compDetail.get(0);
+                            lst_DeviceDetail = DeviceDetailJpa.ConsultDeviceDetailxDvxType(idDeviceHead, name);
+                            if (lst_DeviceDetail != null) {
+                                Object[] ObSt = (Object[]) lst_DeviceDetail.get(0);
                                 if (ObSt[5].toString().contains("XX")) {
-                                    out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"Computer?opt=1&mod=3&IdComputer=" + IdComputer + "&idDoc=" + id + "&idpcHead=" + idPcHead + "&type=" + structure[i] + "&step=" + i + "\"' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
+                                    out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"Computer?opt=1&mod=3&IdComputer=" + "&idDoc=" + id + "&idpcHead=" + "&type=" + structure[i] + "&step=" + i + "\"' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
                                     out.print("<div class=\"wizard-step-icon\">");
                                     out.print("<i class=\"" + ico + "\"></i>");
                                     out.print("</div>");
@@ -156,7 +159,7 @@ public class Tag_device extends TagSupport {
                                 } else {
                                     int steDet = Integer.parseInt(ObSt[6].toString());
                                     if (steDet == 0) {
-                                        out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"Computer?opt=1&mod=3&IdComputer=" + IdComputer + "&idDoc=" + id + "&idpcHead=" + idPcHead + "&type=" + structure[i] + "&step=" + i + "\"' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
+                                        out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"Computer?opt=1&mod=3&IdComputer=" + "&idDoc=" + id + "&idpcHead=" + "&type=" + structure[i] + "&step=" + i + "\"' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
                                         out.print("<div class=\"wizard-step-icon\">");
                                         out.print("<i class=\"" + ico + "\"></i>");
                                         out.print("</div>");
@@ -169,7 +172,7 @@ public class Tag_device extends TagSupport {
                                         out.print("</div>");
                                     } else if (steDet == 2) {
 //                                    out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"AppDetail?opt=1&mod=3&idApp\"' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
-                                        out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"Computer?opt=1&mod=3&IdComputer=" + IdComputer + "&idDoc=" + id + "&idpcHead=" + idPcHead + "&type=" + structure[i] + "&step=" + i + "\"' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
+                                        out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"Computer?opt=1&mod=3&IdComputer=" + "&idDoc=" + id + "&idpcHead=" + "&type=" + structure[i] + "&step=" + i + "\"' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
                                         out.print("<div class=\"wizard-step-icon\">");
                                         out.print("<i class=\"" + ico + "\"></i>");
                                         out.print("</div>");
@@ -198,7 +201,7 @@ public class Tag_device extends TagSupport {
                         }
 
                     }
-                    
+
                 }
 
                 out.print("</div>");
@@ -316,7 +319,7 @@ public class Tag_device extends TagSupport {
                             out.print("<td>" + stat[1] + "</td>");
                         }
                         out.print("<td class='text-center'>");
-                        out.print("<button class='btn btn-yellow' onclick='window.location.href=\"\"'><i class='fas fa-folder-open'></i></button>");
+                        out.print("<button class='btn btn-yellow' onclick='window.location.href=\"Device?opt=1&act=3&idTypeDv=" + idTypeDv + "&idDevice=" + idDevice + "&idDeviceHead=" + Objdevice + "\"'><i class='fas fa-folder-open'></i></button>");
                         out.print("</td>");
                         out.print("</tr>");
                     }
