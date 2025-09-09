@@ -112,6 +112,7 @@ public class PendingControllerJpa {
             return null;
         }
     }
+
     public List ConsultPendingAlert(String Managed, String User) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
@@ -131,14 +132,13 @@ public class PendingControllerJpa {
         }
     }
 
-
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="PROGRESS">
-    public boolean PendingRegister(String afi, int prt, String mng, String dcp, int urg) {
+    public boolean PendingRegister(String afi, int prt, String mng, String dcp, String dln, int urg) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
-            Query q = em.createNativeQuery("CALL `Sp_pdg_r_RegisterPending`('" + afi + "','" + prt + "','" + mng + "','" + dcp + "','" + urg + "')");
+            Query q = em.createNativeQuery("CALL `Sp_pdg_r_RegisterPending`('" + afi + "','" + prt + "','" + mng + "','" + dcp + "','" + dln + "','" + urg + "')");
             int resultado = q.executeUpdate();
             em.getTransaction().commit();
             em.clear();
@@ -153,11 +153,11 @@ public class PendingControllerJpa {
         }
     }
 
-    public boolean PendingUpdate(int IdPending, String afi, int prt, String mng, String dcp) {
+    public boolean PendingUpdate(int IdPending, String afi, int prt, String mng, String dcp, String dln) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
-            Query q = em.createNativeQuery("CALL `Sp_pdg_u_UpdatePending`('" + IdPending + "','" + afi + "','" + prt + "','" + mng + "','" + dcp + "')");
+            Query q = em.createNativeQuery("CALL `Sp_pdg_u_UpdatePending`('" + IdPending + "','" + afi + "','" + prt + "','" + mng + "','" + dcp + "','" + dln + "')");
             int resultado = q.executeUpdate();
             em.getTransaction().commit();
             em.clear();
@@ -172,11 +172,11 @@ public class PendingControllerJpa {
         }
     }
 
-    public boolean SolutionPending(int IdPending, String sdt, String slv, String slt, int pgr) {
+    public boolean SolutionPending(int IdPending, String sdt, String slt, int pgr) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
-            Query q = em.createNativeQuery("CALL `Sp_pdg_u_UpdateSolution`('" + IdPending + "','" + sdt + "','" + slv + "','" + slt + "','" + pgr + "')");
+            Query q = em.createNativeQuery("CALL `Sp_pdg_u_UpdateSolution`('" + IdPending + "','" + sdt + "','" + slt + "','" + pgr + "')");
             int resultado = q.executeUpdate();
             em.getTransaction().commit();
             em.clear();

@@ -175,8 +175,12 @@ public class Tag_role extends TagSupport {
                                     out.print("<div class='module_permss'>");
                                     for (int j = 0; j < lst_ficha.size(); j++) {
                                         Object[] Obj_module = (Object[]) lst_ficha.get(j);
-                                        if (obj_rol_permission[2].toString().contains("[" + Obj_module[0] + "]")) {
-                                            out.print("<input type='checkbox' name='#' id='' value='" + Obj_module[0] + "' onclick='Masivo(this.value);' checked><span>" + Obj_module[2] + "</span><br>");
+                                        if (obj_rol_permission[2] != null) {
+                                            if (obj_rol_permission[2].toString().contains("[" + Obj_module[0] + "]")) {
+                                                out.print("<input type='checkbox' name='#' id='' value='" + Obj_module[0] + "' onclick='Masivo(this.value);' checked><span>" + Obj_module[2] + "</span><br>");
+                                            } else {
+                                                out.print("<input type='checkbox' name='#' id='' value='" + Obj_module[0] + "' onclick='Masivo(this.value);'><span>" + Obj_module[2] + "</span><br>");
+                                            }
                                         } else {
                                             out.print("<input type='checkbox' name='#' id='' value='" + Obj_module[0] + "' onclick='Masivo(this.value);'><span>" + Obj_module[2] + "</span><br>");
                                         }

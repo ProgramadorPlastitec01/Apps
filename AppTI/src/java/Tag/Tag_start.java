@@ -8,9 +8,7 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 import java.util.List;
 import javax.servlet.http.HttpSession;
-import java.text.DateFormatSymbols;
 import java.util.Calendar;
-import java.util.Locale;
 import Controller.DashBoardJpaController;
 import Controller.SettingControllerJpa;
 import Controller.UserControllerJpa;
@@ -58,6 +56,7 @@ public class Tag_start extends TagSupport {
             out.print("</div>");
 
             if (CheckPending > 0) {
+                //<editor-fold defaultstate="collapsed" desc="ALERT PENDING">
                 lst_pending = PedingJpa.ConsultPendingAlert(NameRol, NameUser);
                 if (lst_pending != null) {
                     StringBuilder sb = new StringBuilder();
@@ -94,6 +93,7 @@ public class Tag_start extends TagSupport {
                     out.print("</script>");
                     out.print("</div>");
                 }
+                //</editor-fold>
             }
 
             out.print("<div class='container mt-4'>");

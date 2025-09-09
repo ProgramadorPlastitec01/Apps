@@ -122,7 +122,7 @@ public class Tag_idea extends TagSupport {
                     state = Integer.parseInt(ObjIdea[4].toString());
                     out.print("<td><div class='badge badge-" + ((state == 1) ? "success'>Vigente" : "dark'>Cerrado") + "</div></td>");
                     out.print("<td class='text-center'>");
-                    if (txtPermissions.contains("[4]")) {
+                    if (txtPermissions.contains("[74]")) {
                         if (state == 0) {
                             out.print("<button class='btn btn-green' ><i class=\"fas fa-check\"></i></button>");
                         } else {

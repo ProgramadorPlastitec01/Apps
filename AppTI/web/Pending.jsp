@@ -194,8 +194,65 @@
                 }
             }, false);
         </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                function pad(n) {
+                    return n < 10 ? '0' + n : n;
+                }
+                function ymd(d) {
+                    return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+                }
 
+                var now = new Date();
+                var tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+                var max = new Date(tomorrow.getFullYear(), tomorrow.getMonth() + 12, tomorrow.getDate());
 
+                function setupDateInput(input) {
+                    if (!input)
+                        return;
+
+                    // establecer min y max
+                    input.setAttribute('min', ymd(tomorrow));
+                    input.setAttribute('max', ymd(max));
+
+                    function isInvalidDate(value) {
+                        if (!value)
+                            return true;
+                        var parts = value.split('-');
+                        if (parts.length !== 3)
+                            return true;
+                        var sel = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+                        var todayZero = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                        return sel <= todayZero;
+                    }
+
+                    input.addEventListener('change', function () {
+                        if (isInvalidDate(input.value)) {
+                            input.classList.add('is-invalid');
+                            input.value = '';
+                        } else {
+                            input.classList.remove('is-invalid');
+                        }
+                    });
+
+                    var form = input.closest('form');
+                    if (form) {
+                        form.addEventListener('submit', function (e) {
+                            if (isInvalidDate(input.value)) {
+                                e.preventDefault();
+                                input.classList.add('is-invalid');
+                                input.focus();
+                            }
+                        });
+                    }
+                }
+
+                // Aplica la lógica a ambos campos
+                setupDateInput(document.getElementById('Txt_deadline'));
+                setupDateInput(document.getElementById('Txt_deadline2'));
+            });
+        </script>
+        
         <Alerts:Alert/>
         <script src="Interface/Content/Assets/modules/izitoast/js/iziToast.min.js"></script>
         <script src="Interface/Content/Assets/js/page/modules-datatables.js"></script>

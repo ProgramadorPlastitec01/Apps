@@ -203,13 +203,13 @@ public class Tag_menu extends TagSupport {
                     Object[] obj_pending = (Object[]) lst_pending.get(i);
                     out.print("      <a href=\"Pending?opt=1&State=1&Priority=&Search=" + obj_pending[0] + "\" class=\"dropdown-item dropdown-item-unread\">\n");
                     out.print("        <div class=\"dropdown-item-avatar\">\n");
-                    out.print("          <img alt=\"image\" src=\"Interface/Imagen/Profile/" + obj_pending[14] + "\" style='height:100%' class=\"rounded-circle\">\n");
+                    out.print("          <img alt=\"image\" src=\"Interface/Imagen/Profile/" + obj_pending[13] + "\" style='height:100%' class=\"rounded-circle\">\n");
                     out.print("          <div class=\"is-online\"></div>\n");
                     out.print("        </div>\n");
                     out.print("        <div class=\"dropdown-item-desc\">\n");
-                    out.print("          <div class='d-flex justify-content-between'><b>" + ((obj_pending[1] == null) ? "Sin asunto" : obj_pending[1]) + "</b><span class=\"time\" style='margin-top:0px' data-toggle=\"tooltip\" data-placement=\"top\" title='Registrado por'>" + obj_pending[13] + "</span></div>\n");
-                    out.print("          <p>" + ((obj_pending[11] == null) ? "Sin contenido" : obj_pending[11]) + " " + ((obj_pending[11].toString().length() > 20) ? "...." : "") + "</p>\n");
-                    int minuteP = Integer.parseInt(obj_pending[12].toString());
+                    out.print("          <div class='d-flex justify-content-between'><b>" + ((obj_pending[1] == null) ? "Sin asunto" : obj_pending[1]) + "</b><span class=\"time\" style='margin-top:0px' data-toggle=\"tooltip\" data-placement=\"top\" title='Registrado por'>" + obj_pending[12] + "</span></div>\n");
+                    out.print("          <p>" + ((obj_pending[2] == null) ? "Sin contenido" : obj_pending[2]) + " " + ((obj_pending[2].toString().length() > 20) ? "...." : "") + "</p>\n");
+                    int minuteP = Integer.parseInt(obj_pending[11].toString());
                     if (minuteP < 60) {
                         out.print("<div class=\"time text-warning\">Hace " + minuteP + " Min</div>");
                     } else {

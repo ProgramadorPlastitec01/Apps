@@ -24,7 +24,7 @@ public class Pending extends HttpServlet {
         int opt = Integer.parseInt(request.getParameter("opt"));
         int IdPending = 0, Temp = 0, Priority = 0, Type = 0, Progress = 0, State = 0;
         String Affair = "", Managed = "", Description = "", DateSolution = "", Solver = "", Solution = "", SolutionOld = "", SolutionEnd = "", Search = "",
-                Filter = "";
+                Filter = "", Deadline;
         boolean Result = false;
         try {
             switch (opt) {
@@ -86,12 +86,13 @@ public class Pending extends HttpServlet {
                         Managed = request.getParameter("Txt_person");
                     }
                     Description = request.getParameter("Txt_description");
+                    Deadline = request.getParameter("Deadline");
                     if (IdPending > 0) {
-                        Result = PendingJpa.PendingUpdate(IdPending, Affair, Priority, Managed, Description);
+                        Result = PendingJpa.PendingUpdate(IdPending, Affair, Priority, Managed, Description, Deadline);
                         ActivityJpa.ActivityRegister(IdUser, 3, "Pendiente", "Se modifico el pendiente #" + IdPending + ".", 1, NameUser);
                         request.setAttribute("UpdatePending", Result);
                     } else {
-                        Result = PendingJpa.PendingRegister(Affair, Priority, Managed, Description, IdUser);
+                        Result = PendingJpa.PendingRegister(Affair, Priority, Managed, Description, Deadline, IdUser);
                         ActivityJpa.ActivityRegister(IdUser, 3, "Pendiente", "Registro un nuevo pendiente.", 1, NameUser);
                         request.setAttribute("RegisterPending", Result);
                     }
@@ -115,11 +116,11 @@ public class Pending extends HttpServlet {
                     }
                     Solution = request.getParameter("Txt_Solution");
                     if (SolutionOld.equals("")) {
-                        SolutionEnd = "[" + DateSolution + "][" + Solution + "][" + Solver + "][" + Progress + "]";
+                        SolutionEnd = "[" + DateSolution + "][" + Solution.trim() + "][" + Solver + "][" + Progress + "]";
                     } else {
-                        SolutionEnd = "[" + DateSolution + "][" + Solution + "][" + Solver + "][" + Progress + "]" + "///" + SolutionOld;
+                        SolutionEnd = "[" + DateSolution + "][" + Solution.trim() + "][" + Solver + "][" + Progress + "]" + "///" + SolutionOld;
                     }
-                    Result = PendingJpa.SolutionPending(IdPending, DateSolution, Solver, SolutionEnd, Progress);
+                    Result = PendingJpa.SolutionPending(IdPending, DateSolution, SolutionEnd, Progress);
                     if (Progress == 100) {
                         request.setAttribute("SolutionPending", Result);
                         ActivityJpa.ActivityRegister(IdUser, 3, "Pendiente", "Se solución el pendiente #" + IdPending + ".", 1, NameUser);

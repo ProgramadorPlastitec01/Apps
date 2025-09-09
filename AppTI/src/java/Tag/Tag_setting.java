@@ -169,7 +169,7 @@ public class Tag_setting extends TagSupport {
                 out.print("</div>");
                 out.print("</div>");
             }
-            if (txtPermissions.contains("[70]")) {
+            if (txtPermissions.contains("[73]")) {
                 out.print("<div class='col-lg-6'>");
                 out.print("<div class='card card-large-icons'>");
                 out.print("<div class='card-icon bg-primary text-white'>");
