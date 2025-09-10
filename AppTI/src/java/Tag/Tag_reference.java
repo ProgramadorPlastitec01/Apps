@@ -30,7 +30,6 @@ public class Tag_reference extends TagSupport {
         }
 
         try {
-
             //<editor-fold defaultstate="collapsed" desc="REGISTER REFERENCE">
             out.print("<div class='sweet-local' tabindex='-1' id='Ventana1' style='opacity: 1.03; display:" + ((ref.equals("")) ? "none" : "block") + ";'>");
             out.print("<div class='contGeneral' style='width: 64%; right: 10%;'>");
@@ -64,7 +63,7 @@ public class Tag_reference extends TagSupport {
                     lst_factory = FactoryJpa.ConsulNewReference(ref);
                     if (lst_factory.size() > 0) {
                         String[] lstFact = lst_factory.toString().replace("[", "").replace("]", "").split(" / ");
-                        out.print("<form action='Reference?opt=2' method='post' class='needs-validation' novalidate=''>");
+                        out.print("<form action='Reference?opt=2' method='post' class='needs-validation' novalidate='' onsubmit='return cargarDatosForm(this)'>");
                         out.print("<div class='text-center mt-4 text-success'>");
                         out.print("<h4>¡REFERENCIA ENCONTRADA!</h4>");
                         out.print("</div>");
@@ -91,7 +90,7 @@ public class Tag_reference extends TagSupport {
                         out.print("</div>");
                         out.print("</div>");
                         out.print("<div class='text-center mt2'>");
-                        out.print("<button class='btn btn-yellow' onclick='cargarDatos()'>Registrar Referencia</button>");
+                        out.print("<button class='btn btn-yellow' >Registrar Referencia</button>");
                         out.print("</div>");
                         out.print("</form>");
                     } else {
@@ -109,7 +108,6 @@ public class Tag_reference extends TagSupport {
             out.print("</div>");
             out.print("</div>");
 //</editor-fold>
-
             //<editor-fold defaultstate="collapsed" desc="MAIN LIST">
             out.print("<section class='section'>");
             out.print("<div class='section-body'>");

@@ -281,7 +281,7 @@ public class Tag_pending extends TagSupport {
             out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(1)' data-toggle='tooltip' data-placement='top' title='Cerrar' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
             out.print("</div>");
 
-            out.print("<form action='Pending?opt=2' method='post' name='FormPending' id='FormPending' class='needs-validation' novalidate=''>");
+            out.print("<form action='Pending?opt=2' method='post' name='FormPending' id='FormPending' class='needs-validation' novalidate='' onsubmit='return cargarDatosForm(this)'>");
 //
             out.print("<input type='hidden' name='Type' value='1' id='typePen'>");
 
@@ -437,6 +437,7 @@ public class Tag_pending extends TagSupport {
             out.print("<div class='card-header' style='justify-content: space-between;'>");
             out.print("<h4>Listado de Pendientes " + ((State == 0) ? "Cerrados" : "Abiertos") + "</h4>");
             out.print("<div style='display:flex;'>");
+            //<editor-fold defaultstate="collapsed" desc="BUTTOM">
             if (!Search.equals("") || !Filter.equals("")) {
                 out.print("<button class='btn btn-danger mr-4' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Quitar Filtro' onclick='window.location.href=\"Pending?opt=1&State=" + State + "\";cargarDatos()' ><i class=\"fas fa-times\"></i></button>");
             }
@@ -451,6 +452,7 @@ public class Tag_pending extends TagSupport {
             } else {
                 out.print("<button class='btn btn-green' style='border-radius: 4px; opacity: 0.7;' disabled data-toggle='tooltip' data-placement='top' title='No tiene permisos'><i class='fas fa-plus'></i></button>");
             }
+            //</editor-fold>
             out.print("</div>");
             out.print("</div>");
             out.print("<div class='card-body'>");
@@ -673,6 +675,7 @@ public class Tag_pending extends TagSupport {
                 }
                 //</editor-fold>
             } else {
+                //<editor-fold defaultstate="collapsed" desc="NO DATA">
                 if (!Search.equals("")) {
                     out.print("<div style='display:flex;display: flex;justify-content: center;width: 100%;'>");
                     out.print("<div><i style='font-size:33px;'class='fas fa-exclamation mr-3'></i></div>");
@@ -689,6 +692,7 @@ public class Tag_pending extends TagSupport {
                     out.print("<div><h2>Sin pendientes registrados</h2></div>");
                     out.print("</div>");
                 }
+                //</editor-fold>
             }
             out.print("</div>");
             out.print("</div>");

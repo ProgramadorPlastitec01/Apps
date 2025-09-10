@@ -91,7 +91,7 @@ public class Tag_trackingItem extends TagSupport {
                 if (lst_result != null) {
                     out.print("<div class='card'>");
                     out.print("<div class='card-body'>");
-                    out.print("<form action='' method='post' class='needs-validation' novalidate=''>");
+                    out.print("<form action='' method='post' class='needs-validation' novalidate='' onsubmit='return cargarDatosForm(this)'>");
                     out.print("<input type='hidden' name='' id='idItmeToSig' value=''>");
                     out.print("<div class='text-right' style='margin: 10px;'>");
                     out.print("<button class='btn btn-green' id='btnUserSign' style='display: none;'>Firmar</button>");

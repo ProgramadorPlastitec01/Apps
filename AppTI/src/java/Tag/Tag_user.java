@@ -50,7 +50,7 @@ public class Tag_user extends TagSupport {
                 out.print("<div class='cont_form_user'>");
                 if (lst_user != null) {
                     Object[] ObjUser = (Object[]) lst_user.get(0);
-                    out.print("<form action='User?opt=2&idUser=" + ObjUser[0] + "' method='post'>");
+                    out.print("<form action='User?opt=2&idUser=" + ObjUser[0] + "' method='post' onsubmit='return cargarDatosForm(this)'>");
                     out.print("<div class='d-flex'>");
                     out.print("<input type='text' class='form-control' name='txtName' id='' placeholder='Nombre' data-toggle='tooltip' data-placement='top' title='Nombre' value='" + ObjUser[1] + "'>");
                     out.print("<input type='text' class='form-control' name='txtLastname' id='' placeholder='Apellido' data-toggle='tooltip' data-placement='top' title='Apellido' value='" + ObjUser[2] + "'>");
@@ -75,7 +75,7 @@ public class Tag_user extends TagSupport {
                     out.print("</div>");
                     out.print("</div>");
                     out.print("<div class='text-center mt-2'>");
-                    out.print("<button class='btn btn-green' onclick='cargarDatos()'>Confirmar</button>");
+                    out.print("<button class='btn btn-green'>Confirmar</button>");
                     out.print("</div>");
                     out.print("</form>");
                 } else {
@@ -103,7 +103,7 @@ public class Tag_user extends TagSupport {
             out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(1)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
             out.print("</div>");
             out.print("<div class='cont_form_user'>");
-            out.print("<form action='User?opt=2' method='post' class='needs-validation' novalidate=''>");
+            out.print("<form action='User?opt=2' method='post' class='needs-validation' novalidate='' onsubmit='return cargarDatosForm(this)'>");
             out.print("<div class='d-flex'>");
             out.print("<input type='text' class='form-control' name='txtName' id='' placeholder='Nombre' data-toggle='tooltip' data-placement='top' title='Nombre' >");
             out.print("<input type='text' class='form-control' name='txtLastname' id='' placeholder='Apellido' data-toggle='tooltip' data-placement='top' title='Apellido' >");
@@ -128,7 +128,7 @@ public class Tag_user extends TagSupport {
             out.print("</div>");
             out.print("</div>");
             out.print("<div class='text-center mt-2'>");
-            out.print("<button class='btn btn-green' onclick='cargarDatos()'>Registrar</button>");
+            out.print("<button class='btn btn-green' >Registrar</button>");
             out.print("</div>");
             out.print("</form>");
             out.print("</div>");

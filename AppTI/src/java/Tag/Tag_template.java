@@ -41,7 +41,7 @@ public class Tag_template extends TagSupport {
                 out.print("<div class='cont_form_user'>");
                 if (lst_tempalte != null) {
                     Object[] ObTempl = (Object[]) lst_tempalte.get(0);
-                    out.print("<form action='Template?opt=2&idTempl=" + ObTempl[0] + "' method='post' class='needs-validation' novalidate=''>");
+                    out.print("<form action='Template?opt=2&idTempl=" + ObTempl[0] + "' method='post' class='needs-validation' novalidate='' onsubmit='return cargarDatosForm(this)'>");
                     out.print("<span class='text-dark'>Nombre de la plantilla</span>");
                     out.print("<input type='text' name='txtTitle' class='form-control col-lg-10' value='" + ObTempl[2] + "' required>");
                     out.print("<span class='text-dark'>Contenido de la plantilla</span>");
@@ -49,7 +49,7 @@ public class Tag_template extends TagSupport {
                     out.print(ObTempl[3]);
                     out.print("</textarea>");
                     out.print("<div class=''>");
-                    out.print("<button class='btn btn-green' onclick='cargarDatos()'>Editar</button>");
+                    out.print("<button class='btn btn-green'>Editar</button>");
                     out.print("</div>");
                     out.print("</form>");
                 } else {
@@ -68,11 +68,11 @@ public class Tag_template extends TagSupport {
             out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(1)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
             out.print("</div>");
             out.print("<div class='cont_form_user'>");
-            out.print("<form action='Template?opt=3' method='post' class='needs-validation' novalidate=''>");
+            out.print("<form action='Template?opt=3' method='post' class='needs-validation' novalidate='' onsubmit='return cargarDatosForm(this)'>");
             out.print("<span class='text-dark'>Nombre de la plantilla</span>");
             out.print("<input type='text' class='form-control col-lg-10' name='txtTitle' id='' required>");
             out.print("<div class='text-center'>");
-            out.print("<button class='btn btn-green' onclick='cargarDatos()'>Registrar</button>");
+            out.print("<button class='btn btn-green' >Registrar</button>");
             out.print("</div>");
             out.print("</form>");
             out.print("</div>");

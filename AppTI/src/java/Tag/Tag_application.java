@@ -52,7 +52,7 @@ public class Tag_application extends TagSupport {
                 if (lst_appId != null) {
                     Object[] ObjAppId = (Object[]) lst_appId.get(0);
 
-                    out.print("<form action='Application?opt=2' method='post' name='FormPending' id='FormPending' class='needs-validation' novalidate=''>");
+                    out.print("<form action='Application?opt=2' method='post' name='FormPending' id='FormPending' class='needs-validation' novalidate='' onsubmit='return cargarDatosForm(this)'>");
                     out.print("<input type='hidden' name='IdApplication' value='" + IdApplication + "' id='IdApplication'>");
 
                     out.print("<div class='col-12 mb-2'>");
@@ -75,7 +75,7 @@ public class Tag_application extends TagSupport {
                     out.print("</div>");
 
                     out.print("<div class='' style='width: 100%; text-align:center;'>");
-                    out.print("<button class='btn btn-green btn-lg' onclick='cargarDatos()'>Modificar</button>");
+                    out.print("<button class='btn btn-green btn-lg' >Modificar</button>");
                     out.print("</div>");
 
                     out.print("</form>");
@@ -94,7 +94,7 @@ public class Tag_application extends TagSupport {
             out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(1);' data-toggle='tooltip' data-placement='top' title='Cerrar' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
             out.print("</div>");
 
-            out.print("<form action='Application?opt=2' method='post' name='FormPending' id='FormPending' class='needs-validation' novalidate=''>");
+            out.print("<form action='Application?opt=2' method='post' name='FormPending' id='FormPending' class='needs-validation' novalidate='' onsubmit='return cargarDatosForm(this)'>");
 
             out.print("<div class='col-12 mb-2'>");
             out.print("<input type='text' class='form-control' onchange='javascript:this.value=this.value.toUpperCase();' name='Txt_name' id='Txt_name' placeholder='Nombre aplicación'  data-toggle='tooltip' data-placement='top' title='Nombre aplicación' required autocomplete='off' >");
@@ -116,7 +116,7 @@ public class Tag_application extends TagSupport {
             out.print("</div>");
 
             out.print("<div class='' style='width: 100%; text-align:center;'>");
-            out.print("<button class='btn btn-green btn-lg' onclick='cargarDatos()'>Registrar</button>");
+            out.print("<button class='btn btn-green btn-lg'>Registrar</button>");
             out.print("</div>");
 
             out.print("</form>");

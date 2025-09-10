@@ -20,7 +20,7 @@
         <link rel="stylesheet" href="Interface/Content/Assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css">
         <link rel="stylesheet" href="Interface/Content/Assets/modules/bootstrap-daterangepicker/daterangepicker.css">
         <link rel="stylesheet" href="Interface/Content/Assets/modules/select2/dist/css/select2.min.css">
-        
+
         <link rel="stylesheet" href="Interface/Content/Assets/css/appDetail.css">
 
         <!-- Datepicker CSS -->
@@ -33,7 +33,7 @@
         <!--        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-94034622-3"></script>-->
         <!--        <script type="text/javascript" src="Interface/Alertas/dist/sweetalert.min.js"></script>
                 <link href="Interfaz/Alertas/dist/sweetalert.css" rel="stylesheet" type="text/css"/>-->
-        
+
         <style>
             #lottie-loader {
                 position: fixed;
@@ -301,6 +301,26 @@
                 showLoader();
 
             }
+            function cargarDatosForm(form) {
+                let valido = true;
+
+                // revisar manualmente campos requeridos
+                form.querySelectorAll("[required]").forEach(function (input) {
+                    if (!input.value.trim()) {
+                        input.classList.add("is-invalid");
+                        valido = false;
+                    } else {
+                        input.classList.remove("is-invalid");
+                    }
+                });
+
+                if (valido) {
+                    showLoader();
+                    return true;
+                }
+                return false;
+            }
+
         </script>
 
         <!--         Page Specific JS File -->

@@ -88,7 +88,6 @@ public class Tag_binnacle extends TagSupport {
         } catch (Exception e) {
             empyData = 0;
         }
-
         //<editor-fold defaultstate="collapsed" desc="DECLARATIONS">
 //        int currentMonth = today.getMonthValue();
         LocalDate startDate = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
@@ -99,7 +98,6 @@ public class Tag_binnacle extends TagSupport {
             ActualWeek = "Semana " + formattedStart + " / " + formattedEnd;
         }
 //</editor-fold>
-
         try {
             if (idbinn > 0 && temp == 0) {
                 //<editor-fold defaultstate="collapsed" desc="EDIT BINNACLE">
@@ -113,7 +111,7 @@ public class Tag_binnacle extends TagSupport {
                 out.print("<div class='cont_form_user'>");
                 if (lst_binnacle != null) {
                     Object[] objBinn = (Object[]) lst_binnacle.get(0);
-                    out.print("<form action='Binnacle?opt=2&idBinn=" + objBinn[0] + "' method='post' class='needs-validation' novalidate=''>");
+                    out.print("<form action='Binnacle?opt=2&idBinn=" + objBinn[0] + "' method='post' class='needs-validation' novalidate='' onsubmit='return cargarDatosForm(this)'>");
                     out.print("<div class=''>");
                     out.print("<div class='col-lg-6' style='margin: auto;' data-toggle='tooltip' data-placemente='top' title='Seleccionar turno'>");
                     lst_setting = SettingJpa.ConsultSettingCategorie("Shift");
@@ -158,7 +156,7 @@ public class Tag_binnacle extends TagSupport {
                     out.print("</div>");
 
                     out.print("<div class='text-center mt-4'>");
-                    out.print("<button class='btn btn-green' onclick='cargarDatos()'>Actualizar</button>");
+                    out.print("<button class='btn btn-green' >Actualizar</button>");
                     out.print("</div>");
 
                     out.print("</form>");
@@ -289,7 +287,7 @@ public class Tag_binnacle extends TagSupport {
                     out.print("</div>");
                     out.print("<div class='text-center'>");
                     if (state == 0) {
-                        out.print("<button class='btn btn-green' onclick='cargarDatos()'>Guardar <i class='fas fa-save'></i></button>");
+                        out.print("<button class='btn btn-green'>Guardar <i class='fas fa-save'></i></button>");
                     }
                     out.print("</div>");
                     out.print("</form>");
@@ -378,7 +376,7 @@ public class Tag_binnacle extends TagSupport {
                 if (state == 0) {
                     out.print("<form action='Binnacle?opt=4&idBinn=" + idbinn + "' method='post'>");
                     out.print("<input type='hidden' class='form-control' name='txtiIdAct' value='" + idActy + "'>");
-                    out.print("<button class='btn btn-green' onclick='AlertMail();cargarDatos()'>Enviar <i class=\"fas fa-share\"></i></button>");
+                    out.print("<button class='btn btn-green' onclick='AlertMail()'>Enviar <i class=\"fas fa-share\"></i></button>");
                     out.print("</form>");
                 }
                 out.print("</div>");
@@ -408,7 +406,7 @@ public class Tag_binnacle extends TagSupport {
             out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(1)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
             out.print("</div>");
             out.print("<div class='cont_form_user'>");
-            out.print("<form action='Binnacle?opt=2' method='post' class='needs-validation' novalidate=''>");
+            out.print("<form action='Binnacle?opt=2' method='post' class='needs-validation' novalidate='' onsubmit='return cargarDatosForm(this)'>");
 
             out.print("<div class=''>");
             out.print("<div class='col-lg-6' style='margin: auto;' data-toggle='tooltip' data-placemente='top' title='Seleccionar turno'>");
@@ -481,7 +479,7 @@ public class Tag_binnacle extends TagSupport {
             out.print("</div>");
 
             out.print("<div class='text-center mt-4'>");
-            out.print("<button class='btn btn-green' onclick='cargarDatos()'>Registrar</button>");
+            out.print("<button class='btn btn-green' >Registrar</button>");
             out.print("</div>");
 
             out.print("</form>");

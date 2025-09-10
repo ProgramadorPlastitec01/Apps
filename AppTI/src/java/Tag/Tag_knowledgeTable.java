@@ -50,7 +50,7 @@ public class Tag_knowledgeTable extends TagSupport {
                 lst_knowledgeId = KnowledgeJpa.ConsultKnowledgeBaseId(IdKnowledge);
                 if (lst_knowledgeId != null) {
                     Object[] ObjKnowledge = (Object[]) lst_knowledgeId.get(0);
-                    out.print("<form action='Attach_1.jsp' method='post' enctype='multipart/form-data'>");
+                    out.print("<form action='Attach_1.jsp' method='post' enctype='multipart/form-data' onsubmit='return cargarDatosForm(this)'>");
 
                     out.print("<input type='hidden' name='IdKnowledge' value='" + IdKnowledge + "'>");
 
@@ -107,7 +107,7 @@ public class Tag_knowledgeTable extends TagSupport {
                     out.print("</div>");
 
                     out.print("<div class='text-center mt-2'>");
-                    out.print("<button class='btn btn-green' onclick='cargarDatos()'>Confirmar</button>");
+                    out.print("<button class='btn btn-green' >Confirmar</button>");
                     out.print("</div>");
                     out.print("</form>");
                 } else {
@@ -135,7 +135,7 @@ public class Tag_knowledgeTable extends TagSupport {
             out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(1)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
             out.print("</div>");
             out.print("<div class='cont_form_user'>");
-            out.print("<form action='Attach_1.jsp' method='post' enctype='multipart/form-data'>");
+            out.print("<form action='Attach_1.jsp' method='post' enctype='multipart/form-data' onsubmit='return cargarDatosForm(this)'>");
 
             out.print("<input type='hidden' name='IdKnowledge' value='" + 0 + "'>");
 
@@ -192,7 +192,7 @@ public class Tag_knowledgeTable extends TagSupport {
             out.print("</div>");
 
             out.print("<div class='text-center mt-2'>");
-            out.print("<button class='btn btn-green' onclick='cargarDatos()'>Confirmar</button>");
+            out.print("<button class='btn btn-green'>Confirmar</button>");
             out.print("</div>");
             out.print("</form>");
             out.print("</div>");

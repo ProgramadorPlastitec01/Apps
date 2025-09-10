@@ -43,7 +43,7 @@ public class Tag_idea extends TagSupport {
                 lst_ideaId = IdeaJpa.ConsultIdeaId(idIdea);
                 if (lst_ideaId != null) {
                     Object[] ObjIdeaId = (Object[]) lst_ideaId.get(0);
-                    out.print("<form action='Idea?opt=2' method='post' id='FormIdea'>");
+                    out.print("<form action='Idea?opt=2' method='post' id='FormIdea' onsubmit='return cargarDatosForm(this)'>");
                     out.print("<input type='hidden' name='idIdea' value='" + ObjIdeaId[0] + "'>");
                     out.print("<input type='hidden' id='validation' name='state' value=''>");
                     out.print("<div class='col-12 mt-4' style='max-height: 540px;overflow: auto;'>"
@@ -54,8 +54,8 @@ public class Tag_idea extends TagSupport {
                     out.print("</form>");
 
                     out.print("<div class='mt-2 d-flex justify-content-around'>");
-                    out.print("<button class='btn btn-info' onclick='ValidationSave(1);cargarDatos()'>En gestión</button>");
-                    out.print("<button class='btn btn-green'onclick='ValidationSave(0);cargarDatos()'>Finalizar</button>");
+                    out.print("<button class='btn btn-info' onclick='ValidationSave(1)'>En gestión</button>");
+                    out.print("<button class='btn btn-green'onclick='ValidationSave(0)'>Finalizar</button>");
                     out.print("</div>");
 
                 } else {

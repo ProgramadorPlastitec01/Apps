@@ -142,7 +142,6 @@ public class Tag_minute extends TagSupport {
                                 + " });"
                                 + "</script>");
                         //</editor-fold>
-
                         //<editor-fold defaultstate="collapsed" desc="FIND OUT SIGNATURE">
                         out.print("<div class='sweet-local' tabindex='-1' id='Ventana6' style='opacity: 1.03; display:none;'>");
                         out.print("<div class='contGeneral' style='width: 44%; right: 21%;'>");

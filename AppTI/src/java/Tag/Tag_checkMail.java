@@ -67,7 +67,7 @@ public class Tag_checkMail extends TagSupport {
             out.print("<h4>Datos de conexión</h4>");
             out.print("</div>");
 
-            out.print("<form action='CheckerMail?opt=1' method='post' class='needs-validation' novalidate='' id='formCheckMail'>");
+            out.print("<form action='CheckerMail?opt=1' method='post' class='needs-validation' novalidate='' id='formCheckMail' onsubmit='return cargarDatosForm(this)'>");
             out.print("<div class='mb-2'>");
             out.print("<span class=''>Host:</span>");
             out.print("<input type='text' class='form-control' name='txtHost' id='' placeholder='' data-toggle='tooltip' data-placement='top' title='' value='' required>");
@@ -100,7 +100,7 @@ public class Tag_checkMail extends TagSupport {
             out.print("</div>");
 
             out.print("<div class='text-center'>");
-            out.print("<button class='btn btn-green' type='button' onclick='ValidMail();cargarDatos()'>Comprobar</button>");
+            out.print("<button class='btn btn-green' type='button' onclick='ValidMail()'>Comprobar</button>");
             out.print("</div>");
 
             out.print("</form>");

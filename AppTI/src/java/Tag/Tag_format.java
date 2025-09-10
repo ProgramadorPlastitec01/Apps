@@ -56,10 +56,10 @@ public class Tag_format extends TagSupport {
                     out.print("</ul>");
                     out.print("<div class='tab-content' id='myTabContent2' style='overflow-y: auto;max-height: 430px;'>");
                     out.print("<div class='tab-pane fade show active' id='home3' role='tabpanel' aria-labelledby='home-tab3'>");
-                    out.print("<form action='Format?opt=4&idfmt=" + ObjFomt[0] + "' method='post'>");
+                    out.print("<form action='Format?opt=4&idfmt=" + ObjFomt[0] + "' method='post' onsubmit='return cargarDatosForm(this)'>");
                     out.print("<textarea class='codeeditor' name='txtFormat'>" + ((ObjFomt[3] == null) ? "" : ObjFomt[3]) + "</textarea>");
                     out.print("<div style='position: absolute;margin-top: 9px;right: 50%;'>");
-                    out.print("<button class='btn btn-green' onclick='cargarDatos()'>Actualizar</button>");
+                    out.print("<button class='btn btn-green'>Actualizar</button>");
                     out.print("</div>");
                     out.print("</form>");
                     out.print("</div>");
@@ -94,7 +94,7 @@ public class Tag_format extends TagSupport {
                 out.print("<div class='cont_form_user'>");
                 if (lst_format != null) {
                     Object[] Objform = (Object[]) lst_format.get(0);
-                    out.print("<form action='Format?opt=2&idfmt=" + Objform[0] + "&temp=2' method='post' class='needs-validation' novalidate=''>");
+                    out.print("<form action='Format?opt=2&idfmt=" + Objform[0] + "&temp=2' method='post' class='needs-validation' novalidate='' onsubmit='return cargarDatosForm(this)'>");
                     out.print("<div class='d-flex justify-content-center'>");
                     out.print("<input type='text' class='form-control' name='txtFormat' value='" + Objform[3] + "' >");
                     out.print("<input type='text' class='form-control col-lg-3' name='txtCode' id='' value='" + Objform[1] + "' placeholder='Codigo' data-toggle='tooltip' data-placement='top' title='Codigo' >");
@@ -103,7 +103,7 @@ public class Tag_format extends TagSupport {
                     out.print("<input type='number' class='form-control col-lg-3' name='nmbVersion' id='' value='" + val + "' placeholder='Version' data-toggle='tooltip' data-placement='top' title='Version' >");
                     out.print("</div>");
                     out.print("<div class='text-center'>");
-                    out.print("<button class='btn btn-green' onclick='cargarDatos()'>Registrar</button>");
+                    out.print("<button class='btn btn-green'>Registrar</button>");
                     out.print("</div>");
                     out.print("</form>");
                 } else {
@@ -125,14 +125,14 @@ public class Tag_format extends TagSupport {
                 out.print("<div class='cont_form_user'>");
                 if (lst_format != null) {
                     Object[] Objform = (Object[]) lst_format.get(0);
-                    out.print("<form action='Format?opt=2&idfmt=" + Objform[0] + "' method='post' class='needs-validation' novalidate=''>");
+                    out.print("<form action='Format?opt=2&idfmt=" + Objform[0] + "' method='post' class='needs-validation' novalidate='' onsubmit='return cargarDatosForm(this)'>");
                     out.print("<div class='d-flex justify-content-center'>");
                     out.print("<input type='text' class='form-control col-lg-3' name='txtCode' id='' value='" + Objform[1] + "' placeholder='Codigo' data-toggle='tooltip' data-placement='top' title='Codigo' >");
                     out.print("<input type='text' class='form-control col-lg-4' name='txtName' id='' value='" + Objform[2] + "' placeholder='Nombre' data-toggle='tooltip' data-placement='top' title='Nombre' >");
                     out.print("<input type='number' class='form-control col-lg-3' name='nmbVersion' id='' value='" + Objform[4] + "' placeholder='Version' data-toggle='tooltip' data-placement='top' title='Version' >");
                     out.print("</div>");
                     out.print("<div class='text-center'>");
-                    out.print("<button class='btn btn-green' onclick='cargarDatos()'>Confirmar</button>");
+                    out.print("<button class='btn btn-green' >Confirmar</button>");
                     out.print("</div>");
                     out.print("</form>");
                 } else {
@@ -151,14 +151,14 @@ public class Tag_format extends TagSupport {
             out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(1)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
             out.print("</div>");
             out.print("<div class='cont_form_user'>");
-            out.print("<form action='Format?opt=2' method='post' class='needs-validation' novalidate=''>");
+            out.print("<form action='Format?opt=2' method='post' class='needs-validation' novalidate='' onsubmit='return cargarDatosForm(this)'>");
             out.print("<div class='d-flex justify-content-center'>");
             out.print("<input type='text' class='form-control col-lg-3' name='txtCode' id='' placeholder='Codigo' data-toggle='tooltip' data-placement='top' title='Codigo' >");
             out.print("<input type='text' class='form-control col-lg-4' name='txtName' id='' placeholder='Nombre' data-toggle='tooltip' data-placement='top' title='Nombre' >");
             out.print("<input type='number' class='form-control col-lg-3' name='nmbVersion' id='' placeholder='Version' data-toggle='tooltip' data-placement='top' title='Version' >");
             out.print("</div>");
             out.print("<div class='text-center'>");
-            out.print("<button class='btn btn-green' onclick='cargarDatos()'>Registrar</button>");
+            out.print("<button class='btn btn-green'>Registrar</button>");
             out.print("</div>");
             out.print("</form>");
             out.print("</div>");

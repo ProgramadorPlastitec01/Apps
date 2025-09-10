@@ -57,7 +57,7 @@ public class Tag_role extends TagSupport {
                 out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(1)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
                 out.print("</div>");
                 out.print("<div class='cont_form_user'>");
-                out.print("<form action='Role?opt=2' method='post' class='needs-validation' novalidate=''>");
+                out.print("<form action='Role?opt=2' method='post' class='needs-validation' novalidate='' onsubmit='return cargarDatosForm(this)'>");
                 out.print("<div class='' style='display: flex;'>");
                 out.print("<div class='col-lg-11 col-md-6'>");
                 out.print("<input type='text' class='form-control' name='Txt_name' id='Txt_name' placeholder='Nombre' required='' data-toggle='tooltip' data-placement='top' title='Nombre rol'>");
@@ -65,7 +65,7 @@ public class Tag_role extends TagSupport {
                 out.print("</div>");
                 out.print("</div>");
                 out.print("<div class='' style='width: 100%; text-align:center;'>");
-                out.print("<button class='btn btn-green btn-lg' onclick='cargarDatos()'>Registrar</button>");
+                out.print("<button class='btn btn-green btn-lg'>Registrar</button>");
                 out.print("</div>");
                 out.print("</form>");
                 out.print("</div>");
@@ -84,7 +84,7 @@ public class Tag_role extends TagSupport {
                         out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(2)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
                         out.print("</div>");
                         out.print("<div class='cont_form_user'>");
-                        out.print("<form action='Role?opt=2' method='post' class='needs-validation' novalidate=''>");
+                        out.print("<form action='Role?opt=2' method='post' class='needs-validation' novalidate='' onsubmit='return cargarDatosForm(this)'>");
                         out.print("<input type='hidden' name='idRole' value='" + obj_updateRole[0] + "'> ");
                         out.print("<div class='' style='display: flex;'>");
 
@@ -109,7 +109,7 @@ public class Tag_role extends TagSupport {
                         out.print("</div>");
 
                         out.print("<div class='' style='width: 100%; text-align:center;'>");
-                        out.print("<button class='btn btn-green btn-lg' onclick='cargarDatos()'>Editar</button>");
+                        out.print("<button class='btn btn-green btn-lg'>Editar</button>");
                         out.print("</div>");
 
                         out.print("</form>");
@@ -131,7 +131,7 @@ public class Tag_role extends TagSupport {
                     if (lst_role_id != null) {
                         Object[] obj_rol_permission = (Object[]) lst_role_id.get(0);
                         out.print("<div class='cont_form_user'>");
-                        out.print("<form action='Role?opt=4' method='post'>");
+                        out.print("<form action='Role?opt=4' method='post' onsubmit='return cargarDatosForm(this)'>");
                         out.print("<input type='hidden' name='Cbx_permission' id='Cbx_permission' value='" + obj_rol_permission[2] + "'>");
                         out.print("<input type='hidden' value='" + IdRolePermission + "' name='idRole' id='idRole'>");
                         out.print("<div class=\"card-body\">");
@@ -209,7 +209,7 @@ public class Tag_role extends TagSupport {
                         out.print("</div>");
                         if (lst_module != null) {
                             out.print("<div class='' style='width: 100%; text-align:center;'>");
-                            out.print("<button class='btn btn-green btn-lg' onclick='cargarDatos()'>Registrar</button>");
+                            out.print("<button class='btn btn-green btn-lg' >Registrar</button>");
                             out.print("</div>");
                         }
                         out.print("</form>");
@@ -328,7 +328,7 @@ public class Tag_role extends TagSupport {
                 out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(1)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
                 out.print("</div>");
 
-                out.print("<form action='Role?opt=5' method='post' class='needs-validation' novalidate=''>");
+                out.print("<form action='Role?opt=5' method='post' class='needs-validation' novalidate='' onsubmit='return cargarDatosForm(this)'>");
                 out.print("<div class='col-12' style='display: flex; justify-content:space-between;'>");
                 out.print("<div style='width: 48%;' data-toggle='tooltip' data-placement='top' title='Modulo'>");
                 out.print("<input class=\"form-control\" name='Txt_module' list=\"dataListModule\" id=\"\" placeholder=\"Seleccionar módulo\">");
@@ -352,7 +352,7 @@ public class Tag_role extends TagSupport {
                 out.print("</div>");
 
                 out.print("<div class='' style='width: 100%; text-align:center; margin-top: 12px;'>");
-                out.print("<button class='btn btn-green btn-lg' onclick='cargarDatos()'>Registrar</button>");
+                out.print("<button class='btn btn-green btn-lg' >Registrar</button>");
                 out.print("</div>");
                 out.print("</div>");
 
@@ -372,7 +372,7 @@ public class Tag_role extends TagSupport {
                         out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(2)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
                         out.print("</div>");
 
-                        out.print("<form action='Role?opt=5&IdPermission=" + obj_permissId[0] + "' method='post' class='needs-validation' novalidate=''>");
+                        out.print("<form action='Role?opt=5&IdPermission=" + obj_permissId[0] + "' method='post' class='needs-validation' novalidate='' onsubmit='return cargarDatosForm(this)'>");
 
                         out.print("<div class='col-12' style='display: flex;margin-top: 10px;'>");
                         out.print("<div class='col-6' style='width: 100%;' id='select2' data-toggle='tooltip' data-placement='top' title='Modulo'>");
@@ -400,7 +400,7 @@ public class Tag_role extends TagSupport {
                         out.print("</div>");
 
                         out.print("<div class='' style='width: 100%; text-align:center;'>");
-                        out.print("<button class='btn btn-green btn-lg' onclick='cargarDatos()'>Editar</button>");
+                        out.print("<button class='btn btn-green btn-lg' >Editar</button>");
                         out.print("</div>");
                         out.print("</div>");
                         out.print("</form>");

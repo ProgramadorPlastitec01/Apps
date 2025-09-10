@@ -155,14 +155,14 @@ public class Tag_activity extends TagSupport {
                 out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(2)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
                 out.print("</div>");
                 out.print("<div class='cont_form_user'>");
-                out.print("<form action='Activity?opt=5&action=1&idAct=" + idAct + "&event=1' method='post' class='needs-validation' novalidate=''>");
+                out.print("<form action='Activity?opt=5&action=1&idAct=" + idAct + "&event=1' method='post' class='needs-validation' novalidate='' onsubmit='return cargarDatosForm(this)'>");
                 out.print("<div class='' style='width: 93%;'>");
                 out.print("<input type='date' class='form-control' name='txtDate' data-toggle='tooltip' data-placement='top' title='' required >");
                 out.print("<textarea type='text' class='form-control' name='txtComent' style='margin: 12px;' id='' value='' placeholder='Explicar actividad ejecutada...' required ></textarea>");
                 out.print("</div>");
                 out.print("<input type='hidden' class='form-control' name='idEject' id='idAct'>");
                 out.print("<div class='text-center'>");
-                out.print("<button class='btn btn-warning mt-2' onclick='cargarDatos()' >Ejecutar</button>");
+                out.print("<button class='btn btn-warning mt-2'>Ejecutar</button>");
                 out.print("</div>");
                 out.print("</form>");
                 out.print("</div>");
@@ -177,14 +177,14 @@ public class Tag_activity extends TagSupport {
                 out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(3)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
                 out.print("</div>");
                 out.print("<div class='cont_form_user'>");
-                out.print("<form action='Activity?opt=5&action=2&idAct=" + idAct + "&event=1' method='post' class='needs-validation' novalidate=''>");
+                out.print("<form action='Activity?opt=5&action=2&idAct=" + idAct + "&event=1' method='post' class='needs-validation' novalidate='' onsubmit='return cargarDatosForm(this)'>");
                 out.print("<div class='' style='width: 93%;'>");
                 out.print("<input type='date' class='form-control' name='txtDate' data-toggle='tooltip' data-placement='top' title='' required >");
                 out.print("<textarea type='text' class='form-control' name='txtComent' style='margin: 12px;' id='' value='' placeholder='Comentario de la actividad ejecutada...' required ></textarea>");
                 out.print("</div>");
                 out.print("<input type='hidden' class='form-control' name='idVerf' id='idVer'>");
                 out.print("<div class='text-center'>");
-                out.print("<button class='btn btn-info mt-2' onclick='cargarDatos()'>Verificar</button>");
+                out.print("<button class='btn btn-info mt-2'>Verificar</button>");
                 out.print("</div>");
                 out.print("</form>");
                 out.print("</div>");
@@ -396,7 +396,7 @@ public class Tag_activity extends TagSupport {
                     out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(2)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
                     out.print("</div>");
                     out.print("<div class='cont_form_user'>");
-                    out.print("<form action='Activity?opt=2&idAct=" + idAct + "' method='post' class='needs-validation' novalidate=''>");
+                    out.print("<form action='Activity?opt=2&idAct=" + idAct + "' method='post' class='needs-validation' novalidate='' onsubmit='return cargarDatosForm(this)'>");
                     //<editor-fold defaultstate="collapsed" desc="ACTIVITY AND WEEK">
                     if (lst_activity != null) {
                         Object[] Act = (Object[]) lst_activity.get(0);
@@ -426,9 +426,8 @@ public class Tag_activity extends TagSupport {
                         out.print("</div>");
                     }
                     //</editor-fold>
-
                     out.print("<div class='text-center'>");
-                    out.print("<button class='btn btn-green' onclick='cargarDatos()'>Confirmar</button>");
+                    out.print("<button class='btn btn-green' >Confirmar</button>");
                     out.print("</div>");
 
                     out.print("</form>");
@@ -445,7 +444,7 @@ public class Tag_activity extends TagSupport {
                 out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(1)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
                 out.print("</div>");
                 out.print("<div class='cont_form_user'>");
-                out.print("<form action='Activity?opt=4' method='post' class='needs-validation' novalidate='' id='formActi' autocomplete='off'>");
+                out.print("<form action='Activity?opt=4' method='post' class='needs-validation' novalidate='' id='formActi' autocomplete='off' onsubmit='return cargarDatosForm(this)'>");
                 //<editor-fold defaultstate="collapsed" desc="ACTIVITY AND WEEK">
                 out.print("<div class='d-flex'>");
                 out.print("<div class='col-lg-8'>");
@@ -550,7 +549,7 @@ public class Tag_activity extends TagSupport {
                 out.print("</div>");
                 out.print("<input type='hidden' class='form-control' name='typeSelect' id='typeSelec' value=''>");
                 out.print("<div class='mt-4 text-center'>");
-                out.print("<button type='button' class='btn btn-green' onclick='validForm();cargarDatos()' >Registrar</button>");
+                out.print("<button type='button' class='btn btn-green' onclick='validForm();' >Registrar</button>");
                 out.print("</div>");
 
                 out.print("</form>");

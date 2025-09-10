@@ -60,7 +60,7 @@ public class Tag_information extends TagSupport {
                 out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(1)' data-toggle='tooltip' data-placement='top' title='Cerrar' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
                 out.print("</div>");
 
-                out.print("<form action='Information?opt=2' method='post' name='FormInfo' id='FormInfo' class='needs-validation' novalidate=''>");
+                out.print("<form action='Information?opt=2' method='post' name='FormInfo' id='FormInfo' class='needs-validation' novalidate='' onsubmit='return cargarDatosForm(this)'>");
                 out.print("<input type='hidden' name='IdInformation' value='" + IdInformation + "'>");
                 lst_Id_information = InformationJpa.ConsultInformationId(IdInformation);
                 if (lst_Id_information != null) {
@@ -165,7 +165,7 @@ public class Tag_information extends TagSupport {
                     out.print("</div>");
                     //</editor-fold>
                     out.print("<div class='' style='width: 100%; text-align:center;'>");
-                    out.print("<button class='btn btn-green btn-lg' onclick='cargarDatos()' >Actualizar</button>");
+                    out.print("<button class='btn btn-green btn-lg'  >Actualizar</button>");
                     out.print("</div>");
                 }
 

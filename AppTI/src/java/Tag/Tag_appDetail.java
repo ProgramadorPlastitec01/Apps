@@ -194,7 +194,7 @@ public class Tag_appDetail extends TagSupport {
                     out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(4)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
                     out.print("</div>");
                     out.print("<div class='cont_form_user'>");
-                    out.print("<form action='AppDetail?opt=1&mod=3&idDoc=" + idDoc + "&idApp=" + idApp + "&idHead=" + idHead + "&type=" + type + "&idDet=" + idDet + "&swpt=3&step=" + step + "' method='post' class=''>");
+                    out.print("<form action='AppDetail?opt=1&mod=3&idDoc=" + idDoc + "&idApp=" + idApp + "&idHead=" + idHead + "&type=" + type + "&idDet=" + idDet + "&swpt=3&step=" + step + "' method='post' class='' onsubmit='return cargarDatosForm(this)'>");
                     out.print("<input type='hidden' id='idDocx' value=''>");
                     out.print("<input type='hidden' id='idCodx' value=''>");
                     out.print("<div class='d-flex align-items-center'>");
@@ -207,7 +207,7 @@ public class Tag_appDetail extends TagSupport {
                     out.print("<input type='number' class='form-control' name='codx' id='FinCodx' placeholder='Codigo' value='' onkeyup='FindCod()' required>");
                     out.print("</div>");
                     out.print("<div class='col-lg-2'>");
-                    out.print("<button class='btn btn-green' onclick='cargarDatos()'><i class='fas fa-search'></i></button>");
+                    out.print("<button class='btn btn-green'><i class='fas fa-search'></i></button>");
                     out.print("</div>");
                     out.print("</div>");
                     out.print("</form>");
@@ -291,12 +291,12 @@ public class Tag_appDetail extends TagSupport {
                         out.print("</div>");
                         out.print("<input type='hidden' class='form-control' name='' id='coordenadas-hidden' value='" + signt + "'>");
 
-                        out.print("<form action='AppDetail?opt=7&idDet=" + idDet + "&idHead=" + idHead + "&idDoc=" + idDoc + "&idApp=" + idApp + "&type=" + type + "&step=" + step + "' method='post' class=''>");
+                        out.print("<form action='AppDetail?opt=7&idDet=" + idDet + "&idHead=" + idHead + "&idDoc=" + idDoc + "&idApp=" + idApp + "&type=" + type + "&step=" + step + "' method='post' class='' ");
                         out.print("<input type='hidden' name='idSignature' id='' value='" + ObjSig[0].toString().replace("[", "") + "'>");
                         out.print("<input type='hidden' name='docx' id='' value='" + docx + "'>");
                         out.print("<input type='hidden' name='codx' value='" + codx + "'>");
                         out.print("<div class='text-center'>");
-                        out.print("<button class='btn btn-green' onclick='cargarDatos()'>Firmar</button>");
+                        out.print("<button class='btn btn-green'>Firmar</button>");
                         out.print("</div>");
                         out.print("</form>");
                         //</editor-fold>
@@ -316,12 +316,12 @@ public class Tag_appDetail extends TagSupport {
                         out.print("</div>");
                         out.print("</div>");
 
-                        out.print("<form action='AppDetail?opt=7&idDet=" + idDet + "&idHead=" + idHead + "&idDoc=" + idDoc + "&idApp=" + idApp + "&type=" + type + "&step=" + step + "' method='post' class=''>");
+                        out.print("<form action='AppDetail?opt=7&idDet=" + idDet + "&idHead=" + idHead + "&idDoc=" + idDoc + "&idApp=" + idApp + "&type=" + type + "&step=" + step + "' method='post' class='' >");
                         out.print("<input type='hidden' name='docx' value='" + docx + "'>");
                         out.print("<input type='hidden' name='codx' value='" + codx + "'>");
                         out.print("<input type='hidden' class='form-control' name='txtSignature' id='coordenadas-hidden' value='" + signt + "'>");
                         out.print("<div class='text-center'>");
-                        out.print("<button class='btn btn-green' onclick='cargarDatos()'>Guardar y Firmar</button>");
+                        out.print("<button class='btn btn-green'>Guardar y Firmar</button>");
                         out.print("</div>");
                         out.print("</form>");
                         //</editor-fold>
@@ -351,7 +351,7 @@ public class Tag_appDetail extends TagSupport {
                         out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(1)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
                         out.print("</div>");
                         out.print("<div class='cont_form_user'>");
-                        out.print("<form action='AppDetail?opt=2&idHead=" + idHead + "&idApp=" + idApp + "&idDoc=" + idDoc + "&type=" + type + "&step=" + step + "' method='post' id='formData'>");
+                        out.print("<form action='AppDetail?opt=2&idHead=" + idHead + "&idApp=" + idApp + "&idDoc=" + idDoc + "&type=" + type + "&step=" + step + "' method='post' id='formData' onsubmit='return cargarDatosForm(this)'>");
                         out.print("<div id=\"accordion\">");
                         out.print("<div class='accordion'>");
                         out.print("<div class=\"accordion-header\" role=\"button\" data-toggle=\"collapse\" data-target=\"#panel-body-99\" aria-expanded=\"true\" style='box-shadow: 0px 1px 4px 0px #a7a7a7;'>");
@@ -432,7 +432,7 @@ public class Tag_appDetail extends TagSupport {
                         out.print("</div>");
 
                         out.print("<div class='mt-2 text-center'>");
-                        out.print("<button type='button' class='btn btn-green' onclick='validForm(\"idDateForm\",\"idAffair\",\"assigned-person-ids\",\"cke_editable\");cargarDatos()'>Registrar</button>");
+                        out.print("<button type='button' class='btn btn-green' onclick='validForm(\"idDateForm\",\"idAffair\",\"assigned-person-ids\",\"cke_editable\")'>Registrar</button>");
                         out.print("</div>");
 
                         out.print("</form>");
@@ -464,7 +464,7 @@ public class Tag_appDetail extends TagSupport {
                             Object[] ObjDtil = (Object[]) lst_appDetail.get(0);
                             String[] content = ObjDtil[4].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
                             String[] docPersonal = ObjDtil[5].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
-                            out.print("<form action='AppDetail?opt=2&idHead=" + idHead + "&idApp=" + idApp + "&idDoc=" + idDoc + "&type=" + type + "&idDet=" + idDet + "&step=" + step + "' method='post' id='formData'>");
+                            out.print("<form action='AppDetail?opt=2&idHead=" + idHead + "&idApp=" + idApp + "&idDoc=" + idDoc + "&type=" + type + "&idDet=" + idDet + "&step=" + step + "' method='post' id='formData' onsubmit='return cargarDatosForm(this)'>");
                             out.print("<div id=\"accordion\">");
                             out.print("<div class='accordion'>");
                             out.print("<div class=\"accordion-header\" role=\"button\" data-toggle=\"collapse\" data-target=\"#panel-body-99\" aria-expanded=\"true\" style='box-shadow: 0px 1px 4px 0px #a7a7a7;'>");
@@ -558,7 +558,7 @@ public class Tag_appDetail extends TagSupport {
                             out.print("</div>");
                             out.print("</div>");
                             out.print("<div class='mt-2 text-center'>");
-                            out.print("<button type='button' class='btn btn-green' onclick='validForm(\"idDateForm\",\"idAffair\",\"assigned-person-ids\",\"editorNext\");cargarDatos()'>Actualizar</button>");
+                            out.print("<button type='button' class='btn btn-green' onclick='validForm(\"idDateForm\",\"idAffair\",\"assigned-person-ids\",\"editorNext\")'>Actualizar</button>");
                             out.print("</div>");
                         }
 
@@ -588,7 +588,7 @@ public class Tag_appDetail extends TagSupport {
                         out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(2)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
                         out.print("</div>");
                         out.print("<div class='cont_form_user'>");
-                        out.print("<form action='AppDetail?opt=6&idDoc=" + idDoc + "&idApp=" + idApp + "&idHead=" + idHead + "&type=" + type + "&step=" + step + "' method='post' class=''>");
+                        out.print("<form action='AppDetail?opt=6&idDoc=" + idDoc + "&idApp=" + idApp + "&idHead=" + idHead + "&type=" + type + "&step=" + step + "' method='post' class='' onsubmit='return cargarDatosForm(this)'>");
                         out.print("<div id='accordion'>");
                         out.print("<div class='accordion'>");
                         out.print("<div class=\"accordion-header\" role=\"button\" data-toggle=\"collapse\" data-target=\"#panel-body-1\"  aria-expanded=\"true\" style='box-shadow: 0px 1px 4px 0px #a7a7a7;'>");
@@ -789,7 +789,7 @@ public class Tag_appDetail extends TagSupport {
                         out.print("</div>");
                         out.print("</div>");
                         out.print("<div class='text-center'>");
-                        out.print("<button class='btn btn-green' onclick='cargarDatos()'>Registrar</button>");
+                        out.print("<button class='btn btn-green'>Registrar</button>");
                         out.print("</div>");
                         out.print("</div>");
                         out.print("</form>");
@@ -819,7 +819,7 @@ public class Tag_appDetail extends TagSupport {
                         if (lst_appDetail != null) {
                             Object[] ObjEditD = (Object[]) lst_appDetail.get(0);
                             String[] content = ObjEditD[4].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
-                            out.print("<form action='AppDetail?opt=6&idDoc=" + idDoc + "&idApp=" + idApp + "&idHead=" + idHead + "&type=" + type + "&idDet=" + idDet + "&step=" + step + "' method='post' class=''>");
+                            out.print("<form action='AppDetail?opt=6&idDoc=" + idDoc + "&idApp=" + idApp + "&idHead=" + idHead + "&type=" + type + "&idDet=" + idDet + "&step=" + step + "' method='post' class='' onsubmit='return cargarDatosForm(this)'>");
                             out.print("<div id='accordion'>");
                             out.print("<div class='accordion'>");
                             out.print("<div class=\"accordion-header\" role=\"button\" data-toggle=\"collapse\" data-target=\"#panel-body-1\"  aria-expanded=\"true\" style='box-shadow: 0px 1px 4px 0px #a7a7a7;'>");
@@ -1051,7 +1051,7 @@ public class Tag_appDetail extends TagSupport {
                             out.print("</div>");
                             out.print("</div>");
                             out.print("<div class='text-center'>");
-                            out.print("<button class='btn btn-green' onclick='cargarDatos()'>Actualizar</button>");
+                            out.print("<button class='btn btn-green' >Actualizar</button>");
                             out.print("</div>");
                             out.print("</div>");
                             out.print("</form>");
