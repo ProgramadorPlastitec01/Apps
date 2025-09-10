@@ -13,6 +13,7 @@
         <link rel="stylesheet" href="Interface/Content/Assets/css/progress.css">
         <link rel="stylesheet" href="Interface/Content/Assets/css/RangeInput.css">
         <link rel="icon" type="image/png" href="Interface/Imagen/Logo_app/IconW.fw.png">
+        <link rel="stylesheet" href="Interface/Content/Assets/css/pending.css">
         <!-- CKEditor -->
         <script src="Interface/Editor/ckeditor.js"></script>
 
@@ -204,15 +205,17 @@
                 }
 
                 var now = new Date();
+                var todayZero = new Date(now.getFullYear(), now.getMonth(), now.getDate());
                 var tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
-                var max = new Date(tomorrow.getFullYear(), tomorrow.getMonth() + 12, tomorrow.getDate());
 
-                function setupDateInput(input) {
+                function setupDateInput(input, baseDate) {
                     if (!input)
                         return;
 
+                    var max = new Date(baseDate.getFullYear(), baseDate.getMonth() + 12, baseDate.getDate());
+
                     // establecer min y max
-                    input.setAttribute('min', ymd(tomorrow));
+                    input.setAttribute('min', ymd(baseDate));
                     input.setAttribute('max', ymd(max));
 
                     function isInvalidDate(value) {
@@ -222,8 +225,7 @@
                         if (parts.length !== 3)
                             return true;
                         var sel = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
-                        var todayZero = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-                        return sel <= todayZero;
+                        return sel < baseDate; // permite hoy si baseDate es hoy
                     }
 
                     input.addEventListener('change', function () {
@@ -247,12 +249,67 @@
                     }
                 }
 
-                // Aplica la lógica a ambos campos
-                setupDateInput(document.getElementById('Txt_deadline'));
-                setupDateInput(document.getElementById('Txt_deadline2'));
+                // Caso 1: Txt_deadline -> permitir hoy
+                setupDateInput(document.getElementById('Txt_deadline'), todayZero);
+
+                // Caso 2: Txt_deadline2 -> desde DateRegister
+                var dateRegisterStr = document.getElementById('DateRegister')?.value;
+                if (dateRegisterStr) {
+                    var parts = dateRegisterStr.split('-');
+                    if (parts.length === 3) {
+                        var dateRegister = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+                        setupDateInput(document.getElementById('Txt_deadline2'), dateRegister);
+                    }
+                }
             });
         </script>
-        
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const now = new Date();
+                const todayZero = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // solo fecha
+
+                document.querySelectorAll(".ticket-item").forEach(function (item) {
+                    // limpiar clases previas
+                    item.classList.remove("vencido", "soonHead");
+
+                    const raw = item.getAttribute("data-fecha-limite");
+                    if (!raw)
+                        return;
+
+                    // extraer solo la parte fecha: soporta "yyyy-mm-dd", "yyyy-mm-ddTHH:MM", "yyyy-mm-dd HH:MM:SS"
+                    const datePart = raw.split("T")[0].split(" ")[0];
+                    const parts = datePart.split("-");
+                    if (parts.length !== 3) {
+                        console.warn("Fecha con formato inesperado:", raw, "en", item.id);
+                        return;
+                    }
+
+                    const y = parseInt(parts[0], 10);
+                    const m = parseInt(parts[1], 10);
+                    const d = parseInt(parts[2], 10);
+                    if (isNaN(y) || isNaN(m) || isNaN(d)) {
+                        console.warn("Fecha inválida:", raw, "en", item.id);
+                        return;
+                    }
+
+                    const fechaLimiteLocal = new Date(y, m - 1, d); // medianoche local de la fecha límite
+
+                    // Comparación POR DÍA (sin horas)
+                    if (todayZero.getTime() > fechaLimiteLocal.getTime()) {
+                        // hoy es posterior -> vencido
+                        item.classList.add("vencido");
+                    } else if (todayZero.getTime() === fechaLimiteLocal.getTime()) {
+                        // mismo día -> pronto a vencer
+                        item.classList.add("soonHead");
+                    }
+                    // else -> futuro, nada que hacer
+                    // DEBUG opcional:
+                    // console.log(item.id, "limite:", fechaLimiteLocal.toISOString().slice(0,10), "hoy:", todayZero.toISOString().slice(0,10));
+                });
+            });
+
+
+        </script>
         <Alerts:Alert/>
         <script src="Interface/Content/Assets/modules/izitoast/js/iziToast.min.js"></script>
         <script src="Interface/Content/Assets/js/page/modules-datatables.js"></script>

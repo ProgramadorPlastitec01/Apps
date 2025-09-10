@@ -11,6 +11,8 @@ import javax.servlet.jsp.tagext.TagSupport;
 import Controller.PendingControllerJpa;
 import Controller.UserControllerJpa;
 import Controller.SettingControllerJpa;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import javax.servlet.http.HttpSession;
 
 public class Tag_pending extends TagSupport {
@@ -27,6 +29,7 @@ public class Tag_pending extends TagSupport {
         int IdUser = Integer.parseInt(sesion.getAttribute("idUsuario").toString());
         String NameUser = sesion.getAttribute("Nombres").toString();
         String NameRol = sesion.getAttribute("NombreRol").toString();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         List lst_pending = null, lst_pendingId = null, lst_role = null, lst_user = null, lst_userId = null, lst_roleC = null;
         int IdPending = 0, Temp = 0, Type = 0, Priority = 0, State = 0, idRol = 0;
         String Filter = "";
@@ -90,7 +93,7 @@ public class Tag_pending extends TagSupport {
                     out.print("<div class='mb-2' style='display: flex;justify-content: space-around;  align-items: baseline;'>");
 
                     out.print("<div class='col-6' data-toggle='tooltip' data-placement='top' title='Fecha Solución'>");
-                    out.print("<input type='datetime-local' class='form-control' name='Txt_Date' id='DateExecute' placeholder='Fecha'  required autocomplete='off' >");
+                    out.print("<input type='datetime-local' class='form-control btnEstric' name='Txt_Date' id='DateExecute' placeholder='Fecha'  required autocomplete='off' >");
                     out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
                     out.print("</div>");
                     out.print("<div class='col-6' data-toggle='tooltip' data-placement='top' title='Responsable'>");
@@ -244,6 +247,8 @@ public class Tag_pending extends TagSupport {
                     out.print("<div class='invalid-feedback'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp;Debe seleccionar una persona.</div>");
                     out.print("</div>");
 
+                    out.print("<input type='hidden' id='DateRegister' value='" + obj_pending[4] + "'>");
+
                     out.print("<div class='col-6'>");
                     out.print("<input type='date' class='form-control' name='Deadline' id='Txt_deadline2' placeholder='Fecha Limite'  data-toggle='tooltip' data-placement='top' title='Fecha Limite' required value='" + ((obj_pending[13] == null) ? "" : obj_pending[13]) + "' autocomplete='off' >");
                     out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
@@ -257,6 +262,9 @@ public class Tag_pending extends TagSupport {
                     out.print("<div class='mt-3' style='width: 100%; text-align:center;'>");
                     out.print("<button class='btn btn-green btn-lg'>Modificar</button>");
                     out.print("</div>");
+                    out.print("<input type='hidden' name='Txt_Solution_OLD' value='" + obj_pending[5] + "'>");
+                    out.print("<input type='hidden' name='Progress' value='" + obj_pending[9] + "'>");
+                    out.print("<input type='hidden' name='DeadlineOld' value='" + obj_pending[13] + "'>");
                     out.print("</form>");
                 }
 
@@ -446,7 +454,6 @@ public class Tag_pending extends TagSupport {
             out.print("</div>");
             out.print("</div>");
             out.print("<div class='card-body'>");
-            out.print("<div class=\"tickets\">");
             if (!Filter.equals("")) {
                 if (Priority >= 0) {
                     if (Filter.equals("")) {
@@ -460,13 +467,42 @@ public class Tag_pending extends TagSupport {
             } else {
                 lst_pending = PendingJpa.ConsultPendingOpen(NameUser, NameRol);
             }
+            out.print("<div class=\"tickets\">");
             if (lst_pending != null) {
                 //<editor-fold defaultstate="collapsed" desc="CONTENT LEFT">
                 out.print("<div class=\"ticket-items ScrollDivTicket \" id=\"ticket-items\" >");
                 for (int i = 0; i < lst_pending.size(); i++) {
                     Object[] obj_pending = (Object[]) lst_pending.get(i);
-                    out.print("<div class='ticket-item " + ((i > 0) ? "" : "active") + " div-ticket' id='IdPendingDiv" + i + "' onclick='ViewContentPending(" + i + ")'>");
+                    int Progress = Integer.parseInt(obj_pending[9].toString());
+                    if (Progress != 100) {
+                        LocalDate fechaLimite = LocalDate.parse(obj_pending[14].toString(), formatter);
+                        LocalDate fechaActual = LocalDate.now();
+                        out.print("<div class='ticket-item " + ((i > 0) ? "" : "active")
+                                + " div-ticket' id='IdPendingDiv" + i
+                                + "' data-fecha-limite='" + obj_pending[14].toString()
+                                + "' onclick='ViewContentPending(" + i + ")'>");
+                        if (fechaActual.isAfter(fechaLimite)) {
+                            // Caso vencido
+                            out.print("<div class='d-flex justify-content-between'>"
+                                    + "<p></p>");
+                            out.print("<div class='DivHead'>"
+                                    + "<b class='text-danger textHead'>VENCIDO</b></div>");
+                            out.print("</div>");
+                        } else if (fechaActual.isEqual(fechaLimite)) {
+                            // Caso pronto a vencer
+                            out.print("<div class='d-flex justify-content-between'>"
+                                    + "<p></p>");
+                            out.print("<div class='DivsoonHead'>"
+                                    + "<b class='textsoonHead'>PRONTO A VENCER</b></div>");
+                            out.print("</div>");
+                        }
+                    } else {
+                        out.print("<div class='ticket-item " + ((i > 0) ? "" : "active")
+                                + " div-ticket' id='IdPendingDiv" + i
+                                + "' onclick='ViewContentPending(" + i + ")'>");
+                    }
                     out.print("<div class=\"ticket-title\" >");
+
                     out.print("<div class='d-flex' style='justify-content: space-between;align-items: baseline;' >"
                             + "<div class='w-50'><h4>#" + obj_pending[0] + " | " + obj_pending[1] + "</div>");
                     out.print("<div>");
@@ -502,6 +538,7 @@ public class Tag_pending extends TagSupport {
                     }
                     out.print("</div>");
                     out.print("</div>");
+
                 }
                 out.print("</div>");
                 //</editor-fold>
@@ -563,8 +600,20 @@ public class Tag_pending extends TagSupport {
                             String[] ArrDetail = obj_pending[5].toString().split("///");
                             for (int j = 0; j < ArrDetail.length; j++) {
                                 String[] ArrDetailRlc = ArrDetail[j].replace("][", "///").replace("[", "").replace("]", "").split("///");
-                                out.print("<div class='FollowUp'>");
+                                out.print("<div class='FollowUp d-flex justify-content-between'>");
+                                String DateFmt[] = ArrDetailRlc[0].split("T");
+                                LocalDate fechaSeguimiento = LocalDate.parse(DateFmt[0], formatter);
+                                LocalDate fechaLimite = LocalDate.parse(obj_pending[14].toString(), formatter);
+                                if (fechaSeguimiento.isAfter(fechaLimite)) {
+                                    out.print("<div class='left-col'>");
+                                    //<editor-fold defaultstate="collapsed" desc="DIV LEFT">
+                                    out.print("<b class='textRotate'>VENCIDO</b>");
+                                    //</editor-fold>
+                                    out.print("</div>");
+                                }
 
+                                out.print("<div class='right-col' " + ((!DateFmt[0].contains(obj_pending[14].toString())) ? "" : "style='width:100%'") + ">");
+                                //<editor-fold defaultstate="collapsed" desc="DIV RIGHT">
                                 out.print("<div class='d-flex justify-content-between'>");
 
                                 out.print("<div class='d-flex '>");
@@ -595,6 +644,8 @@ public class Tag_pending extends TagSupport {
                                 out.print("</div>");
 
                                 out.print("<div>" + ArrDetailRlc[1].replace("<img", "<img style='width:100%'") + "</div>");
+                                out.print("</div>");
+                                //</editor-fold>
                                 out.print("</div>");
                             }
                         } else {

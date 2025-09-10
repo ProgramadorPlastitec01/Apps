@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServletResponse;
 import Controller.PendingControllerJpa;
 import javax.servlet.http.HttpSession;
 import Controller.ActivitySystemControllerJpa;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Pending extends HttpServlet {
 
@@ -22,9 +25,12 @@ public class Pending extends HttpServlet {
         String UserRol = sesion.getAttribute("idRol").toString();
         String NameUser = sesion.getAttribute("Nombres").toString();
         int opt = Integer.parseInt(request.getParameter("opt"));
+        LocalDateTime dateTimeCurrent = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        String DateCurrent = dateTimeCurrent.format(formatter);
         int IdPending = 0, Temp = 0, Priority = 0, Type = 0, Progress = 0, State = 0;
         String Affair = "", Managed = "", Description = "", DateSolution = "", Solver = "", Solution = "", SolutionOld = "", SolutionEnd = "", Search = "",
-                Filter = "", Deadline;
+                Filter = "", Deadline = "", DeadlineOld = "";
         boolean Result = false;
         try {
             switch (opt) {
@@ -89,7 +95,28 @@ public class Pending extends HttpServlet {
                     Deadline = request.getParameter("Deadline");
                     if (IdPending > 0) {
                         Result = PendingJpa.PendingUpdate(IdPending, Affair, Priority, Managed, Description, Deadline);
-                        ActivityJpa.ActivityRegister(IdUser, 3, "Pendiente", "Se modifico el pendiente #" + IdPending + ".", 1, NameUser);
+                        if (Result) {
+                            ActivityJpa.ActivityRegister(IdUser, 3, "Pendiente", "Se modifico el pendiente #" + IdPending + ".", 1, NameUser);
+                            DeadlineOld = request.getParameter("DeadlineOld");
+                            if (!DeadlineOld.equals(Deadline)) {
+                                try {
+                                    Progress = Integer.parseInt(request.getParameter("Progress"));
+                                } catch (Exception e) {
+                                    Progress = 0;
+                                }
+                                try {
+                                    SolutionOld = request.getParameter("Txt_Solution_OLD");
+                                } catch (Exception e) {
+                                    SolutionOld = "";
+                                }
+                                if (SolutionOld.equals("")) {
+                                    SolutionEnd = "[" + DateCurrent + "][Se actualiza fecha de vecimiento " + Deadline + "][" + IdUser + "][" + Progress + "]";
+                                } else {
+                                    SolutionEnd = "[" + DateCurrent + "][Se actualiza fecha de vecimiento " + Deadline + "][" + IdUser + "][" + Progress + "]" + "///" + SolutionOld;
+                                }
+                                PendingJpa.SolutionPendingHead(IdPending, SolutionEnd);
+                            }
+                        }
                         request.setAttribute("UpdatePending", Result);
                     } else {
                         Result = PendingJpa.PendingRegister(Affair, Priority, Managed, Description, Deadline, IdUser);

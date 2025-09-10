@@ -190,5 +190,23 @@ public class PendingControllerJpa {
             return false;
         }
     }
+    public boolean SolutionPendingHead(int IdPending, String slt) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        try {
+            Query q = em.createNativeQuery("CALL `Sp_pdg_u_UpdateSolutionHead`('" + IdPending + "','" + slt + "')");
+            int resultado = q.executeUpdate();
+            em.getTransaction().commit();
+            em.clear();
+            em.close();
+            if (resultado == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
     //</editor-fold>
 }
