@@ -56,72 +56,72 @@ public class Tag_start extends TagSupport {
             out.print("</div>");
 
             if (CheckPending > 0) {
-            //<editor-fold defaultstate="collapsed" desc="ALERT PENDING">
-            lst_pending = PedingJpa.ConsultPendingAlert(NameRol, NameUser);
-            if (lst_pending != null) {
-                StringBuilder sb = new StringBuilder();
-                sb.append("<div class='container-fluid' style='max-height:320px; overflow-y:auto;'>");
+                //<editor-fold defaultstate="collapsed" desc="ALERT PENDING">
+                lst_pending = PedingJpa.ConsultPendingAlert(NameRol, NameUser);
+                if (lst_pending != null) {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("<div class='container-fluid' style='max-height:320px; overflow-y:auto;'>");
 
-                sb.append("<div class='card shadow-sm' style='border-radius:12px; overflow:hidden;'>");
+                    sb.append("<div class='card shadow-sm' style='border-radius:12px; overflow:hidden;'>");
 
-                sb.append("<div class='card-body p-0'>");
-                sb.append("<table class='table mb-0 table-sm text-center align-middle'>");
-                sb.append("<thead style='background-color:#f9fafb;'>");
-                sb.append("<tr>");
-                sb.append("<th>Rol</th>");
-                sb.append("<th><span class='text-danger'>Vencidos</span></th>");
-                sb.append("<th><span class='text-warning'>Por vencer hoy</span></th>");
-                sb.append("<th><span class='text-success'>Vigentes</span></th>");
-                sb.append("<th><span class='text-primary'>Total</span></th>");
-                sb.append("</tr>");
-                sb.append("</thead>");
-                sb.append("<tbody>");
-                for (int i = 0; i < lst_pending.size(); i++) {
-                    Object[] ObjCount = (Object[]) lst_pending.get(i);
+                    sb.append("<div class='card-body p-0'>");
+                    sb.append("<table class='table mb-0 table-sm text-center align-middle'>");
+                    sb.append("<thead style='background-color:#f9fafb;'>");
                     sb.append("<tr>");
-                    sb.append("<td style='font-weight:600;'>").append(ObjCount[0]).append("</td>"); // Rol
-                    sb.append("<td><span class='badge bg-danger fs-5 px-3 text-white'>").append(ObjCount[1]).append("</span></td>"); // Vencidos
-                    sb.append("<td><span class='badge bg-warning fs-5 px-3 text-white'>").append(ObjCount[2]).append("</span></td>"); // Por vencer hoy
-                    sb.append("<td><span class='badge bg-success fs-5 px-3 text-white'>").append(ObjCount[3]).append("</span></td>"); // Sin vencimiento
-                    sb.append("<td><span class='badge bg-primary fs-5 px-3 text-white'>").append(ObjCount[4]).append("</span></td>"); // Total
+                    sb.append("<th>Rol</th>");
+                    sb.append("<th><span class='text-danger'>Vencidos</span></th>");
+                    sb.append("<th><span class='text-warning'>Por vencer hoy</span></th>");
+                    sb.append("<th><span class='text-success'>Vigentes</span></th>");
+                    sb.append("<th><span class='text-primary'>Total</span></th>");
                     sb.append("</tr>");
+                    sb.append("</thead>");
+                    sb.append("<tbody>");
+                    for (int i = 0; i < lst_pending.size(); i++) {
+                        Object[] ObjCount = (Object[]) lst_pending.get(i);
+                        sb.append("<tr>");
+                        sb.append("<td style='font-weight:600;'>").append(ObjCount[0]).append("</td>"); // Rol
+                        sb.append("<td><span class='badge bg-danger fs-5 px-3 text-white'>").append(ObjCount[1]).append("</span></td>"); // Vencidos
+                        sb.append("<td><span class='badge bg-warning fs-5 px-3 text-white'>").append(ObjCount[2]).append("</span></td>"); // Por vencer hoy
+                        sb.append("<td><span class='badge bg-success fs-5 px-3 text-white'>").append(ObjCount[3]).append("</span></td>"); // Sin vencimiento
+                        sb.append("<td><span class='badge bg-primary fs-5 px-3 text-white'>").append(ObjCount[4]).append("</span></td>"); // Total
+                        sb.append("</tr>");
+                    }
+                    sb.append("</tbody>");
+
+                    sb.append("</table>");
+                    sb.append("</div>"); // cierre card-body
+                    sb.append("</div>"); // cierre card
+                    sb.append("</div>"); // cierre container-fluid
+
+                    String htmlContent = sb.toString().replace("\"", "\\\"");
+
+                    out.print("<div>");
+                    out.print("<script>");
+                    out.print("$(document).ready(function () {");
+                    out.print("  var wrapper = document.createElement('div');");
+                    out.print("  wrapper.innerHTML = \"" + htmlContent + "\";");
+                    out.print("  swal({");
+                    out.print("    title: 'Pendientes',");
+                    out.print("    content: wrapper,");
+                    out.print("    icon: 'warning',");
+                    out.print("    buttons: false,");
+                    out.print("    className: 'custom-swal-width'");  // clase personalizada
+                    out.print("  }).then(function(){");
+                    out.print("    $.post('Session?opt=6', function(resp){ console.log('CheckPending reiniciado a 0'); });");
+                    out.print("  });");
+                    out.print("});");
+                    out.print("</script>");
+
+                    out.print("</div>");
                 }
-                sb.append("</tbody>");
-
-                sb.append("</table>");
-                sb.append("</div>"); // cierre card-body
-                sb.append("</div>"); // cierre card
-                sb.append("</div>"); // cierre container-fluid
-
-                String htmlContent = sb.toString().replace("\"", "\\\"");
-
-                out.print("<div>");
-                out.print("<script>");
-                out.print("$(document).ready(function () {");
-                out.print("  var wrapper = document.createElement('div');");
-                out.print("  wrapper.innerHTML = \"" + htmlContent + "\";");
-                out.print("  swal({");
-                out.print("    title: 'Pendientes',");
-                out.print("    content: wrapper,");
-                out.print("    icon: 'warning',");
-                out.print("    buttons: false,");
-                out.print("    className: 'custom-swal-width'");  // clase personalizada
-                out.print("  }).then(function(){");
-                out.print("    $.post('Session?opt=6', function(resp){ console.log('CheckPending reiniciado a 0'); });");
-                out.print("  });");
-                out.print("});");
-                out.print("</script>");
-
-                out.print("</div>");
-            }
-            //</editor-fold>
+                //</editor-fold>
             }
 
             out.print("<div class='container mt-4'>");
 
-            out.print("<div class='row g-4'>"); // g-4 agrega espacio entre columnas/fila
+            out.print("<div class=\"row d-flex flex-wrap\">");
             //<editor-fold defaultstate="collapsed" desc="CONTADORES APPTI">
-            lst_items = DashJpa.ConsultScheduleFollowItems(CurrYear, (CurrMonth + 1));
+            lst_items = DashJpa.ConsultScheduleFollowItems(CurrYear, (CurrMonth + 1), NameRol, NameUser);
             if (lst_items != null) {
                 for (int i = 0; i < lst_items.size(); i++) {
                     Object[] ObjItems = (Object[]) lst_items.get(i);
@@ -143,9 +143,6 @@ public class Tag_start extends TagSupport {
                 }
             }
             //</editor-fold>
-            out.print("</div>"); // Fin container
-
-            out.print("<div class=\"row\">");
             //<editor-fold defaultstate="collapsed" desc="PENDIENTE ANUALES">
             lst_follow = DashJpa.ConsultPendingHistory(CurrYear);
             if (lst_follow != null) {
@@ -156,7 +153,7 @@ public class Tag_start extends TagSupport {
                     labelData += "'" + ObjType[1].toString() + "', ";
                     valueData += ObjType[2].toString() + ", ";
                 }
-                out.print("<div class='col-md-7'>");
+                out.print("<div class='col-lg-6'>");
 
                 out.print("<div class=\"card\" id='I' style='display:" + (Module.contains("I") ? "block" : "none") + "'>"
                         + "                <div class=\"card-header\">"
@@ -193,7 +190,7 @@ public class Tag_start extends TagSupport {
             //<editor-fold defaultstate="collapsed" desc="ACTIVIDADES RECIENTES">
             lst_activity = DashJpa.ConsultActiviryRecent(CurrYear, (CurrMonth + 1));
             if (lst_activity != null) {
-                out.print("<div class=\"col-md-5\">");
+                out.print("<div class=\"col-lg-6\">");
                 out.print("<div class=\"card\" id='J' style='display:" + (Module.contains("J") ? "block" : "none") + "'>");
                 out.print("<div class=\"card-header\">");
                 out.print("<h4>Actividades recientes</h4>");
@@ -211,7 +208,7 @@ public class Tag_start extends TagSupport {
                         out.print(ObjModule[2]);
                         out.print("    </div>");
                     }
-                    out.print("    <div class=\"activity-detail w-100\" style='margin-bottom:9px !important;'>");
+                    out.print("    <div class=\"activity-detail\" style='margin-bottom:9px !important;'>");
                     out.print("  <div class='d-flex justify-content-between mb-2'>");
                     out.print("    <span class='text-job text-primary'>" + ObjActivity[1] + "</span>");
                     out.print("    <span class='text-job text-warning'>" + ObjActivity[4] + "</span>");
@@ -225,11 +222,16 @@ public class Tag_start extends TagSupport {
                 out.print("</div>");
             }
             //</editor-fold>
+            //<editor-fold defaultstate="collapsed" desc="PROGRAMACION DE TURNO">
+            out.print("<div class=\"col-lg-6\">");
+            
+            out.print("</div>");
+            //</editor-fold>
             out.print("</div>");
 
             out.print("</div>");
 
-            out.print("</div>");
+            out.print("</section>");
 
             //<editor-fold defaultstate="collapsed" desc="CONTADOR - HABILITAR MODAL">
             out.print("<div class='setting_toggle' id=\"customize-toggle\" onclick=\"toggleCustomizer()\">");
@@ -243,22 +245,25 @@ public class Tag_start extends TagSupport {
             out.print("    <button class='btn btn-link text-dark p-0' onclick=\"toggleCustomizer()\"><i class='fas fa-times'></i></button>");
             out.print("  </div>");
 
-            out.print("  <div class='row p-3'>");
+            out.print("  <div class='row p-3 scrollRowDiv'>");
 
             String[] ArgModule = {
-                "Pendientes", "Bitacora", "Aplicativo en gestión", "Actas sin firmas",
+                "Total Pendientes", "Bitacora", "Aplicativo en gestión", "Actas sin firmas",
                 "Actividad mensuales", "PC en gestión", "Equipos en gestión", "Programaciones pendientes",
-                "Pendientes Anuales", "Actividad Reciente"
+                "Pendientes Anuales", "Actividad Reciente", "Pendientes vencidos", "Pendientes por vencer",
+                "Pendientes vigentes"
             };
             String[] ArgIcon = {
                 "fa-bell", "fa-folder-open", "fa-lightbulb", "fa-file-alt",
                 "fa-calendar", "fa-laptop", "fa-tablet", "fa-clipboard-check",
-                "fa-list", "fa-comments"
+                "fa-list", "fa-comments", "fa-exclamation", "fa-hourglass-half",
+                "fa-check"
             };
             String[] DivOpenClose = {
                 "A", "B", "C", "D",
                 "E", "F", "G", "H",
-                "I", "J"
+                "I", "J", "K", "L",
+                "M"
             };
 
             for (int i = 0; i < ArgModule.length; i++) {
@@ -270,23 +275,16 @@ public class Tag_start extends TagSupport {
                 out.print("</div>");
             }
 
-            out.print("</div>"); // cierre row
-
             out.print("<form id='MyForm' action='Start?opt=2' method='POST'>");
             out.print("<input type=\"hidden\" id=\"modSelectedInput\" name='Module' value='" + Module + "'>");
             out.print("</form>");
 
-            out.print("<div class='text-center'>");
-            out.print("<button class='btn btn-green' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' onclick='SendForm()'><i class=\"fas fa-save\"></i>Guardar</button>");
-            out.print("</div>");
+            out.print("<button class='btn btn-green SaveButtom' data-toggle='tooltip' data-placement='top' onclick='SendForm()'><i class=\"fas fa-save\"></i>Guardar</button>");
+            out.print("</div>"); // cierre row
+
             out.print("</div>"); // cierre panel
             //</editor-fold>
 
-            out.print("</div>");
-
-            out.print("</div>");
-
-            out.print("</section>");
         } catch (IOException ex) {
             Logger.getLogger(Tag_start.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {

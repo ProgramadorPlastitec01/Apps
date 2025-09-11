@@ -39,8 +39,8 @@
 
                     <ul class="nav_items">
                         <li class="nav_item">
-                            <a href="Knowledge.jsp" class="nav_link">Documentación Técnica</a>
-                            <a href="http://172.16.5.99:8084/AppSupport/" class="nav_link" target="_blank">Soporte</a>
+                            <a href="Knowledge.jsp" class="nav_link" target="_blank" rel="noopener noreferrer" class="nav_link">Documentación Técnica</a>
+                            <a href="http://172.16.5.99:8084/AppSupport/" class="nav_link" target="_blank" rel="noopener noreferrer">Soporte</a>
                             <a href="#"  onclick="ViewWindows(2)" class="nav_link">Idea</a>
                         </li>
                     </ul>
@@ -317,9 +317,8 @@
             }
         </script>
         <script>
-             document.addEventListener("DOMContentLoaded", () => {
+            document.addEventListener("DOMContentLoaded", () => {
                 const totalImages = 12;
-                let index = 1;
                 const homeSection = document.querySelector(".home");
 
                 if (!homeSection) {
@@ -327,29 +326,37 @@
                     return;
                 }
 
-                function changeBackground() {
-                    console.log("Valor de index:", index);
-                    const imageUrl = "Interface/Content/Assets/css/Img/B" + index + ".jpg";
-                    console.log("Usando imagen:", imageUrl);
-                    homeSection.style.backgroundImage = 'url("' + imageUrl + '")';
-                    index = index >= totalImages ? 1 : index + 1;
-                    console.log("Nuevo valor de index:", index);
+                function getDailyImageIndex() {
+                    const today = new Date();
+                    const seed = today.getFullYear() + "" + (today.getMonth() + 1) + "" + today.getDate();
+                    // Convierte la fecha en un número entero
+                    let num = 0;
+                    for (let i = 0; i < seed.length; i++) {
+                        num += seed.charCodeAt(i);
+                    }
+                    // Saca un índice dentro del rango de imágenes
+                    return (num % totalImages) + 1;
                 }
 
-                // Precarga de imágenes (opcional, para evitar parpadeo por carga)
+                function setDailyBackground() {
+                    const index = getDailyImageIndex();
+                    const imageUrl = "Interface/Content/Assets/css/Img/B" + index + ".jpg";
+                    console.log("Imagen diaria (" + index + "):", imageUrl);
+                    homeSection.style.backgroundImage = 'url("' + imageUrl + '")';
+                }
+
+                // Precarga (opcional, si quieres que no parpadee al cargar)
                 const images = [];
                 for (let i = 1; i <= totalImages; i++) {
                     images[i] = new Image();
                     images[i].src = "Interface/Content/Assets/css/Img/B" + i + ".jpg";
                 }
 
-                // Ejecuta la función inmediatamente
-                changeBackground();
-
-                // Configura el intervalo para cambiar la imagen cada 5 segundos
-                setInterval(changeBackground, 30000);
+                // Asigna la imagen del día
+                setDailyBackground();
             });
         </script>
+
         <script src="Interface/Content/Assets/modules/jquery.min.js"></script>
         <script src="Interface/Content/Assets/modules/bootstrap/js/bootstrap.min.js"></script>
         <script src="Interface/Content/Assets/js/page/modules-toastr.js"></script>

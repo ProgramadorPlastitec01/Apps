@@ -113,11 +113,11 @@ public class DashBoardJpaController implements Serializable {
         }
     }
 
-    public List ConsultScheduleFollowItems(int yar, int mth) {
+    public List ConsultScheduleFollowItems(int yar, int mth, String cgo, String me) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
         try {
-            Query q = etm.createNativeQuery("CALL `Sp_str_c_ConsultFollowItems`('" + yar + "','" + mth + "')");
+            Query q = etm.createNativeQuery("CALL `Sp_str_c_ConsultFollowItems`('" + yar + "','" + mth + "','" + cgo + "','" + me + "')");
             List consulta = q.getResultList();
             etm.getTransaction().commit();
             etm.clear();
@@ -170,7 +170,7 @@ public class DashBoardJpaController implements Serializable {
         }
     }
 
-    public boolean UpdateModuleUser(String Module,int idUser) {
+    public boolean UpdateModuleUser(String Module, int idUser) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {

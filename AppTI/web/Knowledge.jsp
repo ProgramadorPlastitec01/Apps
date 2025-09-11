@@ -19,7 +19,7 @@
         <div class="card">
             <div class="card-body">
                 <nav class="navbar bg-primary">
-                    <img src="Interface/Imagen/Logo_app/LogoSideW.fw.png" alt="" style="width: 13%;">
+                    <img src="Interface/Imagen/Logo_app/LogoSideW.fw.png" alt="" style="width: 13%;cursor: pointer;" onclick="openNexus()">
                     <a class="navbar-brand" href="Knowledge.jsp">💻 Documentación técnica</a>
                     <div class="form-inline">
                         <input class="form-control" id="searchInput" type="search" placeholder="Filtro" aria-label="Search">
@@ -92,7 +92,7 @@
                 <%
                         } // cierre for grupo
                     } // cierre if grupo
-%>
+                %>
             </div>
             <div id="noResultsMessage" style="display: none; text-align: center; margin: 20px;">
                 <h2>No se encontraron resultados</h2>
@@ -130,6 +130,11 @@
                 form.submit();
             }
 
+        </script>
+        <script>
+            function openNexus() {
+                window.open("http://172.16.1.164:8089/AppTI/", "_blank");
+            }
         </script>
         <script src="Interface/Content/Assets/js/knowledge.js"></script>
         <script src="Interface/Content/Assets/modules/jquery.min.js"></script>

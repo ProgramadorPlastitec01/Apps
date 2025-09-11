@@ -16,20 +16,23 @@
 
 .mod-panel {
     position: fixed;
-    top: 70px; /* ajusta según navbar */
-    right: -364px;
+    top: 70px;
+    right: -360px;             /* 🔹 Panel oculto por defecto */
     background: #fff;
     width: auto;
-    max-width: 340px;
+    max-width: 359px;
     border-left: 1px solid #ddd;
     box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
     z-index: 1050;
     border-radius: 8px 0 0 8px;
-    transition: all 0.3s ease;
-    height: -webkit-fill-available;
+    transition: right 0.3s ease; /* animación más clara */
+    height: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 .mod-panel.active{
     right: 0;
+    position: absolute;
 }
 
 .mod-icon-card {
@@ -99,13 +102,24 @@
 
 /* CSS que debes añadir (head o justo antes del swal) */
 .swal-modal.custom-swal-width {
-  width: 46% !important;        /* ancho deseado */
+    width: 46% !important;        /* ancho deseado */
 }
 
 /* Responsive: en pantallas más pequeñas ajusta el ancho */
 @media (max-width: 992px) {
-  .swal-modal.custom-swal-width { width: 76% !important; }
+    .swal-modal.custom-swal-width { width: 76% !important; }
 }
 @media (max-width: 576px) {
-  .swal-modal.custom-swal-width { width: 89% !important; }
+    .swal-modal.custom-swal-width { width: 89% !important; }
+}
+.scrollRowDiv{
+    max-height: 91%;
+    height: 91%;
+    overflow-y: auto;
+}
+.SaveButtom{
+    border-radius: 4px;
+    position: absolute;
+    left: 38%;
+    bottom: 7px;
 }
