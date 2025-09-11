@@ -56,44 +56,65 @@ public class Tag_start extends TagSupport {
             out.print("</div>");
 
             if (CheckPending > 0) {
-                //<editor-fold defaultstate="collapsed" desc="ALERT PENDING">
-                lst_pending = PedingJpa.ConsultPendingAlert(NameRol, NameUser);
-                if (lst_pending != null) {
-                    StringBuilder sb = new StringBuilder();
-                    sb.append("<div class='container-fluid' style='max-height:250px; overflow-y:auto;'>");
-                    sb.append("<ul class='list-group'>");
+            //<editor-fold defaultstate="collapsed" desc="ALERT PENDING">
+            lst_pending = PedingJpa.ConsultPendingAlert(NameRol, NameUser);
+            if (lst_pending != null) {
+                StringBuilder sb = new StringBuilder();
+                sb.append("<div class='container-fluid' style='max-height:320px; overflow-y:auto;'>");
 
-                    for (int i = 0; i < lst_pending.size(); i++) {
-                        Object[] ObjCount = (Object[]) lst_pending.get(i);
-                        sb.append("<li class='list-group-item d-flex justify-content-between align-items-center'>")
-                                .append("<span style='font-weight:500;'>").append(ObjCount[1]).append("</span>")
-                                .append("<span class='badge badge-warning badge-pill'>").append(ObjCount[0]).append("</span>")
-                                .append("</li>");
-                    }
+                sb.append("<div class='card shadow-sm' style='border-radius:12px; overflow:hidden;'>");
 
-                    sb.append("</ul>");
-                    sb.append("</div>");
-
-                    String htmlContent = sb.toString().replace("\"", "\\\"");
-
-                    out.print("<div>");
-                    out.print("<script>");
-                    out.print("$(document).ready(function () {");
-                    out.print("  var wrapper = document.createElement('div');");
-                    out.print("  wrapper.innerHTML = \"" + htmlContent + "\";");
-                    out.print("  swal({");
-                    out.print("    title: 'Pendientes',");
-                    out.print("    content: wrapper,");
-                    out.print("    icon: 'warning',");
-                    out.print("    buttons: false");
-                    out.print("  }).then(function(){");  // callback cuando se cierra la alerta
-                    out.print("    $.post('Session?opt=6', function(resp){ console.log('CheckPending reiniciado a 0'); });");
-                    out.print("  });");
-                    out.print("});");
-                    out.print("</script>");
-                    out.print("</div>");
+                sb.append("<div class='card-body p-0'>");
+                sb.append("<table class='table mb-0 table-sm text-center align-middle'>");
+                sb.append("<thead style='background-color:#f9fafb;'>");
+                sb.append("<tr>");
+                sb.append("<th>Rol</th>");
+                sb.append("<th><span class='text-danger'>Vencidos</span></th>");
+                sb.append("<th><span class='text-warning'>Por vencer hoy</span></th>");
+                sb.append("<th><span class='text-success'>Vigentes</span></th>");
+                sb.append("<th><span class='text-primary'>Total</span></th>");
+                sb.append("</tr>");
+                sb.append("</thead>");
+                sb.append("<tbody>");
+                for (int i = 0; i < lst_pending.size(); i++) {
+                    Object[] ObjCount = (Object[]) lst_pending.get(i);
+                    sb.append("<tr>");
+                    sb.append("<td style='font-weight:600;'>").append(ObjCount[0]).append("</td>"); // Rol
+                    sb.append("<td><span class='badge bg-danger fs-5 px-3 text-white'>").append(ObjCount[1]).append("</span></td>"); // Vencidos
+                    sb.append("<td><span class='badge bg-warning fs-5 px-3 text-white'>").append(ObjCount[2]).append("</span></td>"); // Por vencer hoy
+                    sb.append("<td><span class='badge bg-success fs-5 px-3 text-white'>").append(ObjCount[3]).append("</span></td>"); // Sin vencimiento
+                    sb.append("<td><span class='badge bg-primary fs-5 px-3 text-white'>").append(ObjCount[4]).append("</span></td>"); // Total
+                    sb.append("</tr>");
                 }
-                //</editor-fold>
+                sb.append("</tbody>");
+
+                sb.append("</table>");
+                sb.append("</div>"); // cierre card-body
+                sb.append("</div>"); // cierre card
+                sb.append("</div>"); // cierre container-fluid
+
+                String htmlContent = sb.toString().replace("\"", "\\\"");
+
+                out.print("<div>");
+                out.print("<script>");
+                out.print("$(document).ready(function () {");
+                out.print("  var wrapper = document.createElement('div');");
+                out.print("  wrapper.innerHTML = \"" + htmlContent + "\";");
+                out.print("  swal({");
+                out.print("    title: 'Pendientes',");
+                out.print("    content: wrapper,");
+                out.print("    icon: 'warning',");
+                out.print("    buttons: false,");
+                out.print("    className: 'custom-swal-width'");  // clase personalizada
+                out.print("  }).then(function(){");
+                out.print("    $.post('Session?opt=6', function(resp){ console.log('CheckPending reiniciado a 0'); });");
+                out.print("  });");
+                out.print("});");
+                out.print("</script>");
+
+                out.print("</div>");
+            }
+            //</editor-fold>
             }
 
             out.print("<div class='container mt-4'>");

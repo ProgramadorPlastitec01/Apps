@@ -96,3 +96,16 @@
 .scrollActivities::-webkit-scrollbar-thumb:active {
     background-color: #0b0025;
 }
+
+/* CSS que debes añadir (head o justo antes del swal) */
+.swal-modal.custom-swal-width {
+  width: 46% !important;        /* ancho deseado */
+}
+
+/* Responsive: en pantallas más pequeñas ajusta el ancho */
+@media (max-width: 992px) {
+  .swal-modal.custom-swal-width { width: 76% !important; }
+}
+@media (max-width: 576px) {
+  .swal-modal.custom-swal-width { width: 89% !important; }
+}
