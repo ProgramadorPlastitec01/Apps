@@ -80,5 +80,43 @@ public class DeviceHeaderJpaController implements Serializable {
             return false;
         }
     }
+    
+    public boolean ChangueStateDeviceHeader(int idDeviceHeader) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        try {
+            Query q = em.createNativeQuery("CALL `Sp_dhr_u_ChangueStateDeviceHead`(" + idDeviceHeader + ")");
+            int resultado = q.executeUpdate();
+            em.getTransaction().commit();
+            em.clear();
+            em.close();
+            if (resultado == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    
+    public boolean DeleteCalificationDeviceHead(int idDeviceHeader) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        try {
+            Query q = em.createNativeQuery("CALL `Sp_chd_u_DeleteCalificationDeviceHead`(" + idDeviceHeader + ")");
+            int resultado = q.executeUpdate();
+            em.getTransaction().commit();
+            em.clear();
+            em.close();
+            if (resultado == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
     //</editor-fold>
 }

@@ -211,5 +211,24 @@ public class DeviceJpaController implements Serializable {
         }
     }
 
+    public boolean UpdateDeviceItem(int idDevice, int idItem) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        try {
+            Query q = em.createNativeQuery("CALL `Sp_cpt_u_UpdateDeviceItem`(" + idDevice + ", " + idItem + ")");
+            int resultado = q.executeUpdate();
+            em.getTransaction().commit();
+            em.clear();
+            em.close();
+            if (resultado == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
 //</editor-fold>
 }

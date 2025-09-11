@@ -827,6 +827,10 @@ public class Tag_computer extends TagSupport {
                                 .replace("XXXCOLUMM4XXX", "<b>" + DtaFormat[16].toString() + "</b>")
                                 .replace("XXXCOLUMM5XXX", "<b>" + DtaFormat[17].toString()) + "</b>";
 
+                        format = format.replace("XXXElaboradorXXX", "<b class='text-warning'>Pendiente Firma</b>");
+                        format = format.replace("XXXUsuarioXXX", "<b class='text-warning'>Pendiente Firma</b>");
+                        format = format.replace("XXXJefe o DirectorXXX", "<b class='text-warning'><b class='text-warning'>Pendiente Firma</b></b>");
+
 //                        en este momento se viene el remplazo de las firmas realizadas y validacion del modulo en general
 //                        try {
 //                            String[] usrs = ObjFormat[5].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
@@ -872,9 +876,6 @@ public class Tag_computer extends TagSupport {
 //                            }
 //
 //                        } catch (Exception e) {
-//                            format = format.replace("XXXElaboradorXXX", "<b class='text-warning'>Pendiente Firma</b>");
-//                            format = format.replace("XXXUsuarioXXX", "<b class='text-warning'>Pendiente Firma</b>");
-//                            format = format.replace("XXXJefe o DirectorXXX", "<b class='text-warning'><b class='text-warning'>Pendiente Firma</b></b>");
 //                        }
                         //</editor-fold>
                         //<editor-fold defaultstate="collapsed" desc="ITEMS PLUS">

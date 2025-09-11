@@ -2,13 +2,11 @@
 
 
 <%
-    
+
 //ESTE CODIGO REALIZA SUBIDA DE LOS ARCHIVOS ADJUNTOS DE CADA HOJA DE VIDA, CUAL ES LA IDEA DE ESTO; ES QUE SELECCIONE LOS 4 ARCHIVOS PRINCIPALES, 
 //SE GUARDAN Y LISTO ESA ES LA PRIMERA PARTE, LA SEGUNDA PARTE ES LA EDICION DE LOS ARCHIVOS, PARA ESTO SE MANEJA EL MISMO FORMULARIO Y ESTE MISMO ARCHIVO,
 //SE RECIBE EL OBJETO 3 COMO RESULTADO DEL NOMBRE DEL ARCHIVO QUE SE ESTA CAMBIANDO, EN LA LINEA 103 SE REALIZA UN RECORDDIO PARA RECONOCER CUAL ES EL CAMPO 
 //QUE SE ESTA CAMBIANDO, POSTERIORMENTE RECIBE EN EL OBJETO 4 EL NOMBRE DEL ARCHIVO QUE HABIA ANTEIRORMENTE PARA ELIMINAR UY EVITAR LLENAR LA CARPETA DE ARCHIVOS BASURA
-    
-    
     Calendar cal = Calendar.getInstance();
     String ano = cal.get(Calendar.YEAR) + "";
     String mes = "";
@@ -125,6 +123,21 @@
             } catch (Exception e) {
             }
         }
-        request.getRequestDispatcher("Computer?opt=4&IdComputer=" + idComputer + "&idpcHead=" + idPcHead + "&type=" + TypeDoc + "&fileDocs=" + FileNames + "&idDetail=" + idDetail + "&xtemp=" + temp + "").forward(request, response);
+        int device = 0;
+        try {
+            if (temp == 0) {
+                device = Integer.parseInt(hidden.get(4).toString());
+            } else {
+                device = Integer.parseInt(hidden.get(7).toString());
+            }
+        } catch (Exception e) {
+            device = 0;
+        }
+        if (device == 1) {
+            request.getRequestDispatcher("Device?opt=4&idDevice=" + idComputer + "&idDeviceHead=" + idPcHead + "&type=" + TypeDoc + "&fileDocs=" + FileNames + "&idDeviceDetail=" + idDetail + "&xtemp=" + temp + "").forward(request, response);
+        } else {
+            request.getRequestDispatcher("Computer?opt=4&IdComputer=" + idComputer + "&idpcHead=" + idPcHead + "&type=" + TypeDoc + "&fileDocs=" + FileNames + "&idDetail=" + idDetail + "&xtemp=" + temp + "").forward(request, response);
+
+        }
     }
 %>
