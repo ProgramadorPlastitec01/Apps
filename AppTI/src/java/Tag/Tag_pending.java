@@ -13,6 +13,7 @@ import Controller.UserControllerJpa;
 import Controller.SettingControllerJpa;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import javax.servlet.http.HttpSession;
 
 public class Tag_pending extends TagSupport {
@@ -32,6 +33,8 @@ public class Tag_pending extends TagSupport {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         List lst_pending = null, lst_pendingId = null, lst_role = null, lst_user = null, lst_userId = null, lst_roleC = null;
         int IdPending = 0, Temp = 0, Type = 0, Priority = 0, State = 0, idRol = 0;
+        double progressPercentage = 0;
+        LocalDate fechaSeguimiento = LocalDate.now();
         String Filter = "";
         //<editor-fold defaultstate="collapsed" desc="VARIABLES">
         try {
@@ -579,7 +582,11 @@ public class Tag_pending extends TagSupport {
 
                     out.print("</div>");
                     String uniqueId = "progressText" + i; // Genera un ID único
-                    double progressPercentage = Double.parseDouble(obj_pending[9].toString()); // Suponiendo que el progreso está en obj_pending[10]
+                    if (obj_pending.length > 9 && obj_pending[9] != null) {
+                        progressPercentage = Double.parseDouble(obj_pending[9].toString());
+                    } else {
+                        progressPercentage = 0;
+                    }
                     double strokeDashoffset = 125.66 - (progressPercentage / 100) * 125.66; // Calcula el desplazamiento basado en el porcentaje de progreso
                     out.print("<div data-toggle='tooltip' data-placement='top' title='Progreso'>\n"
                             + "        <svg>\n"
@@ -603,8 +610,12 @@ public class Tag_pending extends TagSupport {
                             for (int j = 0; j < ArrDetail.length; j++) {
                                 String[] ArrDetailRlc = ArrDetail[j].replace("][", "///").replace("[", "").replace("]", "").split("///");
                                 out.print("<div class='FollowUp d-flex justify-content-between'>");
-                                String DateFmt[] = ArrDetailRlc[0].split("T");
-                                LocalDate fechaSeguimiento = LocalDate.parse(DateFmt[0], formatter);
+                                String DateFmt[] = ArrDetailRlc[0].toString().split("T");
+                                try {
+                                    fechaSeguimiento = LocalDate.parse(DateFmt[0], formatter);
+                                } catch (DateTimeParseException e) {
+                                    System.out.println("Error parseando fecha: " + DateFmt[0]);
+                                }
                                 LocalDate fechaLimite = LocalDate.parse(obj_pending[14].toString(), formatter);
                                 if (fechaSeguimiento.isAfter(fechaLimite)) {
                                     out.print("<div class='left-col'>");
@@ -619,13 +630,18 @@ public class Tag_pending extends TagSupport {
                                 out.print("<div class='d-flex justify-content-between'>");
 
                                 out.print("<div class='d-flex '>");
-                                int UserPnd = Integer.parseInt(ArrDetailRlc[2]);
+                                 int UserPnd = 0;
+                                try {
+                                   UserPnd = Integer.parseInt(ArrDetailRlc[2]);
+                                } catch (Exception e) {
+                                      System.out.println("Valor inválido en ArrDetailRlc[2]: " + ArrDetailRlc[2]);
+                                }
                                 lst_userId = UserJpa.ConsultUsersid(UserPnd);
                                 String UserN = "", Icon = "";
                                 if (lst_userId != null) {
                                     Object[] objUser = (Object[]) lst_userId.get(0);
-                                    Icon = objUser[12].toString();
-                                    UserN = objUser[1].toString();
+                                    Icon = (objUser[12] != null) ? objUser[12].toString() : "default.png";
+                                    UserN = (objUser[1] != null) ? objUser[1].toString() : "Sin nombre";
                                 } else {
                                     Icon = "Fallo";
                                     UserN = "Fallo";

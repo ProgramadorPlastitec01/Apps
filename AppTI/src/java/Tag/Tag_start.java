@@ -13,6 +13,7 @@ import Controller.DashBoardJpaController;
 import Controller.SettingControllerJpa;
 import Controller.UserControllerJpa;
 import Controller.PendingControllerJpa;
+import Controller.ShiftControllerJpa;
 import SQL.ConnectionsBd;
 
 public class Tag_start extends TagSupport {
@@ -25,6 +26,7 @@ public class Tag_start extends TagSupport {
         DashBoardJpaController DashJpa = new DashBoardJpaController();
         SettingControllerJpa SettingJpa = new SettingControllerJpa();
         PendingControllerJpa PedingJpa = new PendingControllerJpa();
+        ShiftControllerJpa ShiftJpa = new ShiftControllerJpa();
         ConnectionsBd ConnectionBd = new ConnectionsBd();
         UserControllerJpa UserJpa = new UserControllerJpa();
         int IdUser = Integer.parseInt(sesion.getAttribute("idUsuario").toString());
@@ -35,7 +37,8 @@ public class Tag_start extends TagSupport {
         int CurrYear = cal.get(Calendar.YEAR);
         int CurrMonth = (cal.get(Calendar.MONTH));
 //        nombreMes = nombreMes.substring(0, 1).toUpperCase() + nombreMes.substring(1).toLowerCase();
-        List lst_items = null, lst_follow = null, lst_activity = null, lst_module = null, lst_tickets = null, lst_user = null, lst_pending = null;
+        List lst_items = null, lst_follow = null, lst_activity = null, lst_module = null, lst_tickets = null, lst_user = null, lst_pending = null,
+                lst_shift = null;
         int CountP = 0;
         String Module = "";
 
@@ -143,6 +146,8 @@ public class Tag_start extends TagSupport {
                 }
             }
             //</editor-fold>
+            out.print("</div>");
+            out.print("<div class='row d-flex flex-wrap g-4'>"); 
             //<editor-fold defaultstate="collapsed" desc="PENDIENTE ANUALES">
             lst_follow = DashJpa.ConsultPendingHistory(CurrYear);
             if (lst_follow != null) {
@@ -192,9 +197,11 @@ public class Tag_start extends TagSupport {
             if (lst_activity != null) {
                 out.print("<div class=\"col-lg-6\">");
                 out.print("<div class=\"card\" id='J' style='display:" + (Module.contains("J") ? "block" : "none") + "'>");
+                
                 out.print("<div class=\"card-header\">");
                 out.print("<h4>Actividades recientes</h4>");
                 out.print("</div>");
+                
                 out.print("<div class=\"card-body scrollActivities\" style='font-size:11px'>");
                 out.print("<div class=\" activities\" >");
                 for (int i = 0; i < lst_activity.size(); i++) {
@@ -209,6 +216,7 @@ public class Tag_start extends TagSupport {
                         out.print("    </div>");
                     }
                     out.print("    <div class=\"activity-detail\" style='margin-bottom:9px !important;'>");
+                    
                     out.print("  <div class='d-flex justify-content-between mb-2'>");
                     out.print("    <span class='text-job text-primary'>" + ObjActivity[1] + "</span>");
                     out.print("    <span class='text-job text-warning'>" + ObjActivity[4] + "</span>");
@@ -216,19 +224,59 @@ public class Tag_start extends TagSupport {
                     out.print("        <span class=\"text-job text-primary\">" + ObjActivity[3] + "</span>");
                     out.print("      <div class='d-flex align-items-baseline'><span class=\"bullet \"></span><p>" + ObjActivity[2] + "</p></div>");
                     out.print("    </div>");
+                    
                     out.print("  </div>");
 
                 }
                 out.print("</div>");
+                out.print("</div>");
+                out.print("</div>");
+                out.print("</div>");
             }
             //</editor-fold>
             //<editor-fold defaultstate="collapsed" desc="PROGRAMACION DE TURNO">
-            out.print("<div class=\"col-lg-6\">");
-            
+            out.print("<div class=\"col-lg-12\">");
+            out.print("<div class=\"card\" id='N' style='display:" + (Module.contains("N") ? "block" : "none") + "'>");
+            out.print("<table class='table table-sm' id='table-1'>");
+            out.print("<tr style='background: #33bf98;color: black; text-align: center;'>");
+            out.print("<th>TURNO PROGRAMADO</th>");
+            out.print("<th>PERSONAL PROGRAMADO</th>");
+            out.print("</tr>");
+            lst_shift = ShiftJpa.ConsultcurrentShift();
+            if (lst_shift != null) {
+                for (int i = 0; i < lst_shift.size(); i++) {
+                    Object[] ObjShift = (Object[]) lst_shift.get(i);
+                    String[] DataShift = ObjShift[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                    for (int j = 0; j < DataShift.length; j++) {
+                        String tittle = DataShift[j].replace("am/", "am///").replace("pm/", "pm///").split("///")[0];
+                        out.print("<tr>");
+                        out.print("<th class='text-center'><b>" + tittle.replace("Turno", "").split(":")[0] + "</b>&nbsp;&nbsp; <i class=\"fas fa-arrow-right\"></i> &nbsp; <span style='font-weight: lighter;'>" + tittle.split(":")[1] + "</span></th>");
+
+                        String userId = DataShift[j].replace("am/", "am///").replace("pm/", "pm///").split("///")[1];
+                        lst_user = UserJpa.ConsultUsersMultiple(userId);
+                        out.print("<td>");
+                        if (lst_user != null) {
+                            for (int k = 0; k < lst_user.size(); k++) {
+                                Object[] ObjUser = (Object[]) lst_user.get(k);
+                                out.print("<span class='bullet'></span><span>" + ObjUser[1] + " " + ObjUser[2] + "</span>&nbsp;");
+                            }
+                        } else {
+                            out.print("<h4>Error al consultar usuarios</h4>");
+                        }
+                        out.print("</td>");
+                        out.print("</tr>");
+                    }
+                }
+            }
+            out.print("</table>");
+            out.print("</div>");
             out.print("</div>");
             //</editor-fold>
             out.print("</div>");
-
+            
+            
+            
+            
             out.print("</div>");
 
             out.print("</section>");
@@ -250,20 +298,20 @@ public class Tag_start extends TagSupport {
             String[] ArgModule = {
                 "Total Pendientes", "Bitacora", "Aplicativo en gestión", "Actas sin firmas",
                 "Actividad mensuales", "PC en gestión", "Equipos en gestión", "Programaciones pendientes",
-                "Pendientes Anuales", "Actividad Reciente", "Pendientes vencidos", "Pendientes por vencer",
-                "Pendientes vigentes"
+                "Pendientes vencidos", "Pendientes por vencer", "Pendientes vigentes",
+                "Pendientes Anuales", "Actividad Reciente",  "Programacion de turno"
             };
             String[] ArgIcon = {
                 "fa-bell", "fa-folder-open", "fa-lightbulb", "fa-file-alt",
                 "fa-calendar", "fa-laptop", "fa-tablet", "fa-clipboard-check",
-                "fa-list", "fa-comments", "fa-exclamation", "fa-hourglass-half",
-                "fa-check"
+                "fa-exclamation", "fa-hourglass-half","fa-check",
+                "fa-list", "fa-comments", "fa-user-clock"
             };
             String[] DivOpenClose = {
                 "A", "B", "C", "D",
                 "E", "F", "G", "H",
-                "I", "J", "K", "L",
-                "M"
+                "K", "L", "M",
+                "I", "J", "N"
             };
 
             for (int i = 0; i < ArgModule.length; i++) {

@@ -111,7 +111,7 @@ a:not(.btn-social-icon):not(.btn-social):not(.page-link) .fab {
     background-color: #32ff7e !important;
 }
 .bg-3 {
-    background-color: #ffcccc !important;
+    background-color: #00d2d3 !important;
 }
 .bg-4 {
     background-color: #7efff5 !important;
@@ -129,10 +129,13 @@ a:not(.btn-social-icon):not(.btn-social):not(.page-link) .fab {
     background-color: #7d5fff !important;
 }
 .bg-9 {
-    background-color: #fffa65 !important;
+    background-color: #ff9f43 !important;
 }
 .bg-10 {
     background-color: #0652DD !important;
+}
+.bg-11 {
+    background-color: #10ac84 !important;
 }
 
 .text-primary, .text-primary-all *, .text-primary-all *:before, .text-primary-all *:after {
