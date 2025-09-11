@@ -315,7 +315,7 @@ public class Tag_device extends TagSupport {
                     try {
                         if (docx > 0) {
                             //<editor-fold defaultstate="collapsed" desc="LOAD SIGNATURE">
-                            out.print("<form action='Device?opt=1&act=4&idTypeDv=" + idTypeDv + "&type=" + type + "&idDeviceHead=" + idDeviceHead + "&idDevice=" + idDevice + "' method='post' class='needs-validation' novalidate=''>");
+                            out.print("<form action='Device?opt=1&act=4&idTypeDv=" + idTypeDv + "&type=" + type + "&idDeviceHead=" + idDeviceHead + "&idDevice=" + idDevice + "' method='post' class='needs-validation' novalidate='' onsubmit='return cargarDatosForm(this)'>");
                             out.print("<div class='d-flex'>");
                             out.print("<div class='col-lg-5 mr-2'>");
                             out.print("<span class=''>Documento: </span>");
@@ -368,11 +368,11 @@ public class Tag_device extends TagSupport {
                                 out.print("<input type='hidden' class='form-control' name='SigMode' id='idSigMode' value='" + SigMode + "'>");
 
                                 out.print("<div class='canvas-container'>");
-                                out.print("<div class='signature-pad mt-2 d-flex' style='justify-content: center;'>");
-                                out.print("<canvas id='miCanvas' width='400' height='200'></canvas>");
-                                out.print("<div class=''>");
-                                out.print("<button type='button' class='btn btn-info ml-2' onclick=\"limpiarCanvas('signature-canvas')\"><i class='fas fa-sync-alt'></i></button>");
-                                out.print("</div>");
+                                out.print("<div class='signature-pad mt-2 mb-4 d-flex' style='justify-content: center;'>");
+                                out.print("<canvas id='miCanvas' width='400' height='200' style='border-bottom: 1px solid black;'></canvas>");
+//                                out.print("<div class=''>");
+//                                out.print("<button type='button' class='btn btn-info ml-2' onclick=\"limpiarCanvas('signature-canvas')\"><i class='fas fa-sync-alt'></i></button>");
+//                                out.print("</div>");
                                 out.print("</div>");
                                 out.print("<input type='hidden' class='form-control' name='TxtSignatureDraw' id='coordenadas-hidden' value='" + ObjCnn[3].toString() + "'>");
                                 out.print("</div>");
@@ -415,7 +415,7 @@ public class Tag_device extends TagSupport {
                             //</editor-fold>
                         } else {
                             //<editor-fold defaultstate="collapsed" desc="CONSULT SIGNATURE">
-                            out.print("<form action='Device?opt=1&act=4&idTypeDv=" + idTypeDv + "&type=" + type + "&idDeviceHead=" + idDeviceHead + "&idDevice=" + idDevice + "' method='post' class='needs-validation' novalidate=''>");
+                            out.print("<form action='Device?opt=1&act=4&idTypeDv=" + idTypeDv + "&type=" + type + "&idDeviceHead=" + idDeviceHead + "&idDevice=" + idDevice + "' method='post' class='needs-validation' novalidate='' onsubmit='return cargarDatosForm(this)'>");
                             out.print("<span class=''>Firma seleccionada:</span> <input type='text' class='form-control inpMode' name='txtSigMode' id='idSigMode' value='" + SigMode + "'>");
                             out.print("<div class='text-center'>");
                             out.print("<div class='mr-2'>");
@@ -456,7 +456,7 @@ public class Tag_device extends TagSupport {
 
                 //<editor-fold defaultstate="collapsed" desc="HEADER AND BUTTONS">
                 out.print("<div class='card-header' style='justify-content: space-between;'>");
-                out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='window.location.href=\"Device?opt=1&idTypeDv=" + idTypeDv + "&idDevice=" + idDevice + "&idDeviceHead=" + idDeviceHead + "&act=3\"'><i class='fas fa-arrow-left'></i></button>");
+                out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='window.location.href=\"Device?opt=1&idTypeDv=" + idTypeDv + "&idDevice=" + idDevice + "&idDeviceHead=" + idDeviceHead + "&act=3\";cargarDatos()'><i class='fas fa-arrow-left'></i></button>");
                 out.print("<div class='text-center'>");
                 out.print("<h4>Documentacion " + nameDevice + "</h4><h1>" + typeSc[1] + "</h1><h4>" + nameDoc + "</h4>");
                 out.print("</div>");
@@ -467,12 +467,12 @@ public class Tag_device extends TagSupport {
                         out.print("<button class='btn btn-warning mr-2' style='border-radius: 4px;' onclick='mostrarConvencion(3)'><i class='fas fa-signature'></i></button>");
                     }
                     if (stetx == 0 && (code.equals("A") || code.contains("-019"))) {
-                        out.print("<button class='btn btn-green mr-2' style='border-radius: 4px;' onclick='window.location.href=\"Device?opt=5&idTypeDv=" + idTypeDv + "&idDevice=" + idDevice + "&idDeviceHead=" + idDeviceHead + "&idDeviceDetail=" + ObjDetail[0] + "&type=" + type + "&act=3&xtemp=1\"'><i class='fas fa-share'></i></button>");
+                        out.print("<button class='btn btn-green mr-2' style='border-radius: 4px;' onclick='window.location.href=\"Device?opt=5&idTypeDv=" + idTypeDv + "&idDevice=" + idDevice + "&idDeviceHead=" + idDeviceHead + "&idDeviceDetail=" + ObjDetail[0] + "&type=" + type + "&act=3&xtemp=1\";cargarDatos()'><i class='fas fa-share'></i></button>");
                     } else if (stetx == 1) {
-                        out.print("<button class='btn btn-green mr-2' style='border-radius: 4px;' onclick='window.location.href=\"Device?opt=5&idTypeDv=" + idTypeDv + "&idDevice=" + idDevice + "&idDeviceHead=" + idDeviceHead + "&idDeviceDetail=" + ObjDetail[0] + "&type=" + type + "&act=3&xtemp=1\"'><i class='fas fa-share'></i></button>");
+                        out.print("<button class='btn btn-green mr-2' style='border-radius: 4px;' onclick='window.location.href=\"Device?opt=5&idTypeDv=" + idTypeDv + "&idDevice=" + idDevice + "&idDeviceHead=" + idDeviceHead + "&idDeviceDetail=" + ObjDetail[0] + "&type=" + type + "&act=3&xtemp=1\";cargarDatos()'><i class='fas fa-share'></i></button>");
                     }
                 } else {
-                    out.print("<span> </span>");
+                    out.print("<span></span>");
                 }
                 out.print("</div>");
                 out.print("</div>");
@@ -488,7 +488,7 @@ public class Tag_device extends TagSupport {
                         if (lst_setting != null) {
                             Object[] ObjStt = (Object[]) lst_setting.get(0);
                             String[] docs = ObjStt[2].toString().split("///");
-                            out.print("<form action='Attach.jsp' method='post' class='needs-validation' novalidate='' enctype='multipart/form-data'>");
+                            out.print("<form action='Attach.jsp' method='post' class='needs-validation' novalidate='' enctype='multipart/form-data' onsubmit='return cargarDatosForm(this)'>");
 
                             out.print("<input type='hidden' name='idDevice' value='" + idDevice + "'>");
                             out.print("<input type='hidden' name='idDeviceHead' value='" + idDeviceHead + "'>");
@@ -575,7 +575,7 @@ public class Tag_device extends TagSupport {
                             out.print("</div>");
                             out.print("<div class='cont_form_user'>");
 
-                            out.print("<form action='Attach.jsp' method='post' class='needs-validation' novalidate='' enctype='multipart/form-data'>");
+                            out.print("<form action='Attach.jsp' method='post' class='needs-validation' novalidate='' enctype='multipart/form-data' onsubmit='return cargarDatosForm(this)'>");
                             out.print("<input type='hidden' name='idDevice' value='" + idDevice + "'>");
                             out.print("<input type='hidden' name='idDeviceHead' value='" + idDeviceHead + "'>");
                             out.print("<input type='hidden' name='typeDoc' value='" + type + "'>");
@@ -723,7 +723,7 @@ public class Tag_device extends TagSupport {
                         lst_item = ItemJpa.ConsultItemAvailable();
 
                         out.print("<div class='text-center'>");
-                        out.print("<form action='Device?opt=1&act=4&idTypeDv=" + idTypeDv + "&idDevice=" + idDevice + "&idDoc=" + idDoc + "&idDeviceHead=" + idDeviceHead + "&type=" + type + "' method='post' class='needs-validation' novalidate='' id='formSearchItem'>");
+                        out.print("<form action='Device?opt=1&act=4&idTypeDv=" + idTypeDv + "&idDevice=" + idDevice + "&idDoc=" + idDoc + "&idDeviceHead=" + idDeviceHead + "&type=" + type + "' method='post' class='needs-validation' novalidate='' id='formSearchItem' onsubmit='return cargarDatosForm(this)'>");
                         out.print("<h4 class='mb-4'>Items disponibles</h4>");
                         out.print("<div class='col-lg-6' style='margin: auto;' data-toggle='tooltip' data-placement='top' title=''>");
                         out.print("<select class='form-control' name='cbxItem' style='margin-12px;' onchange='formSearchItem.submit()'>");
@@ -800,7 +800,7 @@ public class Tag_device extends TagSupport {
                                 out.print("</form>");
 
                                 out.print("<div class='text-center'>");
-                                out.print("<button class='btn btn-green' onclick='formConfirmItem.submit()'>Confirmar</button>");
+                                out.print("<button class='btn btn-green' onclick='formConfirmItem.submit();cargarDatos()'>Confirmar</button>");
                                 out.print("</div>");
 
                                 out.print("</div>");
@@ -1015,7 +1015,7 @@ public class Tag_device extends TagSupport {
 //</editor-fold>
 
                             //<editor-fold defaultstate="collapsed" desc="FORM TO REGISTER">
-                            out.print("<form action='Device?opt=7&idDevice=" + idDevice + "&idDeviceHead=" + idDeviceHead + "&type=" + type + "&idTypeDv=" + idTypeDv + "' method='post' class='needs-validation' novalidate='' id='formR03'>");
+                            out.print("<form action='Device?opt=7&idDevice=" + idDevice + "&idDeviceHead=" + idDeviceHead + "&type=" + type + "&idTypeDv=" + idTypeDv + "' method='post' class='needs-validation' novalidate='' id='formR03' onsubmit='return cargarDatosForm(this)'>");
                             out.print(format);
                             out.print("<input type='hidden' class='form-control' name='txt_soft' id='infoOculta' >");
                             out.print("<input type='hidden' class='form-control' name='txt_otherItem' id='infoField' >");
@@ -1113,7 +1113,7 @@ public class Tag_device extends TagSupport {
                 out.print("<div class='col-12'>");
                 out.print("<div class='card'>");
                 out.print("<div class='card-header' style='justify-content: space-between;'>");
-                out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='window.location.href=\"Device?opt=1&act=2&idTypeDv=" + idTypeDv + "&idDevice=" + idDevice + "\"'><i class='fas fa-arrow-left'></i></button>");
+                out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='window.location.href=\"Device?opt=1&act=2&idTypeDv=" + idTypeDv + "&idDevice=" + idDevice + "\";cargarDatos()'><i class='fas fa-arrow-left'></i></button>");
                 out.print("<div class='text-center'><h4>Documentacion</h4><h2>" + nameDevice + "</h2></div>");
                 out.print("<span class=''></span>");
                 out.print("</div>");
@@ -1141,7 +1141,7 @@ public class Tag_device extends TagSupport {
                         }
 
                         if (i == state) {
-                            out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"Device?opt=1&act=4&idTypeDv=" + idTypeDv + "&idDevice=" + idDevice + "&idDoc=" + id + "&idDeviceHead=" + idDeviceHead + "&type=" + structure[i] + "&step=" + i + "\"' style='background: #33bf98; color:#0b0025; cursor: pointer;' data-toggle='tooltip' data-placement='top' title='En proceso'>");
+                            out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"Device?opt=1&act=4&idTypeDv=" + idTypeDv + "&idDevice=" + idDevice + "&idDoc=" + id + "&idDeviceHead=" + idDeviceHead + "&type=" + structure[i] + "&step=" + i + "\";cargarDatos()' style='background: #33bf98; color:#0b0025; cursor: pointer;' data-toggle='tooltip' data-placement='top' title='En proceso'>");
                             out.print("<div class=\"wizard-step-icon\">");
                             out.print("<i class=\"" + ico + "\"></i>");
                             out.print("</div>");
@@ -1169,7 +1169,7 @@ public class Tag_device extends TagSupport {
                             if (lst_DeviceDetail != null) {
                                 Object[] ObSt = (Object[]) lst_DeviceDetail.get(0);
                                 if (ObSt[5].toString().contains("XX")) {
-                                    out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"Device?opt=1&act=4&idTypeDv=" + idTypeDv + "&idDevice=" + idDevice + "&idDoc=" + id + "&idDeviceHead=" + idDeviceHead + "&type=" + structure[i] + "&step=" + i + "\"' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
+                                    out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"Device?opt=1&act=4&idTypeDv=" + idTypeDv + "&idDevice=" + idDevice + "&idDoc=" + id + "&idDeviceHead=" + idDeviceHead + "&type=" + structure[i] + "&step=" + i + "\";cargarDatos()' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
                                     out.print("<div class=\"wizard-step-icon\">");
                                     out.print("<i class=\"" + ico + "\"></i>");
                                     out.print("</div>");
@@ -1183,7 +1183,7 @@ public class Tag_device extends TagSupport {
                                 } else {
                                     int steDet = Integer.parseInt(ObSt[6].toString());
                                     if (steDet == 0) {
-                                        out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"Device?opt=1&act=4&idTypeDv=" + idTypeDv + "&idDevice=" + idDevice + "&idDoc=" + id + "&idDeviceHead=" + idDeviceHead + "&type=" + structure[i] + "&step=" + i + "\"' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
+                                        out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"Device?opt=1&act=4&idTypeDv=" + idTypeDv + "&idDevice=" + idDevice + "&idDoc=" + id + "&idDeviceHead=" + idDeviceHead + "&type=" + structure[i] + "&step=" + i + "\";cargarDatos()' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
                                         out.print("<div class=\"wizard-step-icon\">");
                                         out.print("<i class=\"" + ico + "\"></i>");
                                         out.print("</div>");
@@ -1196,7 +1196,7 @@ public class Tag_device extends TagSupport {
                                         out.print("</div>");
                                     } else if (steDet == 2) {
 //                                    out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"AppDetail?opt=1&act=3&idApp\"' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
-                                        out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"Device?opt=1&act=4&idTypeDv=" + idTypeDv + "&idDevice=" + idDevice + "&idDoc=" + id + "&idDeviceHead=" + idDeviceHead + "&type=" + structure[i] + "&step=" + i + "\"' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
+                                        out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"Device?opt=1&act=4&idTypeDv=" + idTypeDv + "&idDevice=" + idDevice + "&idDoc=" + id + "&idDeviceHead=" + idDeviceHead + "&type=" + structure[i] + "&step=" + i + "\";cargarDatos()' style=' cursor: pointer;'  data-toggle='tooltip' data-placement='top' title='Realizado'>");
                                         out.print("<div class=\"wizard-step-icon\">");
                                         out.print("<i class=\"" + ico + "\"></i>");
                                         out.print("</div>");
@@ -1249,7 +1249,7 @@ public class Tag_device extends TagSupport {
                 out.print("</div>");
                 out.print("<div class='cont_form_user'>");
 
-                out.print("<form action='Device?opt=3' method='post' class='needs-validation' novalidate=''>");
+                out.print("<form action='Device?opt=3' method='post' class='needs-validation' novalidate='' onsubmit='return cargarDatosForm(this)'>");
 
                 out.print("<input type='hidden' name='idTypeDv' value='" + idTypeDv + "'>");
                 out.print("<input type='hidden' name='idDevice' value='" + idDevice + "'>");
@@ -1297,7 +1297,7 @@ public class Tag_device extends TagSupport {
                 out.print("<div class='col-12'>");
                 out.print("<div class='card'>");
                 out.print("<div class='card-header' style='justify-content: space-between;'>");
-                out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='window.location.href=\"Device?opt=1&act=1&idTypeDv=" + idTypeDv + "\"'><i class='fas fa-arrow-left'></i></button>");
+                out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='window.location.href=\"Device?opt=1&act=1&idTypeDv=" + idTypeDv + "\";cargarDatos()'><i class='fas fa-arrow-left'></i></button>");
                 out.print("<h2> " + nameDevice + " </h2>");
                 out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1)'><i class='fas fa-plus'></i></button>");
                 out.print("</div>");
@@ -1343,7 +1343,7 @@ public class Tag_device extends TagSupport {
                             out.print("<td>" + stat[1] + "</td>");
                         }
                         out.print("<td class='text-center'>");
-                        out.print("<button class='btn btn-yellow' onclick='window.location.href=\"Device?opt=1&act=3&idTypeDv=" + idTypeDv + "&idDevice=" + idDevice + "&idDeviceHead=" + Objdevice[0] + "\"'><i class='fas fa-folder-open'></i></button>");
+                        out.print("<button class='btn btn-yellow' onclick='window.location.href=\"Device?opt=1&act=3&idTypeDv=" + idTypeDv + "&idDevice=" + idDevice + "&idDeviceHead=" + Objdevice[0] + "\";cargarDatos()'><i class='fas fa-folder-open'></i></button>");
                         out.print("</td>");
                         out.print("</tr>");
                     }
@@ -1385,7 +1385,7 @@ public class Tag_device extends TagSupport {
                 out.print("</div>");
                 out.print("<div class='cont_form_user'>");
 
-                out.print("<form action='Device?opt=2' method='post' class='needs-validation' novalidate=''>");
+                out.print("<form action='Device?opt=2' method='post' class='needs-validation' novalidate='' onsubmit='return cargarDatosForm(this)'>");
                 out.print("<input type='hidden' name='idTypeDv' id='' value='" + idTypeDv + "'>");
                 out.print("<div class='d-flex' style='justify-content: space-evenly;'>");
                 out.print("<div class=''>");
@@ -1407,13 +1407,13 @@ public class Tag_device extends TagSupport {
                 out.print("</div>");
 
                 out.print("<span class=''>Cargo</span>");
-                out.print("<input type='text' class='form-control' name='txt_chargue' id='' data-toggle='tooltip' data-placement='top' title='' value=''>");
+                out.print("<input type='text' class='form-control' name='txt_chargue' id='' data-toggle='tooltip' data-placement='top' title='' value='' required>");
 
                 out.print("<span class=''>Nombre</span>");
-                out.print("<input type='text' class='form-control' name='txt_name' id='' data-toggle='tooltip' data-placement='top' title='' value=''>");
+                out.print("<input type='text' class='form-control' name='txt_name' id='' data-toggle='tooltip' data-placement='top' title='' value='' required>");
 
                 out.print("<span class=''>Serial</span>");
-                out.print("<input type='text' class='form-control' name='txt_serial' id='' data-toggle='tooltip' data-placement='top' title='' value=''>");
+                out.print("<input type='text' class='form-control' name='txt_serial' id='' data-toggle='tooltip' data-placement='top' title='' value='' required>");
                 out.print("</div>");
 
                 out.print("<div class=''>");
@@ -1425,10 +1425,10 @@ public class Tag_device extends TagSupport {
                     Object[] Objit = (Object[]) lst_item.get(0);
                     consec = Integer.parseInt(Objit[1].toString()) + 1;
                 }
-                out.print("<input type='number' class='form-control' name='nmb_consec' id='' data-toggle='tooltip' data-placement='top' title='' value='" + consec + "'>");
+                out.print("<input type='number' class='form-control' name='nmb_consec' id='' data-toggle='tooltip' data-placement='top' title='' value='" + consec + "' required>");
 
                 out.print("<span class=''>Responsable</span>");
-                out.print("<input type='text' class='form-control' name='txt_respo' id='' data-toggle='tooltip' data-placement='top' title='' value=''>");
+                out.print("<input type='text' class='form-control' name='txt_respo' id='' data-toggle='tooltip' data-placement='top' title='' value='' required>");
 
                 out.print("<span class=''>Area</span>");
                 out.print("<div class='' data-toggle='tooltip' data-placement='top' title='' style='margin: 12px -12px 12px 12px;'>");
@@ -1448,7 +1448,7 @@ public class Tag_device extends TagSupport {
                 out.print("</div>");
 
                 out.print("<span class=''>Ubicación</span>");
-                out.print("<input type='text' class='form-control' name='txt_location' id='' data-toggle='tooltip' data-placement='top' title='' value=''>");
+                out.print("<input type='text' class='form-control' name='txt_location' id='' data-toggle='tooltip' data-placement='top' title='' value='' required>");
                 out.print("</div>");
                 out.print("</div>");
 
@@ -1469,7 +1469,7 @@ public class Tag_device extends TagSupport {
                 out.print("<div class='col-12'>");
                 out.print("<div class='card'>");
                 out.print("<div class='card-header' style='justify-content: space-between;'>");
-                out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='window.location.href=\"Device?opt=1\"'><i class='fas fa-arrow-left'></i></button>");
+                out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='window.location.href=\"Device?opt=1\";cargarDatos()'><i class='fas fa-arrow-left'></i></button>");
                 out.print("<div class='text-center'><h2>Listado de dispositivos</h2><h6>" + nameDv + "</h6></div>");
                 out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1)'><i class='fas fa-plus'></i></button>");
                 out.print("</div>");
@@ -1493,11 +1493,11 @@ public class Tag_device extends TagSupport {
                 out.print("</div>");
                 out.print("<div class='col-lg-4 d-flex justify-content-end'>");
                 if (steDv > 0) {
-                    out.print("<button class='btn btn-green mr-2' onclick='window.location.href=\"Device?opt=1&act=1&idTypeDv=" + idTypeDv + "\"'><i class=\"fas fa-times\"></i> </button>");
+                    out.print("<button class='btn btn-green mr-2' onclick='window.location.href=\"Device?opt=1&act=1&idTypeDv=" + idTypeDv + "\";cargarDatos()'><i class=\"fas fa-times\"></i> </button>");
                 }
-                out.print("<button class='btn btn-success mr-2' onclick='window.location.href=\"Device?opt=1&act=1&idTypeDv=" + idTypeDv + "&steDv=1\"'><i class=\"fas fa-clipboard-check\"></i> Bueno (" + est1 + ")</button>");
-                out.print("<button class='btn btn-warning mr-2' onclick='window.location.href=\"Device?opt=1&act=1&idTypeDv=" + idTypeDv + "&steDv=2\"'><i class=\"fas fa-folder-open\"></i> Revisión (" + est2 + ")</button>");
-                out.print("<button class='btn btn-danger mr-2' onclick='window.location.href=\"Device?opt=1&act=1&idTypeDv=" + idTypeDv + "&steDv=3\"'><i class=\"fas fa-folder-minus\"></i> De baja (" + est3 + ")</button>");
+                out.print("<button class='btn btn-success mr-2' onclick='window.location.href=\"Device?opt=1&act=1&idTypeDv=" + idTypeDv + "&steDv=1\";cargarDatos()'><i class=\"fas fa-clipboard-check\"></i> Bueno (" + est1 + ")</button>");
+                out.print("<button class='btn btn-warning mr-2' onclick='window.location.href=\"Device?opt=1&act=1&idTypeDv=" + idTypeDv + "&steDv=2\";cargarDatos()'><i class=\"fas fa-folder-open\"></i> Revisión (" + est2 + ")</button>");
+                out.print("<button class='btn btn-danger mr-2' onclick='window.location.href=\"Device?opt=1&act=1&idTypeDv=" + idTypeDv + "&steDv=3\";cargarDatos()'><i class=\"fas fa-folder-minus\"></i> De baja (" + est3 + ")</button>");
                 out.print("</div>");
                 //</editor-fold>
                 out.print("</div>");
@@ -1540,7 +1540,7 @@ public class Tag_device extends TagSupport {
                         out.print("<div class='gnDiv'>");
                         out.print("<div class='d-flex dvListBtn'>");
                         out.print("<a href='#' onclick='showDetail(" + i + ")'><i id='arrow" + i + "' class='fas fa-chevron-down'></i> Ver detalle</a>");
-                        out.print("<button class='btn btn-green btn-sm' onclick='window.location.href=\"Device?opt=1&act=2&idTypeDv=" + idTypeDv + "&idDevice=" + ObjDev[0] + "\"'><i class=\"fas fa-link\"></i></button>");
+                        out.print("<button class='btn btn-green btn-sm' onclick='window.location.href=\"Device?opt=1&act=2&idTypeDv=" + idTypeDv + "&idDevice=" + ObjDev[0] + "\";cargarDatos()'><i class=\"fas fa-link\"></i></button>");
                         out.print("</div>");
                         out.print("</div>");
                         out.print("</div>");
@@ -1580,7 +1580,7 @@ public class Tag_device extends TagSupport {
                 lst_device = DeviceJpa.ConsultAllTypeDeviceCount();
 
                 out.print("<div class='d-flex'>");
-                out.print("<div class='col-lg-7 mr-2 contDataList'>");
+                out.print("<div class='col-lg-6 mr-2 contDataList'>");
                 //<editor-fold defaultstate="collapsed" desc="LIST LEFT">
                 if (lst_device != null) {
                     out.print("<div class='d-flex justify-content-between devfx'>");
@@ -1589,7 +1589,7 @@ public class Tag_device extends TagSupport {
                     out.print("</div>");
                     for (int i = 0; i < lst_device.size(); i++) {
                         Object[] ObjDev = (Object[]) lst_device.get(i);
-                        out.print("<div class='d-flex justify-content-between devDet' onclick='window.location.href=\"Device?opt=1&act=1&idTypeDv=" + ObjDev[0] + "\"'>");
+                        out.print("<div class='d-flex justify-content-between devDet' onclick='window.location.href=\"Device?opt=1&act=1&idTypeDv=" + ObjDev[0] + "\";cargarDatos()'>");
                         out.print("<span>" + ObjDev[1] + "</span>");
                         out.print("<span class=''>" + ObjDev[2] + "</span>");
                         out.print("</div>");
@@ -1598,14 +1598,8 @@ public class Tag_device extends TagSupport {
                 //</editor-fold>
                 out.print("</div>");
 
-                out.print("<div class='col-lg-5'>");
+                out.print("<div class='col-lg-6'>");
                 //<editor-fold defaultstate="collapsed" desc="LIST RIGHT">
-//                out.print("<div class='col-lg-12 mb-4 divButton'>");
-//                out.print("<h5 class='mb-2'>Consultar todos los dispositivos</h5>");
-//                out.print("<div class='text-center'>");
-//                out.print("<button class='btn btn-green' onclick='window.location.href=\"Device?opt=1&act=1\"'><i class='fas fa-search' style='font-size: 16px;'></i></button>");
-//                out.print("</div>");
-//                out.print("</div>");
 
                 //<editor-fold defaultstate="collapsed" desc="COUNTER">
                 out.print("<div class='divCount'>");
@@ -1632,30 +1626,32 @@ public class Tag_device extends TagSupport {
                 out.print("<h5>Documentos en proceso</h5>");
                 out.print("</div>");
 
-                out.print("<table class='table table-sm' id='table-1'>");
+                out.print("<table class='table-sm w-100'>");
                 out.print("<thead>");
                 out.print("<tr>");
                 out.print("<th>Dispositivo</th>");
-                out.print("<th>Estado</th>");
+                out.print("<th>Documento</th>");
+//                out.print("<th>Estado</th>");
                 out.print("<th>Ver</th>");
                 out.print("</tr>");
                 out.print("</thead>");
                 out.print("<tbody>");
-                out.print("<tr>");
-                out.print("<td>Tablet 1</td>");
-                out.print("<td>Mantenimiento</td>");
-                out.print("<td><button class='btn btn-info btn-sm'><i class='fas fa-eye'></i></button></td>");
-                out.print("</tr>");
-                out.print("<tr>");
-                out.print("<td>Impresora 1</td>");
-                out.print("<td>Mantenimiento</td>");
-                out.print("<td><button class='btn btn-info btn-sm'><i class='fas fa-eye'></i></button></td>");
-                out.print("</tr>");
-                out.print("<tr>");
-                out.print("<td>Scanner 1</td>");
-                out.print("<td>Mantenimiento</td>");
-                out.print("<td><button class='btn btn-info btn-sm'><i class='fas fa-eye'></i></button></td>");
-                out.print("</tr>");
+                lst_DeviceDetail = DeviceDetailJpa.ConsultDeviceDocumentsInProcess();
+                if (lst_DeviceDetail != null) {
+                    for (int i = 0; i < lst_DeviceDetail.size(); i++) {
+                        Object[] ObjDev = (Object[]) lst_DeviceDetail.get(i);
+                        out.print("<tr>");
+                        out.print("<td>" + ObjDev[3] + " <br> <b class='text-dark' style='font-size: 12px;'>"+ ObjDev[4] +"</b> </td>");
+                        out.print("<td>" + ObjDev[5].toString().split("/")[1] + " <br> <b class='text-dark' style='font-size: 12px;'>" + ObjDev[6] + "</b></td>");
+                        out.print("<td><button class='btn btn-info btn-sm' onclick='window.location.href=\"Device?opt=1&act=4&idTypeDv=" + ObjDev[7] + "&idDevice=" + ObjDev[2] + "&idDoc=" + ObjDev[5].toString().split("/")[0] + "&idDeviceHead=" + ObjDev[1] + "&type=" + ObjDev[5] + "&step=1\";cargarDatos()'><i class='fas fa-arrow-right'></i></button></td>");
+                        out.print("</tr>");
+                    }
+                } else {
+                    out.print("<tr>");
+                    out.print("<td colspan='4'>Al dia! <br> No hay documentos en proceso</td>");
+                    out.print("</tr>");
+                }
+
                 out.print("</tbody>");
                 out.print("</table>");
 

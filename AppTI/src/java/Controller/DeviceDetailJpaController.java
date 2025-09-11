@@ -17,6 +17,9 @@ public class DeviceDetailJpaController implements Serializable {
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
+    
+    //<editor-fold defaultstate="collapsed" desc="CONSULTS">
+    
 
     public List ConsultDeviceDetailxDvxType(int idDeviceHead, String name) {
         EntityManager etm = getEntityManager();
@@ -74,6 +77,31 @@ public class DeviceDetailJpaController implements Serializable {
             return null;
         }
     }
+
+    public List ConsultDeviceDocumentsInProcess() {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_ddl_c_ConsultDocumentsInProcess`()");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+    
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="PROCESS">
+    
+
 
     public boolean UpdateDeviceDetailContent(int idDetail, String conten, int user) {
         EntityManager em = getEntityManager();
@@ -150,5 +178,7 @@ public class DeviceDetailJpaController implements Serializable {
             return false;
         }
     }
+    
+    //</editor-fold>
 
 }
