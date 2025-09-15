@@ -1321,9 +1321,16 @@ public class Tag_computer extends TagSupport {
                     for (int i = 0; i < lst_setting.size(); i++) {
                         Object[] ObjAp = (Object[]) lst_setting.get(i);
                         String struc = ObjAp[2].toString();
-                        out.print("<option value='" + struc + "'>" + struc.replace("][", "///").replace("[", "").replace("]", "").split("///")[0] + "</option>");
+                        String typeporc = struc.replace("][", "///").replace("[", "").replace("]", "").split("///")[0];
+                        lst_computerHeader = ComputerHeaderJpa.ConsulteComputerHeaderIdCmp(IdComputer);
+                        if (lst_computerHeader != null) {
+                            out.print("<option value='" + struc + "'>" + typeporc + "</option>");
+                        } else {
+                            if (typeporc.contains("Nuevo")) {
+                                out.print("<option value='" + struc + "'>" + typeporc + "</option>");
+                            }
+                        }
                     }
-
                 } else {
                     out.print("<option value='' disabled>Ha ocurrido un error.</option>");
                 }
@@ -1349,12 +1356,7 @@ public class Tag_computer extends TagSupport {
                 out.print("<div class='card'>");
                 out.print("<div class='card-header' style='justify-content: space-between; align-items:flex-start'>");
                 out.print("<p></p>");
-//                if (lst_computerId != null) {
-//                    Object[] ObjComputer = (Object[]) lst_computerId.get(0);
                 out.print("<h2>" + NroPC + "</h2>");
-//                } else {
-//                    out.print("<h2>Fallo en consulta</h2>");
-//                }
                 out.print("<div><button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1)'><i class='fas fa-plus'></i></button></div>");
                 out.print("</div>");
 
