@@ -157,7 +157,10 @@ public class Tag_pending extends TagSupport {
                         }
                     }
                     out.print("<form action='Pending?opt=2' method='post' name='FormPending' id='FormPending' class='needs-validation' novalidate=''>");
-                    if (DataRole.contains(obj_pending[8].toString())) {
+
+                    if (obj_pending[8].toString().equals("Todos")) {
+                        Type = 1;
+                    } else if (DataRole.contains(obj_pending[8].toString())) {
                         Type = 1;
                     } else {
                         Type = 2;
@@ -219,7 +222,9 @@ public class Tag_pending extends TagSupport {
                     if (lst_role != null) {
                         for (int i = 0; i < lst_role.size(); i++) {
                             Object[] obj_role = (Object[]) lst_role.get(i);
-                            if (obj_pending[8].toString().equals(obj_role[1])) {
+                            if (obj_pending[8].toString().equals("Todos")) {
+                                out.print("<option value='Todos' selected>Todos</option>");
+                            } else if (obj_pending[8].toString().equals(obj_role[1])) {
                                 out.print("<option value='" + obj_role[1] + "' selected>" + obj_role[1] + "</option>");
                             } else {
                                 out.print("<option value='" + obj_role[1] + "'>" + obj_role[1] + "</option>");
@@ -602,7 +607,6 @@ public class Tag_pending extends TagSupport {
 
                     out.print("<div class=\"ticket-description ScrollDivContent\" >");
                     out.print("" + obj_pending[2].toString().replace("<img", "<img style='width:100%'") + "");
-//                    if (State == 0) {
                     if (obj_pending[5] != null) {
                         out.print("<div class='StyleSolution'><i class=\"fas fa-lock" + ((State == 0) ? "" : "-open") + " mt-2\" Style='font-size: 15px;'></i>&nbsp;&nbsp;<h6>Solución</h6></div>");
                         if (obj_pending[5].toString().contains("[")) {
@@ -610,31 +614,33 @@ public class Tag_pending extends TagSupport {
                             for (int j = 0; j < ArrDetail.length; j++) {
                                 String[] ArrDetailRlc = ArrDetail[j].replace("][", "///").replace("[", "").replace("]", "").split("///");
                                 out.print("<div class='FollowUp d-flex justify-content-between'>");
-                                String DateFmt[] = ArrDetailRlc[0].toString().split("T");
-                                try {
-                                    fechaSeguimiento = LocalDate.parse(DateFmt[0], formatter);
-                                } catch (DateTimeParseException e) {
-                                    System.out.println("Error parseando fecha: " + DateFmt[0]);
-                                }
-                                LocalDate fechaLimite = LocalDate.parse(obj_pending[14].toString(), formatter);
-                                if (fechaSeguimiento.isAfter(fechaLimite)) {
-                                    out.print("<div class='left-col'>");
-                                    //<editor-fold defaultstate="collapsed" desc="DIV LEFT">
-                                    out.print("<b class='textRotate'>VENCIDO</b>");
-                                    //</editor-fold>
-                                    out.print("</div>");
-                                }
+                                if (ArrDetailRlc[0].contains("T")) {
+                                    String DateFmt[] = ArrDetailRlc[0].toString().split("T");
+                                    try {
+                                        fechaSeguimiento = LocalDate.parse(DateFmt[0], formatter);
+                                    } catch (DateTimeParseException e) {
+                                        System.out.println("Error parseando fecha: " + DateFmt[0]);
+                                    }
+                                    LocalDate fechaLimite = LocalDate.parse(obj_pending[14].toString(), formatter);
+                                    if (fechaSeguimiento.isAfter(fechaLimite)) {
+                                        out.print("<div class='left-col'>");
+                                        //<editor-fold defaultstate="collapsed" desc="DIV LEFT">
+                                        out.print("<b class='textRotate'>VENCIDO</b>");
+                                        //</editor-fold>
+                                        out.print("</div>");
+                                    }
 
-                                out.print("<div class='right-col' " + ((!DateFmt[0].contains(obj_pending[14].toString())) ? "" : "style='width:100%'") + ">");
+                                    out.print("<div class='right-col' " + ((!DateFmt[0].contains(obj_pending[14].toString())) ? "" : "style='width:100%'") + ">");
+                                }
                                 //<editor-fold defaultstate="collapsed" desc="DIV RIGHT">
                                 out.print("<div class='d-flex justify-content-between'>");
 
                                 out.print("<div class='d-flex '>");
-                                 int UserPnd = 0;
+                                int UserPnd = 0;
                                 try {
-                                   UserPnd = Integer.parseInt(ArrDetailRlc[2]);
+                                    UserPnd = Integer.parseInt(ArrDetailRlc[2]);
                                 } catch (Exception e) {
-                                      System.out.println("Valor inválido en ArrDetailRlc[2]: " + ArrDetailRlc[2]);
+                                    System.out.println("Valor inválido en ArrDetailRlc[2]: " + ArrDetailRlc[2]);
                                 }
                                 lst_userId = UserJpa.ConsultUsersid(UserPnd);
                                 String UserN = "", Icon = "";

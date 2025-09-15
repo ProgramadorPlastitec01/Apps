@@ -11,6 +11,7 @@ import Controller.ActivityJpaController;
 import Controller.ActivityDetailJpaController;
 import Controller.ComputerControllerJpa;
 import Controller.RoleControllerJpa;
+import Controller.ScheduleControllerJpa;
 import java.util.List;
 
 import java.time.LocalDate;
@@ -25,12 +26,14 @@ public class Tag_activity extends TagSupport {
         ActivityJpaController ActivityJpa = new ActivityJpaController();
         ComputerControllerJpa ComputerJpa = new ComputerControllerJpa();
         ActivityDetailJpaController ActivityDetail = new ActivityDetailJpaController();
+        ScheduleControllerJpa ScheduleJpa = new ScheduleControllerJpa();
         RoleControllerJpa RoleJpa = new RoleControllerJpa();
         HttpSession sesion = pageContext.getSession();
 
         List lst_activity = null;
         List lst_computer = null;
         List lst_activityDet = null;
+        List lst_schedule = null;
         JspWriter out = pageContext.getOut();
         int event = 0, idAct = 0, temp = 0;
         int year = LocalDate.now().getYear();
@@ -449,7 +452,17 @@ public class Tag_activity extends TagSupport {
                 out.print("<div class='d-flex'>");
                 out.print("<div class='col-lg-8'>");
                 out.print("<span class=''>Actividad</span>");
-                out.print("<input type='text' class='form-control' name='txtAct' id='' data-toggle='tooltip' data-placement='top' title='Escribir titulo de la actividad' value='' required>");
+                out.print("<input type='text' class='form-control' list='datalistOptions' name='txtAct' id='' data-toggle='tooltip' data-placement='top' title='Escribir titulo de la actividad' value='' required>");
+                out.print("<datalist id='datalistOptions'>");
+                lst_schedule = ScheduleJpa.ConsultScheduleActivity();
+                if (lst_schedule != null && !lst_schedule.isEmpty()) {
+                    for (int i = 0; i < lst_schedule.size(); i++) {
+                        Object[] ObjActivity = (Object[]) lst_schedule.get(i);
+                        out.print("<option value='" + ObjActivity[3] + "'>" + ObjActivity[2] + "</option>");
+                    }
+                }
+                out.print("</datalist>");
+                out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
                 out.print("</div>");
                 out.print("<div class='col-lg-4'>");
                 out.print("<span class=''>Semana</span>");
@@ -566,7 +579,7 @@ public class Tag_activity extends TagSupport {
                 out.print("<div class='card-header' style='justify-content: space-between;'>");
                 out.print("<h2>Actividades programadas</h2>");
                 if (txtPermissions.contains("[61]")) {
-                    out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1);cargarDatos()'><i class='fas fa-plus'></i></button>");
+                    out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1);'><i class='fas fa-plus'></i></button>");
                 }
                 out.print("</div>");
                 out.print("<div class='card-body'>");

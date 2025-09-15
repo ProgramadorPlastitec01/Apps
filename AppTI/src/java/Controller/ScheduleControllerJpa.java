@@ -92,6 +92,24 @@ public class ScheduleControllerJpa {
             return null;
         }
     }
+    public List ConsultScheduleActivity() {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_sdl_c_ConsultScheduleActivity`()");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
 
     public boolean ScheduleRegister(int tpe, int app, String act, String mot, String clr, String urg) {
         EntityManager em = getEntityManager();

@@ -109,7 +109,7 @@ public class Pending extends HttpServlet {
                                 } catch (Exception e) {
                                     SolutionOld = "";
                                 }
-                                if (SolutionOld.equals("")) {
+                                if (SolutionOld.equals("") || SolutionOld.equals("null")) {
                                     SolutionEnd = "[" + DateCurrent + "][Se actualiza fecha de vecimiento " + Deadline + "][" + IdUser + "][" + Progress + "]";
                                 } else {
                                     SolutionEnd = "[" + DateCurrent + "][Se actualiza fecha de vecimiento " + Deadline + "][" + IdUser + "][" + Progress + "]" + "///" + SolutionOld;

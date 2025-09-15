@@ -138,7 +138,7 @@ public class Tag_start extends TagSupport {
                             + "                    <h4>" + ObjItems[0] + "</h4>"
                             + "                  </div>"
                             + "                  <div class=\"card-body\">"
-                            + "                    " + (Integer.parseInt(ObjItems[1].toString()) == 0 ? "<i class='fas fa-laugh-beam mr-2' style='color:#399733;font-size:18px'></i><b>¡Al día!</b>" : ObjItems[1]) + ""
+                            + "                    " + (Integer.parseInt(ObjItems[1].toString()) == 0 ? "0" : ObjItems[1]) + ""
                             + "                  </div>"
                             + "                </div>"
                             + "              </div>"
