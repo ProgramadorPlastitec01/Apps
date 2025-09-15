@@ -25,6 +25,9 @@
                 background-position: center;
                 transition: background-image 1s ease-in-out; /* efecto suave */
             }
+            .ImgSizeSala:hover{
+                    transform: scale(1.1) rotate(360deg) !important;
+            }
         </style>
     </head>
     <body>
@@ -86,6 +89,8 @@
                             <div class="login_signup">VP 00.00.00 </div>
                         </form>
                     </div>
+                    
+                    
 
                     <!-- Signup From -->
                     <div class="form signup_form">
@@ -160,6 +165,7 @@
                         </div>
                     </div>
                 </div>
+                <img src="Interface/Imagen/Sala2.png" onclick="window.open('https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ1A0nzF9oO2Pl5AXUv2s6vi1LCstbctuYoHD2QD1jMz1iqsO1EXPNbY1D79ECJuQs2xyj44M7dO', '_blank')" class='ImgSizeSala' alt="" width="58" style="cursor: pointer;position: absolute; bottom: 19px;left: 19px;"/>
                 <div class="ButtomFloat" onclick="ViewWindows(1)" ><img  class='ImgSizeFloat' src='Interface/Imagen/BOTTI.png'></div>
             </section>
             <div  id="Window1" class="DivBot">
@@ -192,6 +198,8 @@
                     </div>
                 </div>
             </div>
+            
+                
         <Alerts:Alert/>
         <script src="Interface/Content/Assets/js/ScriptLogin.js"></script>
         <script type="text/javascript">
