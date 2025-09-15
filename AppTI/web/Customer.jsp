@@ -216,8 +216,8 @@
             new FroalaEditor('#editorNext', {
                 Flmngr: {
                     apiKey: 'z5tCL8YdVd99dhc5MQCNlQlo',
-                    urlFileManager: 'http://172.16.1.164/flmngr/flmngr.php',
-                    urlFiles: 'http://172.16.1.164/flmngr/files/'
+                    urlFileManager: 'http://172.16.2.117/flmngr/flmngr.php',
+                    urlFiles: 'http://172.16.2.117/flmngr/files/'
                 }
             });
         </script>
@@ -237,7 +237,7 @@
                 let filesToUpload = []; // Aquí puedes agregar lógica para llenar este array con los archivos que desees subir
 
                 var xhr = new XMLHttpRequest();
-                xhr.open("POST", "http://172.16.1.164/flmngr/envio.php", true);
+                xhr.open("POST", "http://172.16.2.117/flmngr/envio.php", true);
                 xhr.setRequestHeader("Content-Type", "application/json");
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState === 4 && xhr.status === 200) {

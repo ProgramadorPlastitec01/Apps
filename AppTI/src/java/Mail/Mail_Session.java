@@ -54,7 +54,7 @@ public class Mail_Session {
                         + "    <p style=\"color:#555555 \">Has solicitado restablecer tu contraseña. La contraseña actual es:</p>\n"
                         + "    <p><b>" + Pass + "</b></p>\n"
                         + "    <p style=\"color:#555555 \">Ingresa al aplicativo y realiza el cambio. La contraseña es privada y no debe ser divulgada.</p>\n"
-                        + "    <a href=\"http://localhost:8089/AppTI/\">\n"
+                        + "    <a href=\"http://172.16.2.117:8089/AppTI/\">\n"
                         + "      <button style=\"background-color: #4D4AE8; border: none; border-radius: 3px; color: white; padding: 10px 20px; cursor: pointer;\">Ir a Nexus</button>\n"
                         + "    </a>\n"
                         + "    <br><br>\n"

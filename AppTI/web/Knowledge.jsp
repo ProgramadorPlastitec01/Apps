@@ -133,7 +133,7 @@
         </script>
         <script>
             function openNexus() {
-                window.open("http://172.16.1.164:8089/AppTI/", "_blank");
+                window.open("http://172.16.2.117:8089/AppTI/", "_blank");
             }
         </script>
         <script src="Interface/Content/Assets/js/knowledge.js"></script>

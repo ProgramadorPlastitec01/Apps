@@ -99,8 +99,8 @@
                     let element = document.getElementById(id);
                     if (element) {
                         CKEDITOR.replace(id, {
-                            filebrowserBrowseUrl: 'http://172.16.1.164/elFinder/elfinder.html?rol=' + Rol + '&idusuario=' + IdUsPhp,
-                            filebrowserImageBrowseUrl: 'http://172.16.1.164/elFinder/elfinder.html?type=Images&rol=' + Rol + '&idusuario=' + IdUsPhp,
+                            filebrowserBrowseUrl: 'http://172.16.2.117/elFinder/elfinder.html?rol=' + Rol + '&idusuario=' + IdUsPhp,
+                            filebrowserImageBrowseUrl: 'http://172.16.2.117/elFinder/elfinder.html?type=Images&rol=' + Rol + '&idusuario=' + IdUsPhp,
                             removeDialogTabs: 'link:upload;image:upload',
                             language: 'es',
                             height: 380,
@@ -149,7 +149,7 @@
         <script>
             window.addEventListener('message', function (event) {
                 // Recomendado: validar origen si solo aceptas desde elFinder
-                // if (event.origin !== 'http://172.16.1.164') return;
+                // if (event.origin !== 'http://172.16.2.117') return;
 
                 const data = event.data;
                 if (data && data.funcNum && data.url) {
