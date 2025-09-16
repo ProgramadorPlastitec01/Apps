@@ -401,32 +401,21 @@ public class Tag_menu extends TagSupport {
             }
             out.print("</ul>");
             out.print("</li>");
-
-            out.print("<li class=\"dropdown\">");
-            if (txtPermissions.contains("[46]")) {
-                out.print("<a  href=\"#\" class=\"nav-link has-dropdown\" data-toggle=\"dropdown\"><i class=\"fas fa-layer-group\"></i> <span>Inventario</span></a>");
-            }
-            out.print("<ul class=\"dropdown-menu\">");
-            if (txtPermissions.contains("[46]")) {
-                out.print("<li><a class=\"nav-link\" href=\"Reference?opt=1\" style='padding-left: 50px;' onclick='cargarDatos()'><i style='margin-right:4px' class='fas fa-folder-plus'></i>Ingreso referencias</a></li>");
-            }
-            out.print("<li><a class=\"nav-link\" href=\"MoveItem?opt=1\" style='padding-left: 50px;' onclick='cargarDatos()'><i style='margin-right:4px' class='fas fa-people-carry'></i>Movimiento items</a></li>");
-            out.print("<li><a class=\"nav-link\" href=\"TrackingItem?opt=1\" style='padding-left: 50px;' onclick='cargarDatos()'><i style='margin-right:4px' class='fas fa-dolly-flatbed'></i>Seguimiento items</a></li>");
-            out.print("</ul>");
             out.print("</li>");
 
             out.print("<li class=\"dropdown\">");
             if (txtPermissions.contains("[37]")) {
-                out.print("<a class=\"nav-link\" href=\"AppDetail?opt=1\" onclick='cargarDatos()'><i class=\"fas fa-lightbulb\"></i><span>&nbsp;Aplicativos</span></a>");
+                out.print("<a class=\"nav-link\" href=\"AppDetail?opt=1\" onclick='cargarDatos()'><i class=\"fas fa-lightbulb\"></i><span>Aplicativos</span></a>");
             }
-//            out.print("<a class=\"nav-link\" href=\"AppDetail?opt=1\"><i style='margin-right:4px' class=\"fab fa-medapps\"></i><span>&nbsp;Aplicativos</span></a>");
+            out.print("</li>");
+            
+            out.print("<li class=\"dropdown\">");
+            if (txtPermissions.contains("[46]")) {
+                out.print("<a class=\"nav-link\" href=\"TrackingItem?opt=1&action=0\" onclick='cargarDatos()'><i class=\"fas fa-boxes\"></i><span>Inventario</span></a>");
+            }
             out.print("</li>");
 
             out.print("<li class=\"menu-header\">Consulta</li>");
-//            out.print("<li class=\"dropdown\">");
-//            out.print("<a href=\"Indicator?opt=1\" class=\"nav-link\"><i class=\"fas fa-weight\"></i><span>Indicadores</span></a>");
-//            out.print("</li>");
-
             out.print("<ul class=\"sidebar-menu\">");
             out.print("</li>");
             out.print("<li class=\"dropdown\">");

@@ -11,6 +11,7 @@
         <link rel="stylesheet" href="Interface/Content/Assets/modules/datatables/datatables.min.css">
         <link rel="stylesheet" href="Interface/Content/Assets/modules/izitoast/css/iziToast.min.css">
         <link rel="stylesheet" href="Interface/Content/Assets/css/main.css">
+        <link rel="stylesheet" href="Interface/Content/Assets/css/trakingItems.css">
         <script src="Interface/Content/Assets/js/sweetalert2.js"></script>
         <link rel="icon" type="image/png" href="Interface/Imagen/Logo_app/IconW.fw.png">
         <style>
@@ -113,5 +114,8 @@
         <script src="Interface/Content/Assets/modules/izitoast/js/iziToast.min.js"></script>
         <script src="Interface/Content/Assets/js/page/modules-toastr.js"></script>
         <script src="Interface/Content/Assets/js/page/bootstrap-modal.js"></script>
+        
+        <script src="Interface/Content/Assets/modules/chart.min.js"></script>
+        <script src="Interface/Content/Assets/js/page/modules-chartjs.js"></script>
     </body>
 </html>

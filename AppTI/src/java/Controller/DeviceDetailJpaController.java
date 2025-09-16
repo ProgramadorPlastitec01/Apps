@@ -96,6 +96,7 @@ public class DeviceDetailJpaController implements Serializable {
             return null;
         }
     }
+
     
     //</editor-fold>
     
