@@ -200,16 +200,26 @@ public class Tag_schedule extends TagSupport {
             out.print("<form action='Schedule?opt=2' method='post' class='needs-validation' novalidate=''>");
 
             out.print("<div class='col-11 text-center'>");
-            out.print("<div class=\"selectgroup selectgroup-pills\">\n"
-                    + "                        <label class=\"selectgroup-item\">\n"
-                    + "                          <input type=\"radio\" name=\"type\" onclick='ChangeType(1)' value=\"1\" class=\"selectgroup-input\"  " + ((type == 1) ? "checked" : "") + " >\n"
-                    + "                          <span class=\"selectgroup-button selectgroup-button-icon\" style='border-radius:4px !important;'><i class=\"fas fa-server\"></i> Hardware</span>\n"
-                    + "                        </label>\n"
-                    + "                        <label class=\"selectgroup-item\">\n"
-                    + "                          <input type=\"radio\" name=\"type\" onclick='ChangeType(0)' value=\"2\" class=\"selectgroup-input\" " + ((type == 2) ? "checked" : "") + ">\n"
-                    + "                          <span class=\"selectgroup-button selectgroup-button-icon\" style='border-radius:4px !important; '><i class=\"fas fa-database\"></i> Software</span>\n"
-                    + "                        </label>\n"
-                    + "                      </div>");
+            out.print("  <div class=\"selectgroup selectgroup-pills\">");
+
+            if (Permissions.contains("[75]")) {
+                out.print("    <label class=\"selectgroup-item\">");
+                out.print("      <input type=\"radio\" name=\"type\" onclick='ChangeType(1)' value=\"1\" class=\"selectgroup-input\"" + ((type == 1) ? "checked" : "") + " >");
+                out.print("      <span class=\"selectgroup-button selectgroup-button-icon\" style='border-radius:4px !important;'>"
+                        + "<i class=\"fas fa-server\"></i> Hardware</span>");
+                out.print("    </label>");
+            }
+
+            if (Permissions.contains("[76]")) {
+                out.print("    <label class=\"selectgroup-item\">");
+                out.print("      <input type=\"radio\" name=\"type\" onclick='ChangeType(0)' value=\"2\" class=\"selectgroup-input\" "
+                        + ((type == 2) ? "checked" : "") + ">");
+                out.print("      <span class=\"selectgroup-button selectgroup-button-icon\" style='border-radius:4px !important;'>"
+                        + "<i class=\"fas fa-database\"></i> Software</span>");
+                out.print("    </label>");
+            }
+
+            out.print("  </div>");
             out.print("</div>");
 
             out.print("<div class='d-flex'>");
@@ -306,7 +316,7 @@ public class Tag_schedule extends TagSupport {
             out.print("<input type='hidden' name='Year' value='" + Year + "'>");
 
             out.print("<input type='hidden' id='IdMasive' name='IdMasive' value=''>");
-            out.print("<input type='hidden' name='validation' value='2'>");
+            out.print("<input type='hidden' name='validation' id='vld' value=''>");
 
             out.print("<div class='d-flex align-items-center'>");
 
@@ -425,18 +435,27 @@ public class Tag_schedule extends TagSupport {
             out.print("<div><h4>Módulo R-TI-026</h4></div>");
             //<editor-fold defaultstate="collapsed" desc="OPTION">
             out.print("<div class='d-flex'>");
-            out.print("<div><button class=\"btn btn-green mr-4\" style=\"border-radius: 4px;\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\" onclick=\"location.href='Schedule?opt=1&type=" + ((type == 1) ? 2 : 1) + "&module=" + module + "&Year=" + Year + "';cargarDatos()\" data-original-title=\"Tipo\"><i class=\"fas fa-" + ((type == 1) ? "server" : "database") + "\"></i></button></div>");
+            if (Permissions.contains("[77]")) {
+                out.print("<div><button class=\"btn btn-green mr-4\" style=\"border-radius: 4px;\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\" onclick=\"location.href='Schedule?opt=1&type=" + ((type == 1) ? 2 : 1) + "&module=" + module + "&Year=" + Year + "';cargarDatos()\" data-original-title=\"Tipo\"><i class=\"fas fa-" + ((type == 1) ? "server" : "database") + "\"></i></button></div>");
+            }
             if (!activityFilter.equals("")) {
                 out.print("<div><button class=\"btn btn-danger mr-4\" style=\"border-radius: 4px;\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\" onclick=\"location.href='Schedule?opt=1&type=" + type + "&module=" + module + "&Year=" + Year + "';cargarDatos()\" data-original-title=\"Filtrar\"><i class=\"fas fa-times\"></i></button></div>");
             }
             out.print("<div><button class=\"btn btn-green mr-4\" style=\"border-radius: 4px;\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\" onclick=\"mostrarConvencion(5)\" data-original-title=\"Filtrar\"><i class=\"fas fa-search\"></i></button></div>");
             if (module.equals("Report")) {
                 out.print("<div><button class=\"btn btn-info mr-4\" style=\"border-radius: 4px;\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\"  onclick=\"location.href='Schedule?opt=1&type=" + type + "&module=Schedule&Year=" + Year + "';cargarDatos()\" data-original-title=\"Calendario\"><i class=\"fas fa-calendar\"></i></button></div>");
-                out.print("<div><button class=\"btn btn-green mr-4\" style=\"border-radius: 4px;\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\"  onclick='EnableDivView(1)' data-original-title=\"Firma Masiva\"><i class=\"fas fa-signature\"></i></button></div>");
+                if (Permissions.contains("[44]")) {
+                    out.print("<div><button class=\"btn btn-warning mr-4\" style=\"border-radius: 4px;\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\"  onclick='EnableDivView(1,1)' data-original-title=\"Firma Masiva Ejecutor\"><i class=\"fas fa-signature\"></i></button></div>");
+                }
+                if (Permissions.contains("[43]")) {
+                    out.print("<div><button class=\"btn btn-success mr-4\" style=\"border-radius: 4px;\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\"  onclick='EnableDivView(1,2)' data-original-title=\"Firma Masiva Revisor\"><i class=\"fas fa-signature\"></i></button></div>");
+                }
             } else {
                 out.print("<div><button class=\"btn btn-info mr-4\" style=\"border-radius: 4px;\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\"  onclick=\"location.href='Schedule?opt=1&type=" + type + "&module=Report&Year=" + Year + "';cargarDatos()\" data-original-title=\"Reporte\"><i class=\"fas fa-file-contract\"></i></button></div>");
             }
-            out.print("<div><button class=\"btn btn-green\" style=\"border-radius: 4px;\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\" onclick=\"mostrarConvencion(1)\" data-original-title=\"Registar\"><i class=\"fas fa-plus\"></i></button></div>");
+            if (Permissions.contains("[38]")) {
+                out.print("<div><button class=\"btn btn-green\" style=\"border-radius: 4px;\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\" onclick=\"mostrarConvencion(1)\" data-original-title=\"Registar\"><i class=\"fas fa-plus\"></i></button></div>");
+            }
             out.print("</div>");
             //</editor-fold>
             out.print("</div>");
@@ -684,8 +703,16 @@ public class Tag_schedule extends TagSupport {
             } else if (module.equals("Schedule")) {
                 //<editor-fold defaultstate="collapsed" desc="SCHEDULE">
                 out.print("<div class=\"card-body\">");
-
-                lst_schedule = ScheduleJpa.ConsultScheduleType(Year, type);
+                if (type > 0) {
+                    lst_schedule = ScheduleJpa.ConsultScheduleType(Year, type);
+                } else {
+                    if (Permissions.contains("[76]")) {
+                        lst_schedule = ScheduleJpa.ConsultScheduleType(Year, 2);
+                    }
+                    if (Permissions.contains("[75]")) {
+                        lst_schedule = ScheduleJpa.ConsultScheduleType(Year, 1);
+                    }
+                }
                 if (lst_schedule != null) {
                     out.print("<script>");
                     out.print("document.addEventListener('DOMContentLoaded', function() {");
@@ -713,7 +740,9 @@ public class Tag_schedule extends TagSupport {
                         out.print("start: '" + obj_calendar[17] + "',");
                         out.print("end: '" + obj_calendar[18] + "',");
                         out.print("backgroundColor: '" + ((obj_calendar[19] == null) ? "#0b0025" : obj_calendar[19]) + "',");
-                        out.print("url: 'Schedule?opt=1&IdSchedule=" + obj_calendar[0] + "&temp=" + temp + "&type=" + type + "&module=" + module + "&Year=" + Year + "'");
+                        if (Permissions.contains("[39]")) {
+                            out.print("url: 'Schedule?opt=1&IdSchedule=" + obj_calendar[0] + "&temp=" + temp + "&type=" + obj_calendar[1] + "&module=" + module + "&Year=" + Year + "'");
+                        }
                         if (i == lst_schedule.size() - 1) {
                             out.print("}");
                         } else {

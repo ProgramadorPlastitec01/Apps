@@ -21,7 +21,7 @@ public class Tag_information extends TagSupport {
         RoleControllerJpa RoleJpa = new RoleControllerJpa();
         List lst_information = null, lst_Id_information = null;
         SettingControllerJpa SettingJpa = new SettingControllerJpa();
-        int State = 0, IdInformation = 0, StateInf = 0, Counter = 0, idRol = 0;
+        int State = 0, IdInformation = 0, StateInf = 0, Counter = 0, idRol = 0, IdPc = 0;
         String TypeAct = "", CantAct = "";
         String txtPermissions = "";
         List lst_setting = null, lst_role = null, view_antivirus = null, view_red = null, view_state = null, view_warranty = null, view_process = null, view_type = null;
@@ -49,6 +49,11 @@ public class Tag_information extends TagSupport {
                 Counter = Integer.parseInt(pageContext.getRequest().getAttribute("Counter").toString());
             } catch (NumberFormatException e) {
                 Counter = 0;
+            }
+            try {
+                IdPc = Integer.parseInt(pageContext.getRequest().getAttribute("IdPc").toString());
+            } catch (NumberFormatException e) {
+                IdPc = 0;
             }
             if (IdInformation > 0) {
                 //<editor-fold defaultstate="collapsed" desc="UPDATE DETAIL">
@@ -176,373 +181,375 @@ public class Tag_information extends TagSupport {
                 //</editor-fold>
             }
 
-            if (Counter > 0) {
-                //<editor-fold defaultstate="collapsed" desc="ACCOUNTANTS">
-                out.print("<div class='sweet-local' tabindex='-1' id='Ventana2' style='opacity: 1.03; display:block;'>");
-                out.print("<div class='contGeneral' style='width:80%;     padding: 20px 47px 18px 16px;'>");
+            if (IdPc == 0) {
+                if (Counter > 0) {
+                    //<editor-fold defaultstate="collapsed" desc="ACCOUNTANTS">
+                    out.print("<div class='sweet-local' tabindex='-1' id='Ventana2' style='opacity: 1.03; display:block;'>");
+                    out.print("<div class='contGeneral' style='width:80%;     padding: 20px 47px 18px 16px;'>");
 
-                out.print("<div style='display: flex; justify-content: space-between'>");
-                out.print("<h4>Estadisticas</h4>");
-                out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(2)' data-toggle='tooltip' data-placement='top' title='Cerrar' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
-                out.print("</div>");
+                    out.print("<div style='display: flex; justify-content: space-between'>");
+                    out.print("<h4>Estadisticas</h4>");
+                    out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(2)' data-toggle='tooltip' data-placement='top' title='Cerrar' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
+                    out.print("</div>");
 
-                out.print("<div class='col-lg-12 d-flex'>");
-                out.print("<div class='col-lg-4 mr-3 mt-3 contGrafic' style='box-shadow: 0px 0px 6px 0px #6f6f6f;border-radius: 7px;'>");
-                view_antivirus = InformationJpa.ViewAntivirus();
-                if (view_antivirus != null) {
-                    //<editor-fold defaultstate="collapsed" desc="ANTIVIRUS">
-                    out.print("<h4 class='mb-2 mt-4 text-center'>Antivirus</h4>");
-                    out.print("<canvas id=\"myChart2\" width=\"400\" height=\"230\"></canvas>");
-                    String labels = "";
-                    String dataSi = "", dataNo = "";
-                    for (int i = 0; i < view_antivirus.size(); i++) {
-                        Object[] ObjAct = (Object[]) view_antivirus.get(i);
-                        String Type = ObjAct[0].toString();
-                        String Cant = ObjAct[1].toString();
+                    out.print("<div class='col-lg-12 d-flex'>");
+                    out.print("<div class='col-lg-4 mr-3 mt-3 contGrafic' style='box-shadow: 0px 0px 6px 0px #6f6f6f;border-radius: 7px;'>");
+                    view_antivirus = InformationJpa.ViewAntivirus();
+                    if (view_antivirus != null) {
+                        //<editor-fold defaultstate="collapsed" desc="ANTIVIRUS">
+                        out.print("<h4 class='mb-2 mt-4 text-center'>Antivirus</h4>");
+                        out.print("<canvas id=\"myChart2\" width=\"400\" height=\"230\"></canvas>");
+                        String labels = "";
+                        String dataSi = "", dataNo = "";
+                        for (int i = 0; i < view_antivirus.size(); i++) {
+                            Object[] ObjAct = (Object[]) view_antivirus.get(i);
+                            String Type = ObjAct[0].toString();
+                            String Cant = ObjAct[1].toString();
 
-                        labels += "'" + Type + "', ";
+                            labels += "'" + Type + "', ";
 
-                        if (Type.equals("SI")) {
-                            dataSi = Cant;
-                        } else if (Type.equals("NO")) {
-                            dataNo = Cant;
+                            if (Type.equals("SI")) {
+                                dataSi = Cant;
+                            } else if (Type.equals("NO")) {
+                                dataNo = Cant;
+                            }
                         }
-                    }
 
-                    if (!labels.isEmpty()) {
-                        labels = labels.substring(0, labels.length() - 2);
-                    }
-                    out.print("<script>");
-                    out.print("var ctx = document.getElementById(\"myChart2\").getContext('2d'); ");
-                    out.print("var myChart = new Chart(ctx, { ");
-                    out.print("  type: 'bar', ");
-                    out.print("  data: { ");
-                    out.print("    labels: [" + labels + "], ");  // Etiquetas "SI", "NO", "N/A"
-                    out.print("    datasets: [ ");
-                    out.print("      { ");
-                    out.print("        label: 'SI', ");
-                    out.print("        data: [" + dataSi + ", 0], "); // Valores correctos
-                    out.print("        backgroundColor: '#443104', ");
-                    out.print("        borderWidth: 1.7 ");
-                    out.print("      }, ");
-                    out.print("      { ");
-                    out.print("        label: 'NO', ");
-                    out.print("        data: [0, " + dataNo + "], ");
-                    out.print("        backgroundColor: '#74590f', ");
-                    out.print("        borderWidth: 1.7 ");
-                    out.print("      }, ");
-                    out.print("    ] ");
-                    out.print("  }, ");
-                    out.print("  options: { ");
-                    out.print("    legend: { display: true, position: 'bottom', labels: { fontColor: '#333', fontSize: 12 } }, ");
-                    out.print("    scales: { ");
-                    out.print("      yAxes: [{ gridLines: { drawBorder: false, color: '#f2f2f2' }, ticks: { beginAtZero: true, stepSize: 50 } }], ");
-                    out.print("      xAxes: [{ ticks: { autoSkip: false }, gridLines: { display: false } }] ");
-                    out.print("    } ");
-                    out.print("  } ");
-                    out.print("});");
-                    out.print("</script>");
-                    //</editor-fold>
-                }
-                out.print("</div>");
-                out.print("<div class='col-lg-4 mr-3 mt-3 contGrafic' style='box-shadow: 0px 0px 6px 0px #6f6f6f;border-radius: 7px;'>");
-                view_red = InformationJpa.ViewRed();
-                if (view_red != null) {
-                    //<editor-fold defaultstate="collapsed" desc="RED">
-                    out.print("<h4 class='mb-2 mt-4 text-center'>RED</h4>");
-                    out.print("<canvas id=\"myChart3\" width=\"400\" height=\"230\"></canvas>");
-                    String labels = "";
-                    String dataSi = "", dataNo = "", dataNa = "";
-                    for (int i = 0; i < view_red.size(); i++) {
-                        Object[] ObjAct = (Object[]) view_red.get(i);
-                        String Type = ObjAct[0].toString();
-                        String Cant = ObjAct[1].toString();
-
-                        labels += "'" + Type + "', ";
-
-                        if (Type.equals("SI")) {
-                            dataSi = Cant;
-                        } else if (Type.equals("NO")) {
-                            dataNo = Cant;
-                        } else if (Type.equals("N/A")) {
-                            dataNa = Cant;
+                        if (!labels.isEmpty()) {
+                            labels = labels.substring(0, labels.length() - 2);
                         }
+                        out.print("<script>");
+                        out.print("var ctx = document.getElementById(\"myChart2\").getContext('2d'); ");
+                        out.print("var myChart = new Chart(ctx, { ");
+                        out.print("  type: 'bar', ");
+                        out.print("  data: { ");
+                        out.print("    labels: [" + labels + "], ");  // Etiquetas "SI", "NO", "N/A"
+                        out.print("    datasets: [ ");
+                        out.print("      { ");
+                        out.print("        label: 'SI', ");
+                        out.print("        data: [" + dataSi + ", 0], "); // Valores correctos
+                        out.print("        backgroundColor: '#443104', ");
+                        out.print("        borderWidth: 1.7 ");
+                        out.print("      }, ");
+                        out.print("      { ");
+                        out.print("        label: 'NO', ");
+                        out.print("        data: [0, " + dataNo + "], ");
+                        out.print("        backgroundColor: '#74590f', ");
+                        out.print("        borderWidth: 1.7 ");
+                        out.print("      }, ");
+                        out.print("    ] ");
+                        out.print("  }, ");
+                        out.print("  options: { ");
+                        out.print("    legend: { display: true, position: 'bottom', labels: { fontColor: '#333', fontSize: 12 } }, ");
+                        out.print("    scales: { ");
+                        out.print("      yAxes: [{ gridLines: { drawBorder: false, color: '#f2f2f2' }, ticks: { beginAtZero: true, stepSize: 50 } }], ");
+                        out.print("      xAxes: [{ ticks: { autoSkip: false }, gridLines: { display: false } }] ");
+                        out.print("    } ");
+                        out.print("  } ");
+                        out.print("});");
+                        out.print("</script>");
+                        //</editor-fold>
                     }
-                    if (!labels.isEmpty()) {
-                        labels = labels.substring(0, labels.length() - 2);
-                    }
-                    out.print("<script>");
-                    out.print("var ctx = document.getElementById(\"myChart3\").getContext('2d'); ");
-                    out.print("var myChart = new Chart(ctx, { ");
-                    out.print("  type: 'bar', ");
-                    out.print("  data: { ");
-                    out.print("    labels: [" + labels + "], ");  // Etiquetas "SI", "NO", "N/A"
-                    out.print("    datasets: [ ");
-                    out.print("      { ");
-                    out.print("        label: 'SI', ");
-                    out.print("        data: [" + dataSi + ", 0, 0], "); // Valores correctos
-                    out.print("        backgroundColor: '#04344d', ");
+                    out.print("</div>");
+                    out.print("<div class='col-lg-4 mr-3 mt-3 contGrafic' style='box-shadow: 0px 0px 6px 0px #6f6f6f;border-radius: 7px;'>");
+                    view_red = InformationJpa.ViewRed();
+                    if (view_red != null) {
+                        //<editor-fold defaultstate="collapsed" desc="RED">
+                        out.print("<h4 class='mb-2 mt-4 text-center'>RED</h4>");
+                        out.print("<canvas id=\"myChart3\" width=\"400\" height=\"230\"></canvas>");
+                        String labels = "";
+                        String dataSi = "", dataNo = "", dataNa = "";
+                        for (int i = 0; i < view_red.size(); i++) {
+                            Object[] ObjAct = (Object[]) view_red.get(i);
+                            String Type = ObjAct[0].toString();
+                            String Cant = ObjAct[1].toString();
+
+                            labels += "'" + Type + "', ";
+
+                            if (Type.equals("SI")) {
+                                dataSi = Cant;
+                            } else if (Type.equals("NO")) {
+                                dataNo = Cant;
+                            } else if (Type.equals("N/A")) {
+                                dataNa = Cant;
+                            }
+                        }
+                        if (!labels.isEmpty()) {
+                            labels = labels.substring(0, labels.length() - 2);
+                        }
+                        out.print("<script>");
+                        out.print("var ctx = document.getElementById(\"myChart3\").getContext('2d'); ");
+                        out.print("var myChart = new Chart(ctx, { ");
+                        out.print("  type: 'bar', ");
+                        out.print("  data: { ");
+                        out.print("    labels: [" + labels + "], ");  // Etiquetas "SI", "NO", "N/A"
+                        out.print("    datasets: [ ");
+                        out.print("      { ");
+                        out.print("        label: 'SI', ");
+                        out.print("        data: [" + dataSi + ", 0, 0], "); // Valores correctos
+                        out.print("        backgroundColor: '#04344d', ");
 //                    out.print("        borderColor: '#fdcb6e', ");
-                    out.print("        borderWidth: 1.7 ");
-                    out.print("      }, ");
-                    out.print("      { ");
-                    out.print("        label: 'NO', ");
-                    out.print("        data: [0, " + dataNo + ",0], ");
-                    out.print("        backgroundColor: '#065374', ");
+                        out.print("        borderWidth: 1.7 ");
+                        out.print("      }, ");
+                        out.print("      { ");
+                        out.print("        label: 'NO', ");
+                        out.print("        data: [0, " + dataNo + ",0], ");
+                        out.print("        backgroundColor: '#065374', ");
 //                    out.print("        borderColor: '#038a87', ");
-                    out.print("        borderWidth: 1.7 ");
-                    out.print("      }, ");
-                    out.print("      { ");
-                    out.print("        label: 'N/A', ");
-                    out.print("        data: [0, 0," + dataNa + "], ");
-                    out.print("        backgroundColor: '#00638d', ");
+                        out.print("        borderWidth: 1.7 ");
+                        out.print("      }, ");
+                        out.print("      { ");
+                        out.print("        label: 'N/A', ");
+                        out.print("        data: [0, 0," + dataNa + "], ");
+                        out.print("        backgroundColor: '#00638d', ");
 //                    out.print("        borderColor: '#0984e3', ");
-                    out.print("        borderWidth: 1.7 ");
-                    out.print("      }, ");
-                    out.print("    ] ");
-                    out.print("  }, ");
-                    out.print("  options: { ");
-                    out.print("    legend: { display: true, position: 'bottom', labels: { fontColor: '#333', fontSize: 12 } }, ");
-                    out.print("    scales: { ");
-                    out.print("      yAxes: [{ gridLines: { drawBorder: false, color: '#f2f2f2' }, ticks: { beginAtZero: true, stepSize: 50 } }], ");
-                    out.print("      xAxes: [{ ticks: { autoSkip: false }, gridLines: { display: false } }] ");
-                    out.print("    } ");
-                    out.print("  } ");
-                    out.print("});");
-                    out.print("</script>");
-                    //</editor-fold>
+                        out.print("        borderWidth: 1.7 ");
+                        out.print("      }, ");
+                        out.print("    ] ");
+                        out.print("  }, ");
+                        out.print("  options: { ");
+                        out.print("    legend: { display: true, position: 'bottom', labels: { fontColor: '#333', fontSize: 12 } }, ");
+                        out.print("    scales: { ");
+                        out.print("      yAxes: [{ gridLines: { drawBorder: false, color: '#f2f2f2' }, ticks: { beginAtZero: true, stepSize: 50 } }], ");
+                        out.print("      xAxes: [{ ticks: { autoSkip: false }, gridLines: { display: false } }] ");
+                        out.print("    } ");
+                        out.print("  } ");
+                        out.print("});");
+                        out.print("</script>");
+                        //</editor-fold>
+                    }
+                    out.print("</div>");
+                    out.print("<div class='col-lg-4 mr-3 mt-3 contGrafic' style='box-shadow: 0px 0px 6px 0px #6f6f6f;border-radius: 7px;'>");
+                    view_process = InformationJpa.ViewProcess();
+                    if (view_process != null) {
+                        //<editor-fold defaultstate="collapsed" desc="PROCESS">
+                        out.print("<h4 class='mb-2 mt-4 text-center'>Proceso</h4>");
+                        out.print("<canvas id=\"myChart6\" width=\"400\" height=\"230\"></canvas>");
+                        String labelData = "";
+                        String valueData = "";
+                        for (int i = 0; i < view_process.size(); i++) {
+                            Object[] ObjProcess = (Object[]) view_process.get(i);
+                            labelData += "'" + ObjProcess[0].toString() + "', ";
+                            valueData += ObjProcess[1].toString() + ", ";
+                        }
+                        out.print("<script>");
+                        out.print("var ctx = document.getElementById(\"myChart6\").getContext('2d'); ");
+                        out.print("var myChart = new Chart(ctx, { ");
+                        out.print("  type: 'doughnut', ");
+                        out.print("  data: { ");
+                        out.print("    labels: [" + labelData + "], ");
+                        out.print("    datasets: [{ ");
+                        out.print("      label: 'Proceso', ");
+                        out.print("      data: [" + valueData + "], ");
+                        out.print("      backgroundColor: [");
+
+                        String[] colors = {"'#0d2259'", "'#153b9a'", "'#0d3dc6'", "'#0943f1'", "'#1653ff'", "'#5da4ff'", "'#a8ddb5'", "'#ccebc5'"};
+                        for (int i = 0; i < view_process.size(); i++) {
+                            out.print(colors[i % colors.length]);
+                            if (i < view_process.size() - 1) {
+                                out.print(", ");
+                            }
+                        }
+
+                        out.print("], borderColor: [");
+                        for (int i = 0; i < view_process.size(); i++) {
+                            out.print(colors[i % colors.length]);
+                            if (i < view_process.size() - 1) {
+                                out.print(", ");
+                            }
+                        }
+
+                        out.print("], borderWidth: 1.7 }], ");
+                        out.print("}, options: { "
+                                + "responsive: true,"
+                                + "    cutout: '60%', "
+                                + "    legend: { "
+                                + "      position: 'bottom', "
+                                + "    }, ");
+                        out.print("}});");
+                        out.print("</script>");
+                        //</editor-fold>
+                    }
+                    out.print("</div>");
+                    out.print("</div>");
+
+                    out.print("<div class='col-lg-12 d-flex'>");
+                    out.print("<div class='col-lg-4 mr-3 mt-3 contGrafic' style='box-shadow: 0px 0px 6px 0px #6f6f6f;border-radius: 7px;'>");
+                    view_state = InformationJpa.ViewState();
+                    if (view_state != null) {
+                        //<editor-fold defaultstate="collapsed" desc="STATE">
+                        out.print("<h4 class='mb-2 mt-4 text-center'>Estado</h4>");
+                        out.print("<canvas id=\"myChart4\" width=\"400\" height=\"230\"></canvas>");
+                        String labelData = "";
+                        String valueData = "";
+                        for (int i = 0; i < view_state.size(); i++) {
+                            Object[] ObjState = (Object[]) view_state.get(i);
+                            labelData += "'" + ObjState[0].toString() + "', ";
+                            valueData += ObjState[1].toString() + ", ";
+                        }
+                        out.print("<script>");
+                        out.print("var ctx = document.getElementById(\"myChart4\").getContext('2d'); ");
+                        out.print("var myChart = new Chart(ctx, { ");
+                        out.print("  type: 'pie', ");
+                        out.print("  data: { ");
+                        out.print("    labels: [" + labelData + "], ");
+                        out.print("    datasets: [{ ");
+                        out.print("      label: 'Proceso', ");
+                        out.print("      data: [" + valueData + "], ");
+                        out.print("      backgroundColor: [");
+
+                        String[] colors = {"'#490076'", "'#6a079c'", "'#8607ca'"};
+                        for (int i = 0; i < view_state.size(); i++) {
+                            out.print(colors[i % colors.length]);
+                            if (i < view_state.size() - 1) {
+                                out.print(", ");
+                            }
+                        }
+
+                        out.print("], borderColor: [");
+                        for (int i = 0; i < view_state.size(); i++) {
+                            out.print(colors[i % colors.length]);
+                            if (i < view_state.size() - 1) {
+                                out.print(", ");
+                            }
+                        }
+
+                        out.print("], borderWidth: 1.7 }], ");
+                        out.print("}, options: { "
+                                + "responsive: true,"
+                                + "    cutout: '60%', "
+                                + "    legend: { "
+                                + "      position: 'bottom', "
+                                + "    }, ");
+                        out.print("}});");
+                        out.print("</script>");
+                        //</editor-fold>
+                    }
+                    out.print("</div>");
+                    out.print("<div class='col-lg-4 mr-3 mt-3 contGrafic' style='box-shadow: 0px 0px 6px 0px #6f6f6f;border-radius: 7px;'>");
+                    view_warranty = InformationJpa.ViewWarranty();
+                    if (view_warranty != null) {
+                        //<editor-fold defaultstate="collapsed" desc="WARRANTY">
+                        out.print("<h4 class='mb-2 mt-4 text-center'>Garantia</h4>");
+                        out.print("<canvas id=\"myChart5\" width=\"400\" height=\"230\"></canvas>");
+                        String labels = "";
+                        String dataSI = "", dataNO = "", dataNA = "";
+                        for (int i = 0; i < view_warranty.size(); i++) {
+                            Object[] ObjAct = (Object[]) view_warranty.get(i);
+                            String Type = ObjAct[0].toString();
+                            String Cant = ObjAct[1].toString();
+
+                            labels += "'" + Type + "', ";
+
+                            if (Type.equals("SI")) {
+                                dataSI = Cant;
+                            } else if (Type.equals("NO")) {
+                                dataNO = Cant;
+                            } else if (Type.equals("N/A")) {
+                                dataNA = Cant;
+                            }
+                        }
+                        if (!labels.isEmpty()) {
+                            labels = labels.substring(0, labels.length() - 2);
+                        }
+                        out.print("<script>");
+                        out.print("var ctx = document.getElementById(\"myChart5\").getContext('2d'); ");
+                        out.print("var myChart = new Chart(ctx, { ");
+                        out.print("  type: 'bar', ");
+                        out.print("  data: { ");
+                        out.print("    labels: [" + labels + "], ");  // Etiquetas "SI", "NO", "N/A"
+                        out.print("    datasets: [ ");
+                        out.print("      { ");
+                        out.print("        label: 'SI', ");
+                        out.print("        data: [" + dataSI + ", 0, 0], "); // Valores correctos
+                        out.print("        backgroundColor: '#5f0038', ");
+                        out.print("        borderWidth: 1.7 ");
+                        out.print("      }, ");
+                        out.print("      { ");
+                        out.print("        label: 'NO', ");
+                        out.print("        data: [0, " + dataNO + ",0], ");
+                        out.print("        backgroundColor: '#980362', ");
+                        out.print("        borderWidth: 1.7 ");
+                        out.print("      }, ");
+                        out.print("      { ");
+                        out.print("        label: 'N/A', ");
+                        out.print("        data: [0, 0," + dataNA + "], ");
+                        out.print("        backgroundColor: '#b80074', ");
+                        out.print("        borderWidth: 1.7 ");
+                        out.print("      }, ");
+                        out.print("    ] ");
+                        out.print("  }, ");
+                        out.print("  options: { ");
+                        out.print("    legend: { display: true, position: 'bottom', labels: { fontColor: '#333', fontSize: 12 } }, ");
+                        out.print("    scales: { ");
+                        out.print("      yAxes: [{ gridLines: { drawBorder: false, color: '#f2f2f2' }, ticks: { beginAtZero: true, stepSize: 50 } }], ");
+                        out.print("      xAxes: [{ ticks: { autoSkip: false }, gridLines: { display: false } }] ");
+                        out.print("    } ");
+                        out.print("  } ");
+                        out.print("});");
+                        out.print("</script>");
+                        //</editor-fold>
+                    }
+                    out.print("</div>");
+                    out.print("<div class='col-lg-4 mr-2 mt-3 contGrafic' style='box-shadow: 0px 0px 6px 0px #6f6f6f;border-radius: 7px;'>");
+                    view_type = InformationJpa.ViewType();
+                    if (view_type != null) {
+                        //<editor-fold defaultstate="collapsed" desc="TYPE">
+                        out.print("<h4 class='mb-2 mt-4 text-center'>Tipo</h4>");
+                        out.print("<canvas id=\"myChart7\" width=\"400\" height=\"230\"></canvas>");
+                        String labelData = "";
+                        String valueData = "";
+                        for (int i = 0; i < view_type.size(); i++) {
+                            Object[] ObjType = (Object[]) view_type.get(i);
+                            labelData += "'" + ObjType[0].toString() + "', ";
+                            valueData += ObjType[1].toString() + ", ";
+                        }
+                        out.print("<script>");
+                        out.print("var ctx = document.getElementById(\"myChart7\").getContext('2d'); ");
+                        out.print("var myChart = new Chart(ctx, { ");
+                        out.print("  type: 'horizontalBar', ");
+                        out.print("  data: { ");
+                        out.print("    labels: [" + labelData + "], ");
+                        out.print("    datasets: [{ ");
+                        out.print("      label: 'Proceso', ");
+                        out.print("      data: [" + valueData + "], ");
+                        out.print("      backgroundColor: [");
+
+                        String[] colors = {"'#042f05'", "'#135413'", "'#156714'", "'#158312'", "'#18a913'", "'#24c91e'"};
+                        for (int i = 0; i < view_type.size(); i++) {
+                            out.print(colors[i % colors.length]);
+                            if (i < view_type.size() - 1) {
+                                out.print(", ");
+                            }
+                        }
+
+                        out.print("], borderColor: [");
+                        for (int i = 0; i < view_type.size(); i++) {
+                            out.print(colors[i % colors.length]);
+                            if (i < view_type.size() - 1) {
+                                out.print(", ");
+                            }
+                        }
+
+                        out.print("], borderWidth: 1.7 }], ");
+                        out.print("}, options: { "
+                                + "responsive: true,"
+                                + "    cutout: '60%', "
+                                + "    legend: { "
+                                + "      position: 'bottom', "
+                                + "    }, ");
+                        out.print("}});");
+                        out.print("</script>");
+                        //</editor-fold>
+                    }
+                    out.print("</div>");
+
+                    out.print("</div>");
+
+                    out.print("</div>");
+                    out.print("</div>");
+                    //</editor-fold>   
                 }
-                out.print("</div>");
-                out.print("<div class='col-lg-4 mr-3 mt-3 contGrafic' style='box-shadow: 0px 0px 6px 0px #6f6f6f;border-radius: 7px;'>");
-                view_process = InformationJpa.ViewProcess();
-                if (view_process != null) {
-                    //<editor-fold defaultstate="collapsed" desc="PROCESS">
-                    out.print("<h4 class='mb-2 mt-4 text-center'>Proceso</h4>");
-                    out.print("<canvas id=\"myChart6\" width=\"400\" height=\"230\"></canvas>");
-                    String labelData = "";
-                    String valueData = "";
-                    for (int i = 0; i < view_process.size(); i++) {
-                        Object[] ObjProcess = (Object[]) view_process.get(i);
-                        labelData += "'" + ObjProcess[0].toString() + "', ";
-                        valueData += ObjProcess[1].toString() + ", ";
-                    }
-                    out.print("<script>");
-                    out.print("var ctx = document.getElementById(\"myChart6\").getContext('2d'); ");
-                    out.print("var myChart = new Chart(ctx, { ");
-                    out.print("  type: 'doughnut', ");
-                    out.print("  data: { ");
-                    out.print("    labels: [" + labelData + "], ");
-                    out.print("    datasets: [{ ");
-                    out.print("      label: 'Proceso', ");
-                    out.print("      data: [" + valueData + "], ");
-                    out.print("      backgroundColor: [");
-
-                    String[] colors = {"'#0d2259'", "'#153b9a'", "'#0d3dc6'", "'#0943f1'", "'#1653ff'", "'#5da4ff'", "'#a8ddb5'", "'#ccebc5'"};
-                    for (int i = 0; i < view_process.size(); i++) {
-                        out.print(colors[i % colors.length]);
-                        if (i < view_process.size() - 1) {
-                            out.print(", ");
-                        }
-                    }
-
-                    out.print("], borderColor: [");
-                    for (int i = 0; i < view_process.size(); i++) {
-                        out.print(colors[i % colors.length]);
-                        if (i < view_process.size() - 1) {
-                            out.print(", ");
-                        }
-                    }
-
-                    out.print("], borderWidth: 1.7 }], ");
-                    out.print("}, options: { "
-                            + "responsive: true,"
-                            + "    cutout: '60%', "
-                            + "    legend: { "
-                            + "      position: 'bottom', "
-                            + "    }, ");
-                    out.print("}});");
-                    out.print("</script>");
-                    //</editor-fold>
-                }
-                out.print("</div>");
-                out.print("</div>");
-
-                out.print("<div class='col-lg-12 d-flex'>");
-                out.print("<div class='col-lg-4 mr-3 mt-3 contGrafic' style='box-shadow: 0px 0px 6px 0px #6f6f6f;border-radius: 7px;'>");
-                view_state = InformationJpa.ViewState();
-                if (view_state != null) {
-                    //<editor-fold defaultstate="collapsed" desc="STATE">
-                    out.print("<h4 class='mb-2 mt-4 text-center'>Estado</h4>");
-                    out.print("<canvas id=\"myChart4\" width=\"400\" height=\"230\"></canvas>");
-                    String labelData = "";
-                    String valueData = "";
-                    for (int i = 0; i < view_state.size(); i++) {
-                        Object[] ObjState = (Object[]) view_state.get(i);
-                        labelData += "'" + ObjState[0].toString() + "', ";
-                        valueData += ObjState[1].toString() + ", ";
-                    }
-                    out.print("<script>");
-                    out.print("var ctx = document.getElementById(\"myChart4\").getContext('2d'); ");
-                    out.print("var myChart = new Chart(ctx, { ");
-                    out.print("  type: 'pie', ");
-                    out.print("  data: { ");
-                    out.print("    labels: [" + labelData + "], ");
-                    out.print("    datasets: [{ ");
-                    out.print("      label: 'Proceso', ");
-                    out.print("      data: [" + valueData + "], ");
-                    out.print("      backgroundColor: [");
-
-                    String[] colors = {"'#490076'", "'#6a079c'", "'#8607ca'"};
-                    for (int i = 0; i < view_state.size(); i++) {
-                        out.print(colors[i % colors.length]);
-                        if (i < view_state.size() - 1) {
-                            out.print(", ");
-                        }
-                    }
-
-                    out.print("], borderColor: [");
-                    for (int i = 0; i < view_state.size(); i++) {
-                        out.print(colors[i % colors.length]);
-                        if (i < view_state.size() - 1) {
-                            out.print(", ");
-                        }
-                    }
-
-                    out.print("], borderWidth: 1.7 }], ");
-                    out.print("}, options: { "
-                            + "responsive: true,"
-                            + "    cutout: '60%', "
-                            + "    legend: { "
-                            + "      position: 'bottom', "
-                            + "    }, ");
-                    out.print("}});");
-                    out.print("</script>");
-                    //</editor-fold>
-                }
-                out.print("</div>");
-                out.print("<div class='col-lg-4 mr-3 mt-3 contGrafic' style='box-shadow: 0px 0px 6px 0px #6f6f6f;border-radius: 7px;'>");
-                view_warranty = InformationJpa.ViewWarranty();
-                if (view_warranty != null) {
-                    //<editor-fold defaultstate="collapsed" desc="WARRANTY">
-                    out.print("<h4 class='mb-2 mt-4 text-center'>Garantia</h4>");
-                    out.print("<canvas id=\"myChart5\" width=\"400\" height=\"230\"></canvas>");
-                    String labels = "";
-                    String dataSI = "", dataNO = "", dataNA = "";
-                    for (int i = 0; i < view_warranty.size(); i++) {
-                        Object[] ObjAct = (Object[]) view_warranty.get(i);
-                        String Type = ObjAct[0].toString();
-                        String Cant = ObjAct[1].toString();
-
-                        labels += "'" + Type + "', ";
-
-                        if (Type.equals("SI")) {
-                            dataSI = Cant;
-                        } else if (Type.equals("NO")) {
-                            dataNO = Cant;
-                        } else if (Type.equals("N/A")) {
-                            dataNA = Cant;
-                        }
-                    }
-                    if (!labels.isEmpty()) {
-                        labels = labels.substring(0, labels.length() - 2);
-                    }
-                    out.print("<script>");
-                    out.print("var ctx = document.getElementById(\"myChart5\").getContext('2d'); ");
-                    out.print("var myChart = new Chart(ctx, { ");
-                    out.print("  type: 'bar', ");
-                    out.print("  data: { ");
-                    out.print("    labels: [" + labels + "], ");  // Etiquetas "SI", "NO", "N/A"
-                    out.print("    datasets: [ ");
-                    out.print("      { ");
-                    out.print("        label: 'SI', ");
-                    out.print("        data: [" + dataSI + ", 0, 0], "); // Valores correctos
-                    out.print("        backgroundColor: '#5f0038', ");
-                    out.print("        borderWidth: 1.7 ");
-                    out.print("      }, ");
-                    out.print("      { ");
-                    out.print("        label: 'NO', ");
-                    out.print("        data: [0, " + dataNO + ",0], ");
-                    out.print("        backgroundColor: '#980362', ");
-                    out.print("        borderWidth: 1.7 ");
-                    out.print("      }, ");
-                    out.print("      { ");
-                    out.print("        label: 'N/A', ");
-                    out.print("        data: [0, 0," + dataNA + "], ");
-                    out.print("        backgroundColor: '#b80074', ");
-                    out.print("        borderWidth: 1.7 ");
-                    out.print("      }, ");
-                    out.print("    ] ");
-                    out.print("  }, ");
-                    out.print("  options: { ");
-                    out.print("    legend: { display: true, position: 'bottom', labels: { fontColor: '#333', fontSize: 12 } }, ");
-                    out.print("    scales: { ");
-                    out.print("      yAxes: [{ gridLines: { drawBorder: false, color: '#f2f2f2' }, ticks: { beginAtZero: true, stepSize: 50 } }], ");
-                    out.print("      xAxes: [{ ticks: { autoSkip: false }, gridLines: { display: false } }] ");
-                    out.print("    } ");
-                    out.print("  } ");
-                    out.print("});");
-                    out.print("</script>");
-                    //</editor-fold>
-                }
-                out.print("</div>");
-                out.print("<div class='col-lg-4 mr-2 mt-3 contGrafic' style='box-shadow: 0px 0px 6px 0px #6f6f6f;border-radius: 7px;'>");
-                view_type = InformationJpa.ViewType();
-                if (view_type != null) {
-                    //<editor-fold defaultstate="collapsed" desc="TYPE">
-                    out.print("<h4 class='mb-2 mt-4 text-center'>Tipo</h4>");
-                    out.print("<canvas id=\"myChart7\" width=\"400\" height=\"230\"></canvas>");
-                    String labelData = "";
-                    String valueData = "";
-                    for (int i = 0; i < view_type.size(); i++) {
-                        Object[] ObjType = (Object[]) view_type.get(i);
-                        labelData += "'" + ObjType[0].toString() + "', ";
-                        valueData += ObjType[1].toString() + ", ";
-                    }
-                    out.print("<script>");
-                    out.print("var ctx = document.getElementById(\"myChart7\").getContext('2d'); ");
-                    out.print("var myChart = new Chart(ctx, { ");
-                    out.print("  type: 'horizontalBar', ");
-                    out.print("  data: { ");
-                    out.print("    labels: [" + labelData + "], ");
-                    out.print("    datasets: [{ ");
-                    out.print("      label: 'Proceso', ");
-                    out.print("      data: [" + valueData + "], ");
-                    out.print("      backgroundColor: [");
-
-                    String[] colors = {"'#042f05'", "'#135413'", "'#156714'", "'#158312'", "'#18a913'", "'#24c91e'"};
-                    for (int i = 0; i < view_type.size(); i++) {
-                        out.print(colors[i % colors.length]);
-                        if (i < view_type.size() - 1) {
-                            out.print(", ");
-                        }
-                    }
-
-                    out.print("], borderColor: [");
-                    for (int i = 0; i < view_type.size(); i++) {
-                        out.print(colors[i % colors.length]);
-                        if (i < view_type.size() - 1) {
-                            out.print(", ");
-                        }
-                    }
-
-                    out.print("], borderWidth: 1.7 }], ");
-                    out.print("}, options: { "
-                            + "responsive: true,"
-                            + "    cutout: '60%', "
-                            + "    legend: { "
-                            + "      position: 'bottom', "
-                            + "    }, ");
-                    out.print("}});");
-                    out.print("</script>");
-                    //</editor-fold>
-                }
-                out.print("</div>");
-
-                out.print("</div>");
-
-                out.print("</div>");
-                out.print("</div>");
-                //</editor-fold>   
             }
 
             out.print("<section class='section'>");
@@ -551,44 +558,61 @@ public class Tag_information extends TagSupport {
             out.print("<div class='col-12'>");
             out.print("<div class='card'>");
             out.print("<div class='card-header justify-content-between'>");
-            out.print("<div><h4>PC Información</h4></div>");
-            out.print("<div class='d-flex'>"
-                    + "<div class='mr-2'><button class=\"btn btn-green btn-sm\" style=\"border-radius: 4px;\"  onclick='window.location.href=\"Information?opt=1&State=" + State + "&Counter=1\"' ><i class=\"fas fa-chart-bar\"></i></button></div>");
-            if (txtPermissions.contains("[48]")) {
-                out.print("<div><button class=\"btn btn-green btn-sm\" style=\"border-radius: 4px;\"  onclick=\"exportarExcel()\" ><i class=\"fas fa-file-excel\"></i></button></div>");
+            if (IdPc == 0) {
+                out.print("<div class='d-flex'>"
+                        + "<div class='mr-2'><button class=\"btn btn-green\" style=\"border-radius: 4px;\" onclick='window.location.href=\"Computer?opt=1\"'><i class=\"fas fa-arrow-left\"></i></button></div>"
+                        + "<h4>PC Información</h4>"
+                        + "</div>");
+            } else {
+                out.print("<div class='d-flex'>"
+                        + "<div class='mr-2'><button class=\"btn btn-green\" style=\"border-radius: 4px;\" onclick='window.location.href=\"Computer?opt=1&IdComputer=" + IdPc + "&mod=1\"'><i class=\"fas fa-arrow-left\"></i></button></div>"
+                        + "<h4>PC Información</h4>"
+                        + "</div>");
             }
-            out.print("</div>");
+            if (IdPc == 0) {
+                out.print("<div class='d-flex'>"
+                        + "<div class='mr-2'><button class=\"btn btn-green btn-sm\" style=\"border-radius: 4px;\"  onclick='window.location.href=\"Information?opt=1&State=" + State + "&Counter=1\"' ><i class=\"fas fa-chart-bar\"></i></button></div>");
+                if (txtPermissions.contains("[48]")) {
+                    out.print("<div><button class=\"btn btn-green btn-sm\" style=\"border-radius: 4px;\"  onclick=\"exportarExcel()\" ><i class=\"fas fa-file-excel\"></i></button></div>");
+                }
+                out.print("</div>");
+            }
             out.print("</div>");
             out.print("<div class='card'>");
             out.print("<div class='d-flex  m-2 justify-content-between'>");
             //<editor-fold defaultstate="collapsed" desc="FILTER">
-            out.print("<div class=\"form-group text-center mb-0\">\n"
-                    + "                      <div class=\"selectgroup selectgroup-pills\">\n"
-                    + "                  <label class=\"selectgroup-item\">\n"
-                    + "                          <input type=\"radio\" onclick=\"javascript:location.href='Information?opt=1&State=3'\" name=\"icon-input\" value=\"3\" class=\"selectgroup-input\" " + ((State == 3) ? "checked" : "") + " >\n"
-                    + "                          <span class=\"selectgroup-button selectgroup-button-icon btn-outline-info\" style='border-radius:6px !important;' data-toggle='tooltip' data-placement='top' title='General'><i style='font-size:17px' class=\"fas fa-star-of-life\"></i></span>\n"
-                    + "                        </label>\n"
-                    + "                        <label class=\"selectgroup-item\">\n"
-                    + "                          <input type=\"radio\" onclick=\"javascript:location.href='Information?opt=1&State=1'\" name=\"icon-input\" value=\"1\" class=\"selectgroup-input\" " + ((State == 1) ? "checked" : "") + ">\n"
-                    + "                          <span class=\"selectgroup-button selectgroup-button-icon btn-outline-success\" style='border-radius:6px !important;' data-toggle='tooltip' data-placement='top' title='Bueno'><i style='font-size:17px' class=\"fas fa-thumbs-up\"></i></span>\n"
-                    + "                        </label>\n"
-                    + "                        <label class=\"selectgroup-item\">\n"
-                    + "                          <input type=\"radio\" onclick=\"javascript:location.href='Information?opt=1&State=2'\" name=\"icon-input\" value=\"2\" class=\"selectgroup-input\" " + ((State == 2) ? "checked" : "") + ">\n"
-                    + "                          <span class=\"selectgroup-button selectgroup-button-icon btn-outline-warning\" style='border-radius:6px !important;' data-toggle='tooltip' data-placement='top' title='En Proceso'><i style='font-size:17px' class=\"fas fa-fist-raised\"></i></span>\n"
-                    + "                        </label>\n"
-                    + "                        <label class=\"selectgroup-item\">\n"
-                    + "                          <input type=\"radio\" onclick=\"javascript:location.href='Information?opt=1&State=0'\" name=\"icon-input\" value=\"3\" class=\"selectgroup-input\" " + ((State == 0) ? "checked" : "") + ">\n"
-                    + "                          <span class=\"selectgroup-button selectgroup-button-icon btn-outline-danger\" style='border-radius:6px !important;' data-toggle='tooltip' data-placement='top' title='De Baja'><i style='font-size:17px' class=\"fas fa-thumbs-down\"></i></span>\n"
-                    + "                        </label>\n");
-            out.print("</div>"
-                    + "</div>");
+            if (IdPc == 0) {
+                out.print("<div class=\"form-group text-center mb-0\">\n"
+                        + "                      <div class=\"selectgroup selectgroup-pills\">\n"
+                        + "                  <label class=\"selectgroup-item\">\n"
+                        + "                          <input type=\"radio\" onclick=\"javascript:location.href='Information?opt=1&State=3'\" name=\"icon-input\" value=\"3\" class=\"selectgroup-input\" " + ((State == 3) ? "checked" : "") + " >\n"
+                        + "                          <span class=\"selectgroup-button selectgroup-button-icon btn-outline-info\" style='border-radius:6px !important;' data-toggle='tooltip' data-placement='top' title='General'><i style='font-size:17px' class=\"fas fa-star-of-life\"></i></span>\n"
+                        + "                        </label>\n"
+                        + "                        <label class=\"selectgroup-item\">\n"
+                        + "                          <input type=\"radio\" onclick=\"javascript:location.href='Information?opt=1&State=1'\" name=\"icon-input\" value=\"1\" class=\"selectgroup-input\" " + ((State == 1) ? "checked" : "") + ">\n"
+                        + "                          <span class=\"selectgroup-button selectgroup-button-icon btn-outline-success\" style='border-radius:6px !important;' data-toggle='tooltip' data-placement='top' title='Bueno'><i style='font-size:17px' class=\"fas fa-thumbs-up\"></i></span>\n"
+                        + "                        </label>\n"
+                        + "                        <label class=\"selectgroup-item\">\n"
+                        + "                          <input type=\"radio\" onclick=\"javascript:location.href='Information?opt=1&State=2'\" name=\"icon-input\" value=\"2\" class=\"selectgroup-input\" " + ((State == 2) ? "checked" : "") + ">\n"
+                        + "                          <span class=\"selectgroup-button selectgroup-button-icon btn-outline-warning\" style='border-radius:6px !important;' data-toggle='tooltip' data-placement='top' title='En Proceso'><i style='font-size:17px' class=\"fas fa-fist-raised\"></i></span>\n"
+                        + "                        </label>\n"
+                        + "                        <label class=\"selectgroup-item\">\n"
+                        + "                          <input type=\"radio\" onclick=\"javascript:location.href='Information?opt=1&State=0'\" name=\"icon-input\" value=\"3\" class=\"selectgroup-input\" " + ((State == 0) ? "checked" : "") + ">\n"
+                        + "                          <span class=\"selectgroup-button selectgroup-button-icon btn-outline-danger\" style='border-radius:6px !important;' data-toggle='tooltip' data-placement='top' title='De Baja'><i style='font-size:17px' class=\"fas fa-thumbs-down\"></i></span>\n"
+                        + "                        </label>\n");
+                out.print("</div>"
+                        + "</div>");
+            } else {
+                out.print("<div><p></p></div>");
+            }
             out.print("<div><input style='width:91%' type=\"text\" class='form-control' id=\"myInput\" placeholder=\"Buscar...\"></div>"
                     //</editor-fold>
                     + "</div>");
             out.print("<div id=\"accordion\">");
             out.print("<div class=\"accordion\">");
-
-            if (State == 3) {
+            if (IdPc > 0) {
+                lst_information = InformationJpa.ConsultComputerInformationIdPC(IdPc);
+            } else if (State == 3) {
                 lst_information = InformationJpa.ConsultInformation();
             } else {
                 lst_information = InformationJpa.ConsultInformation(State);
@@ -601,7 +625,7 @@ public class Tag_information extends TagSupport {
                     out.print("<div id='list'><span>");
                     out.print("<div class=\"single-item\">");
                     //<editor-fold defaultstate="collapsed" desc="HEAD">
-                    out.print("<div class=\"accordion-header accc_div_dataSheet\" role=\"button\" data-toggle=\"collapse\" data-target=\"#panel-body-" + i + "\" aria-expanded=\"true\">");
+                    out.print("<div class=\"accordion-header accc_div_dataSheet\" role=\"button\" data-toggle=\"collapse\" data-target=\"#panel-body-" + i + "\" aria-expanded='" + ((IdPc > 0) ? "false" : "true") + "'>");
                     out.print("<div  class='styledata' style='display:flex; justify-content:space-between;width:100%; text-align:center; border-right: 3px solid " + ((StateInf == 1) ? "green" : (StateInf == 2) ? "#ffa426" : "#fd1e08") + "; border-left: 3px solid " + ((StateInf == 1) ? "green" : (StateInf == 2) ? "#ffa426" : "#fd1e08") + ";'>");
 
                     out.print("<div style='width:20%'>");
@@ -628,13 +652,19 @@ public class Tag_information extends TagSupport {
                     out.print("</div>");
                     //</editor-fold>
                     //<editor-fold defaultstate="collapsed" desc="CONTENT">
-                    out.print("<div class=\"accordion-body collapse\" id=\"panel-body-" + i + "\" style='background-color: rgb(251 251 251);max-width: 99%;' data-parent=\"#accordion\">");
+                    out.print("<div class=\"accordion-body collapse " + ((IdPc > 0) ? "show" : "") + "\" id=\"panel-body-" + i + "\" style='background-color: rgb(251 251 251);max-width: 99%;' data-parent=\"#accordion\">");
                     out.print("<div style='display:flex; padding-top:16px; justify-content: space-evenly;'>");
                     out.print("<div style='width:85%;text-align:center;'><h5>Especificaciones</h5></div>");
                     if (txtPermissions.contains("[47]")) {
-                        out.print("<div>"
-                                + ((StateInf == 1) ? "<a href='Information?opt=1&IdInformation=" + obj_info[0] + "' onclick='cargarDatos()'><i style='font-size:22px; color:black;' class=\"fas fa-pencil-alt\"></i></a>" : "")
-                                + "</div>");
+                        if (IdPc > 0) {
+                            out.print("<div>"
+                                    + ((StateInf == 1) ? "<a href='Information?opt=1&IdInformation=" + obj_info[0] + "&IdPc=" + IdPc + "' onclick='cargarDatos()'><i style='font-size:22px; color:black;' class=\"fas fa-pencil-alt\"></i></a>" : "")
+                                    + "</div>");
+                        } else {
+                            out.print("<div>"
+                                    + ((StateInf == 1) ? "<a href='Information?opt=1&IdInformation=" + obj_info[0] + "' onclick='cargarDatos()'><i style='font-size:22px; color:black;' class=\"fas fa-pencil-alt\"></i></a>" : "")
+                                    + "</div>");
+                        }
                     }
                     out.print("</div>");
 
@@ -686,7 +716,6 @@ public class Tag_information extends TagSupport {
                 }
                 out.print("</div>");
             } else {
-
             }
             out.print("</div>");
 

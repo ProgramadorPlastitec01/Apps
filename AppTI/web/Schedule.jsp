@@ -194,7 +194,7 @@
 
         </script>
         <script type="text/javascript">
-            function EnableDivView(id) {
+            function EnableDivView(id, vld) {
                 var content = document.getElementById("IdMasive").value;
                 if (content.length > 0) {
                     const body = document.body;
@@ -204,6 +204,7 @@
                         document.getElementById("View" + id).style.display = "none";
                     }
                     body.classList.toggle('modal-open');
+                    document.getElementById("vld").value = vld;
                 } else {
                     iziToast.warning({
                         title: 'Alerta!',

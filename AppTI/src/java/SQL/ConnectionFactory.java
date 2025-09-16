@@ -18,7 +18,8 @@ public class ConnectionFactory {
                     + "LEFT JOIN maestro m ON k.COD = m.COD "
                     + "LEFT JOIN [EMP001_COMP].[dbo].COMPRAS2 c ON k.OC = c.OC "
                     + "WHERE k.COD LIKE '" + Ref + "' AND k.tipo = '1051' and c.CPROV is not null "
-                    + "GROUP BY k.COD, m.NOM, c.CPROV, c.NOMBRE";
+                    + "GROUP BY k.COD, m.NOM, c.CPROV, c.NOMBRE"
+                    + "ORDER BY k.OC DESC";
             Statement sttm = con.createStatement();
             ResultSet rs = sttm.executeQuery(query);
             List<String> lst_orden_factory = new ArrayList<String>();

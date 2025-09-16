@@ -9,6 +9,9 @@ import javax.servlet.http.HttpSession;
 
 import Controller.BinnacleControllerJpa;
 import Controller.ActivitySystemControllerJpa;
+import Mail.Mail_Session;
+
+import Mail.Mail_binnacle;
 
 public class Binnacle extends HttpServlet {
 
@@ -21,6 +24,7 @@ public class Binnacle extends HttpServlet {
             HttpSession sesion = request.getSession();
             BinnacleControllerJpa binnacleJpa = new BinnacleControllerJpa();
             ActivitySystemControllerJpa activitySystem = new ActivitySystemControllerJpa();
+            Mail_binnacle BinnacleSend = new Mail_binnacle();
             String UserRol = sesion.getAttribute("idRol").toString();
             int idUser = Integer.parseInt(sesion.getAttribute("idUsuario").toString());
             String userSession = sesion.getAttribute("Nombres").toString();
@@ -97,7 +101,7 @@ public class Binnacle extends HttpServlet {
                     result = binnacleJpa.BinnacleUpdateData(idBinn, binnacle);
                     request.setAttribute("UpdateDatabinnacle", result);
                     if (result) {
-                        activitySystem.ActivityRegister(idUser, 2, "Bitacora", "Se registra bitacora del día", 1, userSession);
+                        activitySystem.ActivityRegister(idUser, 2, "Bitacora", "Se modificado la bitacora Id #" + idBinn + "", 1, userSession);
                     }
                     request.getRequestDispatcher("Binnacle?opt=1&idBinn=" + idBinn + "&temp=1").forward(request, response);
                     //</editor-fold>
@@ -114,6 +118,9 @@ public class Binnacle extends HttpServlet {
                     result = binnacleJpa.BinnacleUpdateStateFinal(idBinn, idAct, 1);
 
 //                    ------------------------ PENDIENTE CREAR METODOS DE CORREO -------------------
+                    if (result) {
+                        BinnacleSend.SendBinnacle(idBinn, idUser, getServletContext());
+                    }
                     request.setAttribute("SendBinnacle", result);
                     request.getRequestDispatcher("Binnacle?opt=1&idBinn=0").forward(request, response);
                     //</editor-fold>

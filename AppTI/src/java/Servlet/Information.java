@@ -23,7 +23,7 @@ public class Information extends HttpServlet {
             String UserRol = sesion.getAttribute("idRol").toString();
             int IdUser = Integer.parseInt(sesion.getAttribute("idUsuario").toString());
             String NameUser = sesion.getAttribute("Nombres").toString();
-            int IdInformation = 0, State = 0, Counter = 0;
+            int IdInformation = 0, State = 0, Counter = 0, IdPc = 0;
             String externa_mail = "", bill = "", bill_date = "", licence_date = "", warranty = "", warranty_date = "",
                     skype = "", vlan = "", network_point = "", description = "";
             boolean Result = false;
@@ -45,10 +45,16 @@ public class Information extends HttpServlet {
                     } catch (Exception e) {
                         State = 3;
                     }
+                    try {
+                        IdPc = Integer.parseInt(request.getParameter("IdPc"));
+                    } catch (Exception e) {
+                        IdPc = 0;
+                    }
                     request.setAttribute("IdInformation", IdInformation);
                     request.setAttribute("State", State);
                     request.setAttribute("Counter", Counter);
                     request.setAttribute("idRol", UserRol);
+                    request.setAttribute("IdPc", IdPc);
                     request.getRequestDispatcher("Information.jsp").forward(request, response);
                     //</editor-fold>
 

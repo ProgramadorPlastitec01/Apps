@@ -12,8 +12,8 @@ import Controller.ComputerHeaderControllerJpa;
 import Controller.ComputerDetailJpaController;
 import Controller.FormatControllerJpa;
 import Controller.ItemJpaController;
+import Controller.RoleControllerJpa;
 import SQL.ConnectionsBd;
-import java.util.HashMap;
 import java.util.List;
 
 import java.time.LocalDate;
@@ -32,6 +32,7 @@ public class Tag_computer extends TagSupport {
         FormatControllerJpa FormatJpa = new FormatControllerJpa();
         ItemJpaController ItemJpa = new ItemJpaController();
         ConnectionsBd ConnectJpa = new ConnectionsBd();
+        RoleControllerJpa RoleJpa = new RoleControllerJpa();
         LocalDate fecha = LocalDate.now();
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         String CurrentDate = fecha.format(formato);
@@ -40,14 +41,26 @@ public class Tag_computer extends TagSupport {
         List lst_format = null;
         List lst_item = null;
         List lst_connect = null;
+        List lst_role = null;
         int module = 0, IdComputer = 0, StateCmp = 0, state = 0;
         String usuario = "", area = "", cargouser = "", nameUser = "";
         String[] structure = {};
+        String txtPermissions = "";
+        int idRol = 0;
 
         boolean isActive = false;
         boolean hvInfo = false;
 
         try {
+            try {
+                idRol = Integer.parseInt(pageContext.getRequest().getAttribute("idRol").toString());
+                lst_role = RoleJpa.ConsultRoleId(idRol);
+                Object[] obj_permi = (Object[]) lst_role.get(0);
+                txtPermissions = obj_permi[2].toString();
+            } catch (Exception e) {
+                idRol = 0;
+                txtPermissions = "";
+            }
             try {
                 module = Integer.parseInt(pageContext.getRequest().getAttribute("mod").toString());
             } catch (NumberFormatException e) {
@@ -1296,7 +1309,6 @@ public class Tag_computer extends TagSupport {
                 //</editor-fold>
             } else if (module == 1) {
                 //<editor-fold defaultstate="collapsed" desc="PC - LIST EVENTS">
-
                 //<editor-fold defaultstate="collapsed" desc="REGISTER EVENT">
                 out.print("<div class='sweet-local' tabindex='-1' id='Ventana1' style='opacity: 1.03; display:none;'>");
                 out.print("<div class='contGeneral' style='width: 44%;right: 22%;'>");
@@ -1346,7 +1358,6 @@ public class Tag_computer extends TagSupport {
                 out.print("</div>");
                 out.print("</div>");
                 //</editor-fold>
-
                 //<editor-fold defaultstate="collapsed" desc="LIST EVENTS">
 //                lst_computerId = ComputerJpa.ConsulteComputerIdPC(IdComputer);
                 out.print("<section class='section'>");
@@ -1357,7 +1368,12 @@ public class Tag_computer extends TagSupport {
                 out.print("<div class='card-header' style='justify-content: space-between; align-items:flex-start'>");
                 out.print("<p></p>");
                 out.print("<h2>" + NroPC + "</h2>");
-                out.print("<div><button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1)'><i class='fas fa-plus'></i></button></div>");
+                out.print("<div class='d-flex'>");
+                if (txtPermissions.contains("[46]")) {
+                    out.print("<div class='mr-5'><button class='btn btn-green' style='border-radius: 4px;' onclick=\"javascript:location.href='Information?opt=1&IdPc=" + IdComputer + "'\" data-toggle=\"tooltip\" data-placement=\"top\" title='Especificaciones'><i class=\"fas fa-window-restore\"></i></button></div>");
+                }
+                out.print("<div><button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1)' data-toggle=\"tooltip\" data-placement=\"top\" title='Registra PC'><i class='fas fa-plus'></i></button></div>");
+                out.print("</div>");
                 out.print("</div>");
 
                 out.print("<div class='card-body'>");
@@ -1422,7 +1438,6 @@ public class Tag_computer extends TagSupport {
                 out.print("</div>");
                 out.print("</section>");
                 //</editor-fold>
-
                 //</editor-fold>
             } else if (module == 0) {
                 //<editor-fold defaultstate="collapsed" desc="MAIN LIST">
@@ -1521,7 +1536,14 @@ public class Tag_computer extends TagSupport {
                 out.print("<div class='card-header' style='justify-content: space-between; align-items:flex-start'>");
                 out.print("<p></p>");
                 out.print("<h2>PC</h2>");
-                out.print("<div><button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1)'><i class='fas fa-plus'></i></button></div>");
+
+                out.print("<div class='d-flex'>");
+                if (txtPermissions.contains("[46]")) {
+                    out.print("<div class='mr-5'><button class='btn btn-green' style='border-radius: 4px;' data-toggle=\"tooltip\" data-placement=\"top\" title='Información PC' onclick=\"javascript:location.href='Information?opt=1'\" ><i class=\"fas fa-window-restore\"></i></button></div>");
+                }
+                out.print("<div><button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1)' data-toggle=\"tooltip\" data-placement=\"top\" title='Registrar PC'><i class='fas fa-plus'></i></button></div>");
+                out.print("</div>");
+
                 out.print("</div>");
 
                 out.print("<div class='card-body'>");

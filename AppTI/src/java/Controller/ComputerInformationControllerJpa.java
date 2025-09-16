@@ -75,6 +75,24 @@ public class ComputerInformationControllerJpa implements Serializable {
             return null;
         }
     }
+    public List ConsultComputerInformationIdPC(int IdPc) {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_cdt_c_ConsultComputerInformationIdPC`('" + IdPc + "')");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
 
     public List ViewAntivirus() {
         EntityManager etm = getEntityManager();

@@ -10,7 +10,6 @@ import Encript.ControlEncryption;
 import Controller.UserControllerJpa;
 import Mail.Mail_Session;
 import java.util.List;
-import java.time.LocalDate;
 import Method.generateRandomPassword;
 
 import SQL.ConnectionsBd;

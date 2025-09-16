@@ -53,7 +53,7 @@ public class Tag_menu extends TagSupport {
             if (lst_pending != null) {
                 counterPending = lst_pending.size();
             }
-            int IdUs = Integer.parseInt(sesion.getAttribute("idRol").toString());
+            int IdUs = Integer.parseInt(sesion.getAttribute("idUsuario").toString());
             List lst_userIcon = UserJpa.ConsultUsersid(IdUs);
             if (lst_userIcon != null) {
                 Object[] ObjIcon = (Object[]) lst_userIcon.get(0);
@@ -203,7 +203,7 @@ public class Tag_menu extends TagSupport {
                     Object[] obj_pending = (Object[]) lst_pending.get(i);
                     out.print("      <a href=\"Pending?opt=1&State=1&Priority=&Search=" + obj_pending[0] + "\" class=\"dropdown-item dropdown-item-unread\">\n");
                     out.print("        <div class=\"dropdown-item-avatar\">\n");
-                    out.print("          <img alt=\"image\" src=\"Interface/Imagen/Profile/" + obj_pending[13] + "\" style='height:100%' class=\"rounded-circle\">\n");
+                    out.print("          <img alt=\"image\" src=\"Interface/Imagen/Profile/" + obj_pending[13] + "\"  style=\"width:50px; height:50px; border-radius:50% !important; object-fit:cover;\" class=\"rounded-circle\">\n");
                     out.print("          <div class=\"is-online\"></div>\n");
                     out.print("        </div>\n");
                     out.print("        <div class=\"dropdown-item-desc\">\n");
@@ -313,8 +313,7 @@ public class Tag_menu extends TagSupport {
 ////</editor-fold>
             out.print(
                     "          <li class=\"dropdown\"><a href=\"#\" data-toggle=\"dropdown\" onclick='CloseDivStartEndDate()' class=\"nav-link dropdown-toggle nav-link-lg nav-link-user\">\n"
-                    + "        <img alt=\"image\" src='Interface/Imagen/Profile/" + Icon + "' style='width:34px;height:34px;' >"
-                    + "            <div class=\"d-sm-none d-lg-inline-block\">" + NameUser + "</div></a>\n"
+                    + "            <div class=\"d-sm-none d-lg-inline-block\">" + NameUser + "<img alt=\"image\" class='ml-2' src='Interface/Imagen/Profile/" + Icon + "' style=\"width:40px; height:40px; border-radius:50% !important; object-fit:cover;\" ></div></a>\n"
                     + "            <div class=\"dropdown-menu dropdown-menu-right\">\n"
                     + "              <div class=\"dropdown-title\">Acceso hace " + hours + " hr - " + minutes + " min</div>\n"
                     + "              <a href=\"Profile?opt=1\" onclick='cargarDatos()' class=\"dropdown-item has-icon\">\n"
@@ -374,22 +373,12 @@ public class Tag_menu extends TagSupport {
             out.print("<ul class=\"sidebar-menu\">");
             out.print("<li class=\"menu-header\">Documentación</li>");
             out.print("</li>");
-            out.print("<li class=\"dropdown\">");
-            if (txtPermissions.contains("[60]")) {
-                out.print("<a  href=\"#\" class=\"nav-link has-dropdown\" data-toggle=\"dropdown\"><i class=\"fas fa-layer-group\"></i> <span>Equipo</span></a>");
-            }
-            out.print("<ul class=\"dropdown-menu\">");
 
             if (txtPermissions.contains("[50]")) {
                 out.print("<li><a class=\"nav-link\" href=\"Computer?opt=1\" onclick='cargarDatos()'><i style='margin-right:4px' class=\"fas fa-laptop\"></i>PC</a></li>");
             }
-            if (txtPermissions.contains("[46]")) {
-                out.print("<li><a class=\"nav-link\" href=\"Information?opt=1\" onclick='cargarDatos()'><i style='margin-right:4px' class=\"fas fa-copy\"></i>Información PC</a></li>");
-            }
                 out.print("<li><a class=\"nav-link\" href=\"Device?opt=1\" onclick='cargarDatos()'><i style='margin-right:4px' class=\"fas fa-microchip\"></i>Dispositivos</a></li>");
 
-            out.print("</ul>");
-            out.print("</li>");
 
             out.print("<ul class=\"sidebar-menu\">");
             out.print("</li>");

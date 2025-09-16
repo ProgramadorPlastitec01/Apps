@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const total = 30;
+  const total = 40;
   const visible = 13; // número total de imágenes visibles (impar)
   const track = document.getElementById("carouselTrack");
 
