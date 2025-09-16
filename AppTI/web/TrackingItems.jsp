@@ -114,5 +114,8 @@
         <script src="Interface/Content/Assets/modules/izitoast/js/iziToast.min.js"></script>
         <script src="Interface/Content/Assets/js/page/modules-toastr.js"></script>
         <script src="Interface/Content/Assets/js/page/bootstrap-modal.js"></script>
+        
+        <script src="Interface/Content/Assets/modules/chart.min.js"></script>
+        <script src="Interface/Content/Assets/js/page/modules-chartjs.js"></script>
     </body>
 </html>
