@@ -27,7 +27,8 @@ public class TrackingItem extends HttpServlet {
         int opt = Integer.parseInt(request.getParameter("opt"));
         boolean result = false;
         String ref = "", dateMove = "", keyWord = "";
-        int numItem = 0, nummov = 0;
+        int numItem = 0, nummov = 0, action = 0;
+     
 
         try {
             switch (opt) {
@@ -39,6 +40,11 @@ public class TrackingItem extends HttpServlet {
                             validation += " i.item_num = '" + numItem + "' AND";
                         } catch (Exception e) {
                             numItem = 0;
+                        }
+                        try {
+                            action = Integer.parseInt(request.getParameter("action"));
+                        } catch (Exception e) {
+                            action = 0;
                         }
                         try {
                             ref = request.getParameter("txt_Ref");
@@ -74,6 +80,7 @@ public class TrackingItem extends HttpServlet {
                         String q = rmov.RemoveLastWord(validation, "AND");
 
                         List lst_result = MoveItemJpa.ConsultSetting(q);
+                        request.setAttribute("action", action);
                         request.setAttribute("ResultDataSearch", lst_result);
                         request.getRequestDispatcher("TrackingItems.jsp").forward(request, response);
                     } catch (Exception e) {
