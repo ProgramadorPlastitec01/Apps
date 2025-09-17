@@ -449,35 +449,49 @@ public class Tag_pending extends TagSupport {
             out.print("<div class='row'>");
             out.print("<div class='col-12'>");
             out.print("<div class='card'>");
+
             out.print("<div class='card-header' style='justify-content: space-between;'>");
             if (ModuleReg > 0) {
                 if (ModuleReg == 1) {
-                    out.print("<h4>Listado de Pendientes Asignados</h4>");
+                    out.print("<h4>Mis pendientes</h4>");
                 } else {
-                    out.print("<h4>Listado de Pendientes General</h4>");
+                    out.print("<h4>Listado de pendientes abiertos</h4>");
                 }
             } else {
-                out.print("<h4>Mis Pendientes " + ((State == 0) ? "Cerrados" : "Abiertos") + "</h4>");
+                out.print("<h4>Pendientes " + ((State == 0) ? "Cerrados" : "Abiertos") + "</h4>");
             }
             out.print("<div style='display:flex;'>");
             //<editor-fold defaultstate="collapsed" desc="BUTTOM">
-            if (ModuleReg > 0) {
-                out.print("<button class='btn btn-danger mr-4' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Mis pendientes' onclick='window.location.href=\"Pending?opt=1&State=1&Filter=\";cargarDatos()' ><i class=\"fas fa-user\"></i></button>");
+            if (State != 0) {
+                out.print("<div style='margin-left:5px;'  class='dropdown d-inline mr-4'>\n");
+                
+                out.print("<button class='btn btn-green  dropdown-toggle' style='border-radius: 4px;' type='button' id='dropdownMenuButton2' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>\n");
+                out.print("<i class='fas fa-cog fa-spin'></i>");
+                out.print("</button>");
+
+                out.print("<div class='dropdown-menu menuDropdow'>");
+                if (Permissions.contains("[79]")) {
+                    out.print("<a class='dropdown-item has-icon' onclick='window.location.href=\"Pending?opt=1&ModuleReg=2\";cargarDatos()' ><i class=\"fas fa-user\"></i>Mis Pendientes</a>");
+                }
+                if (Permissions.contains("[78]")) {
+                    out.print("<a class='dropdown-item has-icon' onclick='window.location.href=\"Pending?opt=1&ModuleReg=1\";cargarDatos()' ><i class=\"fas fa-users\"></i>Listado de pendientes</a>");
+                }
+                if (ModuleReg > 0) {
+                    out.print("<a class='dropdown-item has-icon' onclick='window.location.href=\"Pending?opt=1&State=1&Filter=\";cargarDatos()' ><i class=\"fas fa-users\"></i>Pendientes Abiertos</a>");
+                }
+                out.print("</div>");
+
+                out.print("</div>");
             }
-            if (Permissions.contains("[79]")) {
-                out.print("<button class='btn btn-warning mr-4' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Pendientes Generales' onclick='window.location.href=\"Pending?opt=1&ModuleReg=2\";cargarDatos()' ><i class=\"fas fa-users\"></i></button>");
-            }
-            if (Permissions.contains("[78]")) {
-                out.print("<button class='btn btn-info mr-4' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Pendientes asignados' onclick='window.location.href=\"Pending?opt=1&ModuleReg=1\";cargarDatos()' ><i class=\"fas fa-user-friends\"></i></button>");
-            }
+
             if (!Search.equals("") || !Filter.equals("")) {
                 out.print("<button class='btn btn-danger mr-4' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Quitar Filtro' onclick='window.location.href=\"Pending?opt=1&State=" + State + "\";cargarDatos()' ><i class=\"fas fa-times\"></i></button>");
             }
             out.print("<button class='btn btn-green mr-4' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title=' Filtro' onclick='mostrarConvencion(4)' ><i class=\"fas fa-search\"></i></button>");
             if (State == 0) {
-                out.print("<button class='btn btn-green mr-4' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title=' Pendiente Abiertos' onclick='window.location.href=\"Pending?opt=1&State=1\";cargarDatos()'><i class=\"fas fa-external-link-alt\"></i></button>");
+                out.print("<button class='btn btn-green mr-4' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title=' Pendiente Abiertos' onclick='window.location.href=\"Pending?opt=1&State=1\";cargarDatos()'><i class=\"fas fa-lock-open\"></i></button>");
             } else {
-                out.print("<button class='btn btn-green mr-4' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title=' Pendiente Cerrados' onclick='window.location.href=\"Pending?opt=1&State=0\";cargarDatos()'><i class=\"fas fa-history\"></i></button>");
+                out.print("<button class='btn btn-green mr-4' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title=' Pendiente Cerrados' onclick='window.location.href=\"Pending?opt=1&State=0\";cargarDatos()'><i class=\"fas fa-lock\"></i></button>");
             }
             if (Permissions.contains("[30]")) {
                 out.print("<button class='btn btn-green' style='border-radius: 4px;'  data-toggle='tooltip' data-placement='top' title='Registar' onclick='mostrarConvencion(1)'><i class='fas fa-plus'></i></button>");
@@ -487,6 +501,7 @@ public class Tag_pending extends TagSupport {
             //</editor-fold>
             out.print("</div>");
             out.print("</div>");
+
             out.print("<div class='card-body'>");
             if (ModuleReg > 0) {
                 lst_pending = (ModuleReg == 1)
@@ -539,7 +554,7 @@ public class Tag_pending extends TagSupport {
                     out.print("<div class=\"ticket-title\" >");
 
                     out.print("<div class='d-flex' style='justify-content: space-between;align-items: baseline;' >"
-                            + "<div class='w-50'><h4>#" + obj_pending[0] + " | " + obj_pending[1] + "</div>");
+                            + "<div class='w-50'><h4>#" + obj_pending[0] + " | " + obj_pending[1] + "</h4></div>");
                     out.print("<div>");
                     Priority = Integer.parseInt(obj_pending[7].toString());
                     out.print("" + ((Priority == 1) ? "<b style='color:red'>ALTA" : (Priority == 2) ? "<b>MEDIA" : "BAJA") + "</b>");
@@ -573,7 +588,6 @@ public class Tag_pending extends TagSupport {
                     }
                     out.print("</div>");
                     out.print("</div>");
-
                 }
                 out.print("</div>");
                 //</editor-fold>
@@ -647,16 +661,15 @@ public class Tag_pending extends TagSupport {
                                         System.out.println("Error parseando fecha: " + DateFmt[0]);
                                     }
                                     LocalDate fechaLimite = LocalDate.parse(obj_pending[14].toString(), formatter);
-                                    if (fechaSeguimiento.isAfter(fechaLimite)) {
+                                    if (fechaSeguimiento.isAfter(fechaLimite) && State != 0) {
                                         out.print("<div class='left-col'>");
                                         //<editor-fold defaultstate="collapsed" desc="DIV LEFT">
                                         out.print("<b class='textRotate'>VENCIDO</b>");
                                         //</editor-fold>
                                         out.print("</div>");
                                     }
-
-                                    out.print("<div class='right-col' " + ((!DateFmt[0].contains(obj_pending[14].toString())) ? "" : "style='width:100%'") + ">");
                                 }
+                                out.print("<div class='right-col' style='width:100%'>");
                                 //<editor-fold defaultstate="collapsed" desc="DIV RIGHT">
                                 out.print("<div class='d-flex justify-content-between'>");
 
@@ -696,9 +709,13 @@ public class Tag_pending extends TagSupport {
                                 out.print("</div>");
                                 //</editor-fold>
                                 out.print("</div>");
+
                             }
                         } else {
-                            out.print("<div class='d-flex justify-content-around mt-2'><div>" + obj_pending[6] + "</div><div>" + obj_pending[7] + "</div></div>");
+                            out.print("<div class='d-flex justify-content-around mt-2'>"
+                                    + "<div>" + obj_pending[6] + "</div>"
+                                    + "<div>" + obj_pending[7] + "</div>"
+                                    + "</div>");
                             out.print("<hr>");
                             out.print(obj_pending[5]);
                         }
@@ -742,6 +759,7 @@ public class Tag_pending extends TagSupport {
                 //</editor-fold>
             }
             out.print("</div>");
+
             out.print("</div>");
 
             out.print("</div>");

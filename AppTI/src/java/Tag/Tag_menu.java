@@ -336,12 +336,14 @@ public class Tag_menu extends TagSupport {
             );
             //</editor-fold>
             //<editor-fold defaultstate="collapsed" desc="MENU">
-            out.print("<div  class=\"main-sidebar sidebar-style-2\"  tabindex=\"1\" overflow: hidden; outline: none;\">");
+            out.print("<div class=\"main-sidebar sidebar-style-2\" tabindex=\"1\" style='overflow: hidden; outline: none;'>");
             out.print("<div style='height:92%;'>");
             out.print("<aside id=\"sidebar-wrapper\">");
+
             out.print("<div class=\"sidebar-brand\">");
             out.print("<a style='color:#fff' href=\"Start?opt=1\"><img src=\"Interface/Imagen/Logo_app/LogoSideW.fw.png\" alt=\"\" style=\"width: 50%;\"/></a>");
             out.print("</div>");
+
             out.print("<div class=\"sidebar-brand sidebar-brand-sm\">");
             out.print("<a style='color:#fff' href=\"Start.jsp\"><img src=\"Interface/Imagen/Logo_app/IconW.fw.png\" alt=\"\" style=\"width: 50%;\"/></a>");
             out.print("</div>");
@@ -353,8 +355,9 @@ public class Tag_menu extends TagSupport {
             out.print("</div>");
 
             out.print("<ul class=\"sidebar-menu\">");
+
+// ===================== Gestión =====================
             out.print("<li class=\"menu-header\">Gestión</li>");
-            out.print("</li>");
             if (txtPermissions.contains("[33]")) {
                 out.print("<li class=\"dropdown\">");
                 out.print("<a href=\"Pending?opt=1&State=1&Filter=\" class=\"nav-link\" onclick='cargarDatos()'><i class=\"fas fa-bell\"></i> <span>Pendiente</span> <input class='Bounce' value='" + counterPending + "' readonly></a>");
@@ -363,84 +366,81 @@ public class Tag_menu extends TagSupport {
 
             if (txtPermissions.contains("[23]")) {
                 out.print("<li class=\"dropdown\">");
-                out.print("<a href=\"Binnacle?opt=1\" class=\"nav-link\" onclick='cargarDatos()'><i class=\"fas fa-folder-open\" ></i> <span>Bitacora</span></a>");
+                out.print("<a href=\"Binnacle?opt=1\" class=\"nav-link\" onclick='cargarDatos()'><i class=\"fas fa-folder-open\"></i> <span>Bitacora</span></a>");
                 out.print("</li>");
             }
 
-//            out.print("<li class=\"dropdown\">");
-//            out.print("<a href=\"Support?opt=1\" class=\"nav-link\"><i class=\"fas fa-ticket-alt\"></i> <span>Ticket</span> <input class='Bounce' value='" + counter + "' readonly></a>");
-//            out.print("</li>");
-            out.print("<ul class=\"sidebar-menu\">");
+// ===================== Documentación =====================
             out.print("<li class=\"menu-header\">Documentación</li>");
-            out.print("</li>");
-
             if (txtPermissions.contains("[50]")) {
-                out.print("<li><a class=\"nav-link\" href=\"Computer?opt=1\" onclick='cargarDatos()'><i style='margin-right:4px' class=\"fas fa-laptop\"></i>PC</a></li>");
+                out.print("<li class=\"dropdown\">"
+                        + "<a class=\"nav-link\" href=\"Computer?opt=1\" onclick='cargarDatos()'><i style='margin-right:4px' class=\"fas fa-laptop\"></i><span>PC</span></a>"
+                        + "</li>");
             }
-                out.print("<li><a class=\"nav-link\" href=\"Device?opt=1\" onclick='cargarDatos()'><i style='margin-right:4px' class=\"fas fa-microchip\"></i>Dispositivos</a></li>");
+            out.print("<li class=\"dropdown\">"
+                    + "<a class=\"nav-link\" href=\"Device?opt=1\" onclick='cargarDatos()'><i style='margin-right:4px' class=\"fas fa-microchip\"></i><span>Dispositivos</span></a></li>");
 
-
-            out.print("<ul class=\"sidebar-menu\">");
-            out.print("</li>");
-            out.print("<li class=\"dropdown\">");
             if (txtPermissions.contains("[55]")) {
-                out.print("<a  href=\"#\" class=\"nav-link has-dropdown\" data-toggle=\"dropdown\"><i class=\"fas fa-layer-group\"></i> <span>Registros</span></a>");
-            }
-            out.print("<ul class=\"dropdown-menu\">");
-//            if (txtPermissions.contains("[56]")) {
-//                out.print("<li><a class=\"nav-link\" href=\"Call?opt=1&Module=General\"><i style='margin-right:4px' class='fas fa-file-alt'></i>R-TI-001</a></li>");
-//            }
-            if (txtPermissions.contains("[57]")) {
-                out.print("<li><a class=\"nav-link\" href=\"Activity?opt=1\" onclick='cargarDatos()'><i style='margin-right:4px' class='fas fa-file-alt'></i>R-TI-005</a></li>");
-            }
-            if (txtPermissions.contains("[58]")) {
-                out.print("<li><a class=\"nav-link\" href=\"Minute?opt=1\" onclick='cargarDatos()'><i style='margin-right:4px' class='fas fa-file-alt'></i>R-TI-014</a></li>");
-            }
-            if (txtPermissions.contains("[59]")) {
-                out.print("<li><a class=\"nav-link\" href=\"Schedule?opt=1&module=Schedule&Year=\" onclick='cargarDatos()'><i style='margin-right:4px' class='fas fa-file-alt'></i>R-TI-026</a></li>");
-            }
-            out.print("</ul>");
-            out.print("</li>");
-            out.print("</li>");
+                out.print("<li class=\"dropdown\">");
+                out.print("<a href=\"#\" class=\"nav-link has-dropdown\" data-toggle=\"dropdown\"><i class=\"fas fa-layer-group\"></i> <span>Registros</span></a>");
+                out.print("<ul class=\"dropdown-menu\">");
 
-            out.print("<li class=\"dropdown\">");
+                if (txtPermissions.contains("[57]")) {
+                    out.print("<li><a class=\"nav-link\" href=\"Activity?opt=1\" onclick='cargarDatos()'><i style='margin-right:4px' class='fas fa-file-alt'></i>R-TI-005</a></li>");
+                }
+                if (txtPermissions.contains("[58]")) {
+                    out.print("<li><a class=\"nav-link\" href=\"Minute?opt=1\" onclick='cargarDatos()'><i style='margin-right:4px' class='fas fa-file-alt'></i>R-TI-014</a></li>");
+                }
+                if (txtPermissions.contains("[59]")) {
+                    out.print("<li><a class=\"nav-link\" href=\"Schedule?opt=1&module=Schedule&Year=\" onclick='cargarDatos()'><i style='margin-right:4px' class='fas fa-file-alt'></i>R-TI-026</a></li>");
+                }
+
+                out.print("</ul>");
+                out.print("</li>");
+            }
+
+// ===================== Aplicativos =====================
             if (txtPermissions.contains("[37]")) {
+                out.print("<li class=\"dropdown\">");
                 out.print("<a class=\"nav-link\" href=\"AppDetail?opt=1\" onclick='cargarDatos()'><i class=\"fas fa-lightbulb\"></i><span>Aplicativos</span></a>");
+                out.print("</li>");
             }
-            out.print("</li>");
-            
-            out.print("<li class=\"dropdown\">");
-            if (txtPermissions.contains("[46]")) {
-                out.print("<a class=\"nav-link\" href=\"TrackingItem?opt=1&action=0\" onclick='cargarDatos()'><i class=\"fas fa-boxes\"></i><span>Inventario</span></a>");
-            }
-            out.print("</li>");
 
+// ===================== Inventario =====================
+            if (txtPermissions.contains("[46]")) {
+                out.print("<li class=\"dropdown\">");
+                out.print("<a class=\"nav-link\" href=\"TrackingItem?opt=1&action=0\" onclick='cargarDatos()'><i class=\"fas fa-boxes\"></i><span>Inventario</span></a>");
+                out.print("</li>");
+            }
+
+// ===================== Consulta =====================
             out.print("<li class=\"menu-header\">Consulta</li>");
-            out.print("<ul class=\"sidebar-menu\">");
-            out.print("</li>");
             out.print("<li class=\"dropdown\">");
-            out.print("<a  href=\"#\" class=\"nav-link has-dropdown\" data-toggle=\"dropdown\"><i class=\"fas fa-layer-group\"></i> <span>Reportes</span></a>");
+            out.print("<a href=\"#\" class=\"nav-link has-dropdown\" data-toggle=\"dropdown\"><i class=\"fas fa-layer-group\"></i> <span>Reportes</span></a>");
             out.print("<ul class=\"dropdown-menu\">");
             out.print("<li><a class=\"nav-link\" href=\"Report?opt=2\" onclick='cargarDatos()'><i style='margin-right:4px' class=\"fas fa-search\"></i>Informacion PC</a></li>");
             out.print("<li><a class=\"nav-link\" href=\"Report?opt=1\" onclick='cargarDatos()'><i style='margin-right:4px' class=\"fas fa-search\"></i>Pendiente</a></li>");
             out.print("</ul>");
             out.print("</li>");
 
+// ===================== Histórico =====================
             out.print("<li class=\"menu-header\">Historico</li>");
             out.print("<li class=\"dropdown\">");
             lst_link = SettingJpa.ConsultSettingCategorie("LinkOldREDEAC");
             if (lst_link != null) {
                 Object[] ObjLink = (Object[]) lst_link.get(0);
-                out.print("<a  href='" + ObjLink[2] + "' target='_blank' rel='noopener noreferrer' class=\"nav-link\"><i class=\"fas fa-tag\"></i> <span>REDEAC</span></a>");
+                out.print("<a href='" + ObjLink[2] + "' target='_blank' rel='noopener noreferrer' class=\"nav-link\"><i class=\"fas fa-tag\"></i> <span>REDEAC</span></a>");
             } else {
-                out.print("<a  href='#' onclick='ViewAlertREDEAC()'  class=\"nav-link\"><i class=\"fas fa-tag\"></i> <span>REDEAC</span></a>");
+                out.print("<a href='#' onclick='ViewAlertREDEAC()' class=\"nav-link\"><i class=\"fas fa-tag\"></i> <span>REDEAC</span></a>");
             }
             out.print("</li>");
-            out.print("</li>");
-            out.print("</ul>");
+
+            out.print("</ul>"); // cierre de sidebar-menu
+
             out.print("</aside>");
             out.print("</div>");
             out.print("</div>");
+
             //</editor-fold>
         } catch (IOException ex) {
             Logger.getLogger(Tag_menu.class.getName()).log(Level.SEVERE, null, ex);
