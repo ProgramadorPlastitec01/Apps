@@ -37,11 +37,11 @@ public class PendingControllerJpa {
         }
     }
 
-    public List ConsultPendingClose(String post, String person) {
+    public List ConsultPendingClose() {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
         try {
-            Query q = etm.createNativeQuery("CALL `Sp_pdg_c_ConsultPendingClose`('" + post + "','" + person + "')");
+            Query q = etm.createNativeQuery("CALL `Sp_pdg_c_ConsultPendingClose`()");
             List consulta = q.getResultList();
             etm.getTransaction().commit();
             etm.clear();
@@ -118,6 +118,42 @@ public class PendingControllerJpa {
         etm.getTransaction().begin();
         try {
             Query q = etm.createNativeQuery("CALL `Sp_pdg_c_ConsultPedingCountAlert`('" + Managed + "','" + User + "')");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+    public List ConsultPendingOpenUser(int IdUser ,String Managed) {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_pdg_c_ConsultPendingOpenUser`('" + IdUser + "','" + Managed + "')");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+    public List ConsultPendingOpenGeneral() {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_pdg_c_ConsultPendingOpenGeneral`()");
             List consulta = q.getResultList();
             etm.getTransaction().commit();
             etm.clear();

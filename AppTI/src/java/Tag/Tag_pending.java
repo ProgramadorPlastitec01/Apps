@@ -32,7 +32,7 @@ public class Tag_pending extends TagSupport {
         String NameRol = sesion.getAttribute("NombreRol").toString();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         List lst_pending = null, lst_pendingId = null, lst_role = null, lst_user = null, lst_userId = null, lst_roleC = null;
-        int IdPending = 0, Temp = 0, Type = 0, Priority = 0, State = 0, idRol = 0;
+        int IdPending = 0, Temp = 0, Type = 0, Priority = 0, State = 0, idRol = 0, ModuleReg = 0;
         double progressPercentage = 0;
         LocalDate fechaSeguimiento = LocalDate.now();
         String Filter = "";
@@ -77,6 +77,11 @@ public class Tag_pending extends TagSupport {
             } catch (Exception e) {
                 Filter = "";
             }
+            try {
+                ModuleReg = Integer.parseInt(pageContext.getRequest().getAttribute("ModuleReg").toString());
+            } catch (Exception e) {
+                ModuleReg = 0;
+            }
             //</editor-fold>
             if (Temp == 3 && IdPending > 0) {
                 //<editor-fold defaultstate="collapsed" desc="EXECUTE PENDING">
@@ -92,6 +97,7 @@ public class Tag_pending extends TagSupport {
 
                     out.print("<form action='Pending?opt=3' method='post' name='FormPending' id='FormPending' class='needs-validation' novalidate=''>");
                     out.print("<input type='hidden' name='IdPending' value='" + IdPending + "' id='IdPending'>");
+                    out.print("<input type='hidden' name='ModuleReg' value='" + ModuleReg + "' >");
 
                     out.print("<div class='mb-2' style='display: flex;justify-content: space-around;  align-items: baseline;'>");
 
@@ -167,6 +173,7 @@ public class Tag_pending extends TagSupport {
                     }
                     out.print("<input type='hidden' name='Type' value='" + Type + "' id='typePen'>");
                     out.print("<input type='hidden' name='IdPending' value='" + IdPending + "' id='IdPending'>");
+                    out.print("<input type='hidden' name='ModuleReg' value='" + ModuleReg + "' >");
                     out.print("<div class='col-12' style='display:flex;justify-content: space-around;'>"
                             + "<div class=\"selectgroup selectgroup-pills\">\n"
                             + "                        <label class=\"selectgroup-item\">\n"
@@ -443,9 +450,26 @@ public class Tag_pending extends TagSupport {
             out.print("<div class='col-12'>");
             out.print("<div class='card'>");
             out.print("<div class='card-header' style='justify-content: space-between;'>");
-            out.print("<h4>Listado de Pendientes " + ((State == 0) ? "Cerrados" : "Abiertos") + "</h4>");
+            if (ModuleReg > 0) {
+                if (ModuleReg == 1) {
+                    out.print("<h4>Listado de Pendientes Asignados</h4>");
+                } else {
+                    out.print("<h4>Listado de Pendientes General</h4>");
+                }
+            } else {
+                out.print("<h4>Mis Pendientes " + ((State == 0) ? "Cerrados" : "Abiertos") + "</h4>");
+            }
             out.print("<div style='display:flex;'>");
             //<editor-fold defaultstate="collapsed" desc="BUTTOM">
+            if (ModuleReg > 0) {
+                out.print("<button class='btn btn-danger mr-4' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Mis pendientes' onclick='window.location.href=\"Pending?opt=1&State=1&Filter=\";cargarDatos()' ><i class=\"fas fa-user\"></i></button>");
+            }
+            if (Permissions.contains("[79]")) {
+                out.print("<button class='btn btn-warning mr-4' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Pendientes Generales' onclick='window.location.href=\"Pending?opt=1&ModuleReg=2\";cargarDatos()' ><i class=\"fas fa-users\"></i></button>");
+            }
+            if (Permissions.contains("[78]")) {
+                out.print("<button class='btn btn-info mr-4' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Pendientes asignados' onclick='window.location.href=\"Pending?opt=1&ModuleReg=1\";cargarDatos()' ><i class=\"fas fa-user-friends\"></i></button>");
+            }
             if (!Search.equals("") || !Filter.equals("")) {
                 out.print("<button class='btn btn-danger mr-4' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Quitar Filtro' onclick='window.location.href=\"Pending?opt=1&State=" + State + "\";cargarDatos()' ><i class=\"fas fa-times\"></i></button>");
             }
@@ -464,16 +488,17 @@ public class Tag_pending extends TagSupport {
             out.print("</div>");
             out.print("</div>");
             out.print("<div class='card-body'>");
-            if (!Filter.equals("")) {
-                if (Priority >= 0) {
-                    if (Filter.equals("")) {
-                        lst_pending = PendingJpa.ConsultPendingFilter(Priority, State, NameUser, NameRol, Search);
-                    } else {
-                        lst_pending = PendingJpa.ConsultPendingFilterManaged(Priority, State, Filter, Search);
-                    }
-                }
+            if (ModuleReg > 0) {
+                lst_pending = (ModuleReg == 1)
+                        ? PendingJpa.ConsultPendingOpenUser(IdUser, NameRol)
+                        : PendingJpa.ConsultPendingOpenGeneral();
+
+            } else if (!Filter.equals("") && Priority >= 0) {
+                lst_pending = PendingJpa.ConsultPendingFilterManaged(Priority, State, Filter, Search);
+
             } else if (State == 0) {
-                lst_pending = PendingJpa.ConsultPendingClose(NameUser, NameRol);
+                lst_pending = PendingJpa.ConsultPendingClose();
+
             } else {
                 lst_pending = PendingJpa.ConsultPendingOpen(NameUser, NameRol);
             }

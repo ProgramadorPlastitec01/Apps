@@ -28,7 +28,7 @@ public class Pending extends HttpServlet {
         LocalDateTime dateTimeCurrent = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
         String DateCurrent = dateTimeCurrent.format(formatter);
-        int IdPending = 0, Temp = 0, Priority = 0, Type = 0, Progress = 0, State = 0;
+        int IdPending = 0, Temp = 0, Priority = 0, Type = 0, Progress = 0, State = 0, ModuleReg = 0;
         String Affair = "", Managed = "", Description = "", DateSolution = "", Solver = "", Solution = "", SolutionOld = "", SolutionEnd = "", Search = "",
                 Filter = "", Deadline = "", DeadlineOld = "";
         boolean Result = false;
@@ -66,6 +66,12 @@ public class Pending extends HttpServlet {
                     } catch (Exception e) {
                         Filter = "";
                     }
+                    try {
+                        ModuleReg = Integer.parseInt(request.getParameter("ModuleReg"));
+                    } catch (Exception e) {
+                        ModuleReg = 0;
+                    }
+
                     request.setAttribute("IdPending", IdPending);
                     request.setAttribute("Temp", Temp);
                     request.setAttribute("State", State);
@@ -73,6 +79,7 @@ public class Pending extends HttpServlet {
                     request.setAttribute("Search", Search);
                     request.setAttribute("Filter", Filter);
                     request.setAttribute("idRol", UserRol);
+                    request.setAttribute("ModuleReg", ModuleReg);
                     request.getRequestDispatcher("Pending.jsp").forward(request, response);
                     //</editor-fold>
                     break;
@@ -123,7 +130,12 @@ public class Pending extends HttpServlet {
                         ActivityJpa.ActivityRegister(IdUser, 3, "Pendiente", "Registro un nuevo pendiente.", 1, NameUser);
                         request.setAttribute("RegisterPending", Result);
                     }
-                    request.getRequestDispatcher("Pending?opt=1&IdPending=0&State=1").forward(request, response);
+                    try {
+                        ModuleReg = Integer.parseInt(request.getParameter("ModuleReg"));
+                    } catch (Exception e) {
+                        ModuleReg = 0;
+                    }
+                    request.getRequestDispatcher("Pending?opt=1&IdPending=0&State=1&ModuleReg=" + ModuleReg + "").forward(request, response);
                     //</editor-fold>
                     break;
                 case 3:
@@ -155,7 +167,12 @@ public class Pending extends HttpServlet {
                         request.setAttribute("SolutionPendingAdvance", Result);
                         ActivityJpa.ActivityRegister(IdUser, 3, "Pendiente", "Se registro un avance al pendiente con un porcentaje de " + Progress + "%.", 1, NameUser);
                     }
-                    request.getRequestDispatcher("Pending?opt=1&IdPending=0&State=1").forward(request, response);
+                    try {
+                        ModuleReg = Integer.parseInt(request.getParameter("ModuleReg"));
+                    } catch (Exception e) {
+                        ModuleReg = 0;
+                    }
+                    request.getRequestDispatcher("Pending?opt=1&IdPending=0&State=1&ModuleReg=" + ModuleReg + "").forward(request, response);
                     //</editor-fold>
                     break;
             }
