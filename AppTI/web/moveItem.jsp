@@ -34,30 +34,7 @@
         </div>
         <Alerts:Alert/>
 
-        <script>
-            function SearchItems() {
-                var refren = document.getElementById("idRef").value;
-                if (refren != "") {
-                    Swal.fire({
-                        title: 'Buscando Movimientos...',
-                        html: '<i class="fas fa-spinner fa-spin" style="font-size: 50px; color: #00281b;"></i>',
-                        icon: 'info',
-                        showConfirmButton: false,
-                        allowEscapeKey: false,
-                        allowOutsideClick: false,
-                    });
-                    document.getElementById("FormMove").submit();
-                } else {
-                    $("#toastr-2").ready(function () {
-                        iziToast.warning({
-                            title: 'Atención!',
-                            message: 'Sebe diligenciar la referencia!.',
-                            position: 'topRight'
-                        });
-                    });
-                }
-            }
-        </script>
+        
 
         <script>
             document.getElementById("startDate").addEventListener("change", function () {
@@ -106,6 +83,31 @@
                     });
                 } else {
                     document.getElementById("formDataMove").submit();
+                }
+            }
+        </script>
+        
+        <script>
+            function SearchItems() {
+                var refren = document.getElementById("idRef").value;
+                if (refren != "") {
+                    Swal.fire({
+                        title: 'Buscando Movimientos...',
+                        html: '<i class="fas fa-spinner fa-spin" style="font-size: 50px; color: #00281b;"></i>',
+                        icon: 'info',
+                        showConfirmButton: false,
+                        allowEscapeKey: false,
+                        allowOutsideClick: false,
+                    });
+                    document.getElementById("FormMove").submit();
+                } else {
+                    $("#toastr-2").ready(function () {
+                        iziToast.warning({
+                            title: 'Atención!',
+                            message: 'Sebe diligenciar la referencia!.',
+                            position: 'topRight'
+                        });
+                    });
                 }
             }
         </script>

@@ -60,8 +60,8 @@ public class Tag_reference extends TagSupport {
                     out.print("</div>");
                     out.print("</div>");
                 } else {
-                    lst_factory = FactoryJpa.ConsulNewReference(ref);
-                    if (lst_factory.size() > 0) {
+                    lst_factory = FactoryJpa.ConsulNewReference(ref.trim());
+                    if (lst_factory != null) {
                         String[] lstFact = lst_factory.toString().replace("[", "").replace("]", "").split(" / ");
                         out.print("<form action='Reference?opt=2' method='post' class='needs-validation' novalidate='' onsubmit='return cargarDatosForm(this)'>");
                         out.print("<div class='text-center mt-4 text-success'>");
@@ -78,7 +78,7 @@ public class Tag_reference extends TagSupport {
                         out.print("</div>");
                         out.print("<div class='col-lg-5'>");
                         out.print("<label class='' style='margin-bottom: 0;'>Proveedor</label>");
-                        out.print("<input type='text' class='form-control disabled' name='txt_supplier' id='' data-toggle='tooltip' data-placement='top' title='' value='" + lstFact[3] + "' >");
+                        out.print("<input type='text' class='form-control " + ((lstFact[3].toString().contains("No Registrado")) ? "" : "disabled") + "' name='txt_supplier' id='' data-toggle='tooltip' data-placement='top' title='' value='"+ lstFact[3].toString() +"' >");
                         out.print("</div>");
                         out.print("<div class='col-lg-4'>");
                         out.print("<label class='' style='margin-bottom: 0;'>Marca</label>");
@@ -115,8 +115,8 @@ public class Tag_reference extends TagSupport {
             out.print("<div class='col-12'>");
             out.print("<div class='card'>");
             out.print("<div class='card-header' style='justify-content: space-between;'>");
-            out.print("<h4></h4>");
-            out.print("<h2>Referencias</h2>");
+            out.print("<button style='border-radius: 4px;' class='btn btn-green' onclick='window.location.href=\"TrackingItem?opt=1&action=0\"'><i class='fas fa-arrow-left'></i></button>");;
+            out.print("<h2>REFERENCIAS FACTORY</h2>");
             out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1)'><i class='fas fa-plus'></i></button>");
             out.print("</div>");
             out.print("<div class='card-body'>");

@@ -132,7 +132,7 @@ public class ItemJpaController implements Serializable {
             return null;
         }
     }
-    
+
     public List ConsultItemAvaibleDetail() {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
@@ -180,6 +180,25 @@ public class ItemJpaController implements Serializable {
         em.getTransaction().begin();
         try {
             Query q = em.createNativeQuery("CALL `Sp_itm_RegisterItem`(" + idRef + "," + item_num + ", '" + model + "', '" + serial + "','" + obs + "'," + userRef + ")");
+            int resultado = q.executeUpdate();
+            em.getTransaction().commit();
+            em.clear();
+            em.close();
+            if (resultado == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean ItemAsignPc_or_Device(int idItem, int idPc, int idDevice) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        try {
+            Query q = em.createNativeQuery("CALL `Sp_itm_u_UpdateItemAsigned`(" + idItem + "," + idPc + ", " + idDevice + ")");
             int resultado = q.executeUpdate();
             em.getTransaction().commit();
             em.clear();

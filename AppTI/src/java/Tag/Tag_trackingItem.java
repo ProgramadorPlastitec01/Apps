@@ -369,7 +369,9 @@ public class Tag_trackingItem extends TagSupport {
                     out.print("<div class='col-12'>");
                     out.print("<div class='card'>");
                     out.print("<div class='card-header' style='justify-content: space-between;'>");
+                    out.print("<button style='border-radius: 4px;' class='btn btn-green' onclick='window.location.href=\"TrackingItem?opt=1&action=0\"'><i class='fas fa-arrow-left'></i></button>");
                     out.print("<h2>Seguimiento a Items</h2>");
+                    out.print("<span class=''></span>");
                     out.print("</div>");
                     out.print("<div class='card-body'>");
                     out.print("<div class='table-responsive'>");
@@ -384,7 +386,7 @@ public class Tag_trackingItem extends TagSupport {
                     out.print("<h4>Buscar movimientos realizados:</h4>");
                     out.print("</div>");
                     out.print("<div class=''>");
-                    out.print("<form action='TrackingItem?opt=1' method='post' class='needs-validation' novalidate='' id='FormMoveSearch'>");
+                    out.print("<form action='TrackingItem?opt=1&action=1' method='post' class='needs-validation' novalidate='' id='FormMoveSearch'>");
                     out.print("<div class='row'>");
                     out.print("<div class='col-lg-4 mt-3'>");
                     out.print("<input type='number' class='form-control' name='txt_numItem' id='id_numItem' data-toggle='tooltip' data-placement='top' title='Num. Item' placeholder='Num. Item' value=''>");

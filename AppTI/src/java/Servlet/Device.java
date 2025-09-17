@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import Controller.DeviceJpaController;
 import Controller.DeviceHeaderJpaController;
 import Controller.SettingControllerJpa;
+import Controller.ItemJpaController;
 import java.util.List;
 
 public class Device extends HttpServlet {
@@ -26,6 +27,7 @@ public class Device extends HttpServlet {
         DeviceHeaderJpaController DeviceHeaderJpa = new DeviceHeaderJpaController();
         DeviceDetailJpaController DeviceDetailJpa = new DeviceDetailJpaController();
         SettingControllerJpa SettingJpa = new SettingControllerJpa();
+        ItemJpaController ItemJpa = new ItemJpaController();
 
         List lst_setting = null;
 
@@ -310,6 +312,7 @@ public class Device extends HttpServlet {
                     result = DeviceJpa.UpdateDeviceItem(idDevice, idItem);
                     if (result) {
                         result = DeviceDetailJpa.RegisterDeviceDetail(idDeviceHead, type, idItem + "", "N/A", id_user, 1);
+                        result = ItemJpa.ItemAsignPc_or_Device(idItem, 0, idDevice);
                     }
 
                     request.setAttribute("ComputerItem", result);
@@ -317,7 +320,7 @@ public class Device extends HttpServlet {
                     //</editor-fold>
                     break;
                 case 7:
-                    //<editor-fold defaultstate="collapsed" desc="REGISTER ASIG">
+                    //<editor-fold defaultstate="collapsed" desc="REGISTER ASIG 003">
                     try {
                         idDevice = Integer.parseInt(request.getParameter("idDevice"));
                     } catch (NumberFormatException e) {
@@ -338,6 +341,9 @@ public class Device extends HttpServlet {
                     } catch (Exception e) {
                         type = "";
                     }
+
+                    String[] itmsToAsig = {};
+
                     String structure = "";
                     //<editor-fold defaultstate="collapsed" desc="DECLARATIONS">
                     String txt_post = "",
@@ -386,6 +392,7 @@ public class Device extends HttpServlet {
 
                     try {
                         txt_otherItem = request.getParameter("txt_otherItem").replace("] [", ",");
+                        itmsToAsig = txt_otherItem.replace("[", "").replace("]", "").split(",");
                     } catch (Exception e) {
                         txt_otherItem = "[NoN]";
                     }
@@ -414,6 +421,12 @@ public class Device extends HttpServlet {
                     }
 //                    result = CompDetailJpa.registerPcDetail(idDeviceHead, type, structure, respo, 1, 1);
                     result = DeviceDetailJpa.RegisterDeviceDetail(idDeviceHead, type, structure, respo, id_user, 1);
+                    if (result) {
+                        for (int i = 0; i < itmsToAsig.length; i++) {
+                            int idothe = Integer.parseInt(itmsToAsig[i].toString().trim());
+                            ItemJpa.ItemAsignPc_or_Device(idothe, 0, idDevice);
+                        }
+                    }
                     request.setAttribute("Register003", result);
                     request.getRequestDispatcher("Device?opt=1&idDevice=" + idDevice + "&act=4&idDeviceHead=" + idDeviceHead + "&type=" + type + "&idTypeDv=" + idTypeDv + "").forward(request, response);
                     //</editor-fold>
@@ -539,7 +552,7 @@ public class Device extends HttpServlet {
                         result = DeviceDetailJpa.RegisterDeviceDetail(idDeviceHead, type, htmlTabla, respo, id_user, 1);
                     }
                     request.setAttribute("Register004_029", result);
-                    request.getRequestDispatcher("Device?opt=1&IdDevice=" + idDevice + "&act=4&idTypeDv="+ idTypeDv +"&IdDeviceHead=" + idDeviceHead + "&type=" + type + "").forward(request, response);
+                    request.getRequestDispatcher("Device?opt=1&IdDevice=" + idDevice + "&act=4&idTypeDv=" + idTypeDv + "&IdDeviceHead=" + idDeviceHead + "&type=" + type + "").forward(request, response);
                     //</editor-fold>
                     break;
             }

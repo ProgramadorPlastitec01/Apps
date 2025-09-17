@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import java.util.List;
 
@@ -23,6 +25,7 @@ public class Tag_moveItem extends TagSupport {
 
     @Override
     public int doStartTag() throws JspException {
+
         ConnectionFactory FactoryJpa = new ConnectionFactory();
         MoveItemJpaController MoveJpa = new MoveItemJpaController();
         ItemJpaController ItemJpa = new ItemJpaController();
@@ -49,18 +52,22 @@ public class Tag_moveItem extends TagSupport {
         } catch (Exception e) {
             moveValid = "";
         }
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String currentDate = today.format(formato);
         try {
             dtIn = pageContext.getRequest().getAttribute("DateIni").toString();
             dtFn = pageContext.getRequest().getAttribute("DateFin").toString();
         } catch (Exception e) {
-            dtIn = "";
-            dtFn = "";
+            dtIn = currentDate;
+            dtFn = currentDate;
         }
         try {
             moveDate = pageContext.getRequest().getAttribute("dateMove").toString();
         } catch (Exception e) {
             moveDate = "";
         }
+
         try {
 
             if (!numEnt.equals("") && !ref.equals("")) {
@@ -273,7 +280,9 @@ public class Tag_moveItem extends TagSupport {
             out.print("<div class='col-12'>");
             out.print("<div class='card'>");
             out.print("<div class='card-header' style='justify-content: space-between;'>");
-            out.print("<h2>Movimiento de items</h2>");
+            out.print("<button style='border-radius: 4px;' class='btn btn-green' onclick='window.location.href=\"TrackingItem?opt=1&action=0\"'><i class='fas fa-arrow-left'></i></button>");
+            out.print("<h2>CONFIRMAR MOVIMIENTOS FACTORY</h2>");
+            out.print("<span class=''></span>");
             out.print("</div>");
             out.print("<div class='card-body text-center'>");
             //<editor-fold defaultstate="collapsed" desc="FORM SEARCH DATA">
@@ -332,7 +341,7 @@ public class Tag_moveItem extends TagSupport {
                             String[] arrEnt = lst_factory.toString().replace("[", "").replace("]", "").split("---");
                             for (String item : arrEnt) {
                                 String[] entDat = item.split(" / ");
-                                if (entDat.length > 2) {
+                                if (entDat.length > 2 && entDat[1].toString().contains("ENT")) {
                                     entNums.add(entDat[1].replace("ENT", ""));
                                 }
                             }
@@ -375,9 +384,7 @@ public class Tag_moveItem extends TagSupport {
                                     int cantMov = 0;
                                     try {
                                         cantMov = Integer.parseInt(entDat[5].toString());
-                                        
-                                        
-                                        
+
                                     } catch (Exception e) {
                                         cantMov = 0;
                                     }

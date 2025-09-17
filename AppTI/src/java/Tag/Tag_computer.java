@@ -20,11 +20,11 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class Tag_computer extends TagSupport {
-
+    
     @Override
     public int doStartTag() throws JspException {
         JspWriter out = pageContext.getOut();
-
+        
         ComputerControllerJpa ComputerJpa = new ComputerControllerJpa();
         SettingControllerJpa SettingJpa = new SettingControllerJpa();
         ComputerDetailJpaController ComDetail = new ComputerDetailJpaController();
@@ -36,7 +36,7 @@ public class Tag_computer extends TagSupport {
         LocalDate fecha = LocalDate.now();
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         String CurrentDate = fecha.format(formato);
-
+        
         List lst_computer = null, lst_computerId = null, lst_computerHeader = null, lst_setting = null, lst_compDetail = null;
         List lst_format = null;
         List lst_item = null;
@@ -47,10 +47,10 @@ public class Tag_computer extends TagSupport {
         String[] structure = {};
         String txtPermissions = "";
         int idRol = 0;
-
+        
         boolean isActive = false;
         boolean hvInfo = false;
-
+        
         try {
             try {
                 idRol = Integer.parseInt(pageContext.getRequest().getAttribute("idRol").toString());
@@ -71,9 +71,9 @@ public class Tag_computer extends TagSupport {
             } catch (NumberFormatException e) {
                 IdComputer = 0;
             }
-
+            
             String NroPC = "";
-
+            
             lst_computer = ComputerJpa.ConsulteComputerIdPC(IdComputer);
             if (lst_computer != null) {
                 Object[] ObjCompx = (Object[]) lst_computer.get(0);
@@ -103,7 +103,7 @@ public class Tag_computer extends TagSupport {
                 //<editor-fold defaultstate="collapsed" desc="VARIABLE">
                 int idDoc = 0, idPcHead = 0, docx = 0, codx = 0, stet = 0, idItem = 0;
                 String nameDoc = "", code = "", format = "", type = "", SigMode = "";
-
+                
                 try {
                     idPcHead = Integer.parseInt(pageContext.getRequest().getAttribute("idPcHead").toString());
                 } catch (Exception e) {
@@ -178,7 +178,7 @@ public class Tag_computer extends TagSupport {
                     } catch (Exception e) {
                         singExits = "";
                     }
-
+                    
                     if (code.contains("-004") || code.contains("-013") || code.contains("-029") || code.contains("-031") || code.contains("-032")) {
                         format = ObjDetail[4].toString();
                     }
@@ -201,7 +201,7 @@ public class Tag_computer extends TagSupport {
                                     } else {
                                         format = format.replace("XXX" + usrx[0] + "XXX", "<canvas id='signaCanvas" + i + "' width='200' height='100' style='border: 1px solid #fff;'></canvas>");
                                     }
-
+                                    
                                     String json = ObjSi[3].toString();
                                     out.print("<input type='hidden' class='form-control' name='' id='coor" + i + "' value='" + json + "'>");
                                     post_script += "<script>"
@@ -230,13 +230,13 @@ public class Tag_computer extends TagSupport {
                             }
                             //</editor-fold>
                         }
-
+                        
                     } catch (Exception e) {
                         format = format.replace("XXXElaboradorXXX", "<b class='text-warning'>Pendiente Firma</b>");
                         format = format.replace("XXXUsuarioXXX", "<b class='text-warning'>Pendiente Firma</b>");
                         format = format.replace("XXXJefe o DirectorXXX", "<b class='text-warning'><b class='text-warning'>Pendiente Firma</b></b>");
                     }
-
+                    
                 } catch (Exception e) {
                     stetx = 99;
                     idDetail = 0;
@@ -256,16 +256,16 @@ public class Tag_computer extends TagSupport {
                     useSign = false;
                 }
                 if (useSign) {
-
+                    
                     out.print("<div class='sweet-local' tabindex='-1' id='Ventana3' style='opacity: 1.03; display:none;'>");
                     out.print("<div class='contGeneral' style='width: 44%;'>");
                     out.print("<div style='display: flex; justify-content: space-between'>");
-
+                    
                     out.print("<div class=''>");
                     out.print("<h2>Firmar</h2>");
                     out.print(" <h5>" + nameDoc + "</h5>");
                     out.print("</div>");
-
+                    
                     out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(3)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
                     out.print("</div>");
                     out.print("<div class='cont_form_user'>");
@@ -292,7 +292,7 @@ public class Tag_computer extends TagSupport {
                     }
                     out.print("</tbody>");
                     out.print("</table>");
-
+                    
                     out.print("</div>");
                     out.print("</div>");
                     out.print("</div>");
@@ -314,18 +314,18 @@ public class Tag_computer extends TagSupport {
                             out.print("<span class=''>Documento: </span>");
                             out.print("<input type='text' class='form-control' name='NmbDoc' id='' data-toggle='tooltip' data-placement='top' title='' value='" + docx + "'>");
                             out.print("</div>");
-
+                            
                             out.print("<div class='col-lg-5'>");
                             out.print("<span class=''>Codigo: </span>");
                             out.print("<input type='text' class='form-control' name='NmbCod' id='' data-toggle='tooltip' data-placement='top' title='' value='" + codx + "'>");
                             out.print("</div>");
-
+                            
                             out.print("<div style='margin: auto;'>");
                             out.print("<button class='btn btn-green'><i class='fas fa-search'></i></button>");
                             out.print("</div>");
                             out.print("</div>");
                             out.print("</form>");
-
+                            
                             lst_connect = ConnectJpa.Consultar_firmasDoc(docx, codx);
                             String[] ObjCnn = lst_connect.toString().split("///");
 //                        String sigma = ObjCnn[3].toString().trim();
@@ -353,13 +353,13 @@ public class Tag_computer extends TagSupport {
                                 }
                             } else {
                                 out.print("<form action='Computer?opt=8&mod=3&type=" + type + "&idpcHead=" + idPcHead + "&IdComputer=" + IdComputer + "' method='post' class='needs-validation' novalidate=''>");
-
+                                
                                 out.print("<input type='hidden' class='form-control' name='idDetail' id='' value='" + ObjDetail[0] + "'>");
                                 out.print("<input type='hidden' class='form-control' name='NmbDoc' id='' value='" + docx + "'>");
                                 out.print("<input type='hidden' class='form-control' name='NmbCod' id='' value='" + codx + "'>");
                                 out.print("<input type='hidden' class='form-control' name='idSignature' id='' value='" + ObjCnn[0].toString().replace("[", "") + "'>");
                                 out.print("<input type='hidden' class='form-control' name='SigMode' id='idSigMode' value='" + SigMode + "'>");
-
+                                
                                 out.print("<div class='canvas-container'>");
                                 out.print("<div class='signature-pad mt-2 d-flex' style='justify-content: center;'>");
                                 out.print("<canvas id='miCanvas' width='400' height='200'></canvas>");
@@ -369,7 +369,7 @@ public class Tag_computer extends TagSupport {
                                 out.print("</div>");
                                 out.print("<input type='hidden' class='form-control' name='TxtSignatureDraw' id='coordenadas-hidden' value='" + ObjCnn[3].toString() + "'>");
                                 out.print("</div>");
-
+                                
                                 out.print("<script>");
                                 out.print(" function dibujarCoordenadas() { "
                                         + "            const canvas = document.getElementById('miCanvas'); "
@@ -388,13 +388,13 @@ public class Tag_computer extends TagSupport {
                                         + " "
                                         + " window.onload = dibujarCoordenadas; ");
                                 out.print("</script>");
-
+                                
                                 out.print("<div class='text-center'>");
                                 out.print("<button class='btn btn-green'>Firmar <i class='fas fa-signature'></i></button>");
                                 out.print("</div>");
-
+                                
                             }
-
+                            
                             out.print("</form>");
                             out.print("<script>"
                                     + " document.addEventListener('DOMContentLoaded', function() {"
@@ -415,18 +415,18 @@ public class Tag_computer extends TagSupport {
                             out.print("<span class=''>Documento: </span>");
                             out.print("<input type='text' class='form-control inputTextdt' name='NmbDoc' id='' data-toggle='tooltip' data-placement='top' title='' value=''>");
                             out.print("</div>");
-
+                            
                             out.print("<div class=''>");
                             out.print("<span class=''>Codigo: </span>");
                             out.print("<input type='text' class='form-control inputTextdt' name='NmbCod' id='' data-toggle='tooltip' data-placement='top' title='' value=''>");
                             out.print("</div>");
-
+                            
                             out.print("<div style='margin: auto;'>");
                             out.print("<button class='btn btn-green'> Consultar <i class='fas fa-search '></i></button>");
                             out.print("</div>");
-
+                            
                             out.print("</div>");
-
+                            
                             out.print("<div class=''>");
                             out.print("</div>");
                             out.print("</form>");
@@ -434,7 +434,7 @@ public class Tag_computer extends TagSupport {
                         }
                     } catch (Exception e) {
                     }
-
+                    
                     out.print("</div>");
                     out.print("</div>");
                     out.print("</div>");
@@ -453,7 +453,7 @@ public class Tag_computer extends TagSupport {
                 out.print("<div class='text-center'>");
                 out.print("<h4>Documentacion " + NroPC + "</h4><h1>" + typeSc[1] + "</h1><h4>" + nameDoc + "</h4>");
                 out.print("</div>");
-
+                
                 out.print("<div class='d-flex'>");
                 if (stetx != 99) {
                     if (singExits.contains("XX")) {
@@ -482,24 +482,24 @@ public class Tag_computer extends TagSupport {
                             Object[] ObjStt = (Object[]) lst_setting.get(0);
                             String[] docs = ObjStt[2].toString().split("///");
                             out.print("<form action='Attach.jsp' method='post' class='needs-validation' novalidate='' enctype='multipart/form-data'>");
-
+                            
                             out.print("<input type='hidden' name='IdComputer' value='" + IdComputer + "'>");
                             out.print("<input type='hidden' name='idpcHead' value='" + idPcHead + "'>");
                             out.print("<input type='hidden' name='typeDoc' value='" + type + "'>");
                             out.print("<input type='hidden' class='form-control' name='txtNameCat' id='pruebas'>");
-
+                            
                             out.print("<div class='row'>");
                             for (int i = 0; i < docs.length; i++) {
                                 String[] dtail = docs[i].split("/");
                                 int counter = i + 1;
                                 out.print("<div class='mt-4 col-lg-6'>");
                                 out.print("<span class='mb-2'>" + counter + ". " + dtail[0] + "</span> <i class='fas fa-question-circle' data-toggle='tooltip' data-placement='top' title='" + dtail[1] + "'></i>");
-
+                                
                                 out.print("<div class='d-flex' style='align-items: center;'>");
                                 out.print("<input type='file' class='form-control intFile' data-categoria='" + dtail[0] + "' name='txtFile" + i + "' id='txtFile" + i + "' data-toggle='tooltip' data-placement='top' title='' value='' required>");
                                 out.print("<div id='DownloadFile" + i + "'></div>");
                                 out.print("</div>");
-
+                                
                                 out.print("</div>");
                                 out.print("<script>");
                                 out.print("document.getElementById('txtFile" + i + "').addEventListener('change', function(){ "
@@ -511,11 +511,11 @@ public class Tag_computer extends TagSupport {
                                 out.print("</script>");
                             }
                             out.print("</div>");
-
+                            
                             out.print("<div class='text-center mt-4'>");
                             out.print("<button class='btn btn-green'>Registrar</button>");
                             out.print("</div>");
-
+                            
                             out.print("<script>\n"
                                     + "document.addEventListener(\"DOMContentLoaded\", function () {\n"
                                     + "    document.querySelectorAll(\".intFile\").forEach(function(input) {\n"
@@ -537,7 +537,7 @@ public class Tag_computer extends TagSupport {
                                     + "    });\n"
                                     + "});\n"
                                     + "</script>");
-
+                            
                             out.print("</form>");
                         }
                         //</editor-fold>
@@ -558,7 +558,7 @@ public class Tag_computer extends TagSupport {
                             out.print("</div>");
                             out.print("<span class='mb-2'>" + DataFiles[0] + "</span> </i>");
                             out.print("</div>");
-
+                            
                             out.print("<div class='sweet-local' tabindex='-1' id='Ventana" + i + "' style='opacity: 1.03; display:none;'>");
                             out.print("<div class='contGeneral' style='width: 35%; top: 10%; right: 22%;'>");
                             out.print("<div style='display: flex; justify-content: space-between'>");
@@ -566,7 +566,7 @@ public class Tag_computer extends TagSupport {
                             out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(" + i + ")' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
                             out.print("</div>");
                             out.print("<div class='cont_form_user'>");
-
+                            
                             out.print("<form action='Attach.jsp' method='post' class='needs-validation' novalidate='' enctype='multipart/form-data'>");
                             out.print("<input type='hidden' name='IdComputer' value='" + IdComputer + "'>");
                             out.print("<input type='hidden' name='idPcHead' value='" + idPcHead + "'>");
@@ -575,18 +575,18 @@ public class Tag_computer extends TagSupport {
                             out.print("<input type='hidden' class='form-control' name='fileDelete' value='" + DataFiles[1] + "'>");
                             out.print("<input type='hidden' name='allDocs' value='" + allDocs + "'>");
                             out.print("<input type='hidden' name='idDetail' value='" + ObjD[0] + "'>");
-
+                            
                             out.print("<div class='d-flex' style='align-items: center;'>");
                             out.print("<input type='file' class='form-control intxFile' data-categoria='" + DataFiles[0] + "' name='txtFile" + i + "' id='txtFilex" + i + "' data-toggle='tooltip' data-placement='top' title='' value='' required>");
                             out.print("<div id='DownloadFile" + i + "'></div>");
                             out.print("</div>");
-
+                            
                             out.print("</div>");
-
+                            
                             out.print("<div class='text-center'>");
                             out.print("<button class='btn btn-green'>Modificar</button>");
                             out.print("</div>");
-
+                            
                             out.print("<script>");
                             out.print("document.getElementById('txtFilex" + i + "').addEventListener('change', function(){ "
                                     + "var input = this; "
@@ -595,9 +595,9 @@ public class Tag_computer extends TagSupport {
                                     + "DownloadFile.innerHTML = '<a class=\"btn btn-info\" href=\"' + URL.createObjectURL(input.files[0]) + '\" download=\"' + NameFile + '\"><i class=\"fas fa-download\"></i></a>'; "
                                     + "});");
                             out.print("</script>");
-
+                            
                             out.print("</form>");
-
+                            
                             out.print("</div>");
                             out.print("</div>");
 //                            out.print("</div>");
@@ -644,49 +644,49 @@ public class Tag_computer extends TagSupport {
                             out.print("<div class='text-center mt-4'>");
                             out.print("<h4 class=''>DETALLE DEL ITEM</h4>");
                             out.print("</div>");
-
+                            
                             out.print("<div class='row mt-4'>");
-
+                            
                             out.print("<div class='col-lg-3 mb-4'>");
                             out.print("<span class=''><b>ITEM</b></span><br>");
                             out.print("<span class='ml-2'><b>" + ObjItm[1] + "</b></span>");
                             out.print("</div>");
-
+                            
                             out.print("<div class='col-lg-3'>");
                             out.print("<span class=''><b>REFERENCIA</b></span><br>");
                             out.print("<span class='ml-2'>" + ObjItm[2] + "</span>");
                             out.print("</div>");
-
+                            
                             out.print("<div class='col-lg-3'>");
                             out.print("<span class=''><b>PROVEEDOR</b></span><br>");
                             out.print("<span class='ml-2'>" + ObjItm[3] + "</span>");
                             out.print("</div>");
-
+                            
                             out.print("<div class='col-lg-3'>");
                             out.print("<span class=''><b>MARCA</b></span><br>");
                             out.print("<span class='ml-2'>" + ObjItm[4] + "</span>");
                             out.print("</div>");
-
+                            
                             out.print("<div class='col-lg-3 mb-4'>");
                             out.print("<span class=''><b>UBICACION</b></span><br>");
                             out.print("<span class='ml-2'>" + ObjItm[5] + "</span>");
                             out.print("</div>");
-
+                            
                             out.print("<div class='col-lg-3'>");
                             out.print("<span class=''><b>ULTIMO MOVIMIENTO</b></span><br>");
                             out.print("<span class='ml-2'>" + ObjItm[6] + "</span>");
                             out.print("</div>");
-
+                            
                             out.print("<div class='col-lg-3'>");
                             out.print("<span class=''><b>NUMERO MOVIMIENTO</b></span><br>");
                             out.print("<span class='ml-2'>" + ObjItm[7] + "</span>");
                             out.print("</div>");
-
+                            
                             out.print("<div class='col-lg-3'>");
                             out.print("<span class=''><b>FECHA MOVIMIENTO</b></span><br>");
                             out.print("<span class='ml-2'>" + ObjItm[8] + "</span>");
                             out.print("</div>");
-
+                            
                             out.print("</div>");
 
 //                            out.print("<form action='Computer?opt=6' method='post' id='formConfirmItem'>");
@@ -712,7 +712,7 @@ public class Tag_computer extends TagSupport {
                     } else {
                         //<editor-fold defaultstate="collapsed" desc="SEARCH ITEM TO ASIG">
                         lst_item = ItemJpa.ConsultItemAvailable();
-
+                        
                         out.print("<div class='text-center'>");
                         out.print("<form action='Computer?opt=1&mod=3&IdComputer=" + IdComputer + "&idDoc=" + idDoc + "&idpcHead=" + idPcHead + "&type=" + type + "' method='post' class='needs-validation' novalidate='' id='formSearchItem'>");
                         out.print("<h4 class='mb-4'>Items disponibles</h4>");
@@ -725,10 +725,10 @@ public class Tag_computer extends TagSupport {
                         }
                         out.print("</select>");
                         out.print("</div>");
-
+                        
                         out.print("</form>");
                         out.print("</div>");
-
+                        
                         if (idItem > 0) {
                             out.print("<div class=''>");
                             lst_item = ItemJpa.ConsultItemLastMove(idItem);
@@ -737,62 +737,62 @@ public class Tag_computer extends TagSupport {
                                 out.print("<div class='text-center mt-4'>");
                                 out.print("<h4 class=''>DETALLE DEL ITEM</h4>");
                                 out.print("</div>");
-
+                                
                                 out.print("<div class='row mt-4'>");
-
+                                
                                 out.print("<div class='col-lg-3 mb-4'>");
                                 out.print("<span class=''><b>ITEM</b></span><br>");
                                 out.print("<span class='ml-2'><b>" + ObjItm[1] + "</b></span>");
                                 out.print("</div>");
-
+                                
                                 out.print("<div class='col-lg-3'>");
                                 out.print("<span class=''><b>REFERENCIA</b></span><br>");
                                 out.print("<span class='ml-2'>" + ObjItm[2] + "</span>");
                                 out.print("</div>");
-
+                                
                                 out.print("<div class='col-lg-3'>");
                                 out.print("<span class=''><b>PROVEEDOR</b></span><br>");
                                 out.print("<span class='ml-2'>" + ObjItm[3] + "</span>");
                                 out.print("</div>");
-
+                                
                                 out.print("<div class='col-lg-3'>");
                                 out.print("<span class=''><b>MARCA</b></span><br>");
                                 out.print("<span class='ml-2'>" + ObjItm[4] + "</span>");
                                 out.print("</div>");
-
+                                
                                 out.print("<div class='col-lg-3 mb-4'>");
                                 out.print("<span class=''><b>UBICACION</b></span><br>");
                                 out.print("<span class='ml-2'>" + ObjItm[5] + "</span>");
                                 out.print("</div>");
-
+                                
                                 out.print("<div class='col-lg-3'>");
                                 out.print("<span class=''><b>ULTIMO MOVIMIENTO</b></span><br>");
                                 out.print("<span class='ml-2'>" + ObjItm[6] + "</span>");
                                 out.print("</div>");
-
+                                
                                 out.print("<div class='col-lg-3'>");
                                 out.print("<span class=''><b>NUMERO MOVIMIENTO</b></span><br>");
                                 out.print("<span class='ml-2'>" + ObjItm[7] + "</span>");
                                 out.print("</div>");
-
+                                
                                 out.print("<div class='col-lg-3'>");
                                 out.print("<span class=''><b>FECHA MOVIMIENTO</b></span><br>");
                                 out.print("<span class='ml-2'>" + ObjItm[8] + "</span>");
                                 out.print("</div>");
-
+                                
                                 out.print("</div>");
-
+                                
                                 out.print("<form action='Computer?opt=6' method='post' id='formConfirmItem'>");
                                 out.print("<input type='hidden' name='IdComputer' value='" + IdComputer + "'>");
                                 out.print("<input type='hidden' name='idpcHead' value='" + idPcHead + "'>");
                                 out.print("<input type='hidden' name='type' value='" + type + "'>");
                                 out.print("<input type='hidden' name='cbxItem' value='" + idItem + "'>");
                                 out.print("</form>");
-
+                                
                                 out.print("<div class='text-center'>");
                                 out.print("<button class='btn btn-green' onclick='formConfirmItem.submit()'>Confirmar</button>");
                                 out.print("</div>");
-
+                                
                                 out.print("</div>");
 
 //                                SE PUEDE AGREGAR LA CONSULTA LA INFORMACION DEL EQUIPO, COMO ESTA REALCIONADO DIRECTAMENTE POR EL ID DEL ITME, 
@@ -839,7 +839,7 @@ public class Tag_computer extends TagSupport {
                                 .replace("XXXCOLUMM3XXX", "<b>" + DtaFormat[15].toString() + "</b>")
                                 .replace("XXXCOLUMM4XXX", "<b>" + DtaFormat[16].toString() + "</b>")
                                 .replace("XXXCOLUMM5XXX", "<b>" + DtaFormat[17].toString()) + "</b>";
-
+                        
                         format = format.replace("XXXElaboradorXXX", "<b class='text-warning'>Pendiente Firma</b>");
                         format = format.replace("XXXUsuarioXXX", "<b class='text-warning'>Pendiente Firma</b>");
                         format = format.replace("XXXJefe o DirectorXXX", "<b class='text-warning'><b class='text-warning'>Pendiente Firma</b></b>");
@@ -929,7 +929,7 @@ public class Tag_computer extends TagSupport {
                         //<editor-fold defaultstate="collapsed" desc="ADITIONAL INFORMATION">
                         format = format.replace("name=\"textcal\" value=\"" + DtaFormat[18].toString() + "\"", "name=\"textcal\" value=\"" + DtaFormat[18].toString() + "\" checked");
                         format = format.replace("name=\"textFll\" value=\"" + DtaFormat[19].toString() + "\"", "name=\"textFll\" value=\"" + DtaFormat[19].toString() + "\" checked");
-
+                        
                         format = format.replace("name=\"textcal\"", "name=\"textcal\" disabled");
                         format = format.replace("name=\"textFll\"", "name=\"textFll\" disabled");
                         //</editor-fold>
@@ -985,7 +985,7 @@ public class Tag_computer extends TagSupport {
                                 }
                                 out.print("</tbody>");
                                 out.print("</table>");
-
+                                
                             } else {
                                 out.print("<div class=''>");
                                 out.print("<h4>Al parecer no hay items disponibles para asignar.</h4>");
@@ -1004,7 +1004,7 @@ public class Tag_computer extends TagSupport {
                             out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(2)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
                             out.print("</div>");
                             out.print("<div class='cont_form_user'>");
-
+                            
                             out.print("<table class='table table-bordered table-sm' id='tabla'>");
                             out.print("<thead>");
                             out.print("<tr>");
@@ -1023,7 +1023,7 @@ public class Tag_computer extends TagSupport {
                             out.print("</tr>");
                             out.print("</tbody>");
                             out.print("</table>");
-
+                            
                             out.print("</div>");
                             out.print("</div>");
                             out.print("</div>");
@@ -1047,14 +1047,18 @@ public class Tag_computer extends TagSupport {
                                     .replace("XXXCOLUMM4XXX", "<input type='text' class='form-control' name='txt_comm4' id='' data-toggle='tooltip' data-placement='top' title=''  value=''  required >")
                                     .replace("XXXCOLUMM5XXX", "<input type='text' class='form-control' name='txt_comm5' id='' data-toggle='tooltip' data-placement='top' title=''  value=''  required >");
                             format = format.replace("XXXNROPCXXX", NroPC);
-                            format = format.replace("XXXTIPOOXXX", ObInfo[2].toString())
-                                    .replace("XXXAMRCAXXX", ObInfo[3].toString())
-                                    .replace("XXXMODELOXXX", ObInfo[4].toString())
-                                    .replace("XXXSERIALXXX", ObInfo[5].toString())
-                                    .replace("XXXITEMXXX", ObInfo[6].toString());
+                            try {
+                                format = format.replace("XXXTIPOOXXX", ObInfo[2].toString());
+                            } catch (Exception e) {
+                                format = format.replace("XXXTIPOOXXX", "Sin Tipo definido");
+                            }
+                            format = format.replace("XXXAMRCAXXX", ObInfo[3].toString());
+                            format = format.replace("XXXMODELOXXX", ObInfo[4].toString());
+                            format = format.replace("XXXSERIALXXX", ObInfo[5].toString());
+                            format = format.replace("XXXITEMXXX", ObInfo[6].toString());
                             format = format.replace("XXXPLUS1XXX", "<button type='buitton' class='btn btn-green btn-sm' onclick='mostrarConvencion(1)'><i class='fas fa-plus'></i></button>");
                             format = format.replace("XXXPLUS2XXX", "<button type='buitton' class='btn btn-green btn-sm' onclick='mostrarConvencion(2)'><i class='fas fa-plus'></i></button>");
-
+                            
                             format = format.replace("XXXElaboradorXXX", "<b class='text-warning'>Pendiente Firma</b>");
                             format = format.replace("XXXUsuarioXXX", "<b class='text-warning'>Pendiente Firma</b>");
                             format = format.replace("XXXJefe o DirectorXXX", "<b class='text-warning'>Pendiente Firma</b>");
@@ -1066,7 +1070,7 @@ public class Tag_computer extends TagSupport {
                             out.print("<input type='hidden' class='form-control' name='txt_soft' id='infoOculta' >");
                             out.print("<input type='hidden' class='form-control' name='txt_otherItem' id='infoField' >");
                             out.print("</form>");
-
+                            
                             out.print("<script>\n"
                                     + "document.addEventListener('DOMContentLoaded', function () {\n"
                                     + "    const table = document.getElementById('table-1');\n"
@@ -1117,13 +1121,13 @@ public class Tag_computer extends TagSupport {
                     format = format.replace("XXXUSERXXX", usuario);
                     format = format.replace("XXXPOSITIONXXX", cargouser);
                     format = format.replace("XXXUSERNAMEXXX", nameUser);
-
+                    
                     if (stetx == 2) {
                         format = format.replace("id=\"idtabla\"", "id=\"idtabla\" class='inactive004'");
                     }
                     out.print(format);
                     out.print(post_script);
-
+                    
                     if (stetx == 1 || stetx == 99) {
                         out.print("<form action='Computer?opt=9&IdComputer=" + IdComputer + "&idDetail=" + idDetail + "&idpcHead=" + idPcHead + "&type=" + type + "' method='post' id='Form04'>");
                         out.print("<input type='hidden' name='htmlTabla' id='htmlTabla' value=''>");
@@ -1152,7 +1156,7 @@ public class Tag_computer extends TagSupport {
                 } catch (Exception e) {
                     idPcHead = 0;
                 }
-
+                
                 out.print("<section class='section'>");
                 out.print("<div class='section-body'>");
                 out.print("<div class='row'>");
@@ -1167,17 +1171,17 @@ public class Tag_computer extends TagSupport {
                 out.print("</div>");
                 out.print("<div class='card-body'>");
                 out.print("<div class='table-responsive'>");
-
+                
                 lst_compDetail = ComputerHeaderJpa.ConsulteComputerHeader(idPcHead);
                 if (lst_compDetail != null) {
                     Object[] ObjPc = (Object[]) lst_compDetail.get(0);
                     structure = ObjPc[3].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
-
+                    
                     out.print("<div class='card'>");
                     out.print("<div class=\"row mt-4\" style='width: 100%; justify-content: center;'>");
                     out.print("<div class=\"col-12\">");
                     out.print("<div class=\"wizard-steps\" style='display: flex; flex-wrap: wrap; justify-content: center;'>");
-
+                    
                     state = Integer.parseInt(ObjPc[4].toString());
                     for (int i = 1; i < structure.length; i++) {
                         String[] idxnamexico = structure[i].toString().split("/");
@@ -1187,7 +1191,7 @@ public class Tag_computer extends TagSupport {
                         if (!idxnamexico[0].toString().equals("A")) {
                             id = Integer.parseInt(idxnamexico[0].toString());
                         }
-
+                        
                         if (i == state) {
                             out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"Computer?opt=1&mod=3&IdComputer=" + IdComputer + "&idDoc=" + id + "&idpcHead=" + idPcHead + "&type=" + structure[i] + "&step=" + i + "\"' style='background: #33bf98; color:#0b0025; cursor: pointer;' data-toggle='tooltip' data-placement='top' title='En proceso'>");
 //                            out.print("<div class=\"wizard-step wizard-step-active addStepCls\" onclick='window.location.href=\"AppDetail?opt=1&mod=3&idApp=\"' style='background: #33bf98; color:#0b0025; cursor: pointer;' data-toggle='tooltip' data-placement='top' title='En proceso'>");
@@ -1272,7 +1276,7 @@ public class Tag_computer extends TagSupport {
                                 }
                             }
                         }
-
+                        
                     }
 
 //                    if (state == structure.length) {
@@ -1292,13 +1296,13 @@ public class Tag_computer extends TagSupport {
                     out.print("</div>");
                     out.print("</div>");
                     out.print("</div>");
-
+                    
                 } else {
                     out.print("<div class=''>");
                     out.print("<h4>Se ha presentado un error al cargar la información de los documentos.</h4>");
                     out.print("</div>");
                 }
-
+                
                 out.print("</div>");
                 out.print("</div>");
                 out.print("</div>");
@@ -1375,7 +1379,7 @@ public class Tag_computer extends TagSupport {
                 out.print("<div><button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1)' data-toggle=\"tooltip\" data-placement=\"top\" title='Registra PC'><i class='fas fa-plus'></i></button></div>");
                 out.print("</div>");
                 out.print("</div>");
-
+                
                 out.print("<div class='card-body'>");
                 out.print("<div class='table-responsive'>");
                 out.print("<table class=\"table table-bordered\" id=\"table-1\">");
@@ -1410,7 +1414,7 @@ public class Tag_computer extends TagSupport {
                             } else {
                                 out.print("<td>Documento Finalizado</td>");
                             }
-
+                            
                         } else {
                             stat = states[sta].split("/");
                             out.print("<td>" + stat[1] + "</td>");
@@ -1419,7 +1423,7 @@ public class Tag_computer extends TagSupport {
                         out.print("<button class='btn btn-yellow' onclick='window.location.href=\"Computer?opt=1&IdComputer=" + IdComputer + "&idpcHead=" + ObjHeader[0] + "&mod=2\"'><i class='fas fa-folder-open'></i></button>");
                         out.print("</td>");
                         out.print("</tr>");
-
+                        
                     }
                 } else {
                     out.print("<tr>");
@@ -1430,7 +1434,7 @@ public class Tag_computer extends TagSupport {
                 out.print("</table>");
                 out.print("</div>");
                 out.print("</div>");
-
+                
                 out.print("</div>");
                 out.print("</div>");
                 out.print("</div>");
@@ -1450,12 +1454,12 @@ public class Tag_computer extends TagSupport {
                     //<editor-fold defaultstate="collapsed" desc="COMPUTER UPDATE">
                     out.print("<div class='sweet-local' tabindex='-1' id='Ventana2' style='opacity: 1.03; display:block;'>");
                     out.print("<div class='contGeneral'>");
-
+                    
                     out.print("<div style='display: flex; justify-content: space-between'>");
                     out.print("<h3>Modificar PC</h3>");
                     out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(2)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
                     out.print("</div>");
-
+                    
                     out.print("<div class='cont_form_user'>");
                     lst_computerId = ComputerJpa.ConsulteComputerIdPC(IdComputer);
                     if (lst_computerId != null) {
@@ -1471,20 +1475,20 @@ public class Tag_computer extends TagSupport {
                                 + "<input type='email' class='form-control' name='txtMail' value='" + ObjComputerId[12] + "' placeholder='Correo' data-toggle='tooltip' data-placement='top' title='Correo' required>"
                                 + "<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div></div>");
                         out.print("</div>");
-
+                        
                         out.print("<div class='col-12' style='margin:12px;' data-toggle='tooltip' data-placement='top' title='Descripción'>");
                         out.print("<textarea class=\"form-control\" id='editorNextReg' placeholder=\"Descripción ...\" name='txtDescription' required>" + ObjComputerId[9] + "</textarea>"
                                 + "<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
                         out.print("</div>");
-
+                        
                         out.print("<div class='' style='width: 100%; text-align:center;'>");
                         out.print("<button class='btn btn-green btn-lg'>Modificar</button>");
                         out.print("</div>");
-
+                        
                         out.print("</form>");
                     }
                     out.print("</div>");
-
+                    
                     out.print("</div>");
                     out.print("</div>");
 
@@ -1493,12 +1497,12 @@ public class Tag_computer extends TagSupport {
                 //<editor-fold defaultstate="collapsed" desc="COMPUTER REGISTER">
                 out.print("<div class='sweet-local' tabindex='-1' id='Ventana1' style='opacity: 1.03; display:none;'>");
                 out.print("<div class='contGeneral'>");
-
+                
                 out.print("<div style='display: flex; justify-content: space-between'>");
                 out.print("<h3>Registar PC</h3>");
                 out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(1)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
                 out.print("</div>");
-
+                
                 out.print("<div class='cont_form_user'>");
                 out.print("<form action='Computer?opt=2' method='post' class='needs-validation' novalidate=''>");
                 out.print("<input type='hidden' name='StateCmp' value='" + StateCmp + "'>");
@@ -1510,19 +1514,19 @@ public class Tag_computer extends TagSupport {
                         + "<input type='email' class='form-control' name='txtMail' placeholder='Correo' data-toggle='tooltip' data-placement='top' title='Correo' required>"
                         + "<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div></div>");
                 out.print("</div>");
-
+                
                 out.print("<div class='col-12' style='margin:12px;' data-toggle='tooltip' data-placement='top' title='Descripción'>");
                 out.print("<textarea class=\"form-control\" id='editorNextReg' placeholder=\"Descripción ...\" name='txtDescription' required></textarea>"
                         + "<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
                 out.print("</div>");
-
+                
                 out.print("<div class='' style='width: 100%; text-align:center;'>");
                 out.print("<button class='btn btn-green btn-lg'>Registrar</button>");
                 out.print("</div>");
-
+                
                 out.print("</form>");
                 out.print("</div>");
-
+                
                 out.print("</div>");
                 out.print("</div>");
 
@@ -1532,20 +1536,20 @@ public class Tag_computer extends TagSupport {
                 out.print("<div class='row'>");
                 out.print("<div class='col-12'>");
                 out.print("<div class='card'>");
-
+                
                 out.print("<div class='card-header' style='justify-content: space-between; align-items:flex-start'>");
                 out.print("<p></p>");
                 out.print("<h2>PC</h2>");
-
+                
                 out.print("<div class='d-flex'>");
                 if (txtPermissions.contains("[46]")) {
                     out.print("<div class='mr-5'><button class='btn btn-green' style='border-radius: 4px;' data-toggle=\"tooltip\" data-placement=\"top\" title='Información PC' onclick=\"javascript:location.href='Information?opt=1'\" ><i class=\"fas fa-window-restore\"></i></button></div>");
                 }
                 out.print("<div><button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1)' data-toggle=\"tooltip\" data-placement=\"top\" title='Registrar PC'><i class='fas fa-plus'></i></button></div>");
                 out.print("</div>");
-
+                
                 out.print("</div>");
-
+                
                 out.print("<div class='card-body'>");
                 out.print("<div class='table-responsive'>");
                 if (StateCmp != 99) {
@@ -1621,6 +1625,28 @@ public class Tag_computer extends TagSupport {
                 out.print("</div>");
                 out.print("</section>");
                 //</editor-fold>
+//            } else if (module == 99) {
+//                //<editor-fold defaultstate="collapsed" desc="PORTADA DE DATOS">
+//                out.print("<section class='section'>");
+//                out.print("<div class='section-body'>");
+//                out.print("<div class='row'>");
+//                out.print("<div class='col-12'>");
+//                out.print("<div class='card'>");
+//                out.print("<div class='card-header' style='justify-content: space-between;'>");
+//                out.print("<h4>PC</h4>");
+//                out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1)'><i class='fas fa-plus'></i></button>");
+//                out.print("</div>");
+//                out.print("<div class='card-body'>");
+//                
+//                
+//                
+//                out.print("</div>");
+//                out.print("</div>");
+//                out.print("</div>");
+//                out.print("</div>");
+//                out.print("</div>");
+//                out.print("</section>");
+//                //</editor-fold>
             }
         } catch (IOException ex) {
             Logger.getLogger(Tag_computer.class.getName()).log(Level.SEVERE, null, ex);

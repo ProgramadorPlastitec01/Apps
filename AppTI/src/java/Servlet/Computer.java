@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import Controller.ComputerControllerJpa;
 import Controller.ComputerDetailJpaController;
 import Controller.ComputerHeaderControllerJpa;
+import Controller.ItemJpaController;
 
 import Controller.SettingControllerJpa;
 import java.util.List;
@@ -23,6 +24,7 @@ public class Computer extends HttpServlet {
         ComputerDetailJpaController CompDetailJpa = new ComputerDetailJpaController();
         ComputerHeaderControllerJpa CompHeader = new ComputerHeaderControllerJpa();
         SettingControllerJpa SettingJpa = new SettingControllerJpa();
+        ItemJpaController ItemJpa = new ItemJpaController();
         HttpSession sesion = request.getSession();
         String UserRol = sesion.getAttribute("idRol").toString();
 
@@ -238,7 +240,7 @@ public class Computer extends HttpServlet {
 
                     if (Result) {
                         Result = CompDetailJpa.registerPcDetail(idPcHead, type, idItem + "", "N/A", 1, 1);
-//                        Result = CompHeader.ChangueStateComputerHeader(idPcHead);
+                        Result = ItemJpa.ItemAsignPc_or_Device(idItem, IdComputer, 0);
                     }
 
                     request.setAttribute("ComputerItem", Result);
@@ -246,7 +248,7 @@ public class Computer extends HttpServlet {
                     //</editor-fold>
                     break;
                 case 7:
-                    //<editor-fold defaultstate="collapsed" desc="REGISTER ASIG">
+                    //<editor-fold defaultstate="collapsed" desc="REGISTER ASIG 003">
                     try {
                         idPcHead = Integer.parseInt(request.getParameter("idpcHead"));
                     } catch (NumberFormatException e) {
@@ -257,6 +259,9 @@ public class Computer extends HttpServlet {
                     } catch (Exception e) {
                         type = "";
                     }
+                    
+                    String[] itmsToAsig = {};
+                    
                     String structure = "";
                     //<editor-fold defaultstate="collapsed" desc="DECLARATIONS">
                     String txt_post = "",
@@ -305,6 +310,7 @@ public class Computer extends HttpServlet {
 
                     try {
                         txt_otherItem = request.getParameter("txt_otherItem").replace("] [", ",");
+                        itmsToAsig = txt_otherItem.replace("[", "").replace("]", "").split(",");
                     } catch (Exception e) {
                         txt_otherItem = "[NoN]";
                     }
@@ -331,6 +337,12 @@ public class Computer extends HttpServlet {
                         CompHeader.DleeCalificationComputerHeader(idPcHead);
                     }
                     Result = CompDetailJpa.registerPcDetail(idPcHead, type, structure, respo, 1, 1);
+                    if (Result) {
+                        for (int i = 0; i < itmsToAsig.length; i++) {
+                            int idothe = Integer.parseInt(itmsToAsig[i].toString().trim());
+                            ItemJpa.ItemAsignPc_or_Device(idothe, IdComputer, 0);
+                        }
+                    }
                     request.setAttribute("Register003", Result);
                     request.getRequestDispatcher("Computer?opt=1&IdComputer=" + IdComputer + "&mod=3&idpcHead=" + idPcHead + "&type=" + type + "").forward(request, response);
                     //</editor-fold>
