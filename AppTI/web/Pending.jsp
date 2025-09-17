@@ -16,6 +16,8 @@
         <link rel="stylesheet" href="Interface/Content/Assets/css/pending.css">
         <!-- CKEditor -->
         <script src="Interface/Editor/ckeditor.js"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;700&family=Audiowide&display=swap" rel="stylesheet">
+
 
     </head>
     <body>

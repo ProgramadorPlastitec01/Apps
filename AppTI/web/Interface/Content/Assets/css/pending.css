@@ -65,3 +65,7 @@
 .ticket-item.active.soonHead{
     background-color: #f7e5d699 !important; 
 }
+.text-creator{
+    color:#ff5a1a  !important;
+    font-weight: bold;
+}

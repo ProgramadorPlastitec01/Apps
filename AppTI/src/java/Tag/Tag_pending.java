@@ -32,7 +32,7 @@ public class Tag_pending extends TagSupport {
         String NameRol = sesion.getAttribute("NombreRol").toString();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         List lst_pending = null, lst_pendingId = null, lst_role = null, lst_user = null, lst_userId = null, lst_roleC = null;
-        int IdPending = 0, Temp = 0, Type = 0, Priority = 0, State = 0, idRol = 0, ModuleReg = 0;
+        int IdPending = 0, Temp = 0, Type = 0, Priority = 0, State = 0, idRol = 0, ModuleReg = 0, UserReg = 0;
         double progressPercentage = 0;
         LocalDate fechaSeguimiento = LocalDate.now();
         String Filter = "";
@@ -464,17 +464,17 @@ public class Tag_pending extends TagSupport {
             //<editor-fold defaultstate="collapsed" desc="BUTTOM">
             if (State != 0) {
                 out.print("<div style='margin-left:5px;'  class='dropdown d-inline mr-4'>\n");
-                
+
                 out.print("<button class='btn btn-green  dropdown-toggle' style='border-radius: 4px;' type='button' id='dropdownMenuButton2' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>\n");
                 out.print("<i class='fas fa-cog fa-spin'></i>");
                 out.print("</button>");
 
                 out.print("<div class='dropdown-menu menuDropdow'>");
                 if (Permissions.contains("[79]")) {
-                    out.print("<a class='dropdown-item has-icon' onclick='window.location.href=\"Pending?opt=1&ModuleReg=2\";cargarDatos()' ><i class=\"fas fa-user\"></i>Mis Pendientes</a>");
+                    out.print("<a class='dropdown-item has-icon' onclick='window.location.href=\"Pending?opt=1&ModuleReg=1&State=1\";cargarDatos()' ><i class=\"fas fa-user\"></i>Mis Pendientes</a>");
                 }
                 if (Permissions.contains("[78]")) {
-                    out.print("<a class='dropdown-item has-icon' onclick='window.location.href=\"Pending?opt=1&ModuleReg=1\";cargarDatos()' ><i class=\"fas fa-users\"></i>Listado de pendientes</a>");
+                    out.print("<a class='dropdown-item has-icon' onclick='window.location.href=\"Pending?opt=1&ModuleReg=2&State=1\";cargarDatos()' ><i class=\"fas fa-users\"></i>Listado de pendientes</a>");
                 }
                 if (ModuleReg > 0) {
                     out.print("<a class='dropdown-item has-icon' onclick='window.location.href=\"Pending?opt=1&State=1&Filter=\";cargarDatos()' ><i class=\"fas fa-users\"></i>Pendientes Abiertos</a>");
@@ -595,6 +595,7 @@ public class Tag_pending extends TagSupport {
                 for (int i = 0; i < lst_pending.size(); i++) {
                     Object[] obj_pending = (Object[]) lst_pending.get(i);
                     Priority = Integer.parseInt(obj_pending[7].toString());
+                    UserReg = Integer.parseInt(obj_pending[3].toString());
                     out.print("<div class=\"ticket-content div-content ml-2\" style='display:" + ((i > 0) ? "none" : "block") + ";padding: 15px;\n"
                             + "    box-shadow: 0px 0px 11px -3px #818181;\n"
                             + "    border-radius: 7px;\n"
@@ -647,7 +648,7 @@ public class Tag_pending extends TagSupport {
                     out.print("<div class=\"ticket-description ScrollDivContent\" >");
                     out.print("" + obj_pending[2].toString().replace("<img", "<img style='width:100%'") + "");
                     if (obj_pending[5] != null) {
-                        out.print("<div class='StyleSolution'><i class=\"fas fa-lock" + ((State == 0) ? "" : "-open") + " mt-2\" Style='font-size: 15px;'></i>&nbsp;&nbsp;<h6>Solución</h6></div>");
+                        out.print("<div class='StyleSolution '><h6 class='mt-2'>Solución</h6></div>");
                         if (obj_pending[5].toString().contains("[")) {
                             String[] ArrDetail = obj_pending[5].toString().split("///");
                             for (int j = 0; j < ArrDetail.length; j++) {
@@ -691,7 +692,11 @@ public class Tag_pending extends TagSupport {
                                     UserN = "Fallo";
                                 }
                                 out.print("<img src=\"Interface/Imagen/Profile/" + Icon + "\" alt=\"image\" class='mr-2' style='    width: 24px;height: 24px;'>");
-                                out.print(UserN);
+                                if (UserPnd == UserReg) {
+                                    out.print("<div>"+UserN + "<i class=\"fas fa-star ml-2\" style='color:#33bf98'></i></div>");
+                                }else{
+                                    out.print(UserN);
+                                }
                                 out.print("</div>");
 
                                 out.print("<div>");
