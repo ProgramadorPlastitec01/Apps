@@ -597,7 +597,7 @@ public class Tag_trackingItem extends TagSupport {
                                 + "        <h4>No se han encontrado movimientos</h4> "
                                 + "   </div> "
                                 + "<div class=\"card-body\"> "
-                                + " "
+                                + "<span><b>No se han encontrado movimientos</b></span>"
                                 + "</div> "
                                 + "</div>");
                         out.print("</div>");
