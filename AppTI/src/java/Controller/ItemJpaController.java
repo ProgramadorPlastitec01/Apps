@@ -174,6 +174,44 @@ public class ItemJpaController implements Serializable {
         }
     }
 
+    public List ConsultItemxId(int idItem) {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_itm_c_ConsultItemxId`(" + idItem + ")");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public List ConsultAllItems() {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_itm_c_ConsultAllItems`()");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
     //<editor-fold defaultstate="collapsed" desc="PROCESZ">
     public boolean ItemRegister(int idRef, int item_num, String model, String serial, String obs, int userRef) {
         EntityManager em = getEntityManager();
@@ -212,6 +250,25 @@ public class ItemJpaController implements Serializable {
             return false;
         }
     }
-//</editor-fold>
 
+    public boolean ItemUpdateData(int idItem, int itmNum, String model, String seral, String Obs) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        try {
+            Query q = em.createNativeQuery("CALL `Sp_itm_U_UpdateItemData`(" + idItem + "," + itmNum + ", '" + model + "', '" + seral + "', '" + Obs + "')");
+            int resultado = q.executeUpdate();
+            em.getTransaction().commit();
+            em.clear();
+            em.close();
+            if (resultado == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+//</editor-fold>
 }

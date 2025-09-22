@@ -48,7 +48,7 @@ public class MoveItemJpaController implements Serializable {
         etm.getTransaction().begin();
         try {
             Query q = etm.createNativeQuery("SELECT m.id_mov_item, m.mov_date, m.id_item, i.item_num, f.cod_reference, f.ref_name, m.mov_type, m.mov_num, m.mov_location, "
-                    + "i.model, i.i_serial, m.mov_obs, m.user_reg, CONCAT(u.name, ' ', u.lastname) AS 'Nombres', m.user_verify "
+                    + "i.model, i.i_serial, m.mov_obs, m.user_reg, CONCAT(u.name, ' ', u.lastname) AS 'Nombres', m.user_verify, m.date_mod "
                     + "FROM mov_item m  "
                     + "INNER JOIN user u ON m.user_reg = u.id_user "
                     + "INNER JOIN item i ON m.id_item = i.id_item "
@@ -69,7 +69,110 @@ public class MoveItemJpaController implements Serializable {
         }
     }
 
-    //<editor-fold defaultstate="collapsed" desc="PROCESZ">
+    public List ConsultItemsRegisterByNroMove(int mov_num) {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_mim_c_ConsultItemsRegisterByNroMove`(" + mov_num + ")");
+
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public List ConsultMoveItems() {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_mim_c_ConsultAllMoveItems`()");
+
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+    
+    public List ConsultMoveItemsMonth() {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_mim_c_ConsultMoveLastSixMonth`()");
+
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+    
+    public List ConsultMoveItemsMonthEnt() {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_mim_c_ConsultMoveLastSixMonthENT`()");
+
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+    
+    public List ConsultMoveItemsMonthSal() {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_mim_c_ConsultMoveLastSixMonthSAL`()");
+
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+    
+    
+    
+
+    //<editor-fold defaultstate="collapsed" desc="PROCESS">
     public boolean RegisterItemMoveNew(int item, String mov_type, String num_mov, String dateMov, String locationMov, String obsMov, int userReg, int userMod) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
@@ -95,6 +198,46 @@ public class MoveItemJpaController implements Serializable {
         try {
             Query q = em.createNativeQuery("INSERT INTO mov_item (id_item, mov_type, mov_num, mov_date, mov_location, mov_obs, user_reg, user_mod) "
                     + "VALUES " + data + ";");
+            int resultado = q.executeUpdate();
+            em.getTransaction().commit();
+            em.clear();
+            em.close();
+            if (resultado > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean UpdateMoveItemData(int idMov, String mov) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        try {
+            Query q = em.createNativeQuery("CALL `Sp_itm_u_ItemMoveUpdateData`(" + idMov + ",  '" + mov + "')");
+            int resultado = q.executeUpdate();
+            em.getTransaction().commit();
+            em.clear();
+            em.close();
+            if (resultado > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean MoveItemSignature(String idSign, String signa, int usr) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        try {
+            Query q = em.createNativeQuery("UPDATE mov_item m "
+                    + "SET m.user_verify = '" + idSign + "', m.user_mod = "+ usr +" "
+                    + "WHERE m.id_mov_item IN (" + signa + ")");
             int resultado = q.executeUpdate();
             em.getTransaction().commit();
             em.clear();

@@ -116,6 +116,6 @@
         <script src="Interface/Content/Assets/js/page/bootstrap-modal.js"></script>
         
         <script src="Interface/Content/Assets/modules/chart.min.js"></script>
-        <script src="Interface/Content/Assets/js/page/modules-chartjs.js"></script>
+        <!--<script src="Interface/Content/Assets/js/page/modules-chartjs.js"></script>-->
     </body>
 </html>

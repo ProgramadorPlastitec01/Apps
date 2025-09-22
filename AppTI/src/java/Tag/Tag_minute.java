@@ -487,7 +487,7 @@ public class Tag_minute extends TagSupport {
                     String[] person = ObjMin[3].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
                     for (int i = 0; i < person.length; i++) {
                         String[] datil = person[i].split(" / ");
-                        if (!datil[4].toString().equals("XX")) {
+                        if (!datil[4].toString().trim().equals("XX")) {
                             counter++;
                         }
                     }

@@ -97,7 +97,7 @@ public class ConnectionFactory {
                     + "FROM kardex k "
                     + "WHERE k.COD LIKE '" + Ref + "%' AND (k.tipo = '1051' OR k.tipo = '1151') AND  k.FECHA BETWEEN CONVERT(DATETIME,'" + dtIn + "', 120) AND CONVERT(DATETIME,'" + dtFn + "', 120) "
                     + "GROUP BY k.FECHA, k.DES, k.COD, k.DOC, k.tipo, k.cant  "
-                    + "UNION ALL  "
+                    + "UNION ALL "
                     + "SELECT k.COD as 'Cod', k.DOC as 'Doc', CONVERT(DATE, k.FECHA) as 'Date', k.DES as 'desc', k.tipo as 'Type', cast(k.cant as INT) as 'Cantidad' "
                     + "FROM kardexa k "
                     + "WHERE k.COD LIKE '" + Ref + "%' AND (k.tipo = '1051' OR k.tipo = '1151') AND  k.FECHA BETWEEN CONVERT(DATETIME,'" + dtIn + "', 120) AND CONVERT(DATETIME,'" + dtFn + "', 120) "

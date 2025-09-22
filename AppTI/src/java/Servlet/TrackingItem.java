@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import Method.RemoveWord;
 import Controller.MoveItemJpaController;
+import Controller.ItemJpaController;
 import java.util.List;
 
 public class TrackingItem extends HttpServlet {
@@ -21,18 +22,19 @@ public class TrackingItem extends HttpServlet {
 
         RemoveWord rmov = new RemoveWord();
         MoveItemJpaController MoveItemJpa = new MoveItemJpaController();
+        ItemJpaController ItemJpa = new ItemJpaController();
 
         HttpSession sesion = request.getSession();
         int idUser = Integer.parseInt(sesion.getAttribute("idUsuario").toString());
         int opt = Integer.parseInt(request.getParameter("opt"));
         boolean result = false;
-        String ref = "", dateMove = "", keyWord = "";
-        int numItem = 0, nummov = 0, action = 0;
-     
+        String ref = "", dateMove = "", keyWord = "", model = "", serial = "", Locati = "", Observ = "", idTemToSig = "", NameSigna = "";
+        int numItem = 0, nummov = 0, action = 0, idItem = 0, nmItem = 0, idMov = 0, docx = 0, codx = 0, idSignat = 0;
 
         try {
             switch (opt) {
                 case 1:
+                    //<editor-fold defaultstate="collapsed" desc="MAIN MODULE">
                     try {
                         String validation = "";
                         try {
@@ -45,6 +47,11 @@ public class TrackingItem extends HttpServlet {
                             action = Integer.parseInt(request.getParameter("action"));
                         } catch (Exception e) {
                             action = 0;
+                        }
+                        try {
+                            idItem = Integer.parseInt(request.getParameter("idItem"));
+                        } catch (Exception e) {
+                            idItem = 0;
                         }
                         try {
                             ref = request.getParameter("txt_Ref");
@@ -69,6 +76,11 @@ public class TrackingItem extends HttpServlet {
                             nummov = 0;
                         }
                         try {
+                            idTemToSig = request.getParameter("idItmeToSig");
+                        } catch (Exception e) {
+                            idTemToSig = "";
+                        }
+                        try {
                             keyWord = request.getParameter("txt_keyword");
                             if (!keyWord.equals("")) {
                                 validation += " ( i.item_num like '%" + keyWord + "%' AND f.cod_reference like '%" + keyWord + "%' OR f.ref_name like '%" + keyWord + "%' OR m.mov_num like '%" + keyWord + "%' OR m.mov_location like '%" + keyWord + "%' OR m.mov_obs like '%" + keyWord + "%' )";
@@ -76,16 +88,88 @@ public class TrackingItem extends HttpServlet {
                         } catch (Exception e) {
                             keyWord = "";
                         }
+                        try {
+                            docx = Integer.parseInt(request.getParameter("docx"));
+                        } catch (Exception e) {
+                            docx = 0;
+                        }
+                        try {
+                            codx = Integer.parseInt(request.getParameter("codx"));
+                        } catch (Exception e) {
+                            codx = 0;
+                        }
 
                         String q = rmov.RemoveLastWord(validation, "AND");
-
-                        List lst_result = MoveItemJpa.ConsultSetting(q);
+                        List lst_result = null;
+                        lst_result = MoveItemJpa.ConsultSetting(q);
+                        if (lst_result == null) {
+                            lst_result = MoveItemJpa.ConsultMoveItems();
+                        }
                         request.setAttribute("action", action);
+                        request.setAttribute("idItem", idItem);
                         request.setAttribute("ResultDataSearch", lst_result);
+                        request.setAttribute("idTemToSig", idTemToSig);
+                        request.setAttribute("docx", docx);
+                        request.setAttribute("codx", codx);
                         request.getRequestDispatcher("TrackingItems.jsp").forward(request, response);
                     } catch (Exception e) {
                         request.getRequestDispatcher("TrackingItems.jsp").forward(request, response);
                     }
+                    //</editor-fold>
+                    break;
+                case 2:
+                    //<editor-fold defaultstate="collapsed" desc="EDIT ITEM DATA">
+                    try {
+                        idItem = Integer.parseInt(request.getParameter("idItem"));
+                    } catch (Exception e) {
+                        idItem = 0;
+                    }
+                    try {
+                        idMov = Integer.parseInt(request.getParameter("txtidMov"));
+                    } catch (Exception e) {
+                        idMov = 0;
+                    }
+                    nmItem = Integer.parseInt(request.getParameter("nmbItem"));
+                    model = request.getParameter("txtModel");
+                    serial = request.getParameter("txtSerial");
+                    Locati = request.getParameter("TxtLocation");
+                    Observ = request.getParameter("txtObs");
+                    result = ItemJpa.ItemUpdateData(idItem, nmItem, model, serial, Observ);
+                    if (result) {
+                        result = MoveItemJpa.UpdateMoveItemData(idMov, Locati);
+                    }
+                    request.setAttribute("EditMoveItem", result);
+                    request.getRequestDispatcher("TrackingItem?opt=1&action=1&idItem=0").forward(request, response);
+                    //</editor-fold>
+                    break;
+                case 3:
+                    //<editor-fold defaultstate="collapsed" desc="SIGNATURE ITEMS">
+                    try {
+                        idTemToSig = request.getParameter("idItmeToSig");
+                    } catch (Exception e) {
+                        idTemToSig = "";
+                    }
+                    try {
+                        NameSigna = request.getParameter("NameSigna");
+                    } catch (Exception e) {
+                        NameSigna = "";
+                    }
+                    try {
+                        codx = Integer.parseInt(request.getParameter("codx"));
+                    } catch (Exception e) {
+                        codx = 0;
+                    }
+
+                    idTemToSig = idTemToSig.replace("][", ",").replace("[", "").replace("]", "").trim();
+                    idSignat = Integer.parseInt(request.getParameter("idSig"));
+
+                    String sginature = idSignat + "/" + NameSigna + "/" + codx;
+
+                    result = MoveItemJpa.MoveItemSignature(sginature, idTemToSig, idUser);
+
+                    request.setAttribute("SignatureMove", result);
+                    request.getRequestDispatcher("TrackingItem?opt=1&action=1&codx=0&idItmeToSig=").forward(request, response);
+                    //</editor-fold>
                     break;
             }
         } catch (Exception e) {

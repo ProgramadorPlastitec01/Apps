@@ -18,6 +18,7 @@ import java.util.Set;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 
 import java.util.List;
 
@@ -335,6 +336,7 @@ public class Tag_moveItem extends TagSupport {
                     out.print("<tbody>");
                     //<editor-fold defaultstate="collapsed" desc="VALID ENT">
                     lst_factory = FactoryJpa.ConsulReferenceENT(ref, dtIn, dtFn);
+                    ArrayList<String> validCant = new ArrayList<>();
                     if (lst_factory.size() > 0) {
                         try {
                             List<String> entNums = new ArrayList<>();
@@ -342,13 +344,39 @@ public class Tag_moveItem extends TagSupport {
                             for (String item : arrEnt) {
                                 String[] entDat = item.split(" / ");
                                 if (entDat.length > 2 && entDat[1].toString().contains("ENT")) {
+                                    String dataCant = entDat[1] + "/" + entDat[5];
+                                    validCant.add(dataCant);
                                     entNums.add(entDat[1].replace("ENT", ""));
                                 }
                             }
+
+                            //<editor-fold defaultstate="collapsed" desc="VALIDACION DE CANTIDADES REGISTRADAS Y POR REGISTRAR">
+                            HashMap<Integer, Integer> NewCanti = new HashMap<>();
+                            for (String dato : validCant) {
+                                String temp = dato.replace("ENT", "").split("/")[0];
+                                int mov_num = Integer.parseInt(temp);
+                                temp = dato.split("/")[1];
+                                int cant = Integer.parseInt(temp);
+                                lst_move = MoveJpa.ConsultItemsRegisterByNroMove(mov_num);
+                                if (lst_move != null) {
+                                    Object[] ObjMov = (Object[]) lst_move.get(0);
+                                    int cantBd = Integer.parseInt(ObjMov[2].toString());
+                                    if (cantBd <= cant && cantBd > 0) {
+                                        int newCant = cant - cantBd;
+                                        if (newCant > 0) {
+                                            NewCanti.put(mov_num, newCant);
+                                            entNums.remove(String.valueOf(mov_num));
+                                        }
+                                    }
+                                }
+                            }
+                            //</editor-fold>
+
+                            //<editor-fold defaultstate="collapsed" desc="LIST OF ITEMS BY REFERENCE">
                             lst_move = MoveJpa.compareItems(entNums, dtIn, dtFn);
                             Set<String> misIDs = new HashSet<>();
                             if (lst_move != null) {
-                                //<editor-fold defaultstate="collapsed" desc="LIST OF ITEMS BY REFERENCE">
+                                //<editor-fold defaultstate="collapsed" desc="VALIDACION EN CASO DE QUE YA TENGA MOVIMIENTOS EN EL SISTEMA">
                                 for (Object obj : lst_move) {
                                     Object[] ObjVl = (Object[]) obj;
                                     misIDs.add(ObjVl[3].toString());
@@ -364,7 +392,13 @@ public class Tag_moveItem extends TagSupport {
                                         out.print("<td>" + entDat[3] + "</td>");
                                         int cantMov = 0;
                                         try {
-                                            cantMov = Integer.parseInt(entDat[5].toString());
+                                            try {
+                                                int tempnmu = Integer.parseInt(entDat[1].toString().replace("ENT", "").split("/")[0]);
+                                                int validCantd = NewCanti.get(tempnmu);
+                                                cantMov = validCantd;
+                                            } catch (Exception e) {
+                                                cantMov = Integer.parseInt(entDat[5].toString());
+                                            }
                                         } catch (Exception e) {
                                             cantMov = 0;
                                         }
@@ -373,7 +407,10 @@ public class Tag_moveItem extends TagSupport {
                                         out.print("</tr>");
                                     }
                                 }
+                                //</editor-fold>
                             } else {
+                                //<editor-fold defaultstate="collapsed" desc="NO SE TIENE MOVIMIENTOS EN EL SISTEMA">
+
                                 for (String item : arrEnt) {
                                     String[] entDat = item.split(" / ");
                                     out.print("<tr style='font-size: 12px;'>");
@@ -383,8 +420,13 @@ public class Tag_moveItem extends TagSupport {
                                     out.print("<td>" + entDat[3] + "</td>");
                                     int cantMov = 0;
                                     try {
-                                        cantMov = Integer.parseInt(entDat[5].toString());
-
+                                        try {
+                                            int tempnmu = Integer.parseInt(entDat[1].toString().replace("ENT", "").split("/")[0]);
+                                            int validCantd = NewCanti.get(tempnmu);
+                                            cantMov = validCantd;
+                                        } catch (Exception e) {
+                                            cantMov = Integer.parseInt(entDat[5].toString());
+                                        }
                                     } catch (Exception e) {
                                         cantMov = 0;
                                     }
@@ -392,6 +434,7 @@ public class Tag_moveItem extends TagSupport {
                                     out.print("<td><button class='btn btn-success btn-sm' onclick='window.location.href=\"MoveItem?opt=1&txt_ref=" + ref + "&numEnt=" + entDat[1] + "&txtDateIni=" + dtIn + "&txtDateFin=" + dtFn + "&dateMove=" + entDat[2] + "\"'><i class=\"fas fa-reply\"></i></button></td>");
                                     out.print("</tr>");
                                 }
+                                //</editor-fold>
                                 //</editor-fold>
                             }
                         } catch (Exception e) {
@@ -431,7 +474,6 @@ public class Tag_moveItem extends TagSupport {
                     out.print("</thead>");
                     out.print("<tbody>");
                     //<editor-fold defaultstate="collapsed" desc="VALID SAL">
-
                     lst_factory = FactoryJpa.ConsulReferenceSAL(ref, dtIn, dtFn);
                     if (lst_factory.size() > 0) {
                         List<String> salNums = new ArrayList<>();
@@ -461,8 +503,13 @@ public class Tag_moveItem extends TagSupport {
                                     out.print("<td>" + salDat[3] + "</td>");
                                     out.print("<td><button class='btn btn-info btn-sm' onclick='window.location.href=\"MoveItem?opt=1&txt_ref=" + ref + "&numEnt=" + salDat[1] + "&txtDateIni=" + dtIn + "&txtDateFin=" + dtFn + "&dateMove=" + salDat[2] + "\"'><i class=\"fas fa-share\"></i></button></td>");
                                     out.print("</tr>");
+                                } else {
+                                    out.print("<tr>");
+                                    out.print("<td colspan='5' class='text-center'>No se ha encontrado SALIDAS de esta referencia! </td>");
+                                    out.print("</tr>");
                                 }
                             }
+
                         } else {
                             for (String item : arrSal) {
                                 String[] salDat = item.split(" / ");

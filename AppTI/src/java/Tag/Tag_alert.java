@@ -2187,7 +2187,6 @@ public class Tag_alert extends TagSupport {
                 }
             }
             //</editor-fold>
-
             //<editor-fold defaultstate="collapsed" desc="DEVICE">
             if (pageContext.getRequest().getAttribute("RegisterDevice") != null) {
                 boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("RegisterDevice").toString());
@@ -2238,8 +2237,6 @@ public class Tag_alert extends TagSupport {
                 }
             }
             //</editor-fold>
-
-
             //<editor-fold defaultstate="collapsed" desc="IDEA">
             if (pageContext.getRequest().getAttribute("RegisterIdea") != null) {
                 boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("RegisterIdea").toString());
@@ -2291,7 +2288,56 @@ public class Tag_alert extends TagSupport {
                 }
             }
 //</editor-fold>
-
+//<editor-fold defaultstate="collapsed" desc="MOVE ITEM">
+            if (pageContext.getRequest().getAttribute("EditMoveItem") != null) {
+                boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("EditMoveItem").toString());
+                if (result) {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-2\").ready(function() {\n"
+                            + "  iziToast.success({\n"
+                            + "    title: 'Correcto',\n"
+                            + "    message: 'Se ha modificado correctamente.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                } else {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-4\").ready(function() {\n"
+                            + "  iziToast.error({\n"
+                            + "    title: 'Error',\n"
+                            + "    message: 'Ha ocurrido un error al modificar.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                }
+            }
+            if (pageContext.getRequest().getAttribute("SignatureMove") != null) {
+                boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("SignatureMove").toString());
+                if (result) {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-2\").ready(function() {\n"
+                            + "  iziToast.success({\n"
+                            + "    title: 'Correcto',\n"
+                            + "    message: 'Se ha firmado correctamente.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                } else {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-4\").ready(function() {\n"
+                            + "  iziToast.error({\n"
+                            + "    title: 'Error',\n"
+                            + "    message: 'Ha ocurrido un error al firmar.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                }
+            }
+//</editor-fold>
 
         } catch (IOException ex) {
             Logger.getLogger(Tag_alert.class.getName()).log(Level.SEVERE, null, ex);
