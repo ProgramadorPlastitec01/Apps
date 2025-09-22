@@ -168,6 +168,10 @@
         <servlet-name>Idea</servlet-name>
         <servlet-class>Servlet.Idea</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>MinuteServlet</servlet-name>
+        <servlet-class>Servlet.MinuteServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>User</servlet-name>
         <url-pattern>/User</url-pattern>
@@ -320,12 +324,10 @@
         <servlet-name>Knowledge</servlet-name>
         <url-pattern>/Knowledge</url-pattern>
     </servlet-mapping>
-    
     <servlet-mapping>
         <servlet-name>DownloadKnowledge</servlet-name>
         <url-pattern>/DownloadKnowledge</url-pattern>
     </servlet-mapping>
-    
     <servlet-mapping>
         <servlet-name>GeneralNotSession</servlet-name>
         <url-pattern>/GeneralNotSession</url-pattern>
@@ -333,6 +335,10 @@
     <servlet-mapping>
         <servlet-name>Idea</servlet-name>
         <url-pattern>/Idea</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MinuteServlet</servlet-name>
+        <url-pattern>/MinuteServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

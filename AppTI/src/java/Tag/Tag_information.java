@@ -673,41 +673,40 @@ public class Tag_information extends TagSupport {
                     out.print("<div style='display:flex;justify-content:space-around;width:100%;'>");
 
                     out.print("<div class='DivGrip'>");
-                    out.print("<div><b class='b_text'>Antivirus: </b>" + obj_info[13] + "</div>");
-                    out.print("<div><b class='b_text'>Correo Interno: </b>" + obj_info[18] + "</div>");
-                    out.print("<div><b class='b_text'>Correo Externo: </b>" + obj_info[19] + "</div>");
-                    out.print("<div><b class='b_text'>Descripción: </b>" + obj_info[29] + "</div>");
-                    out.print("<div><b class='b_text'>Factura: </b>" + obj_info[20] + "</div>");
-                    out.print("<div><b class='b_text'>Fecha Factura: </b>" + obj_info[21] + "</div>");
-                    out.print("<div><b class='b_text'>Gmail: </b>" + obj_info[17] + "</div>");
-                    out.print("<div><b class='b_text'>Garantia: </b>" + obj_info[25] + "</div>");
+                    out.print("<div><b class='b_text'>Antivirus: </b>" + (obj_info[13] == null ? "" : obj_info[13]) + "</div>");
+                    out.print("<div><b class='b_text'>Correo Interno: </b>" + (obj_info[18] == null ? "" : obj_info[18]) + "</div>");
+                    out.print("<div><b class='b_text'>Correo Externo: </b>" + (obj_info[19] == null ? "" : obj_info[19]) + "</div>");
+                    out.print("<div><b class='b_text'>Factura: </b>" + (obj_info[20] == null ? "" : obj_info[20]) + "</div>");
+                    out.print("<div><b class='b_text'>Fecha Factura: </b>" + (obj_info[21] == null ? "" : obj_info[21]) + "</div>");
+                    out.print("<div><b class='b_text'>Gmail: </b>" + (obj_info[17] == null ? "" : obj_info[17]) + "</div>");
+                    out.print("<div><b class='b_text'>Garantia: </b>" + (obj_info[25] == null ? "" : obj_info[25]) + "</div>");
+                    out.print("<div><b class='b_text'>Garantia Fecha: </b>" + (obj_info[25] == null ? "" : obj_info[25]) + "</div>");
                     out.print("</div>");
 
                     out.print("<div class='DivGrip'>");
-                    out.print("<div><b class='b_text'>Garantia Fecha: </b>" + obj_info[6] + "</div>");
-                    out.print("<div><b class='b_text'>Internet: </b>" + obj_info[14] + "</div>");
-                    out.print("<div><b class='b_text'>Login Plastitec: </b>" + obj_info[6] + "</div>");
-                    out.print("<div><b class='b_text'>Licencia: </b>" + obj_info[22] + "</div>");
-                    out.print("<div><b class='b_text'>Lincecia Fecha Fin: </b>" + obj_info[23] + "</div>");
-                    out.print("<div><b class='b_text'>MAC: </b>" + obj_info[8] + "</div>");
-                    out.print("<div><b class='b_text'>Proveedor: </b>" + obj_info[24] + "</div>");
-                    out.print("<div><b class='b_text'>Punto de red: </b>" + obj_info[28] + "</div>");
+                    out.print("<div><b class='b_text'>Internet: </b>" +(obj_info[14] == null ? "" : obj_info[14])+ "</div>");
+                    out.print("<div><b class='b_text'>Login Plastitec: </b>" + (obj_info[6] == null ? "" : obj_info[6]) + "</div>");
+                    out.print("<div><b class='b_text'>Licencia: </b>" + (obj_info[22] == null ? "" : obj_info[22])+ "</div>");
+                    out.print("<div><b class='b_text'>Licencia Fecha Fin: </b>" + (obj_info[23] == null ? "" : obj_info[23])+ "</div>");
+                    out.print("<div><b class='b_text'>MAC: </b>" + (obj_info[8] == null ? "" : obj_info[8]) + "</div>");
+                    out.print("<div><b class='b_text'>Proveedor: </b>" + (obj_info[24] == null ? "" : obj_info[24]) + "</div>");
+                    out.print("<div><b class='b_text'>Punto de red: </b>" + (obj_info[29] == null ? "" : obj_info[29])+ "</div>");
+                    out.print("<div><b class='b_text'>RED: </b>" + (obj_info[9] == null ? "" : obj_info[9]) + "</div>");
                     out.print("</div>");
 
                     out.print("<div class='DivGrip'>");
-                    out.print("<div><b class='b_text'>RED: </b>" + obj_info[9] + "</div>");
-                    out.print("<div><b class='b_text'>SKYPE: </b>" + obj_info[16] + "</div>");
-                    out.print("<div><b class='b_text'>Tipo Estado: </b>" + obj_info[27] + "</div>");
-                    out.print("<div><b class='b_text'>Tipo Software: </b>" + obj_info[26] + "</div>");
-                    out.print("<div><b class='b_text'>VLAN: </b>" + obj_info[10] + "</div>");
-                    out.print("<div><b class='b_text'>VPN: </b>" + obj_info[15] + "</div>");
-                    out.print("<div><b class='b_text'>Versión Office: </b>" + obj_info[12] + "</div>");
-                    out.print("<div><b class='b_text'>Versión WIN: </b>" + obj_info[11] + "</div>");
+                    out.print("<div><b class='b_text'>SKYPE: </b>" + (obj_info[16] == null ? "" : obj_info[16]) + "</div>");
+                    out.print("<div><b class='b_text'>Tipo Estado: </b>" + (obj_info[27] == null ? "" : obj_info[27]) + "</div>");
+                    out.print("<div><b class='b_text'>Tipo Software: </b>" + (obj_info[26] == null ? "" : obj_info[26]) + "</div>");
+                    out.print("<div><b class='b_text'>VLAN: </b>" + (obj_info[10] == null ? "" : obj_info[10]) + "</div>");
+                    out.print("<div><b class='b_text'>VPN: </b>" + (obj_info[15] == null ? "" : obj_info[15]) + "</div>");
+                    out.print("<div><b class='b_text'>Versión Office: </b>" + (obj_info[12] == null ? "" : obj_info[12]) + "</div>");
+                    out.print("<div><b class='b_text'>Versión WIN: </b>" + (obj_info[11] == null ? "" : obj_info[11]) + "</div>");
                     out.print("</div>");
 
                     out.print("</div>");
 
-                    out.print("<div class='text-center mb-2'><b class='b_text'>Caracteristicas: </b><br>" + obj_info[30] + "</div>");
+                    out.print("<div class='text-center mb-2'><b class='b_text'>Caracteristicas: </b><br>" + (obj_info[30] == null ? "" : obj_info[30]) + "</div>");
 
                     out.print("</div>");
                     //</editor-fold>
@@ -716,6 +715,7 @@ public class Tag_information extends TagSupport {
                 }
                 out.print("</div>");
             } else {
+                out.print("<div class='text-center'><h5>No existe información para este PC</h5></div>");
             }
             out.print("</div>");
 
