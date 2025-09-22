@@ -13,8 +13,14 @@ import java.util.List;
 import Method.generateRandomPassword;
 
 import SQL.ConnectionsBd;
+import java.util.Properties;
+import javax.mail.Authenticator;
 
 public class Session extends HttpServlet {
+
+    static Session getInstance(Properties props, Authenticator authenticator) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

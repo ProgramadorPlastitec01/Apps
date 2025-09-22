@@ -303,7 +303,7 @@ public class Tag_minute extends TagSupport {
                 out.print("<div class='sweet-local' tabindex='-1' id='Ventana4' style='opacity: 1.03; display:none;'>");
                 out.print("<div class='contGeneral' style='width: 75%;'>");
                 out.print("<div class='mb-2' style='display: flex; justify-content: space-between'>");
-                out.print("<button class='btn btn-green mr-4' id='btnImprimir' data-toggle='tooltip' data-placement='top' title='Imprimir'><i class=\"fas fa-print\"></i></button>");
+                out.print("<button class='btn btn-green mr-4'  onclick=\"mostrarConvencion(5)\" data-toggle='tooltip' data-placement='top' title='Enviar Correo'><i class=\"fas fa-envelope-open-text\"></i></button>");
                 out.print("<h4>ACTA TECNOLOGIA DE INFORMACIÓN / R-TI-014 </h4>");
                 out.print("<div class='d-flex' style='align-items: center;'>");
                 out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(4)' data-toggle='tooltip' data-placement='top' title='Cerrar' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
@@ -315,7 +315,7 @@ public class Tag_minute extends TagSupport {
                 if (lst_minute != null) {
                     Object[] ObjDoc = (Object[]) lst_minute.get(0);
                     int idDoc = Integer.parseInt(ObjDoc[4].toString().replace("][", "/-/-/").replace("]", "").replace("[", "").split("/-/-/")[0]);
-                    String formater = "";
+                    String formater = "", Affair = "";
                     lst_format = formatJpa.ConsultFormatId(idDoc);
                     if (lst_format != null) {
                         Object[] Objfor = (Object[]) lst_format.get(0);
@@ -323,6 +323,7 @@ public class Tag_minute extends TagSupport {
                     }
                     formater = formater.replace("XXXDATEXXX", ObjDoc[2].toString());
                     formater = formater.replace("XXXAFFAIRXXX", ObjDoc[1].toString());
+                    Affair = ObjDoc[1].toString();
                     String[] sdtr_data = ObjDoc[4].toString().replace("][", "/-/-/").replace("]", "").replace("[", "").split("/-/-/");
                     try {
                         formater = formater.replace("XXXCONTENTXXX", sdtr_data[1].toString());
@@ -409,6 +410,38 @@ public class Tag_minute extends TagSupport {
                     out.print("<div id='dataDocument' class='divDocumentContent'>");
                     out.print(formater);
                     out.print("</div>");
+
+                    out.print("<div class='sweet-local' tabindex='-1' id='Ventana5' style='opacity: 1.03; display:none;'>");
+                    out.print("<div class='contGeneral'>");
+
+                    out.print("<div class='mb-2' style='display: flex; justify-content: space-between'>");
+                    out.print("<h4>Enviar correo</h4>");
+                    out.print("<div class='d-flex' style='align-items: center;'>");
+                    out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(5)' data-toggle='tooltip' data-placement='top' title='Cerrar' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
+                    out.print("</div>");
+                    out.print("</div>");
+
+                    out.print("<div class='cont_form_user'>");
+                    out.print("  <form id=\"minuteForm\" class='needs-validation' novalidate>\n"
+                            + "    <input type=\"hidden\" name=\"asunto\" value='" + Affair + "'>\n"
+                            + "    <div id='destinatariosContainer'>\n"
+                            + "      <div class='input-group mb-2 align-items-baseline'>\n"
+                            + "        <input type='email' class='form-control' name='destinatario[]' placeholder='Correo destinatario' required>\n"
+                            + "        <div class='input-group-append'>\n"
+                            + "          <button class='btn btn-success' style='height:70%' type='button' onclick='addDestinatarioField()'><i class='fas fa-plus'></i></button>\n"
+                            + "        </div>\n"
+                            + "      </div>\n"
+                            + "    </div>\n"
+                            + "    <div class='invalid-feedback invalid_data_rll'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp;Debe ingresar un valor válido!</div>\n"
+                            + "    <div style='width: 100%; text-align:center;'>\n"
+                            + "      <button type='button' onclick='prepareMinuteToSend()' class='btn btn-primary'>Enviar minuta</button>\n"
+                            + "    </div>\n"
+                            + "  </form>");
+                    out.print("</div>");
+
+                    out.print("</div>");
+                    out.print("</div>");
+                    
 
                 } else {
                     out.print("<div class='text-center'>");

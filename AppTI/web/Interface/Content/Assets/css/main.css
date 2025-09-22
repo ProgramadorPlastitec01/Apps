@@ -2176,7 +2176,7 @@ DivSignatureAct::-webkit-scrollbar-thumb:active {
 }
 
 .divDocumentContent{
-    max-height: 555px;
+    /*max-height: 555px;*/
     overflow-y: scroll;
 }
 

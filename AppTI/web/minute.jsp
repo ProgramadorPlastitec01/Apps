@@ -121,7 +121,6 @@
             const context = canvas.getContext('2d');
             const hiddenInput = document.getElementById('coordenadas-hidden');
             const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-
             if (isTouchDevice) {
                 canvas.addEventListener('touchstart', startDrawing);
                 canvas.addEventListener('touchend', stopDrawing);
@@ -150,7 +149,6 @@
             function draw(event) {
                 if (!isDrawing)
                     return;
-
                 const currentPoint = getCoordinates(event);
                 if (lastPoint) {
                     coordinates.push({
@@ -159,7 +157,6 @@
                         mx: currentPoint.x,
                         my: currentPoint.y,
                     });
-
                     context.beginPath();
                     context.moveTo(lastPoint.x, lastPoint.y);
                     context.lineTo(currentPoint.x, currentPoint.y);
@@ -273,7 +270,6 @@
             function validForm(dte, aff, per) {
                 var datefor = document.getElementById(dte).value;
                 var affair = document.getElementById(aff).value;
-
                 if (affair == "" || datefor == "") {
                     $("#toastr-2").ready(function () {
                         iziToast.warning({
@@ -312,10 +308,8 @@
             document.getElementById('btnImprimir').addEventListener('click', () => {
                 // Obtener el contenido de la sección a imprimir
                 const contenido = document.getElementById('dataDocument').outerHTML;
-
                 // Crear una nueva ventana o iframe para imprimir
                 const ventanaImpresion = window.open('', '_blank', 'width=800, height=600');
-
                 // Escribir el contenido HTML en la ventana
                 let cont = `<html>
                             <head>
@@ -347,18 +341,13 @@
                                 <div id="content">XXXDATAXXX</div>
                             </body>
                         </html>`;
-
                 cont = cont.replace('XXXDATAXXX', contenido);
-
                 ventanaImpresion.document.write(cont);
-
                 // Esperar a que la nueva ventana cargue el contenido y luego enviar a imprimir
                 ventanaImpresion.document.close(); // Cerrar el documento
                 ventanaImpresion.print(); // Imprimir
                 ventanaImpresion.close(); // Cerrar la ventana después de imprimir
             });
-
-
         </script>
 
 
@@ -368,12 +357,10 @@
                 let Rol = document.getElementById("PhpRol").value;
                 let IdUsPhp = document.getElementById("IdPhpUser").value;
                 console.log("Rol obtenido:", Rol);
-
                 // Sobrescribir la etiqueta del botón "Ver servidor" por "Gestor de archivos"
                 CKEDITOR.on('dialogDefinition', function (ev) {
                     var dialogName = ev.data.name;
                     var dialogDefinition = ev.data.definition;
-
                     if (dialogDefinition.getContents('info')) {
                         var browseButton = dialogDefinition.getContents('info').get('browse');
                         if (browseButton) {
@@ -381,15 +368,14 @@
                         }
                     }
                 });
-
                 // Inicializa por ID los editores dentro de un mismo contexto.
                 const editorIDs = ['editorCK', 'editorCK1', 'editorCK2'];
                 editorIDs.forEach(function (id) {
                     let element = document.getElementById(id);
                     if (element) {
                         CKEDITOR.replace(id, {
-                            filebrowserBrowseUrl: 'http://172.16.2.117/elFinder/elfinder.html?rol=' + Rol + '&idusuario=' + IdUsPhp,
-                            filebrowserImageBrowseUrl: 'http://172.16.2.117/elFinder/elfinder.html?type=Images&rol=' + Rol + '&idusuario=' + IdUsPhp,
+                            filebrowserBrowseUrl: 'http://172.16.1.164/elFinder/elfinder.html?rol=' + Rol + '&idusuario=' + IdUsPhp,
+                            filebrowserImageBrowseUrl: 'http://172.16.1.164/elFinder/elfinder.html?type=Images&rol=' + Rol + '&idusuario=' + IdUsPhp,
                             removeDialogTabs: 'link:upload;image:upload',
                             language: 'es',
                             height: 150,
@@ -413,10 +399,8 @@
                             on: {
                                 instanceReady: function (evt) {
                                     var editor = evt.editor;
-
                                     editor.on('paste', function (pasteEvt) {
                                         let content = pasteEvt.data.dataValue;
-
                                         if (content && content.includes('src="data:image/')) {
                                             pasteEvt.data.dataValue = content.replace(/<img[^>]+src="data:image\/[^">]+"[^>]*>/gi, '');
                                             iziToast.warning({
@@ -458,12 +442,10 @@
             document.getElementById("btnPlus").addEventListener("click", function () {
 
                 const cont = document.getElementById("contDataExt");
-
                 // crear el div contenedor
                 const wrapper = document.createElement("div");
                 wrapper.className = "d-flex mt-2 align-items-center";
                 wrapper.style.justifyContent = "center";
-
                 // plantilla de inputs con el nuevo index
 
                 wrapper.innerHTML = `
@@ -486,25 +468,19 @@
                                 </button>
                             </div>
                         `;
-
                 // agregarlo al contenedor principal
                 cont.appendChild(wrapper);
-
                 // evento para eliminar el bloque
                 wrapper.querySelector(".btnRemove").addEventListener("click", function () {
                     wrapper.remove();
                     renumerarInputs();
                 });
-                
                 renumerarInputs(); // incrementar el contador
             });
-            
-
             function renumerarInputs() {
                 const cont = document.getElementById("contDataExt");
                 // ⬇️ Solo filas DIRECTAS, no los d-flex internos
                 const blocks = cont.querySelectorAll("#contDataExt > .d-flex");
-
                 blocks.forEach((block, i) => {
                     const n = block.querySelector("input[name^='txtNames_ex']");
                     const p = block.querySelector("input[name^='txtPosi_ex']");
@@ -518,15 +494,40 @@
                     document.getElementById("idCountExt").value = i;
                 });
             }
-            
-            function deleteDivPost(idDiv){
+
+            function deleteDivPost(idDiv) {
                 document.getElementById(idDiv).remove();
                 renumerarInputs();
             }
-            
+
+        </script>
+        <script>
+            function addDestinatarioField() {
+                const container = document.getElementById('destinatariosContainer');
+
+                const div = document.createElement('div');
+                div.className = 'input-group mb-2 align-items-baseline';
+
+                div.innerHTML = `
+        <input type="email" class="form-control" name="destinatario[]" placeholder="Correo destinatario" required>
+        <div class="input-group-append">
+            <button class="btn btn-danger" style='height:70%' type="button" onclick="removeDestinatarioField(this)">
+                <i class="fas fa-minus"></i>
+            </button>
+        </div>
+    `;
+
+                container.appendChild(div);
+            }
+
+            function removeDestinatarioField(button) {
+                button.closest('.input-group').remove();
+            }
+
         </script>
 
-
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+        <script src="Interface/Content/Assets/js/MailPdf.js"></script>
         <script src="Interface/Content/Assets/modules/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js"></script>
         <script src="Interface/Content/Assets/modules/datatables/Select-1.2.4/js/dataTables.select.min.js"></script>
         <script src="Interface/Content/Assets/modules/datatables/datatables.min.js"></script>

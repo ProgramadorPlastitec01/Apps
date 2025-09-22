@@ -1,1 +1,1 @@
-initSample();
+//initSample();

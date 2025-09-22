@@ -10,10 +10,19 @@ import javax.servlet.http.HttpSession;
 import Controller.MinuteJpaController;
 import Controller.FormatControllerJpa;
 import Controller.ActivitySystemControllerJpa;
+import Mail.Mail_Minute;
+
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.http.Part;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 import java.util.List;
 
 import SQL.ConnectionsBd;
+import java.io.File;
+import javax.mail.MessagingException;
 
 public class Minute extends HttpServlet {
 
@@ -26,13 +35,14 @@ public class Minute extends HttpServlet {
         FormatControllerJpa FormaJpa = new FormatControllerJpa();
         ActivitySystemControllerJpa activitySystem = new ActivitySystemControllerJpa();
         ConnectionsBd SignatureJpa = new ConnectionsBd();
+        Mail_Minute SendMinute = new Mail_Minute();
         HttpSession sesion = request.getSession();
         int idUser = Integer.parseInt(sesion.getAttribute("idUsuario").toString());
         String UserRol = sesion.getAttribute("idRol").toString();
         String userSession = sesion.getAttribute("Nombres").toString();
         int opt = Integer.parseInt(request.getParameter("opt"));
         int idMinu = 0, state = 0, event = 0, idUserReg = 0, idState = 0, flt = 0, temp = 0, docx = 0, codx = 0, idSig = 0, idContEx = 0;
-        String matter = "", staff = "", cont = "", date = "", content = "", idDoc = "", signature = "", exStaff = "";
+        String matter = "", staff = "", cont = "", date = "", content = "", idDoc = "", signature = "", exStaff = "", minuteSend = "";
         boolean result = false;
         List dataResult = null;
         List lst_signature = null;
