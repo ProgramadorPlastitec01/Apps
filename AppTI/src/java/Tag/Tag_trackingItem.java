@@ -354,6 +354,10 @@ public class Tag_trackingItem extends TagSupport {
                     out.print("</div>");
 
                     out.print("</div>");
+                    
+                    out.print("<div class='mt-4 text-center'>");
+                    out.print("<h4>Estadisitica de datos (ultimos 6 meses)</h4>");
+                    out.print("</div>");
 
                     out.print("<div class='row'>");
                     //<editor-fold defaultstate="collapsed" desc="GRAFICS">
@@ -373,7 +377,7 @@ public class Tag_trackingItem extends TagSupport {
                         }
                         out.print("<div class=''>");
                         out.print("<div class=\"card\"> "
-                                + "  <div class=\"card-header\"> "
+                                + "  <div class=\"card-header text-center\"> "
                                 + "    <h4>Movimientos x mes</h4> "
                                 + "  </div> "
                                 + "<div class=\"card-body\"> "
@@ -429,11 +433,11 @@ public class Tag_trackingItem extends TagSupport {
                     } else {
                         out.print("<div class=''>");
                         out.print("<div class=\"card\"> "
-                                + "   <div class=\"card-header\"> "
-                                + "        <h4>No se han encontrado movimientos</h4> "
+                                + "   <div class=\"card-header text-center\"> "
+                                + "        <h4>Movimientos x mes</h4> "
                                 + "   </div> "
                                 + "<div class=\"card-body\"> "
-                                + " "
+                                + "<span><b>No se han encontrado movimientos</b></span>"
                                 + "</div> "
                                 + "</div>");
                         out.print("</div>");
@@ -456,7 +460,7 @@ public class Tag_trackingItem extends TagSupport {
 
                         out.print("<div class=''>");
                         out.print("<div class=\"card\"> "
-                                + "                  <div class=\"card-header\"> "
+                                + "                  <div class=\"card-header text-center\"> "
                                 + "                    <h4>Entradas x mes</h4> "
                                 + "                  </div> "
                                 + "                  <div class=\"card-body\"> "
@@ -513,9 +517,12 @@ public class Tag_trackingItem extends TagSupport {
                     } else {
                         out.print("<div class=''>");
                         out.print("<div class=\"card\"> "
-                                + "   <div class=\"card-header\"> "
-                                + "        <h4>No se han encontrado movimientos</h4> "
+                                + "   <div class=\"card-header text-center\"> "
+                                + "        <h4>Entradas x mes</h4> "
                                 + "   </div> "
+                                + "<div class=\"card-body\"> "
+                                + "<span><b>No se han encontrado movimientos</b></span>"
+                                + "</div> "
                                 + "</div>");
                         out.print("</div>");
                     }
@@ -536,7 +543,7 @@ public class Tag_trackingItem extends TagSupport {
                         }
                         out.print("<div class=''>");
                         out.print("<div class=\"card\"> "
-                                + "                  <div class=\"card-header\"> "
+                                + "                  <div class=\"card-header text-center\"> "
                                 + "                    <h4>Salidas x mes</h4> "
                                 + "                  </div> "
                                 + "                  <div class=\"card-body\"> "
@@ -593,8 +600,8 @@ public class Tag_trackingItem extends TagSupport {
                     } else {
                         out.print("<div class=''>");
                         out.print("<div class=\"card\"> "
-                                + "   <div class=\"card-header\"> "
-                                + "        <h4>No se han encontrado movimientos</h4> "
+                                + "   <div class=\"card-header text-center\"> "
+                                + "        <h4>Salidas x mes</h4> "
                                 + "   </div> "
                                 + "<div class=\"card-body\"> "
                                 + "<span><b>No se han encontrado movimientos</b></span>"
