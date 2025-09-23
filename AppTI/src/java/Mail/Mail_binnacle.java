@@ -21,6 +21,7 @@ public class Mail_binnacle {
 
     SettingControllerJpa SettingJpa = new SettingControllerJpa();
     List lst_mail = SettingJpa.ConsultSettingCategorie("DataMail");
+    List lst_mailBinnacle = SettingJpa.ConsultSettingCategorie("NotificationBinnacle");
 
     public void SendBinnacle(int idBinn, int idUser, ServletContext context) throws MessagingException {
         if (lst_mail != null) {
@@ -39,8 +40,17 @@ public class Mail_binnacle {
             try {
                 MimeMessage message = new MimeMessage(session);
                 message.setFrom(new InternetAddress(ArrMail[4]));
-                message.addRecipient(Message.RecipientType.TO, new InternetAddress("p.ti@plastitec-sa.com"));
-
+                if (lst_mailBinnacle != null) {
+                    Object[] obj_binnacle = (Object[]) lst_mailBinnacle.get(0);
+                    String[] destino = obj_binnacle[2].toString().split(",");
+                    InternetAddress[] addresto = new InternetAddress[destino.length];
+                    for (int j = 0; j < destino.length; j++) {
+                        addresto[j] = new InternetAddress(destino[j].trim());
+                    }
+                    message.setRecipients(javax.mail.Message.RecipientType.TO, addresto);
+                } else {
+                    message.addRecipient(Message.RecipientType.TO, new InternetAddress("p.ti@plastitec-sa.com"));
+                }
                 UserControllerJpa UserJpa = new UserControllerJpa();
                 BinnacleControllerJpa BinnacleJpa = new BinnacleControllerJpa();
                 List lst_user = null, lst_binnacle;
