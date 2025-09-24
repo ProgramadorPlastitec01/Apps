@@ -25,6 +25,7 @@ public class Session extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("utf-8");
         try {
             HttpSession session = request.getSession();
             ControlEncryption md5 = new ControlEncryption();

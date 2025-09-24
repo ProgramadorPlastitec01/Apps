@@ -13,6 +13,7 @@ public class GeneralNotSession extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("utf-8");
         KnowledgeJpaController KnowlegdeJpa = new KnowledgeJpaController();
         IdeaJpaController IdeaJpa = new IdeaJpaController();
         int opt = Integer.parseInt(request.getParameter("opt"));
