@@ -62,42 +62,52 @@ public class Tag_reference extends TagSupport {
                 } else {
                     lst_factory = FactoryJpa.ConsulNewReference(ref.trim());
                     if (lst_factory != null) {
-                        String[] lstFact = lst_factory.toString().replace("[", "").replace("]", "").split(" / ");
-                        out.print("<form action='Reference?opt=2' method='post' class='needs-validation' novalidate='' onsubmit='return cargarDatosForm(this)'>");
-                        out.print("<div class='text-center mt-4 text-success'>");
-                        out.print("<h4>¡REFERENCIA ENCONTRADA!</h4>");
-                        out.print("</div>");
-                        out.print("<div class='row' style='justify-content: space-evenly; margin-top: 15px;'>");
-                        out.print("<div class='col-lg-2'>");
-                        out.print("<label class='' style='margin-bottom: 0;'>Referencia</label>");
-                        out.print("<input type='text' class='form-control disabled' name='txt_Ref' id='' data-toggle='tooltip' data-placement='top' title='' value='" + lstFact[0] + "' >");
-                        out.print("</div>");
-                        out.print("<div class='col-lg-5'>");
-                        out.print("<label class='' style='margin-bottom: 0;'>Nombre</label>");
-                        out.print("<input type='text' class='form-control disabled' name='txt_RefName' id='' data-toggle='tooltip' data-placement='top' title='' value='" + lstFact[1] + "' >");
-                        out.print("</div>");
-                        out.print("<div class='col-lg-5'>");
-                        out.print("<label class='' style='margin-bottom: 0;'>Proveedor</label>");
-                        out.print("<input type='text' class='form-control " + ((lstFact[3].toString().contains("No Registrado")) ? "" : "disabled") + "' name='txt_supplier' id='' data-toggle='tooltip' data-placement='top' title='' value='"+ lstFact[3].toString() +"' >");
-                        out.print("</div>");
-                        out.print("<div class='col-lg-4'>");
-                        out.print("<label class='' style='margin-bottom: 0;'>Marca</label>");
-                        out.print("<input type='text' class='form-control' name='txt_brand' id='' data-toggle='tooltip' data-placement='top' title='' value='' autocomplete='off'>");
-                        out.print("</div>");                        
-                        out.print("<div class='col-lg-4'>");
-                        out.print("<label class='' style='margin-bottom: 0;'>Ubicación</label>");
-                        out.print("<input type='text' class='form-control' name='txt_location' id='' data-toggle='tooltip' data-placement='top' title='' value='' autocomplete='off'>");
-                        out.print("</div>");
-                        out.print("</div>");
-                        out.print("<div class='text-center mt2'>");
-                        out.print("<button class='btn btn-yellow' >Registrar Referencia</button>");
-                        out.print("</div>");
-                        out.print("</form>");
+                        if (lst_factory.size() > 0) {
+
+                            String[] lstFact = lst_factory.toString().replace("[", "").replace("]", "").split(" / ");
+                            out.print("<form action='Reference?opt=2' method='post' class='needs-validation' novalidate='' onsubmit='return cargarDatosForm(this)'>");
+                            out.print("<div class='text-center mt-4 text-success'>");
+                            out.print("<h4>¡REFERENCIA ENCONTRADA!</h4>");
+                            out.print("</div>");
+                            out.print("<div class='row' style='justify-content: space-evenly; margin-top: 15px;'>");
+                            out.print("<div class='col-lg-2'>");
+                            out.print("<label class='' style='margin-bottom: 0;'>Referencia</label>");
+                            out.print("<input type='text' class='form-control disabled' name='txt_Ref' id='' data-toggle='tooltip' data-placement='top' title='' value='" + lstFact[0] + "' >");
+                            out.print("</div>");
+                            out.print("<div class='col-lg-5'>");
+                            out.print("<label class='' style='margin-bottom: 0;'>Nombre</label>");
+                            out.print("<input type='text' class='form-control disabled' name='txt_RefName' id='' data-toggle='tooltip' data-placement='top' title='' value='" + lstFact[1] + "' >");
+                            out.print("</div>");
+                            out.print("<div class='col-lg-5'>");
+                            out.print("<label class='' style='margin-bottom: 0;'>Proveedor</label>");
+                            out.print("<input type='text' class='form-control " + ((lstFact[3].toString().contains("No Registrado")) ? "" : "disabled") + "' name='txt_supplier' id='' data-toggle='tooltip' data-placement='top' title='' value='" + lstFact[3].toString() + "' >");
+                            out.print("</div>");
+                            out.print("<div class='col-lg-4'>");
+                            out.print("<label class='' style='margin-bottom: 0;'>Marca</label>");
+                            out.print("<input type='text' class='form-control' name='txt_brand' id='' data-toggle='tooltip' data-placement='top' title='' value='' autocomplete='off'>");
+                            out.print("</div>");
+                            out.print("<div class='col-lg-4'>");
+                            out.print("<label class='' style='margin-bottom: 0;'>Ubicación</label>");
+                            out.print("<input type='text' class='form-control' name='txt_location' id='' data-toggle='tooltip' data-placement='top' title='' value='' autocomplete='off'>");
+                            out.print("</div>");
+                            out.print("</div>");
+                            out.print("<div class='text-center mt2'>");
+                            out.print("<button class='btn btn-yellow' >Registrar Referencia</button>");
+                            out.print("</div>");
+                            out.print("</form>");
+                        } else {
+                            out.print("<div class=''>");
+                            out.print("<div class='text-center mt-4'>");
+                            out.print("<h4 class='text-warning'>¡REFERENCIA NO ENCONTRADA!</h4>");
+                            out.print("<h6>Favor revise si la referencia seleccionada ya tiene movimientos!</h6>");
+                            out.print("</div>");
+                            out.print("</div>");
+                        }
                     } else {
                         out.print("<div class=''>");
                         out.print("<div class='text-center mt-4'>");
                         out.print("<h4 class='text-warning'>¡REFERENCIA NO ENCONTRADA!</h4>");
-                        out.print("<h6>Favor escribir otra referencia</h6>");
+                        out.print("<h6>Favor revise si la referencia seleccionada ya tiene movimientos!</h6>");
                         out.print("</div>");
                         out.print("</div>");
                     }
