@@ -730,7 +730,7 @@ public class Tag_pending extends TagSupport {
                         out.print("<div class='DivButtonPending'>");
                         if (Permissions.contains("[31]")) {
                             int IdUserConsult = Integer.parseInt(obj_pending[3].toString());
-                            if (IdUserConsult == IdUser || NameRol.equals("Administrador")) {
+                            if (IdUserConsult == IdUser || NameRol.equals("Administrador") || NameRol.equals("Tecnico Documental") ) {
                                 out.print("<div class='buttomsPending'><button class='btn btn-info' type='button' data-toggle='tooltip' data-placement='top' onclick=\"javascript:location.href='Pending?opt=1&IdPending=" + obj_pending[0] + "&State=1';cargarDatos()\" title='Editar'><i class='fas fa-edit'></i></button></div>");
                             }
                         }

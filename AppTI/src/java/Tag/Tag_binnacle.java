@@ -411,7 +411,7 @@ public class Tag_binnacle extends TagSupport {
             out.print("<div class=''>");
             out.print("<div class='col-lg-6' style='margin: auto;' data-toggle='tooltip' data-placemente='top' title='Seleccionar turno'>");
             lst_setting = SettingJpa.ConsultSettingCategorie("Shift");
-            out.print("<select class='form-control' name='txtshift' id='shiftSelect' style='margin-top: 12px;margin-bottom: 12px;' onchange='updateTimeFields()'>");
+            out.print("<select class='form-control' name='txtshift' id='shiftSelect' required='' style='margin-top: 12px;margin-bottom: 12px;' onchange='updateTimeFields()'>");
             boolean valid = false;
             String shiftx = "";
             lst_shift = ShiftJpa.ConsultShift();
@@ -463,7 +463,7 @@ public class Tag_binnacle extends TagSupport {
             out.print("</div>");
             out.print("<div class=' col-lg-6'>");
             out.print("<label>Hora inicio</label>");
-            out.print("<input type='time' class='form-control' style='margin: 0;' name='txtHourIni' id='startTime' data-toggle='tooltip' data-placement='top' title='' >");
+            out.print("<input type='time' class='form-control' style='margin: 0;' name='txtHourIni' id='startTime' data-toggle='tooltip' data-placement='top' title='' required='' >");
             out.print("</div>");
             out.print("</div>");
 
@@ -474,7 +474,7 @@ public class Tag_binnacle extends TagSupport {
             out.print("</div>");
             out.print("<div class=' col-lg-6'>");
             out.print("<label>Hora final</label>");
-            out.print("<input type='time' class='form-control' style='margin: 0;' name='txtHourfin' id='endTime' data-toggle='tooltip' data-placement='top' title='' >");
+            out.print("<input type='time' class='form-control' style='margin: 0;' name='txtHourfin' id='endTime' data-toggle='tooltip' data-placement='top' title='' required='' >");
             out.print("</div>");
             out.print("</div>");
 

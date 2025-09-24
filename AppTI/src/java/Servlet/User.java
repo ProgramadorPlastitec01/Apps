@@ -60,7 +60,7 @@ public class User extends HttpServlet {
                         request.setAttribute("UserRegister", result);
                     }
 
-                    request.getRequestDispatcher("User?opt=1idUser=0").forward(request, response);
+                    request.getRequestDispatcher("User?opt=1&idUser=0").forward(request, response);
                     //</editor-fold>
                     break;
                 case 3:

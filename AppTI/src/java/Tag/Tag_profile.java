@@ -51,11 +51,11 @@ public class Tag_profile extends TagSupport {
                 out.print("<div class=\"profile-widget-items\">");
                 out.print("<div class=\"profile-widget-item\">");
                 out.print("<div class=\"profile-widget-item-label\">Actividades</div>");
-                out.print("<div class=\"profile-widget-item-value\">" + ObjProfile[1] + "</div>");
+                out.print("<div class=\"profile-widget-item-value\">" + ObjProfile[2] + "</div>");
                 out.print("</div>");
                 out.print("<div class=\"profile-widget-item\">");
                 out.print("<div class=\"profile-widget-item-label\">Bitacoras</div>");
-                out.print("<div class=\"profile-widget-item-value\">" + ObjProfile[2] + "</div>");
+                out.print("<div class=\"profile-widget-item-value\">" + ObjProfile[1] + "</div>");
                 out.print("</div>");
                 out.print("<div class=\"profile-widget-item\">");
                 out.print("<div class=\"profile-widget-item-label\">Casos</div>");
