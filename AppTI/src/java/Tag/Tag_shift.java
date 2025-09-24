@@ -410,7 +410,7 @@ public class Tag_shift extends TagSupport {
             out.print("</div>");
             out.print("</div>");
 
-            out.print("<form action='Shift?opt=2' method='post' id='formShift'>");
+            out.print("<form action='Shift?opt=2' method='post' id='formShift' onsubmit='return cargarDatosForm(this)'>");
             //<editor-fold defaultstate="collapsed" desc="FORM">
             out.print("<input type='hidden' class='form-control' id='ClassData' name='tempClass' placeholder='class'>");
             out.print("<input type='hidden' class='form-control' id='tempTurno' name=''  placeholder='turno' >");
@@ -429,7 +429,7 @@ public class Tag_shift extends TagSupport {
             out.print("<input type='hidden' class='form-control' name='WeekAct' id='' value='" + weekAct + "' placeholder='Semanas iniciales'>");
             out.print("<input type='hidden' class='form-control' name='WeekNext' id='' value='" + weekNext + "' placeholder='Semanas finales'>");
             out.print("<div class='text-center'>");
-            out.print("<button type='button' class='btn btn-green' onclick='ejectForm();cargarDatos()'>Programar</button>");
+            out.print("<button type='button' class='btn btn-green' onclick='ejectForm();'>Programar</button>");
             out.print("</div>");
             //</editor-fold>
             out.print("</form>");
