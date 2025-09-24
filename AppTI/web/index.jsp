@@ -15,6 +15,7 @@
         <link rel="stylesheet" href="Interface/Content/Assets/css/style.css">
         <link rel="stylesheet" href="Interface/Content/Assets/css/components.css">
         <link rel="stylesheet" href="Interface/Content/Assets/css/Suggestion.css">
+        <link rel="stylesheet" href="Interface/Content/Assets/css/resetpass.css">
         <link rel="icon" type="image/png" href="Interface/Imagen/Logo_app/IconW.fw.png">
         <style>
             .home {
@@ -26,7 +27,7 @@
                 transition: background-image 1s ease-in-out; /* efecto suave */
             }
             .ImgSizeSala:hover{
-                    transform: scale(1.1) rotate(360deg) !important;
+                transform: scale(1.1) rotate(360deg) !important;
             }
         </style>
     </head>
@@ -89,8 +90,8 @@
                             <div class="login_signup">VP 00.00.00 </div>
                         </form>
                     </div>
-                    
-                    
+
+
 
                     <!-- Signup From -->
                     <div class="form signup_form">
@@ -198,8 +199,11 @@
                     </div>
                 </div>
             </div>
-            
-                
+
+
+
+
+
         <Alerts:Alert/>
         <script src="Interface/Content/Assets/js/ScriptLogin.js"></script>
         <script type="text/javascript">

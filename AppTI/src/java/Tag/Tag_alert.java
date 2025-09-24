@@ -170,66 +170,91 @@ public class Tag_alert extends TagSupport {
                 } catch (Exception e) {
                     IdUser = "";
                 }
-                out.print("<link rel=\"stylesheet\" href=\"Interface/Content/Validation/StyleSheetLiveValidation.css\">");
-                out.print("<script src=\"Interface/Content/Validation/LiveValidation.js\"></script>");
                 out.print("<div class='sweet-local' style='opacity: 1.03; display: flex; margin:auto;'>");
-                out.print("<fieldset class='cont_pass'>");
-                out.print("<div>");
+                out.print("<link rel='stylesheet' href='Interface/Content/Validation/StyleSheetLiveValidation.css'>");
+                out.print("<script src='Interface/Content/Validation/LiveValidation.js'></script>");
 
-                out.print("<div class='d-flex' style='justify-content: space-between;'>");
+                out.print("<div class='reset-pass-container'>");
+                out.print("    <fieldset class='cont-pass'>");
 
-                out.print("<div>");
-                out.print("<h2>Cambiar Contraseña </h2>");
-                out.print("</div>");
-                out.print("<div>");
-                out.print("<a href='index.jsp' class='btn btn-outline-secondary' style='height: 31px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></a>");
-                out.print("</div>");
+                out.print("        <!-- Header -->");
+                out.print("        <div class='header_reset'>");
+                out.print("            <h2>Cambiar Contraseña</h2>");
+                out.print("            <a href='index.jsp' class='btn-green BtnSt'><i class='fas fa-times i_bnt'></i></a>");
+                out.print("        </div>");
 
-                out.print("</div>");
+                out.print("        <!-- Texto informativo -->");
+                out.print("        <div><p class='info-text'>");
+                out.print("            Proteger tus datos ayuda a evitar fraudes o alteraciones en PLASTITEC y en este Aplicativo.");
+                out.print("        </p></div>");
 
-                out.print("<div>");
-                out.print("</div>");
-                out.print("<p style='text-align: center;'>Recordar que la protección de datos, usuario y contraseña, ayuda a evitar fraudes o alteraciones en la Organización (PLASTITEC) y en este Aplicativo.</p>");
-                out.print("<div style='width:100%' class='camb_body'>");
-                out.print("<form action='Session?opt=2' method='post'>");
-
-                out.print("<div class='d-flex'>");
-                out.print("<input type='hidden' name='IdUser' id='IdUser' value='" + IdUser + "'>");
-                out.print("<input class='form-control' type='password' id='pass-input' placeholder='Nueva Contraseña' style='margin-right: 4%;'>");
+                out.print("        <!-- Formulario -->");
+                out.print("        <form action='Session?opt=2' method='post' autocomplete='off'>");
+                out.print("            <input type='hidden' name='IdUser' id='IdUser' value='" + IdUser + "'>");
+                out.print("            <div class='inputs-container'>");
+                out.print("                <input class='form-control' type='password' name='Txt_password_new' id='pass-input' placeholder='Nueva Contraseña' autocomplete='new-password' readonly>");
+                out.print("    <div id='pass-msg' class='validation-msg'></div>"); // Mensaje de contraseña
 
                 out.print("<script>");
                 out.print("var validatedObj = new LiveValidation('pass-input');");
                 out.print("validatedObj.add(Validate.Password);");
                 out.print("validatedObj.add(Validate.Presence);");
                 out.print("</script>");
-
-                out.print("<input class='form-control' type='password' name='Txt_password' id='confpass-input' placeholder='Confirmar Contraseña' >");
+                out.print("                <input class='form-control' type='password' name='Txt_password' id='confpass-input' placeholder='Confirmar Contraseña' autocomplete='new-password' readonly>");
                 out.print("<script>");
                 out.print("var validatedObj = new LiveValidation('confpass-input');");
                 out.print("validatedObj.add(Validate.Password);");
                 out.print("validatedObj.add(Validate.Confirmation, { match: 'pass-input' });");
                 out.print("</script>");
+                out.print("            </div>");
+
+                out.print("            <script>");
+                out.print("                document.addEventListener('DOMContentLoaded', function() {");
+                out.print("                    var passInput = document.getElementById('pass-input');");
+                out.print("                    var confPassInput = document.getElementById('confpass-input');");
+                out.print("                    if (passInput && confPassInput) {");
+                out.print("                        passInput.removeAttribute('readonly');");
+                out.print("                        confPassInput.removeAttribute('readonly');");
+                out.print("                        console.log('Campos habilitados correctamente');");
+
+                out.print("                        var validatedObj = new LiveValidation('pass-input');");
+                out.print("                        validatedObj.add(Validate.Password);");
+                out.print("                        validatedObj.add(Validate.Presence);");
+                out.print("  validatedPass.onValid = function(){ passMsg.innerHTML='<span style=\"color:green;\">Contraseña válida</span>'; };");
+                out.print("  validatedPass.onInvalid = function(){ passMsg.innerHTML='<span style=\"color:red;\">'+validatedPass.getMessage()+'</span>'; };");
+
+                out.print("                        var validatedObj2 = new LiveValidation('confpass-input');");
+                out.print("                        validatedObj2.add(Validate.Password);");
+                out.print("                        validatedObj2.add(Validate.Confirmation, { match: 'pass-input' });");
+                out.print("                        console.log('Validaciones inicializadas');");
+                out.print("                    } else {");
+                out.print("                        console.error('No se encontraron los campos de contraseña');");
+                out.print("                    }");
+                out.print("                });");
+                out.print("            </script>");
+
+                out.print("            <div class='requirements-logo'>");
+                out.print("                <div class='requirements'>");
+                out.print("                    <strong>Requisitos de la contraseña:</strong><br>");
+                out.print("                    - 8 a 15 caracteres<br>");
+                out.print("                    - Al menos una letra mayúscula y una minúscula<br>");
+                out.print("                    - Al menos un número<br>");
+                out.print("                    - Al menos un carácter especial ($@!%*?&#-)<br>");
+                out.print("                    - No usar espacios en blanco");
+                out.print("                </div>");
+                out.print("                <div class='logo'>");
+                out.print("                    <img src='Interface/Imagen/Espia3.gif' alt='Logo'>");
+                out.print("                </div>");
+                out.print("            </div>");
+
+                out.print("            <div class='submit-btn'>");
+                out.print("                <button type='submit'>Cambiar</button>");
+                out.print("            </div>");
+
+                out.print("        </form>");
+                out.print("    </fieldset>");
                 out.print("</div>");
-                out.print("<div style='display: flex; width: 100%; margin-top: 15px;'>");
-                out.print("<div style='width: 72%;margin-left: 3%; text-align: initial;'>");
-                out.print("<label style='color:#00281b'>El cambio de Contraseña debe contener:<br />"
-                        + "                        -Minimo 8 caracteres<br/>"
-                        + "                        -Maximo 15 caracteres<br/>"
-                        + "                        -Al menos una letra mayúscula<br/>"
-                        + "                        -Al menos una letra minúscula<br/>"
-                        + "                        -Al menos un dígito ( Numero )<br/>"
-                        + "                        -No espacios en blanco<br/>"
-                        + "                        -Al menos 1 caracter especial ( $@$!%*?&#- )</label>");
-                out.print("</div>");
-                out.print("<div style='float:right;'><img src='Interface/Imagen/spy.gif' alt='Logo' width='200' height='150' style='margin-right: 40px;' /></div>");
-                out.print("</div>");
-                out.print("<div style='text-align:center;'>");
-                out.print("<button class='btn btn-green' style=\"box-shadow: 1px 2px 5px 0px #959595;\">Cambiar</button>");
-                out.print("</div>");
-                out.print("</div>");
-                out.print("</form>");
-                out.print("</fieldset>");
-                out.print("</div>");
+
                 out.print("</div>");
             }
 //</editor-fold>
@@ -2288,7 +2313,7 @@ public class Tag_alert extends TagSupport {
                 }
             }
 //</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="MOVE ITEM">
+            //<editor-fold defaultstate="collapsed" desc="MOVE ITEM">
             if (pageContext.getRequest().getAttribute("EditMoveItem") != null) {
                 boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("EditMoveItem").toString());
                 if (result) {

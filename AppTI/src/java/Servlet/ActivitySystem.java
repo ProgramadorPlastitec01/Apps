@@ -29,7 +29,8 @@ public class ActivitySystem extends HttpServlet {
             }
 
         } catch (Exception ex) {
-            request.getRequestDispatcher("ActivitySystem.jsp.jsp").forward(request, response);
+            request.setAttribute("errorMessage", "Ha ocurrido un error procesando tu solicitud: " + ex.getMessage());
+            request.getRequestDispatcher("400.jsp").forward(request, response);
         }
     }
 

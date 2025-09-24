@@ -317,7 +317,7 @@ public class Tag_menu extends TagSupport {
                     + "            <div class=\"dropdown-menu dropdown-menu-right\">\n"
                     + "              <div class=\"dropdown-title\">Acceso hace " + hours + " hr - " + minutes + " min</div>\n"
                     + "              <a href=\"Profile?opt=1\" onclick='cargarDatos()' class=\"dropdown-item has-icon\">\n"
-                    + "                <i class=\"far fa-user\"></i> Perfil\n"
+                    + "                <i class=\"fas fa-user\"></i> Perfil\n"
                     + "              </a>\n"
                     + "              <a href=\"ActivitySystem.jsp\" onclick='cargarDatos()' class=\"dropdown-item has-icon\">\n"
                     + "                <i class=\"fas fa-bolt\"></i> Actividades\n"

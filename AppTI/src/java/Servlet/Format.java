@@ -89,8 +89,9 @@ public class Format extends HttpServlet {
                     request.getRequestDispatcher("Format?opt=1&idfmt=0").forward(request, response);
                     break;
             }
-        } catch (Exception e) {
-            request.getRequestDispatcher("Format.jsp").forward(request, response);
+        } catch (Exception ex) {
+            request.setAttribute("errorMessage", "Ha ocurrido un error procesando tu solicitud: " + ex.getMessage());
+            request.getRequestDispatcher("400.jsp").forward(request, response);
         }
     }
 
