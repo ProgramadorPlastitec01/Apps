@@ -48,7 +48,8 @@ public class CheckerMail extends HttpServlet {
                     break;
             }
         } catch (Exception ex) {
-            request.getRequestDispatcher("CheckMail.jsp").forward(request, response);
+            request.setAttribute("errorMessage", "Ha ocurrido un error procesando tu solicitud: " + ex.getMessage());
+            request.getRequestDispatcher("400.jsp").forward(request, response);
         }
 
     }

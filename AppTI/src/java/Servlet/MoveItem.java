@@ -162,7 +162,9 @@ public class MoveItem extends HttpServlet {
                     //</editor-fold>
                     break;
             }
-        } catch (Exception e) {
+        } catch (Exception ex) {
+            request.setAttribute("errorMessage", "Ha ocurrido un error procesando tu solicitud: " + ex.getMessage());
+            request.getRequestDispatcher("400.jsp").forward(request, response);
         }
     }
 

@@ -39,8 +39,9 @@ public class GeneralNotSession extends HttpServlet {
                     request.getRequestDispatcher("index.jsp").forward(request, response);
                     break;
             }
-        } catch (IOException ex) {
-            request.getRequestDispatcher("index.jsp").forward(request, response);
+        } catch (Exception ex) {
+            request.setAttribute("errorMessage", "Ha ocurrido un error procesando tu solicitud: " + ex.getMessage());
+            request.getRequestDispatcher("500.jsp").forward(request, response);
         }
     }
 

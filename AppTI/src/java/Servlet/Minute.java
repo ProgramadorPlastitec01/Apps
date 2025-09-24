@@ -12,17 +12,10 @@ import Controller.FormatControllerJpa;
 import Controller.ActivitySystemControllerJpa;
 import Mail.Mail_Minute;
 
-import javax.servlet.annotation.MultipartConfig;
-import javax.servlet.http.Part;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 
 import java.util.List;
 
 import SQL.ConnectionsBd;
-import java.io.File;
-import javax.mail.MessagingException;
 
 public class Minute extends HttpServlet {
 
@@ -252,7 +245,9 @@ public class Minute extends HttpServlet {
                     //</editor-fold>
                     break;
             }
-        } catch (Exception e) {
+        } catch (Exception ex) {
+            request.setAttribute("errorMessage", "Ha ocurrido un error procesando tu solicitud: " + ex.getMessage());
+            request.getRequestDispatcher("400.jsp").forward(request, response);
         }
     }
 

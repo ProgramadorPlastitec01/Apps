@@ -1,9 +1,7 @@
 package Servlet;
 
 import Controller.DeviceDetailJpaController;
-import Controller.UserControllerJpa;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -556,7 +554,9 @@ public class Device extends HttpServlet {
                     //</editor-fold>
                     break;
             }
-        } catch (Exception e) {
+        } catch (Exception ex) {
+            request.setAttribute("errorMessage", "Ha ocurrido un error procesando tu solicitud: " + ex.getMessage());
+            request.getRequestDispatcher("400.jsp").forward(request, response);
         }
 
     }

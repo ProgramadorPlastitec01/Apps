@@ -39,6 +39,7 @@ public class Activity extends HttpServlet {
         try {
             switch (opt) {
                 case 1:
+                    //<editor-fold defaultstate="collapsed" desc="MODULE GENERAL">
                     try {
                         idAct = Integer.parseInt(request.getParameter("idAct"));
                     } catch (Exception e) {
@@ -59,6 +60,7 @@ public class Activity extends HttpServlet {
                     request.setAttribute("temp", temp);
                     request.setAttribute("idRol", UserRol);
                     request.getRequestDispatcher("Activity.jsp").forward(request, response);
+                    //</editor-fold>
                     break;
                 case 2:
                     //<editor-fold defaultstate="collapsed" desc="EDIT ACTIVITY">
@@ -78,7 +80,6 @@ public class Activity extends HttpServlet {
                     request.getRequestDispatcher("Activity?opt=1&idAct=0").forward(request, response);
                     //</editor-fold>
                     break;
-
                 case 4:
                     //<editor-fold defaultstate="collapsed" desc="REGISTER DETAIL">
                     String insr_pc = "";
@@ -207,6 +208,7 @@ public class Activity extends HttpServlet {
                     //</editor-fold>
                     break;
                 case 5:
+                    //<editor-fold defaultstate="collapsed" desc="UPDATE DETAIL">
                     try {
                         idAct = Integer.parseInt(request.getParameter("idAct"));
                     } catch (Exception e) {
@@ -236,11 +238,13 @@ public class Activity extends HttpServlet {
                         request.setAttribute("VerfAct", result);
                     }
                     request.getRequestDispatcher("Activity?opt=1").forward(request, response);
+                    //</editor-fold>
                     break;
 
             }
         } catch (Exception ex) {
-            request.getRequestDispatcher("Activity.jsp").forward(request, response);
+            request.setAttribute("errorMessage", "Ha ocurrido un error procesando tu solicitud: " + ex.getMessage());
+            request.getRequestDispatcher("400.jsp").forward(request, response);
         }
 
     }

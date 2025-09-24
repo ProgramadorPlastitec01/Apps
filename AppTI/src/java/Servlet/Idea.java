@@ -44,15 +44,16 @@ public class Idea extends HttpServlet {
                         State = 0;
                     }
                     Description = request.getParameter("Txt_description");
-                    Result = IdeaJpa.CloseIdea(idIdea, State ,Description);
+                    Result = IdeaJpa.CloseIdea(idIdea, State, Description);
                     if (Result) {
                         request.setAttribute("CloseTempIdea", Result);
                     }
                     request.getRequestDispatcher("Idea?opt=1&idIdea=0").forward(request, response);
                     break;
             }
-        } catch (IOException ex) {
-            request.getRequestDispatcher("Idea.jsp").forward(request, response);
+        } catch (Exception ex) {
+            request.setAttribute("errorMessage", "Ha ocurrido un error procesando tu solicitud: " + ex.getMessage());
+            request.getRequestDispatcher("400.jsp").forward(request, response);
         }
     }
 

@@ -215,8 +215,9 @@ public class Schedule extends HttpServlet {
                     //</editor-fold>
                     break;
             }
-        } catch (IOException | ServletException ex) {
-            request.getRequestDispatcher("Schedule.jsp").forward(request, response);
+        } catch (Exception ex) {
+            request.setAttribute("errorMessage", "Ha ocurrido un error procesando tu solicitud: " + ex.getMessage());
+            request.getRequestDispatcher("400.jsp").forward(request, response);
         }
     }
 
