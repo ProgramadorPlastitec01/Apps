@@ -52,6 +52,9 @@ public class Shift extends HttpServlet {
                     weekSelect = request.getParameter("weekSelect");
                     try {
                         ValWeek = request.getParameter("CbxValidPog");
+                        if (ValWeek == null) {
+                            ValWeek = "";
+                        }
                     } catch (Exception e) {
                         ValWeek = "";
                     }
