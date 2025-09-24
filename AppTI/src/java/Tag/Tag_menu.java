@@ -377,8 +377,10 @@ public class Tag_menu extends TagSupport {
                         + "<a class=\"nav-link\" href=\"Computer?opt=1\" onclick='cargarDatos()'><i class=\"fas fa-laptop\"></i> <span>PC</span></a>"
                         + "</li>");
             }
-            out.print("<li class=\"dropdown\">"
-                    + "<a class=\"nav-link\" href=\"Device?opt=1\" onclick='cargarDatos()'><i class=\"fas fa-microchip\"></i> <span>Dispositivos</span></a></li>");
+            if (txtPermissions.contains("[80]")) {
+                out.print("<li class=\"dropdown\">"
+                        + "<a class=\"nav-link\" href=\"Device?opt=1\" onclick='cargarDatos()'><i class=\"fas fa-microchip\"></i> <span>Dispositivos</span></a></li>");
+            }
 
             if (txtPermissions.contains("[55]")) {
                 out.print("<li class=\"dropdown\">");
