@@ -892,6 +892,22 @@ public class Tag_computer extends TagSupport {
                             out.print("<td><input type='number' class='form-control' name='' id='idVersion'></td>");
                             out.print("<td><button class=\"btn btn-info\" onclick=\"agregarFila()\"><i class='fas fa-plus'></button></td>");
                             out.print("</tr>");
+                            String Installed = "";
+                            lst_setting = SettingJpa.ConsultSettingCategorie("InstalledSoftware003");
+                            if (lst_setting != null) {
+                                for (int i = 0; i < lst_setting.size(); i++) {
+                                    Object[] ObjSett = (Object[]) lst_setting.get(i);
+                                    String[] dataSet = ObjSett[2].toString().split("/");
+                                    out.print("<tr>");
+                                    out.print("<td>" + dataSet[0] + "</td>");
+                                    out.print("<td>" + dataSet[1] + "</td>");
+                                    out.print("<td>" + dataSet[2] + "</td>");
+                                    out.print("<td><button class='btn btn-danger' onclick='eliminarFila(this)'>Eliminar</button></td>");
+                                    out.print("</tr>");
+                                    Installed += "[" + ObjSett[2].toString() + "]";
+                                }
+                            }
+
                             out.print("</tbody>");
                             out.print("</table>");
 
@@ -939,8 +955,8 @@ public class Tag_computer extends TagSupport {
                             format = format.replace("XXXMODELOXXX", ObInfo[4].toString());
                             format = format.replace("XXXSERIALXXX", ObInfo[5].toString());
                             format = format.replace("XXXITEMXXX", ObInfo[6].toString());
-                            format = format.replace("XXXPLUS1XXX", "<button type='buitton' class='btn btn-green btn-sm' onclick='mostrarConvencion(1)'><i class='fas fa-plus'></i></button>");
-                            format = format.replace("XXXPLUS2XXX", "<button type='buitton' class='btn btn-green btn-sm' onclick='mostrarConvencion(2)'><i class='fas fa-plus'></i></button>");
+                            format = format.replace("XXXPLUS1XXX", "<button type='button' class='btn btn-info btn-sm' onclick='mostrarConvencion(1)'>Agregar items <i class='fas fa-plus'></i></button>");
+                            format = format.replace("XXXPLUS2XXX", "<button type='button' class='btn btn-info btn-sm' onclick='mostrarConvencion(2)'>Ingresar Software <i class='fas fa-plus'></i></button>");
 
                             format = format.replace("XXXElaboradorXXX", "<b class='text-warning'>Pendiente Firma</b>");
                             format = format.replace("XXXUsuarioXXX", "<b class='text-warning'>Pendiente Firma</b>");
@@ -950,8 +966,8 @@ public class Tag_computer extends TagSupport {
                             //<editor-fold defaultstate="collapsed" desc="FORM TO REGISTER">
                             out.print("<form action='Computer?opt=7&IdComputer=" + IdComputer + "&idpcHead=" + idPcHead + "&type=" + type + "' method='post' class='needs-validation' novalidate='' id='formR03'>");
                             out.print(format);
-                            out.print("<input type='hidden' class='form-control' name='txt_soft' id='infoOculta' >");
                             out.print("<input type='hidden' class='form-control' name='txt_otherItem' id='infoField' >");
+                            out.print("<input type='hidden' class='form-control' name='txt_soft' id='infoOculta' value='" + Installed + "' >");
                             out.print("</form>");
 
                             out.print("<script>\n"

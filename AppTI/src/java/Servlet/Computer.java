@@ -327,7 +327,7 @@ public class Computer extends HttpServlet {
                         txt_otherItem = "[NoN]";
                     }
                     try {
-                        txt_soft = request.getParameter("txt_soft").replace("] [", "---");
+                        txt_soft = request.getParameter("txt_soft").replace("] [", "---").replace("][", "---");
                     } catch (Exception e) {
                         txt_soft = "[NoN]";
                     }
