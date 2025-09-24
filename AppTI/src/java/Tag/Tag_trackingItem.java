@@ -825,7 +825,8 @@ public class Tag_trackingItem extends TagSupport {
                                 out.print("</div>");
                                 out.print("<input type='hidden' class='form-control' name='' id='coordenadas-hidden' value='" + signt + "'>");
 
-                                out.print("<form action='TrackingItem?opt=3&action=1&idItmeToSig=" + idTemToSig + "' method='post' onsubmit='cargarDatos()'>");
+                                out.print("<form action='TrackingItem?opt=3&action=1' method='post' onsubmit='cargarDatos()'>");
+                                out.print("<input type='hidden' name='idItmeToSig' id='' value='" + idTemToSig + "'>");
                                 out.print("<input type='hidden' name='idSig' id='' value='" + ObjSig[0].toString().replace("[", "") + "'>");
                                 out.print("<input type='hidden' name='docx' id='' value='" + docx + "'>");
                                 out.print("<input type='hidden' name='codx' value='" + codx + "'>");
