@@ -731,7 +731,8 @@ public class Tag_trackingItem extends TagSupport {
                             out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(6)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
                             out.print("</div>");
                             out.print("<div class='cont_form_user'>");
-                            out.print("<form action='TrackingItem?opt=1&action=1&idItmeToSig=" + idTemToSig + "' method='post' class=''>");
+                            out.print("<form action='TrackingItem?opt=1&action=1' method='post' class=''>");
+                            out.print("<input type='hidden' name='idItmeToSig' id='' value='" + idTemToSig + "'>");
                             out.print("<div class='d-flex align-items-center'>");
                             out.print("<div class='col-lg-6'>");
                             out.print("<input type='number' class='form-control' name='docx' id='' placeholder='Documento' value='' required>");
