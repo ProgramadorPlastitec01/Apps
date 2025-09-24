@@ -210,6 +210,25 @@ public class ComputerDetailJpaController implements Serializable {
             return false;
         }
     }
+
+    public boolean updateLoginNameComputer(int idPc, String login) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        try {
+            Query q = em.createNativeQuery("CALL `Sp_cdl_u_UpdateLoginPlastitecComputer`(" + idPc + ", '" + login + "')");
+            int resultado = q.executeUpdate();
+            em.getTransaction().commit();
+            em.clear();
+            em.close();
+            if (resultado == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
 //</editor-fold>
 
 }

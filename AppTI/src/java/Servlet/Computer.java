@@ -164,7 +164,7 @@ public class Computer extends HttpServlet {
                         type = "";
                     }
                     try {
-                        DocFiles = request.getParameter("fileDocs");
+                        DocFiles = request.getParameter("txtInitData");
                     } catch (Exception e) {
                         DocFiles = "";
                     }
@@ -178,7 +178,6 @@ public class Computer extends HttpServlet {
                         request.setAttribute("UploadFile_update", Result);
                     } else {
                         Result = CompDetailJpa.registerPcDetail(idPcHead, type, DocFiles, "N/A", 1, 0);
-//                        Result = CompHeader.ChangueStateComputerHeader(idPcHead);
                         request.setAttribute("UploadFile_new", Result);
                     }
                     request.getRequestDispatcher("Computer?opt=1&mod=3&IdComputer=" + IdComputer + "&idDet=0").forward(request, response);
@@ -259,9 +258,9 @@ public class Computer extends HttpServlet {
                     } catch (Exception e) {
                         type = "";
                     }
-                    
+
                     String[] itmsToAsig = {};
-                    
+
                     String structure = "";
                     //<editor-fold defaultstate="collapsed" desc="DECLARATIONS">
                     String txt_post = "",
@@ -287,16 +286,29 @@ public class Computer extends HttpServlet {
                      txt_soft = "";
 
                     int CounterSoftware = 0;
+                    //<editor-fold defaultstate="collapsed" desc="UPDATE DATA PC HEADER">
+                    try {
+                        String areax = request.getParameter("cbxArea");
+                        String[] dataArea = areax.split("/");
+                        int idArea = Integer.parseInt(dataArea[0].toString());
+                        txt_area = "[" + dataArea[1] + "]";
+                        Result = CompHeader.UpdateDataComputer(IdComputer, request.getParameter("txt_name").toUpperCase(), idArea, request.getParameter("txt_post").toUpperCase());
+                        if (Result) {
+                            CompDetailJpa.updateLoginNameComputer(IdComputer, request.getParameter("txt_user").toUpperCase());
+                        }
+                    } catch (Exception e) {
+
+                    }
+                    //</editor-fold>
 
                     txt_post = "[" + request.getParameter("txt_post") + "]";
-                    txt_area = "[" + request.getParameter("txt_area") + "]";
                     txt_location = "[" + request.getParameter("txt_location") + "]";
                     txt_bossname = "[" + request.getParameter("txt_bossname") + "]";
-                    txt_name = "[" + request.getParameter("txt_name") + "]";
                     txt_indentity = "[" + request.getParameter("txt_indentity") + "]";
                     txt_place = "[" + request.getParameter("txt_place") + "]";
                     txt_user = "[" + request.getParameter("txt_user") + "]";
                     txt_day = "[" + request.getParameter("txt_day") + "]";
+                    txt_name = "[" + request.getParameter("txt_name") + "]";
                     txt_month = "[" + request.getParameter("txt_month") + "]";
                     txt_anio = "[" + request.getParameter("txt_anio") + "]";
                     txt_comm1 = "[" + request.getParameter("txt_comm1") + "]";
@@ -320,7 +332,7 @@ public class Computer extends HttpServlet {
                         txt_soft = "[NoN]";
                     }
 
-                    structure = txt_otherItem + txt_soft + txt_post + txt_area + txt_location + txt_bossname + txt_name + txt_indentity + txt_place + txt_user
+                    structure = txt_otherItem + txt_soft + txt_post.toUpperCase() + txt_area.toUpperCase() + txt_location.toUpperCase() + txt_bossname.toUpperCase() + txt_name.toUpperCase() + txt_indentity + txt_place + txt_user.toUpperCase()
                             + txt_day + txt_month + txt_anio + txt_comm1 + txt_comm2 + txt_comm3 + txt_comm4 + txt_comm5 + textcal + textFll;
 
                     lst_setting = SettingJpa.ConsultSettingCategorie("DocSig003");
@@ -333,9 +345,12 @@ public class Computer extends HttpServlet {
                             respo = "[NoN]";
                         }
                     }
-                    if (!textcal.equals("Si")) {
+                    if (textcal.contains("Si")) {
+                        CompHeader.AddCalificationComputerHeader(idPcHead);
+                    } else {
                         CompHeader.DleeCalificationComputerHeader(idPcHead);
                     }
+
                     Result = CompDetailJpa.registerPcDetail(idPcHead, type, structure, respo, 1, 1);
                     if (Result) {
                         for (int i = 0; i < itmsToAsig.length; i++) {
@@ -343,6 +358,7 @@ public class Computer extends HttpServlet {
                             ItemJpa.ItemAsignPc_or_Device(idothe, IdComputer, 0);
                         }
                     }
+
                     request.setAttribute("Register003", Result);
                     request.getRequestDispatcher("Computer?opt=1&IdComputer=" + IdComputer + "&mod=3&idpcHead=" + idPcHead + "&type=" + type + "").forward(request, response);
                     //</editor-fold>
@@ -393,7 +409,7 @@ public class Computer extends HttpServlet {
                         Signature = ObjDet[5].toString().replace(SigMode + "/XX", SigMode + "/" + idSign);
                     }
 //                    if (!Signature.contains("/XX")) {
-                        Result = CompDetailJpa.ComputerSignaturxe(idDetail, Signature);
+                    Result = CompDetailJpa.ComputerSignaturxe(idDetail, Signature);
 //                    } else {
 //                        Result = CompDetailJpa.ComputerSignaturxe(idDetail, Signature, 0);
 //                    }
@@ -403,7 +419,7 @@ public class Computer extends HttpServlet {
                     //</editor-fold>
                     break;
                 case 9:
-                    //<editor-fold defaultstate="collapsed" desc="REGISTER PREVENTIVE MAINTENANCE">
+                    //<editor-fold defaultstate="collapsed" desc="ALL REGISTER">
                     try {
                         idPcHead = Integer.parseInt(request.getParameter("idpcHead"));
                     } catch (NumberFormatException e) {
@@ -433,6 +449,20 @@ public class Computer extends HttpServlet {
                         htmlTabla = "<div id=\"idtabla\">" + htmlTabla + "</div>";
                     }
 
+                    //<editor-fold defaultstate="collapsed" desc="VALID APP PROTOCOL">
+                    if (type.contains("Calificaci")) {
+                        String AppsProtocol = "";
+                        try {
+                            AppsProtocol = request.getParameter("AppsProtocol");
+                        } catch (Exception e) {
+                            AppsProtocol = "";
+                        }
+                        if (!AppsProtocol.equals("")) {
+                            ComputerJpa.UpdateComputerAppProtocol(IdComputer, AppsProtocol);
+                        }
+                    }
+                    //</editor-fold>
+                    
                     if (idDetail > 0) {
                         Result = CompDetailJpa.UpdatePcDetailContent(idDetail, htmlTabla, 0);
                     } else {

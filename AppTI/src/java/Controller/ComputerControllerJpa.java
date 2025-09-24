@@ -342,5 +342,24 @@ public class ComputerControllerJpa {
             return false;
         }
     }
+
+    public boolean UpdateComputerAppProtocol(int IdComputer, String appsPro) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        try {
+            Query q = em.createNativeQuery("CALL `Sp_cpt_u_UpdateAppProtocol`(" + IdComputer + ",'" + appsPro + "')");
+            int resultado = q.executeUpdate();
+            em.getTransaction().commit();
+            em.clear();
+            em.close();
+            if (resultado == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
     //</editor-fold>
 }

@@ -210,55 +210,6 @@
             });
         </script>
 
-        <!--        <script>
-                    function dibujarFirmaPorUsuario(signa) {
-                        const canvas = document.getElementById("signature-canvas-" + signa);
-                        if (!canvas)
-                            return;
-        
-                        const ctx = canvas.getContext('2d');
-                        const hiddenInput = document.getElementById("coordenadas-hidden-" + signa);
-                        if (!hiddenInput)
-                            return;
-        
-                        const coordenadas = JSON.parse(hiddenInput.value);
-        
-                        // Limpiar el canvas
-                        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-                        // Dibujar las coordenadas
-                        coordenadas.forEach(coord => {
-                            ctx.beginPath();
-                            ctx.moveTo(coord.lx, coord.ly);
-                            ctx.lineTo(coord.mx, coord.my);
-                            ctx.strokeStyle = 'black';
-                            ctx.lineWidth = 2;
-                            ctx.stroke();
-                        });
-                    }
-        
-                    function dibujarTodasLasFirmas() {
-                        const canvases = document.querySelectorAll("canvas[id^='signature-canvas-']");
-                        canvases.forEach(canvas => {
-                            const signa = canvas.id.split('-').pop(); // Extrae el ID del usuario
-                            dibujarFirmaPorUsuario(signa);
-                        });
-                    }
-        
-                    // Ejecutar cuando se termine de cargar la página
-                    window.onload = dibujarTodasLasFirmas;
-                </script>-->
-
-
-       
-<!--        
-        <script>
-            function dataPass() {
-                document.getElementById("NewData").value = document.getElementById("editorNext").value;
-                document.FromNew.submit();
-            }
-        </script>-->
-
 
         <script>
 

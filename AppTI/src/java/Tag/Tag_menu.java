@@ -374,11 +374,11 @@ public class Tag_menu extends TagSupport {
             out.print("<li class=\"menu-header\">Documentación</li>");
             if (txtPermissions.contains("[50]")) {
                 out.print("<li class=\"dropdown\">"
-                        + "<a class=\"nav-link\" href=\"Computer?opt=1\" onclick='cargarDatos()'><i style='margin-right:4px' class=\"fas fa-laptop\"></i><span>PC</span></a>"
+                        + "<a class=\"nav-link\" href=\"Computer?opt=1\" onclick='cargarDatos()'><i class=\"fas fa-laptop\"></i> <span>PC</span></a>"
                         + "</li>");
             }
             out.print("<li class=\"dropdown\">"
-                    + "<a class=\"nav-link\" href=\"Device?opt=1\" onclick='cargarDatos()'><i style='margin-right:4px' class=\"fas fa-microchip\"></i><span>Dispositivos</span></a></li>");
+                    + "<a class=\"nav-link\" href=\"Device?opt=1\" onclick='cargarDatos()'><i class=\"fas fa-microchip\"></i> <span>Dispositivos</span></a></li>");
 
             if (txtPermissions.contains("[55]")) {
                 out.print("<li class=\"dropdown\">");
