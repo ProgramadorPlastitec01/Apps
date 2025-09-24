@@ -13,6 +13,7 @@ public class Knowledge extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("utf-8");
         HttpSession sesion = request.getSession();
         int opt = Integer.parseInt(request.getParameter("opt"));
         String UserRol = sesion.getAttribute("idRol").toString();

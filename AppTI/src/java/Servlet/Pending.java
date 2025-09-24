@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 import Controller.PendingControllerJpa;
 import javax.servlet.http.HttpSession;
 import Controller.ActivitySystemControllerJpa;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
