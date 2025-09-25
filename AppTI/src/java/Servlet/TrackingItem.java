@@ -101,8 +101,16 @@ public class TrackingItem extends HttpServlet {
 
                         String q = rmov.RemoveLastWord(validation, "AND");
                         List lst_result = null;
-                        lst_result = MoveItemJpa.ConsultSetting(q);
-                        if (lst_result == null) {
+                        try {
+                            if (!q.equals("")) {
+                                lst_result = MoveItemJpa.ConsultSetting(q);
+                                if (lst_result == null) {
+                                    lst_result = MoveItemJpa.ConsultMoveItems();
+                                }
+                            } else {
+                                lst_result = MoveItemJpa.ConsultMoveItems();
+                            }
+                        } catch (Exception e) {
                             lst_result = MoveItemJpa.ConsultMoveItems();
                         }
                         request.setAttribute("action", action);

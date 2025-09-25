@@ -288,23 +288,23 @@ public class Tag_moveItem extends TagSupport {
             out.print("<div class='card-body text-center'>");
             //<editor-fold defaultstate="collapsed" desc="FORM SEARCH DATA">
             out.print("<h4>Buscar movimiento de factory: </h4>");
-            out.print("<form action='MoveItem?opt=1' method='post' class='needs-validation' novalidate='' id='FormMove'>");
+            out.print("<form action='MoveItem?opt=1' method='post' class='needs-validation' novalidate='' id='FormMove' onsubmit='return cargarDatosForm(this)'>");
             out.print("<div class='d-flex' style='justify-content: center;'>");
             out.print("<div class='col-lg-4'>");
             out.print("<label for='startDate' class='form-label mt-2'><b>Referencia:</b></label>");
-            out.print("<input type='text' class='form-control mr-2' name='txt_ref' id='idRef' data-toggle='tooltip' data-placement='top' title='Referencia' placeholder='Referencia...' value='" + ref + "' autocomplete='off'>");
+            out.print("<input type='text' class='form-control mr-2' name='txt_ref' id='idRef' data-toggle='tooltip' data-placement='top' title='Referencia' placeholder='Referencia...' value='" + ref + "' autocomplete='off' required>");
             out.print("</div>");
             out.print("<div class='col-lg-4'>");
             out.print("<label for='startDate' class='form-label mt-2'><b>Fecha de inicio:</b></label>");
-            out.print("<input type='date' class='form-control mr-2' name='txtDateIni' id='startDate' data-toggle='tooltip' data-placement='top' title='' value='" + dtIn + "'>");
+            out.print("<input type='date' class='form-control mr-2' name='txtDateIni' id='startDate' data-toggle='tooltip' data-placement='top' title='' value='" + dtIn + "' required>");
             out.print("</div>");
             out.print("<div class='col-lg-4'>");
             out.print("<label for='endDate' class='form-label mt-2'><b>Fecha de fin:</b></label>");
-            out.print("<input type='date' class='form-control' name='txtDateFin' id='endDate' data-toggle='tooltip' data-placement='top' title='' value='" + dtFn + "'>");
+            out.print("<input type='date' class='form-control' name='txtDateFin' id='endDate' data-toggle='tooltip' data-placement='top' title='' value='" + dtFn + "' required>");
             out.print("</div>");
             out.print("</div>");
             out.print("<div class='text-center mt-2'>");
-            out.print("<button type='button' class='btn btn-green' onclick='SearchItems();cargarDatos()'>Buscar.. <i class='fas fa-search'></i></button>");
+            out.print("<button type='button' class='btn btn-green' onclick='SearchItems();'>Buscar.. <i class='fas fa-search'></i></button>");
             out.print("</div>");
             out.print("</form>");
             out.print("</div>");
