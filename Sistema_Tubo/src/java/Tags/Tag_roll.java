@@ -1758,9 +1758,16 @@ public class Tag_roll extends TagSupport {
                 out.print("<div><b class='b_text2'>Peso rollo Max: </b>" + objData[29] + "</div>");
                 out.print("</div>");
                 out.print("</div>");
-                out.print("<div class='col-12 mt-3' style='text-align: center;'>");
+                out.print("<div class='col-12 d-flex' style='justify-content: space-around;align-items: baseline;'>");
+                out.print("<div class='DivGrip2'>");
+                out.print("<div><b class='b_text2'>Presión: </b>" + ((objData[33] == null ) ? "" : objData[33]) + "</div>");
+                out.print("<div><b class='b_text2'>Presión Min: </b>" + ((objData[34] == null ) ? "" : objData[34]) + "</div>");
+                out.print("<div><b class='b_text2'>Presión Max: </b>" + ((objData[35] == null ) ? "" : objData[35]) + "</div>");
+                out.print("</div>");
+                out.print("<div class=''>");
                 out.print("<div><b class='b_text2'>Min. Rugosidad: </b>" + objData[30] + "</div>");
                 out.print("<div><b class='b_text2'>Max. Rugosidad: </b>" + objData[31] + "</div>");
+                out.print("</div>");
                 out.print("</div>");
                 out.print("<div class='DivObservation'>");
                 out.print("<div><b class='b_text2'>Observaciones:</b><br>" + objData[32] + "</div>");
