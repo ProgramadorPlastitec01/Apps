@@ -19,7 +19,7 @@ public class MoveItemJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public List<Object[]> compareItems(List<String> itms, String DatIn, String DatFn) {
+    public List<Object[]> compareItems(List<String> itms, String ref, String DatIn, String DatFn) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
 
@@ -29,7 +29,9 @@ public class MoveItemJpaController implements Serializable {
             Query q = etm.createNativeQuery(
                     "SELECT m.id_mov_item, m.id_item, m.mov_type, m.mov_num, m.mov_date "
                     + "FROM mov_item m "
-                    + "WHERE m.mov_num IN (" + ids + ") AND m.mov_date BETWEEN '" + DatIn + "' AND '" + DatFn + "'"
+                    + "INNER JOIN item i ON m.id_item = i.id_item "
+                    + "INNER JOIN fact_reference f ON i.id_reference = f.id_reference "
+                    + "WHERE m.mov_num IN (" + ids + ") AND f.cod_reference LIKE '" + ref + "' AND m.mov_date BETWEEN '" + DatIn + "' AND '" + DatFn + "'"
             );
 
             List<Object[]> consulta = q.getResultList();
@@ -69,11 +71,11 @@ public class MoveItemJpaController implements Serializable {
         }
     }
 
-    public List ConsultItemsRegisterByNroMove(int mov_num) {
+    public List ConsultItemsRegisterByNroMove(int mov_num, String ref) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
         try {
-            Query q = etm.createNativeQuery("CALL `Sp_mim_c_ConsultItemsRegisterByNroMove`(" + mov_num + ")");
+            Query q = etm.createNativeQuery("CALL `Sp_mim_c_ConsultItemsRegisterByNroMove`(" + mov_num + ", '" + ref + "')");
 
             List consulta = q.getResultList();
             etm.getTransaction().commit();
@@ -108,7 +110,7 @@ public class MoveItemJpaController implements Serializable {
             return null;
         }
     }
-    
+
     public List ConsultMoveItemsMonth() {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
@@ -128,7 +130,7 @@ public class MoveItemJpaController implements Serializable {
             return null;
         }
     }
-    
+
     public List ConsultMoveItemsMonthEnt() {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
@@ -148,7 +150,7 @@ public class MoveItemJpaController implements Serializable {
             return null;
         }
     }
-    
+
     public List ConsultMoveItemsMonthSal() {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
@@ -168,9 +170,6 @@ public class MoveItemJpaController implements Serializable {
             return null;
         }
     }
-    
-    
-    
 
     //<editor-fold defaultstate="collapsed" desc="PROCESS">
     public boolean RegisterItemMoveNew(int item, String mov_type, String num_mov, String dateMov, String locationMov, String obsMov, int userReg, int userMod) {
@@ -236,7 +235,7 @@ public class MoveItemJpaController implements Serializable {
         em.getTransaction().begin();
         try {
             Query q = em.createNativeQuery("UPDATE mov_item m "
-                    + "SET m.user_verify = '" + idSign + "', m.user_mod = "+ usr +" "
+                    + "SET m.user_verify = '" + idSign + "', m.user_mod = " + usr + " "
                     + "WHERE m.id_mov_item IN (" + signa + ")");
             int resultado = q.executeUpdate();
             em.getTransaction().commit();

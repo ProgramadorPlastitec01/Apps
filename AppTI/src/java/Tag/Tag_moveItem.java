@@ -357,7 +357,7 @@ public class Tag_moveItem extends TagSupport {
                                 int mov_num = Integer.parseInt(temp);
                                 temp = dato.split("/")[1];
                                 int cant = Integer.parseInt(temp);
-                                lst_move = MoveJpa.ConsultItemsRegisterByNroMove(mov_num);
+                                lst_move = MoveJpa.ConsultItemsRegisterByNroMove(mov_num, ref);
                                 if (lst_move != null) {
                                     Object[] ObjMov = (Object[]) lst_move.get(0);
                                     int cantBd = Integer.parseInt(ObjMov[2].toString());
@@ -373,7 +373,7 @@ public class Tag_moveItem extends TagSupport {
                             //</editor-fold>
 
                             //<editor-fold defaultstate="collapsed" desc="LIST OF ITEMS BY REFERENCE">
-                            lst_move = MoveJpa.compareItems(entNums, dtIn, dtFn);
+                            lst_move = MoveJpa.compareItems(entNums, ref, dtIn, dtFn);
                             Set<String> misIDs = new HashSet<>();
                             if (lst_move != null) {
                                 //<editor-fold defaultstate="collapsed" desc="VALIDACION EN CASO DE QUE YA TENGA MOVIMIENTOS EN EL SISTEMA">
@@ -485,7 +485,7 @@ public class Tag_moveItem extends TagSupport {
                                 salNums.add(salDat[1].replace("SAL", ""));
                             }
                         }
-                        lst_move = MoveJpa.compareItems(salNums, dtIn, dtFn);
+                        lst_move = MoveJpa.compareItems(salNums, ref, dtIn, dtFn);
                         Set<String> misIds = new HashSet<>();
                         if (lst_move != null) {
                             //<editor-fold defaultstate="collapsed" desc="LIST OF ITEMS BY REFERENCE">
