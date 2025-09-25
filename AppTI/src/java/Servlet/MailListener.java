@@ -23,7 +23,7 @@ public class MailListener implements ServletContextListener {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }, 0, 1, TimeUnit.HOURS); // cada 10 segundos
+        }, 0, 30, TimeUnit.DAYS); // cada 10 segundos
     }
 
     @Override
