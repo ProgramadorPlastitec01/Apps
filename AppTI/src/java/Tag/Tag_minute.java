@@ -570,7 +570,7 @@ public class Tag_minute extends TagSupport {
                     String ExPersonal = "";
                     if (lst_minute != null) {
                         Object[] ObjMin = (Object[]) lst_minute.get(0);
-                        out.print("<form action='Minute?opt=2&idMinu=" + ObjMin[0] + "' method='post' id='formData'>");
+                        out.print("<form action='Minute?opt=2&idMinu=" + ObjMin[0] + "' method='post' id='formData' onsubmit='return cargarDatosForm(this)'>");
 
                         out.print("<div id=\"accordion\">");
                         out.print("<div class='accordion'>");
@@ -735,7 +735,7 @@ public class Tag_minute extends TagSupport {
                         out.print("</div>");
 
                         out.print("<div class='mt-2 text-center'>");
-                        out.print("<button class='btn btn-green' onclick='cargarDatos()'>Actualizar</button>");
+                        out.print("<button class='btn btn-green'>Actualizar</button>");
                         out.print("</div>");
 //                        out.print("</div>");
                         out.print("</form>");
@@ -758,7 +758,7 @@ public class Tag_minute extends TagSupport {
                 out.print("</div>");
                 out.print("<div class='cont_form_user'>");
 
-                out.print("<form action='Minute?opt=2' method='post' id='formData'>");
+                out.print("<form action='Minute?opt=2' method='post' id='formData' onsubmit='return cargarDatosForm(this)'>");
                 out.print("<div id=\"accordion\">");
                 out.print("<div class='accordion'>");
                 out.print("<div class=\"accordion-header\" role=\"button\" data-toggle=\"collapse\" data-target=\"#panel-body-99\" aria-expanded=\"true\" style='box-shadow: 0px 1px 4px 0px #a7a7a7;'>");
@@ -865,7 +865,7 @@ public class Tag_minute extends TagSupport {
 
                 out.print("</div>");
                 out.print("<div class='mt-2 text-center'>");
-                out.print("<button type='button' class='btn btn-green' onclick='validForm(\"idDateForm\",\"idAffair\",\"assigned-person-ids\");cargarDatos()'>Registrar</button>");
+                out.print("<button type='button' class='btn btn-green' onclick='validForm(\"idDateForm\",\"idAffair\",\"assigned-person-ids\");'>Registrar</button>");
                 out.print("</div>");
                 out.print("</form>");
                 out.print("</div>");
