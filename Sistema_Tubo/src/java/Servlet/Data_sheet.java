@@ -29,7 +29,8 @@ public class Data_sheet extends HttpServlet {
                     extPre = 0, extPre_min = 0, extPre_max = 0,
                     wall_thickness = 0, wall_thickness_max = 0, wall_thickness_min = 0, diameter_coil_ex = 0,
                     diameter_coil_ex_max = 0, diameter_coil_ex_min = 0, diameter_coil_in = 0, diameter_coil_in_min = 0,
-                    diameter_coil_in_max = 0, min_rugosity = 0, max_rugosity = 0, rollo_weight = 0, rollo_weight_min = 0, rollo_weight_max = 0;
+                    diameter_coil_in_max = 0, min_rugosity = 0, max_rugosity = 0, rollo_weight = 0, rollo_weight_min = 0,
+                    rollo_weight_max = 0, pressure = 0, press_min = 0, press_max = 0;
             String name_sheet = "", code = "", product = "", observation = "";
             boolean result = false;
             switch (opc) {
@@ -73,11 +74,11 @@ public class Data_sheet extends HttpServlet {
                     intSinPre = Double.parseDouble(request.getParameter("Txt_intSinPre"));
                     intSinPre_min = Double.parseDouble(request.getParameter("Txt_intSinPre_min"));
                     intSinPre_max = Double.parseDouble(request.getParameter("Txt_intSinPre_max"));
-                    
+
                     intPre = Double.parseDouble(request.getParameter("Txt_intPre"));
                     intPre_min = Double.parseDouble(request.getParameter("Txt_intPre_min"));
                     intPre_max = Double.parseDouble(request.getParameter("Txt_intPre_max"));
-                    
+
                     extSinPre = Double.parseDouble(request.getParameter("Txt_extSinPre"));
                     extSinPre_min = Double.parseDouble(request.getParameter("Txt_extSinPre_min"));
                     extSinPre_max = Double.parseDouble(request.getParameter("Txt_extSinPre_max"));
@@ -99,6 +100,10 @@ public class Data_sheet extends HttpServlet {
                     rollo_weight = Double.parseDouble(request.getParameter("Txt_roll_weight"));
                     rollo_weight_min = Double.parseDouble(request.getParameter("Txt_roll_weight_min"));
                     rollo_weight_max = Double.parseDouble(request.getParameter("Txt_roll_weight_max"));
+
+                    pressure = Double.parseDouble(request.getParameter("Txt_pressure"));
+                    press_min = Double.parseDouble(request.getParameter("Txt_pressurized_min"));
+                    press_max = Double.parseDouble(request.getParameter("Txt_pressurized_max"));
 
                     min_rugosity = Double.parseDouble(request.getParameter("Txt_min_rugosity"));
                     max_rugosity = Double.parseDouble(request.getParameter("Txt_max_rugosity"));
@@ -123,8 +128,8 @@ public class Data_sheet extends HttpServlet {
                                     wall_thickness, wall_thickness_min, wall_thickness_max,
                                     diameter_coil_ex, diameter_coil_ex_min, diameter_coil_ex_max,
                                     diameter_coil_in, diameter_coil_in_min, diameter_coil_in_max,
-                                    rollo_weight, rollo_weight_min, rollo_weight_max,
-                                    min_rugosity, max_rugosity, observation, rol_usuario);
+                                    rollo_weight, rollo_weight_min, rollo_weight_max, pressure, press_min,
+                                    press_max, min_rugosity, max_rugosity, observation, rol_usuario);
                             result = JpaDataS.DataSheetChangeState(id_data_sheet, 0);
                             request.setAttribute("Data_Sheet_update", result);
                         } else {
@@ -136,7 +141,8 @@ public class Data_sheet extends HttpServlet {
                                     wall_thickness, wall_thickness_min, wall_thickness_max,
                                     diameter_coil_ex, diameter_coil_ex_min, diameter_coil_ex_max,
                                     diameter_coil_in, diameter_coil_in_min, diameter_coil_in_max,
-                                    rollo_weight, rollo_weight_min, rollo_weight_max, min_rugosity, max_rugosity, observation);
+                                    rollo_weight, rollo_weight_min, rollo_weight_max, pressure, press_min,
+                                    press_max, min_rugosity, max_rugosity, observation);
                             request.setAttribute("Data_Sheet_modify", result);
                         }
                     } else {
@@ -148,8 +154,8 @@ public class Data_sheet extends HttpServlet {
                                 wall_thickness, wall_thickness_min, wall_thickness_max,
                                 diameter_coil_ex, diameter_coil_ex_min, diameter_coil_ex_max,
                                 diameter_coil_in, diameter_coil_in_min, diameter_coil_in_max,
-                                rollo_weight, rollo_weight_min, rollo_weight_max,
-                                min_rugosity, max_rugosity, observation, rol_usuario);
+                                rollo_weight, rollo_weight_min, rollo_weight_max, pressure, press_min,
+                                press_max, min_rugosity, max_rugosity, observation, rol_usuario);
                         request.setAttribute("Data_Sheet_register", result);
                     }
                     request.getRequestDispatcher("Data_sheet?opc=1&code=0&id_data_sheet=0").forward(request, response);

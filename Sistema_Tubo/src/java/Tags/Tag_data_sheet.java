@@ -302,12 +302,35 @@ public class Tag_data_sheet extends TagSupport {
                     out.print("</div>");
                     out.print("</div>");
 
-                    //<editor-fold defaultstate="collapsed" desc="RUGOSIDAD Y OBSERVACIONES">
-                    out.print("<div class='ml-2 col-lg-2'>");
+                    out.print("<div class='divCbData'>");
+
+                    out.print("<div style='width:24%'>");
+                    //<editor-fold defaultstate="collapsed" desc="PRESURIZADO">
+                    out.print("<div class='col-lg-12'>");
+                    out.print("<input type='text' class='form-control' name='Txt_pressure' id='Txt_pressure' placeholder='Presurizado' required='' data-toggle='tooltip' data-placement='right' title='Presurizado' autocomplete='off' value='"+ ((obj_data_id[35] == null) ? "0" : obj_data_id[35]) +"'>");
+                    out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
+                    out.print("</div>");
+
+                    out.print("<div class='divTlData'>");
+                    out.print("<div style='margin-right:5px;' class=\"input-group\">"
+                            + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-plus\"></i></div>"
+                            + "<input type='text' style='width:20%' class='form-control' name='Txt_pressurized_max' id='Txt_pressurized_max' placeholder='' required='' value='"+ ((obj_data_id[37] == null) ? "0" : obj_data_id[37]) +"' autocomplete='off'>"
+                            + "</div>");
+                    out.print("<div class=\"input-group\">"
+                            + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-minus\"></i></div>"
+                            + "<input type='text' style='width:20%' class='form-control' name='Txt_pressurized_min' id='Txt_pressurized_min' placeholder='' required='' value='"+ ((obj_data_id[36] == null) ? "0" : obj_data_id[36]) +"' autocomplete='off'>"
+                            + "</div>");
+                    out.print("</div>");
+                    //</editor-fold>
+                    out.print("</div>");
+
+                    out.print("<div style='width:24%'>");
+                    
+                    out.print("<div class='col-lg-12'>");
                     out.print("<span>Rugosidad</span>");
                     out.print("</div>");
-                    out.print("<div class='col-lg-12'  style='display: flex;justify-content: space-around; margin-top:10px;'>");
 
+                    out.print("<div class='divTlData'>");
                     out.print("<div style='margin-right:5px;' class=\"input-group\">"
                             + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-plus\"></i></div>"
                             + "<input type='number' style='width:20%' class='form-control' name='Txt_min_rugosity' id='Txt_min_rugosity' data-toggle='tooltip' data-placement='top' title='Min Rugosidad' placeholder='' value='" + obj_data_id[29] + "' required='' autocomplete='off'>"
@@ -316,12 +339,20 @@ public class Tag_data_sheet extends TagSupport {
                             + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-minus\"></i></div>"
                             + "<input type='number' style='width:20%' class='form-control' name='Txt_max_rugosity' id='Txt_max_rugosity' data-toggle='tooltip' data-placement='top' title='Max Rugosidad' placeholder='' value='" + obj_data_id[30] + "' required='' autocomplete='off'>"
                             + "</div>");
-
-                    out.print("<div class='col-lg-8'>");
+                    out.print("</div>");
+                    out.print("</div>");
+                    
+                    out.print("<div style='width:48%'>");
+                    out.print("<div class=''>");
                     out.print("<textarea class='form-control' name='Txt_observation' id='Txt_observation' placeholder='Observaciones' data-toggle='tooltip' data-placement='right' title='Observaciones' required=''>" + obj_data_id[31] + "</textarea>");
                     out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
                     out.print("</div>");
                     out.print("</div>");
+                    
+                    out.print("</div>");
+
+                    //<editor-fold defaultstate="collapsed" desc="RUGOSIDAD Y OBSERVACIONES">
+                    
                     //</editor-fold>
 
                     out.print("</div>");
@@ -365,7 +396,7 @@ public class Tag_data_sheet extends TagSupport {
                         out.print("</div>");
                         String[] Arr_products = lst_products.toString().replace("[", "").replace("]", "").split("////");
                         out.print("<div class=''>");
-                        out.print("<form class='needs-validation' novalidate='' action='Data_sheet?opc=2' method='post'>");
+                        out.print("<form action='Data_sheet?opc=2' class='needs-validation' novalidate='' method='post'>");
                         out.print("<div class='' style='display: flex;justify-content: space-around;'>");
                         out.print("<div style='width:47%' data-toggle='tooltip' data-placement='right' title='Codigo'><input type='text'  style='background-color:  #ebebeb;' class='form-control input_none' name='Txt_code' id='Txt_code' placeholder='Codigo' value='" + Arr_products[0] + "' ></div>");
                         out.print("<div style='width:47%' data-toggle='tooltip' data-placement='right' title='Producto'><input type='text' style='background-color:  #ebebeb;' class='form-control input_none' name='Txt_product' id='Txt_product' placeholder='Producto' value='" + Arr_products[1] + "'></div>");
@@ -570,33 +601,33 @@ public class Tag_data_sheet extends TagSupport {
                         out.print("</div>");
 
                         out.print("<div class='divCbData'>");
-                        
+
                         out.print("<div style='width:24%'>");
                         //<editor-fold defaultstate="collapsed" desc="PRESURIZADO">
                         out.print("<div class='col-lg-12'>");
-                        out.print("<input type='text' class='form-control' name='Txt_roll_weight' id='Txt_roll_weight' placeholder='Presurizado' required='' data-toggle='tooltip' data-placement='right' title='Peso del rollo' autocomplete='off'>");
+                        out.print("<input type='text' class='form-control' name='Txt_pressure' id='Txt_pressure' placeholder='Presurizado' required='' data-toggle='tooltip' data-placement='right' title='Presurizado' autocomplete='off'>");
                         out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
                         out.print("</div>");
 
                         out.print("<div class='divTlData'>");
                         out.print("<div style='margin-right:5px;' class=\"input-group\">"
                                 + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-plus\"></i></div>"
-                                + "<input type='number' style='width:20%' class='form-control' name='Txt_roll_weight_max' id='Txt_roll_weight_max' placeholder='' required='' autocomplete='off'>"
+                                + "<input type='text' style='width:20%' class='form-control' name='Txt_pressurized_max' id='Txt_pressurized_max' placeholder='' required='' autocomplete='off'>"
                                 + "</div>");
                         out.print("<div class=\"input-group\">"
                                 + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-minus\"></i></div>"
-                                + "<input type='number' style='width:20%' class='form-control' name='Txt_roll_weight_min' id='Txt_roll_weight_min' placeholder='' required='' autocomplete='off'>"
+                                + "<input type='text' style='width:20%' class='form-control' name='Txt_pressurized_min' id='Txt_pressurized_min' placeholder='' required='' autocomplete='off'>"
                                 + "</div>");
                         out.print("</div>");
                         //</editor-fold>
                         out.print("</div>");
-                        
+
+                        out.print("<div style='width:24%'>");
                         //<editor-fold defaultstate="collapsed" desc="RUGOSIDAD">
-                        out.print("<div class='ml-2 col-lg-4'>");
+                        out.print("<div class='col-lg-12'>");
                         out.print("<span>Rugosidad</span>");
                         out.print("</div>");
-                        out.print("<div class='' style='display: flex;justify-content: space-around;'>");
-                        out.print("<div class='divTlData ml-4'>");
+                        out.print("<div class='divTlData'>");
                         out.print("<div style='margin-right:5px;' class=\"input-group\">"
                                 + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-plus\"></i></div>"
                                 + "<input type='number' style='width:20%' class='form-control' name='Txt_min_rugosity' id='Txt_min_rugosity' data-toggle='tooltip' data-placement='top' title='Min Rugosidad' placeholder='' required='' autocomplete='off'>"
@@ -607,8 +638,9 @@ public class Tag_data_sheet extends TagSupport {
                                 + "</div>");
                         //</editor-fold>
                         out.print("</div>");
+                        out.print("</div>");
 
-                        out.print("<div class='col-lg-4'>");
+                        out.print("<div style='width:48%'>");
                         //<editor-fold defaultstate="collapsed" desc="OBSERVACIONES">
                         out.print("<textarea class='form-control' name='Txt_observation' id='Txt_code' placeholder='Observaciones' data-toggle='tooltip' data-placement='right' title='Observaciones' required='' autocomplete='off' ></textarea>");
                         out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
@@ -772,9 +804,18 @@ public class Tag_data_sheet extends TagSupport {
 
                     out.print("</div>");
 
-                    out.print("<div class='DivGrip mb-4' style='height: 50px;text-align: center;width: 100%;'>");
+                    out.print("<div style='display:flex;justify-content:space-around;width:100%;'>");
+
+                    out.print("<div class='DivGrip'>");
+                    out.print("<div><b class='b_text'>Presión: </b>" + ((obj_data[35] == null) ? "0" : obj_data[35]) + "</div>");
+                    out.print("<div><b class='b_text'>Presión Min: </b>" + ((obj_data[36] == null) ? "0" : obj_data[36]) + "</div>");
+                    out.print("<div><b class='b_text'>Presión Max: </b>" + ((obj_data[37] == null) ? "0" : obj_data[37]) + "</div>");
+                    out.print("</div>");
+
+                    out.print("<div class='DivGrip'>");
                     out.print("<div><b class='b_text'>Min. rugosidad: </b>" + obj_data[29] + "</div>");
                     out.print("<div><b class='b_text'>Max. rugosidad: </b>" + obj_data[30] + "</div>");
+                    out.print("</div>");
                     out.print("</div>");
 
                     out.print("</div>");

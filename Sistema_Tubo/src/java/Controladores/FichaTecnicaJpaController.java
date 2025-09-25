@@ -88,7 +88,7 @@ public class FichaTecnicaJpaController implements Serializable {
             double wall_thcickness_max, double diameter_coil_ex, double diameter_coil_ex_min,
             double diameter_coil_ex_max, double diameter_coil_in, double diameter_coil_in_min,
             double diameter_coil_in_max, double roll_weight, double roll_weight_min,
-            double roll_weight_max, double min_rugosity, double max_rugosity, String observation, String user_name) {
+            double roll_weight_max, double pressure, double press_min, double press_max,  double min_rugosity, double max_rugosity, String observation, String user_name) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
@@ -101,7 +101,8 @@ public class FichaTecnicaJpaController implements Serializable {
                     + wall_thcickness_max + "','" + diameter_coil_ex + "','" + diameter_coil_ex_min + "','"
                     + diameter_coil_ex_max + "','" + diameter_coil_in + "','" + diameter_coil_in_min + "','"
                     + diameter_coil_in_max + "','" + roll_weight + "','" + roll_weight_min + "','" + roll_weight_max + "','"
-                    + min_rugosity + "', '"+ max_rugosity +"','" + observation + "','" + user_name + "')");
+                    + pressure + "','" +  press_min + "','" + press_max + "','"+ min_rugosity + "', '"
+                    + max_rugosity +"','" + observation + "','" + user_name + "')");
             int resultado = q.executeUpdate();
             em.getTransaction().commit();
             em.clear();
@@ -125,7 +126,8 @@ public class FichaTecnicaJpaController implements Serializable {
             double wall_thcickness, double wall_thcickness_min,
             double wall_thcickness_max, double diameter_coil_ex, double diameter_coil_ex_min,
             double diameter_coil_ex_max, double diameter_coil_in, double diameter_coil_in_min,
-            double diameter_coil_in_max, double rollweight, double rollweightmin, double rollweightmax, double min_rugosity, double max_rugosity,
+            double diameter_coil_in_max, double rollweight, double rollweightmin, double rollweightmax,
+            double pressure, double press_min, double press_max, double min_rugosity, double max_rugosity,
             String observation) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
@@ -139,7 +141,9 @@ public class FichaTecnicaJpaController implements Serializable {
                     + wall_thcickness + "','" + wall_thcickness_min + "','"
                     + wall_thcickness_max + "','" + diameter_coil_ex + "','" + diameter_coil_ex_min + "','"
                     + diameter_coil_ex_max + "','" + diameter_coil_in + "','" + diameter_coil_in_min + "','"
-                    + diameter_coil_in_max + "','" + rollweight + "','" + rollweightmin + "','" + rollweightmax + "','" + min_rugosity + "','"+ max_rugosity +"','" + observation + "')");
+                    + diameter_coil_in_max + "','" + rollweight + "','" + rollweightmin + "','" + rollweightmax + "','" 
+                    + pressure + "','" +  press_min + "','" + press_max + "','"
+                    + min_rugosity + "','"+ max_rugosity +"','" + observation + "')");
             int resultado = q.executeUpdate();
             em.getTransaction().commit();
             em.clear();
