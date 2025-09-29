@@ -37,6 +37,24 @@ public class BinnacleControllerJpa implements Serializable {
             return null;
         }
     }
+    public List ConsultBinnacleOtherUser(int IdUser) {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_bin_c_ConsultBinnacleOtherIdUser`(" + IdUser + ")");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
 
     public List ConsultBinnacleId(int idBinn) {
         EntityManager etm = getEntityManager();

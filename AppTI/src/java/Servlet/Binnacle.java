@@ -29,7 +29,7 @@ public class Binnacle extends HttpServlet {
             int idUser = Integer.parseInt(sesion.getAttribute("idUsuario").toString());
             String userSession = sesion.getAttribute("Nombres").toString();
             int opt = Integer.parseInt(request.getParameter("opt"));
-            int idBinn = 0, temp = 0, ste = 0, empyData = 0;
+            int idBinn = 0, temp = 0, ste = 0, empyData = 0, tempx = 0;
             String datIn = "", dateFin = "", hourIn = "", hourFin = "", shift = "", binnacle = "", idAct = "", idRec = "";
             boolean result = false;
             switch (opt) {
@@ -47,6 +47,11 @@ public class Binnacle extends HttpServlet {
                         temp = 0;
                     }
                     try {
+                        tempx = Integer.parseInt(request.getParameter("tempx"));
+                    } catch (Exception e) {
+                        tempx = 0;
+                    }
+                    try {
                         empyData = Integer.parseInt(request.getParameter("empyData"));
                     } catch (Exception e) {
                         empyData = 0;
@@ -55,6 +60,7 @@ public class Binnacle extends HttpServlet {
                     request.setAttribute("idUser", idUser);
                     request.setAttribute("idbinn", idBinn);
                     request.setAttribute("temp", temp);
+                    request.setAttribute("tempx", tempx);
                     request.setAttribute("empyData", empyData);
                     request.getRequestDispatcher("Binnacle.jsp").forward(request, response);
 //</editor-fold>
