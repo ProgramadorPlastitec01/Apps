@@ -4,9 +4,17 @@
         <servlet-name>Session</servlet-name>
         <servlet-class>Servlet.Session</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Generate</servlet-name>
+        <servlet-class>Servlet.Generate</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Session</servlet-name>
         <url-pattern>/Session</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Generate</servlet-name>
+        <url-pattern>/Generate</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

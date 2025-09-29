@@ -73,7 +73,7 @@ public class Menu extends TagSupport {
             out.print("</li>");
             out.print("<li class=\"menu-header\">Certificados</li>");
             out.print("<li class=\"dropdown\">");
-            out.print("<a href='#' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/Registros_lab.png\" alt=\"\" class='ImgModule'/></i><span>Registro Lab</span></a>");
+            out.print("<a href='Generate?opt=1' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/Registros_lab.png\" alt=\"\" class='ImgModule'/></i><span>Registro Lab</span></a>");
             out.print("</li>");
             
             out.print("<li class=\"dropdown\">");
@@ -102,7 +102,6 @@ public class Menu extends TagSupport {
             out.print("</div>");
             out.print("</div>");
             //</editor-fold>
-
         } catch (IOException ex) {
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
         }
