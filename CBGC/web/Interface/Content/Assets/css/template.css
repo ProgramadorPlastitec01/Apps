@@ -1,0 +1,9 @@
+.SquareTemplate{
+    box-shadow: 0px 0px 9px -1px #b9b9b9;
+    padding: 11px;
+    border-radius: 5px;
+}
+
+.SquareTemplate:hover{
+    transform: scale(1.03);
+}
