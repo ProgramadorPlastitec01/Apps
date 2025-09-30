@@ -175,13 +175,13 @@ public class Tag_record extends TagSupport {
                 Object[] obj_order = (Object[]) lst_order.get(0);
                 NumOrder = obj_order[3].toString();
                 if (id_order > 48 && !obj_order[12].toString().contains("][")) {
-                    if (!obj_order[3].toString().equals("N/A")) {
+                    if (!obj_order[12].toString().equals("N/A")) {
                         String[] loopLote = obj_order[12].toString().split("/");
                         if (!loopLote[0].equals("-")) {
                             alertLote = true;
                         }
                         maxlote = loopLote[0];
-                        maxRollxLote = Integer.parseInt(loopLote[1]);
+                        maxRollxLote = Integer.parseInt(loopLote[1].toString());
                     } else {
                         maxlote = "";
                         maxRollxLote = 0;

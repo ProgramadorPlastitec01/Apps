@@ -87,7 +87,7 @@
                 document.getElementById("idRoll6").value = idRoll;
 
             }
-            function ActiveControl2(idRoll){
+            function ActiveControl2(idRoll) {
                 document.getElementById("btnEstric").classList.remove("btnEstric");
                 document.getElementById("idRoll2").value = idRoll;
                 document.getElementById("idRoll3").value = idRoll;
@@ -151,29 +151,72 @@
 
         </script>
         <script>
-            function validarFormulario() {
-                var radios = document.getElementsByName('Nmb_inspv');
-                var seleccionado = false;
-                for (var i = 0; i < radios.length; i++) {
-                    if (radios[i].checked) {
-                        seleccionado = true;
-                        break;
-                    }
-                }
-                if (!seleccionado) {
-                    // Si ninguna opción está seleccionada, agrega la clase 'no-seleccionado' a las opciones
-                    for (var i = 0; i < radios.length; i++) {
-                        radios[i].parentNode.classList.add('no-seleccionado');
-                    }
-                    return false; // Devuelve false para evitar el envío del formulario
+            function validarFormulario(formd) {
+                var form = "";
+                if (formd == "") {
+                    form = document.getElementById("FormKeyCode");
                 } else {
-                    // Si hay una opción seleccionada, elimina la clase 'no-seleccionado' de todas las opciones
-                    for (var i = 0; i < radios.length; i++) {
-                        radios[i].parentNode.classList.remove('no-seleccionado');
+                    form = document.getElementById(formd);
+                }
+
+                var total = 0;
+                for (var i = 0; i < 20; i++) {
+                    var element = document.getElementById('outParam' + i);
+                    var temp = 0;
+                    if (element) {
+                        temp = Number(element.value) || 0;
                     }
-                    return true; // Permite el envío del formulario
+                    total += temp;
+                }
+
+                if (total > 0) {
+                    swal({
+                        title: "Atención!",
+                        text: "¿Está segur@ que desea registrar? Hay datos fuera de parámetros.",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#c9e433",
+                        confirmButtonText: "Aceptar",
+                        cancelButtonText: "Cancelar",
+                        closeOnConfirm: false
+                    }, function () {
+                        if (!form.checkValidity()) {
+                            form.reportValidity();
+                            return;
+                        }
+                        form.submit();
+                    });
+                } else {
+                    if (!form.checkValidity()) {
+                        form.reportValidity();
+                        return;
+                    }
+                    form.submit();
                 }
             }
+//            function validarFormulario() {
+//                var radios = document.getElementsByName('Nmb_inspv');
+//                var seleccionado = false;
+//                for (var i = 0; i < radios.length; i++) {
+//                    if (radios[i].checked) {
+//                        seleccionado = true;
+//                        break;
+//                    }
+//                }
+//                if (!seleccionado) {
+//                    // Si ninguna opción está seleccionada, agrega la clase 'no-seleccionado' a las opciones
+//                    for (var i = 0; i < radios.length; i++) {
+//                        radios[i].parentNode.classList.add('no-seleccionado');
+//                    }
+//                    return false; // Devuelve false para evitar el envío del formulario
+//                } else {
+//                    // Si hay una opción seleccionada, elimina la clase 'no-seleccionado' de todas las opciones
+//                    for (var i = 0; i < radios.length; i++) {
+//                        radios[i].parentNode.classList.remove('no-seleccionado');
+//                    }
+//                    return true; // Permite el envío del formulario
+//                }
+//            }
 
             function ValidarInputLabel() {
                 var rd = document.getElementsByName('Nmb_inspv');

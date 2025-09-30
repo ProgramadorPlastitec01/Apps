@@ -211,8 +211,8 @@ public class Record extends HttpServlet {
                                             curreRolls = Integer.parseInt(obj_cont[1].toString());
                                             if (id_order > 48 && !obj_cont[2].toString().contains("N/A")) {
                                                 String[] lteData = obj_cont[2].toString().split("/");
-                                                rollxLote = Integer.parseInt(lteData[1]);
-                                                if (curreRolls >= rollxLote) {
+                                                rollxLote = Integer.parseInt(lteData[1].toString().replace("]", ""));
+                                                if (curreRolls >= rollxLote && rollxLote > 0) {
                                                     result = OrderJpa.OrderchangueValitationLte(id_order, lot_product.trim() + "/" + rollxLote);
                                                 }
                                             }
@@ -224,6 +224,7 @@ public class Record extends HttpServlet {
                                 //</editor-fold>
                                 request.setAttribute("Record_Register", result);
                                 request.getRequestDispatcher("Record?opc=1&id_order=" + id_order + "").forward(request, response);
+                                break;
                             }
 
                             lst_order = OrderJpa.Consult_OrderId(id_order);

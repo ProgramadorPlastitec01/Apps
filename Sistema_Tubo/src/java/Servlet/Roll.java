@@ -41,7 +41,8 @@ public class Roll extends HttpServlet {
                 justifyp = "", idregs = "", txtCodeUser = "", txtJustify = "", changelte = "", numberRoll = "", valueAss = "", valueReg = "", valueRes = "";
         int outParam1 = 0, outParam2 = 0, outParam3 = 0, outParam4 = 0, outParam5 = 0,
                 outParam6 = 0, outParam7 = 0, outParam8 = 0, outParam9 = 0, outParam10 = 0,
-                outParam11 = 0, outParam13 = 0, outParam14 = 0, idRll_Event = 0, nroRll = 0, nmbTime = 0, IdRllH = 0, sumator = 0, counter = 0, countRollsO = 0, id_param = 0;
+                outParam11 = 0, outParam12 = 0, outParam13 = 0, outParam14 = 0, idRll_Event = 0, nroRll = 0, nmbTime = 0, IdRllH = 0, sumator = 0, counter = 0, 
+                countRollsO = 0, id_param = 0;
         boolean result = false;
         boolean result2 = false;
         List lst_rollo = null;
@@ -233,6 +234,14 @@ public class Roll extends HttpServlet {
                             param += "[11]";
                         }
                         try {
+                            outParam12 = Integer.parseInt(request.getParameter("outParam12"));
+                        } catch (Exception e) {
+                            outParam12 = 0;
+                        }
+                        if (outParam12 > 0) {
+                            param += "[12]";
+                        }
+                        try {
                             outParam13 = Integer.parseInt(request.getParameter("outParam13"));
                         } catch (Exception e) {
                             outParam13 = 0;
@@ -291,6 +300,8 @@ public class Roll extends HttpServlet {
                                 justifyp += " - El control de rugosidad " + (valid - 6) + ".<br>";
                             } else if (valid == 11) {
                                 justifyp += " - El peso de rollo.<br>";
+                            } else if (valid == 12) {    
+                                justifyp += " - La presion del rollo.<br>";
                             } else if (valid >= 13) {
                                 justifyp += " - El valor externo sin presurizar.<br>";
                             }

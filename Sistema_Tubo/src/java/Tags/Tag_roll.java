@@ -188,6 +188,10 @@ public class Tag_roll extends TagSupport {
                 double espesorPrdMin = espesorPrd - Double.parseDouble(Obj_ficha[19].toString());
                 double espesorPrdMax = espesorPrd + Double.parseDouble(Obj_ficha[20].toString());
 
+                double pressure = Double.parseDouble(Obj_ficha[33].toString());
+                double press_min = pressure - Double.parseDouble(Obj_ficha[34].toString());
+                double press_max = pressure + Double.parseDouble(Obj_ficha[35].toString());
+
                 double rollWeight = Double.parseDouble(Obj_ficha[27].toString());
                 double rollWeightMin = rollWeight - Double.parseDouble(Obj_ficha[28].toString());
                 double rollWeightMax = rollWeight + Double.parseDouble(Obj_ficha[29].toString());
@@ -356,11 +360,29 @@ public class Tag_roll extends TagSupport {
                             out.print("<div class='col-lg-12' style='margin-bottom: -10px;margin-top: 10px;'>");
                             out.print("</div>");
                             out.print("<div class='col-lg-12 col-md-6' style='display: flex;'>");
+
                             out.print("<div class='col-lg-6'>");
-                            out.print("<label>Presion </label>");
-                            out.print("<input type='text' style='margin-top: 2px;' class='form-control' name='Nmb_prsIny' id='Nmb_prsIny' placeholder='Presion Inyectada' required='' data-toggle='tooltip' data-placement='top' title='Presion Inyectada' value='" + ((obj_editRoll[11] == null) ? "" : obj_editRoll[11]) + "' onkeypress=\"avanzarCampo(event, 'Nmb_PesRoll')\" autocomplete='off'>");
-                            out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
+
+                            out.print("<label>Presion (Min. " + press_min + " / Max. " + press_max + ")</label>");
+                            out.print("<input type='text' style='margin-top: 2px;' class='form-control' name='Nmb_prsIny' id='Nmb_prsIny' placeholder='Presion Inyectada' required='' data-toggle='tooltip' data-placement='top' title='Presion Inyectada' value='" + ((obj_editRoll[11] == null) ? "" : obj_editRoll[11]) + "' onkeyup='Validar12();' onkeypress=\"avanzarCampo(event, 'Nmb_PesRoll')\" autocomplete='off'>");
+                            out.print("<input type='hidden' name='outParam12' id='outParam12' value='0'>");
+                            out.print("<script>"
+                                    + "function Validar12(){ "
+                                    + "	var camp = document.getElementById('Nmb_prsIny').value; "
+                                    + "	if (camp < " + press_min + " || camp > " + press_max + ") { "
+                                    + "         document.getElementById('Nmb_prsIny').classList.add('Invalid_field'); "
+                                    + "		document.getElementById('Nmb_prsIny').classList.remove('Valid_fiel'); "
+                                    + "         document.getElementById('outParam12').value = 1;  "
+                                    + "	}else{ "
+                                    + "		document.getElementById('Nmb_prsIny').classList.remove('Invalid_field'); "
+                                    + "		document.getElementById('Nmb_prsIny').classList.add('Valid_fiel'); "
+                                    + "         document.getElementById('outParam12').value = 0;  "
+                                    + "	} "
+                                    + "};"
+                                    + "</script>");
+
                             out.print("</div>");
+
                             out.print("<div class='col-lg-6'>");
                             out.print("<label>Peso (Min. " + rollWeightMin + " / Max. " + rollWeightMax + ")</label>");
                             out.print("<input type='text' style='margin-top: 2px;' class='form-control' name='Nmb_PesRoll' id='Nmb_PesRoll' placeholder='Peso Rollo' required='' data-toggle='tooltip' data-placement='top' title='Peso Rollo' onkeyup='Validar11();' value='" + ((obj_editRoll[12] == null) ? "" : obj_editRoll[12]) + "' onkeypress=\"avanzarCampo(event, 'Nmb_rug1')\" autocomplete='off'>");
@@ -497,7 +519,7 @@ public class Tag_roll extends TagSupport {
                             out.print("</div>");
                         }
                         out.print("<div class='' style='width: 100%; text-align:center;'>");
-                        out.print("<button class='btn btn-green btn-lg'>Editar</button>");
+                        out.print("<button type='button' class='btn btn-green btn-lg' onclick='validarFormulario()'>Editar</button>");
                         out.print("</div>");
                     } else {
                         out.print("<div class='col-lg-12 col-md-6' style='display: flex;'>");
@@ -581,6 +603,10 @@ public class Tag_roll extends TagSupport {
                 double espesorPrdMin = espesorPrd - Double.parseDouble(Obj_ficha[19].toString());
                 double espesorPrdMax = espesorPrd + Double.parseDouble(Obj_ficha[20].toString());
 
+                double pressure = Double.parseDouble(Obj_ficha[33].toString());
+                double press_min = pressure - Double.parseDouble(Obj_ficha[34].toString());
+                double press_max = pressure + Double.parseDouble(Obj_ficha[35].toString());
+
                 double rollWeight = Double.parseDouble(Obj_ficha[27].toString());
                 double rollWeightMin = rollWeight - Double.parseDouble(Obj_ficha[28].toString());
                 double rollWeightMax = rollWeight + Double.parseDouble(Obj_ficha[29].toString());
@@ -646,7 +672,7 @@ public class Tag_roll extends TagSupport {
                         out.print("<div class='col-lg-12 col-md-6' style='display: flex;'>");
                         out.print("<div class='col-lg-6'>");
                         out.print("<span>Externo sin presurizar (Min. " + ext_sinPressMin + " / Max. " + ext_sinPressMax + ")</span>");
-                        out.print("<input type='text' class='form-control' name='Nmb_exsp' id='Nmb_exsp' placeholder='Externo sin presurizar' data-toggle='tooltip' data-placement='top' title='' onkeyup='Validar13();' onkeypress=\"avanzarCampo(event, 'Nmb_exsp');\" autocomplete='off'>");
+                        out.print("<input type='text' class='form-control' name='Nmb_exsp' id='Nmb_exsp' placeholder='Externo sin presurizar' required data-toggle='tooltip' data-placement='top' title='' onkeyup='Validar13();' onkeypress=\"avanzarCampo(event, 'Nmb_exsp');\" autocomplete='off'>");
                         out.print("<input type='hidden' name='outParam13' id='outParam13' value='0'>");
                         out.print("<script>"
                                 + "function Validar13(){ "
@@ -758,7 +784,7 @@ public class Tag_roll extends TagSupport {
                                 + "</script>");
                         out.print("</div>");
                         out.print("<div class='col-lg-3'>");
-                        out.print("<input type='text' class='form-control' name='Nmb_spr4' id='Nmb_spr4' placeholder='Pared 4' required='' data-toggle='tooltip' data-placement='top' title='Espesor Pared 4' onkeyup='Validar6();'onkeypress=\"avanzarCampo(event, 'Nmb_prsIny');\" autocomplete='off'>");
+                        out.print("<input type='text' class='form-control' name='Nmb_spr4' id='Nmb_spr4' placeholder='Pared 4' required='' data-toggle='tooltip' data-placement='top' title='Espesor Pared 4' onkeyup='Validar6();' onkeypress=\"avanzarCampo(event, 'Nmb_prsIny');\" autocomplete='off'>");
                         out.print("<input type='hidden' name='outParam6' id='outParam6' value='0'>");
                         out.print("<script>"
                                 + "function Validar6(){ "
@@ -790,10 +816,22 @@ public class Tag_roll extends TagSupport {
                             out.print("</div>");
                             out.print("<div class='col-lg-12 col-md-6' style='display: flex;'>");
                             out.print("<div class='col-lg-6'>");
-                            out.print("<label>Presion </label>");
-                            out.print("<input type='text' style='margin-top: 2px;' class='form-control' name='Nmb_prsIny' id='Nmb_prsIny' placeholder='Presion Inyectada' required='' data-toggle='tooltip' data-placement='top' title='Presion Inyectada' onkeypress=\"avanzarCampo(event, 'Nmb_PesRoll');\" autocomplete='off'>");
-                            out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
+                            out.print("<label>Presion (Min. " + press_min + " / Max. " + press_max + ")</label>");
+                            out.print("<input type='text' style='margin-top: 2px;' class='form-control' name='Nmb_prsIny' id='Nmb_prsIny' placeholder='Presion Inyectada' required='' data-toggle='tooltip' data-placement='top' title='Presion Inyectada' onkeyup='Validar12();' onkeypress=\"avanzarCampo(event, 'Nmb_PesRoll');\" autocomplete='off'>");
+                            out.print("<input type='hidden' name='outParam12' id='outParam12' value='0'>");
                             out.print("<script>"
+                                    + "function Validar12(){ "
+                                    + "	var camp = document.getElementById('Nmb_prsIny').value; "
+                                    + "	if (camp < " + press_min + " || camp > " + press_max + ") { "
+                                    + "         document.getElementById('Nmb_prsIny').classList.add('Invalid_field'); "
+                                    + "		document.getElementById('Nmb_prsIny').classList.remove('Valid_fiel'); "
+                                    + "         document.getElementById('outParam12').value = 1;  "
+                                    + "	}else{ "
+                                    + "		document.getElementById('Nmb_prsIny').classList.remove('Invalid_field'); "
+                                    + "		document.getElementById('Nmb_prsIny').classList.add('Valid_fiel'); "
+                                    + "         document.getElementById('outParam12').value = 0;  "
+                                    + "	} "
+                                    + "};"
                                     + "const campoTexto12 = document.getElementById('Nmb_prsIny'); "
                                     + "        campoTexto12.addEventListener('input', function(event) { "
                                     + "            const inputValue = event.target.value; "
@@ -966,7 +1004,7 @@ public class Tag_roll extends TagSupport {
                             out.print("</div>");
                         }
                         out.print("<div class='' style='width: 100%; text-align:center;'>");
-                        out.print("<button id='SendBottom' onclick=\"validarFormulario()\" class='btn btn-green btn-lg'>Registrar</button>");
+                        out.print("<button type='button' id='SendBottom' class='btn btn-green btn-lg' onclick='validarFormulario()'>Registrar</button>");
                         out.print("</div>");
                     } else {
                         out.print("<div class='col-lg-12 col-md-6' style='display: flex;'>");
@@ -1172,6 +1210,11 @@ public class Tag_roll extends TagSupport {
                         double rollWeight = Double.parseDouble(Obj_ficha[27].toString());
                         double rollWeightMin = rollWeight - Double.parseDouble(Obj_ficha[28].toString());
                         double rollWeightMax = rollWeight + Double.parseDouble(Obj_ficha[29].toString());
+
+                        double pressure = Double.parseDouble(Obj_ficha[33].toString());
+                        double press_min = pressure - Double.parseDouble(Obj_ficha[34].toString());
+                        double press_max = pressure + Double.parseDouble(Obj_ficha[35].toString());
+
                         //</editor-fold>
                         out.print("<div class='sweet-local' tabindex='-1' id='Ventana5' style='opacity: 1.03; display:block;'>");
                         out.print("<div class='cont_reg_press'>");
@@ -1180,46 +1223,59 @@ public class Tag_roll extends TagSupport {
                         out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(5)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
                         out.print("</div>");
                         out.print("<div class='cont_form_user'>");
-                        out.print("<form action='Roll?opc=4&id_order=" + id_order + "' method='post' class='needs-validation' novalidate=''>");
+                        out.print("<form action='Roll?opc=4&id_order=" + id_order + "' method='post' class='needs-validation' novalidate='' id='FormKeyCodeTwo'>");
                         out.print("<input type='hidden' name='idRoll' id='idRoll' value='" + idRoll + "'>");
                         out.print("<input type='hidden' name='idReg' id='idReg' value='" + idReg + "'>");
                         out.print("<div class='col-lg-12 col-md-6 mt-2 mb-4' style='display: flex;'>");
                         out.print("<div class='col-lg-6'>");
-                        out.print("<label>Presion </label>");
-                        out.print("<input type='text' class='form-control' name='Txt_pressure' id='Txt_pressure' placeholder='Presion Inyectada' required data-toggle='tooltip' top title='Presion Inyectada (BAR)'>");
-                        out.print("<div class='invalid-feedback'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp;Debe ingresar un valor!</div>");
+                        out.print("<label>Presion (Min. " + press_min + " / Max. " + press_max + " )</label>");
+                        out.print("<input type='text' class='form-control' name='Txt_pressure' id='Txt_pressure' placeholder='Presion Inyectada' required data-toggle='tooltip' top title='Presion Inyectada (BAR)' onkeyup='Validar16();'>");
+                        out.print("<input type='hidden' name='outParam16' id='outParam16' value='0'>");
                         out.print("</div>");
-                        out.print("<script>");
-                        out.print("const campoTexto14 = document.getElementById('Txt_pressure'); "
+                        out.print("<script>"
+                                + " function Validar16(){  "
+                                + " 	var camp = document.getElementById('Txt_pressure').value;  "
+                                + " 	if (camp <  " + press_min + " || camp > " + press_max + ") {  "
+                                + "          document.getElementById('Txt_pressure').classList.add('Invalid_field');  "
+                                + " 	    document.getElementById('Txt_pressure').classList.remove('Valid_fiel');  "
+                                + "          document.getElementById('outParam16').value = 1;   "
+                                + " 	}else{  "
+                                + " 	    document.getElementById('Txt_pressure').classList.remove('Invalid_field');  "
+                                + " 	    document.getElementById('Txt_pressure').classList.add('Valid_fiel');  "
+                                + "          document.getElementById('outParam16').value = 0;   "
+                                + " 	}  "
+                                + " }; "
+                                + " ");
+
+                        out.print(" const campoTexto14 = document.getElementById('Txt_pressure'); "
                                 + "campoTexto14.addEventListener('input', function(event) { "
                                 + "    const inputValue = event.target.value; "
                                 + "    const cleanInput = inputValue.replace(/[^0-9.\\s]/gi, ''); "
                                 + "    if (inputValue !== cleanInput) { "
                                 + "        event.target.value = cleanInput; "
                                 + "    } "
-                                + "});");
+                                + "}); ");
                         out.print("</script>");
                         out.print("<div class='col-lg-6'>");
                         out.print("<label>Peso (Min. " + rollWeightMin + " / Max. " + rollWeightMax + ")</label>");
-                        out.print("<input type='text' class='form-control' name='Txt_weigth' id='Txt_weigth' placeholder='Peso Rollo' required data-toggle='tooltip' data-placement='top' title='Peso Rollo (Kg)' onkeyup='Validar11();'>");
-                        out.print("<div class='invalid-feedback'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp;Debe ingresar un valor!</div>");
-                        out.print("<input type='hidden' name='outParam11' id='outParam11' value='0'>");
+                        out.print("<input type='text' class='form-control' name='Txt_weigth' id='Txt_weigthx' placeholder='Peso Rollo' required data-toggle='tooltip' data-placement='top' title='Peso Rollo (Kg)' onkeyup='Validar17();'>");
+                        out.print("<input type='hidden' name='outParam17' id='outParam17' value='0'>");
                         out.print("<script>"
-                                + "function Validar11(){ "
-                                + "	var camp = document.getElementById('Txt_weigth').value; "
+                                + "function Validar17(){ "
+                                + "	var camp = document.getElementById('Txt_weigthx').value; "
                                 + "	if (camp < " + rollWeightMin + " || camp > " + rollWeightMax + ") { "
-                                + "         document.getElementById('Txt_weigth').classList.add('Invalid_field'); "
-                                + "	    document.getElementById('Txt_weigth').classList.remove('Valid_fiel'); "
-                                + "         document.getElementById('outParam11').value = 1;  "
+                                + "         document.getElementById('Txt_weigthx').classList.add('Invalid_field'); "
+                                + "	    document.getElementById('Txt_weigthx').classList.remove('Valid_fiel'); "
+                                + "         document.getElementById('outParam17').value = 1;  "
                                 + "	}else{ "
-                                + "	    document.getElementById('Txt_weigth').classList.remove('Invalid_field'); "
-                                + "	    document.getElementById('Txt_weigth').classList.add('Valid_fiel'); "
-                                + "         document.getElementById('outParam11').value = 0;  "
+                                + "	    document.getElementById('Txt_weigthx').classList.remove('Invalid_field'); "
+                                + "	    document.getElementById('Txt_weigthx').classList.add('Valid_fiel'); "
+                                + "         document.getElementById('outParam17').value = 0;  "
                                 + "	} "
                                 + "};"
                                 + ""
-                                + "const campoTexto13 = document.getElementById('Txt_weigth'); "
-                                + "        campoTexto13.addEventListener('input', function(event) { "
+                                + "const campoTexto17 = document.getElementById('Txt_weigthx'); "
+                                + "        campoTexto17.addEventListener('input', function(event) { "
                                 + "            const inputValue = event.target.value; "
                                 + "            const cleanInput = inputValue.replace(/[^0-9.\\s]/gi, ''); "
                                 + "            if (inputValue !== cleanInput) { "
@@ -1230,7 +1286,7 @@ public class Tag_roll extends TagSupport {
                         out.print("</div>");
                         out.print("</div>");
                         out.print("<div class='' style='width: 100%; text-align:center;'>");
-                        out.print("<button class='btn btn-green btn-lg'>Registrar</button>");
+                        out.print("<button type='button' class='btn btn-green btn-lg' onclick='validarFormulario(\"FormKeyCodeTwo\")'>Registrar</button>");
                         out.print("</div>");
                         out.print("</form>");
                         out.print("</div>");
@@ -1595,7 +1651,7 @@ public class Tag_roll extends TagSupport {
                     out.print("<div class='sweet-local' tabindex='-1' id='Ventana14' style='opacity: 1.03; display:block;'>");
                     out.print("<div class='cont_reg_bob' style='width: 48%; margin-left: 32%;'>");
                     out.print("<div style='display: flex; justify-content: space-between'>");
-                    out.print("<h3>Registro de valores presurizados Rollo. "+ nroRollo +"</h3>");
+                    out.print("<h3>Registro de valores presurizados Rollo. " + nroRollo + "</h3>");
                     out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(14)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
                     out.print("</div>");
                     out.print("<div class='cont_form_user' style=''>");
@@ -1760,9 +1816,9 @@ public class Tag_roll extends TagSupport {
                 out.print("</div>");
                 out.print("<div class='col-12 d-flex' style='justify-content: space-around;align-items: baseline;'>");
                 out.print("<div class='DivGrip2'>");
-                out.print("<div><b class='b_text2'>Presión: </b>" + ((objData[33] == null ) ? "" : objData[33]) + "</div>");
-                out.print("<div><b class='b_text2'>Presión Min: </b>" + ((objData[34] == null ) ? "" : objData[34]) + "</div>");
-                out.print("<div><b class='b_text2'>Presión Max: </b>" + ((objData[35] == null ) ? "" : objData[35]) + "</div>");
+                out.print("<div><b class='b_text2'>Presión: </b>" + ((objData[33] == null) ? "" : objData[33]) + "</div>");
+                out.print("<div><b class='b_text2'>Presión Min: </b>" + ((objData[34] == null) ? "" : objData[34]) + "</div>");
+                out.print("<div><b class='b_text2'>Presión Max: </b>" + ((objData[35] == null) ? "" : objData[35]) + "</div>");
                 out.print("</div>");
                 out.print("<div class=''>");
                 out.print("<div><b class='b_text2'>Min. Rugosidad: </b>" + objData[30] + "</div>");
