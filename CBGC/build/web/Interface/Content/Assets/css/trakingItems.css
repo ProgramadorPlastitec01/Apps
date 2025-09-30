@@ -1,0 +1,34 @@
+
+.dvGneral{
+    box-shadow: 0px 1px 9px -1px #999999; 
+    border-radius: 6px;
+    margin-bottom: 7px;
+}
+
+.DvSraque{
+    background: #0b0025;
+    border-radius: 3px;
+    padding: 8px;
+    width: 38px;
+    height: 38px;
+    margin: 10px;
+    line-height: 28px;
+    color: white;
+
+}
+
+.DvData{
+    padding: 6px 10px 10px 0px;
+}
+
+.dvText{
+    margin: 0;
+    line-height: 1.2;
+    color: #98a6ad;
+}
+
+.dvBold{
+    font-weight: bolder;
+    color: black;
+    font-size: 15px;
+}

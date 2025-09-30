@@ -1,0 +1,17 @@
+.DivSuggestion {
+    position: fixed;
+    right: -90px;
+    bottom: 242px;
+    width: 64%;
+    opacity: 0;
+    transform: scaleY(0);
+    transform-origin: top right;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+    pointer-events: none;
+}
+
+.DivSuggestion.active {
+    opacity: 1;
+    transform: scaleY(1); /* Se despliega hacia arriba */
+    pointer-events: auto;
+}

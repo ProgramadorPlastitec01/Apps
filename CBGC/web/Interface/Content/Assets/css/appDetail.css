@@ -1,0 +1,7 @@
+
+@media only screen and (max-width: 1000px) {
+    .contGeneral {
+        width: 80% !important;
+        right: 9% !important;
+    }
+}
