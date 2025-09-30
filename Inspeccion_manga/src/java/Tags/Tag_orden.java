@@ -547,7 +547,7 @@ public class Tag_orden extends TagSupport {
                                     out.print("<div style='display: flex;'>");
 
                                     out.print("<input type='number' class='inpInit' style='width: 86px; margin-right: 5px;' name='nmbRollIni' id='' value='" + minv + "' placeholder='Rollo Inicial'>");
-                                    out.print("<input type='number' style='width: 86px;' name='nmbRollFinal' id='miCampo' min=" + minv + " onkeyup='validar(" + minv + ")' placeholder='Rollo Final'>");
+                                    out.print("<input type='number' style='width: 86px;' name='nmbRollFinal' id='miCampo' min=" + minv + " max=" + (minv + 20) + " onblur='validar(" + minv + ")' value='" + (minv + 1) + "' placeholder='Rollo Final'>");
                                     out.print("</div>");
                                     out.print("<span id=\"mensaje\" style='color: red;'></span><br>");
 
@@ -635,9 +635,9 @@ public class Tag_orden extends TagSupport {
                                     out.print("<div style='display: flex;'>");
 
                                     out.print("<input type='number' class='inpInit' style='width: 86px; margin-right: 5px;' name='nmbRollIni' id='' value='" + minv + "' placeholder='Rollo Inicial'>");
-                                    out.print("<input type='number' style='width: 86px;' name='nmbRollFinal' id='' value='' placeholder='Rollo Final'>");
-
+                                    out.print("<input type='number' style='width: 86px;' name='nmbRollFinal' id='miCampo' min=" + minv + " max=" + (minv + 20) + " onblur='validar(" + minv + ")' value='" + (minv + 1) + "' placeholder='Rollo Final'>");
                                     out.print("</div>");
+                                    out.print("<span id=\"mensaje\" style='color: red;'></span><br>");
                                     if (lst_lineas.size() == contador) {
                                         out.print("<b class='rojo'>Los datos de las líneas estan desactivados</b><br />");
                                     }
@@ -770,9 +770,9 @@ public class Tag_orden extends TagSupport {
                                     out.print("<b>Rango rollos :</b>");
                                     out.print("<div style='display: flex;'>");
                                     out.print("<input type='number' class='inpInit' style='width: 86px; margin-right: 5px;' name='nmbRollIni' id='' value='" + minv + "' placeholder='Rollo Inicial'>");
-                                    out.print("<input type='number' style='width: 86px;' name='nmbRollFinal' id='' value='' placeholder='Rollo Final'>");
-
+                                    out.print("<input type='number' style='width: 86px;' name='nmbRollFinal' id='miCampo' min=" + minv + " max=" + (minv + 20) + " onblur='validar(" + minv + ")' value='" + (minv + 1) + "' placeholder='Rollo Final'>");
                                     out.print("</div>");
+                                    out.print("<span id=\"mensaje\" style='color: red;'></span><br>");
 
                                     if (lst_lineas.size() == contador) {
                                         out.print("<b class='rojo'>Los datos de las líneas estan desactivados</b><br />");
@@ -859,8 +859,9 @@ public class Tag_orden extends TagSupport {
                                     out.print("<b>Rango rollos :</b>");
                                     out.print("<div style='display: flex;'>");
                                     out.print("<input type='number' class='inpInit' style='width: 86px; margin-right: 5px;' name='nmbRollIni' id='' value='" + minv + "' placeholder='Rollo Inicial'>");
-                                    out.print("<input type='number' style='width: 86px;' name='nmbRollFinal' id='' value='' placeholder='Rollo Final'>");
+                                    out.print("<input type='number' style='width: 86px;' name='nmbRollFinal' id='miCampo' min=" + minv + " max=" + (minv + 20) + " onblur='validar(" + minv + ")' value='" + (minv + 1) + "' placeholder='Rollo Final'>");
                                     out.print("</div>");
+                                    out.print("<span id=\"mensaje\" style='color: red;'></span><br>");
 
                                     if (lst_lineas.size() == contador) {
                                         out.print("<b class='rojo'>Los datos de las líneas estan desactivados</b><br />");
@@ -1053,9 +1054,9 @@ public class Tag_orden extends TagSupport {
                                     out.print("<b>Rango rollos :</b>");
                                     out.print("<div style='display: flex;'>");
                                     out.print("<input type='number' class='inpInit' style='width: 86px; margin-right: 5px;' name='nmbRollIni' id='' value='" + minv + "' placeholder='Rollo Inicial'>");
-                                    out.print("<input type='number' style='width: 86px;' name='nmbRollFinal' id='' value='' placeholder='Rollo Final'>");
-
+                                    out.print("<input type='number' style='width: 86px;' name='nmbRollFinal' id='miCampo' min=" + minv + " max=" + (minv + 20) + " onblur='validar(" + minv + ")' value='" + (minv + 1) + "' placeholder='Rollo Final'>");
                                     out.print("</div>");
+                                    out.print("<span id=\"mensaje\" style='color: red;'></span><br>");
                                     if (lst_lineas.size() == contador) {
                                         out.print("<b class='rojo'>Los datos de las líneas estan desactivados</b><br />");
                                     }
@@ -1138,9 +1139,9 @@ public class Tag_orden extends TagSupport {
                                     out.print("<b>Rango rollos :</b>");
                                     out.print("<div style='display: flex;'>");
                                     out.print("<input type='number' class='inpInit' style='width: 86px; margin-right: 5px;' name='nmbRollIni' id='' value='" + minv + "' placeholder='Rollo Inicial'>");
-                                    out.print("<input type='number' style='width: 86px;' name='nmbRollFinal' id='' value='' placeholder='Rollo Final'>");
-
+                                    out.print("<input type='number' style='width: 86px;' name='nmbRollFinal' id='miCampo' min=" + minv + " max=" + (minv + 20) + " onblur='validar(" + minv + ")' value='" + (minv + 1) + "' placeholder='Rollo Final'>");
                                     out.print("</div>");
+                                    out.print("<span id=\"mensaje\" style='color: red;'></span><br>");
                                     if (lst_lineas.size() == contador) {
                                         out.print("<b class='rojo'>Los datos de las líneas estan desactivados</b><br />");
                                     }
@@ -1272,9 +1273,9 @@ public class Tag_orden extends TagSupport {
                                     out.print("<b>Rango rollos :</b>");
                                     out.print("<div style='display: flex;'>");
                                     out.print("<input type='number' class='inpInit' style='width: 86px; margin-right: 5px;' name='nmbRollIni' id='' value='" + minv + "' placeholder='Rollo Inicial'>");
-                                    out.print("<input type='number' style='width: 86px;' name='nmbRollFinal' id='' value='' placeholder='Rollo Final'>");
-
+                                    out.print("<input type='number' style='width: 86px;' name='nmbRollFinal' id='miCampo' min=" + minv + " max=" + (minv + 20) + " onblur='validar(" + minv + ")' value='" + (minv + 1) + "' placeholder='Rollo Final'>");
                                     out.print("</div>");
+                                    out.print("<span id=\"mensaje\" style='color: red;'></span><br>");
                                     if (lst_lineas.size() == contador) {
                                         out.print("<b class='rojo'>Los datos de las líneas estan desactivados</b><br />");
                                     }
@@ -1360,8 +1361,9 @@ public class Tag_orden extends TagSupport {
                                     out.print("<b>Rango rollos :</b>");
                                     out.print("<div style='display: flex;'>");
                                     out.print("<input type='number' class='inpInit' style='width: 86px; margin-right: 5px;' name='nmbRollIni' id='' value='" + minv + "' placeholder='Rollo Inicial'>");
-                                    out.print("<input type='number' style='width: 86px;' name='nmbRollFinal' id='' value='' placeholder='Rollo Final'>");
+                                    out.print("<input type='number' style='width: 86px;' name='nmbRollFinal' id='miCampo' min=" + minv + " max=" + (minv + 20) + " onblur='validar(" + minv + ")' value='" + (minv + 1) + "' placeholder='Rollo Final'>");
                                     out.print("</div>");
+                                    out.print("<span id=\"mensaje\" style='color: red;'></span><br>");
 
                                     if (lst_lineas.size() == contador) {
                                         out.print("<b class='rojo'>Los datos de las líneas estan desactivados</b><br />");
@@ -1561,9 +1563,9 @@ public class Tag_orden extends TagSupport {
                                 out.print("<b>Rango rollos :</b>");
                                 out.print("<div style='display: flex;'>");
                                 out.print("<input type='number' class='inpInit' style='width: 86px; margin-right: 5px;' name='nmbRollIni' id='' value='" + minv + "' placeholder='Rollo Inicial'>");
-                                out.print("<input type='number' style='width: 86px;' name='nmbRollFinal' id='' value='' placeholder='Rollo Final'>");
-
+                                out.print("<input type='number' style='width: 86px;' name='nmbRollFinal' id='miCampo' min=" + minv + " max=" + (minv + 20) + " onblur='validar(" + minv + ")' value='" + (minv + 1) + "' placeholder='Rollo Final'>");
                                 out.print("</div>");
+                                out.print("<span id=\"mensaje\" style='color: red;'></span><br>");
 
                                 if (lst_lineas.size() == contador) {
                                     out.print("<b class='rojo'>Los datos de las líneas estan desactivados</b><br />");
@@ -1849,9 +1851,9 @@ public class Tag_orden extends TagSupport {
                                 out.print("<b>Rango rollos :</b>");
                                 out.print("<div style='display: flex;'>");
                                 out.print("<input type='number' class='inpInit' style='width: 86px; margin-right: 5px;' name='nmbRollIni' id='' value='" + minv + "' placeholder='Rollo Inicial'>");
-                                out.print("<input type='number' style='width: 86px;' name='nmbRollFinal' id='' value='' placeholder='Rollo Final'>");
-
+                                out.print("<input type='number' style='width: 86px;' name='nmbRollFinal' id='miCampo' min=" + minv + " max=" + (minv + 20) + " onblur='validar(" + minv + ")' value='" + (minv + 1) + "' placeholder='Rollo Final'>");
                                 out.print("</div>");
+                                out.print("<span id=\"mensaje\" style='color: red;'></span><br>");
 
                                 if (lst_lineas.size() == contador) {
                                     out.print("<b class='rojo'>Los datos de las líneas estan desactivados</b><br />");

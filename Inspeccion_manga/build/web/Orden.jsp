@@ -354,7 +354,11 @@
                         if (!isNaN(valor)) {
                             if (valor < minValue) {
                                 mensaje.textContent = 'El valor no puede ser menor que ' + minValue;
-//                                campo.value = ''
+                                campo.value = minValue + 1;
+                                campo.style.borderColor = "red";
+                            } else if (valor - minValue > 20) {
+                                mensaje.textContent = 'La diferencia no puede ser mayor a 20';
+                                campo.value = minValue + 20;
                                 campo.style.borderColor = "red";
                             } else {
                                 mensaje.textContent = "";
@@ -365,28 +369,32 @@
                             campo.style.borderColor = "initial";
                         }
                     }
-                </script>
-                <script>
-                    function valFormPasar(idForm) {
-                        swal({
-                            title: "Atención",
-                            text: "¿Esta seguro/a de pasar los rollos?",
-                            type: "warning",
-                            showCancelButton: true,
-                            confirmButtonColor: "orange",
-                            confirmButtonText: "Aceptar",
-                            cancelButtonText: "Cancelar",
-                            closeOnConfirm: false,
-                        },
-                                function () {
-                                    document.getElementById("FormPasar" + idForm).submit();
-                                });
+                    function validarFormulario(minue) {
+                        const minValue = minue; // tu valor inicial
+                        return validar(minValue); // si retorna false, bloquea el envío
                     }
-                </script>
+            </script>
+            <script>
+                function valFormPasar(idForm) {
+                    swal({
+                        title: "Atención",
+                        text: "¿Esta seguro/a de pasar los rollos?",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "orange",
+                        confirmButtonText: "Aceptar",
+                        cancelButtonText: "Cancelar",
+                        closeOnConfirm: false,
+                    },
+                            function () {
+                                document.getElementById("FormPasar" + idForm).submit();
+                            });
+                }
+            </script>
 
-        </head>
-        <body id="subpage" onload="Validacion_campos()">
-            <div id="templatemo_wrapper">
+    </head>
+    <body id="subpage" onload="Validacion_campos()">
+        <div id="templatemo_wrapper">
             <Menu:Menu />
             <Orden:Orden />
             <script>
