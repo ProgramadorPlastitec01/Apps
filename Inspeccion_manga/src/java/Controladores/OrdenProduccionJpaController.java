@@ -111,12 +111,54 @@ public class OrdenProduccionJpaController {
             return null;
         }
     }
-    
+
     public List Consultar_Ultimo_rollo(int idReg) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
         try {
             Query q = etm.createNativeQuery("CALL `sp_rgt_c_ConsultUltimoRollo`(" + idReg + ")");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (consulta.isEmpty()) {
+                return null;
+            } else {
+                return consulta;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public List Consultar_idRegInfo(String idReg) {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("SELECT r.id_registro, r.fecha_turno, r.turno_produccion, r.responsables_produccion, r.lote_producto, r.id_linea, l.nombre, "
+                    + "r.turno_calidad, r.responsables_calidad "
+                    + "FROM registro r "
+                    + "INNER JOIN linea l ON r.id_linea = l.id_linea "
+                    + "WHERE r.id_registro IN (" + idReg + ")");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (consulta.isEmpty()) {
+                return null;
+            } else {
+                return consulta;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public List Consultar_Historial(int idProd) {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_htl_c_CsonultarHistorialxProd`(" + idProd + ")");
             List consulta = q.getResultList();
             etm.getTransaction().commit();
             etm.clear();
@@ -155,6 +197,25 @@ public class OrdenProduccionJpaController {
         etm.getTransaction().begin();
         try {
             Query q = etm.createNativeQuery("CALL `sp_opd_m_desactivar`('" + iop + "')");
+            int exitoso = q.executeUpdate();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (exitoso == 0) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
+    public boolean registerHistorialRollo(int idProd, int idRegOld, int idRegnew, int idUse, String data, String infoAdd) {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_htl_r_RegistrarHistorialRollo`(" + idProd + ", " + idRegOld + ",  " + idRegnew + ", " + idUse + ", '" + data + "', '" + infoAdd + "')");
             int exitoso = q.executeUpdate();
             etm.getTransaction().commit();
             etm.clear();

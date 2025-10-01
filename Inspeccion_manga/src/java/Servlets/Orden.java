@@ -35,6 +35,7 @@ public class Orden extends HttpServlet {
             //Sesion
             HttpSession sesion = request.getSession();
             String[] rol_usuario = sesion.getAttribute("Rol/Nombres").toString().split("/");
+            int id_usuario = Integer.parseInt(sesion.getAttribute("Id_usuario").toString());
             String rol = rol_usuario[0];
             String usuario = rol_usuario[1];
             //JPAS-SQLSERVER
@@ -73,21 +74,9 @@ public class Orden extends HttpServlet {
             String fecha, turno_produccion, lote_c, lote_p, responsables_pi, lote_producto, factor_medida;
             String turno_calidad, responsables_gc, prueba_funcional, dureza, curvatura;
             String formato = "", rangeRoll = "";
-            int contador = 0;
-            int materiales = 0;
-            int equipos = 0;
-            int cantidad_seriales = 0;
-            int id_ficha = 0;
-            int pared_doble = 0;
-            int id_orden = 0;
-            int id_producto = 0;
-            int id_linea = 0;
-            int id_registro = 0;
-            int id_registro_despeje = 0;
-            int rollo_inicial = 0;
-            int rollo_final = 0;
-            int posit_roll = 0;
-            int new_id_reg = 0;
+            int contador = 0, materiales = 0, equipos = 0, cantidad_seriales = 0, id_ficha = 0, pared_doble = 0;
+            int id_orden = 0, id_producto = 0, id_linea = 0, id_registro = 0, id_registro_despeje = 0;
+            int rollo_inicial = 0, rollo_final = 0, posit_roll = 0, new_id_reg = 0, tempx = 0;
             switch (opc) {
                 case 1:
                     //<editor-fold defaultstate="collapsed" desc="CASO CONSULTA OP">
@@ -193,6 +182,11 @@ public class Orden extends HttpServlet {
                     } catch (Exception e) {
                         id_registro = 0;
                     }
+                    try {
+                        tempx = Integer.parseInt(request.getParameter("tempx").toString());
+                    } catch (Exception e) {
+                        tempx = 0;
+                    }
 
                     request.setAttribute("Orden", tipo);
                     request.setAttribute("Orden_produccion", orden);
@@ -201,6 +195,7 @@ public class Orden extends HttpServlet {
                     request.setAttribute("Equipos", equipos);
                     request.setAttribute("RangeRoll", rangeRoll);
                     request.setAttribute("irg", id_registro);
+                    request.setAttribute("tempx", tempx);
 
                     if (opcion.equals("1")) {
                         lst_registros = jpacrgt.Traer_producto_orden(id_producto, orden);
@@ -670,6 +665,44 @@ public class Orden extends HttpServlet {
 
                     if (result) {
                         request.setAttribute("Alerta", "PasoRollos");
+                        String data = "", firsData = "", secodData = "";
+                        lst_orden = jpacopd.Consultar_idRegInfo(id_registro + "," + new_id_reg);
+                        if (lst_orden != null) {
+                            data += "<div style=\"display: flex; justify-content: space-evenly;width: 100%;\"> ";
+                            for (int i = 0; i < lst_orden.size(); i++) {
+                                Object[] ObjReg = (Object[]) lst_orden.get(i);
+                                int idregTem = Integer.parseInt(ObjReg[0].toString());
+                                if (id_registro == idregTem) {
+                                    firsData = "<div style=\"text-align: left;width: 50%;\"> "
+                                            + "		<h4>Registro salida de rollos</h4> "
+                                            + "		<span><b>Id registro: </b> " + id_registro + "</span><br> "
+                                            + "		<span><b>Fecha turno: </b> " + ObjReg[1] + "</span><br> "
+                                            + "		<span><b>Turno: </b>" + ObjReg[2] + "</span><br> "
+                                            + "		<span><b>Responsables Ext:</b> " + ObjReg[3] + "A</span><br> "
+                                            + "		<span><b>Lote: </b> " + ObjReg[4] + "</span><br> "
+                                            + "		<span><b>Linea: </b> " + ObjReg[6] + "  </span><br> "
+                                            + "		<span><b>Turno Cal: </b> " + ObjReg[7] + "</span><br> "
+                                            + "		<span><b>Responsables Cal: </b> " + ObjReg[8] + "<br> "
+                                            + "		<span><b>Rollos: </b>" + newRange.toString() + "</span><br> "
+                                            + "	</div>";
+                                } else if (new_id_reg == idregTem) {
+                                    secodData = "<div style=\"text-align: left; width: 50%;\"> "
+                                            + "		<h4>Registro asignacion de rollos </h4> "
+                                            + "		<span><b>Id registro: </b> " + new_id_reg + "</span><br> "
+                                            + "		<span><b>Fecha turno: </b> " + ObjReg[1] + "</span><br> "
+                                            + "		<span><b>Turno: </b> " + ObjReg[2] + "</span><br> "
+                                            + "		<span><b>Responsables Ext: </b> " + ObjReg[3] + "</span><br> "
+                                            + "		<span><b>Lote: </b> " + ObjReg[4] + "</span><br> "
+                                            + "		<span><b>Linea: </b> " + ObjReg[6] + "</span><br> "
+                                            + "		<span><b>Turno Cal: </b> " + ObjReg[7] + "</span><br> "
+                                            + "		<span><b>Responsables Cal: </b> " + ObjReg[8] + " </span><br> "
+                                            + "	</div> "
+                                            + "	</div> ";
+                                }
+                            }
+                            data += firsData + secodData; 
+                        }
+                        result = jpacopd.registerHistorialRollo(id_producto, id_registro, new_id_reg, id_usuario, data, newRange.toString());
                     } else {
                         request.setAttribute("Alerta", "err_PasoRollos");
                     }

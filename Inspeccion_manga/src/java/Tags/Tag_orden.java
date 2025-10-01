@@ -417,10 +417,17 @@ public class Tag_orden extends TagSupport {
                     filtro = pageContext.getRequest().getAttribute("Filtro").toString();
                     equipos = Integer.parseInt(pageContext.getRequest().getAttribute("Equipos").toString());
                     id_registro = Integer.parseInt(pageContext.getRequest().getAttribute("irg").toString());
+                    int tempx = 0;
+
                     try {
                         rangeRoll = pageContext.getRequest().getAttribute("RangeRoll").toString();
                     } catch (Exception e) {
                         rangeRoll = "";
+                    }
+                    try {
+                        tempx = Integer.parseInt(pageContext.getRequest().getAttribute("tempx").toString());
+                    } catch (Exception e) {
+                        tempx = 0;
                     }
 
                     //<editor-fold defaultstate="collapsed" desc="VALID PROXIMO CONSECUTIVO PARA ASIGNACION DE ROLLOS">
@@ -1924,7 +1931,7 @@ public class Tag_orden extends TagSupport {
                                 + "<input type='hidden' name='Txt_cod_ficha' value='N/A' />"
                                 + "<a href='JAVASCRIPT:FormVolver.submit()'><img src='Interfaz/Contenido/Iconos/Volver.png'  alt='edit' title='Volver a Productos' /></a>"
                                 + "</form>Registros <b>" + orden + "</b> " + obj_producto[2] + " / " + obj_producto[3] + "</h3>");
-                        out.print("<div align='right'>"
+                        out.print("<div align='right' style='display: flex; align-items: baseline;justify-content: right;'>"
                                 + "<form action='Orden?opc=6' method='post'>"
                                 + "<input type='hidden' name='ipd' value='" + id_producto + "' />"
                                 + "<input type='hidden' name='odn' value='" + orden + "' />"
@@ -1935,7 +1942,70 @@ public class Tag_orden extends TagSupport {
                         } else {
                             out.print("<input type='text' name='fto' id='fto' placeholder='Buscar' value='" + filtro + "' onkeyup='javascript:this.value=this.value.toUpperCase();'/>");
                         }
-                        out.print("</form></div>");
+                        out.print("</form>");
+                        out.print("<form action='Orden?opc=6' method='post' name='FormReload' id='FormReload' onsubmit='checkSubmit();'>");
+                        out.print("<input type='hidden' name='ipd' value='" + id_producto + "' />");
+                        out.print("<input type='hidden' name='odn' value='" + orden + "' />");
+                        out.print("<input type='hidden' name='irg' value='0' />");
+                        out.print("<input type='hidden' name='tcs' value='0' />");
+                        out.print("<input type='hidden' name='fto' value='' />");
+                        out.print("<input type='hidden' name='tempx' value='1' />");
+                        out.print("<a href='JAVASCRIPT:FormReload.submit()' style='margin-left: 10px;'><img src='Interfaz/Contenido/Iconos/expediente.png'></a>");
+                        out.print("</form>");
+                        out.print("</div>");
+
+                        if (tempx > 0) {
+                            out.print("<div class='sweet-local' tabindex='-1' id='Ventana1' style='opacity: 1.03; display:block;'>");
+                            out.print("<fieldset class='popup_local' style='width:900px;position: absolute;top: 50px;left: 15%;'>");
+
+                            out.print("<div style='display: flex; justify-content: space-between'>");
+                            out.print("<h2>Historial paso de rollos</h2>");
+                            out.print("<form action='Orden?opc=6' method='post' name='FormReload2' id='FormReload2' onsubmit='checkSubmit();'>");
+                            out.print("<input type='hidden' name='ipd' value='" + id_producto + "' />");
+                            out.print("<input type='hidden' name='odn' value='" + orden + "' />");
+                            out.print("<input type='hidden' name='irg' value='0' />");
+                            out.print("<input type='hidden' name='tcs' value='0' />");
+                            out.print("<input type='hidden' name='fto' value='' />");
+                            out.print("<input type='hidden' name='tempx' value='0' />");
+                            out.print("<a href='JAVASCRIPT:FormReload2.submit()' style='margin-left: 10px;'><img src='Interfaz/Contenido/Iconos/Delete.png'></a>");
+                            out.print("</form>");
+                            out.print("</div>");
+
+                            out.print("<div class='cont_form_user' style='max-height: 500px; overflow-y: auto;'>");
+                            lst_producto = jpacopd.Consultar_Historial(Integer.parseInt(id_producto.trim()));
+                            if (lst_producto != null) {
+                                out.print("<table class='table'>");
+                                out.print("<thead>");
+                                out.print("<tr>");
+                                out.print("<th>Fecha</th>");
+                                out.print("<th>responsable</th>");
+                                out.print("<th>Rollos</th>");
+                                out.print("<th>Especificicaciones</th>");
+                                out.print("</tr>");
+                                out.print("</thead>");
+                                out.print("<tbody>");
+                                for (int i = 0; i < lst_producto.size(); i++) {
+                                    Object[] ObjProd = (Object[]) lst_producto.get(i);
+                                    out.print("<tr>");
+                                    out.print("<td>"+ ObjProd[2] +"</td>");
+                                    out.print("<td>"+ ObjProd[3] +"</td>");
+                                    out.print("<td>"+ ObjProd[5] +"</td>");
+                                    out.print("<td>"+ ObjProd[4].toString().replace(",", " - ") +"</td>");
+                                    out.print("</tr>");
+                                }
+                                out.print("</tbody>");
+                                out.print("</table>");
+                            } else {
+                                out.print("<div class=''>");
+                                out.print("<h6>El historial se encuentra vacio</h6>");
+                                out.print("</div>");
+                            }
+                            out.print("</div>");
+
+                            out.print("</fieldset>");
+                            out.print("</div>");
+                        }
+
                         out.print("<div align='left' id='NavPosicion'></div>");
                         out.print("<table class='table' style='width:100%' id='resultados' align='left'>");
                         for (int i = 0; i < lst_registros.size(); i++) {
