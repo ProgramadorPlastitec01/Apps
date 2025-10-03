@@ -74,6 +74,24 @@ public class FormatJpaController implements Serializable {
             return false;
         }
     }
+    public boolean FormatRegisterNew(String apc, String rcd, int vso, String tpc, String urg) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        try {
+            Query q = em.createNativeQuery("CALL `Sp_fmt_r_RegisterFormatNew`('" + apc + "','" + rcd + "','" + vso + "','" + tpc + "','" + urg + "')");
+            int resultado = q.executeUpdate();
+            em.getTransaction().commit();
+            em.clear();
+            em.close();
+            if (resultado == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
     public boolean FormatUpdate(int IdFormat, String apc, String rcd, int vso, String urg) {
         EntityManager em = getEntityManager();
@@ -115,7 +133,7 @@ public class FormatJpaController implements Serializable {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
-            Query q = em.createNativeQuery("CALL `Sp_fmt_u_Sp_fmt_u_UpdateFormatData`('" + IdFormat + "','" + Template + "')");
+            Query q = em.createNativeQuery("CALL `Sp_fmt_u_UpdateFormatData`('" + IdFormat + "','" + Template + "')");
             int resultado = q.executeUpdate();
             em.getTransaction().commit();
             em.clear();

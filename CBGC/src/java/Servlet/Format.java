@@ -41,15 +41,27 @@ public class Format extends HttpServlet {
                     } catch (Exception e) {
                         IdFormat = 0;
                     }
+                    try {
+                        Temp = Integer.parseInt(request.getParameter("Temp"));
+                    } catch (Exception e) {
+                        Temp = 0;
+                    }
                     Application = request.getParameter("Application");
                     Record = request.getParameter("Record");
                     Version = Integer.parseInt(request.getParameter("Version"));
-                    if (IdFormat > 0) {
-                        result = FormatJpa.FormatRegister(Application, Record, Version, "Administrador");
-                    } else {
+                    if (IdFormat > 0 && Temp == 0) {
                         result = FormatJpa.FormatUpdate(IdFormat, Application, Record, Version, "Administrador");
+                        request.getRequestDispatcher("Format?opt=1&IdFormat=0").forward(request, response);
+                    } else {
+                        if (IdFormat > 0 && Temp == 2) {
+                            dataFormat = request.getParameter("dataFormat");
+                            result = FormatJpa.FormatRegisterNew(Application, Record, Version, dataFormat, "Administrador");
+                            request.getRequestDispatcher("Format?opt=3&IdFormat=" + IdFormat + "&State=1").forward(request, response);
+                        } else {
+                            result = FormatJpa.FormatRegister(Application, Record, Version, "Administrador");
+                            request.getRequestDispatcher("Format?opt=1&IdFormat=0").forward(request, response);
+                        }
                     }
-                    request.getRequestDispatcher("Format?opt=1&IdFormat=0").forward(request, response);
                     break;
                 case 3:
                     try {
@@ -58,6 +70,11 @@ public class Format extends HttpServlet {
                         IdFormat = 0;
                     }
                     State = Integer.parseInt(request.getParameter("State"));
+                    if (State == 0) {
+                        State = 1;
+                    } else {
+                        State = 0;
+                    }
                     result = FormatJpa.FormatUpdateState(IdFormat, State);
                     request.getRequestDispatcher("Format?opt=1&IdFormat=0").forward(request, response);
                     break;

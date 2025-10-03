@@ -52,7 +52,7 @@ public class Setting extends TagSupport {
             out.print("<div class='card-body'>");
             out.print("<h4>Configuracion Avanzada</h4>");
             out.print("<p>Módulo encargado de gestionar los parámetros, consultas y configuraciones generales que permiten la correcta administración del sistema.</p>");
-            out.print("<a href='advConfig?opt=1' class='card-cta' onclick='cargarDatos()'>Configurar <i class='fas fa-chevron-right'></i></a>");
+            out.print("<a href='AdvConfig?opt=1' class='card-cta' onclick='cargarDatos()'>Configurar <i class='fas fa-chevron-right'></i></a>");
             out.print("</div>");
             out.print("</div>");
             out.print("</div>");
