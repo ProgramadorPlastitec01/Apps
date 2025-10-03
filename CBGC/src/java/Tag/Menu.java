@@ -73,20 +73,20 @@ public class Menu extends TagSupport {
             out.print("</li>");
             out.print("<li class=\"menu-header\">Certificados</li>");
             out.print("<li class=\"dropdown\">");
-            out.print("<a href='Generate?opt=1' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/Registros_lab.png\" alt=\"\" class='ImgModule'/></i><span>Registro Lab</span></a>");
+            out.print("<a href='Generate?opt=1&Type=RegistrosLab' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/Registros_lab.png\" alt=\"\" class='ImgModule'/></i><span>Registro Lab</span></a>");
             out.print("</li>");
             
             out.print("<li class=\"dropdown\">");
-            out.print("<a href='#' class=\"nav-link\" onclick='cargarDatos()'>"
+            out.print("<a href='Generate?opt=1&Type=ControlGrafado' class=\"nav-link\" onclick='cargarDatos()'>"
                     + "<i><img src=\"Interface/Imagen/Control_grafado.png\" alt=\"\" class='ImgModule'/></i><span>Control Grafado</span></a>");
             out.print("</li>");
             
             out.print("<li class=\"dropdown\">");
-            out.print("<a href='#' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/Inspeccion_manga.png\" alt=\"\" class='ImgModule'/></i><span>Inspección Manga</span></a>");
+            out.print("<a href='Generate?opt=1&Type=InspeccionManga' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/Inspeccion_manga.png\" alt=\"\" class='ImgModule'/></i><span>Inspección Manga</span></a>");
             out.print("</li>");
             
             out.print("<li class=\"dropdown\">");
-            out.print("<a href='#' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/ST_Desc_2.png\" alt=\"\" class='ImgModule'/></i><span>Sistema de tubo</span></a>");
+            out.print("<a href='Generate?opt=1&Type=SistemaTubo' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/ST_Desc_2.png\" alt=\"\" class='ImgModule'/></i><span>Sistema de tubo</span></a>");
             out.print("</li>");
             
             // ===================== Consulta =====================

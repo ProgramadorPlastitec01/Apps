@@ -1,29 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Controller;
 
-import Controller.exceptions.NonexistentEntityException;
-import Entity.Format;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
-/**
- *
- * @author Programador.TI1
- */
 public class FormatJpaController implements Serializable {
 
-    public FormatJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public FormatJpaController() {
+        emf = Persistence.createEntityManagerFactory("CBGCPU");
     }
     private EntityManagerFactory emf = null;
 
@@ -31,108 +18,116 @@ public class FormatJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Format format) {
-        EntityManager em = null;
+    public List ConsultFormat() {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
         try {
-            em = getEntityManager();
-            em.getTransaction().begin();
-            em.persist(format);
-            em.getTransaction().commit();
-        } finally {
-            if (em != null) {
-                em.close();
+            Query q = etm.createNativeQuery("CALL `Sp_fmt_c_ConsultFormat`()");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
             }
-        }
-    }
-
-    public void edit(Format format) throws NonexistentEntityException, Exception {
-        EntityManager em = null;
-        try {
-            em = getEntityManager();
-            em.getTransaction().begin();
-            format = em.merge(format);
-            em.getTransaction().commit();
         } catch (Exception ex) {
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                Integer id = format.getIdFormat();
-                if (findFormat(id) == null) {
-                    throw new NonexistentEntityException("The format with id " + id + " no longer exists.");
-                }
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+            return null;
         }
     }
 
-    public void destroy(Integer id) throws NonexistentEntityException {
-        EntityManager em = null;
+    public List ConsultFormatId(int IdFormat) {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
         try {
-            em = getEntityManager();
-            em.getTransaction().begin();
-            Format format;
-            try {
-                format = em.getReference(Format.class, id);
-                format.getIdFormat();
-            } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The format with id " + id + " no longer exists.", enfe);
+            Query q = etm.createNativeQuery("CALL `Sp_fmt_c_ConsultFormatId`(" + IdFormat + ")");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
             }
-            em.remove(format);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public boolean FormatRegister(String apc, String rcd, int vso, String urg) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        try {
+            Query q = em.createNativeQuery("CALL `Sp_fmt_r_RegisterFormat`('" + apc + "','" + rcd + "','" + vso + "','" + urg + "')");
+            int resultado = q.executeUpdate();
             em.getTransaction().commit();
-        } finally {
-            if (em != null) {
-                em.close();
+            em.clear();
+            em.close();
+            if (resultado == 1) {
+                return true;
+            } else {
+                return false;
             }
+        } catch (Exception e) {
+            return false;
         }
     }
 
-    public List<Format> findFormatEntities() {
-        return findFormatEntities(true, -1, -1);
-    }
-
-    public List<Format> findFormatEntities(int maxResults, int firstResult) {
-        return findFormatEntities(false, maxResults, firstResult);
-    }
-
-    private List<Format> findFormatEntities(boolean all, int maxResults, int firstResult) {
+    public boolean FormatUpdate(int IdFormat, String apc, String rcd, int vso, String urg) {
         EntityManager em = getEntityManager();
+        em.getTransaction().begin();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Format.class));
-            Query q = em.createQuery(cq);
-            if (!all) {
-                q.setMaxResults(maxResults);
-                q.setFirstResult(firstResult);
+            Query q = em.createNativeQuery("CALL `Sp_fmt_u_UpdateFormat`('" + IdFormat + "','" + apc + "','" + rcd + "','" + vso + "','" + urg + "')");
+            int resultado = q.executeUpdate();
+            em.getTransaction().commit();
+            em.clear();
+            em.close();
+            if (resultado == 1) {
+                return true;
+            } else {
+                return false;
             }
-            return q.getResultList();
-        } finally {
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    public boolean FormatUpdateState(int IdFormat, int State) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        try {
+            Query q = em.createNativeQuery("CALL `Sp_fmt_u_UpdateState`('" + IdFormat + "','" + State + "')");
+            int resultado = q.executeUpdate();
+            em.getTransaction().commit();
+            em.clear();
             em.close();
+            if (resultado == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    public boolean UpdateFormatData(int IdFormat, String Template) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        try {
+            Query q = em.createNativeQuery("CALL `Sp_fmt_u_Sp_fmt_u_UpdateFormatData`('" + IdFormat + "','" + Template + "')");
+            int resultado = q.executeUpdate();
+            em.getTransaction().commit();
+            em.clear();
+            em.close();
+            if (resultado == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
         }
     }
 
-    public Format findFormat(Integer id) {
-        EntityManager em = getEntityManager();
-        try {
-            return em.find(Format.class, id);
-        } finally {
-            em.close();
-        }
-    }
-
-    public int getFormatCount() {
-        EntityManager em = getEntityManager();
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Format> rt = cq.from(Format.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
-            return ((Long) q.getSingleResult()).intValue();
-        } finally {
-            em.close();
-        }
-    }
-    
 }

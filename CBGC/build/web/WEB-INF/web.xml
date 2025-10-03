@@ -8,6 +8,10 @@
         <servlet-name>Generate</servlet-name>
         <servlet-class>Servlet.Generate</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Format</servlet-name>
+        <servlet-class>Servlet.Format</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Session</servlet-name>
         <url-pattern>/Session</url-pattern>
@@ -15,6 +19,10 @@
     <servlet-mapping>
         <servlet-name>Generate</servlet-name>
         <url-pattern>/Generate</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Format</servlet-name>
+        <url-pattern>/Format</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -67,16 +67,17 @@
                                                 String Description = ObjDetail[4].toString();
                                     %>
                             <ul class="fw-no-bullet ms-36">
-                                <li>
-                                    <a href="Interface/Content/KnowledgeFiles/<%= Attach%>"   onclick="enviarId(<%= Id%>); return false;"  class="d-flex" target="_blank" rel="noopener noreferrer">
+                                <a href="Interface/Content/KnowledgeFiles/<%= Attach%>"  class="d-flex" target="_blank" rel="noopener noreferrer">
+                                <!--<a href="Interface/Content/KnowledgeFiles/<%= Attach%>"   onclick="enviarId(<%= Id%>); return false;"  class="d-flex" target="_blank" rel="noopener noreferrer">-->
+                                    <li>
                                         <div class="pe-8">
                                             <span class="icon-article"></span>
                                         </div>
                                         <div class="line-clamp-2 linkColor " role="link">
-                                            <span class="opcion DescriptionText"><i class="far fa-copy mr-2" style="font-size: 22px;"></i><%= Description%></span>
+                                            <span class="opcion DescriptionText"><i class="far fa-copy mr-2" onclick="enviarId(<%= Id%>); return false;"  style="font-size: 22px;"></i><%= Description%></span>
                                         </div>
-                                    </a>
-                                </li>
+                                    </li>
+                                </a>
                             </ul>
                             <%
                                     } // cierre for detalle
@@ -92,7 +93,7 @@
                 <%
                         } // cierre for grupo
                     } // cierre if grupo
-                %>
+%>
             </div>
             <div id="noResultsMessage" style="display: none; text-align: center; margin: 20px;">
                 <h2>No se encontraron resultados</h2>

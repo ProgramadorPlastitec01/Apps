@@ -4,8 +4,8 @@
   <short-name>start</short-name>
   <uri>/WEB-INF/tlds/start</uri>
   <tag>
-        <name>Start</name>
-        <tag-class>Tag.Start</tag-class>
-        <body-content>scriptless</body-content>
-    </tag>
+      <name>Start</name>
+      <tag-class>Tag.Start</tag-class>
+      <body-content>scriptless</body-content>
+  </tag>
 </taglib>

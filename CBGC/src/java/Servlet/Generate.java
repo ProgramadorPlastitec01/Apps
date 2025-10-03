@@ -16,9 +16,34 @@ public class Generate extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             int opt = Integer.parseInt(request.getParameter("opt"));
+            int Order = 0;
+            String Type = "", Product = "", Batch = "";
             switch (opt) {
                 case 1:
+                    try {
+                        Type = request.getParameter("");
+                    } catch (Exception e) {
+                        Type = "";
+                    }
                     request.getRequestDispatcher("GenerateReport.jsp").forward(request, response);
+                    break;
+                case 2:
+                    try {
+                        Order = Integer.parseInt(request.getParameter("order"));
+                    } catch (Exception e) {
+                        Order = 0;
+                    }
+                    try {
+                        Product = request.getParameter("product");
+                    } catch (Exception e) {
+                        Product = "";
+                    }
+                    try {
+                        Batch = request.getParameter("batch");
+                    } catch (Exception e) {
+                        Batch = "";
+                    }
+                    request.getRequestDispatcher("GenerateReport?opt=1").forward(request, response);
                     break;
             }
 

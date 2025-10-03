@@ -17,6 +17,50 @@
             <Generate:GenerateReport/>
         </div>
     </body>
+
+    <script>
+        function FormGenerate(form) {
+            const order = document.getElementById("orderInput").value.trim();
+            const producto = document.getElementById("resultadoProductos").value.trim();
+            const lote = document.getElementById("resultadoLotes").value.trim();
+
+            let valido = true;
+
+            // Validación de Orden
+            if (order === "") {
+                document.getElementById("orderInput").classList.add("is-invalid");
+                valido = false;
+            } else {
+                document.getElementById("orderInput").classList.remove("is-invalid");
+            }
+
+            // Validación de Producto
+            if (producto === "") {
+                document.getElementById("resultadoProductos").classList.add("is-invalid");
+                valido = false;
+            } else {
+                document.getElementById("resultadoProductos").classList.remove("is-invalid");
+            }
+
+            // Validación de Lote
+            if (lote === "") {
+                document.getElementById("resultadoLotes").classList.add("is-invalid");
+                valido = false;
+            } else {
+                document.getElementById("resultadoLotes").classList.remove("is-invalid");
+            }
+
+            // Si todo está correcto, enviamos el formulario
+            if (valido) {
+                form.submit();
+            }
+
+            return false; // siempre detener el submit por defecto
+        }
+    </script>
+
+
+    <script src="Interface/Content/Assets/js/filterop.js"></script>
     <script src="Interface/Content/Assets/modules/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js"></script>
     <script src="Interface/Content/Assets/modules/datatables/Select-1.2.4/js/dataTables.select.min.js"></script>
     <script src="Interface/Content/Assets/modules/datatables/datatables.min.js"></script>
