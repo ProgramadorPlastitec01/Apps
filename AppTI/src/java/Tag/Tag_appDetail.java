@@ -552,7 +552,11 @@ public class Tag_appDetail extends TagSupport {
                             out.print("</div>");
                             out.print("<div class=\"accordion-body collapse\" id=\"panel-body-97\" data-parent=\"#accordion\" style='max-height: 300px; overflow-y: auto;'>");
                             //<editor-fold defaultstate="collapsed" desc="DOCUMENT CONTENT">
-                            out.print("<textarea id='editorCK' name='txtContent' placeholder=''>" + content[1] + "</textarea>");
+                            try {
+                                out.print("<textarea id='editorCK' name='txtContent' placeholder=''>" + content[1] + "</textarea>");
+                            } catch (Exception e) {
+                                out.print("<textarea id='editorCK' name='txtContent' placeholder=''></textarea>");
+                            }
                             //</editor-fold>
                             out.print("</div>");
                             out.print("</div>");
@@ -1077,7 +1081,6 @@ public class Tag_appDetail extends TagSupport {
                         //</editor-fold>
                     }
                 }
-
                 //<editor-fold defaultstate="collapsed" desc="LOAD DOCUMENT">
                 //<editor-fold defaultstate="collapsed" desc="HEADER">
                 lst_appDetail = AppDetail.ConsultDocumentType(idHead, typeSc[0] + "/" + typeSc[1]);
@@ -1177,7 +1180,11 @@ public class Tag_appDetail extends TagSupport {
                                 format = ObjDoc[3].toString();
                                 format = format.replace("XXXDATEXXX", Objdet[2].toString());
                                 format = format.replace("XXXAFFAIRXXX", affair);
-                                format = format.replace("XXXCONTENTXXX", conect[1].toString());
+                                try {
+                                    format = format.replace("XXXCONTENTXXX", conect[1].toString());
+                                } catch (Exception e) {
+                                    format = format.replace("XXXCONTENTXXX", "");
+                                }
                                 int iterator = 1;
 
                                 String[] people = Objdet[5].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
