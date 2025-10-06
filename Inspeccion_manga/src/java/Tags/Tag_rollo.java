@@ -597,6 +597,7 @@ public class Tag_rollo extends TagSupport {
                             out.print("<th colspan='2'>Perimetro</th>");
                         }
                         out.print("<th rowspan='2'>Particulas</th>");
+                        out.print("<th rowspan='2'>Curvatura</th>");
                         out.print("<th rowspan='2' colspan='2'>Registros Calidad</th>");
                         out.print("</tr>");
                         out.print("<tr>");
@@ -708,6 +709,24 @@ public class Tag_rollo extends TagSupport {
                                 }
                                 out.print("<td align='center'>" + obj_rollos[13] + "</td>");
                             }
+                            // CURVATURA
+                            int curva = 0;
+                            double dtax = 0;
+                            try {
+                                dtax = Float.parseFloat(obj_registro[71].toString());
+                                curva = (int) Math.round(dtax);
+                            } catch (Exception e) {
+                                curva = 0;
+                            }
+                            if (i == 0) {
+                                out.print("<td align='center'>" + ((obj_rollos[29] == null) ? 0 : obj_rollos[29]) + "</td>");
+                            } else if (curva != 0 && (i + 1) % curva == 0) {
+                                out.print("<td align='center'>" + ((obj_rollos[29] == null) ? 0 : obj_rollos[29]) + "</td>");
+                            } else {
+                                out.print("<td align='center'> - </td>");
+                            }
+
+                            out.print("<td align='center' style='display: flex;justify-content: space-evenly;'>");
                             if ((Integer) obj_registro[15] == 1) {
                                 if (obj_registro[56].toString().equals("1")) {
                                     lst_controles_espesor = jpaccepp.Traer_controles_espesor_id_rollo(Integer.parseInt(obj_rollos[0].toString()));
@@ -715,7 +734,7 @@ public class Tag_rollo extends TagSupport {
                                     lst_controles_espesor = jpaccep.Traer_controles_espesor_id_rollo(Integer.parseInt(obj_rollos[0].toString()));
                                 }
                                 if ((Integer) obj_rollos[2] == 1 || (Integer) obj_rollos[2] % (Integer) obj_registro[52] == 0 || lst_controles_espesor != null) {
-                                    out.print("<td align='center'>"
+                                    out.print(""
                                             + "<form action='Rollo?opc=" + ((obj_registro[56].toString().equals("1")) ? "13" : "2") + "' method='post' name='FormVer" + i + "' id='FormVer" + i + "' onsubmit='checkSubmit();'>"
                                             + "<input type='hidden' name='irg' value='" + id_registro + "'>"
                                             + "<input type='hidden' name='odn' value='" + orden + "'>"
@@ -723,19 +742,19 @@ public class Tag_rollo extends TagSupport {
                                             + "<input type='hidden' name='rlo' value='" + obj_rollos[0] + "'>"
                                             + "<input type='hidden' name='tma' value='0'>"
                                             + "<a href='JAVASCRIPT:FormVer" + i + ".submit()'><img src='Interfaz/Contenido/Iconos/Ver.png' alt='edit' title='R-GC-078' /></a>"
-                                            + "</form></td>");
+                                            + "</form>");
                                     if ((Integer) obj_registro[55] == 0) {
-                                        out.print("<td align='center'>"
+                                        out.print(""
                                                 + "<form action='Rollo?opc=6' method='post' name='Form97" + i + "' id='Form97" + i + "' onsubmit='checkSubmit();'>"
                                                 + "<input type='hidden' name='irg' value='" + id_registro + "'>"
                                                 + "<input type='hidden' name='odn' value='" + orden + "'>"
                                                 + "<input type='hidden' name='ipd' value='" + id_producto + "'>"
                                                 + "<input type='hidden' name='rlo' value='" + obj_rollos[0] + "'>"
                                                 + "<a href='JAVASCRIPT:Form97" + i + ".submit()'><img src='Interfaz/Contenido/Iconos/Edit_97.png' alt='edit' title='R-GC-097' /></a>"
-                                                + "</form></td>");
+                                                + "</form>");
                                     }
                                 } else {
-                                    out.print("<td align='center' colspan='2'><b class='naranja'>---</b></td>");
+                                    out.print("<b class='naranja'>---</b>");
                                 }
                             } else {
                                 if (obj_registro[56].toString().equals("1")) {
@@ -745,7 +764,7 @@ public class Tag_rollo extends TagSupport {
                                 }
                                 if ((Integer) obj_rollos[2] == 1 || (Integer) obj_rollos[2] % (Integer) obj_registro[52] == 0 || lst_controles_espesor != null) {
                                     if (lst_controles_espesor != null) {
-                                        out.print("<td align='center'>"
+                                        out.print(""
                                                 + "<form action='Rollo?opc=" + ((obj_registro[56].toString().equals("1")) ? "13" : "2") + "' method='post' name='FormVer" + i + "' id='FormVer" + i + "' onsubmit='checkSubmit();'>"
                                                 + "<input type='hidden' name='irg' value='" + id_registro + "'>"
                                                 + "<input type='hidden' name='odn' value='" + orden + "'>"
@@ -753,24 +772,33 @@ public class Tag_rollo extends TagSupport {
                                                 + "<input type='hidden' name='rlo' value='" + obj_rollos[0] + "'>"
                                                 + "<input type='hidden' name='tma' value='0'>"
                                                 + "<a href='JAVASCRIPT:FormVer" + i + ".submit()'><img src='Interfaz/Contenido/Iconos/Ver.png' alt='edit' title='R-GC-078' /></a>"
-                                                + "</form></td>");
+                                                + "</form>");
                                         if ((Integer) obj_registro[55] == 0) {
-                                            out.print("<td align='center'>"
+                                            out.print(""
                                                     + "<form action='Rollo?opc=6' method='post' name='Form97" + i + "' id='Form97" + i + "' onsubmit='checkSubmit();'>"
                                                     + "<input type='hidden' name='irg' value='" + id_registro + "'>"
                                                     + "<input type='hidden' name='odn' value='" + orden + "'>"
                                                     + "<input type='hidden' name='ipd' value='" + id_producto + "'>"
                                                     + "<input type='hidden' name='rlo' value='" + obj_rollos[0] + "'>"
                                                     + "<a href='JAVASCRIPT:Form97" + i + ".submit()'><img src='Interfaz/Contenido/Iconos/Edit_97.png' alt='edit' title='R-GC-097' /></a>"
-                                                    + "</form></td>");
+                                                    + "</form>");
                                         }
                                     } else {
-                                        out.print("<td align='center' colspan='2'><b class='naranja'>---</b></td>");
+                                        out.print("<b class='naranja'>---</b>");
                                     }
                                 } else {
-                                    out.print("<td align='center' colspan='2'><b class='naranja'>---</b></td>");
+                                    out.print("<b class='naranja'>---</b>");
                                 }
                             }
+                            if (i == 0) {
+                                out.print("<a href='JAVASCRIPT:'><img src='Interfaz/Contenido/Iconos/curvas2.png'></a>");
+                            }
+                            if (curva != 0 && (i + 1) % curva == 0) {
+                                out.print("<a href='JAVASCRIPT:'><img src='Interfaz/Contenido/Iconos/curvas2.png'>"+ curva +"</a>");
+                            }
+
+                            out.print("</td>");
+
                         }
                         out.print("</table>");
                         if (obj_registro[56].toString().equals("1")) {

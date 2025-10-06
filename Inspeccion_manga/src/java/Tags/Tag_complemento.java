@@ -303,9 +303,6 @@ public class Tag_complemento extends TagSupport {
                         out.print("<b>Variación de espesor :</b><br />");
                         out.print("<input style='width:150px' type='text' name='Txt_variacion_espesor' id='Txt_variacion_espesor' placeholder='Variación de espesor' title='Variación de espesor' /><br />"
                                 + "<script type='text/javascript'>var val1 = new LiveValidation('Txt_variacion_espesor');val1.add(Validate.Presence);val1.add(Validate.Decimal);</script>");
-                        out.print("<b>Curvatura :</b><br />");
-                        out.print("<input style='width:150px' type='text' name='Txt_curvatura' id='Txt_curvatura' placeholder='Curvatura' title='Curvatura' /><br />"
-                                + "<script type='text/javascript'>var val1 = new LiveValidation('Txt_curvatura');val1.add(Validate.Presence);val1.add(Validate.Decimal);</script>");
                         out.print("<b>Diferencia de perimetros:</b><br />");
                         out.print("<input style='width:150px' type='text' name='Txt_diferencia_perimetro' id='Txt_diferencia_perimetro' placeholder='Diferencia de perimetros' title='Diferencia de perimetros' /><br />"
                                 + "<script type='text/javascript'>var val1 = new LiveValidation('Txt_diferencia_perimetro');val1.add(Validate.Presence);val1.add(Validate.Decimal);</script>");
@@ -346,6 +343,9 @@ public class Tag_complemento extends TagSupport {
                         out.print("<b>Cantidad por pared:</b><br />");
                         out.print("<input style='width:150px' type='text' name='Txt_cantidad_evaluar' id='Txt_cantidad_evaluar' placeholder='Cantidad por pared' title='Cantidad por pared' /><br />"
                                 + "<script type='text/javascript'>var val1 = new LiveValidation('Txt_cantidad_evaluar');val1.add(Validate.Presence);val1.add(Validate.Decimal);</script>");
+                        out.print("<b>Cantidad por curvatura :</b><br />");
+                        out.print("<input style='width:150px' type='text' name='Txt_curvatura' id='Txt_curvatura' placeholder='Cantidad por curvatura' title='Curvatura' /><br />"
+                                + "<script type='text/javascript'>var val1 = new LiveValidation('Txt_curvatura');val1.add(Validate.Presence);val1.add(Validate.decimal);</script>");
                         //FIN GRAFICOS
                         //OBSERVACIONES
                         out.print("<b>Observaciones :</b>");
@@ -500,9 +500,6 @@ public class Tag_complemento extends TagSupport {
                         out.print("<b>Variación de espesor :</b><br />");
                         out.print("<input style='width:150px' type='text' name='Txt_variacion_espesor' id='Txt_variacion_espesor' placeholder='Variación de espesor' title='Variación de espesor' value='" + obj_ficha[19] + "'/><br />"
                                 + "<script type='text/javascript'>var val1 = new LiveValidation('Txt_variacion_espesor');val1.add(Validate.Presence);val1.add(Validate.Decimal);</script>");
-                        out.print("<b>Curvatura :</b><br />");
-                        out.print("<input style='width:150px' type='text' name='Txt_curvatura' id='Txt_curvatura' placeholder='Curvatura' title='Curvatura' value='" + obj_ficha[20] + "'/><br />"
-                                + "<script type='text/javascript'>var val1 = new LiveValidation('Txt_curvatura');val1.add(Validate.Presence);val1.add(Validate.Decimal);</script>");
                         out.print("<b>Diferencia de perimetros:</b><br />");
                         out.print("<input style='width:150px' type='text' name='Txt_diferencia_perimetro' id='Txt_diferencia_perimetro' placeholder='Diferencia de perimetros' title='Diferencia de perimetros' value='" + obj_ficha[21] + "'/><br />"
                                 + "<script type='text/javascript'>var val1 = new LiveValidation('Txt_diferencia_perimetro');val1.add(Validate.Presence);val1.add(Validate.Decimal);</script>");
@@ -543,6 +540,9 @@ public class Tag_complemento extends TagSupport {
                         out.print("<b>Cantidad por pared:</b><br />");
                         out.print("<input style='width:150px' type='text' name='Txt_cantidad_evaluar' id='Txt_cantidad_evaluar' placeholder='Cantidad por pared' title='Cantidad por pared' value='" + obj_ficha[30] + "'/><br />"
                                 + "<script type='text/javascript'>var val1 = new LiveValidation('Txt_cantidad_evaluar');val1.add(Validate.Presence);val1.add(Validate.Decimal);</script>");
+                        out.print("<b>Cantidad por curvatura :</b><br />");
+                        out.print("<input style='width:150px' type='text' name='Txt_curvatura' id='Txt_curvatura' placeholder='Curvatura' title='Curvatura' value='" + obj_ficha[20] + "'/><br />"
+                                + "<script type='text/javascript'>var val1 = new LiveValidation('Txt_curvatura');val1.add(Validate.Presence);val1.add(Validate.Decimal);</script>");
                         //FIN GRAFICOS
                         //OBSERVACIONES
                         out.print("<b>Observaciones :</b>");
@@ -601,18 +601,27 @@ public class Tag_complemento extends TagSupport {
                             out.print("<b class='color'>Es Estriada o con Ventana :</b> " + ((obj_fichas[46].toString().equals("1")) ? "Estria" : ((obj_fichas[46].toString().equals("2")) ? "Ventana" : "N/A")) + "<br /><br />");
                             out.print("<b class='color'>Frecuencia de control :</b>" + obj_fichas[28] + "<br />");
                             out.print("<b class='color'>Cantidad de tomas :</b>" + obj_fichas[29] + "<br />");
-                            out.print("<b class='color'>Cantidad por pared :</b>" + obj_fichas[30] + "");
+                            out.print("<b class='color'>Cantidad por pared :</b>" + obj_fichas[30] + "<br />");
+                            int curv = 0;
+                            float datax = 0; 
+                            try {
+                                datax = Float.parseFloat(obj_fichas[20].toString());
+                                curv = Math.round(datax);
+                            } catch (Exception e) {
+                                curv = 0;
+                            }
+                            out.print("<b class='color'>Cantidad por curvatura : </b>" + curv + "<br />");
                             out.print("</td>");
 //</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="DIV CENTRAL">
+                            //<editor-fold defaultstate="collapsed" desc="DIV CENTRAL">
                             out.print("<td valign='top' style='width:20%;'>");
                             out.print("<b class='color'>Pared doble : </b><br />" + obj_fichas[4] + " + " + obj_fichas[5] + " - " + obj_fichas[6] + "<br />");
                             out.print("<b class='color'>Pared doble con estria : </b><br />" + obj_fichas[37] + " + " + obj_fichas[38] + " - " + obj_fichas[39] + "<br /><br />");
                             out.print("<b class='color'>Pared sencilla :</b><br />" + obj_fichas[7] + " + " + obj_fichas[8] + " - " + obj_fichas[9] + "<br />");
                             out.print("<b class='color'>Pared sencilla con estria :</b><br />" + obj_fichas[40] + " + " + obj_fichas[41] + " - " + obj_fichas[42] + "");
                             out.print("</td>");
-//</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="DIV DERECHO">
+                            //</editor-fold>
+                            //<editor-fold defaultstate="collapsed" desc="DIV DERECHO">
                             out.print("<td valign='top' style='width:20%'>");
                             out.print("<b class='color'>Ancho ventana : </b><br />" + obj_fichas[43] + " + " + obj_fichas[44] + " - " + obj_fichas[45] + "<br />");
                             out.print("<b class='color'>Ancho manga : </b><br />" + obj_fichas[10] + " + " + obj_fichas[11] + " - " + obj_fichas[12] + "<br />");
@@ -622,15 +631,14 @@ public class Tag_complemento extends TagSupport {
                             out.print("<b class='color'>Peso nucleo :</b> " + obj_fichas[26] + "<br />");
                             out.print("<b class='color'>Peso bolsa :</b> " + obj_fichas[27] + "");
                             out.print("</td>");
-                            out.print("<td valign='top' style='width:20%'>");
-                            out.print("<b class='color'>Curvatura : </b>" + obj_fichas[20] + "<br />");
+                            out.print("<td valign='top' style='width:20%'>");                            
                             out.print("<b class='color'>Dureza : </b>" + obj_fichas[16] + " + " + obj_fichas[17] + " - " + obj_fichas[18] + "<br />");
                             out.print("<b class='color'>Variación de espesor : </b>" + obj_fichas[19] + "<br />");
                             out.print("<b class='color'>Dif. de perimetros : </b>" + obj_fichas[21] + "<br />");
                             out.print("<b class='color'>Centrado de ventana : </b>" + obj_fichas[47] + "<hr />");
                             out.print("<b class='color'>Observaciones : </b><br />" + obj_fichas[32] + "");
                             out.print("</td>");
-//</editor-fold>
+                            //</editor-fold>
                             out.print("</tr>");
                         }
                         out.print("</table>");

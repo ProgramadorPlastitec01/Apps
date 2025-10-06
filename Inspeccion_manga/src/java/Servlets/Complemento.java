@@ -179,7 +179,12 @@ public class Complemento extends HttpServlet {
                     ancho_ventana = request.getParameter("Txt_ancho_ventana");
                     ancho_ventana_max = request.getParameter("Txt_ancho_ventana_max");
                     ancho_ventana_min = request.getParameter("Txt_ancho_ventana_min");
-                    estria_ventana = Integer.parseInt(request.getParameter("Rdb_estriada_ventana"));
+                    try {
+                        estria_ventana = Integer.parseInt(request.getParameter("Rdb_estriada_ventana"));
+                    } catch (Exception e) {
+                        estria_ventana = 0;
+                    }
+
                     //FIN NUEVAS VARIABLES
                     lst_fichas = jpacftn.Fichas_tecnicas_codigo(codigo_ficha);
                     if (lst_fichas != null) {
@@ -196,7 +201,8 @@ public class Complemento extends HttpServlet {
                         request.setAttribute("var2", version);
                         request.getRequestDispatcher("Complemento?opc=4&cdc=0&cpd=0&fto=").forward(request, response);
                     } else {
-                        proceso = jpacftn.Registrar_ficha(nombre_producto.toUpperCase(), codigo_ficha.toUpperCase(), version,
+                        nombre_producto = nombre_producto.toUpperCase().replace("\u039C", "M");
+                        proceso = jpacftn.Registrar_ficha(nombre_producto, codigo_ficha.toUpperCase(), version,
                                 pared_doble, pared_doble_max, pared_doble_min,
                                 pared_sencilla, pared_sencilla_max, pared_sencilla_min,
                                 ancho_manga, ancho_manga_max, ancho_manga_min,

@@ -1997,7 +1997,7 @@ public class Tag_orden extends TagSupport {
                                 out.print("</table>");
                             } else {
                                 out.print("<div class=''>");
-                                out.print("<h6>El historial se encuentra vacio</h6>");
+                                out.print("<h2>El historial se encuentra vacio</h2>");
                                 out.print("</div>");
                             }
                             out.print("</div>");
