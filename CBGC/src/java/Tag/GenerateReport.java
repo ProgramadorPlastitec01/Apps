@@ -32,7 +32,8 @@ public class GenerateReport extends TagSupport {
             out.print("</div>");
 
             out.print("<div class='cont_form_user'>");
-            out.print("<form action='User?opt=2' method='post' class='needs-validation' novalidate='' onsubmit='return FormGenerate(this)'>");
+            out.print("<form action='Generate?opt=2' method='post' class='needs-validation' novalidate='' onsubmit='return FormGenerate(this)'>");
+            out.print("<input type='hidden' name='IdFormat' value='1'>");
 
             out.print("<div class='d-flex justify-content-center'>");
 
@@ -72,6 +73,7 @@ public class GenerateReport extends TagSupport {
             out.print("</div>");
             out.print("</div>");
             //</editor-fold>
+            
             out.print("<section class='section'>");
             out.print("<div class='section-body'>");
             out.print("<div class='row'>");
@@ -117,7 +119,7 @@ public class GenerateReport extends TagSupport {
                     try {
                         int State = Integer.parseInt(ObjCerti[8].toString());
                         if (State == 1) {
-                            out.print("<td><button class='btn btn-info' style='border-radius: 4px;' onclick='mostrarConvencion(1)'><i class=\"fas fa-spinner fa-spin\"></i></button></td>");
+                            out.print("<td><button class='btn btn-info' style='border-radius: 4px;' ><i class=\"fas fa-spinner fa-spin\"></i></button></td>");
                         } else {
                             out.print("<td><button class='btn btn-info' style='border-radius: 4px;'><i class=\"fas fa-spinner fa-spin\"></i></button></td>");
                         }

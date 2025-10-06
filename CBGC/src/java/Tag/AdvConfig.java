@@ -64,7 +64,7 @@ public class AdvConfig extends TagSupport {
             out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(1);' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
             out.print("</div>");
             out.print("<div class='cont_form_user'>");
-            out.print("<form action='advConfig?opt=2' method='post'>");
+            out.print("<form action='AdvConfig?opt=2' method='post'>");
             out.print("<input type='text' class='form-control col-lg-5 mb-2' style='margin:auto;' name='txtCateogrie' id='' placeholder='Categoria' data-toggle='tooltip' data-placement='top' title='Categoria' >");
             out.print("<div class='d-flex justify-content-around'>");
             out.print("<textarea class='form-control col-lg-5' name='txtValue' placeholder='Valor' data-toggle='tooltip' data-placement='top' title='Valor'></textarea>");

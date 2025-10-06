@@ -16,7 +16,7 @@ public class Generate extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             int opt = Integer.parseInt(request.getParameter("opt"));
-            int Order = 0;
+            int Order = 0, IdFormat = 0;
             String Type = "", Product = "", Batch = "";
             switch (opt) {
                 case 1:
@@ -25,6 +25,8 @@ public class Generate extends HttpServlet {
                     } catch (Exception e) {
                         Type = "";
                     }
+
+                    request.setAttribute("Type", Type);
                     request.getRequestDispatcher("GenerateReport.jsp").forward(request, response);
                     break;
                 case 2:
@@ -43,7 +45,17 @@ public class Generate extends HttpServlet {
                     } catch (Exception e) {
                         Batch = "";
                     }
-                    request.getRequestDispatcher("GenerateReport?opt=1").forward(request, response);
+                    try {
+                        IdFormat = Integer.parseInt(request.getParameter("IdFormat"));
+                    } catch (Exception e) {
+                        IdFormat = 0;
+                    }
+
+                    request.setAttribute("order", Order);
+                    request.setAttribute("product", Product);
+                    request.setAttribute("batch", Batch);
+                    request.setAttribute("IdFormat", IdFormat);
+                    request.getRequestDispatcher("Visual.jsp").forward(request, response);
                     break;
             }
 
