@@ -14,6 +14,8 @@ import Controller.SettingControllerJpa;
 import Controller.UserControllerJpa;
 import Controller.PendingControllerJpa;
 import Controller.ShiftControllerJpa;
+import Controller.AppDetailControllerJpa;
+
 import SQL.ConnectionsBd;
 
 public class Tag_start extends TagSupport {
@@ -29,6 +31,8 @@ public class Tag_start extends TagSupport {
         ShiftControllerJpa ShiftJpa = new ShiftControllerJpa();
         ConnectionsBd ConnectionBd = new ConnectionsBd();
         UserControllerJpa UserJpa = new UserControllerJpa();
+        AppDetailControllerJpa AppDetailJpa = new AppDetailControllerJpa();
+
         int IdUser = Integer.parseInt(sesion.getAttribute("idUsuario").toString());
         String NameUser = sesion.getAttribute("Nombres").toString();
         String NameRol = sesion.getAttribute("NombreRol").toString();
@@ -38,7 +42,7 @@ public class Tag_start extends TagSupport {
         int CurrMonth = (cal.get(Calendar.MONTH));
 //        nombreMes = nombreMes.substring(0, 1).toUpperCase() + nombreMes.substring(1).toLowerCase();
         List lst_items = null, lst_follow = null, lst_activity = null, lst_module = null, lst_tickets = null, lst_user = null, lst_pending = null,
-                lst_shift = null;
+                lst_shift = null, lst_appDetail = null;
         int CountP = 0;
         String Module = "";
 
@@ -147,7 +151,7 @@ public class Tag_start extends TagSupport {
             }
             //</editor-fold>
             out.print("</div>");
-            out.print("<div class='row d-flex flex-wrap g-4'>"); 
+            out.print("<div class='row d-flex flex-wrap g-4'>");
             //<editor-fold defaultstate="collapsed" desc="PENDIENTE ANUALES">
             lst_follow = DashJpa.ConsultPendingHistory(CurrYear);
             if (lst_follow != null) {
@@ -197,11 +201,11 @@ public class Tag_start extends TagSupport {
             if (lst_activity != null) {
                 out.print("<div class=\"col-lg-6\">");
                 out.print("<div class=\"card\" id='J' style='display:" + (Module.contains("J") ? "block" : "none") + "'>");
-                
+
                 out.print("<div class=\"card-header\">");
                 out.print("<h4>Actividades recientes</h4>");
                 out.print("</div>");
-                
+
                 out.print("<div class=\"card-body scrollActivities\" style='font-size:11px'>");
                 out.print("<div class=\" activities\" >");
                 for (int i = 0; i < lst_activity.size(); i++) {
@@ -216,7 +220,7 @@ public class Tag_start extends TagSupport {
                         out.print("    </div>");
                     }
                     out.print("    <div class=\"activity-detail\" style='margin-bottom:9px !important;'>");
-                    
+
                     out.print("  <div class='d-flex justify-content-between mb-2'>");
                     out.print("    <span class='text-job text-primary'>" + ObjActivity[1] + "</span>");
                     out.print("    <span class='text-job text-warning'>" + ObjActivity[4] + "</span>");
@@ -224,7 +228,7 @@ public class Tag_start extends TagSupport {
                     out.print("        <span class=\"text-job text-primary\">" + ObjActivity[3] + "</span>");
                     out.print("      <div class='d-flex align-items-baseline'><span class=\"bullet \"></span><p>" + ObjActivity[2] + "</p></div>");
                     out.print("    </div>");
-                    
+
                     out.print("  </div>");
 
                 }
@@ -272,11 +276,67 @@ public class Tag_start extends TagSupport {
             out.print("</div>");
             out.print("</div>");
             //</editor-fold>
+            
+            //<editor-fold defaultstate="collapsed" desc="DOCUMENTOS EN PROCESO">
+
+            out.print("<div class=\"col-lg-6\">");
+            out.print("<div class=\"card\" id='O' style='display:" + (Module.contains("O") ? "block" : "none") + "'>");
+            
+            out.print("<div class='text-center'>");
+            out.print("<h5>APLICACIONES EN PROCESO</h5>");
             out.print("</div>");
             
-            
-            
-            
+            lst_appDetail = AppDetailJpa.ConsultAppDocProcess();
+            if (lst_appDetail != null) {
+                out.print("<div id='accordion'>");
+                for (int i = 0; i < lst_appDetail.size(); i++) {
+                    Object[] ObjApp = (Object[]) lst_appDetail.get(i);
+                    String[] stuc = ObjApp[3].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                    out.print("<div class='accordion'>");
+                    out.print("<div class='accordion-header' role='button' data-toggle='collapse' data-target='#panel-body-" + i + "'>");
+                    out.print("<h4><b>" + ObjApp[2] + "</b> - " + stuc[0].toUpperCase() + " </h4>");
+                    out.print("</div>");
+                    out.print("<div class='accordion-body collapse' id='panel-body-" + i + "' data-parent='#accordion'>");
+                    out.print("<table class='table table-sm' >");
+                    out.print("<thead>");
+                    out.print("<tr>");
+                    out.print("<th>Documento</th>");
+                    out.print("<th>Estado</th>");
+                    out.print("<th>Acceder</th>");
+                    out.print("</tr>");
+                    out.print("</thead>");
+                    out.print("<tbody>");
+                    int idHead = Integer.parseInt(ObjApp[0].toString());
+                    int idApp =  Integer.parseInt(ObjApp[1].toString());
+                    List lst_appDetailx = AppDetailJpa.ConsultAppProcess(idHead);
+                    if (lst_appDetailx != null) {
+                        for (int j = 0; j < lst_appDetailx.size(); j++) {
+                            Object[] ObjDet = (Object[]) lst_appDetailx.get(j);
+                            out.print("<tr>");
+                            out.print("<td>" + ObjDet[2].toString() + "</td>");
+                            out.print("<td>" + ObjDet[3].toString() + "</td>");
+                            out.print("<td class='text-center'><button class='btn btn-green btn-sm' onclick='window.location.href=\"AppDetail?opt=1&idApp=" + idApp + "&mod=2&idHead=" + idHead + "\"'><i class='fas fa-share'></i></button></td>");
+                            out.print("</tr>");
+                        }
+                    } else {
+                        out.print("<tr>");
+                        out.print("<td class='text-center' colspan='3'> Documento en proceso <br> <button class='btn btn-info btn-sm' onclick='window.location.href=\"AppDetail?opt=1&idApp=" + idApp + "&mod=2&idHead=" + idHead + "\"'><i class='fas fa-share'></i></button> </td>");
+                        out.print("</tr>");
+                    }
+                    out.print("</tbody>");
+                    out.print("</table>");
+                    out.print("</div>");
+                    out.print("</div>");
+                }
+                out.print("</div>");
+            }
+
+            out.print("</div>");
+            out.print("</div>");
+            //</editor-fold>
+
+            out.print("</div>");
+
             out.print("</div>");
 
             out.print("</section>");
@@ -299,19 +359,19 @@ public class Tag_start extends TagSupport {
                 "Total Pendientes", "Bitacora", "Aplicativo en gestión", "Actas sin firmas",
                 "Actividad mensuales", "PC en gestión", "Equipos en gestión", "Programaciones pendientes",
                 "Pendientes vencidos", "Pendientes por vencer", "Pendientes vigentes",
-                "Pendientes Anuales", "Actividad Reciente",  "Programacion de turno"
+                "Pendientes Anuales", "Actividad Reciente", "Programacion de turno", "App en proceso"
             };
             String[] ArgIcon = {
                 "fa-bell", "fa-folder-open", "fa-lightbulb", "fa-file-alt",
                 "fa-calendar", "fa-laptop", "fa-tablet", "fa-clipboard-check",
-                "fa-exclamation", "fa-hourglass-half","fa-check",
-                "fa-list", "fa-comments", "fa-user-clock"
+                "fa-exclamation", "fa-hourglass-half", "fa-check",
+                "fa-list", "fa-comments", "fa-user-clock", "fas fa-rocket"
             };
             String[] DivOpenClose = {
                 "A", "B", "C", "D",
                 "E", "F", "G", "H",
-                "K", "L", "M",
-                "I", "J", "N"
+                "K", "L", "M", "I",
+                "J", "N", "O"
             };
 
             for (int i = 0; i < ArgModule.length; i++) {

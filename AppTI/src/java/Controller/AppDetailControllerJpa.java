@@ -94,8 +94,46 @@ public class AppDetailControllerJpa implements Serializable {
             return null;
         }
     }
-//</editor-fold>
 
+    public List ConsultAppDocProcess() {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_app_ConsultAppDocumentInProcess`()");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public List ConsultAppProcess(int idApp) {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_app_ConsultDocumentInProcess`(" + idApp + ")");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+//</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="PROCESS">
     public boolean NewDocumentByHead(int idHead, String date, String type, String content, String personal, String user) {
         EntityManager em = getEntityManager();

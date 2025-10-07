@@ -291,8 +291,9 @@ public class Tag_appDetail extends TagSupport {
                         out.print("</div>");
                         out.print("<input type='hidden' class='form-control' name='' id='coordenadas-hidden' value='" + signt + "'>");
 
-                        out.print("<form action='AppDetail?opt=7&idDet=" + idDet + "&idHead=" + idHead + "&idDoc=" + idDoc + "&idApp=" + idApp + "&type=" + type + "&step=" + step + "' method='post' class='' ");
-                        out.print("<input type='hidden' name='idSignature' id='' value='" + ObjSig[0].toString().replace("[", "") + "'>");
+                        out.print("<form action='AppDetail?opt=7&idDet=" + idDet + "&idHead=" + idHead + "&idDoc=" + idDoc + "&idApp=" + idApp + "&type=" + type + "&step=" + step + "' method='post' class=''>");
+                        int idSign = Integer.parseInt(ObjSig[0].toString().replace("[", "").trim());
+                        out.print("<input type='hidden' name='idSignature' id='no' value='" + idSign + "'>");
                         out.print("<input type='hidden' name='docx' id='' value='" + docx + "'>");
                         out.print("<input type='hidden' name='codx' value='" + codx + "'>");
                         out.print("<div class='text-center'>");
