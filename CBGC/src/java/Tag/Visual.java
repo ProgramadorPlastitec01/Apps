@@ -11,8 +11,10 @@ import Connection.ConnectionRegistrosLAB;
 import Connection.ConnectionGeneracionLotes;
 import Controller.SettingJpaController;
 import java.util.List;
+import Method.Util;
 
 public class Visual extends TagSupport {
+
 
     @Override
     public int doStartTag() throws JspException {
@@ -23,7 +25,7 @@ public class Visual extends TagSupport {
         SettingJpaController SettingJpa = new SettingJpaController();
         ConnectionGeneracionLotes GeneracionLotesJpa = new ConnectionGeneracionLotes();
         String Type = "", Product = "", ProductFact = "", Batch = "", Register = "", Html = "", BatchLay = "", BatchCentralTube = "", BatchInk = "";
-        int Order = 0, IdFormat = 0, Count = 1;
+        int Order = 0, IdFormat = 0, Count = 1, Count2 = 1;
         List lst_content = null;
         List lst_headFact = null;
         List lst_RLab = null;
@@ -32,6 +34,9 @@ public class Visual extends TagSupport {
         List lst_GlotesRep = null;
         List lst_parameter = null;
         List lst_data = null;
+        List lst_welds = null;
+        List lst_sheet = null;
+        List lst_prm = null;
         try {
             try {
                 Type = pageContext.getRequest().getParameter("Type");
@@ -80,9 +85,11 @@ public class Visual extends TagSupport {
                 out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1);'><i class='fas fa-plus'></i></button>");
                 out.print("</div>");
                 out.print("<div class='p-3'>");
+
                 lst_headFact = FactoryJpa.Products(Order, ProductFact, Batch);
                 if (lst_headFact != null && !lst_headFact.isEmpty() && lst_headFact.size() > 0) {
-                    String[] ArgHead = lst_headFact.get(1).toString().replace("]", "").replace("[", "").split("///");
+                    //<editor-fold defaultstate="collapsed" desc="HEAD FACTORY">
+                    String[] ArgHead = Util.parseResult(lst_headFact.get(1));
                     Html = Html.replace("XOrderX", ArgHead[0]);
                     Html = Html.replace("XClientX", ArgHead[1]);
                     Html = Html.replace("XAddressX", ArgHead[2]);
@@ -96,6 +103,7 @@ public class Visual extends TagSupport {
                     Html = Html.replace("XBatchX", Batch);
                     Html = Html.replace("XQuatityGenX", ArgHead[11] + " UNIDADES");
                     Html = Html.replace("<h3 class=\"mb-0\">XConsX</h3>", "<h3 class=\"mb-0 editable\" contenteditable='true'>CC*****</h3>");
+                    
                     Html = Html.replace("XYFX", "<span class='editable' contenteditable='true'>****</span>");
                     Html = Html.replace("XMFX", "<span class='editable' contenteditable='true'>**</span>");
                     Html = Html.replace("XDFX", "<span class='editable' contenteditable='true'>**</span>");
@@ -105,10 +113,12 @@ public class Visual extends TagSupport {
                     Html = Html.replace("XCodeX", "<span class='editable' contenteditable='true'>-----</span>");
                     Html = Html.replace("XClient_OrderX", "<span class='editable' contenteditable='true'>-------</span>");
                     Html = Html.replace("XSampleX", "<span class='editable' contenteditable='true'>----</span>");
+                    //</editor-fold>
                 }
                 lst_RLab = RegistrosLabJpa.ConsultMaterials(Order, Product, Batch);
-                if (lst_RLab != null && !lst_RLab.isEmpty()) {
-                    String[] ArgMaterials = lst_RLab.get(0).toString().replace("]", "").replace("[", "").split("///");
+                if (lst_RLab != null && !lst_RLab.isEmpty() && lst_RLab.size() > 0) {
+                    //<editor-fold defaultstate="collapsed" desc="MATERIAL REGISTROS LAB">
+                    String[] ArgMaterials = Util.parseResult(lst_RLab.get(0));
                     Html = Html.replace("REF1", ArgMaterials[0]);
                     Html = Html.replace("LBT1", ArgMaterials[1]);
                     Html = Html.replace("REF2", ArgMaterials[9]);
@@ -127,29 +137,62 @@ public class Visual extends TagSupport {
                         Html = Html.replace("COS2", "CC" + ArgCentralTube[0]);
                     }
                     BatchInk = ArgMaterials[8];
+                    //</editor-fold>
                 }
                 lst_GlotesRep = GeneracionLotesJpa.ConsultarCC_RepcecionMaterial(BatchInk);
                 if (lst_GlotesRep != null && !lst_GlotesRep.isEmpty() && lst_GlotesRep.size() > 0) {
-                    String[] ArgInk = lst_GlotesRep.get(0).toString().replace("]", "").replace("[", "").split("///");
+                    //<editor-fold defaultstate="collapsed" desc="CC REPECTION">
+                    String[] ArgInk = Util.parseResult(lst_GlotesRep.get(0));
                     Html = Html.replace("COS3", ArgInk[0]);
+                    //</editor-fold>
                 }
-                lst_parameter = SettingJpa.ConsultSettingCategorie("DimensionalesR-GC-046");
-                if (lst_parameter != null) {
-                    Object[] ObjParameter = (Object[]) lst_parameter.get(0);
-                    if (ObjParameter[2] != null) {
-                        String[] ArgParameter = ObjParameter[2].toString().replace("[", "").replace("]", "").split(",");
-                        for (int i = 0; i < ArgParameter.length; i++) {
-                            String Parameter = ArgParameter[i];
-                            lst_data = RegistrosLabJpa.DimensionalQuery(Order, Product, Batch, Parameter);
-                            if (lst_data != null) {
-                                String[] ArgData = lst_data.get(0).toString().replace("]", "").replace("[", "").split("///");
-                                Html = Html.replace("MIN" + Count + "", ArgData[0]);
-                                Html = Html.replace("MAX" + Count + "", ArgData[1]);
-                                Html = Html.replace("MEAN" + Count + "", ArgData[2]);
+                lst_sheet = SettingJpa.ConsultSettingCategorie("ENEMA - Ficha");
+                if (lst_sheet != null) {
+                    //<editor-fold defaultstate="collapsed" desc="TECNHNICAL SHEET">
+                    Object[] ObjSheet = (Object[]) lst_sheet.get(0);
+                    if (!ObjSheet[2].equals("") || ObjSheet[2] != null) {
+                        lst_prm = RegistrosLabJpa.QueryTechnicalSheet(Order, Product, ObjSheet[2].toString());
+                        if (lst_prm != null) {
+                            String[] ArgPrm = Util.parseResult(lst_prm.get(0));
+                            int ForCant = Integer.parseInt(ArgPrm[0].trim());
+                            for (int i = 1; i < ForCant; i++) {
+                                Html = Html.replace("PRM" + Count2 + "", ArgPrm[i]);
+                                Count2++;
                             }
-                            Count++;
                         }
                     }
+                    //</editor-fold>
+                }
+                lst_parameter = SettingJpa.ConsultSettingCategorie("ENEMA");
+                if (lst_parameter != null) {
+                    //<editor-fold defaultstate="collapsed" desc="DATA PARAMETER">
+                    Object[] ObjParameter = (Object[]) lst_parameter.get(0);
+                    if (ObjParameter[2] != null) {
+                        lst_data = RegistrosLabJpa.DimensionalQuery(Order, Product, Batch, ObjParameter[2].toString(), ObjParameter[3].toString());
+                        if (lst_data != null) {
+                            for (int i = 0; i < lst_data.size(); i++) {
+                                String[] ArgData = Util.parseResult(lst_data.get(i));
+                                Html = Html.replace("MIN" + Count + "", ArgData[1]);
+                                Html = Html.replace("MAX" + Count + "", ArgData[2]);
+                                Html = Html.replace("MEAN" + Count + "", ArgData[3]);
+                                Count++;
+                            }
+                        }
+                    }
+                    //</editor-fold>
+                }
+                String[] ArgCategory = {"boca", "cola"};
+                for (int i = 0; i < ArgCategory.length; i++) {
+                    //<editor-fold defaultstate="collapsed" desc="DATA WELDS">
+                    lst_welds = RegistrosLabJpa.QueryWelds(Order, Product, Batch, ArgCategory[i]);
+                    if (lst_welds != null && !lst_welds.isEmpty() && lst_welds.size() > 0) {
+                        String[] ArgWelds = Util.parseResult(lst_welds.get(0));
+                        Html = Html.replace("MIN" + Count + "", ArgWelds[0]);
+                        Html = Html.replace("MAX" + Count + "", ArgWelds[1]);
+                        Html = Html.replace("MEAN" + Count + "", ArgWelds[2]);
+                    }
+                    Count++;
+                    //</editor-fold>
                 }
 
                 out.print(Html);

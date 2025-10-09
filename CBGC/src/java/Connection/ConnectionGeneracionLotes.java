@@ -1,7 +1,5 @@
 package Connection;
 
-import static Connection.ConnectionRegistrosLAB.login;
-import static Connection.ConnectionSQLServer.url;
 import Controller.SettingJpaController;
 import java.sql.Connection;
 import java.sql.DriverManager;

@@ -3109,3 +3109,9 @@ thead.sticky-top {
     margin-left:4px;
     width: 25px;
 }
+.text-start{
+    text-align: left;
+}
+.fw-bold{
+    font-weight: bold;
+}
