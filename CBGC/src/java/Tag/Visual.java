@@ -15,7 +15,6 @@ import Method.Util;
 
 public class Visual extends TagSupport {
 
-
     @Override
     public int doStartTag() throws JspException {
         JspWriter out = pageContext.getOut();
@@ -24,7 +23,7 @@ public class Visual extends TagSupport {
         ConnectionRegistrosLAB RegistrosLabJpa = new ConnectionRegistrosLAB();
         SettingJpaController SettingJpa = new SettingJpaController();
         ConnectionGeneracionLotes GeneracionLotesJpa = new ConnectionGeneracionLotes();
-        String Type = "", Product = "", ProductFact = "", Batch = "", Register = "", Html = "", BatchLay = "", BatchCentralTube = "", BatchInk = "";
+        String Type = "", Product = "", ProductFact = "", Batch = "", DataTechnicalSheet = "", Html = "", BatchLay = "", BatchCentralTube = "", BatchInk = "";
         int Order = 0, IdFormat = 0, Count = 1, Count2 = 1;
         List lst_content = null;
         List lst_headFact = null;
@@ -76,16 +75,15 @@ public class Visual extends TagSupport {
                 out.print("<div class='card-header' style='justify-content: space-between;'>");
                 out.print("<div class='d-flex'>"
                         + "<div class='mr-2'>"
-                        + "<button class='btn btn-outline-primary btn-sm' style='border-radius: 4px; padding: 2px 9px;'  onclick=\"javascript:location.href='Setting.jsp';cargarDatos()\" >"
+                        + "<button class='btn btn-outline-primary btn-sm' style='border-radius: 4px; padding: 2px 9px;'  onclick=\"javascript:location.href='Generate?opt=1&Type=" + Type + "';cargarDatos()\" >"
                         + "<i class=\"fas fa-arrow-left\"></i>"
                         + "</button>"
                         + "</div>"
                         + "<h4>Generación Certificado</h4>"
                         + "</div>");
-                out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1);'><i class='fas fa-plus'></i></button>");
                 out.print("</div>");
-                out.print("<div class='p-3'>");
 
+                out.print("<div class='p-3'>");
                 lst_headFact = FactoryJpa.Products(Order, ProductFact, Batch);
                 if (lst_headFact != null && !lst_headFact.isEmpty() && lst_headFact.size() > 0) {
                     //<editor-fold defaultstate="collapsed" desc="HEAD FACTORY">
@@ -102,8 +100,9 @@ public class Visual extends TagSupport {
                     Html = Html.replace("XAbilityX", ArgHead[10]);
                     Html = Html.replace("XBatchX", Batch);
                     Html = Html.replace("XQuatityGenX", ArgHead[11] + " UNIDADES");
+                    Html = Html.replace("XClient_OrderX", ArgHead[12]);
                     Html = Html.replace("<h3 class=\"mb-0\">XConsX</h3>", "<h3 class=\"mb-0 editable\" contenteditable='true'>CC*****</h3>");
-                    
+
                     Html = Html.replace("XYFX", "<span class='editable' contenteditable='true'>****</span>");
                     Html = Html.replace("XMFX", "<span class='editable' contenteditable='true'>**</span>");
                     Html = Html.replace("XDFX", "<span class='editable' contenteditable='true'>**</span>");
@@ -111,7 +110,6 @@ public class Visual extends TagSupport {
                     Html = Html.replace("XMEX", "<span class='editable' contenteditable='true'>**</span>");
                     Html = Html.replace("XDEX", "<span class='editable' contenteditable='true'>**</span>");
                     Html = Html.replace("XCodeX", "<span class='editable' contenteditable='true'>-----</span>");
-                    Html = Html.replace("XClient_OrderX", "<span class='editable' contenteditable='true'>-------</span>");
                     Html = Html.replace("XSampleX", "<span class='editable' contenteditable='true'>----</span>");
                     //</editor-fold>
                 }
@@ -154,6 +152,7 @@ public class Visual extends TagSupport {
                         lst_prm = RegistrosLabJpa.QueryTechnicalSheet(Order, Product, ObjSheet[2].toString());
                         if (lst_prm != null) {
                             String[] ArgPrm = Util.parseResult(lst_prm.get(0));
+                            DataTechnicalSheet = ArgPrm[10];
                             int ForCant = Integer.parseInt(ArgPrm[0].trim());
                             for (int i = 1; i < ForCant; i++) {
                                 Html = Html.replace("PRM" + Count2 + "", ArgPrm[i]);
@@ -194,9 +193,10 @@ public class Visual extends TagSupport {
                     Count++;
                     //</editor-fold>
                 }
-
+                if (!DataTechnicalSheet.equals("")) {
+                    Html = Html.replace("XFichaTecnicaX", DataTechnicalSheet);
+                }
                 out.print(Html);
-
                 out.print("</div>");
 
                 out.print("</div>");

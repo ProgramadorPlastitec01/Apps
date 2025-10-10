@@ -21,11 +21,10 @@ public class Generate extends HttpServlet {
             switch (opt) {
                 case 1:
                     try {
-                        Type = request.getParameter("");
+                        Type = request.getParameter("Type");
                     } catch (Exception e) {
                         Type = "";
                     }
-
                     request.setAttribute("Type", Type);
                     request.getRequestDispatcher("GenerateReport.jsp").forward(request, response);
                     break;
@@ -50,7 +49,12 @@ public class Generate extends HttpServlet {
                     } catch (Exception e) {
                         IdFormat = 0;
                     }
-
+                    try {
+                        Type = request.getParameter("Type");
+                    } catch (Exception e) {
+                        Type = "";
+                    }
+                    request.setAttribute("Type", Type);
                     request.setAttribute("order", Order);
                     request.setAttribute("product", Product);
                     request.setAttribute("batch", Batch);

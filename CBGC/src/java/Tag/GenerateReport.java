@@ -33,7 +33,7 @@ public class GenerateReport extends TagSupport {
 
             out.print("<div class='cont_form_user'>");
             out.print("<form action='Generate?opt=2' method='post' class='needs-validation' novalidate='' onsubmit='return FormGenerate(this)'>");
-            out.print("<input type='hidden' name='IdFormat' value='1'>");
+            out.print("<input type='hidden' name='Type' value='" + Type + "'>");
 
             out.print("<div class='d-flex justify-content-center'>");
 
@@ -64,7 +64,7 @@ public class GenerateReport extends TagSupport {
 
             out.print("</div>");
             out.print("<div class='text-center mt-2'>");
-            out.print("<button class='btn btn-green' >Registrar</button>");
+            out.print("<button class='btn btn-green' >Generar</button>");
             out.print("</div>");
 
             out.print("</form>");
@@ -73,7 +73,7 @@ public class GenerateReport extends TagSupport {
             out.print("</div>");
             out.print("</div>");
             //</editor-fold>
-            
+
             out.print("<section class='section'>");
             out.print("<div class='section-body'>");
             out.print("<div class='row'>");
@@ -137,6 +137,7 @@ public class GenerateReport extends TagSupport {
             out.print("</tbody>");
             out.print("</table>");
             out.print("</div>");
+
             out.print("</div>");
             out.print("</div>");
             out.print("</div>");

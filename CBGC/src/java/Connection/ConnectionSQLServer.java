@@ -57,7 +57,8 @@ public class ConnectionSQLServer {
                     + "            CHARINDEX('mL', m.NOM, PATINDEX('%[0-9]%mL%', m.NOM)) - PATINDEX('%[0-9]%mL%', m.NOM) + 2) "
                     + "    ELSE NULL "
                     + "END AS [Volumen], "
-                    + "FORMAT(d.CANT, 'N0', 'es-CO') AS [Cantidad] " // 👈 formatea 20000.0000 → 20.000
+                    + "FORMAT(d.CANT, 'N0', 'es-CO') AS [Cantidad], " // 👈 formatea 20000.0000 → 20.000
+                    + "p.ORDEN as [OrdenC]"
                     + "FROM PEDIDOS p "
                     + "INNER JOIN CLIENTES c ON p.CLIENTE = c.COD "
                     + "INNER JOIN [EMP001_INV].[dbo].[MAESTRO] m ON p.COD = m.COD "

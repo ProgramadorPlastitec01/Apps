@@ -309,7 +309,8 @@ public class ConnectionRegistrosLAB {
                             + rs.getString("Dia. Int. ducto central").trim() + " /// "
                             + rs.getString("Ducto central").trim() + " /// "
                             + rs.getString("Soldadura bocas").trim() + " /// "
-                            + rs.getString("Soldadura colas").trim() + "");
+                            + rs.getString("Soldadura colas").trim() + " /// "
+                            + rs.getString("Ficha Tecnica").trim() + "");
                     count++;
                 }
                 conn.close();
