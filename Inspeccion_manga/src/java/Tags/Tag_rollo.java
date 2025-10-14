@@ -1407,7 +1407,7 @@ public class Tag_rollo extends TagSupport {
 
                     out.print("<div class='divCurv'>");
                     out.print("<div class='divCurvIn' style='text-align: center;'>");
-                    out.print("<form action='Rollo?opc=21' method='post' onsubmit='checkSubmit();' id='formCurv'>");
+                    out.print("<form action='Rollo?opc=21' method='post' onsubmit='checkSubmit();'>");
                     out.print("<input type='hidden' name='irg' value='" + id_registro + "'>"
                             + "<input type='hidden' name='odn' value='" + orden + "'>"
                             + "<input type='hidden' name='ipd' value='" + id_producto + "'>"
@@ -1416,15 +1416,15 @@ public class Tag_rollo extends TagSupport {
                             + "<input type='hidden' name='tma' value='0'>");
                     out.print("<input type='hidden' id='minCurv' value='0'>");
                     out.print("<input type='hidden' id='MaxCurv' value='5'>");
-                    if ((Integer) obj_registro[15] == 0) {
+                    if ((Integer) obj_registro[15] == 1) {
                         out.print("<input style='text-align:center;width:30px;margin:0;border-color:none;font-size:11px;' type='text' placeholder='Curva..' name='Txt_curva_xt' id='Txt_curva_xt' value='" + ((obj_rollo[29] == null) ? "" : obj_rollo[29]) + "' "
                                 + " onChange=\"Validacion('Txt_curva_xt','minCurv', 'MaxCurv', 'Txt_curva_xt')\">");
-                        out.print("<script type='text/javascript'>var val1 = new LiveValidation('Txt_curva_xt');val1.add(Validate.Presence);val1.add(Validate.Decimal);</script>");
+                        out.print("<script type='text/javascript'>var val2 = new LiveValidation('Txt_curva_xt');val2.add(Validate.Presence);val2.add(Validate.Decimal);</script>");
                         out.print("</div>");
                         out.print("<div class='divCurvIn'>");
                         out.print("<div class='myButton' style='margin-left: 10px;width: 15px; margin-top: 3px;'><input type='submit' value=''></div>");
                     } else {
-                        out.print("<span>" + ((obj_rollo[29] == null) ? "" : obj_rollo[29]) + "</span>");
+                        out.print("<span>" + ((obj_rollo[29] == null) ? "-" : obj_rollo[29]) + "</span>");
                     }
                     out.print("</div>");
                     out.print("</form>");
