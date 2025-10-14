@@ -7,6 +7,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 import Controller.CertificatesJpaController;
+import Controller.FormatJpaController;
 import java.util.List;
 
 public class GenerateReport extends TagSupport {
@@ -15,7 +16,9 @@ public class GenerateReport extends TagSupport {
     public int doStartTag() throws JspException {
         JspWriter out = pageContext.getOut();
         CertificatesJpaController CertificateJpa = new CertificatesJpaController();
+        FormatJpaController FormatJpa = new FormatJpaController();
         List lst_ceriticate = null;
+        List lst_format = null;
         String Type = "";
         try {
             try {
@@ -38,28 +41,45 @@ public class GenerateReport extends TagSupport {
             out.print("<div class='d-flex justify-content-center'>");
 
             // Input de Orden
-            out.print("<div class='col-5' data-toggle='tooltip' data-placement='top' title='Orden'>");
-            out.print("<input type='number' class='form-control' name='order' id='orderInput' min='0' placeholder='Orden/Pedido' required autocomplete='off' onblur='SearchForProductsOrder()'>");
+            out.print("<div class='col-6' data-toggle='tooltip' data-placement='top' title='Orden'>");
+            out.print("<input type='number' class='form-control' name='Order' id='orderInput' min='0' placeholder='Orden/Pedido' required autocomplete='off' onblur='SearchForProductsOrder()'>");
             out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un orden!</div>");
             out.print("</div>");
 
             // Select de Producto
-            out.print("</div>");
-
-            out.print("<div class='d-flex'>");
-
             out.print("<div class='col-6' data-toggle='tooltip' data-placement='top' title='Producto'>");
-            out.print("<select class='form-control' style='margin-top:12px' name='product' id='resultadoProductos' required>");
+            out.print("<select class='form-control' style='margin-top:12px' name='Product' id='resultadoProductos' required>");
             out.print("<option value=''>-- Seleccione un producto --</option>");
             out.print("</select>");
             out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe seleccionar un producto!</div>");
             out.print("</div>");
+
+            out.print("</div>");
+
+            out.print("<div class='d-flex'>");
+
             // Select de Lotes
             out.print("<div class='col-6 mt-2' data-toggle='tooltip' title='Lote'>");
-            out.print("<select class='form-control' name='batch' id='resultadoLotes' required>");
+            out.print("<select class='form-control' name='Batch' id='resultadoLotes' required>");
             out.print("<option value=''>-- Seleccione un lote --</option>");
             out.print("</select>");
             out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un lote!</div>");
+            out.print("</div>");
+
+            out.print("<div class='col-6' data-toggle='tooltip' data-placement='top' title='Registro'>");
+            out.print("<select class='form-control' style='margin-top:12px' name='IdFormat' required>");
+            lst_format = FormatJpa.ConsultFormatActive();
+            if (lst_format != null) {
+                for (int i = 0; i < lst_format.size(); i++) {
+                    Object[] ObjFormat = (Object[]) lst_format.get(i);
+                    out.print("<option value=''>-- Seleccione un registro --</option>");
+                    out.print("<option value='" + ObjFormat[0] + "'>" + ObjFormat[2] + " V" + ObjFormat[3] + "</option>");
+                }
+            } else {
+                out.print("<option value=''>-- Seleccione un registro --</option>");
+            }
+            out.print("</select>");
+            out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe seleccionar un producto!</div>");
             out.print("</div>");
 
             out.print("</div>");
@@ -81,11 +101,9 @@ public class GenerateReport extends TagSupport {
             out.print("<div class='card'>");
 
             out.print("<div class='card-header' style='justify-content: space-between;'>");
-
             out.print("<div class='d-flex'>"
                     + "<h4>Generar Certificado</h4>"
                     + "</div>");
-
             out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1)'><i class='fas fa-plus'></i></button>");
             out.print("</div>");
 
@@ -94,6 +112,7 @@ public class GenerateReport extends TagSupport {
             out.print("<table class='table table-bordered' id='table-1'>");
             out.print("<thead>");
             out.print("<tr>");
+            out.print("<th>Ver</th>");
             out.print("<th>Registro</th>");
             out.print("<th>Numero <br/> Certificado</th>");
             out.print("<th>Cliente</th>");
@@ -110,6 +129,7 @@ public class GenerateReport extends TagSupport {
                 for (int i = 0; i < lst_ceriticate.size(); i++) {
                     Object[] ObjCerti = (Object[]) lst_ceriticate.get(i);
                     out.print("<tr>");
+                    out.print("<td><button class='btn btn-green' style='border-radius: 4px;'  onclick=\"javascript:location.href='Generate?opt=2&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "&State=1';cargarDatos()\" ><i class=\"fas fa-eye\"></i></button></td>");
                     out.print("<td>" + ObjCerti[2] + "</td>");
                     out.print("<td>" + ObjCerti[3] + "</td>");
                     out.print("<td>" + ObjCerti[4] + "</td>");

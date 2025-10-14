@@ -85,6 +85,7 @@ public class Session extends HttpServlet {
                                         session.setAttribute("Nombre", DataUser[1]);
                                         session.setAttribute("Apellido", DataUser[2]);
                                         session.setAttribute("Permisos", DataUser[11]);
+                                        session.setAttribute("Rol/Usuario", DataUser[9] + "/" + DataUser[1]);
                                         session.setAttribute("Estado", State);
                                         session.setAttribute("CheckPending", 1);
                                         request.setAttribute("welcome", true);

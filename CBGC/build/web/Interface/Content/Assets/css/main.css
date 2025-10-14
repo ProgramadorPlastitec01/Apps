@@ -1669,8 +1669,12 @@ div:empty:not(:focus):before {
     background-color: #0b0025;
 }
 .DivButtonPending{
-    display: flex;
-    float: right;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    width: 100px;
+    z-index: 999;
+    height: 57px;
 }
 .buttomsPending{
     padding: 0px 12px 0px 0px;
@@ -3089,21 +3093,21 @@ thead.sticky-top {
 }
 
 .card-dashboard {
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  padding: 20px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  margin-bottom: 20px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-bottom: 20px;
 }
 .card-dashboard:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
 }
 .card-title {
-  font-weight: 600;
-  font-size: 1.2rem;
-  margin-bottom: 10px;
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
 }
 .ImgModule{
     margin-left:4px;
