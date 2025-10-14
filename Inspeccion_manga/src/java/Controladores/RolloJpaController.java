@@ -397,6 +397,25 @@ public class RolloJpaController {
         }
     }
 
+    public boolean Curvatura_rollo(int irl, double curv) {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("UPDATE rollo SET curvatura = " + curv + " WHERE id_rollo = " + irl + "");
+            int exitoso = q.executeUpdate();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (exitoso == 0) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
     //DATOS_ESTADISTICOS
     public List Generacion_estadistica(String nod, int ipd, String lpd, int iln, String fin, String ffn, int rin, int rfn) {
         EntityManager etm = getEntityManager();

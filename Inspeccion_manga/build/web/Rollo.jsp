@@ -7,12 +7,12 @@
         <link type="image/png" href="Interfaz/Contenido/images/Inspeccion_manga_new.ico" rel="icon" >
             <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
             <title>Rollo</title>
-<!--            <script type = "text/javascript" >
-                history.pushState(null, null, 'Rollo.jsp');
-                window.addEventListener('popstate', function (event) {
-                    history.pushState(null, null, 'Rollo.jsp');
-                });
-            </script>-->
+            <!--            <script type = "text/javascript" >
+                            history.pushState(null, null, 'Rollo.jsp');
+                            window.addEventListener('popstate', function (event) {
+                                history.pushState(null, null, 'Rollo.jsp');
+                            });
+                        </script>-->
             <jsp:include page='Contenedor_head.jsp'></jsp:include>
                 <script type="text/javascript">
                     function Peso(peso, restar) {
@@ -227,11 +227,21 @@
                         }
                     }
                 </script>
+
         </head>
         <body id="subpage" >
             <div id="templatemo_wrapper">
             <Menu:Menu />
             <Rollo:Rollo/>
+            <script type="text/javascript" language="javascript">
+                function mostrarConvencion(id) {
+                    if (document.getElementById("Ventana" + id).style.display === "none") {
+                        document.getElementById("Ventana" + id).style.display = "block";
+                    } else if (document.getElementById("Ventana" + id).style.display === "block") {
+                        document.getElementById("Ventana" + id).style.display = "none";
+                    }
+                }
+            </script>
         </div>
         <Alertas:Alertas />
     </body>

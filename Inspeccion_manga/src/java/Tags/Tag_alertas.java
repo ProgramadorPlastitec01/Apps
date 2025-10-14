@@ -381,6 +381,23 @@ public class Tag_alertas extends TagSupport {
                     out.print("swal('Error','No se pudo realizar el paso de rollos.','error');");
                     out.print("</script>");
                 }
+                if (pageContext.getRequest().getAttribute("Alerta").toString().equals("RegisterCurvatura")) {
+                    out.print("<script language='javascript' type='text/javascript'>");
+                    out.print("swal('Error','No se pudo realizar el paso de rollos.','error');");
+                    out.print("</script>");
+                }
+                if (pageContext.getRequest().getAttribute("RegisterCurvatura") != null) {
+                boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("RegisterCurvatura").toString());
+                if (result) {
+                    out.print("<script language='javascript' type='text/javascript'>");
+                    out.print("swal('Aprobado','Se ha registrado la curvatura','success');");
+                    out.print("</script>");
+                } else {
+                    out.print("<script language='javascript' type='text/javascript'>");
+                    out.print("swal('Error','No se pudo registrar la curvatura.','error');");
+                    out.print("</script>");
+                }
+            }
                 // </editor-fold>
                 //<editor-fold defaultstate="collapsed" desc="R-PI-034">
                 if (pageContext.getRequest().getAttribute("Alerta").toString().equals("Registro_entrada_material")) {

@@ -530,6 +530,21 @@ public class Tag_rollo extends TagSupport {
                             balanza = "<b class='naranja'>---</b>";
                             calibrador = "<b class='naranja'>---</b>";
                         }
+
+                        //<editor-fold defaultstate="collapsed" desc="REGISTRAR CURVATURA">
+                        out.print("<div class='sweet-local' id='Ventana1' style='opacity: 1.03; display:none;'>");
+                        out.print("<fieldset class='popup_local' style='width:700px;position: absolute;top: 50px;left: 5%;'>");
+                        out.print("<div style='display: flex; justify-content: space-between'>");
+                        out.print("<h2>Registrar curvatura</h2>");
+                        out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(1)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
+                        out.print("</div>");
+                        out.print("<div class='cont_form_user'>");
+
+                        out.print("</div>");
+                        out.print("</fieldset>");
+                        out.print("</div>");
+                        //</editor-fold>
+
                         out.print("<table class='table' style='width:100%'>");
                         if (fecha_convert >= 20160101) {
                             out.print("<tr>");
@@ -597,7 +612,7 @@ public class Tag_rollo extends TagSupport {
                             out.print("<th colspan='2'>Perimetro</th>");
                         }
                         out.print("<th rowspan='2'>Particulas</th>");
-                        out.print("<th rowspan='2'>Curvatura</th>");
+//                        out.print("<th rowspan='2'>Curvatura</th>");
                         out.print("<th rowspan='2' colspan='2'>Registros Calidad</th>");
                         out.print("</tr>");
                         out.print("<tr>");
@@ -710,21 +725,27 @@ public class Tag_rollo extends TagSupport {
                                 out.print("<td align='center'>" + obj_rollos[13] + "</td>");
                             }
                             // CURVATURA
-                            int curva = 0;
-                            double dtax = 0;
-                            try {
-                                dtax = Float.parseFloat(obj_registro[71].toString());
-                                curva = (int) Math.round(dtax);
-                            } catch (Exception e) {
-                                curva = 0;
-                            }
-                            if (i == 0) {
-                                out.print("<td align='center'>" + ((obj_rollos[29] == null) ? 0 : obj_rollos[29]) + "</td>");
-                            } else if (curva != 0 && (i + 1) % curva == 0) {
-                                out.print("<td align='center'>" + ((obj_rollos[29] == null) ? 0 : obj_rollos[29]) + "</td>");
-                            } else {
-                                out.print("<td align='center'> - </td>");
-                            }
+//                            int curva = 0;
+//                            double dtax = 0;
+//                            try {
+//                                dtax = Float.parseFloat(obj_registro[71].toString());
+//                                curva = (int) Math.round(dtax);
+//                            } catch (Exception e) {
+//                                curva = 0;
+//                            }
+//                            String conten = "";
+//                            boolean ShowData = obj_rollos[29] == null;
+//
+//                            if (obj_rollos[29] == null) {
+//                                conten = "-";
+//                            } else {
+//                                conten = obj_rollos[29].toString();
+//                            }
+//                            if (ShowData) {
+//                                out.print("<td align='center'><span onclick='mostrarConvencion(1)' style='cursor: pointer;'>" + conten + "</span></td>");
+//                            } else {
+//                                out.print("<td align='center'> - </td>");
+//                            }
 
                             out.print("<td align='center' style='display: flex;justify-content: space-evenly;'>");
                             if ((Integer) obj_registro[15] == 1) {
@@ -790,12 +811,14 @@ public class Tag_rollo extends TagSupport {
                                     out.print("<b class='naranja'>---</b>");
                                 }
                             }
-                            if (i == 0) {
-                                out.print("<a href='JAVASCRIPT:'><img src='Interfaz/Contenido/Iconos/curvas2.png'></a>");
-                            }
-                            if (curva != 0 && (i + 1) % curva == 0) {
-                                out.print("<a href='JAVASCRIPT:'><img src='Interfaz/Contenido/Iconos/curvas2.png'>"+ curva +"</a>");
-                            }
+//                            if (i == 0) {
+////                                out.print("<a href='JAVASCRIPT:'><img src='Interfaz/Contenido/Iconos/curvas2.png'></a>");
+//                                out.print("<input type='radio' name='' id='' value='" + obj_rollos[0] + "'>");
+//                            }
+//                            if (curva != 0 && (i + 1) % curva == 0) {
+//                                out.print("<input type='radio' name='' id='' value='" + obj_rollos[0] + "'>");
+////                                out.print("<a href='JAVASCRIPT:'><img src='Interfaz/Contenido/Iconos/curvas2.png'>"+ curva +"</a>");
+//                            }
 
                             out.print("</td>");
 
@@ -1254,7 +1277,7 @@ public class Tag_rollo extends TagSupport {
                     out.print("<table class='table' style='width:100%'>");
                     if (fecha_convert >= 20160101) {
                         out.print("<tr>");
-                        out.print("<td colspan='15' style='background-color:#979595;' align='center'><b style='color:white;'>COPIA NO CONTROLADA</b></td>");
+                        out.print("<td colspan='16' style='background-color:#979595;' align='center'><b style='color:white;'>COPIA NO CONTROLADA</b></td>");
                         out.print("</tr>");
                     }
                     out.print("<tr>");
@@ -1267,9 +1290,9 @@ public class Tag_rollo extends TagSupport {
                         out.print("<td colspan='8' align='center'><b class='negro'>MANUAL DE REGISTROS</b></td>");
                     }
                     if (Integer.parseInt(obj_registro[55].toString()) > 0) {
-                        out.print("<td colspan='4' align='center'><b class='negro'>CODIGO<br />R-GC-159</b></td>");
+                        out.print("<td colspan='5' align='center'><b class='negro'>CODIGO<br />R-GC-159</b></td>");
                     } else {
-                        out.print("<td colspan='4' align='center'><b class='negro'>CODIGO<br />R-GC-078</b></td>");
+                        out.print("<td colspan='5' align='center'><b class='negro'>CODIGO<br />R-GC-078</b></td>");
                     }
                     out.print("</tr>");
                     out.print("<tr>");
@@ -1281,7 +1304,7 @@ public class Tag_rollo extends TagSupport {
                             out.print("<td colspan='4' align='center'><b class='negro'>VERSION 0</b></td>");
                         }
                     } else {
-                        out.print("<td colspan='4' align='center'><b class='negro'>VERSION 3</b></td>");
+                        out.print("<td colspan='5' align='center'><b class='negro'>VERSION 3</b></td>");
                     }
                     out.print("</tr>");
                     out.print("<tr>");
@@ -1290,7 +1313,7 @@ public class Tag_rollo extends TagSupport {
                     out.print("<td align='center'><b>Producto</b></td>");
                     out.print("<td align='center' colspan='6'>" + obj_registro[23] + " / " + obj_registro[24] + "</td>");
                     out.print("<td align='center'><b>Lote Producto</b></td>");
-                    out.print("<td colspan='4' align='center'>" + obj_registro[5] + "</td>");
+                    out.print("<td colspan='5' align='center'>" + obj_registro[5] + "</td>");
                     out.print("</tr>");
                     out.print("<tr>");
                     out.print("<td align='center'><b>Fecha y turno</b></td>");
@@ -1302,10 +1325,11 @@ public class Tag_rollo extends TagSupport {
                     out.print("<td align='center'><b>Lote P</b></td>");
                     out.print("<td  align='center'>" + obj_registro[7] + "</td>");
                     out.print("<td align='center'><b>Máquina</b></td>");
-                    out.print("<td colspan='3' align='center'>" + obj_registro[9] + "</td>");
+                    out.print("<td colspan='4' align='center'>" + obj_registro[9] + "</td>");
                     out.print("</tr>");
                     out.print("<tr>");
                     out.print("<th colspan='15'>Datos extrusión</th>");
+                    out.print("<th colspan='1' rowspan='2'>Curvatura <br> ( Calidad )</th>");
                     out.print("</tr>");
                     out.print("<tr>");
                     out.print("<th>Rollo " + obj_rollo[2] + "</th>");
@@ -1321,6 +1345,8 @@ public class Tag_rollo extends TagSupport {
                     out.print("<td align='center'><b>Particulas</b></td>");
                     out.print("<td align='center' colspan='3'><b>Diferencia de perimetro</b></td>");
                     out.print("<td align='center'><b>Algorítmo</b></td>");
+
+//                    out.print("<td align='center'><b>Curvatura</b></td>");
                     out.print("</tr>");
                     out.print("<tr>");
                     if (obj_rollo[4] == null) {
@@ -1371,11 +1397,44 @@ public class Tag_rollo extends TagSupport {
                         out.print(" = <b class='rojo'>---</b>");
                     }
                     out.print("</td>");
+
                     out.print((((Integer) obj_registro[15] == 1 && !(rol.equals("Operario_extrusion") || rol.equals("Coordinador_extrusion") || rol.equals("Consulta"))) ? "<td><div class='myButton'><input type='submit' value=''></div></td></form>" : ""));
+
                     out.print("<td align='center'>" + obj_rollo[16] + "</td>");
+
+                    //CURVATURA
+                    out.print("<td>");
+
+                    out.print("<div class='divCurv'>");
+                    out.print("<div class='divCurvIn' style='text-align: center;'>");
+                    out.print("<form action='Rollo?opc=21' method='post' onsubmit='checkSubmit();' id='formCurv'>");
+                    out.print("<input type='hidden' name='irg' value='" + id_registro + "'>"
+                            + "<input type='hidden' name='odn' value='" + orden + "'>"
+                            + "<input type='hidden' name='ipd' value='" + id_producto + "'>"
+                            + "<input type='hidden' name='rlo' value='" + id_rollo + "'>"
+                            + "<input type='hidden' name='irl' value='" + obj_rollo[0] + "'>"
+                            + "<input type='hidden' name='tma' value='0'>");
+                    out.print("<input type='hidden' id='minCurv' value='0'>");
+                    out.print("<input type='hidden' id='MaxCurv' value='5'>");
+                    if ((Integer) obj_registro[15] == 0) {
+                        out.print("<input style='text-align:center;width:30px;margin:0;border-color:none;font-size:11px;' type='text' placeholder='Curva..' name='Txt_curva_xt' id='Txt_curva_xt' value='" + ((obj_rollo[29] == null) ? "" : obj_rollo[29]) + "' "
+                                + " onChange=\"Validacion('Txt_curva_xt','minCurv', 'MaxCurv', 'Txt_curva_xt')\">");
+                        out.print("<script type='text/javascript'>var val1 = new LiveValidation('Txt_curva_xt');val1.add(Validate.Presence);val1.add(Validate.Decimal);</script>");
+                        out.print("</div>");
+                        out.print("<div class='divCurvIn'>");
+                        out.print("<div class='myButton' style='margin-left: 10px;width: 15px; margin-top: 3px;'><input type='submit' value=''></div>");
+                    } else {
+                        out.print("<span>" + ((obj_rollo[29] == null) ? "" : obj_rollo[29]) + "</span>");
+                    }
+                    out.print("</div>");
+                    out.print("</form>");
+                    out.print("</div>");
+
+                    out.print("</td>");
+
                     out.print("</tr>");
                     out.print("<tr>");
-                    out.print("<th colspan='15'>Controles de espesor</th>");
+                    out.print("<th colspan='16'>Controles de espesor</th>");
                     out.print("</tr>");
                     out.print("</table>");
                     lst_controles_espesor = jpaccep.Traer_controles_espesor_id_rollo((Integer) obj_rollo[0]);

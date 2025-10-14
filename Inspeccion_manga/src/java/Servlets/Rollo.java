@@ -768,6 +768,28 @@ public class Rollo extends HttpServlet {
                     request.getRequestDispatcher("Rollo?opc=19&irg=" + id_registro + "&etvt=" + estria_ventana + "&odn=" + orden + "&ipd=" + id_producto + "&rlo=0&fto=").forward(request, response);
                     break;
 
+                case 21:
+                    //<editor-fold defaultstate="collapsed" desc="CURVATURA">
+                    double curv = 0;
+                    id_registro = Integer.parseInt(request.getParameter("irg"));
+                    id_rollo = Integer.parseInt(request.getParameter("rlo"));
+                    orden = request.getParameter("odn");
+                    id_producto = Integer.parseInt(request.getParameter("ipd"));
+                    toma = Integer.parseInt(request.getParameter("tma"));
+
+                    try {
+                        curv = Double.parseDouble(request.getParameter("Txt_curva_xt").toString());
+                    } catch (Exception e) {
+                        curv = 99;
+                    }
+                    boolean result = false;
+                    result = jpacrlo.Curvatura_rollo(id_rollo, curv);
+                    request.setAttribute("RegisterCurvatura", result);
+
+                    request.getRequestDispatcher("Rollo?opc=2&irg=" + id_registro + "&rlo=" + id_rollo + "&odn=" + orden + "&ipd=" + id_producto + "&tma=0").forward(request, response);
+                    //</editor-fold>
+                    break;
+
             }
         } catch (Exception ex) {
             request.getRequestDispatcher("Salir.jsp").forward(request, response);

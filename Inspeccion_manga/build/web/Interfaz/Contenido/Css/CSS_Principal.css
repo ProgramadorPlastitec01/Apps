@@ -522,3 +522,13 @@ td img {
     background: #dadada;
     box-shadow: 0px 2px 2px 1px #676767;
 }
+
+
+.divCurv{
+    display: flex;
+    justify-content: space-around;
+}
+
+.divCurvIn{
+    width: 45%;
+}
