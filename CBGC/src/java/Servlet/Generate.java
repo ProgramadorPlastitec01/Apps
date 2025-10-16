@@ -10,6 +10,8 @@ import Controller.CertificatesJpaController;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.List;
+import Connection.ConnectionSignature;
+import Method.Util;
 
 public class Generate extends HttpServlet {
 
@@ -20,11 +22,16 @@ public class Generate extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             CertificatesJpaController CertificatesJpa = new CertificatesJpaController();
+            ConnectionSignature SignatureConn = new ConnectionSignature();
             String RolName = session.getAttribute("Rol/Usuario").toString();
+            int IdRol = Integer.parseInt(session.getAttribute("idRol").toString());
+            int Document = Integer.parseInt(session.getAttribute("Documento").toString());
+            int CodeSig = Integer.parseInt(session.getAttribute("Codigo").toString());
             int opt = Integer.parseInt(request.getParameter("opt"));
             int Order = 0, IdFormat = 0, IdCertificates = 0;
             String Type = "", Product = "", Batch = "", Html = "", Code = "", Consecutive = "", Customer = "";
             boolean result = false;
+            List lst_sign = null;
             List lst_id = null;
             switch (opt) {
                 case 1:
@@ -105,7 +112,7 @@ public class Generate extends HttpServlet {
                         //<editor-fold defaultstate="collapsed" desc="UPDATE">
                         result = CertificatesJpa.CertificatesUpdate(IdCertificates, Consecutive, Html);
                         if (result) {
-                            
+
                         }
                         request.getRequestDispatcher("Generate?opt=2&Type=" + Type + "&IdCertificates=" + IdCertificates)
                                 .forward(request, response);
@@ -160,11 +167,37 @@ public class Generate extends HttpServlet {
                     }
                     //</editor-fold>
                     break;
+                case 4:
+                    //<editor-fold defaultstate="collapsed" desc="SIGNATURE">
+                    try {
+                        Type = request.getParameter("Type");
+                    } catch (Exception e) {
+                        Type = "";
+                    }
+                    try {
+                        IdCertificates = Integer.parseInt(request.getParameter("IdCertificates"));
+                    } catch (Exception e) {
+                        IdCertificates = 0;
+                    }
+                    if ((IdRol == 1) || (IdRol == 2)) {
+                        lst_sign = SignatureConn.ConsultSignature(Document, CodeSig);
+                        if (lst_sign != null) {
+                            String[] ArgSign = Util.parseResult(lst_sign.get(0));
+                            result = CertificatesJpa.CertificatesUpdateSignature(IdCertificates, ArgSign[0]);
+                            if (result) {
+                            }
+                        }
+                    } else {
+                        request.setAttribute("UnauthorizedSignature", true);
+                    }
+                    request.getRequestDispatcher("Generate?opt=1&Type=" + Type).forward(request, response);
+                    //</editor-fold>
+                    break;
             }
 
         } catch (Exception ex) {
             request.setAttribute("errorMessage", "Ha ocurrido un error procesando tu solicitud: " + ex.getMessage());
-            request.getRequestDispatcher("GenerateReport.jsp").forward(request, response);
+//            request.getRequestDispatcher("GenerateReport.jsp").forward(request, response);
         }
     }
 

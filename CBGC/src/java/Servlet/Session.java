@@ -77,8 +77,9 @@ public class Session extends HttpServlet {
                                     } else {
                                         session.setAttribute("idUsuario", DataUser[0]);
                                         session.setAttribute("Nombres", (DataUser[1] + " " + DataUser[2]));
+                                        session.setAttribute("Documento", DataUser[3].trim());
+                                        session.setAttribute("Codigo", DataUser[4].trim());
                                         session.setAttribute("Rol/Nombres", DataUser[8] + "/" + DataUser[9]);
-                                        session.setAttribute("Documento", DataUser[3]);
                                         session.setAttribute("Usuario", DataUser[5]);
                                         session.setAttribute("idRol", DataUser[8]);
                                         session.setAttribute("NombreRol", DataUser[9]);
@@ -90,7 +91,6 @@ public class Session extends HttpServlet {
                                         session.setAttribute("CheckPending", 1);
                                         request.setAttribute("welcome", true);
                                         request.getRequestDispatcher("Start.jsp").forward(request, response);
-//                                        request.getRequestDispatcher("Start?opc=1").forward(request, response);
                                     }
                                 } catch (Exception e) {
                                 }

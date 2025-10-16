@@ -109,5 +109,23 @@ public class CertificatesJpaController implements Serializable {
             return false;
         }
     }
+    public boolean CertificatesUpdateSignature(int IdC, String Asg) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        try {
+            Query q = em.createNativeQuery("CALL `Sp_ctf_u_UpdateCertificatesSignature`('" + IdC + "','" + Asg + "')");
+            int resultado = q.executeUpdate();
+            em.getTransaction().commit();
+            em.clear();
+            em.close();
+            if (resultado == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
 }

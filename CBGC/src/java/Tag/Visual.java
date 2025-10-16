@@ -9,10 +9,11 @@ import Controller.FormatJpaController;
 import Connection.ConnectionSQLServer;
 import Connection.ConnectionRegistrosLAB;
 import Connection.ConnectionGeneracionLotes;
+import Connection.ConnectionSignature;
 import Controller.SettingJpaController;
+import Controller.CertificatesJpaController;
 import java.util.List;
 import Method.Util;
-import Controller.CertificatesJpaController;
 
 public class Visual extends TagSupport {
 
@@ -25,8 +26,9 @@ public class Visual extends TagSupport {
         SettingJpaController SettingJpa = new SettingJpaController();
         CertificatesJpaController CertificatesJpa = new CertificatesJpaController();
         ConnectionGeneracionLotes GeneracionLotesJpa = new ConnectionGeneracionLotes();
+        ConnectionSignature SignatureConn = new ConnectionSignature();
         String Type = "", Product = "", ProductFact = "", Batch = "", DataTechnicalSheet = "", Html = "", BatchLay = "", BatchCentralTube = "", BatchInk = "";
-        int Order = 0, IdFormat = 0, Count = 1, Count2 = 1, IdCertificates = 0;
+        int Order = 0, IdFormat = 0, Count = 1, Count2 = 1, IdCertificates = 0, State = 0, IdSig = 0;
         List lst_content = null;
         List lst_headFact = null;
         List lst_RLab = null;
@@ -38,6 +40,7 @@ public class Visual extends TagSupport {
         List lst_welds = null;
         List lst_sheet = null;
         List lst_prm = null;
+        List lst_sign = null;
         try {
             try {
                 Type = pageContext.getRequest().getParameter("Type");
@@ -82,6 +85,8 @@ public class Visual extends TagSupport {
                 Object[] Obj_Format = (Object[]) lst_content.get(0);
                 if (IdCertificates > 0) {
                     Html = Obj_Format[3].toString();
+                    State = Integer.parseInt(Obj_Format[4].toString());
+                    IdSig = Integer.parseInt(Obj_Format[5].toString());
                 } else {
                     Html = Obj_Format[4].toString();
                 }
@@ -225,21 +230,45 @@ public class Visual extends TagSupport {
                     out.print("</div>");
                     //</editor-fold>
                 } else {
-                    out.print("<div id='HtmlContent'>");
-                    out.print(Html);
-                    out.print("</div>");
-                    
-                    out.print("<form id='FormGenerate' action='Generate?opt=3' method='post' class='needs-validation' novalidate='' onsubmit='return FormGenerate(this)'>");
-                    out.print("<input type='hidden' name='Type' value='" + Type + "'>");
-                    out.print("<input type='hidden' name='Order' value='" + Order + "'>");
-                    out.print("<input type='hidden' name='Product' value='" + Product + "'>");
-                    out.print("<input type='hidden' name='Batch' value='" + Batch + "'>");
-                    out.print("<input type='hidden' name='IdFormat' value='" + IdFormat + "'>");
-                    out.print("<input type='hidden' name='IdCertificates' value='" + IdCertificates + "'>");
-                    out.print("</form>");
-                    out.print("<div class='DivButtonPending'>");
-                    out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='saveHtml()'><i class='fas fa-save'></i></button>");
-                    out.print("</div>");
+                    //<editor-fold defaultstate="collapsed" desc="VIEW CERTIFICATE UPDATE - CLOSE">
+                    if (State == 0) {
+                        //<editor-fold defaultstate="collapsed" desc="CLOSE">
+                        out.print("<div id='HtmlContent'>");
+                        Html = Html.replace("contenteditable=\"true\"", "contenteditable=\"false\"");
+                        Html = Html.replaceAll("<input type=\"checkbox\"", "<input type=\"checkbox\" class=\"disabled\" ");
+                        Html = Html.replaceAll("<input name=\"result\" type=\"radio\"", "<input name=\"result\" type=\"radio\" class=\"disabled\"");
+                        lst_sign = SignatureConn.ConsultSignatureId(IdSig);
+                        if (lst_sign != null) {
+                            String[] ArgSign = Util.parseResult(lst_sign.get(0));
+                            String valorCoord = ArgSign[3].replace("\"", "&quot;").replace("'", "&#39;");
+                            Html = Html.replace(
+                                    "<input type='hidden' id=\"coordenadas-hidden\">",
+                                    "<input type='hidden' id=\"coordenadas-hidden\" value=\"" + valorCoord + "\">"
+                            );
+
+                        }
+                        out.print(Html);
+                        out.print("</div>");
+                        //</editor-fold>
+                    } else {
+                        //<editor-fold defaultstate="collapsed" desc="UPDATE">
+                        out.print("<div id='HtmlContent'>");
+                        out.print(Html);
+                        out.print("</div>");
+                        out.print("<form id='FormGenerate' action='Generate?opt=3' method='post' class='needs-validation' novalidate='' onsubmit='return FormGenerate(this)'>");
+                        out.print("<input type='hidden' name='Type' value='" + Type + "'>");
+                        out.print("<input type='hidden' name='Order' value='" + Order + "'>");
+                        out.print("<input type='hidden' name='Product' value='" + Product + "'>");
+                        out.print("<input type='hidden' name='Batch' value='" + Batch + "'>");
+                        out.print("<input type='hidden' name='IdFormat' value='" + IdFormat + "'>");
+                        out.print("<input type='hidden' name='IdCertificates' value='" + IdCertificates + "'>");
+                        out.print("</form>");
+                        out.print("<div class='DivButtonPending'>");
+                        out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='saveHtml()'><i class='fas fa-save'></i></button>");
+                        out.print("</div>");
+                        //</editor-fold>
+                    }
+                    //</editor-fold>
                 }
 
                 out.print("</div>");
