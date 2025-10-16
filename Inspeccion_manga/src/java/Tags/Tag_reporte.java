@@ -1497,7 +1497,7 @@ public class Tag_reporte extends TagSupport {
                                                 out.print("<td colspan='2' align='center'><b class='naranja'>---</b></td>");
                                             }
                                         }
-                                        out.print("<td align='center'>" + obj_rollos[6] + " </td>");
+                                        out.print("<td align='center'>" + obj_rollos[6] + "</td>");
 
                                         if (newv == 0) {
                                             out.print("<td align='center'>" + obj_rollos[7] + "</td>");

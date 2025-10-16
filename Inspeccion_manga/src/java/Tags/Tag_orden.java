@@ -474,8 +474,8 @@ public class Tag_orden extends TagSupport {
                     out.print("<div id='sidebar'>");
                     out.print("<input type='hidden' id='Txt_dureza_min' value='" + ((Double) obj_ficha[16] - (Double) obj_ficha[18]) + "' />");
                     out.print("<input type='hidden' id='Txt_dureza_max' value='" + ((Double) obj_ficha[16] + (Double) obj_ficha[17]) + "' />");
-                    out.print("<input type='hidden' id='Txt_curvatura_min' value='" + 0 + "' />");
-                    out.print("<input type='hidden' id='Txt_curvatura_max' value='" + (Double) obj_ficha[20] + "' />");
+//                    out.print("<input type='hidden' id='Txt_curvatura_min' value='" + 0 + "' />");
+//                    out.print("<input type='hidden' id='Txt_curvatura_max' value='" + (Double) obj_ficha[20] + "' />");
                     if (funcion.equals("Registro")) {
 //                        List lst_estado = jpacrgt.consultarRegistrosAbiertos(Integer.parseInt(id_producto), orden);
 //                        if (lst_estado != null) {
@@ -686,16 +686,17 @@ public class Tag_orden extends TagSupport {
 //                                            + "</script>");
 //                                }
                                     if (material == 1 || estria_ventana > 0) {
-                                        out.print("<input type='hidden' name='Txt_curvatura' id='Txt_curvatura' value='0' />");
+                                        out.print("<span class=''> </span>");
+                                        out.print("<input type='hidden' style='display: none;' name='Txt_curvatura' id='Txt_curvatura' value='0' />");
                                     } else {
-                                        out.print("<b>Curvatura :</b>");
-                                        out.print("<input type='text' name='Txt_curvatura' id='Txt_curvatura' placeholder='Curvatura' title='Curvatura' onkeyup='javascript:this.value=this.value.toUpperCase();'/>"
-                                                + "<script type='text/javascript'>var val1 = new LiveValidation('Txt_curvatura');"
-                                                + "val1.add(Validate.Presence);"
-                                                + "val1.add(Validate.Decimal);"
-                                                + "val1.add(Validate.Parametros_minimos, { match: 'Txt_curvatura_min'} );"
-                                                + "val1.add(Validate.Parametros_maximos, { match: 'Txt_curvatura_max'} );"
-                                                + "</script>");
+//                                        out.print("<b>Curvatura :</b>");
+                                        out.print("<input type='text' style='display: none;' name='Txt_curvatura' id='Txt_curvatura' placeholder='Curvatura' title='Curvatura' onkeyup='javascript:this.value=this.value.toUpperCase();'/>");
+//                                                + "<script type='text/javascript'>var val1 = new LiveValidation('Txt_curvatura');"
+//                                                + "val1.add(Validate.Presence);"
+//                                                + "val1.add(Validate.Decimal);"
+//                                                + "val1.add(Validate.Parametros_minimos, { match: 'Txt_curvatura_min'} );"
+//                                                + "val1.add(Validate.Parametros_maximos, { match: 'Txt_curvatura_max'} );"
+//                                                + "</script>");
                                     }
                                     if (material == 1) {
                                         out.print("<input type='hidden' name='Cbx_prueba_funcional' id='Cbx_prueba_funcional' value='N/A' />");
@@ -943,16 +944,16 @@ public class Tag_orden extends TagSupport {
 //                                            + "</script>");
 //                                }
                                     if (material == 1 || estria_ventana > 0) {
-                                        out.print("<input type='hidden' name='Txt_curvatura' id='Txt_curvatura' value='0' />");
+                                        out.print("<input type='hidden' style='display: none;' name='Txt_curvatura' id='Txt_curvatura' value='0' />");
                                     } else {
-                                        out.print("<b>Curvatura :</b>");
-                                        out.print("<input type='text' name='Txt_curvatura' id='Txt_curvatura' placeholder='Curvatura' title='Curvatura' onkeyup='javascript:this.value=this.value.toUpperCase();' value='" + obj_registro[19] + "'/>"
-                                                + "<script type='text/javascript'>var val1 = new LiveValidation('Txt_curvatura');"
-                                                + "val1.add(Validate.Presence);"
-                                                + "val1.add(Validate.Decimal);"
-                                                + "val1.add(Validate.Parametros_minimos, { match: 'Txt_curvatura_min'} );"
-                                                + "val1.add(Validate.Parametros_maximos, { match: 'Txt_curvatura_max'} );"
-                                                + "</script>");
+//                                        out.print("<b>Curvatura :</b>");
+                                        out.print("<input type='text' style='display: none;' name='Txt_curvatura' id='Txt_curvatura' placeholder='Curvatura' title='Curvatura' onkeyup='javascript:this.value=this.value.toUpperCase();' value='" + obj_registro[19] + "'/>");
+//                                                + "<script type='text/javascript'>var val1 = new LiveValidation('Txt_curvatura');"
+//                                                + "val1.add(Validate.Presence);"
+//                                                + "val1.add(Validate.Decimal);"
+//                                                + "val1.add(Validate.Parametros_minimos, { match: 'Txt_curvatura_min'} );"
+//                                                + "val1.add(Validate.Parametros_maximos, { match: 'Txt_curvatura_max'} );"
+//                                                + "</script>");
                                     }
                                     if (material == 1) {
                                         out.print("<input type='hidden' name='Cbx_prueba_funcional' id='Cbx_prueba_funcional' value='N/A' />");
@@ -1190,16 +1191,16 @@ public class Tag_orden extends TagSupport {
 //                                            + "</script>");
 //                                }
                                     if (material == 1 || estria_ventana > 0) {
-                                        out.print("<input type='hidden' name='Txt_curvatura' id='Txt_curvatura' value='0' />");
+                                        out.print("<input type='hidden' style='display: none;' name='Txt_curvatura' id='Txt_curvatura' value='0' />");
                                     } else {
-                                        out.print("<b>Curvatura :</b>");
-                                        out.print("<input type='text' name='Txt_curvatura' id='Txt_curvatura' placeholder='Curvatura' title='Curvatura' onkeyup='javascript:this.value=this.value.toUpperCase();'/>"
-                                                + "<script type='text/javascript'>var val1 = new LiveValidation('Txt_curvatura');"
-                                                + "val1.add(Validate.Presence);"
-                                                + "val1.add(Validate.Decimal);"
-                                                + "val1.add(Validate.Parametros_minimos, { match: 'Txt_curvatura_min'} );"
-                                                + "val1.add(Validate.Parametros_maximos, { match: 'Txt_curvatura_max'} );"
-                                                + "</script>");
+//                                        out.print("<b>Curvatura :</b>");
+                                        out.print("<input type='text' style='display: none;' name='Txt_curvatura' id='Txt_curvatura' placeholder='Curvatura' title='Curvatura' onkeyup='javascript:this.value=this.value.toUpperCase();'/>");
+//                                                + "<script type='text/javascript'>var val1 = new LiveValidation('Txt_curvatura');"
+//                                                + "val1.add(Validate.Presence);"
+//                                                + "val1.add(Validate.Decimal);"
+//                                                + "val1.add(Validate.Parametros_minimos, { match: 'Txt_curvatura_min'} );"
+//                                                + "val1.add(Validate.Parametros_maximos, { match: 'Txt_curvatura_max'} );"
+//                                                + "</script>");
                                     }
                                     if (material == 1) {
                                         out.print("<input type='hidden' name='Cbx_prueba_funcional' id='Cbx_prueba_funcional' value='N/A' />");
@@ -1445,10 +1446,10 @@ public class Tag_orden extends TagSupport {
 //                                            + "</script>");
 //                                }
                                     if (material == 1 || estria_ventana > 0) {
-                                        out.print("<input type='hidden' name='Txt_curvatura' id='Txt_curvatura' value='0' />");
+                                        out.print("<input type='hidden' style='display: none;' name='Txt_curvatura' id='Txt_curvatura' value='0' />");
                                     } else {
-                                        out.print("<b>Curvatura :</b>");
-                                        out.print("<input type='text' name='Txt_curvatura' id='Txt_curvatura' placeholder='Curvatura' title='Curvatura' onkeyup='javascript:this.value=this.value.toUpperCase();' value='" + obj_registro[19] + "'/>"
+//                                        out.print("<b>Curvatura :</b>");
+                                        out.print("<input type='text' style='display: none;' name='Txt_curvatura' id='Txt_curvatura' placeholder='Curvatura' title='Curvatura' onkeyup='javascript:this.value=this.value.toUpperCase();' value='" + obj_registro[19] + "'/>"
                                                 + "<script type='text/javascript'>var val1 = new LiveValidation('Txt_curvatura');"
                                                 + "val1.add(Validate.Presence);"
                                                 + "val1.add(Validate.Decimal);"
@@ -1653,10 +1654,10 @@ public class Tag_orden extends TagSupport {
 //                                            + "<script type='text/javascript'>var val1 = new LiveValidation('Txt_dureza');val1.add(Validate.Presence);</script>");
 //                                }
                                 if (material == 1 || estria_ventana > 0) {
-                                    out.print("<input type='hidden' name='Txt_curvatura' id='Txt_curvatura' value='0' />");
+                                    out.print("<input type='hidden' style='display: none;' name='Txt_curvatura' id='Txt_curvatura' value='0' />");
                                 } else {
-                                    out.print("<b>Curvatura :</b>");
-                                    out.print("<input type='text' name='Txt_curvatura' id='Txt_curvatura' placeholder='Curvatura' title='Curvatura' onkeyup='javascript:this.value=this.value.toUpperCase();' value='" + obj_registro[19] + "'/>"
+//                                    out.print("<b>Curvatura :</b>");
+                                    out.print("<input type='text' style='display: none;' name='Txt_curvatura' id='Txt_curvatura' placeholder='Curvatura' title='Curvatura' onkeyup='javascript:this.value=this.value.toUpperCase();' value='" + obj_registro[19] + "'/>"
                                             + "<script type='text/javascript'>var val1 = new LiveValidation('Txt_curvatura');val1.add(Validate.Presence);</script>");
                                 }
                                 if (material == 1) {
@@ -1747,16 +1748,17 @@ public class Tag_orden extends TagSupport {
 //                                            + "</script>");
 //                                }
                                 if (material == 1 || estria_ventana > 0) {
-                                    out.print("<input type='hidden' name='Txt_curvatura' id='Txt_curvatura' value='0' />");
+//                                    out.print("<span class=''> d </span>");
+                                    out.print("<input type='hidden' style='display: none;' name='Txt_curvatura' id='Txt_curvatura' value='0' />");
                                 } else {
-                                    out.print("<b>Curvatura :</b>");
-                                    out.print("<input type='text' name='Txt_curvatura' id='Txt_curvatura' placeholder='Curvatura' title='Curvatura' onkeyup='javascript:this.value=this.value.toUpperCase();' value='" + obj_registro[19] + "'/>"
-                                            + "<script type='text/javascript'>var val1 = new LiveValidation('Txt_curvatura');"
-                                            + "val1.add(Validate.Presence);"
-                                            + "val1.add(Validate.Decimal);"
-                                            + "val1.add(Validate.Parametros_minimos, { match: 'Txt_curvatura_min'} );"
-                                            + "val1.add(Validate.Parametros_maximos, { match: 'Txt_curvatura_max'} );"
-                                            + "</script>");
+//                                    out.print("<b>Curvatura :</b>");
+                                    out.print("<input type='text' style='display: none;' name='Txt_curvatura' id='Txt_curvatura' placeholder='Curvatura' title='Curvatura' onkeyup='javascript:this.value=this.value.toUpperCase();' value='" + obj_registro[19] + "'/>");
+//                                            + "<script type='text/javascript'>var val1 = new LiveValidation('Txt_curvatura');"
+//                                            + "val1.add(Validate.Presence);"
+//                                            + "val1.add(Validate.Decimal);"
+//                                            + "val1.add(Validate.Parametros_minimos, { match: 'Txt_curvatura_min'} );"
+//                                            + "val1.add(Validate.Parametros_maximos, { match: 'Txt_curvatura_max'} );"
+//                                            + "</script>");
                                 }
                                 if (material == 1) {
                                     out.print("<input type='hidden' name='Cbx_prueba_funcional' id='Cbx_prueba_funcional' value='N/A' />");
@@ -1987,10 +1989,10 @@ public class Tag_orden extends TagSupport {
                                 for (int i = 0; i < lst_producto.size(); i++) {
                                     Object[] ObjProd = (Object[]) lst_producto.get(i);
                                     out.print("<tr>");
-                                    out.print("<td>"+ ObjProd[2] +"</td>");
-                                    out.print("<td>"+ ObjProd[3] +"</td>");
-                                    out.print("<td>"+ ObjProd[5] +"</td>");
-                                    out.print("<td>"+ ObjProd[4].toString().replace(",", " - ") +"</td>");
+                                    out.print("<td>" + ObjProd[2] + "</td>");
+                                    out.print("<td>" + ObjProd[3] + "</td>");
+                                    out.print("<td>" + ObjProd[5] + "</td>");
+                                    out.print("<td>" + ObjProd[4].toString().replace(",", " - ") + "</td>");
                                     out.print("</tr>");
                                 }
                                 out.print("</tbody>");
@@ -2302,11 +2304,12 @@ public class Tag_orden extends TagSupport {
                                         + "<img src='Interfaz/Contenido/Iconos/Close.png'  alt='edit' title='Sin permisos' />"
                                         + "</td>");
                             }
-                            if (material == 1 || estria_ventana > 0) {
-                                out.print("<td><b>Curvatura </b><b class='negro'>N/A</b></td>");
-                            } else {
-                                out.print("<td><b>Curvatura </b>" + obj_registros[19] + "</td>");
-                            }
+                            out.print("<td></td>");
+//                            if (material == 1 || estria_ventana > 0) {
+//                                out.print("<td><b>Curvatura </b><b class='negro'>N/A</b></td>");
+//                            } else {
+//                                out.print("<td><b>Curvatura </b>" + obj_registros[19] + "</td>");
+//                            }
                             if (rol.equals("Coordinadora_calidad") || rol.equals("Inspectora_calidad") || rol.equals("Administrador")) {
                                 if (Integer.parseInt(obj_registros[15].toString()) == 1) {
                                     out.print("<td align='center'>"
