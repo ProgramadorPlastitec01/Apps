@@ -86,7 +86,9 @@ public class Visual extends TagSupport {
                 if (IdCertificates > 0) {
                     Html = Obj_Format[3].toString();
                     State = Integer.parseInt(Obj_Format[4].toString());
-                    IdSig = Integer.parseInt(Obj_Format[5].toString());
+                    if (Obj_Format[5] != null) {
+                        IdSig = Integer.parseInt(Obj_Format[5].toString());
+                    }
                 } else {
                     Html = Obj_Format[4].toString();
                 }
@@ -160,6 +162,7 @@ public class Visual extends TagSupport {
                     if (lst_GlotesRep != null && !lst_GlotesRep.isEmpty() && lst_GlotesRep.size() > 0) {
                         //<editor-fold defaultstate="collapsed" desc="CC REPECTION">
                         String[] ArgInk = Util.parseResult(lst_GlotesRep.get(0));
+                        Html = Html.replace("REF3", ArgInk[1].replace("M", ""));
                         Html = Html.replace("COS3", ArgInk[0]);
                         //</editor-fold>
                     }
@@ -241,8 +244,8 @@ public class Visual extends TagSupport {
                         if (lst_sign != null) {
                             String[] ArgSign = Util.parseResult(lst_sign.get(0));
                             String valorCoord = ArgSign[3].replace("\"", "&quot;").replace("'", "&#39;");
-                            Html = Html.replace(
-                                    "<input type='hidden' id=\"coordenadas-hidden\">",
+                            Html = Html.replaceAll(
+                                    "<input type=\"hidden\" id=\"coordenadas-hidden\" value=\"\">",
                                     "<input type='hidden' id=\"coordenadas-hidden\" value=\"" + valorCoord + "\">"
                             );
 
@@ -270,9 +273,7 @@ public class Visual extends TagSupport {
                     }
                     //</editor-fold>
                 }
-
                 out.print("</div>");
-
                 out.print("</div>");
                 out.print("</div>");
                 out.print("</div>");

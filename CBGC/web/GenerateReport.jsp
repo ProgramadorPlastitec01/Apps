@@ -16,9 +16,83 @@
             <div class="main-content" style="min-height: 694px;">
             <Generate:GenerateReport/>
         </div>
+        <div id="loading-screen">
+            <div class="doc-loader">
+                <div class="doc-icon"><i class="fas fa-file-alt" style="font-size: 30px"></i></div>
+                <div id="loading-text" class="dots">Buscando información</div>
+            </div>
+        </div>
     </body>
 
+
     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const orderInput = document.getElementById("orderInput");
+            const productoSection = document.getElementById("producto-section");
+            const loteSection = document.getElementById("lote-section");
+            const registroSection = document.getElementById("registro-section");
+            const loadingScreen = document.getElementById("loading-screen");
+            const productosSelect = document.getElementById("resultadoProductos");
+            const lotesSelect = document.getElementById("resultadoLotes");
+
+            // Paso 1: buscar orden
+            orderInput.addEventListener("change", function () {
+                const orderValue = orderInput.value.trim();
+                if (orderValue === "")
+                    return;
+
+                mostrarCarga("Buscando orden");
+
+                setTimeout(() => {
+                    ocultarCarga();
+                    productoSection.classList.remove("d-none");
+                    productoSection.classList.add("fade-in");
+                    productosSelect.disabled = false;
+                }, 1500);
+            });
+
+            // Paso 2: buscar producto
+            productosSelect.addEventListener("change", function () {
+                const productoValue = productosSelect.value.trim();
+                if (productoValue === "")
+                    return;
+
+                mostrarCarga("Consultando productos");
+
+                setTimeout(() => {
+                    ocultarCarga();
+                    loteSection.classList.remove("d-none");
+                    loteSection.classList.add("fade-in");
+                    lotesSelect.disabled = false;
+                }, 1500);
+            });
+
+            // Paso 3: buscar lote
+            lotesSelect.addEventListener("change", function () {
+                const loteValue = lotesSelect.value.trim();
+                if (loteValue === "")
+                    return;
+
+                mostrarCarga("Cargando registros");
+
+                setTimeout(() => {
+                    ocultarCarga();
+                    registroSection.classList.remove("d-none");
+                    registroSection.classList.add("fade-in");
+                }, 1500);
+            });
+
+            function mostrarCarga(texto) {
+                document.getElementById("loading-text").innerText = texto;
+                loadingScreen.style.display = "flex";
+            }
+
+            function ocultarCarga() {
+                loadingScreen.style.display = "none";
+            }
+        });
+
+        // Validación igual a tu versión funcional
         function FormGenerate(form) {
             const order = document.getElementById("orderInput").value.trim();
             const producto = document.getElementById("resultadoProductos").value.trim();
@@ -26,7 +100,6 @@
 
             let valido = true;
 
-            // Validación de Orden
             if (order === "") {
                 document.getElementById("orderInput").classList.add("is-invalid");
                 valido = false;
@@ -34,7 +107,6 @@
                 document.getElementById("orderInput").classList.remove("is-invalid");
             }
 
-            // Validación de Producto
             if (producto === "") {
                 document.getElementById("resultadoProductos").classList.add("is-invalid");
                 valido = false;
@@ -42,7 +114,6 @@
                 document.getElementById("resultadoProductos").classList.remove("is-invalid");
             }
 
-            // Validación de Lote
             if (lote === "") {
                 document.getElementById("resultadoLotes").classList.add("is-invalid");
                 valido = false;
@@ -50,16 +121,79 @@
                 document.getElementById("resultadoLotes").classList.remove("is-invalid");
             }
 
-            // Si todo está correcto, enviamos el formulario
             if (valido) {
                 form.submit();
             }
 
-            return false; // siempre detener el submit por defecto
+            return false;
+        }
+        function Masive(ide) {
+            var id = "[" + ide + "]";
+            var content = document.getElementById("IdCerti").value;
+            if (content.includes(id)) {
+                document.getElementById("IdCerti").value = content.replace(id, "");
+            } else {
+                document.getElementById("IdCerti").value += id;
+            }
+        }
+        function ExecuteForm() {
+            const form = document.getElementById("myForm");
+
+            // Validar antes de enviar
+            if (form.checkValidity()) {
+                form.submit(); // Enviar formulario
+            } else {
+                form.reportValidity(); // Mostrar errores de campos requeridos
+            }
+        }
+    </script>
+    <script>
+        function confirmarEliminacion(url) {
+            swal({
+                title: "¿Está seguro de eliminar?",
+                text: "Por favor, justifique la razón de la eliminación:",
+                content: {
+                    element: "textarea",
+                    attributes: {
+                        placeholder: "Escriba aquí la justificación...",
+                        id: "razonEliminacion"
+                    },
+                },
+                icon: "warning",
+                buttons: {
+                    cancel: {
+                        text: "Cancelar",
+                        visible: true,
+                        className: "btn btn-secondary",
+                        closeModal: true,
+                    },
+                    confirm: {
+                        text: "Sí, eliminar",
+                        visible: true,
+                        className: "btn btn-danger",
+                        closeModal: false,
+                    },
+                },
+                dangerMode: true,
+            }).then((value) => {
+                if (value) {
+                    const razon = document.getElementById("razonEliminacion").value.trim();
+                    if (!razon) {
+                        swal("Debe justificar la eliminación", {
+                            icon: "error",
+                        });
+                        return;
+                    }
+                    // Redirige al servlet con la razón codificada
+                    const razonEncoded = encodeURIComponent(razon);
+                    window.location.href = url + "&Justification=" + razonEncoded;
+                }
+            });
         }
     </script>
 
 
+    <script src="Interface/Content/Assets/modules/sweetalert/sweetalert.min.js"></script>
     <script src="Interface/Content/Assets/js/filterop.js"></script>
     <script src="Interface/Content/Assets/modules/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js"></script>
     <script src="Interface/Content/Assets/modules/datatables/Select-1.2.4/js/dataTables.select.min.js"></script>

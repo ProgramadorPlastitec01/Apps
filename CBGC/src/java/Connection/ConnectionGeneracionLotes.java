@@ -69,13 +69,13 @@ public class ConnectionGeneracionLotes {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             conn = DriverManager.getConnection(url, login, password);
             if (conn != null) {
-                String query = "SELECT r.consecutivo FROM recepcion_material r  WHERE r.lote LIKE '%" + Lote.trim() + "%'";
+                String query = "SELECT r.consecutivo,r.codigo FROM recepcion_material r  WHERE r.lote LIKE '%" + Lote.trim() + "%'";
                 Statement sttm = conn.createStatement();
                 ResultSet rs = sttm.executeQuery(query);
                 List<String> lst_consecutivos = new ArrayList<String>();
                 int count = 0;
                 while (rs.next()) {
-                    lst_consecutivos.add(count, rs.getString("consecutivo").toString().trim());
+                    lst_consecutivos.add(count, rs.getString("consecutivo").trim()  + "///" + rs.getString("codigo").trim());
                     count++;
                 }
                 conn.close();

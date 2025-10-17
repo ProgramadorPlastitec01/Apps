@@ -36,6 +36,24 @@ public class CertificatesJpaController implements Serializable {
             return null;
         }
     }
+    public List ConsultCeritcateTypeDelete(String Type) {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_ctf_c_ConsultCertificatesDelete`('" + Type + "')");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
     public List ConsultCeritcateTypeId(String Type) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
@@ -114,6 +132,24 @@ public class CertificatesJpaController implements Serializable {
         em.getTransaction().begin();
         try {
             Query q = em.createNativeQuery("CALL `Sp_ctf_u_UpdateCertificatesSignature`('" + IdC + "','" + Asg + "')");
+            int resultado = q.executeUpdate();
+            em.getTransaction().commit();
+            em.clear();
+            em.close();
+            if (resultado == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    public boolean DeleteCertificate(int IdC, String Djt) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        try {
+            Query q = em.createNativeQuery("CALL `Sp_ctf_u_DeleteCertificate`('" + IdC + "','" + Djt + "')");
             int resultado = q.executeUpdate();
             em.getTransaction().commit();
             em.clear();
