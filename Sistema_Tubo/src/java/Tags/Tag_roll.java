@@ -468,8 +468,8 @@ public class Tag_roll extends TagSupport {
                                     + "            if (inputValue !== cleanInput) { "
                                     + "                event.target.value = cleanInput;"
                                     + "            }"
-                                    + "            if (inputValue.length > 4){ "
-                                    + "                   event.target.value = inputValue.slice(0, 4); "
+                                    + "            if (inputValue.length > 5){ "
+                                    + "                   event.target.value = inputValue.slice(0, 5); "
                                     + "            }"
                                     + "        });"
                                     + "</script>");
@@ -1003,8 +1003,8 @@ public class Tag_roll extends TagSupport {
                                     + "            if (inputValue !== cleanInput) { "
                                     + "                event.target.value = cleanInput;"
                                     + "            }"
-                                    + "            if (inputValue.length > 4){ "
-                                    + "                   event.target.value = inputValue.slice(0, 4); "
+                                    + "            if (inputValue.length > 5){ "
+                                    + "                   event.target.value = inputValue.slice(0, 5); "
                                     + "            }"
                                     + "        });"
                                     + "</script>");
@@ -1436,8 +1436,8 @@ public class Tag_roll extends TagSupport {
                                 + "            if (inputValue !== cleanInput) { "
                                 + "                event.target.value = cleanInput;"
                                 + "            }"
-                                + "            if (inputValue.length > 4){ "
-                                + "                   event.target.value = inputValue.slice(0, 4); "
+                                + "            if (inputValue.length > 5){ "
+                                + "                   event.target.value = inputValue.slice(0, 5); "
                                 + "            }"
                                 + "        });"
                                 + "</script>");

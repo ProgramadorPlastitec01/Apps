@@ -4,11 +4,11 @@
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/inspeccion_manga"/>
-      <property name="javax.persistence.jdbc.user" value="root"/>
-      <property name="javax.persistence.jdbc.password" value=""/>
-      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
       <!--<property name="javax.persistence.jdbc.url" value="jdbc:mysql://172.16.5.99:3306/inspeccion_manga"/>-->
-      <!--<property name="javax.persistence.jdbc.password" value="HIT1v0"/>-->
+      <property name="javax.persistence.jdbc.user" value="root"/>
+      <property name="javax.persistence.jdbc.password" value="HIT1v0"/>
+      <!--<property name="javax.persistence.jdbc.password" value=""/>-->
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
     </properties>
   </persistence-unit>
 </persistence>

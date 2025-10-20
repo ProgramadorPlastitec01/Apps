@@ -1502,7 +1502,7 @@ public class Tag_reporte extends TagSupport {
                                         }
                                         try {
                                             int dteDta = Integer.parseInt(obj_rollos[16].toString());
-                                            if (dteDta < 20251009) {
+                                            if (dteDta < 20251019) {
                                                 out.print("<td align='center'>" + obj_rollos[18] + "</td>");
                                             } else {
                                                 out.print("<td align='center'>" + obj_rollos[6] + "</td>");

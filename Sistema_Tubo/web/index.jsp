@@ -61,7 +61,8 @@
                     </form>
                     <!--<div style="float: right; bottom: 0;"><b style="font-size:15px; color:#03291d; ">VP</b><b style="font-size: 15px; color:#03291d"> 00.00.00</b></div>-->
                     <!--<div style="float: right; bottom: 0;"><b style="font-size:15px; color:#03291d; ">VP</b><b style="font-size: 15px; color:#03291d"> 01.05.02</b></div>-->
-                    <div style="float: right; bottom: 0;"><b style="font-size:15px; color:#03291d; ">VA</b><b style="font-size: 15px; color:#03291d"> 01.05.02</b></div>
+                    <!--<div style="float: right; bottom: 0;"><b style="font-size:15px; color:#03291d; ">VA</b><b style="font-size: 15px; color:#03291d"> 01.05.02</b></div>-->
+                    <div style="float: right; bottom: 0;"><b style="font-size:15px; color:#03291d; ">VA</b><b style="font-size: 15px; color:#03291d"> 01.06.03</b></div>
                 </div>
             </div>
         <Alertas:Alert/>
