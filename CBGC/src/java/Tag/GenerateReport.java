@@ -133,10 +133,15 @@ public class GenerateReport extends TagSupport {
 
             out.print("<div class='card-body'>");
             out.print("<div class='table-responsive'>");
-            out.print("<table class='table table-bordered' id='table-1'>");
+            out.print("<table class='table table-bordered' id='table-2'>");
             out.print("<thead>");
             out.print("<tr>");
-            out.print("<th>#</th>");
+            out.print("<th class=\"text-center\">\n"
+                    + "                              <div class=\"custom-checkbox custom-control\">\n"
+                    + "                                <input type=\"checkbox\" data-checkboxes=\"mygroup\" data-checkbox-role=\"dad\" class=\"custom-control-input\" id=\"checkbox-all\">\n"
+                    + "                                <label for=\"checkbox-all\" class=\"custom-control-label\">&nbsp;</label>\n"
+                    + "                              </div>\n"
+                    + "                            </th>");
             out.print("<th>Registro</th>");
             out.print("<th>Numero <br/> Certificado</th>");
             out.print("<th>Cliente</th>");
@@ -162,7 +167,10 @@ public class GenerateReport extends TagSupport {
                     out.print("<tr>");
                     int State = Integer.parseInt(ObjCerti[8].toString());
                     if (State == 1) {
-                        out.print("<td class='text-center'><input type='checkbox' class='' onclick='Masive(this.value);' value='" + ObjCerti[0] + "'></td>");
+                        out.print("<td><div class=\"custom-checkbox custom-control\">\n"
+                                + "                                <input type=\"checkbox\" data-checkboxes=\"mygroup\"  onclick='Masive(this.value);' value='" + ObjCerti[0] + "' class=\"custom-control-input\" id=\"checkbox-" + i + "\">\n"
+                                + "                                <label for=\"checkbox-" + i + "\" class=\"custom-control-label\">&nbsp;</label>\n"
+                                + "                              </div></td>");
                     } else {
                         out.print("<td class='text-center'></td>");
                     }

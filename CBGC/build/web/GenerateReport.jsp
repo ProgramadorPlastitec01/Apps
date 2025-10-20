@@ -127,15 +127,32 @@
 
             return false;
         }
+        document.addEventListener("DOMContentLoaded", function () {
+            const checkAll = document.getElementById("checkbox-all");
+            const checkboxes = document.querySelectorAll('input[data-checkboxes="mygroup"]:not([data-checkbox-role="dad"])');
+
+            // Evento para el checkbox general
+            checkAll.addEventListener("change", function () {
+                checkboxes.forEach(chk => {
+                    chk.checked = checkAll.checked; // marca/desmarca visualmente
+                    Masive(chk.value);              // ejecuta la función en cada uno
+                });
+            });
+        });
+
         function Masive(ide) {
             var id = "[" + ide + "]";
-            var content = document.getElementById("IdCerti").value;
+            var input = document.getElementById("IdCerti");
+            var content = input.value;
+
             if (content.includes(id)) {
-                document.getElementById("IdCerti").value = content.replace(id, "");
+                input.value = content.replace(id, "");
             } else {
-                document.getElementById("IdCerti").value += id;
+                input.value += id;
             }
         }
+
+
         function ExecuteForm() {
             const form = document.getElementById("myForm");
 
