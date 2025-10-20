@@ -305,9 +305,9 @@ public class Tag_data_sheet extends TagSupport {
                     out.print("<div class='divCbData'>");
 
                     out.print("<div style='width:24%'>");
-                    //<editor-fold defaultstate="collapsed" desc="PRESURIZADO">
+                    //<editor-fold defaultstate="collapsed" desc="PRESION">
                     out.print("<div class='col-lg-12'>");
-                    out.print("<input type='text' class='form-control' name='Txt_pressure' id='Txt_pressure' placeholder='Presurizado' required='' data-toggle='tooltip' data-placement='right' title='Presurizado' autocomplete='off' value='"+ ((obj_data_id[35] == null) ? "0" : obj_data_id[35]) +"'>");
+                    out.print("<input type='text' class='form-control' name='Txt_pressure' id='Txt_pressure' placeholder='Presión' required='' data-toggle='tooltip' data-placement='right' title='Presión' autocomplete='off' value='"+ ((obj_data_id[35] == null) ? "0" : obj_data_id[35]) +"'>");
                     out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
                     out.print("</div>");
 
@@ -603,9 +603,9 @@ public class Tag_data_sheet extends TagSupport {
                         out.print("<div class='divCbData'>");
 
                         out.print("<div style='width:24%'>");
-                        //<editor-fold defaultstate="collapsed" desc="PRESURIZADO">
+                        //<editor-fold defaultstate="collapsed" desc="PRESION">
                         out.print("<div class='col-lg-12'>");
-                        out.print("<input type='text' class='form-control' name='Txt_pressure' id='Txt_pressure' placeholder='Presurizado' required='' data-toggle='tooltip' data-placement='right' title='Presurizado' autocomplete='off'>");
+                        out.print("<input type='text' class='form-control' name='Txt_pressure' id='Txt_pressure' placeholder='Presión' required='' data-toggle='tooltip' data-placement='right' title='Presión' autocomplete='off'>");
                         out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
                         out.print("</div>");
 

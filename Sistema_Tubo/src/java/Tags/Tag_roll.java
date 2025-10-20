@@ -242,6 +242,9 @@ public class Tag_roll extends TagSupport {
                                 + "            if (inputValue !== cleanInput) { "
                                 + "                event.target.value = cleanInput;"
                                 + "            }"
+                                + "            if (inputValue.length > 4){ "
+                                + "                   event.target.value = inputValue.slice(0, 4); "
+                                + "            }"
                                 + "        });"
                                 + "</script>");
                         out.print("</div>");
@@ -262,12 +265,15 @@ public class Tag_roll extends TagSupport {
                                 + "         document.getElementById('outParam13').value = 0;  "
                                 + "	} "
                                 + "};"
-                                + "const campoTexto13 = document.getElementById('Nmb_exsp'); "
+                                + "        const campoTexto13 = document.getElementById('Nmb_exsp'); "
                                 + "        campoTexto13.addEventListener('input', function(event) { "
                                 + "            const inputValue = event.target.value; "
                                 + "            const cleanInput = inputValue.replace(/[^0-9.\\s]/gi, ''); "
                                 + "            if (inputValue !== cleanInput) { "
                                 + "                event.target.value = cleanInput;"
+                                + "            }"
+                                + "            if (inputValue.length > 4){ "
+                                + "                   event.target.value = inputValue.slice(0, 4); "
                                 + "            }"
                                 + "        });"
                                 + "</script>");
@@ -295,6 +301,17 @@ public class Tag_roll extends TagSupport {
                                 + "         document.getElementById('outParam3').value = 0;  "
                                 + "	} "
                                 + "};"
+                                + "        const campoTexto13 = document.getElementById('Nmb_spr1'); "
+                                + "        campoTexto13.addEventListener('input', function(event) { "
+                                + "            const inputValue = event.target.value; "
+                                + "            const cleanInput = inputValue.replace(/[^0-9.\\s]/gi, ''); "
+                                + "            if (inputValue !== cleanInput) { "
+                                + "                event.target.value = cleanInput;"
+                                + "            }"
+                                + "            if (inputValue.length > 4){ "
+                                + "                   event.target.value = inputValue.slice(0, 4); "
+                                + "            }"
+                                + "        });"
                                 + "</script>");
                         out.print("</div>");
                         out.print("<div class='col-lg-3'>");
@@ -314,6 +331,17 @@ public class Tag_roll extends TagSupport {
                                 + "         document.getElementById('outParam4').value = 0;  "
                                 + "	} "
                                 + "};"
+                                + "        const campoTexto3 = document.getElementById('Nmb_spr2'); "
+                                + "        campoTexto3.addEventListener('input', function(event) { "
+                                + "            const inputValue = event.target.value; "
+                                + "            const cleanInput = inputValue.replace(/[^0-9.\\s]/gi, ''); "
+                                + "            if (inputValue !== cleanInput) { "
+                                + "                event.target.value = cleanInput;"
+                                + "            }"
+                                + "            if (inputValue.length > 4){ "
+                                + "                   event.target.value = inputValue.slice(0, 4); "
+                                + "            }"
+                                + "        });"
                                 + "</script>");
                         out.print("</div>");
                         out.print("<div class='col-lg-3'>");
@@ -333,6 +361,17 @@ public class Tag_roll extends TagSupport {
                                 + "         document.getElementById('outParam5').value = 0;  "
                                 + "	} "
                                 + "};"
+                                + "        const campoTexto4 = document.getElementById('Nmb_spr3'); "
+                                + "        campoTexto4.addEventListener('input', function(event) { "
+                                + "            const inputValue = event.target.value; "
+                                + "            const cleanInput = inputValue.replace(/[^0-9.\\s]/gi, ''); "
+                                + "            if (inputValue !== cleanInput) { "
+                                + "                event.target.value = cleanInput;"
+                                + "            }"
+                                + "            if (inputValue.length > 4){ "
+                                + "                   event.target.value = inputValue.slice(0, 4); "
+                                + "            }"
+                                + "        });"
                                 + "</script>");
                         out.print("</div>");
                         out.print("<div class='col-lg-3'>");
@@ -352,6 +391,17 @@ public class Tag_roll extends TagSupport {
                                 + "         document.getElementById('outParam6').value = 0;  "
                                 + "	} "
                                 + "};"
+                                + "        const campoTexto5 = document.getElementById('Nmb_spr4'); "
+                                + "        campoTexto5.addEventListener('input', function(event) { "
+                                + "            const inputValue = event.target.value; "
+                                + "            const cleanInput = inputValue.replace(/[^0-9.\\s]/gi, ''); "
+                                + "            if (inputValue !== cleanInput) { "
+                                + "                event.target.value = cleanInput;"
+                                + "            }"
+                                + "            if (inputValue.length > 4){ "
+                                + "                   event.target.value = inputValue.slice(0, 4); "
+                                + "            }"
+                                + "        });"
                                 + "</script>");
                         out.print("</div>");
 
@@ -379,6 +429,17 @@ public class Tag_roll extends TagSupport {
                                     + "         document.getElementById('outParam12').value = 0;  "
                                     + "	} "
                                     + "};"
+                                    + "        const campoTexto6 = document.getElementById('Nmb_prsIny'); "
+                                    + "        campoTexto6.addEventListener('input', function(event) { "
+                                    + "            const inputValue = event.target.value; "
+                                    + "            const cleanInput = inputValue.replace(/[^0-9.\\s]/gi, ''); "
+                                    + "            if (inputValue !== cleanInput) { "
+                                    + "                event.target.value = cleanInput;"
+                                    + "            }"
+                                    + "            if (inputValue.length > 4){ "
+                                    + "                   event.target.value = inputValue.slice(0, 4); "
+                                    + "            }"
+                                    + "        });"
                                     + "</script>");
 
                             out.print("</div>");
@@ -400,6 +461,17 @@ public class Tag_roll extends TagSupport {
                                     + "         document.getElementById('outParam11').value = 0;  "
                                     + "	} "
                                     + "};"
+                                    + "        const campoTexto7 = document.getElementById('Nmb_PesRoll'); "
+                                    + "        campoTexto7.addEventListener('input', function(event) { "
+                                    + "            const inputValue = event.target.value; "
+                                    + "            const cleanInput = inputValue.replace(/[^0-9.\\s]/gi, ''); "
+                                    + "            if (inputValue !== cleanInput) { "
+                                    + "                event.target.value = cleanInput;"
+                                    + "            }"
+                                    + "            if (inputValue.length > 4){ "
+                                    + "                   event.target.value = inputValue.slice(0, 4); "
+                                    + "            }"
+                                    + "        });"
                                     + "</script>");
                             out.print("</div>");
                             out.print("</div>");
@@ -429,6 +501,17 @@ public class Tag_roll extends TagSupport {
                                     + "         document.getElementById('outParam7').value = 0;  "
                                     + "	} "
                                     + "};"
+                                    + "        const campoTexto8 = document.getElementById('Nmb_rug1'); "
+                                    + "        campoTexto8.addEventListener('input', function(event) { "
+                                    + "            const inputValue = event.target.value; "
+                                    + "            const cleanInput = inputValue.replace(/[^0-9.\\s]/gi, ''); "
+                                    + "            if (inputValue !== cleanInput) { "
+                                    + "                event.target.value = cleanInput;"
+                                    + "            }"
+                                    + "            if (inputValue.length > 4){ "
+                                    + "                   event.target.value = inputValue.slice(0, 4); "
+                                    + "            }"
+                                    + "        });"
                                     + "</script>");
                             out.print("</div>");
                             out.print("<div class='col-lg-3'>");
@@ -448,6 +531,17 @@ public class Tag_roll extends TagSupport {
                                     + "         document.getElementById('outParam8').value = 0;  "
                                     + "	} "
                                     + "};"
+                                    + "        const campoTexto9 = document.getElementById('Nmb_rug2'); "
+                                    + "        campoTexto9.addEventListener('input', function(event) { "
+                                    + "            const inputValue = event.target.value; "
+                                    + "            const cleanInput = inputValue.replace(/[^0-9.\\s]/gi, ''); "
+                                    + "            if (inputValue !== cleanInput) { "
+                                    + "                event.target.value = cleanInput;"
+                                    + "            }"
+                                    + "            if (inputValue.length > 4){ "
+                                    + "                   event.target.value = inputValue.slice(0, 4); "
+                                    + "            }"
+                                    + "        });"
                                     + "</script>");
                             out.print("</div>");
                             out.print("<div class='col-lg-3'>");
@@ -467,6 +561,17 @@ public class Tag_roll extends TagSupport {
                                     + "         document.getElementById('outParam9').value = 0;  "
                                     + "	} "
                                     + "};"
+                                    + "        const campoTexto10 = document.getElementById('Nmb_rug3'); "
+                                    + "        campoTexto10.addEventListener('input', function(event) { "
+                                    + "            const inputValue = event.target.value; "
+                                    + "            const cleanInput = inputValue.replace(/[^0-9.\\s]/gi, ''); "
+                                    + "            if (inputValue !== cleanInput) { "
+                                    + "                event.target.value = cleanInput;"
+                                    + "            }"
+                                    + "            if (inputValue.length > 4){ "
+                                    + "                   event.target.value = inputValue.slice(0, 4); "
+                                    + "            }"
+                                    + "        });"
                                     + "</script>");
                             out.print("</div>");
                             out.print("<div class='col-lg-3'>");
@@ -486,6 +591,17 @@ public class Tag_roll extends TagSupport {
                                     + "         document.getElementById('outParam10').value = 0;  "
                                     + "	} "
                                     + "};"
+                                    + "        const campoTexto11 = document.getElementById('Nmb_rug4'); "
+                                    + "        campoTexto11.addEventListener('input', function(event) { "
+                                    + "            const inputValue = event.target.value; "
+                                    + "            const cleanInput = inputValue.replace(/[^0-9.\\s]/gi, ''); "
+                                    + "            if (inputValue !== cleanInput) { "
+                                    + "                event.target.value = cleanInput;"
+                                    + "            }"
+                                    + "            if (inputValue.length > 4){ "
+                                    + "                   event.target.value = inputValue.slice(0, 4); "
+                                    + "            }"
+                                    + "        });"
                                     + "</script>");
                             out.print("</div>");
                             out.print("</div>");
@@ -519,7 +635,7 @@ public class Tag_roll extends TagSupport {
                             out.print("</div>");
                         }
                         out.print("<div class='' style='width: 100%; text-align:center;'>");
-                        out.print("<button type='button' class='btn btn-green btn-lg' onclick='validarFormulario()'>Editar</button>");
+                        out.print("<button type='button' class='btn btn-green btn-lg' onclick='validarFormulario(\"FormKeyCode\")'>Editar</button>");
                         out.print("</div>");
                     } else {
                         out.print("<div class='col-lg-12 col-md-6' style='display: flex;'>");
@@ -646,7 +762,7 @@ public class Tag_roll extends TagSupport {
                         out.print("<input type='text' class='form-control' name='Nmb_insp' id='Nmb_insp' placeholder='Interno sin presurizar' required data-toggle='tooltip' data-placement='top' title='Diametro Externo' onkeyup='Validar();' autocomplete='off' onkeypress=\"avanzarCampo(event, 'Nmb_diaInt')\">");
                         out.print("<input type='hidden' name='outParam1' id='outParam1' value='0'>");
                         out.print("<script>"
-                                + "function Validar(){ "
+                                + "function Validar(){"
                                 + "	var camp = document.getElementById('Nmb_insp').value; "
                                 + "	if (camp < " + int_sinpressMin + " || camp > " + int_sinpressMax + ") { "
                                 + "         document.getElementById('Nmb_insp').classList.add('Invalid_field'); "
@@ -665,6 +781,9 @@ public class Tag_roll extends TagSupport {
                                 + "            const cleanInput = inputValue.replace(/[^0-9.\\s]/gi, ''); "
                                 + "            if (inputValue !== cleanInput) { "
                                 + "                event.target.value = cleanInput;"
+                                + "            }"
+                                + "            if (inputValue.length > 4){ "
+                                + "                   event.target.value = inputValue.slice(0, 4); "
                                 + "            }"
                                 + "        });"
                                 + "</script>");
@@ -693,6 +812,9 @@ public class Tag_roll extends TagSupport {
                                 + "            const cleanInput = inputValue.replace(/[^0-9.\\s]/gi, ''); "
                                 + "            if (inputValue !== cleanInput) { "
                                 + "                event.target.value = cleanInput;"
+                                + "            }"
+                                + "            if (inputValue.length > 4){ "
+                                + "                   event.target.value = inputValue.slice(0, 4); "
                                 + "            }"
                                 + "        });"
                                 + "</script>");
@@ -728,6 +850,9 @@ public class Tag_roll extends TagSupport {
                                 + "            if (inputValue !== cleanInput) { "
                                 + "                event.target.value = cleanInput;"
                                 + "            }"
+                                + "            if (inputValue.length > 4){ "
+                                + "                   event.target.value = inputValue.slice(0, 4); "
+                                + "            }"
                                 + "        });"
                                 + "</script>");
                         out.print("</div>");
@@ -753,6 +878,9 @@ public class Tag_roll extends TagSupport {
                                 + "            const cleanInput = inputValue.replace(/[^0-9.\\s]/gi, ''); "
                                 + "            if (inputValue !== cleanInput) { "
                                 + "                event.target.value = cleanInput;"
+                                + "            }"
+                                + "            if (inputValue.length > 4){ "
+                                + "                   event.target.value = inputValue.slice(0, 4); "
                                 + "            }"
                                 + "        });"
                                 + "</script>");
@@ -780,6 +908,9 @@ public class Tag_roll extends TagSupport {
                                 + "            if (inputValue !== cleanInput) { "
                                 + "                event.target.value = cleanInput;"
                                 + "            }"
+                                + "            if (inputValue.length > 4){ "
+                                + "                   event.target.value = inputValue.slice(0, 4); "
+                                + "            }"
                                 + "        });"
                                 + "</script>");
                         out.print("</div>");
@@ -805,6 +936,9 @@ public class Tag_roll extends TagSupport {
                                 + "            const cleanInput = inputValue.replace(/[^0-9.\\s]/gi, ''); "
                                 + "            if (inputValue !== cleanInput) { "
                                 + "                event.target.value = cleanInput;"
+                                + "            }"
+                                + "            if (inputValue.length > 4){ "
+                                + "                   event.target.value = inputValue.slice(0, 4); "
                                 + "            }"
                                 + "        });"
                                 + "</script>");
@@ -839,6 +973,9 @@ public class Tag_roll extends TagSupport {
                                     + "            if (inputValue !== cleanInput) { "
                                     + "                event.target.value = cleanInput;"
                                     + "            }"
+                                    + "            if (inputValue.length > 4){ "
+                                    + "                   event.target.value = inputValue.slice(0, 4); "
+                                    + "            }"
                                     + "        });"
                                     + "</script>");
                             out.print("</div>");
@@ -865,6 +1002,9 @@ public class Tag_roll extends TagSupport {
                                     + "            const cleanInput = inputValue.replace(/[^0-9.\\s]/gi, ''); "
                                     + "            if (inputValue !== cleanInput) { "
                                     + "                event.target.value = cleanInput;"
+                                    + "            }"
+                                    + "            if (inputValue.length > 4){ "
+                                    + "                   event.target.value = inputValue.slice(0, 4); "
                                     + "            }"
                                     + "        });"
                                     + "</script>");
@@ -901,6 +1041,9 @@ public class Tag_roll extends TagSupport {
                                     + "            if (inputValue !== cleanInput) { "
                                     + "                event.target.value = cleanInput;"
                                     + "            }"
+                                    + "            if (inputValue.length > 4){ "
+                                    + "                   event.target.value = inputValue.slice(0, 4); "
+                                    + "            }"
                                     + "        });"
                                     + "</script>");
                             out.print("</div>");
@@ -926,6 +1069,9 @@ public class Tag_roll extends TagSupport {
                                     + "            const cleanInput = inputValue.replace(/[^0-9.\\s]/gi, ''); "
                                     + "            if (inputValue !== cleanInput) { "
                                     + "                event.target.value = cleanInput;"
+                                    + "            }"
+                                    + "            if (inputValue.length > 4){ "
+                                    + "                   event.target.value = inputValue.slice(0, 4); "
                                     + "            }"
                                     + "        });"
                                     + "</script>");
@@ -953,6 +1099,9 @@ public class Tag_roll extends TagSupport {
                                     + "            if (inputValue !== cleanInput) { "
                                     + "                event.target.value = cleanInput;"
                                     + "            }"
+                                    + "            if (inputValue.length > 4){ "
+                                    + "                   event.target.value = inputValue.slice(0, 4); "
+                                    + "            }"
                                     + "        });"
                                     + "</script>");
                             out.print("</div>");
@@ -979,6 +1128,9 @@ public class Tag_roll extends TagSupport {
                                     + "            if (inputValue !== cleanInput) { "
                                     + "                event.target.value = cleanInput;"
                                     + "            }"
+                                    + "            if (inputValue.length > 4){ "
+                                    + "                   event.target.value = inputValue.slice(0, 4); "
+                                    + "            }"
                                     + "        });"
                                     + "</script>");
                             out.print("</div>");
@@ -1004,7 +1156,7 @@ public class Tag_roll extends TagSupport {
                             out.print("</div>");
                         }
                         out.print("<div class='' style='width: 100%; text-align:center;'>");
-                        out.print("<button type='button' id='SendBottom' class='btn btn-green btn-lg' onclick='validarFormulario()'>Registrar</button>");
+                        out.print("<button type='button' id='SendBottom' class='btn btn-green btn-lg' onclick='validarFormulario(\"FormKeyCode\")'>Registrar</button>");
                         out.print("</div>");
                     } else {
                         out.print("<div class='col-lg-12 col-md-6' style='display: flex;'>");
@@ -1254,6 +1406,9 @@ public class Tag_roll extends TagSupport {
                                 + "    if (inputValue !== cleanInput) { "
                                 + "        event.target.value = cleanInput; "
                                 + "    } "
+                                + "    if (inputValue.length > 4){ "
+                                + "        event.target.value = inputValue.slice(0, 4); "
+                                + "    } "
                                 + "}); ");
                         out.print("</script>");
                         out.print("<div class='col-lg-6'>");
@@ -1280,6 +1435,9 @@ public class Tag_roll extends TagSupport {
                                 + "            const cleanInput = inputValue.replace(/[^0-9.\\s]/gi, ''); "
                                 + "            if (inputValue !== cleanInput) { "
                                 + "                event.target.value = cleanInput;"
+                                + "            }"
+                                + "            if (inputValue.length > 4){ "
+                                + "                   event.target.value = inputValue.slice(0, 4); "
                                 + "            }"
                                 + "        });"
                                 + "</script>");
