@@ -140,33 +140,47 @@ public class Visual extends TagSupport {
                         String[] ArgMaterials = Util.parseResult(lst_RLab.get(0));
                         Html = Html.replace("REF1", ArgMaterials[0]);
                         Html = Html.replace("LBT1", ArgMaterials[1]);
-                        Html = Html.replace("REF2", ArgMaterials[9]);
-                        Html = Html.replace("LBT2", ArgMaterials[10]);
-                        Html = Html.replace("LBT3", ArgMaterials[8]);
+                        Html = Html.replace("REF2", ArgMaterials[2]);
+                        Html = Html.replace("LBT2", ArgMaterials[3]);
+                        Html = Html.replace("REF3", ArgMaterials[4]);
+                        Html = Html.replace("LBT3", ArgMaterials[5]);
+                        Html = Html.replace("REF4", ArgMaterials[6]);
+                        Html = Html.replace("LBT4", ArgMaterials[7]);
+                        Html = Html.replace("REF5", ArgMaterials[8]);
+                        Html = Html.replace("LBT5", ArgMaterials[9]);
+                        Html = Html.replace("REF6", ArgMaterials[10]);
+                        Html = Html.replace("LBT6", ArgMaterials[11]);
+                        Html = Html.replace("REF7", ArgMaterials[12]);
+                        Html = Html.replace("LBT7", ArgMaterials[13]);
+                        Html = Html.replace("LBT8", ArgMaterials[14]);
+                        Html = Html.replace("LBT9", ArgMaterials[15]);
                         BatchLay = ArgMaterials[1];
-                        lst_Glotes1 = GeneracionLotesJpa.ConsultarCC_GeneracionLote(BatchLay);
-                        if (lst_Glotes1 != null && !lst_Glotes1.isEmpty() && lst_Glotes1.size() > 0) {
-                            String[] ArgLay = lst_Glotes1.get(0).toString().replace("]", "").replace("[", "").split("///");
-                            Html = Html.replace("COS1", "CC" + ArgLay[0]);
+                        String[] ArgImP = {ArgMaterials[1], ArgMaterials[3], ArgMaterials[5], ArgMaterials[7], ArgMaterials[9], ArgMaterials[11], ArgMaterials[13], ArgMaterials[15]};
+                        int Cnt = 1;
+                        for (int i = 0; i < ArgImP.length; i++) {
+                            lst_Glotes1 = GeneracionLotesJpa.ConsultarCC_GeneracionLote(ArgImP[i]);
+                            if (lst_Glotes1 != null && !lst_Glotes1.isEmpty() && lst_Glotes1.size() > 0) {
+                                String[] ArgLay = lst_Glotes1.get(0).toString().replace("]", "").replace("[", "").split("///");
+                                Html = Html.replace("COS" + Cnt + "", "CC" + ArgLay[0]);
+                            }
+                            Cnt++;
                         }
-                        BatchCentralTube = ArgMaterials[10];
-                        lst_Glotes2 = GeneracionLotesJpa.ConsultarCC_GeneracionLote(BatchCentralTube);
-                        if (lst_Glotes2 != null && !lst_Glotes2.isEmpty() && lst_Glotes2.size() > 0) {
-                            String[] ArgCentralTube = lst_Glotes2.get(0).toString().replace("]", "").replace("[", "").split("///");
-                            Html = Html.replace("COS2", "CC" + ArgCentralTube[0]);
+                        //</editor-fold>
+                        String[] ArgTnt = {ArgMaterials[14], ArgMaterials[15]};
+                        int Cnt2 = 8;
+                        for (int o = 0; o < ArgTnt.length; o++) {
+                            lst_GlotesRep = GeneracionLotesJpa.ConsultarCC_RepcecionMaterial(ArgTnt[o]);
+                            if (lst_GlotesRep != null && !lst_GlotesRep.isEmpty() && lst_GlotesRep.size() > 0) {
+                                //<editor-fold defaultstate="collapsed" desc="CC REPECTION">
+                                String[] ArgInk = Util.parseResult(lst_GlotesRep.get(0));
+                                Html = Html.replace("REF" + Cnt2 + "", ArgInk[1].replace("M", ""));
+                                Html = Html.replace("COS" + Cnt2 + "", ArgInk[0]);
+                                //</editor-fold>
+                                Cnt2++;
+                            }
                         }
-                        BatchInk = ArgMaterials[8];
-                        //</editor-fold>
                     }
-                    lst_GlotesRep = GeneracionLotesJpa.ConsultarCC_RepcecionMaterial(BatchInk);
-                    if (lst_GlotesRep != null && !lst_GlotesRep.isEmpty() && lst_GlotesRep.size() > 0) {
-                        //<editor-fold defaultstate="collapsed" desc="CC REPECTION">
-                        String[] ArgInk = Util.parseResult(lst_GlotesRep.get(0));
-                        Html = Html.replace("REF3", ArgInk[1].replace("M", ""));
-                        Html = Html.replace("COS3", ArgInk[0]);
-                        //</editor-fold>
-                    }
-                    lst_sheet = SettingJpa.ConsultSettingCategorie("ENEMA - Ficha");
+                    lst_sheet = SettingJpa.ConsultSettingCategorie(Type + " - Ficha");
                     if (lst_sheet != null) {
                         //<editor-fold defaultstate="collapsed" desc="TECNHNICAL SHEET">
                         Object[] ObjSheet = (Object[]) lst_sheet.get(0);
@@ -174,17 +188,17 @@ public class Visual extends TagSupport {
                             lst_prm = RegistrosLabJpa.QueryTechnicalSheet(Order, Product, ObjSheet[2].toString());
                             if (lst_prm != null) {
                                 String[] ArgPrm = Util.parseResult(lst_prm.get(0));
-                                DataTechnicalSheet = ArgPrm[10];
+                                DataTechnicalSheet = ArgPrm[16];
                                 int ForCant = Integer.parseInt(ArgPrm[0].trim());
                                 for (int i = 1; i < ForCant; i++) {
-                                    Html = Html.replace("PRM" + Count2 + "", ArgPrm[i]);
+                                    Html = Html.replaceFirst("PRM" + Count2 + "", ArgPrm[i]);
                                     Count2++;
                                 }
                             }
                         }
                         //</editor-fold>
                     }
-                    lst_parameter = SettingJpa.ConsultSettingCategorie("ENEMA");
+                    lst_parameter = SettingJpa.ConsultSettingCategorie(Type);
                     if (lst_parameter != null) {
                         //<editor-fold defaultstate="collapsed" desc="DATA PARAMETER">
                         Object[] ObjParameter = (Object[]) lst_parameter.get(0);
@@ -193,9 +207,9 @@ public class Visual extends TagSupport {
                             if (lst_data != null) {
                                 for (int i = 0; i < lst_data.size(); i++) {
                                     String[] ArgData = Util.parseResult(lst_data.get(i));
-                                    Html = Html.replace("MIN" + Count + "", ArgData[1]);
-                                    Html = Html.replace("MAX" + Count + "", ArgData[2]);
-                                    Html = Html.replace("MEAN" + Count + "", ArgData[3]);
+                                    Html = Html.replaceFirst("MIN" + Count + "", ArgData[1]);
+                                    Html = Html.replaceFirst("MAX" + Count + "", ArgData[2]);
+                                    Html = Html.replaceFirst("MEAN" + Count + "", ArgData[3]);
                                     Count++;
                                 }
                             }
@@ -221,6 +235,7 @@ public class Visual extends TagSupport {
                     out.print("<div id='HtmlContent'>");
                     out.print(Html);
                     out.print("</div>");
+
                     out.print("<form id='FormGenerate' action='Generate?opt=3' method='post' class='needs-validation' novalidate='' onsubmit='return FormGenerate(this)'>");
                     out.print("<input type='hidden' name='Type' value='" + Type + "'>");
                     out.print("<input type='hidden' name='Order' value='" + Order + "'>");
