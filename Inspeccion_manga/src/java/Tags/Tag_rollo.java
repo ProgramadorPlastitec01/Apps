@@ -1298,7 +1298,9 @@ public class Tag_rollo extends TagSupport {
                     out.print("<tr>");
                     out.print("<td colspan='8' align='center'><b class='negro'>CONTROL ESPESOR MANGA</b></td>");
                     if (Integer.parseInt(obj_registro[55].toString()) > 0) {
-                        if (fecha_convert >= 20161221) {
+                        if (fecha_convert >= 20251009) {
+                            out.print("<td colspan='5' align='center'><b class='negro'>VERSION 2</b></td>");
+                        }else if (fecha_convert >= 20161221) {
                             out.print("<td colspan='4' align='center'><b class='negro'>VERSION 1</b></td>");
                         } else {
                             out.print("<td colspan='4' align='center'><b class='negro'>VERSION 0</b></td>");

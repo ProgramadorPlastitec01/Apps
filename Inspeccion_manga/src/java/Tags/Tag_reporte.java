@@ -22,6 +22,7 @@ import javax.servlet.jsp.tagext.TagSupport;
 import Controladores.ParametroJpaController;
 import java.text.DecimalFormat;
 
+
 public class Tag_reporte extends TagSupport {
 
     @Override
@@ -46,6 +47,8 @@ public class Tag_reporte extends TagSupport {
             ResumenJpaController jpacrsm = new ResumenJpaController();
             ProductoJpaController jpacpdt = new ProductoJpaController();
             ParametroJpaController ParametroJpa = new ParametroJpaController();
+
+           
             //VARIABLE GLOBALES
             List lst_registros_dia = null;
             String filtro = "";
@@ -738,7 +741,6 @@ public class Tag_reporte extends TagSupport {
                     out.print("</div> <!-- END of content -->");
                     out.print("<div class='cleaner'></div>");
                 } // </editor-fold>
-                
                 // <editor-fold defaultstate="collapsed" desc="RESUMEN R-GC-153">
                 else if (pageContext.getRequest().getAttribute("Reporte").toString().equals("Reporte_R-GC-153")) {
                     orden = pageContext.getRequest().getAttribute("Orden").toString();
@@ -1383,7 +1385,8 @@ public class Tag_reporte extends TagSupport {
                                     out.print("</tr>");
                                     out.print("<tr>");
                                     out.print("<td colspan='6' align='center'><b class='negro'>RESUMEN<br />INSPECCIÓN MANGA</b></td>");
-                                    if (fechaActv2 < fechaVig) {
+                                    
+                                     if (fechaActv2 < fechaVig) {
                                         out.print("<td colspan='3' align='center'><b class='negro'>VERSION 1</b></td>");
                                     } else {
                                         out.print("<td colspan='3' align='center'><b class='negro'>VERSION 2</b></td>");
@@ -1497,7 +1500,16 @@ public class Tag_reporte extends TagSupport {
                                                 out.print("<td colspan='2' align='center'><b class='naranja'>---</b></td>");
                                             }
                                         }
-                                        out.print("<td align='center'>" + obj_rollos[6] + "</td>");
+                                        try {
+                                            int dteDta = Integer.parseInt(obj_rollos[16].toString());
+                                            if (dteDta < 20251009) {
+                                                out.print("<td align='center'>" + obj_rollos[18] + "</td>");
+                                            } else {
+                                                out.print("<td align='center'>" + obj_rollos[6] + "</td>");
+                                            }
+                                        } catch (Exception e) {
+                                            out.print("<td>?</td>");
+                                        }
 
                                         if (newv == 0) {
                                             out.print("<td align='center'>" + obj_rollos[7] + "</td>");
