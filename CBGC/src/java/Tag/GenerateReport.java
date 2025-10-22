@@ -82,13 +82,13 @@ public class GenerateReport extends TagSupport {
             out.print("</div>");
 
             out.print("<div class='col-6' data-toggle='tooltip' data-placement='top' title='Registro'>");
-            out.print("<select class='form-control' style='margin-top:12px' name='IdFormat' required>");
+            out.print("<select class='form-control' style='margin-top:12px' name='FormatName' required>");
             lst_format = FormatJpa.ConsultFormatActive();
             if (lst_format != null) {
+                out.print("<option value=''>-- Seleccione un registro --</option>");
                 for (int i = 0; i < lst_format.size(); i++) {
                     Object[] ObjFormat = (Object[]) lst_format.get(i);
-                    out.print("<option value=''>-- Seleccione un registro --</option>");
-                    out.print("<option value='" + ObjFormat[0] + "'>" + ObjFormat[2] + " V" + ObjFormat[3] + "</option>");
+                    out.print("<option value='" + ObjFormat[0] + "/" + ObjFormat[2] + "'>" + ObjFormat[2] + " V" + ObjFormat[3] + "</option>");
                 }
             } else {
                 out.print("<option value=''>-- Seleccione un registro --</option>");
@@ -184,16 +184,22 @@ public class GenerateReport extends TagSupport {
                         out.print("<td>" + ObjCerti[9] + "</td>");
                     }
                     try {
-                        if (State == 1) {
-                            out.print("<td class='text-center'><button class='btn btn-info btn-sm' style='border-radius: 4px;' ><i class=\"fas fa-spinner fa-spin\"></i></button></td>");
-                        } else {
-                            out.print("<td class='text-center'><button class='btn btn-success btn-sm' style='border-radius: 4px;'><i class=\"fas fa-check\"></i></button></td>");
+                        switch (State) {
+                            case 1:
+                                out.print("<td class='text-center'><button class='btn btn-info btn-sm' style='border-radius: 4px;' ><i class=\"fas fa-spinner fa-spin\"></i></button></td>");
+                                break;
+                            case 2:
+                                out.print("<td class='text-center'><button class='btn btn-danger btn-sm' style='border-radius: 4px;'><i class=\"fas fa-trash\"></i></button></td>");
+                                break;
+                            default:
+                                out.print("<td class='text-center'><button class='btn btn-success btn-sm' style='border-radius: 4px;'><i class=\"fas fa-check\"></i></button></td>");
+                                break;
                         }
                     } catch (IOException | NumberFormatException e) {
                         out.print("<td class='text-center'><button class='btn btn-danter btn-sm' style='border-radius: 4px;'><i class=\"fas fa-times\"></i></button></td>");
                     }
                     out.print("<td class='d-flex'>");
-                    out.print("<button class='btn btn-green btn-sm mr-2' style='border-radius: 4px;' onclick=\"javascript:location.href='Generate?opt=2&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "';cargarDatos()\" ><i class=\"fas fa-eye\"></i></button>");
+                    out.print("<button class='btn btn-green btn-sm mr-2' style='border-radius: 4px;' onclick=\"javascript:location.href='Generate?opt=2&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "&TempDelete=" + TempDelete + "';cargarDatos()\" ><i class=\"fas fa-eye\"></i></button>");
                     if (State == 1) {
                         out.print("<button class='btn btn-danger btn-sm' style='border-radius: 4px;' onclick=\"confirmarEliminacion('Generate?opt=5&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "')\"><i class='fas fa-trash'></i></button>");
                     }

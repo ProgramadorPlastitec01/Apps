@@ -33,15 +33,27 @@ public class ConnectionGeneracionLotes {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             conn = DriverManager.getConnection(url, login, password);
             if (conn != null) {
-                String query = "SELECT c.consecutivo FROM control_consecutivos c WHERE c.lote LIKE '%" + Lote.trim() + "%'";
+                String query = "";
+                if (Lote.contains("/")) {
+                    String[] BatchN = Lote.split("/");
+                    query = "SELECT GROUP_CONCAT(c.consecutivo SEPARATOR ' - CC') AS consecutivo "
+                            + "FROM control_consecutivos c "
+                            + "WHERE c.lote IN ('" + BatchN[0] + "', '" + BatchN[1] + "')";
+                } else {
+                    query = "SELECT c.consecutivo FROM control_consecutivos c WHERE c.lote LIKE '%" + Lote.trim() + "%'";
+                }
                 Statement sttm = conn.createStatement();
                 ResultSet rs = sttm.executeQuery(query);
                 List<String> lst_consecutivos = new ArrayList<String>();
                 int count = 0;
                 while (rs.next()) {
-                    lst_consecutivos.add(count, rs.getString("consecutivo").trim());
+                    String consecutivo = rs.getString("consecutivo");
+                    if (consecutivo != null) {
+                        lst_consecutivos.add(count, consecutivo.trim());
+                    }
                     count++;
                 }
+
                 conn.close();
                 return lst_consecutivos;
             } else {
@@ -75,7 +87,7 @@ public class ConnectionGeneracionLotes {
                 List<String> lst_consecutivos = new ArrayList<String>();
                 int count = 0;
                 while (rs.next()) {
-                    lst_consecutivos.add(count, rs.getString("consecutivo").trim()  + "///" + rs.getString("codigo").trim());
+                    lst_consecutivos.add(count, rs.getString("consecutivo").trim() + "///" + rs.getString("codigo").trim());
                     count++;
                 }
                 conn.close();

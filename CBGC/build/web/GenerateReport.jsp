@@ -155,14 +155,27 @@
 
         function ExecuteForm() {
             const form = document.getElementById("myForm");
+            const idCerti = document.getElementById("IdCerti");
 
-            // Validar antes de enviar
+            // Validar que haya al menos un id seleccionado
+            if (!idCerti || idCerti.value.trim() === "" || idCerti.value.trim() === "[]") {
+                iziToast.warning({
+                    title: 'Validación requerida',
+                    message: 'Debes seleccionar al menos un certificado para firmar.',
+                    position: 'bottomRight',
+                    timeout: 5000
+                });
+                return false; // Detiene el envío
+            }
+
+            // Validar el formulario HTML5 normalmente
             if (form.checkValidity()) {
-                form.submit(); // Enviar formulario
+                form.submit();
             } else {
-                form.reportValidity(); // Mostrar errores de campos requeridos
+                form.reportValidity();
             }
         }
+
     </script>
     <script>
         function confirmarEliminacion(url) {

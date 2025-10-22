@@ -18,21 +18,31 @@ public class ConnectionSQLServer {
     static String url = "";
 
     public List<String> Products(int Orden, String Producto, String Lote) throws Exception {
-        try {
+        Connection con = null;
+        Statement sttm = null;
+        ResultSet rs = null;
 
+        try {
+            // Obtener parámetros de conexión
             List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerSQLServer");
-            if (lst_parameter != null) {
-                Object[] obj_data = (Object[]) lst_parameter.get(0);
-                String[] arr_data = obj_data[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
-                login = arr_data[0];
-                password = arr_data[1];
-                url = "jdbc:sqlserver://" + arr_data[2];
-            } else {
+            if (lst_parameter == null || lst_parameter.isEmpty()) {
                 return null;
             }
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            Connection con = DriverManager.getConnection(url, login, password);
 
+            Object[] obj_data = (Object[]) lst_parameter.get(0);
+            String[] arr_data = obj_data[2].toString()
+                    .replace("][", "///")
+                    .replace("[", "")
+                    .replace("]", "")
+                    .split("///");
+            String login = arr_data[0];
+            String password = arr_data[1];
+            String url = "jdbc:sqlserver://" + arr_data[2];
+
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            con = DriverManager.getConnection(url, login, password);
+
+            // Consulta SQL
             String query = "SELECT "
                     + "p.NUM AS [Op], "
                     + "c.NOM AS [Cliente], "
@@ -57,8 +67,8 @@ public class ConnectionSQLServer {
                     + "            CHARINDEX('mL', m.NOM, PATINDEX('%[0-9]%mL%', m.NOM)) - PATINDEX('%[0-9]%mL%', m.NOM) + 2) "
                     + "    ELSE NULL "
                     + "END AS [Volumen], "
-                    + "FORMAT(d.CANT, 'N0', 'es-CO') AS [Cantidad], " // 👈 formatea 20000.0000 → 20.000
-                    + "p.ORDEN as [OrdenC]"
+                    + "FORMAT(d.CANT, 'N0', 'es-CO') AS [Cantidad], "
+                    + "p.ORDEN as [OrdenC] "
                     + "FROM PEDIDOS p "
                     + "INNER JOIN CLIENTES c ON p.CLIENTE = c.COD "
                     + "INNER JOIN [EMP001_INV].[dbo].[MAESTRO] m ON p.COD = m.COD "
@@ -69,14 +79,14 @@ public class ConnectionSQLServer {
                     + "  AND p.COD LIKE '%" + Producto + "%' "
                     + "  AND d.LOTE = '" + Lote + "'";
 
-            Statement sttm = con.createStatement();
-            ResultSet rs = sttm.executeQuery(query);
+            sttm = con.createStatement();
+            rs = sttm.executeQuery(query);
 
             List<String> lst_resultado = new ArrayList<>();
             ResultSetMetaData metaData = rs.getMetaData();
             int columnCount = metaData.getColumnCount();
 
-            // Cabecera
+            // Crear cabecera
             StringBuilder header = new StringBuilder();
             for (int i = 1; i <= columnCount; i++) {
                 if (i > 1) {
@@ -86,7 +96,8 @@ public class ConnectionSQLServer {
             }
             lst_resultado.add(header.toString());
 
-            // Filas
+            // Crear filas
+            int rowCount = 0;
             while (rs.next()) {
                 StringBuilder row = new StringBuilder();
                 for (int i = 1; i <= columnCount; i++) {
@@ -97,14 +108,39 @@ public class ConnectionSQLServer {
                     row.append(value != null ? value.trim() : "NULL");
                 }
                 lst_resultado.add(row.toString());
+                rowCount++;
             }
 
-            con.close();
+            // Si hay cabecera pero no filas → devolver null
+            if (rowCount == 0) {
+                return null;
+            }
+
             return lst_resultado;
 
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
+        } finally {
+            // Liberar recursos de forma segura
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (Exception ignore) {
+                }
+            }
+            if (sttm != null) {
+                try {
+                    sttm.close();
+                } catch (Exception ignore) {
+                }
+            }
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (Exception ignore) {
+                }
+            }
         }
     }
 

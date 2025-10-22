@@ -28,8 +28,8 @@ public class Generate extends HttpServlet {
             int Document = Integer.parseInt(session.getAttribute("Documento").toString());
             int CodeSig = Integer.parseInt(session.getAttribute("Codigo").toString());
             int opt = Integer.parseInt(request.getParameter("opt"));
-            int Order = 0, IdFormat = 0, IdCertificates = 0, TempDelete = 0;
-            String Type = "", Product = "", Batch = "", Html = "", Code = "", Consecutive = "", Customer = "", IdCertiMasive = "", Justification = "";
+            int Order = 0, IdCertificates = 0, TempDelete = 0;
+            String Type = "", Product = "", Batch = "", Html = "", Code = "", Consecutive = "", Customer = "", IdCertiMasive = "", Justification = "", Record = "", FormatName = "";
             boolean result = false;
             List lst_sign = null;
             List lst_id = null;
@@ -74,21 +74,33 @@ public class Generate extends HttpServlet {
                         Batch = "";
                     }
                     try {
-                        IdFormat = Integer.parseInt(request.getParameter("IdFormat"));
+                        Record = request.getParameter("Record");
                     } catch (Exception e) {
-                        IdFormat = 0;
+                        Record = "";
+                    }
+                    try {
+                        FormatName = request.getParameter("FormatName");
+                    } catch (Exception e) {
+                        FormatName = "";
                     }
                     try {
                         IdCertificates = Integer.parseInt(request.getParameter("IdCertificates"));
                     } catch (Exception e) {
                         IdCertificates = 0;
                     }
+                    try {
+                        TempDelete = Integer.parseInt(request.getParameter("TempDelete"));
+                    } catch (Exception e) {
+                        TempDelete = 0;
+                    }
                     request.setAttribute("Type", Type);
-                    request.setAttribute("order", Order);
-                    request.setAttribute("product", Product);
-                    request.setAttribute("batch", Batch);
-                    request.setAttribute("IdFormat", IdFormat);
+                    request.setAttribute("Order", Order);
+                    request.setAttribute("Product", Product);
+                    request.setAttribute("Batch", Batch);
+                    request.setAttribute("Record", Record);
+                    request.setAttribute("FormatName", FormatName);
                     request.setAttribute("IdCertificates", IdCertificates);
+                    request.setAttribute("TempDelete", TempDelete);
                     request.getRequestDispatcher("Visual.jsp").forward(request, response);
                     //</editor-fold>
                     break;
@@ -151,9 +163,9 @@ public class Generate extends HttpServlet {
                             Code = "*****";
                         }
                         try {
-                            IdFormat = Integer.parseInt(request.getParameter("IdFormat"));
+                            FormatName = request.getParameter("FormatName");
                         } catch (Exception e) {
-                            IdFormat = 0;
+                            FormatName = "";
                         }
                         result = CertificatesJpa.CertificatesRegister(Type, Code, Order, Product, Batch, Consecutive, Customer, RolName, Html);
                         if (result) {
@@ -167,7 +179,7 @@ public class Generate extends HttpServlet {
                                 }
                             }
                         }
-                        request.getRequestDispatcher("Generate?opt=2&Type=" + Type + "&Order=" + Order + "&Product=" + Product + "&Batch=" + Batch + "&IdFormat=" + IdFormat + "&IdCertificates=" + IdCertificates)
+                        request.getRequestDispatcher("Generate?opt=2&Type=" + Type + "&Order=" + Order + "&Product=" + Product + "&Batch=" + Batch + "&FormatName=" + FormatName + "&IdCertificates=" + IdCertificates)
                                 .forward(request, response);
                         //</editor-fold>
                     }
