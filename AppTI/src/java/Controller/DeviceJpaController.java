@@ -208,8 +208,7 @@ public class DeviceJpaController implements Serializable {
             return null;
         }
     }
-    
-    
+
     public List ConsultGeneralCounter() {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
@@ -228,12 +227,31 @@ public class DeviceJpaController implements Serializable {
             return null;
         }
     }
-    
+
     public List CounterReferenceItem() {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
         try {
             Query q = etm.createNativeQuery("CALL `Sp_gg_c_Count_References_Items`()");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public List ConsulDataRedeacDevice(int idDevice) {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_REDEAC_c_ConsultFilesidDevice`(" + idDevice + ")");
             List consulta = q.getResultList();
             etm.getTransaction().commit();
             etm.clear();

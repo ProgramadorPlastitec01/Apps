@@ -1270,6 +1270,50 @@ public class Tag_computer extends TagSupport {
                 out.print("</div>");
                 out.print("</div>");
                 //</editor-fold>
+
+                out.print("<div class='sweet-local' tabindex='-1' id='Ventana2' style='opacity: 1.03; display:none;'>");
+                out.print("<div class='contGeneral' style='width: 66%;'>");
+                out.print("<div style='display: flex; justify-content: space-between'>");
+                out.print("<h4>Historial de " + NroPC + " (REDEAC)</h4>");
+                out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(2)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
+                out.print("</div>");
+                out.print("<div class='cont_form_user'>");
+                lst_computer = ComputerJpa.ConsulDataRedeacComputer(IdComputer);
+                if (lst_computer != null) {
+                    out.print("<div style='max-height: 545px;overflow-y: auto;overflow-x: hidden;'>");
+                    out.print("<table class='tabletf table table-sm' id='table-1'>");
+                    out.print("<thead>");
+                    out.print("<tr class='text-center text-dark'>");
+                    out.print("<th>CODIGO - DOCUMENTO</th>");
+                    out.print("<th>FECHA</th>");
+                    out.print("<th>USUARIO</th>");
+                    out.print("<th>LINK</th>");
+                    out.print("</tr>");
+                    out.print("</thead>");
+                    out.print("<tbody>");
+                    for (int i = 0; i < lst_computer.size(); i++) {
+                        Object[] comp = (Object[]) lst_computer.get(i);
+                        out.print("<tr>");
+                        out.print("<td>" + comp[2] + " V" + comp[4] + " <br> " + comp[3] + "</td>");
+                        String linkDoc = comp[5].toString().replace("UserFiles/File/", "http://172.16.2.117:8084/REDEAC/UserFiles/File/");
+                        out.print("<td>" + comp[6].toString().split(" ")[0] + "</td>");
+                        out.print("<td>" + comp[7] + "</td>");
+                        out.print("<td>" + linkDoc + "</td>");
+//                        out.print("<td>" + linkDoc + "</td>");
+                        out.print("</tr>");
+                    }
+                    out.print("</tbody>");
+                    out.print("</table>");
+                    out.print("</div>");
+                } else {
+                    out.print("<div class='text-center'>");
+                    out.print("<h5>No se ha encontrado información</h5>");
+                    out.print("</div>");
+                }
+                out.print("</div>");
+                out.print("</div>");
+                out.print("</div>");
+
                 //<editor-fold defaultstate="collapsed" desc="LIST EVENTS">
 //                lst_computerId = ComputerJpa.ConsulteComputerIdPC(IdComputer);
                 out.print("<section class='section'>");
@@ -1281,6 +1325,7 @@ public class Tag_computer extends TagSupport {
                 out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='window.location.href=\"Computer?opt=1\"'><i class='fas fa-arrow-left'></i></button>");
                 out.print("<h2>" + NroPC + "</h2>");
                 out.print("<div class='d-flex'>");
+                out.print("<button class='btn btn-yellow mr-2' style='border-radius: 4px;' onclick='mostrarConvencion(2)' data-toggle='tooltip' data-placement='top' title='Hoja de vida'><i class=\"fas fa-folder-open\"></i></button>");
                 if (txtPermissions.contains("[46]")) {
                     out.print("<div class='mr-2'><button class='btn btn-green' style='border-radius: 4px;' onclick=\"javascript:location.href='Information?opt=1&IdPc=" + IdComputer + "'\" data-toggle=\"tooltip\" data-placement=\"top\" title='Especificaciones'><i class=\"fas fa-window-restore\"></i></button></div>");
                 }
