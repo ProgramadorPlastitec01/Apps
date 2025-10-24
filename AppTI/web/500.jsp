@@ -64,7 +64,7 @@
                 </p>
 
                 <div class="actions">
-                    <a class="btn btn-green" href="index?opt=1"><i class="fas fa-home"></i> Inicio</a>
+                    <a class="btn btn-green" href="index.jsp"><i class="fas fa-home"></i> Inicio</a>
                     <span class="">Nuestro equipo técnico ya fue notificado.</span>
                 </div>
             </section>

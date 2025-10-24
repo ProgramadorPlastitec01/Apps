@@ -1251,7 +1251,7 @@ public class Tag_device extends TagSupport {
                 lst_device = DeviceJpa.ConsulDataRedeacDevice(idDevice);
                 if (lst_device != null) {
                     out.print("<div style='max-height: 545px;overflow-y: auto;overflow-x: hidden;'>");
-                    out.print("<table class='tabletf table table-sm' id='table-1'>");
+                    out.print("<table class='tabletf table table-sm' id='table-3'>");
                     out.print("<thead>");
                     out.print("<tr class='text-center text-dark'>");
                     out.print("<th>CODIGO - DOCUMENTO</th>");
@@ -1352,7 +1352,7 @@ public class Tag_device extends TagSupport {
                 out.print("<div class='card-body'>");
                 out.print("<div class='table-responsive'>");
 
-                out.print("<table class='table table-bordered' id='table-1'>");
+                out.print("<table class='table table-bordered' id='table-2'>");
                 out.print("<thead>");
                 out.print("<tr>");
                 out.print("<th>Fecha</th>");

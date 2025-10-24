@@ -1281,7 +1281,7 @@ public class Tag_computer extends TagSupport {
                 lst_computer = ComputerJpa.ConsulDataRedeacComputer(IdComputer);
                 if (lst_computer != null) {
                     out.print("<div style='max-height: 545px;overflow-y: auto;overflow-x: hidden;'>");
-                    out.print("<table class='tabletf table table-sm' id='table-1'>");
+                    out.print("<table class='tabletf table table-sm' id='table-3'>");
                     out.print("<thead>");
                     out.print("<tr class='text-center text-dark'>");
                     out.print("<th>CODIGO - DOCUMENTO</th>");
@@ -1335,7 +1335,7 @@ public class Tag_computer extends TagSupport {
 
                 out.print("<div class='card-body'>");
                 out.print("<div class='table-responsive'>");
-                out.print("<table class=\"table table-bordered\" id=\"table-1\">");
+                out.print("<table class=\"table table-bordered\" id=\"table-2\">");
                 out.print("<thead>");
                 out.print("<tr>");
                 out.print("<th>Fecha</th>");
