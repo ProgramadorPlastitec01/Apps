@@ -1,0 +1,846 @@
+[33mcommit 7426cd6bb9aa22ccd568178b6c6cc7e05744d973[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: ProgramadorPlastitec01 <ProgramadorPlastitec01>
+Date:   Mon Oct 27 13:43:34 2025 -0500
+
+    Eliminar archivos pesados y agregar .gitignore
+
+[33mcommit bdc257847d4992de753e681371c7195e98c87c38[m
+Author: ProgramadorPlastitec01 <ProgramadorPlastitec01>
+Date:   Mon Oct 27 13:39:46 2025 -0500
+
+    Eliminar archivos pesados y agregar .gitignore
+
+[33mcommit 62ba2e7fe2de1ae62259a7cf528886818c4d7fc3[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Mon Oct 27 12:54:22 2025 -0500
+
+    Sebas - Se corrigen detalles visuales en modulo de actas y registro de actividades
+
+[33mcommit 3675a68e5f937677a65d152f37273e8d9ac8ad38[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Mon Oct 27 08:23:34 2025 -0500
+
+    Sebas - Se corrigen detalles visuales en modulo de actas y registro de actividades
+
+[33mcommit 7a74892df75119119b9f9fda6e0adb3320f02c28[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Fri Oct 24 09:23:30 2025 -0500
+
+    Sebas - Se agrega opciones para ver documentos(Hoja de vida) del aplicativo REDEAC desde nexus, para computadores y otros dispositivos
+
+[33mcommit ac19c7b950aa12209ea592aca4530c490d94e7c7[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Thu Oct 23 16:34:38 2025 -0500
+
+    Sebas - Se agrega opciones para ver documentos(Hoja de vida) del aplicativo REDEAC desde nexus, para computadores y otros dispositivos
+
+[33mcommit dd0ce119667a35d6497d2b9b17d0a1dc479e6a98[m
+Author: ProgramadorPlastitec01 <ProgramadorPlastitec01>
+Date:   Wed Oct 22 17:17:08 2025 -0500
+
+     Se implmementa nuevo formato, se realiza validacion de contenido, se implementa consulta en BD, se realiza mejoras en codigo, se deja funcionalidad. - FABIAN
+
+[33mcommit 33c48a97f33ec7411996252b2dad226ca2836cdc[m
+Merge: 7740fb7 d3f154e
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Mon Oct 20 11:10:20 2025 -0500
+
+    Merge branch 'main' of https://github.com/ProgramadorPlastitec01/Apps
+
+[33mcommit 7740fb7b7e3349a249b840dd495b5beb1c553b2a[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Mon Oct 20 11:09:58 2025 -0500
+
+    Solicitan un pequeño ajuste en los rollos de sistema de tubo, se sube y fucniona perfecto
+
+[33mcommit d3f154ec8f3a74b277d5771a0b3b44e8b3523cb3[m
+Author: ProgramadorPlastitec01 <ProgramadorPlastitec01>
+Date:   Mon Oct 20 11:02:49 2025 -0500
+
+    Se implementa todos los parametros del registro R-GC-046 con todas las variantes, ademas se anexan mejoras en firmas y opciones por JS que permite quitar filas que no se utilicen. Se anexa opciones de seleccion masiva en consulta general. Se realiza cambios en BD y formatos - FABIAN
+
+[33mcommit c024d1c7523711cf1adee6183e661c3e1b8ef4b0[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Mon Oct 20 07:37:22 2025 -0500
+
+    Se finaliza con el aplicativo de sistema de tubo, esta listo apra capacitacion
+
+[33mcommit 89257242522b4066f693635de495e5616b61149f[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Mon Oct 20 07:35:50 2025 -0500
+
+    Se finaliza con el aplicativo de sistema de tubo, esta listo apra capacitacion
+
+[33mcommit 07b10d9fa6a927781f5da8520e6bab65f3f814f5[m
+Author: ProgramadorPlastitec01 <ProgramadorPlastitec01>
+Date:   Fri Oct 17 09:37:23 2025 -0500
+
+    Se implementa opcion de eliminar, alertas de espera en generacion de certificado y se realiza pruebas de uso - FABIAN
+
+[33mcommit aa1867b1724a228bd1a31518d709aa23b8319c84[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Thu Oct 16 12:54:15 2025 -0500
+
+    Se finaliza con el aplicativo de Inspeccion Manga, esta listo para capacitacion
+
+[33mcommit ee7b4e3730b57deb76a736e43acf32b8ea278b08[m
+Author: ProgramadorPlastitec01 <ProgramadorPlastitec01>
+Date:   Thu Oct 16 07:27:27 2025 -0500
+
+    Se implementa proceso de firmas, gestion de registrar, guardar y validaciones en formato - FABIAN
+
+[33mcommit 09bf2fb2f752a6035d86bf85a53b098b0767ed18[m
+Author: ProgramadorPlastitec01 <ProgramadorPlastitec01>
+Date:   Tue Oct 14 14:49:55 2025 -0500
+
+    Se implementa opciones de registros, modificar, accedo al contenido creado y se realiza pruebas de modificacion - FABIAN
+
+[33mcommit 77aeabe528735d0592c1d69fc3825ae1cdfc065e[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Tue Oct 14 12:00:35 2025 -0500
+
+    Sebas - Se ha finalizado el desarollo de inspeccion manga se procede a hacer pruebas y revisar bugs
+
+[33mcommit 3c71b4610f3db924cd6e5fa70715264ae00e9104[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Tue Oct 14 08:21:58 2025 -0500
+
+    Sebas - Se ha agregado opcion para registro de curvatura y hasta el momento ya se encuentra valdiado
+
+[33mcommit 1f34bb17912adce0a2d30d131917fcc77097c61e[m
+Author: ProgramadorPlastitec01 <ProgramadorPlastitec01>
+Date:   Fri Oct 10 08:08:32 2025 -0500
+
+    Se realiza avance en modulo de desarollo R-GC-046 informacion extraida de ficha tecnica, gestion firmas y validaciones - FABIAN
+
+[33mcommit 240cec9fced285a5c1c5daeb2f458b04f47c4959[m
+Author: ProgramadorPlastitec01 <ProgramadorPlastitec01>
+Date:   Thu Oct 9 07:03:18 2025 -0500
+
+    Se realiza avance en modulo de desarollo R-GC-046 con el caso de ENEMA - FABIAN
+
+[33mcommit 36c026a3ade54474d9a39dd92b5fbb8a2132be22[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Tue Oct 7 10:50:32 2025 -0500
+
+    Sebas - Se agrega al modulo de inicio la seccion de app en proceso, se corrigen bugs
+
+[33mcommit 35a1e5ad3fbff5cabeadd9c3f191c54507279904[m
+Author: ProgramadorPlastitec01 <ProgramadorPlastitec01>
+Date:   Mon Oct 6 16:48:15 2025 -0500
+
+    Se terminan ajustes de configuración, se avanza con modulo de certificados, se implementa plantilla, conexion a Factory, Registros Lab, Generacion de lotes y se realizan validaciones - FABIAN
+
+[33mcommit 3c12b0303653e3eab3f1caf70594ba44d1d87696[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Mon Oct 6 09:41:14 2025 -0500
+
+    Sebas - Se crea sistema de historial para paso de rollos
+
+[33mcommit dba3f44946e3950e34212163759e0213fbbc8721[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Mon Oct 6 09:40:03 2025 -0500
+
+    Sebas - Se crea sistema de historial para paso de rollos
+
+[33mcommit d10efe431217e5c5ac3539f01ff5daa5fb7b13dc[m
+Author: ProgramadorPlastitec01 <ProgramadorPlastitec01>
+Date:   Fri Oct 3 16:04:02 2025 -0500
+
+    Se implementa modulo de parametrizacion, modulo de formato y configuracion avanzadas con funcionalidad - FABIAN
+
+[33mcommit 5e671e6e7545e0b828348c8cf1825e76cb2db95d[m
+Author: ProgramadorPlastitec01 <ProgramadorPlastitec01>
+Date:   Fri Oct 3 08:29:11 2025 -0500
+
+    Se implementa modulo de formato, con plantilla de R-GC-046 V4, se anexa formulario de consulta y validaciones de orden, producto y lote en generacion - FABIAN
+
+[33mcommit ea17f4ec3eee3f1808ad95fce5855e45dfbef808[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Wed Oct 1 12:01:26 2025 -0500
+
+    Sebas - Se crea sistema de historial para paso de rollos
+
+[33mcommit 0790e6ddfdf080fd73e7261dbca58fb15474d9cb[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Wed Oct 1 12:00:03 2025 -0500
+
+    Sebas - Se crea sistema de historial para paso de rollos
+
+[33mcommit 27ff1bb8ebc26b0a7b03c79f8698740d699af692[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Tue Sep 30 17:07:06 2025 -0500
+
+    Sebas - Se realiza validacion de campo final de los rollos
+
+[33mcommit cf37c954246ed99ffe2d593cdfdcd9ba855bc6a5[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Tue Sep 30 09:58:30 2025 -0500
+
+    Sebas - Se sube aplicativo de inspeccion manga para nuevos cambios
+
+[33mcommit a99b376de83a9ac61a19b018558caac6c029f548[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Tue Sep 30 09:57:13 2025 -0500
+
+    Sebas - Se sube aplicativo de inspeccion manga para nuevos cambios
+
+[33mcommit 4d2e3e991d1679486f015a67fc201b368a5a98b1[m
+Merge: c628981 faa24c4
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Tue Sep 30 08:36:30 2025 -0500
+
+    Merge branch 'main' of https://github.com/ProgramadorPlastitec01/Apps
+
+[33mcommit c628981ee721c021b9d6e0105ab6ac0c852e3a7f[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Tue Sep 30 08:36:10 2025 -0500
+
+    Sebas - Se finaliza con los cambios de sistema de tubo
+
+[33mcommit faa24c4a21141f18b04a7ee80b1b5913fec72db4[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Mon Sep 29 17:23:11 2025 -0500
+
+    Aplicativo GBGC se anexa modulo de certificados, consulta de informacion, se realiza validaciones - FABIAN
+
+[33mcommit 68550961702f1e244250857970d8c4c9a2f1059e[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Mon Sep 29 12:29:06 2025 -0500
+
+    implementación de nueva App GBGC, Inicio de session, conexion con bd de administracion y menu - FABIAN
+
+[33mcommit 8709b26fd5469795e4b6a6b765551e0763091d75[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Mon Sep 29 11:21:38 2025 -0500
+
+    Sebas - Se agrega una opcion para consultar bitacoras de otros usuarios
+
+[33mcommit 624abbc8dcb096342ed9e702efa5c24348157556[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Thu Sep 25 17:31:37 2025 -0500
+
+    Sebas - se actualizan consultas en modulos de registro y rollo que consultan fichas tecnicas
+
+[33mcommit 4e0deab92e168ba78bdc17c30ce8a452aae83aac[m
+Merge: f42c374 22d9cde
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Thu Sep 25 17:19:45 2025 -0500
+
+    Merge branch 'main' of https://github.com/ProgramadorPlastitec01/Apps
+
+[33mcommit f42c374dc6ac5a2974477c92f522145deaebe257[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Thu Sep 25 17:19:11 2025 -0500
+
+    Sebas - modulo de ficha tecnica terminada
+
+[33mcommit 22d9cde439ef72fcff43316da570d801df40bcb8[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Thu Sep 25 16:41:18 2025 -0500
+
+    Nuevo aplicativo certificados y batch record Gestion Calidad CBGC - FABIAN
+
+[33mcommit e8953e70b235f627d8231df5a126bdb0fbe4d7c3[m
+Merge: 65ee013 e681979
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Thu Sep 25 14:12:14 2025 -0500
+
+    Merge branch 'main' of https://github.com/ProgramadorPlastitec01/Apps
+
+[33mcommit 65ee013204f6474fa17b8e5c91f8f6ab35bceec3[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Thu Sep 25 14:11:29 2025 -0500
+
+    Sebas - Se valida consulta de moviminetos de referecnia ya que no traia toda la info
+
+[33mcommit e68197909bab9a9185610c708f23f36cc0a244f5[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Thu Sep 25 11:18:44 2025 -0500
+
+    Se cambia configuracion de Listener de casos a díario - FABIAN
+
+[33mcommit c9d5f03af7fc1be3b44f6d535c375dff744162a5[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Thu Sep 25 11:17:52 2025 -0500
+
+    Sebas - Se anexa validacion en consulta vacia
+
+[33mcommit 9ec332f3f58bba7c6746e2fb1bb9a8aeee1e4972[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Thu Sep 25 08:13:13 2025 -0500
+
+    Sebas - Sistema d etubo
+
+[33mcommit 08ed1dbeb3da66aa9a027d281bb427ad68c5e6dd[m
+Merge: c39cd16 90a2789
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Thu Sep 25 08:12:08 2025 -0500
+
+    Merge branch 'main' of https://github.com/ProgramadorPlastitec01/Apps
+
+[33mcommit c39cd1639337d64ed718d34c54521dbbf9510dd4[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Thu Sep 25 08:11:54 2025 -0500
+
+    Sebas - Ajuste al firmar acta se queda cargando
+
+[33mcommit 90a2789dc68f47a2c276fe5545f524de0f7db46a[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Thu Sep 25 08:03:42 2025 -0500
+
+    Aplicativo Nexus - Se cambian ip locales a ip de servidor para funcionamiento del elfinder - FABIAN
+
+[33mcommit cccdfb278fcfe2d88c526c77ab90ec1e8d205023[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Wed Sep 24 16:31:33 2025 -0500
+
+    Sebas - Se sube aplicativo sistema de tubo para nuevos requerimientos
+
+[33mcommit 52d6cba0c669cc6d5f572986440939a7e7148459[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Wed Sep 24 16:11:42 2025 -0500
+
+    Sebas - Se sube aplicativo sistema de tubo para nuevos requerimientos
+
+[33mcommit d5f3790ad62aac5dc449c7a026f0e8fee3bf7ae1[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Wed Sep 24 16:09:50 2025 -0500
+
+    Sebas - Se sube aplicativo sistema de tubo para nuevos requerimientos
+
+[33mcommit 6d2d0dd44d29436d954194ed8c6253ad6ccf618b[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Wed Sep 24 16:06:58 2025 -0500
+
+    Sebas - Se sube aplicativo sistema de tubo para nuevos requerimientos
+
+[33mcommit a79fe829e7542fb04b11462749908e11fb19160e[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Wed Sep 24 12:56:33 2025 -0500
+
+    Sebas - Ultimo ajuste antes de salida para pruebas oficial, con bugs corregidos
+
+[33mcommit 33ae8e8a78829c6f35a2d0b5dfdec2202fef94b3[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Wed Sep 24 12:53:45 2025 -0500
+
+    Sebas - Ultimo ajuste antes de salida para pruebas oficial, con bugs corregidos
+
+[33mcommit 59204c49ddf364a3a92998141a53c6286c5bdf6e[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Wed Sep 24 11:52:30 2025 -0500
+
+    Sebas - Ultimo ajuste antes de salida para pruebas oficial, con bugs corregidos
+
+[33mcommit e273f3830912cb8adad5c49bef54aaead5d577b3[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Wed Sep 24 11:48:39 2025 -0500
+
+    Se anexa foto de maicol - FABIAN
+
+[33mcommit 7347de6d1e82ff129a6dc55015af39c02a7bd3b1[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Wed Sep 24 11:47:56 2025 -0500
+
+    Sebas - Ultimo ajuste antes de salida para pruebas oficial, con bugs corregidos
+
+[33mcommit 51b6377a887c6567a097d550da88dfab251d4bbe[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Wed Sep 24 11:37:22 2025 -0500
+
+    Sebas - Ultimo ajuste antes de salida para pruebas oficial, con bugs corregidos
+
+[33mcommit 64cf7ba7c98fe10f5cc3ca12ea86dcc121950876[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Wed Sep 24 11:21:58 2025 -0500
+
+    Cambios en binnacles validacion de required, cambios en contadores de profile y permiso para rol de tecnico documental en modificar cualquier pendientes - FABIAN
+
+[33mcommit 6b51e280a3ba28639d1f68ac1464d0c0ed1d7120[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Wed Sep 24 11:20:04 2025 -0500
+
+    Sebas - Ultimo ajuste antes de salida para pruebas oficial, con bugs corregidos
+
+[33mcommit 8c8757c35ef3ea904b0da764fe52aca96eacb4b1[m
+Merge: 4a71a14 2ed295b
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Wed Sep 24 10:47:41 2025 -0500
+
+    Merge branch 'main' of https://github.com/ProgramadorPlastitec01/Apps
+
+[33mcommit 4a71a143367f994ec26d52aafa7909b6c815a78f[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Wed Sep 24 10:47:32 2025 -0500
+
+    Sebas - Ultimo ajuste antes de salida para pruebas oficial, con bugs corregidos
+
+[33mcommit 2ed295b7595fa179c9664173d206bfae7e4f2293[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Wed Sep 24 10:46:42 2025 -0500
+
+    Implementación codificación UTF-8 en servlet faltantes - FABIAN
+
+[33mcommit d4a40a713347c31d7da6eff9c7893f00c08a0d76[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Wed Sep 24 10:41:40 2025 -0500
+
+    Sebas - Ultimo ajuste antes de salida para pruebas oficial, con bugs corregidos
+
+[33mcommit d0e2ccf343839cc69d72dc7a3fcfcccf4b9cbc7d[m
+Merge: 6bab13d 07458ec
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Wed Sep 24 09:49:54 2025 -0500
+
+    Merge branch 'main' of https://github.com/ProgramadorPlastitec01/Apps
+
+[33mcommit 6bab13db1604869455aa02aeb76604b605423eb4[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Wed Sep 24 09:49:38 2025 -0500
+
+    Sebas - se finaliza con ajustes del modulo de computer
+
+[33mcommit 07458ec88e8cbeb0017aac41f22cf0d84afe2623[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Wed Sep 24 07:57:21 2025 -0500
+
+    Implementación de paginas de error, ajustes en salidas y web.xml - FABIAN
+
+[33mcommit 5c36ca7afd09b59d658d8158a0b04b0ccb63ed62[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Tue Sep 23 12:38:08 2025 -0500
+
+    Nuevas mejoras en diseño parcial de restablecimiento de pass y ajustes - FABIAN
+
+[33mcommit 10f51465f90e494872964334b7e9686861543c82[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Tue Sep 23 07:23:22 2025 -0500
+
+    Implementacion Mail para caso, con programación diaria y ajuste de correos para bitacora, creado en Setting - FABIAN
+
+[33mcommit 08fc62a2968b6712245ae55d72ad7167c22e9748[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Mon Sep 22 18:11:54 2025 -0500
+
+    Sebas - se finaliza con los cambios del modulo de inventarios se sigue con el de PC que tiene ajustes pendientes
+
+[33mcommit c8c919d302a7a2cd91d8ca6df119d2e63402a566[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Mon Sep 22 17:19:09 2025 -0500
+
+    Sebas - se realiza nuevo cambios y validaciones en modulo de inventarios
+
+[33mcommit 05aea0d93c7370aa4099e0ad658cc34c324672d2[m
+Merge: c4e8693 12d86c9
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Mon Sep 22 17:18:14 2025 -0500
+
+    Merge branch 'main' of https://github.com/ProgramadorPlastitec01/Apps
+
+[33mcommit c4e86935c5ba142a4eb71b14e654d4d2e4aca613[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Mon Sep 22 17:17:33 2025 -0500
+
+    Sebas - se realiza nuevo cambios y validaciones en modulo de inventarios
+
+[33mcommit 12d86c986705b0e8c3d37b24da0d781786914853[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Mon Sep 22 14:09:30 2025 -0500
+
+    Implementacion de opcion de enviar actas por correo - FABIAN
+
+[33mcommit 276e27b7c193218dfe984598dcd3c648d053dd6f[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Wed Sep 17 11:54:57 2025 -0500
+
+    Sebas - se realiza ajuste en asignacion de itme scon bd y ajuste de id de movimiento
+
+[33mcommit 5bc0214fee1302a2966008b0bdcee9973e019741[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Wed Sep 17 11:52:29 2025 -0500
+
+    Implementacion nota del creador en pendientes - FABIAN
+
+[33mcommit cb90797e3743b660d0a5383063294e559b75afd0[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Wed Sep 17 09:18:55 2025 -0500
+
+    Cambio en menu y ajustes en codigo - FABIAN
+
+[33mcommit f2a98dbf72baa081d0f34f91860e57c580a1595a[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Wed Sep 17 07:39:36 2025 -0500
+
+    Implementacion de botones de pendientes asignados y general - FABIAN
+
+[33mcommit b05597014457a25c01d727734c4f8cb515f3dcc0[m
+Merge: 1d285fe 84d5d90
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Tue Sep 16 12:44:10 2025 -0500
+
+    Merge branch 'main' of https://github.com/ProgramadorPlastitec01/Apps
+
+[33mcommit 1d285fea0a320da369717df0190349117cd6c75b[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Tue Sep 16 12:40:02 2025 -0500
+
+    Cambios en bitacora, pendientes, perfil, PC, informacion PC y menu - FABIAN
+
+[33mcommit 84d5d90e02468714ff4feda61fdb147c29b82081[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Tue Sep 16 12:33:59 2025 -0500
+
+    Sebas - se realiza mopdificacion de acceso a inventarios
+
+[33mcommit 4f8b1697b2f819abed152709e1281d1f404d8382[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Tue Sep 16 09:01:25 2025 -0500
+
+    Sebas - se realiza ajuste en logos
+
+[33mcommit cdbd529730674079f64f1f79746ad8d85abb55a6[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Mon Sep 15 11:42:02 2025 -0500
+
+    Sebas - se realiza validaicon en equipos primer registro
+
+[33mcommit 685d8aa073f0ec6e0d8316826ae836b8bbe4ce83[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Mon Sep 15 09:58:40 2025 -0500
+
+    Cambios en IP, imagenes, actividad primera lanzamiento en produccion - FABIAN
+
+[33mcommit bcc4327a0000efbc64e868594a76c43e1a28c39e[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Mon Sep 15 09:17:55 2025 -0500
+
+    Correción de bugs y ajuste en lineas V2 - FABIAN
+
+[33mcommit 57e93f3a32f47e75bd333b41948ac9083218c21f[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Mon Sep 15 08:51:59 2025 -0500
+
+    Sebas - se realiza compilacion de rutina
+
+[33mcommit 83943a353fd91831c05dc3258a406a467ead3843[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Thu Sep 11 16:58:54 2025 -0500
+
+    Mejora y correcion de bug en modulo de pendientes, ademas se anexa en inicio programacion de turnos - FABIAN
+
+[33mcommit 918211dc0e92c0c5121deff83488f9fa9501d303[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Thu Sep 11 11:46:14 2025 -0500
+
+    Sebastian - Se ha finalizado proceso documental con pruebas
+
+[33mcommit 9f265096c9b6cd41633acbc1d352fcde13956f8d[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Thu Sep 11 11:45:35 2025 -0500
+
+    Cambios en index y base de conocimiento, imagen fija por dia - FABIAN
+
+[33mcommit 082c4980eb4e148e340afa4bbef2b9d4e3e5e4ec[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Thu Sep 11 07:39:08 2025 -0500
+
+    Sebastian - Se ha finalizado proceso documental para dispositivos faltan pruebas y revision de bugs
+
+[33mcommit a7a8053e29c84ea9414dfb1070655306151cb0c9[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Thu Sep 11 07:38:04 2025 -0500
+
+    Cambios en alerta de Start y nuevo estilo - FABIAN
+
+[33mcommit 58b4baf3877e8a70d4594c9603818b31bac7ecb8[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Wed Sep 10 14:39:12 2025 -0500
+
+    Cambios en pantallas de carga - FABIAN
+
+[33mcommit 36fef3b89be9c016ccbf1b0065023657d02404a4[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Wed Sep 10 12:32:37 2025 -0500
+
+    Cambios en modulo de pendientes, implementacion de campo fecha limite junto con validaciones visuales - FABIAN
+
+[33mcommit 3ce1f0fafa40fdcc5ba88982317e311af6da3808[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Tue Sep 9 11:15:51 2025 -0500
+
+    Cambios en modulo de pendientes, nuevo campo fecha limite y se quito campo de ejecutor, modificaciones en validacione - FABIAN
+
+[33mcommit 1edfc895830dcc5301e342ce8b710802c6674eed[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Tue Sep 9 11:13:59 2025 -0500
+
+    Sebastian - Se ha realizado creacion de todo el modulo de dispoisitivos se comienza con correccion de errores
+
+[33mcommit abca95bdb95e25a2ce64a56b2582f2fb202f78d8[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Tue Sep 9 10:24:12 2025 -0500
+
+    Sebastian - Se ha realizado creacion de todo el modulo de dispoisitivos se comienza con correccion de errores
+
+[33mcommit 8353a2405afe212897c23fbe1205f4670e22d747[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Tue Sep 9 07:47:54 2025 -0500
+
+    Sebas -Nuevos ajsutes
+
+[33mcommit 6b5b247eba3d6338c8d73fe75aab2eb4180d4f21[m
+Merge: f8ade0d 8cd693f
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Mon Sep 8 17:11:17 2025 -0500
+
+    Sebas -Nuevos ajsutes
+
+[33mcommit f8ade0dcc6387b576143d542eb12ed5e119dc220[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Mon Sep 8 17:05:16 2025 -0500
+
+    Sebas -Nuevos ajsutes
+
+[33mcommit 8cd693f9792569bcf1b43f40be49c8bbe6e176aa[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Mon Sep 8 16:49:54 2025 -0500
+
+    Implementacion de pantallas de cargas y alerta en inicio de pendientes, cambios en registro 026 correción de bugs - FABIAN
+
+[33mcommit 019f76f36f811c4d1436206a13cc0de86973a530[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Fri Sep 5 14:28:20 2025 -0500
+
+    Implementación de modulo de idea, cambios es modulos y mejoras en formularios - FABIAN
+
+[33mcommit 1efec247dfe9a851f235c2c6a2fa17e9b69ec2f1[m
+Author: sebast1an2 <Programador.ti2@PLASTITEC.SA>
+Date:   Mon Sep 8 08:43:45 2025 -0500
+
+    APPTI Sebas - Ajustes de la revision general realizada 40%
+
+[33mcommit 0228cdb7c9defe31dd0d54a293bcd57651380e25[m
+Merge: 8c714fe e5f4851
+Author: sebast1an2 <Programador.TI2@PLASTITEC.SA>
+Date:   Wed Sep 3 08:03:15 2025 -0500
+
+    APPTI Sebas - Ajustes de la revision general realizada 35%
+
+[33mcommit 8c714fee982b62c8fbc936ce767da2d02914a10d[m
+Author: sebast1an2 <Programador.TI2@PLASTITEC.SA>
+Date:   Wed Sep 3 07:53:21 2025 -0500
+
+    APPTI Sebas - Ajustes de la revision general realizada 35%
+
+[33mcommit e5f48512871417c0ccc9aa3eb965f549bf827d85[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Mon Sep 1 12:12:57 2025 -0500
+
+    Diseño y modulo final de base de conocimiento Ultimos ajustes - FABIAN
+
+[33mcommit d452e966aaf322a0b147ca57da763686da70c10c[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Mon Sep 1 11:05:06 2025 -0500
+
+    Diseño y modulo final de base de conocimiento - FABIAN
+
+[33mcommit 91c4c97544cf27632aa3c1b4170028bd61df3351[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Fri Aug 29 11:50:50 2025 -0500
+
+    Implementacion de Base de conocimiento y su flujo V3 FINAL - FABIAN
+
+[33mcommit 9f595d74ec308f8f4437054794103fbee11857e2[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Tue Aug 26 15:01:57 2025 -0500
+
+    Implementacion de Base de conocimiento y su flujo V2 - FABIAN
+
+[33mcommit fcc6d0073bdb1972938eacb5db2cd1720c6f4f2d[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Tue Aug 26 14:59:26 2025 -0500
+
+    Implementacion de Base de conocimiento y su flujo - FABIAN
+
+[33mcommit 58e1e83ff970e12f4b18f22650c4e2931557d0d9[m
+Author: sebast1an2 <Programador.TI2@PLASTITEC.SA>
+Date:   Tue Aug 26 08:46:48 2025 -0500
+
+    APPTI Sebas - Ajustes de la revision general realizada 15%
+
+[33mcommit 0a3cbe8cb4c07b03d247f6794e7a83abcc6db0f7[m
+Author: sebast1an2 <Programador.TI2@PLASTITEC.SA>
+Date:   Fri Aug 22 15:21:39 2025 -0500
+
+    APPTI Sebas - Ajustes de la revision general realizada 5%
+
+[33mcommit e288a4fc1b26cca0dd4451dfc3b64e3ce78d7fd1[m
+Author: sebast1an2 <Programador.TI2@PLASTITEC.SA>
+Date:   Thu Aug 21 13:20:19 2025 -0500
+
+    APPTI Sebas - ultimos ajustes antes de subir a pruebas
+
+[33mcommit 3b483c68f5efba4c6c78506e41151a76859bf30e[m
+Merge: 3f0e130 990189b
+Author: sebast1an2 <Programador.TI2@PLASTITEC.SA>
+Date:   Thu Aug 21 11:27:41 2025 -0500
+
+    Merge branch 'main' of https://github.com/ProgramadorPlastitec01/Apps
+
+[33mcommit 3f0e13040f6a34701208076e243855fbdb3aba04[m
+Merge: ba939ff a25c4be
+Author: sebast1an2 <Programador.TI2@PLASTITEC.SA>
+Date:   Thu Aug 21 11:26:09 2025 -0500
+
+    APPTI Sebas - Ajustes en programacion de turnos y ajustes visuales
+
+[33mcommit 990189bb70a636226c2afd77bfae8ecefa19593e[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Thu Aug 21 11:24:47 2025 -0500
+
+    Se quita linea de icono en AppDetail.jsp - FABIAN
+
+[33mcommit ba939ff8641f5a27d08ce14dbd93c1cb53ec0243[m
+Author: sebast1an2 <Programador.TI2@PLASTITEC.SA>
+Date:   Thu Aug 21 11:22:07 2025 -0500
+
+    APPTI Sebas - Ajustes en programacion de turnos y ajustes visuales
+
+[33mcommit a25c4bea422a146b3281ae764ba0e4d8d5caa695[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Thu Aug 21 11:17:54 2025 -0500
+
+    Implemtancion icono, mejora en actividades del sistema con filtro, se condiciona en modulo de pendientes ver pendientes para todos - FABIAN
+
+[33mcommit b5aa9292910497c75ca0ad178bb6d8384631bdef[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Thu Aug 21 09:57:54 2025 -0500
+
+    Cambios en diseño y proceso de filtro en actividades - FABIAN
+
+[33mcommit 4a1cbec9e30f7bde3f6c087b69d7b4118120dc08[m
+Author: sebast1an2 <Programador.TI2@PLASTITEC.SA>
+Date:   Wed Aug 20 12:10:47 2025 -0500
+
+    APPTI Sebas - Ajustes en interfaz y pruebas en tablet
+
+[33mcommit 66990c48115d61028f09b601f4ef6ebd832358d0[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Wed Aug 20 12:06:42 2025 -0500
+
+    Cambios en diseño y finalizacion de actividades del sistema
+
+[33mcommit 26f46bbec29d9c9f87532c6c8e312eb881926396[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Wed Aug 20 10:44:44 2025 -0500
+
+    Cambio imagen fondo
+
+[33mcommit b7d3e74e041011243a711d341219882a3bd7c0fa[m
+Author: sebast1an2 <Programador.TI2@PLASTITEC.SA>
+Date:   Wed Aug 20 10:41:39 2025 -0500
+
+    APPTI Sebas - Finalización de proceso documental de los equipos, ajustes en modulo de aplicativos
+
+[33mcommit 71cf269513e6c9cad8fde7f570d609f4e68015b8[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Wed Aug 20 10:39:12 2025 -0500
+
+    Cambios en actividades del sistema, estilos y colores
+
+[33mcommit 9ef9da962ce2f242f36adf818b5e83bcf5b65f0f[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Tue Aug 19 07:13:33 2025 -0500
+
+    Cambios en modulo de inicio y actividades del usuario
+
+[33mcommit 4672edffd5f5939a2d992e92d7858334885a3529[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Fri Aug 15 11:41:06 2025 -0500
+
+    Implementacion hora en actividades recientes
+
+[33mcommit 3cad06ab9290939fbccde77ec297b9a3e87fb1f5[m
+Author: sebast1an2 <Programador.TI2@PLASTITEC.SA>
+Date:   Fri Aug 15 11:11:06 2025 -0500
+
+    APPTI Sebas - Se agrega correccion pantalla de carga en bitacora
+
+[33mcommit be74153f35953af5974ef344851862ec2338ca6d[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Fri Aug 15 11:05:26 2025 -0500
+
+    Modificacion inicio correccion DIV
+
+[33mcommit 4357fd372fd8a51070fe7079e1c5916429d89fbf[m
+Author: sebast1an2 <Programador.TI2@PLASTITEC.SA>
+Date:   Fri Aug 15 10:53:45 2025 -0500
+
+    APPTI Sebas - Se agrega pantalla de carga
+
+[33mcommit 2b6a6e799221b08957d60d5d30160ec16accf7e6[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Fri Aug 15 10:50:39 2025 -0500
+
+    Cambios en Start e implementacion de actividades en modulos principales Part 1
+
+[33mcommit f99d7b6ed91c51e885d74b67a437a8c7e932c62a[m
+Author: sebast1an2 <Programador.TI2@PLASTITEC.SA>
+Date:   Thu Aug 14 15:42:30 2025 -0500
+
+    APPTI Sebas - Se crean documentos 029, 031, 32 y validaciones de estado
+
+[33mcommit fbf644db66eaf33a22fa41155641c5a9b46564d0[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Thu Aug 14 09:09:01 2025 -0500
+
+    Cambios en permisos, roles y cronograma
+
+[33mcommit b610f466c583901d6b977c707094955a1abb15bf[m
+Author: sebast1an2 <Programador.TI2@PLASTITEC.SA>
+Date:   Mon Aug 11 10:16:32 2025 -0500
+
+    APPTI Sebas - Se crea css para el modulo de coumputador y se termina con el documento 004
+
+[33mcommit 3fdab8dd53bd76683451ac09d02a0b5fcfb27a31[m
+Author: sebast1an2 <Programador.TI2@PLASTITEC.SA>
+Date:   Wed Aug 6 08:44:04 2025 -0500
+
+    APPTI Sebas - Se crea css para el modulo de coumputador y se termina con el documento 004
+
+[33mcommit 1d2f54c429a36a860225dcc19fc50ff4f69035a9[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Tue Aug 5 12:58:46 2025 -0500
+
+    Ultimos cambios permisos en modulos
+
+[33mcommit a608d5dacbf806349f35a7909f0cbd035eef31ef[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Tue Aug 5 07:25:08 2025 -0500
+
+    Implementacion permisos en Servelt
+
+[33mcommit d7faf2851bd89b35ce105488f736cbd9df887cab[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Mon Aug 4 13:53:33 2025 -0500
+
+    Cambios en inicio V2 Registro BD
+
+[33mcommit 8265e165fbcd6e5a2f5ba333131440e8ad36e7c5[m
+Author: ProgramadorPlastitec01 <Programador.TI1@PLASTITEC.SA>
+Date:   Fri Aug 1 08:46:11 2025 -0500
+
+    Inicio mejorado - Fabian
+
+[33mcommit c6858f08297a98f73bfca861c1c83c64318f0c5f[m
+Author: ProgramadorPlastitec01 <Programador.ti1@PLASTITEC.SA>
+Date:   Tue Jul 29 12:48:47 2025 -0500
+
+    Cambio Start
+
+[33mcommit afc76913b62bd416af8d1a3611c92f9ff9aab9c5[m
+Author: Programador TI2 <Programador.TI2@PLASTITEC.SA>
+Date:   Tue Jul 29 12:28:39 2025 -0500
+
+    Subida del aplicativo

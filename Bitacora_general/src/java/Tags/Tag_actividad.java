@@ -484,7 +484,7 @@ public class Tag_actividad extends TagSupport {
                                         + "</p>";
                                 contM = contM + 1;
                             } else if (obj_formulario[5].equals("Campo editorTexto")) {
-                                if (obj_Mactividad[3].toString().contains("ENCARGADA PRF")) {
+                                if (obj_Mactividad[3].toString().contains("ENCARGADA PRF") || obj_Mactividad[3].toString().contains("OPERARIA PRF")) {
                                     HTMLeditor = "<b>" + obj_formulario[4] + ": </b><br />"
                                             + "<textarea id='editor1' name='Mtext_" + arg_nameId[0] + "' class='input_full' placeholder='" + obj_formulario[4] + "'> " + obj_Mactividad[15].toString().replace("<div>", "<div contenteditable='true'>") + " </textarea><br />";
                                 } else {
