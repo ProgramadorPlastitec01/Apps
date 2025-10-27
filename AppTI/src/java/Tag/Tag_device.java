@@ -891,11 +891,14 @@ public class Tag_device extends TagSupport {
                         //</editor-fold>
 
                         //<editor-fold defaultstate="collapsed" desc="ADITIONAL INFORMATION">
-                        format = format.replace("name=\"textcal\" value=\"" + DtaFormat[18].toString() + "\"", "name=\"textcal\" value=\"" + DtaFormat[18].toString() + "\" checked");
-                        format = format.replace("name=\"textFll\" value=\"" + DtaFormat[19].toString() + "\"", "name=\"textFll\" value=\"" + DtaFormat[19].toString() + "\" checked");
+                        format = format.replace("name=\"textcal\" value=\"" + DtaFormat[18].toString() + "\"", "name=\"textcal\" value=\"" + DtaFormat[18].toString() + "\" checked disabled");
+                        try {
+                            format = format.replace("name=\"textFll\" value=\"" + DtaFormat[19].toString() + "\"", "name=\"textFll\" value=\"" + DtaFormat[19].toString() + "\" checked disabled");
+                        } catch (Exception e) {
+                        }
 
-                        format = format.replace("name=\"textcal\"", "name=\"textcal\" disabled");
-                        format = format.replace("name=\"textFll\"", "name=\"textFll\" disabled");
+//                        format = format.replace("name=\"textcal\"", "name=\"textcal\" disabled");
+//                        format = format.replace("name=\"textFll\"", "name=\"textFll\" disabled");
                         //</editor-fold>
 
                         out.print(format);
@@ -905,7 +908,7 @@ public class Tag_device extends TagSupport {
                         //<editor-fold defaultstate="collapsed" desc="NEW REGISTER">
                         if (lst_device != null) {
                             Object[] ObInfo = (Object[]) lst_device.get(0);
-                            out.print("<button class='btn btn-green' style='position: fixed; bottom: 12px; right: 71px;' onclick='formR03.submit()'>Guardar <i class='fas fa-save'></i></button>");
+                            out.print("<button class='btn btn-green' style='position: fixed; bottom: 12px; right: 71px;' onclick='validData003()'>Guardar <i class='fas fa-save'></i></button>");
 
                             //<editor-fold defaultstate="collapsed" desc="SEARCH ITEMS">
                             out.print("<div class='sweet-local' tabindex='-1' id='Ventana1' style='opacity: 1.03; display:none;'>");
@@ -1015,7 +1018,7 @@ public class Tag_device extends TagSupport {
 //</editor-fold>
 
                             //<editor-fold defaultstate="collapsed" desc="FORM TO REGISTER">
-                            out.print("<form action='Device?opt=7&idDevice=" + idDevice + "&idDeviceHead=" + idDeviceHead + "&type=" + type + "&idTypeDv=" + idTypeDv + "' method='post' class='needs-validation' novalidate='' id='formR03' onsubmit='return cargarDatosForm(this)'>");
+                            out.print("<form action='Device?opt=7&idDevice=" + idDevice + "&idDeviceHead=" + idDeviceHead + "&type=" + type + "&idTypeDv=" + idTypeDv + "' method='post' class='needs-validation' novalidate='' id='formR03'>");
                             out.print(format);
                             out.print("<input type='hidden' class='form-control' name='txt_soft' id='infoOculta' >");
                             out.print("<input type='hidden' class='form-control' name='txt_otherItem' id='infoField' >");

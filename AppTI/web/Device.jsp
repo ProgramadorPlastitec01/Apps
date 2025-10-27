@@ -178,6 +178,34 @@
             }
         </script>
         
+        <script>
+            function validData003() {
+                const form = document.getElementById("formR03");
+                var infoField = document.getElementById("infoField").value;
+                var infoHide = document.getElementById("infoOculta").value;
+
+                const showWarning = (msg) => {
+                    iziToast.warning({
+                        title: 'Atención!',
+                        message: msg,
+                        position: 'topRight'
+                    });
+                };
+
+                if (!infoField) {
+                    showWarning('No se ha seleccionado items.');
+                } else if (!infoHide) {
+                    showWarning('No se ha ingresado software instalado.');
+                } else {
+                    if (form.checkValidity()) {
+                        form.submit();  // solo se envía si pasa validaciones
+                    } else {
+                        form.reportValidity(); // muestra mensajes nativos de HTML5
+                    }
+                }
+            }
+        </script>
+        
         <Alerts:Alert/>
         
         
