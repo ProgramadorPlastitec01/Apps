@@ -1,0 +1,65 @@
+.tooltip-container {
+    position: relative;
+}
+
+.tooltip {
+    display: none;
+    position: absolute;
+    background-color: #601c03;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.medida {
+    /* Ajusta las coordenadas de posición */
+    top: -7px; /* Cambia esto según sea necesario para la posición vertical */
+    left: 30px; /* Cambia esto según sea necesario para la posición horizontal */
+    z-index: 2;
+}
+
+.medida1 {
+    /* Ajusta las coordenadas de posición */
+    top: -15px; /* Cambia esto según sea necesario para la posición vertical */
+    left: -2px; /* Cambia esto según sea necesario para la posición horizontal */
+    z-index: 2;
+}
+
+.medida2 {
+    /* Ajusta las coordenadas de posición */
+    top: -15px; /* Cambia esto según sea necesario para la posición vertical */
+    left: -5px; /* Cambia esto según sea necesario para la posición horizontal */
+    z-index: 2;
+}
+
+.medida3 {
+    /* Ajusta las coordenadas de posición */
+    top: -15px; /* Cambia esto según sea necesario para la posición vertical */
+    left: -2px; /* Cambia esto según sea necesario para la posición horizontal */
+    z-index: 2;
+}
+
+.medida4 { /*Medida para la opcion ver */
+    /* Ajusta las coordenadas de posición */
+    top: -12px; /* Cambia esto según sea necesario para la posición vertical */
+    left: 10px; /* Cambia esto según sea necesario para la posición horizontal */ 
+    z-index: 2;
+}
+
+.medida5 { /*Medida para la opcion abrir */
+    /* Ajusta las coordenadas de posición */
+    top: -15px; /* Cambia esto según sea necesario para la posición vertical */
+    left: 5px; /* Cambia esto según sea necesario para la posición horizontal */
+    z-index: 2;
+}
+.medida6{
+    left: 138%;
+    top: -27%;
+    z-index: 2;
+}
+
+.tooltip-container:hover .tooltip {
+    display: block
+}
