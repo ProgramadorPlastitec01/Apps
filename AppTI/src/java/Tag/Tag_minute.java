@@ -441,7 +441,16 @@ public class Tag_minute extends TagSupport {
 
                     out.print("</div>");
                     out.print("</div>");
-                    
+
+//                    out.print("<script>"
+//                            + " document.addEventListener('DOMContentLoaded', function() {"
+//                            + "    function toggleClass() {"
+//                            + "        const body = document.body;"
+//                            + "        body.classList.add('modal-open');"
+//                            + "    }"
+//                            + "    toggleClass();"
+//                            + " });"
+//                            + "</script>");
 
                 } else {
                     out.print("<div class='text-center'>");

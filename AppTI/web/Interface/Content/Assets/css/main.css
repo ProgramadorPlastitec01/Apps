@@ -2176,7 +2176,7 @@ DivSignatureAct::-webkit-scrollbar-thumb:active {
 }
 
 .divDocumentContent{
-    /*max-height: 555px;*/
+    max-height: 555px;
     overflow-y: scroll;
 }
 
@@ -2361,43 +2361,43 @@ DivSignatureAct::-webkit-scrollbar-thumb:active {
 }
 
 .bg_ten{
-    background-color: #c90a00 !important;
+    background-color: #D4310F !important;
 }
 
 .bg_tweny {
-    background-color: #e13d0c !important;
+    background-color: #853D2E !important;
 }
 
 .bg_thirty {
-    background-color: #e15b0c !important;
+    background-color: #A83D27 !important;
 }
 
 .bg_fourty{
-    background-color: #f3881a !important;
+    background-color: #BA5930 !important;
 }
 
 .bg_fifty{
-    background-color: #d7c124 !important;
+    background-color: #BA7330 !important;
 }
 
 .bg_sixty{
-    background-color: #bbd724 !important;
+    background-color: #CFBC5D !important;
 }
 
 .bg_seventy{
-    background-color: #9ec133 !important;
+    background-color: #B5C42B !important;
 }
 
 .bg_eighty{
-    background-color: #5dc133 !important;
+    background-color: #92B538 !important;
 }
 
 .bg_ninety{
-    background-color: #49c133 !important;
+    background-color: #67B538 !important;
 }
 
 .bg_oneHundred{
-    background-color: #2c9718 !important;
+    background-color: #007D18 !important;
 }
 
 
