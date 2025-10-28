@@ -37,9 +37,16 @@ public class Tag_device extends TagSupport {
         ConnectionsBd ConnectJpa = new ConnectionsBd();
         SettingControllerJpa SettingJpa = new SettingControllerJpa();
 
+//        LocalDate fecha = LocalDate.now();
+//        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+//        String CurrentDate = fecha.format(formato);
+        
         LocalDate fecha = LocalDate.now();
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         String CurrentDate = fecha.format(formato);
+        int currentDay = fecha.getDayOfMonth();
+        int currentMonth = fecha.getMonthValue();
+        int currentYear = fecha.getYear();
 
         List lst_device = null;
         List lst_deviceHead = null;
@@ -978,26 +985,54 @@ public class Tag_device extends TagSupport {
                             out.print("<td><input type='number' class='form-control' name='' id='idVersion'></td>");
                             out.print("<td><button class=\"btn btn-info\" onclick=\"agregarFila()\"><i class='fas fa-plus'></button></td>");
                             out.print("</tr>");
+                            String Installed = "";
+                            lst_setting = SettingJpa.ConsultSettingCategorie("InstalledSoftware003Dv");
+                            if (lst_setting != null) {
+                                for (int i = 0; i < lst_setting.size(); i++) {
+                                    Object[] ObjSett = (Object[]) lst_setting.get(i);
+                                    String[] dataSet = ObjSett[2].toString().split("/");
+                                    out.print("<tr>");
+                                    out.print("<td>" + dataSet[0] + "</td>");
+                                    out.print("<td>" + dataSet[1] + "</td>");
+                                    out.print("<td>" + dataSet[2] + "</td>");
+                                    out.print("<td><button class='btn btn-danger' onclick='eliminarFila(this)'>Eliminar</button></td>");
+                                    out.print("</tr>");
+                                    Installed += "[" + ObjSett[2].toString() + "]";
+                                }
+                            }
                             out.print("</tbody>");
                             out.print("</table>");
 
                             out.print("</div>");
                             out.print("</div>");
-                            out.print("</div>");
-
+                            out.print("</div>");   
                             //</editor-fold>
+                            
+                            String optArea = "";
+                            lst_area = AreaJpa.ConsultAreaActive();
+                            if (lst_area != null) {
+                                for (int i = 0; i < lst_area.size(); i++) {
+                                    Object[] ObjOpc = (Object[]) lst_area.get(i);
+                                    optArea += "<option value='" + ObjOpc[0] + "/" + ObjOpc[1] + "'>" + ObjOpc[1] + "</option>";
+                                }
+                            }
+                            String areaList = "<div class='col-lg-6'><select class='form-control select2' name='cbxArea' style='margin-12px;'>"
+                                    + "<option selected disabled>Seleccionar </option> " + optArea + " </select></div>";
+                            
                             //<editor-fold defaultstate="collapsed" desc="REPLACE DATA">
                             format = format.replace("XXXCARGOXXX", "<input type='text' class='form-control' name='txt_post' id='' data-toggle='tooltip' data-placement='top' title='' value='' required>")
-                                    .replace("XXXAREAXXX", "<input type='text' class='form-control' name='txt_area' id='' data-toggle='tooltip' data-placement='top' title='' value='' required>")
+                                    .replace("XXXAREAXXX", areaList)
                                     .replace("XXXUBICACIONXXX", "<input type='text' class='form-control' name='txt_location' id='' data-toggle='tooltip' data-placement='top' title='' value='' required>")
                                     .replace("XXXBOSSNAMEXXX", "<input type='text' class='form-control col-lg-2' name='txt_bossname' id='' data-toggle='tooltip' data-placement='top' title='' value='' required>")
                                     .replace("XXXNAMEXXX", "<input type='text' class='form-control col-lg-2' name='txt_name' id='' data-toggle='tooltip' data-placement='top' title='' value='' required>")
                                     .replace("XXXCEDULAXXX", "<input type='text' class='form-control col-lg-2' name='txt_indentity' id='' data-toggle='tooltip' data-placement='top' title='' value='' required>")
                                     .replace("XXXLOCATIONXXX", "<input type='text' class='form-control col-lg-2' name='txt_place' id='' data-toggle='tooltip' data-placement='top' title='' value='' required>")
                                     .replace("XXXUSERPCXXX", "<input type='text' class='form-control col-lg-2' name='txt_user' id='' data-toggle='tooltip' data-placement='top' title='' value='' required>")
-                                    .replace("XXXDIAXXX", "<input type='number' class='form-control col-lg-2' name='txt_day' id='' data-toggle='tooltip' data-placement='top' title='' value='' required>")
-                                    .replace("XXXMESXXX", "<input type='number' class='form-control col-lg-2' name='txt_month' id='' data-toggle='tooltip' data-placement='top' title='' value='' required>")
-                                    .replace("XXXANIOXXX", "<input type='number' class='form-control col-lg-2' name='txt_anio' id='' data-toggle='tooltip' data-placement='top' title='' value='' required>")
+                                    
+                                    .replace("XXXDIAXXX", "<input type='number' class='form-control col-lg-2' name='txt_day' id='' value='" + currentDay + "' required>")
+                                    .replace("XXXMESXXX", "<input type='number' class='form-control col-lg-2' name='txt_month' id='' value='" + currentMonth + "' required>")
+                                    .replace("XXXANIOXXX", "<input type='number' class='form-control col-lg-2' name='txt_anio' id='' value='" + currentYear + "' required>")
+                                    
                                     .replace("XXXCOLUMM1XXX", "<input type='text' class='form-control' name='txt_comm1' id='' data-toggle='tooltip' data-placement='top' title=''  value=''  required >")
                                     .replace("XXXCOLUMM2XXX", "<input type='text' class='form-control' name='txt_comm2' id='' data-toggle='tooltip' data-placement='top' title=''  value=''  required >")
                                     .replace("XXXCOLUMM3XXX", "<input type='text' class='form-control' name='txt_comm3' id='' data-toggle='tooltip' data-placement='top' title=''  value=''  required >")
@@ -1020,8 +1055,8 @@ public class Tag_device extends TagSupport {
                             //<editor-fold defaultstate="collapsed" desc="FORM TO REGISTER">
                             out.print("<form action='Device?opt=7&idDevice=" + idDevice + "&idDeviceHead=" + idDeviceHead + "&type=" + type + "&idTypeDv=" + idTypeDv + "' method='post' class='needs-validation' novalidate='' id='formR03'>");
                             out.print(format);
-                            out.print("<input type='hidden' class='form-control' name='txt_soft' id='infoOculta' >");
                             out.print("<input type='hidden' class='form-control' name='txt_otherItem' id='infoField' >");
+                            out.print("<input type='hidden' class='form-control' name='txt_soft' id='infoOculta' value='" + Installed + "' >");
                             out.print("</form>");
 
                             out.print("<script>\n"

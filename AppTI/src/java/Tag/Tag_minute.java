@@ -451,7 +451,6 @@ public class Tag_minute extends TagSupport {
 //                            + "    toggleClass();"
 //                            + " });"
 //                            + "</script>");
-
                 } else {
                     out.print("<div class='text-center'>");
                     out.print("<h4>Se ha presentado un error al cargar la información.</h4>");
@@ -1021,7 +1020,7 @@ public class Tag_minute extends TagSupport {
                     out.print("<tr class='text-center'>");
                     out.print("<th>Nro Acta</th>");
                     out.print("<th>Asunto</th>");
-                    out.print("<th>Fecha</th>");
+                    out.print("<th style='min-width: 76px;'>Fecha</th>");
                     out.print("<th>Estado</th>");
                     out.print("<th>Registro</th>");
                     out.print("<th>Modifico</th>");
@@ -1034,12 +1033,12 @@ public class Tag_minute extends TagSupport {
                         Object[] ObjMinu = (Object[]) lst_minute.get(i);
                         if (idMinu > 0 && i == 0) {
                             out.print("<tr style='background:#33bf9826;'>");
-                            out.print("<td>" + ObjMinu[0] + " &nbsp; <i class='fas fa-clock' data-toggle='tooltip' data-placement='top' title='Abierto recientemente!'></i> </td>");
+                            out.print("<td class='text-center'>" + ObjMinu[0] + " &nbsp; <i class='fas fa-clock' data-toggle='tooltip' data-placement='top' title='Abierto recientemente!'></i> </td>");
                         } else {
                             out.print("<tr>");
-                            out.print("<td>" + ObjMinu[0] + "</td>");
+                            out.print("<td class='text-center'>" + ObjMinu[0] + "</td>");
                         }
-                        out.print("<td>" + ObjMinu[1] + "</td>");
+                        out.print("<td><a href='#' onclick='window.location.href=\"Minute?opt=1&idMinu=" + ObjMinu[0] + "&event=1\";cargarDatos()'>" + ObjMinu[1] + "</a></td>");
                         out.print("<td>" + ObjMinu[2] + "</td>");
                         String persn = "";
                         String[] minu_pers = ObjMinu[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///");
@@ -1067,15 +1066,15 @@ public class Tag_minute extends TagSupport {
                         }
                         out.print("<td>");
                         out.print("<div class='d-flex' style='justify-content: center;'>");
-                        out.print("<button class='btn btn-info btn-sm mr-2' data-toggle='tooltip' data-placement='top' title='Ver acta' onclick='window.location.href=\"Minute?opt=1&idMinu=" + ObjMinu[0] + "&event=1\";cargarDatos()'><i class=\"fas fa-file\"></i></button>");
 
                         if (counter > 0) {
-                            out.print("<button class='btn btn-secondary btn-sm' data-toggle='tooltip' data-placement='top' title='No se puede editar, ya hay al menos una firma en el acta' disabled><i class='fas fa-edit'></i></button>");
+                            out.print("<button class='btn btn-secondary btn-sm  mr-2' data-toggle='tooltip' data-placement='top' title='No se puede editar, ya hay al menos una firma en el acta' disabled><i class='fas fa-edit'></i></button>");
                         } else {
                             if (txtPermissions.contains("[66]")) {
-                                out.print("<button class='btn btn-warning btn-sm'  onclick='window.location.href=\"Minute?opt=1&idMinu=" + ObjMinu[0] + "\";cargarDatos()'><i class='fas fa-edit'></i></button>");
+                                out.print("<button class='btn btn-warning btn-sm  mr-2'  onclick='window.location.href=\"Minute?opt=1&idMinu=" + ObjMinu[0] + "\";cargarDatos()'><i class='fas fa-edit'></i></button>");
                             }
                         }
+                        out.print("<button class='btn btn-yellow btn-sm' data-toggle='tooltip' data-placement='top' title='Ver acta' onclick='window.location.href=\"Minute?opt=1&idMinu=" + ObjMinu[0] + "&event=1\";cargarDatos()'><i class=\"fas fa-eye\"></i></button>");
 
                         out.print("</div>");
                         out.print("</td>");

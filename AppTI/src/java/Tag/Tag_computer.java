@@ -893,7 +893,7 @@ public class Tag_computer extends TagSupport {
                             out.print("<td><button class=\"btn btn-info\" onclick=\"agregarFila()\"><i class='fas fa-plus'></button></td>");
                             out.print("</tr>");
                             String Installed = "";
-                            lst_setting = SettingJpa.ConsultSettingCategorie("InstalledSoftware003");
+                            lst_setting = SettingJpa.ConsultSettingCategorie("InstalledSoftware003Pc");
                             if (lst_setting != null) {
                                 for (int i = 0; i < lst_setting.size(); i++) {
                                     Object[] ObjSett = (Object[]) lst_setting.get(i);
@@ -961,7 +961,7 @@ public class Tag_computer extends TagSupport {
                             format = format.replace("XXXElaboradorXXX", "<b class='text-warning'>Pendiente Firma</b>");
                             format = format.replace("XXXUsuarioXXX", "<b class='text-warning'>Pendiente Firma</b>");
                             format = format.replace("XXXJefe o DirectorXXX", "<b class='text-warning'>Pendiente Firma</b>");
-//</editor-fold>
+                            //</editor-fold>
 
                             //<editor-fold defaultstate="collapsed" desc="FORM TO REGISTER">
                             out.print("<form action='Computer?opt=7&IdComputer=" + IdComputer + "&idpcHead=" + idPcHead + "&type=" + type + "' method='post' class='needs-validation' novalidate='' id='formR03'>");

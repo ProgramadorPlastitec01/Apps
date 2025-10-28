@@ -279,7 +279,7 @@ public class Tag_start extends TagSupport {
             
             //<editor-fold defaultstate="collapsed" desc="DOCUMENTOS EN PROCESO">
 
-            out.print("<div class=\"col-lg-6\">");
+            out.print("<div class=\"col-lg-6\" style='box-shadow: 0px 1px 13px -1px #afafaf; padding: 15px; border-radius: 5px;'>");
             out.print("<div class=\"card\" id='O' style='display:" + (Module.contains("O") ? "block" : "none") + "'>");
             
             out.print("<div class='text-center'>");
