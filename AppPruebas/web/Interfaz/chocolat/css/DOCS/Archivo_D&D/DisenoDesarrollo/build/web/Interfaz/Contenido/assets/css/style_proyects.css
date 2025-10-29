@@ -1,0 +1,54 @@
+table .mytable_p{
+    width: 54%;
+    margin: 50px auto;
+    border-collapse: collapse;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+th,
+td {
+    padding: 8px;
+    text-align: left;
+}
+.thead {
+    background-color: #cceaff !important;
+}
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip-message {
+    visibility: hidden;
+    width: 200px;
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip-container:hover .tooltip-message {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Tooltip for buttons - displayed above */
+.tooltip-container .tooltip-message {
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100px;
+}
+
+/* Tooltip for listado - displayed below */
+.tooltip-container.listado .tooltip-message {
+    top: -60%;
+    bottom: auto;
+    left: 193%;
+    margin-left: -100px;
+    width: 260%;
+}

@@ -112,35 +112,33 @@
 
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                // Se crean variables que permitirán tener control de permisos y carpetas por usuarios dentro del PHP del gestor.
-                let Rol = document.getElementById("PhpRol").value;
-                let IdUsPhp = document.getElementById("IdPhpUser").value;
-                console.log("Rol obtenido:", Rol);
 
-                // Sobrescribir la etiqueta del botón "Ver servidor" por "Gestor de archivos"
+                // ✅ Obtiene los valores desde los inputs ocultos en el HTML
+                let Rol = document.getElementById("PhpRol") ? document.getElementById("PhpRol").value : "";
+                let IdUsPhp = document.getElementById("IdPhpUser") ? document.getElementById("IdPhpUser").value : "";
+
                 CKEDITOR.on('dialogDefinition', function (ev) {
-                    var dialogName = ev.data.name;
-                    var dialogDefinition = ev.data.definition;
-
+                    const dialogDefinition = ev.data.definition;
                     if (dialogDefinition.getContents('info')) {
-                        var browseButton = dialogDefinition.getContents('info').get('browse');
-                        if (browseButton) {
+                        const browseButton = dialogDefinition.getContents('info').get('browse');
+                        if (browseButton)
                             browseButton.label = 'Gestor de archivos';
-                        }
                     }
                 });
 
-                // Inicializa por ID los editores dentro de un mismo contexto.
                 const editorIDs = ['editorCK', 'editorCK1', 'editorCK2'];
+
                 editorIDs.forEach(function (id) {
-                    let element = document.getElementById(id);
+                    const element = document.getElementById(id);
                     if (element) {
                         CKEDITOR.replace(id, {
+                            // ✅ Incluye el rol e idusuario en las URLs del gestor de archivos
                             filebrowserBrowseUrl: 'http://172.16.2.117/elFinder/elfinder.html?rol=' + Rol + '&idusuario=' + IdUsPhp,
                             filebrowserImageBrowseUrl: 'http://172.16.2.117/elFinder/elfinder.html?type=Images&rol=' + Rol + '&idusuario=' + IdUsPhp,
                             removeDialogTabs: 'link:upload;image:upload',
                             language: 'es',
                             height: 150,
+
                             toolbarGroups: [
                                 {name: 'document', groups: ['mode', 'document', 'doctools']},
                                 {name: 'clipboard', groups: ['clipboard', 'undo']},
@@ -157,21 +155,67 @@
                                 '/',
                                 {name: 'styles', groups: ['styles']}
                             ],
+
                             removeButtons: 'Save,NewPage,Preview,Source,Templates,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,Subscript,Superscript,Blockquote,CreateDiv,BidiLtr,BidiRtl,Anchor,HorizontalRule,SpecialChar,PageBreak,Iframe,ShowBlocks,Language,Styles,About,Font,ExportPdf,Print,Replace',
+
                             on: {
                                 instanceReady: function (evt) {
-                                    var editor = evt.editor;
+                                    const editor = evt.editor;
 
+                                    // ✅ Maneja imágenes pegadas (base64 → subir automáticamente)
                                     editor.on('paste', function (pasteEvt) {
                                         let content = pasteEvt.data.dataValue;
 
-                                        if (content && content.includes('src="data:image/')) {
-                                            pasteEvt.data.dataValue = content.replace(/<img[^>]+src="data:image\/[^">]+"[^>]*>/gi, '');
-                                            iziToast.warning({
-                                                title: 'No se permite copiar y pegar archivos o imagenes!',
-                                                message: 'Por favor suba la archivo o imagen al gestor de archivos.',
-                                                position: 'bottomRight',
-                                                time: 5000
+                                        // Detecta imágenes en base64
+                                        const matches = content.match(/<img[^>]+src="data:image\/[^">]+"[^>]*>/gi);
+                                        if (matches) {
+                                            matches.forEach(function (imgTag) {
+                                                const base64Data = imgTag.match(/src="(data:image\/[^">]+)"/i)[1];
+
+                                                // 🔹 Obtiene variables del JSP
+                                                let Rol = document.getElementById("PhpRol") ? document.getElementById("PhpRol").value : "";
+                                                let IdUsPhp = document.getElementById("IdPhpUser") ? document.getElementById("IdPhpUser").value : "";
+
+                                                // 🔹 Enviar la imagen + datos al servlet
+                                                fetch(`${pageContext.request.contextPath}/UploadPasteImageServlet`, {
+                                                    method: 'POST',
+                                                    body: JSON.stringify({
+                                                        imageData: base64Data,
+                                                        rol: Rol,
+                                                        idusuario: IdUsPhp
+                                                    }),
+                                                    headers: {'Content-Type': 'application/json'}
+                                                })
+                                                        .then(response => response.json())
+                                                        .then(data => {
+                                                            if (data && data.url) {
+                                                                // Reemplaza el base64 por la URL del archivo
+                                                                content = content.replace(base64Data, data.url);
+                                                                pasteEvt.data.dataValue = content;
+                                                                iziToast.success({
+                                                                    title: 'Imagen subida',
+                                                                    message: 'La imagen fue guardada automáticamente.',
+                                                                    position: 'bottomRight',
+                                                                    time: 3000
+                                                                });
+                                                            } else {
+                                                                iziToast.error({
+                                                                    title: 'Error',
+                                                                    message: 'No se pudo subir la imagen.',
+                                                                    position: 'bottomRight'
+                                                                });
+                                                            }
+                                                        })
+                                                        .catch(err => {
+                                                            console.error(err);
+                                                            iziToast.error({
+                                                                title: 'Error',
+                                                                message: 'Ocurrió un problema al subir la imagen.',
+                                                                position: 'bottomRight'
+                                                            });
+                                                        });
+
+                                                pasteEvt.cancel(); // Evita insertar el base64 original
                                             });
                                         }
                                     });
@@ -182,6 +226,7 @@
                 });
             });
         </script>
+
         <!-- Este script escucha los mensajes enviados desde elFinder (por postMessage) -->
         <script>
             window.addEventListener('message', function (event) {
