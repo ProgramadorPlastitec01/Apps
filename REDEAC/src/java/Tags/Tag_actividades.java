@@ -67,7 +67,7 @@ public class Tag_actividades extends TagSupport {
                     lst_actividades = jpa_actividad.consultarActividades(id_usuario, fecha_inicial, fecha_final);
                     lst_plantilla = jpa_actividad.consultarPlantilla(id_rol);
                     Object[] obj_plantilla = (Object[]) lst_plantilla.get(0);
-                    out.print("<div style='float:right'><a href='#' data-toggle=\"modal\" onclick='mostrarConvencion(2)'><i class='fa fa-plus fa-lg' style='color:#292929'></i></a></div>");
+                    out.print("<div style='float:right;'><a href='#' data-toggle=\"modal\" ><i class='fa fa-plus fa-lg' style='color:#c4c4c4; cursor: no-drop;'></i></a></div>");
                     out.print("<h3>Actividad</h3>");
                     if (id_actividad == 0) {
                         //<editor-fold defaultstate="collapsed" desc="Registrar actividad">
@@ -203,7 +203,7 @@ public class Tag_actividades extends TagSupport {
                 } else {
                     //<editor-fold defaultstate="collapsed" desc="ACTIVIDADES EN GENERAL">
                     lst_actividades = jpa_actividad.consultarActividades(id_usuario, fecha_inicial, fecha_final);
-                    out.print("<div style='float:right'><a href='#' data-toggle=\"modal\" onclick='mostrarConvencion(2)'><i class='fa fa-plus fa-lg' style='color:#292929'></i></a></div>");
+                    out.print("<div style='float:right;'><a href='#' data-toggle=\"modal\"><i class='fa fa-plus fa-lg' style='color:#c4c4c4; cursor: no-drop;'></i></a></div>");
                     out.print("<h3>Actividad</h3>");
                     if (id_actividad == 0) {
                         //                        //<editor-fold defaultstate="collapsed" desc="Registrar actividad">
@@ -342,7 +342,7 @@ public class Tag_actividades extends TagSupport {
                         out.print("<tr>");
                         out.print("<td style='width:30%'><b class='title'>Asunto: </b>" + obj_actividades[3] + "</td>");
                         out.print("<td style='width:65%'><b class='title'>Inicio: </b>" + obj_actividades[1] + "&nbsp;|&nbsp;<b class='title'>Fin: </b>" + obj_actividades[2] + "</td>");
-                        out.print("<td style='width:5%' align='center'><a href='Actividad?opc=1&idA=" + obj_actividades[0] + "&mod=Ac' class='icon' title='Modificar'><i class='fa fa-pencil-alt fa-lg'></i></a></td>");
+//                        out.print("<td style='width:5%' align='center'><a href='Actividad?opc=1&idA=" + obj_actividades[0] + "&mod=Ac' class='icon' title='Modificar'><i class='fa fa-pencil-alt fa-lg'></i></a></td>");
                         out.print("</tr>");
                         out.print("<tr>");
                         out.print("<td valign='top' colspan='3'>" + obj_actividades[4] + "</td>");
@@ -372,7 +372,7 @@ public class Tag_actividades extends TagSupport {
                 lst_tipoSpt = jpa_tipoP.consultarTipoSoporteIdRol(id_rol);
                 int documento = Integer.parseInt(pageContext.getRequest().getAttribute("Documento").toString());
                 int codigo = Integer.parseInt(pageContext.getRequest().getAttribute("Codigo").toString());
-                out.print("<div style='float:right'><a href='#' data-toggle=\"modal\" onclick='mostrarConvencion(1)' ><i class='fa fa-plus fa-lg' style='color:#292929'></i></a></div>");
+                out.print("<div style='float:right'><a href='#' data-toggle=\"modal\" ><i class='fa fa-plus fa-lg' style='color:#c4c4c4; cursor: no-drop;'></i></a></div>");
                 out.print("<h3>Actividad Reportante</h3>");
                 if (id_actividad == 0) {
                     if (val == 1) {
@@ -847,7 +847,7 @@ public class Tag_actividades extends TagSupport {
                         out.print("<td style='width:30%'><b class='title'>Area: </b>" + ((obj_actividades[20] == null) ? "N/A" : obj_actividades[20]) + "</td>");
                         out.print("<td style='width:25%'><b class='title'>Tecnico: </b>" + obj_actividades[19] + "</td>");
                         if (id_usuario == (Integer) obj_actividades[14]) {
-                            out.print("<td rowspan='5'style='width:5%' align='center'><a href='Actividad?opc=1&idA=" + obj_actividades[0] + "&mod=AcR' class='icon' title='Modificar'><i class='fa fa-pencil-alt fa-lg'></i></a></td>");
+//                            out.print("<td rowspan='5'style='width:5%' align='center'><a href='Actividad?opc=1&idA=" + obj_actividades[0] + "&mod=AcR' class='icon' title='Modificar'><i class='fa fa-pencil-alt fa-lg'></i></a></td>");
                         } else {
                             out.print("<td rowspan='5' style='width:5%' align='center'><i style='color:#b2b4b7' title='Sin permiso' class='fa fa-pencil-alt fa-lg'></i></td>");
                         }

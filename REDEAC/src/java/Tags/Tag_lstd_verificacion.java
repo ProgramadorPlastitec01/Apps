@@ -56,7 +56,8 @@ public class Tag_lstd_verificacion extends TagSupport {
             if (modulo.equals("LV")) {
                 //<editor-fold defaultstate="collapsed" desc="LISTA DE VERIFICACION">
                 out.print("<h3>Lista de equipos</h3>");
-                out.print("<div><i class='fa fa-plus fa-lg' onclick='mostrarConvencion(8)' style='color:#292929'></i></a></div>");
+                out.print("<div><i class='fa fa-plus fa-lg' style='color:#c4c4c4 !important; cursor: no-drop;'></i></a></div>");
+//                out.print("<div><i class='fa fa-plus fa-lg' onclick='mostrarConvencion(8)' style='color:#292929'></i></a></div>");
                 if (filtro.equals("")) {
                     lsts_tpverificacion = jpa_lstVer.consultaListasTipoVerificacion();
                 } else {
@@ -155,7 +156,8 @@ public class Tag_lstd_verificacion extends TagSupport {
                     } else {
                         out.print("<td>Sin registros</td>");
                     }
-                    out.print("<td align='center'><a href='Lst_verificacion?opc=1&idLV=" + obj_Ver[0] + "&idVR=0&mod=LV&txt_bus='><i class='fa fa-pencil-alt fa-lg' style='color:#292929'></i></a></td>");
+//                    out.print("<td align='center'><a href='Lst_verificacion?opc=1&idLV=" + obj_Ver[0] + "&idVR=0&mod=LV&txt_bus='><i class='fa fa-pencil-alt fa-lg' style='color:#292929'></i></a></td>");
+                    out.print("<td align='center'><a href='#'><i class='fa fa-pencil-alt fa-lg' style='color:#c4c4c4 !important; cursor: no-drop;'></i></a></td>");
                     out.print("<td align='center'><a href='Lst_verificacion?opc=1&idLV=" + obj_Ver[0] + "&idVR=0&mod=LDV&txt_bus='><i class='fa fa-eye fa-lg' style='color:#292929'></i></a></td>");
                     out.print("</tr>");
                 }

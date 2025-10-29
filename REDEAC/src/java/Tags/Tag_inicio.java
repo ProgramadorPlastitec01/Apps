@@ -29,7 +29,7 @@ public class Tag_inicio extends TagSupport {
         }
         try {
 
-            if (id_rol == 8) {
+            if (id_rol == 7) {
                 //<editor-fold defaultstate="collapsed" desc="INICIO DE CONSULTA">
                 out.print("<h3>¡Bienvenido a REDEAC!</h3>");
                 out.print("<br><b class='verde'>Podra consultar los casos reportandos y los casos ya solucionados</b>");

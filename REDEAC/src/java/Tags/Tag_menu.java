@@ -57,7 +57,7 @@ public class Tag_menu extends TagSupport {
             out.print("<li>");
             out.print("<a href='#'><i class=\"fa fa-spell-check\"></i> <span>Pendientes " + ((lst_pendientes != null) ? "<span class='label label-primary pull-right' style='position: absolute; margin-left: 10px; margin-top: 2px;'>" + lst_pendientes.size() + "</span>" : "") + "</span> <i class=\"fa fa-angle-left pull-right\"></i>");
             out.print("<ul class='sidebar-submenu'>");
-            out.print("<li><a href='Pendiente?opc=1&mod=R'><i class=\"fa fa-circle-notch\"></i>Nuevo Pendiente</a></li>");
+//            out.print("<li><a href='Pendiente?opc=1&mod=R'><i class=\"fa fa-circle-notch\"></i>Nuevo Pendiente</a></li>");
             out.print("<li><a href='Pendiente?opc=1&mod=C'><i class=\"fa fa-circle-notch\"></i>Mis Pendientes" + ((lst_pendientes != null) ? "<span class='label label-primary pull-right'>" + lst_pendientes.size() + "</span>" : "") + "</a></li>");
             out.print("<li><a href='Pendiente?opc=1&mod=C_All'><i class=\"fa fa-circle-notch\"></i>Todos los Pendientes</a></li>");
             out.print("<li><a href='Pendiente?opc=1&mod=CS'><i class=\"fa fa-circle-notch\"></i>Pendientes Solucionados</a></li>");
@@ -80,7 +80,7 @@ public class Tag_menu extends TagSupport {
             out.print("<li>");
             out.print("<a href='#'><i class=\"fa fa-book\"></i> <span>Bitacora</span> <i class=\"fa fa-angle-left pull-right\"></i>");
             out.print("<ul class='sidebar-submenu'>");
-            out.print("<li><a href='Bitacora?opc=1&mod=B'><i class=\"fa fa-circle-notch\"></i>Bitacora</a></li>");
+//            out.print("<li><a href='Bitacora?opc=1&mod=B'><i class=\"fa fa-circle-notch\"></i>Bitacora</a></li>");
             out.print("<li><a href='Bitacora?opc=1&mod=BC'><i class=\"fa fa-circle-notch\"></i>Consulta Bitacora</a></li>");
             out.print("</ul>");
             out.print("</li>");

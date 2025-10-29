@@ -79,7 +79,8 @@ public class Tag_detalle_equipos extends TagSupport {
             out.print("<input type='text' name='txt_bus' id='Txt_filtro' class='form-control'  onkeyup='FiltrarDetalleEquipo()'  placeholder='Buscar' onchange='javascript:this.value=this.value.toUpperCase();'>");
             out.print("</div>");
             out.print("<h3>Detalle Equipo</h3><br>");
-            out.print("<a href='#' data-toggle=\"modal\" data-target=\"#Registrar\"><i class='fa fa-plus fa-lg' style='color:#292929'></i></a>");
+//            out.print("<a href='#' data-toggle=\"modal\" data-target=\"#Registrar\"><i class='fa fa-plus fa-lg' style='color:#292929'></i></a>");
+            out.print("<a href='#' ><i class='fa fa-plus fa-lg' style='color:#c4c4c4 !important; cursor: no-drop;'></i></a>");
             //            //<editor-fold defaultstate="collapsed" desc="FILTRO DE BUSQUEDA ESPECIFICO">
             out.print("<div class='sweet-local' tabindex='-1' id='Ventana16' style='opacity: 1.03; display:none;'>");
             out.print("<fieldset class='popup_local scrollbar' id='styleScroll' style='width:535px; height:600px; overflow:scroll; position: absolute;top:0%; left:34%;text-align:left '>");
@@ -734,7 +735,8 @@ public class Tag_detalle_equipos extends TagSupport {
                     Object[] obj_detalle = (Object[]) lst_detalleE.get(i);
                     out.print("<tbody>");
                     out.print("<tr align='center'>");
-                    out.print("<td class='sticky'><a href='Detalle_equipo?opc=1&txt_bus=&idDT=" + obj_detalle[0] + "'><b  style='font-size: 12px;;color:" + (obj_detalle[29].equals("B") ? "green" : (obj_detalle[29].equals("R") ? "orange" : "red")) + "' >" + obj_detalle[2] + "</b></a></td>");
+//                    out.print("<td class='sticky'><a href='Detalle_equipo?opc=1&txt_bus=&idDT=" + obj_detalle[0] + "'><b  style='font-size: 12px;;color:" + (obj_detalle[29].equals("B") ? "green" : (obj_detalle[29].equals("R") ? "orange" : "red")) + "' >" + obj_detalle[2] + "</b></a></td>");
+                    out.print("<td class='sticky'><a href='#'  style='color:#c4c4c4 !important; cursor: no-drop;'><b  style='font-size: 12px;;color:" + (obj_detalle[29].equals("B") ? "green" : (obj_detalle[29].equals("R") ? "orange" : "red")) + "' >" + obj_detalle[2] + "</b></a></td>");
                     out.print("<td>" + obj_detalle[28] + "</td>");
                     out.print("<td>" + obj_detalle[25] + "</td>");
                     out.print("<td>" + obj_detalle[3] + "</td>");

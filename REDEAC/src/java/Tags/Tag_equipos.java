@@ -55,7 +55,8 @@ public class Tag_equipos extends TagSupport {
                 out.print("<div style='float:right;'>");
                 out.print("<form action='Equipo?opc=1&mod=Epo' name='formA' method='post'>");
                 out.print("<div style='display:flex;'>");
-                out.print("<div style='margin:7px;'><a href='#' data-toggle=\"modal\" data-target=\"#Registrar\"><i class='fa fa-plus fa-lg' style='color:#292929'></i></a></div>");
+//                out.print("<div style='margin:7px;'><a href='#' data-toggle=\"modal\" data-target=\"#Registrar\" style='color:#c4c4c4 !important; cursor: no-drop;'><i class='fa fa-plus fa-lg' style='color:#c4c4c4'></i></a></div>");
+                out.print("<div style='margin:7px;'><a href='#' style='color:#c4c4c4 !important; cursor: no-drop;'><i class='fa fa-plus fa-lg' style='color:#c4c4c4'></i></a></div>");
                 out.print("<div><input type='text' id='Txt_filtro' class='form-control' name='txt_bus' onkeyup='Filtrar()' placeholder='Buscar' onchange='javascript:this.value=this.value.toUpperCase();'></div>");
                 out.print("</div>");
                 out.print("</form>");
@@ -421,7 +422,8 @@ public class Tag_equipos extends TagSupport {
                         out.print("<td>" + obj_equipos[3] + "<hr>" + ((obj_equipos[14] == null) ? "N/A" : obj_equipos[14]) + "</td>");
                         out.print("<td>" + obj_equipos[5] + "&nbsp;|&nbsp;<b class='title'>Cargo: </b>" + obj_equipos[6] + "</td>");
                         out.print("<td>" + obj_equipos[11] + "</td>");
-                        out.print("<td align='center'><a href='Equipo?opc=1&mod=Epo&txt_bus=" + filtro + "&idE=" + obj_equipos[0] + "' class='icon' title='Modificar'><i class='fa fa-pencil-alt fa-lg'></i></a></td>");
+//                        out.print("<td align='center'><a href='Equipo?opc=1&mod=Epo&txt_bus=" + filtro + "&idE=" + obj_equipos[0] + "' style='color:#c4c4c4 !important; cursor: no-drop;' class='icon' title='Modificar'><i class='fa fa-pencil-alt fa-lg'></i></a></td>");
+                        out.print("<td align='center'><a href='#' style='color:#c4c4c4 !important; cursor: no-drop;' class='icon' title='Modificar'><i class='fa fa-pencil-alt fa-lg'></i></a></td>");
                         out.print("<td align='center'><a href='Equipo?opc=1&mod=Mvt&txt_bus=" + filtro + "&idE=" + obj_equipos[0] + "' class='icon' title='Movimiento'><i class='fa fa-exchange-alt fa-lg'></i></a></td>");
 //                        out.print("<td align='center'><a href='Equipo?opc=1&mod=Hmt&txt_bus=" + filtro + "&idE=" + obj_equipos[0] + "' class='icon' title='Horometro'><i class='fa fa-history fa-lg'></i></a></td>");
                         out.print("<td align='center'>");
@@ -450,7 +452,7 @@ public class Tag_equipos extends TagSupport {
                 lst_equipo = jpa_equipo.consultaEquipoId(id_equipo);
                 Object[] obj_equipo = (Object[]) lst_equipo.get(0);
                 out.print("<div style='float:right;'>");
-                out.print("<i class='fa fa-plus fa-lg' onclick='mostrarConvencion(14)' style='color:#292929'></i>");
+                out.print("<i class='fa fa-plus fa-lg' style='color:#c4c4c4 !important; cursor: no-drop;'></i>");
                 out.print("</div>");
                 out.print("<a href='Equipo?opc=1&mod=Epo&txt_bus=" + filtro + "'><i class='fa fa-arrow-left fa-lg' style='color:#292929'></i></a>&nbsp;&nbsp;&nbsp;");
                 out.print("<h3>Movimientos " + obj_equipo[1] + "</h3>");
@@ -645,7 +647,8 @@ public class Tag_equipos extends TagSupport {
                         out.print("<td>" + obj_movimientos[3] + "</td>");
                         out.print("<td>" + obj_movimientos[5] + "&nbsp;|&nbsp;<b class='title'>Cargo: </b>" + obj_movimientos[6] + "</td>");
                         out.print("<td>" + obj_movimientos[9] + "</td>");
-                        out.print("<td align='center'><a href='Equipo?opc=1&mod=Mvt&txt_bus=" + filtro + "&idE=" + id_equipo + "&idM=" + obj_movimientos[0] + "' class='icon'><i class='fas fa-pencil-alt fa-lg' ></i></a></td>");
+                        out.print("<td align='center'><a href='#' style='color:#c4c4c4 !important; cursor: no-drop;'class='icon'><i class='fas fa-pencil-alt fa-lg' ></i></a></td>");
+//                        out.print("<td align='center'><a href='Equipo?opc=1&mod=Mvt&txt_bus=" + filtro + "&idE=" + id_equipo + "&idM=" + obj_movimientos[0] + "' class='icon'><i class='fas fa-pencil-alt fa-lg' ></i></a></td>");
                         out.print("</tr>");
                     }
                     out.print("</table>");
@@ -849,7 +852,7 @@ public class Tag_equipos extends TagSupport {
                 out.print("<td valign='top'>" + obj_equipo[8] + "<hr>" + obj_equipo[13] + "</td>");
                 out.print("<td valign='top'>" + obj_equipo[5] + "<hr><b class='title'>Cargo: </b>" + obj_equipo[6] + "</td>");
                 out.print("<td align='center'>" + obj_equipo[11] + "</td>");
-                out.print("<td align='center'><a href='Equipo?opc=1&mod=HVE&txt_bus=" + filtro + "&idE=" + obj_equipo[0] + "&idHV=1' class='icon' title='Agregar'><i class='fas fa-plus fa-lg'></i></a></td>");
+                out.print("<td align='center'><a href='#' class='icon' title='Agregar' style='color:#c4c4c4 !important; cursor: no-drop;'><i class='fas fa-plus fa-lg'></i></a></td>");
                 out.print("</td>");
                 out.print("</tr>");
                 out.print("</table>");
