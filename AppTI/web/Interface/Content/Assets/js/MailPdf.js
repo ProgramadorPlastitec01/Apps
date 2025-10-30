@@ -198,89 +198,117 @@ document.addEventListener('DOMContentLoaded', function () {
             originalContainer.style.display = "none";
             return;
         }
+// 🔧 DESACTIVAR scroll temporalmente para capturar todo
+        const originalStyles = {
+            maxHeight: originalContainer.style.maxHeight,
+            overflowY: originalContainer.style.overflowY
+        };
 
-        html2pdf().from(element).set({
-            margin: [5, 5, 5, 5],
-            filename: 'Acta.pdf',
-            html2canvas: {
-                scale: 2,
-                useCORS: true,
-                allowTaint: true,
-                logging: true,
-                windowWidth: document.body.scrollWidth,
-                windowHeight: document.body.scrollHeight + 300
-            },
-            jsPDF: {unit: 'mm', format: 'a4', orientation: 'portrait', compress: true},
-            pagebreak: {mode: ['avoid-all', 'css', 'legacy']}
-        }).outputPdf('blob').then(function (pdfBlob) {
-            let form = document.getElementById('minuteForm');
-            if (!form) {
-                console.error('No se encontró #minuteForm');
-                document.body.removeChild(alerta);
-                return;
-            }
+// Si la clase tiene max-height en CSS, también lo anulamos con inline-style
+        element.style.maxHeight = 'none';
+        element.style.overflowY = 'visible';
 
-            // ✅ Validar formulario antes de continuar
-            if (!form.checkValidity()) {
-                form.classList.add('was-validated');
-                document.body.removeChild(alerta);
-                iziToast.warning({
-                    title: 'Formulario incompleto',
-                    message: 'Por favor completa todos los campos obligatorios.',
-                    position: 'bottomRight',
-                    timeout: 3000
-                });
-                return;
-            }
+        console.log('Scroll desactivado temporalmente para captura completa');
 
-// Construir FormData
-            let formData = new FormData(form);
+        const totalWidth = Math.max(
+                element.scrollWidth,
+                document.documentElement.scrollWidth,
+                document.body.scrollWidth
+                );
+        const totalHeight = Math.max(
+                element.scrollHeight,
+                document.documentElement.scrollHeight,
+                document.body.scrollHeight
+                );
 
-// Normalizar lista de destinatarios separados por ";"
-            // ✅ Capturar todos los campos destinatario[]
-            let destinatarios = [];
-            form.querySelectorAll("input[name='destinatario[]']").forEach(input => {
-                if (input.value.trim() !== "") {
-                    destinatarios.push(input.value.trim());
-                }
-            });
+        console.log('Tamaño total detectado:', totalWidth, totalHeight);
 
-// Normalizar con ";"
-            formData.set("destinatario", destinatarios.join(";"));
+// Generar PDF con html2pdf ajustado
+        html2pdf()
+                .from(element)
+                .set({
+                    margin: [5, 5, 5, 5],
+                    filename: 'Acta.pdf',
+                    html2canvas: {
+                        scale: 2,
+                        useCORS: true,
+                        allowTaint: true,
+                        scrollY: 0,
+                        logging: true,
+                        windowWidth: totalWidth
+                    },
+                    jsPDF: {
+                        unit: 'mm',
+                        format: 'a4',
+                        orientation: 'portrait',
+                        compress: true
+                    },
+                    pagebreak: {mode: ['avoid-all', 'css', 'legacy']}
+                })
+                .outputPdf('blob')
+                .then(function (pdfBlob) {
+                    let form = document.getElementById('minuteForm');
+                    if (!form) {
+                        console.error('No se encontró #minuteForm');
+                        document.body.removeChild(alerta);
+                        return;
+                    }
 
-
-// Adjuntar PDF
-            formData.append('pdf', pdfBlob, 'Acta.pdf');
-
-// Enviar al servlet
-            fetch('MinuteServlet', {method: 'POST', body: formData})
-                    .then(r => r.text())
-                    .then(res => {
-                        iziToast.success({
-                            title: 'Acta enviada',
-                            message: res,
-                            position: 'topCenter',
+                    if (!form.checkValidity()) {
+                        form.classList.add('was-validated');
+                        document.body.removeChild(alerta);
+                        iziToast.warning({
+                            title: 'Formulario incompleto',
+                            message: 'Por favor completa todos los campos obligatorios.',
+                            position: 'bottomRight',
                             timeout: 3000
                         });
-                        mostrarConvencion(5);
-                    })
-                    .catch(err => console.error('Error enviando PDF:', err))
-                    .finally(() => {
-                        if (document.getElementById('alertaEspera'))
-                            document.body.removeChild(alerta);
-                    });
+                        return;
+                    }
 
-        }).catch(err => {
-            console.error('Error generando PDF:', err);
-            if (document.getElementById('alertaEspera'))
-                iziToast.error({
-                    title: 'Error',
-                    message: 'Hubo un problema enviando del acta.',
-                    position: 'topRight',
-                    timeout: 4000
+                    let formData = new FormData(form);
+                    let destinatarios = [];
+                    form.querySelectorAll("input[name='destinatario[]']").forEach(input => {
+                        if (input.value.trim() !== "")
+                            destinatarios.push(input.value.trim());
+                    });
+                    formData.set("destinatario", destinatarios.join(";"));
+                    formData.append('pdf', pdfBlob, 'Acta.pdf');
+
+                    fetch('MinuteServlet', {method: 'POST', body: formData})
+                            .then(r => r.text())
+                            .then(res => {
+                                iziToast.success({
+                                    title: 'Acta enviada',
+                                    message: res,
+                                    position: 'topCenter',
+                                    timeout: 3000
+                                });
+                                mostrarConvencion(5);
+                            })
+                            .catch(err => console.error('Error enviando PDF:', err))
+                            .finally(() => {
+                                if (document.getElementById('alertaEspera'))
+                                    document.body.removeChild(alerta);
+                            });
+                })
+                .catch(err => {
+                    console.error('Error generando PDF:', err);
+                    if (document.getElementById('alertaEspera'))
+                        iziToast.error({
+                            title: 'Error',
+                            message: 'Hubo un problema generando el acta.',
+                            position: 'topRight',
+                            timeout: 4000
+                        });
+                    alert('Error generando el PDF. Revisa la consola.');
                 });
-            alert('Error generando el PDF. Revisa la consola.');
-        });
+        // 🔧 Restaurar estilos originales del contenedor
+        originalContainer.style.maxHeight = originalStyles.maxHeight;
+        originalContainer.style.overflowY = originalStyles.overflowY;
+
+        console.log('Estilos originales restaurados');
+
     };
 
 });
