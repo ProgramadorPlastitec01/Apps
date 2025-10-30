@@ -322,6 +322,137 @@
             }
 
         </script>
+         <script>
+            document.addEventListener('DOMContentLoaded', function () {
+
+                // ✅ Obtiene los valores desde los inputs ocultos en el HTML
+                let Rol = document.getElementById("PhpRol") ? document.getElementById("PhpRol").value : "";
+                let IdUsPhp = document.getElementById("IdPhpUser") ? document.getElementById("IdPhpUser").value : "";
+
+                CKEDITOR.on('dialogDefinition', function (ev) {
+                    const dialogDefinition = ev.data.definition;
+                    if (dialogDefinition.getContents('info')) {
+                        const browseButton = dialogDefinition.getContents('info').get('browse');
+                        if (browseButton)
+                            browseButton.label = 'Gestor de archivos';
+                    }
+                });
+
+                const editorIDs = ['editorCK', 'editorCK1', 'editorCK2'];
+
+                editorIDs.forEach(function (id) {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        CKEDITOR.replace(id, {
+                            // ✅ Incluye el rol e idusuario en las URLs del gestor de archivos
+                            filebrowserBrowseUrl: 'http://172.16.1.164/elFinder/elfinder.html?rol=' + Rol + '&idusuario=' + IdUsPhp,
+                            filebrowserImageBrowseUrl: 'http://172.16.1.164/elFinder/elfinder.html?type=Images&rol=' + Rol + '&idusuario=' + IdUsPhp,
+                            removeDialogTabs: 'link:upload;image:upload',
+                            language: 'es',
+                            height: 150,
+
+                            toolbarGroups: [
+                                {name: 'document', groups: ['mode', 'document', 'doctools']},
+                                {name: 'clipboard', groups: ['clipboard', 'undo']},
+                                {name: 'editing', groups: ['find', 'selection', 'spellchecker', 'editing']},
+                                {name: 'forms', groups: ['forms']},
+                                {name: 'basicstyles', groups: ['basicstyles', 'cleanup']},
+                                {name: 'paragraph', groups: ['list', 'indent', 'blocks', 'align', 'bidi', 'paragraph']},
+                                {name: 'links', groups: ['links']},
+                                {name: 'colors', groups: ['colors']},
+                                {name: 'insert', groups: ['insert']},
+                                {name: 'tools', groups: ['tools']},
+                                {name: 'others', groups: ['others']},
+                                {name: 'about', groups: ['about']},
+                                '/',
+                                {name: 'styles', groups: ['styles']}
+                            ],
+
+                            removeButtons: 'Save,NewPage,Preview,Source,Templates,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,Subscript,Superscript,Blockquote,CreateDiv,BidiLtr,BidiRtl,Anchor,HorizontalRule,SpecialChar,PageBreak,Iframe,ShowBlocks,Language,Styles,About,Font,ExportPdf,Print,Replace',
+
+                            on: {
+                                instanceReady: function (evt) {
+                                    const editor = evt.editor;
+
+                                    // ✅ Maneja imágenes pegadas (base64 → subir automáticamente)
+                                    editor.on('paste', function (pasteEvt) {
+                                        let content = pasteEvt.data.dataValue;
+
+                                        // Detecta imágenes en base64
+                                        const matches = content.match(/<img[^>]+src="data:image\/[^">]+"[^>]*>/gi);
+                                        if (matches) {
+                                            matches.forEach(function (imgTag) {
+                                                const base64Data = imgTag.match(/src="(data:image\/[^">]+)"/i)[1];
+
+                                                // 🔹 Obtiene variables del JSP
+                                                let Rol = document.getElementById("PhpRol") ? document.getElementById("PhpRol").value : "";
+                                                let IdUsPhp = document.getElementById("IdPhpUser") ? document.getElementById("IdPhpUser").value : "";
+
+                                                // 🔹 Enviar la imagen + datos al servlet
+                                                fetch(window.location.origin + '/AppTI/UploadPasteImageServlet', {
+                                                    method: 'POST',
+                                                    body: JSON.stringify({
+                                                        imageData: base64Data,
+                                                        rol: Rol,
+                                                        idusuario: IdUsPhp
+                                                    }),
+                                                    headers: {'Content-Type': 'application/json'}
+                                                })
+                                                        .then(response => response.json())
+                                                        .then(data => {
+                                                            if (data && data.url) {
+                                                                // ✅ Inserta directamente la imagen con la URL en el cursor actual
+                                                                editor.insertHtml('<img src="' + data.url + '" alt="Imagen pegada" />');
+
+                                                                iziToast.success({
+                                                                    title: 'Imagen subida',
+                                                                    message: 'La imagen fue guardada y agregada correctamente.',
+                                                                    position: 'bottomRight',
+                                                                    timeout: 3000
+                                                                });
+                                                            } else {
+                                                                iziToast.error({
+                                                                    title: 'Error',
+                                                                    message: 'No se pudo subir la imagen.',
+                                                                    position: 'bottomRight'
+                                                                });
+                                                            }
+                                                        })
+                                                        .catch(err => {
+                                                            console.error(err);
+                                                            iziToast.error({
+                                                                title: 'Error',
+                                                                message: 'Ocurrió un problema al subir la imagen.',
+                                                                position: 'bottomRight'
+                                                            });
+                                                        });
+                                                pasteEvt.cancel(); // Evita insertar el base64 original
+                                            });
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+        </script>
+
+        <!-- Este script escucha los mensajes enviados desde elFinder (por postMessage) -->
+        <script>
+            window.addEventListener('message', function (event) {
+                // Recomendado: validar origen si solo aceptas desde elFinder
+                // if (event.origin !== 'http://172.16.2.117') return;
+
+                const data = event.data;
+                if (data && data.funcNum && data.url) {
+                    // Llama la función de CKEditor con la URL recibida
+                    if (typeof CKEDITOR !== 'undefined') {
+                        CKEDITOR.tools.callFunction(data.funcNum, data.url);
+                    }
+                }
+            }, false);
+        </script>
 
         <!--         Page Specific JS File -->
         <script src="Interface/Content/Assets/js/page/index.js"></script>

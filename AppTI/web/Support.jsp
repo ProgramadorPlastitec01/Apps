@@ -62,6 +62,5 @@
         <script src="Interface/Content/Assets/js/page/bootstrap-modal.js"></script>
         <script src="Interface/Content/Assets/modules/select2/dist/js/select2.full.min.js"></script>
         <script src="Interface/Content/Assets/modules/chart.min.js"></script>
-        <!--<script src="Interface/Content/Assets/js/page/modules-chartjs.js"></script>-->
     </body>
 </html>

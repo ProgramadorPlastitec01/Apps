@@ -22,7 +22,7 @@
                     <Alert:Alert/>
         <script>
             function exportarExcel() {
-                fetch('http://localhost:8089/AppTI/DataExport?opt=1') // Llama al Servlet
+                fetch('http://172.16.2.117:8084/AppTI/DataExport?opt=1') // Llama al Servlet
                         .then(response => response.json())
                         .then(data => {
                             if (data.error) {

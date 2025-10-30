@@ -212,15 +212,6 @@
             });
 
         </script>
-        <script type="text/javascript">
-            new FroalaEditor('#editorNext', {
-                Flmngr: {
-                    apiKey: 'z5tCL8YdVd99dhc5MQCNlQlo',
-                    urlFileManager: 'http://172.16.2.117/flmngr/flmngr.php',
-                    urlFiles: 'http://172.16.2.117/flmngr/files/'
-                }
-            });
-        </script>
         <script>
             function uploadFiles() {
                 // Obtener la última fecha de subida del storage

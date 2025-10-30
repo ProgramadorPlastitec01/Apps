@@ -18,7 +18,7 @@ public class UploadPasteImageServlet extends HttpServlet {
         JSONObject jsonResponse = new JSONObject();
 
         try {
-            // 🔹 Leer el cuerpo JSON de la petición
+            // 🔹 Leer el cuerpo JSON enviado por JavaScript
             StringBuilder sb = new StringBuilder();
             try (BufferedReader reader = request.getReader()) {
                 String line;
@@ -28,46 +28,52 @@ public class UploadPasteImageServlet extends HttpServlet {
             }
 
             JSONObject json = new JSONObject(sb.toString());
-            String base64Data = json.optString("imageData", null);
-            String rol = json.optString("rol", "Default");
-            String idusuario = json.optString("idusuario", "0");
+            String base64Data = json.optString("imageData", "");
+            String rol = json.optString("rol", "General");
+            String idUsuario = json.optString("idusuario", "0");
 
-            if (base64Data == null || base64Data.isEmpty()) {
-                throw new Exception("No se recibió imagen base64");
+            if (base64Data.isEmpty()) {
+                throw new Exception("No se recibió imagen en formato Base64");
             }
 
-            // 🔹 Extraer los bytes de la imagen base64
+            // 🔹 Decodificar imagen base64
             base64Data = base64Data.replaceFirst("^data:image/[^;]+;base64,", "");
             byte[] imageBytes = Base64.getDecoder().decode(base64Data);
 
-            // 🔹 Construir ruta física para guardar la imagen
-            String uploadDir = getServletContext().getRealPath(
-                "/elFinder/files/Usuarios/" + idusuario + "/"
-            );
+            // 🔹 Construir ruta física para guardar la imagen (por usuario)
+            // 🔹 Guardar directamente en la carpeta de elFinder de XAMPP
+            // 🔹 Nueva ruta: dentro de /Usuarios/<id>/ImagenesCapturadas
+            String uploadDir = "C:\\xampp\\htdocs\\elFinder\\files\\Usuarios\\" + idUsuario + "\\ImagenesCapturadas\\";
 
             File dir = new File(uploadDir);
-            if (!dir.exists()) {
-                dir.mkdirs(); // crea carpeta si no existe
+            if (!dir.exists() && !dir.mkdirs()) {
+                throw new IOException("No se pudo crear el directorio: " + uploadDir);
             }
 
             // 🔹 Crear nombre único de archivo
             String fileName = "img_" + System.currentTimeMillis() + ".png";
             File file = new File(dir, fileName);
 
+            // 🔹 Guardar el archivo físicamente
             try (OutputStream os = new FileOutputStream(file)) {
                 os.write(imageBytes);
             }
 
-            // 🔹 Construir URL pública (para mostrar en el editor)
-            String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-                    + request.getContextPath() + "/elFinder/files/Usuarios/" + idusuario + "/" + fileName;
+            // 🔹 Construir URL pública accesible desde el editor
+            String fileUrl = "http://172.16.1.164/elFinder/files/Usuarios/"
+                    + idUsuario + "/ImagenesCapturadas/" + fileName;
 
+            // 🔹 Armar respuesta JSON
             jsonResponse.put("status", "success");
-            jsonResponse.put("url", baseUrl);
+            jsonResponse.put("url", fileUrl);
+            jsonResponse.put("rol", rol);
+            jsonResponse.put("usuario", idUsuario);
+            jsonResponse.put("path", uploadDir);
 
-            // 🔹 Log de depuración
-            System.out.println("✅ Imagen guardada en: " + file.getAbsolutePath());
-            System.out.println("🌐 URL pública: " + baseUrl);
+            // 🔹 Log para depuración
+            System.out.println("Imagen guardada correctamente:");
+            System.out.println("Ruta local: " + file.getAbsolutePath());
+            System.out.println("URL pública: " + fileUrl);
 
         } catch (Exception ex) {
             jsonResponse.put("status", "error");
@@ -77,6 +83,7 @@ public class UploadPasteImageServlet extends HttpServlet {
 
         try (PrintWriter out = response.getWriter()) {
             out.print(jsonResponse.toString());
+            out.flush();
         }
     }
 }
