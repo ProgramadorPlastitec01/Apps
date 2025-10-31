@@ -6,7 +6,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Menu</title>
-        
+
         <!-- General CSS Files -->
         <link rel="stylesheet" href="Interface/Content/Assets/modules/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="Interface/Content/Assets/modules/fontawesome/css/all.min.css">
@@ -22,7 +22,7 @@
         <link rel="stylesheet" href="Interface/Content/Assets/modules/bootstrap-daterangepicker/daterangepicker.css">
         <link rel="stylesheet" href="Interface/Content/Assets/modules/select2/dist/css/select2.min.css">
         <link rel="stylesheet" href="Interface/Content/Assets/css/appDetail.css">
-        
+
         <!-- Datepicker CSS -->
         <link rel="stylesheet" type="text/css" media="all" href="Interface/Content/Assets/rangeCalendar/daterangepicker.css" />
         <!-- Template CSS -->
@@ -51,8 +51,6 @@
 
         <!-- Editores -->
         <link rel="stylesheet" href="Interface/Editor/samples/toolbarconfigurator/lib/codemirror/neo.css">
-        <script src="Interface/Editor/ckeditor.js"></script>
-
         <!-- End Editor -->
 
         <script>
@@ -89,6 +87,7 @@
         </script>
 
         <script src="Interface/Content/Assets/modules/jquery.min.js"></script>
+        <script src="Interface/Content/Assets/modules/izitoast/js/iziToast.min.js"></script>
         <script src="Interface/Content/Assets/modules/moment.min.js"></script>
         <script type="text/javascript" src="Interface/Content/Assets/rangeCalendar/daterangepicker.js"></script>
 

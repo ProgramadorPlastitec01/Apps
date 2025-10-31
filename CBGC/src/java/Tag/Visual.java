@@ -87,7 +87,6 @@ public class Visual extends TagSupport {
             }
             //</editor-fold>
             out.print("<section class='section'>");
-
             if (IdCertificates > 0) {
                 //<editor-fold defaultstate="collapsed" desc="CONSULT DATA REGISTER">
                 lst_content = CertificatesJpa.ConsultCertificatesIdHtml(IdCertificates);
@@ -109,6 +108,15 @@ public class Visual extends TagSupport {
                     //</editor-fold>
                 } else {
                     //<editor-fold defaultstate="collapsed" desc="VALIDATION NEW">
+                    out.print("<script>");
+                    out.print("$(document).ready(function() {\n"
+                            + "    iziToast.success({\n"
+                            + "        title: '¡Correcto!',\n"
+                            + "        message: 'Se generó el certificado correctamente, favor verificar.',\n"
+                            + "        position: 'bottomRight'\n"
+                            + "    });\n"
+                            + "});");
+                    out.print("</script>");
                     Html = Obj_Format[4].toString();
                     State = 99;
                     //</editor-fold>

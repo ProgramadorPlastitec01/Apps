@@ -130,7 +130,7 @@ public class Generate extends HttpServlet {
                         //<editor-fold defaultstate="collapsed" desc="UPDATE">
                         result = CertificatesJpa.CertificatesUpdate(IdCertificates, Consecutive, Html);
                         if (result) {
-
+                            request.setAttribute("UpdateCertificate", result);
                         }
                         request.getRequestDispatcher("Generate?opt=2&Type=" + Type + "&IdCertificates=" + IdCertificates)
                                 .forward(request, response);
@@ -178,6 +178,7 @@ public class Generate extends HttpServlet {
                                     IdCertificates = 0;
                                 }
                             }
+                            request.setAttribute("RegisterCertificates", result);
                         }
                         request.getRequestDispatcher("Generate?opt=2&Type=" + Type + "&Order=" + Order + "&Product=" + Product + "&Batch=" + Batch + "&FormatName=" + FormatName + "&IdCertificates=" + IdCertificates)
                                 .forward(request, response);
@@ -207,8 +208,10 @@ public class Generate extends HttpServlet {
                                 result = CertificatesJpa.CertificatesUpdateSignature(IdCertificates, ArgSign[0]);
                             }
                             if (result) {
+                                request.setAttribute("UpdateCertificate", result);
                             }
                         }
+
                     } else {
                         request.setAttribute("UnauthorizedSignature", true);
                     }
@@ -234,7 +237,7 @@ public class Generate extends HttpServlet {
                     }
                     result = CertificatesJpa.DeleteCertificate(IdCertificates, Justification);
                     if (result) {
-
+                        request.setAttribute("DeleteCertificates", result);
                     }
                     request.getRequestDispatcher("Generate?opt=1&Type=" + Type).forward(request, response);
                     //</editor-fold>

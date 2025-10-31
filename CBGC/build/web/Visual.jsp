@@ -1,16 +1,21 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="/WEB-INF/tlds/visual"  prefix="Visual" %>
+<%@taglib uri="/WEB-INF/tlds/alert" prefix="Alert" %>
+
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
+        <link rel="stylesheet" href="Interface/Content/Assets/modules/izitoast/css/iziToast.min.css">
+
     </head>
     <body>
         <jsp:include page="Menu.jsp"></jsp:include>
             <div class="main-content" style="min-height: 694px;">
             <Visual:Visual/>
+            <Alert:Alert/>
         </div>
         <script>
             document.querySelectorAll('.editable').forEach(el => {

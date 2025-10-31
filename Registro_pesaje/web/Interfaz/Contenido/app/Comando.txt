@@ -1,0 +1,11 @@
+
+
+
+
+
+
+
+Arranque
+Detener
+Velocidad 100 piezas antes de completar la unidad de empaque
+T Arranque temporizado

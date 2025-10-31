@@ -1,0 +1,9 @@
+\\172.16.1.164\d$\PROG\LANZAMIENTO APLICATIVOS\REGISTRO_PESAJE\NEW_PESAJE\Registro_pesaje\web\Interfaz\Contenido\app\Bascula_1.txt
+7
+S
+
+Primera linea es la ruta del archivo
+Segunda linea es el puerto serial que se abre
+Tercera linea es "S" o "N" para indicar si se debe abrir el puerto automaticamente al ejecutar
+Cuarta linea es el archivo donde pondremo hacia la banda
+
