@@ -71,7 +71,7 @@ public class Tag_registro extends TagSupport {
                 int id_programacion = Integer.parseInt(pageContext.getRequest().getAttribute("id_programacion").toString());
                 int id_seguimiento = Integer.parseInt(pageContext.getRequest().getAttribute("id_seguimiento").toString());
                 out.print("<div style='float:right;'>");
-                out.print("<a href='#' data-toggle='modal' data-target='#Registrar'><i class='fa fa-plus fa-lg' style='color:#292929'></i></a>&nbsp;&nbsp;&nbsp;");
+                out.print("<a href='#'><i class='fa fa-plus fa-lg' style='color:#c4c4c4 !important; cursor: no-drop;'></i></a>&nbsp;&nbsp;&nbsp;");
                 out.print("</div>");
                 out.print("<h3>R-TI-005</h3>");
                 if (id_seguimiento == 0) {
@@ -250,7 +250,7 @@ public class Tag_registro extends TagSupport {
                     out.print("<div style='width: 100%; height:83%; max-width: 100%; max-height:87%; overflow:auto'>");
                     out.print("<table class='table' id='resultados'>");
                     out.print("<tr>");
-                    out.print("<th class='sticky4' >Actividad</th>");
+                    out.print("<th class='sticky4'>Actividad</th>");
                     out.print("<th class='sticky4'>Semana</th>");
                     out.print("<th class='sticky4'>Fecha</th>");
                     out.print("<th class='sticky4'>Usuario</th>");
@@ -334,7 +334,7 @@ public class Tag_registro extends TagSupport {
                                 out.print("<tr>");
                                 out.print("<td>" + equipos[0] + "</td>");
                                 out.print("<td>" + obj_seguimientoE[9] + "</td>");
-                                out.print("<td " + ((obj_seguimientosE[2] != null) ? ">" + obj_seguimientosE[2] + "" : "align='center'><a href='#' onclick='ejecutar(" + obj_seguimientosE[0] + "," + id_programacion + ")' ><b class='naranja'>Ejecutar</a></b>") + ""
+                                out.print("<td " + ((obj_seguimientosE[2] != null) ? ">" + obj_seguimientosE[2] + "" : "align='center'><a href='#' style='color:#c4c4c4 !important; cursor: no-drop;'><b class='naranja'>Ejecutar</a></b>") + ""
                                         + "<br />" + ((obj_seguimientosE[3] != null) ? "<b class='verde'>Ejecutado</b>" : "<b class='naranja'>En Proceso</b>") + "</td>");
                                 if (id_rol == 3 || id_rol == 4 || id_rol == 1) {
                                     out.print("<center><td align='center'>" + ((obj_seguimientosE[3] != null) ? "<input class='td_fecha form-control' type='text' id='" + obj_seguimientosE[0] + "' value='" + obj_seguimientosE[3] + "'>" : "---") + "</td></center>");
@@ -349,15 +349,15 @@ public class Tag_registro extends TagSupport {
                                 if (obj_seguimientosE[4] != null) {
                                     if (id_rol == 4 || id_rol == 1 || id_rol == 3) {
                                         out.print("<td colspan='2'><div style='display:flex;align-items: flex-end;'><div>" + ((obj_seguimientosE[5] != null) ? "" + obj_seguimientosE[5] + "<br><input class='td_responsableV form-control' type='text'  id='" + obj_seguimientosE[0] + "' value='" + obj_seguimientosE[7] + "'></div>"
-                                                + "<div><input class='td_fechaV form-control' type='text' id='" + obj_seguimientosE[0] + "' value='" + obj_seguimientosE[6] + "'>" + "" : "" + ((obj_seguimientosE[3] != null) ? "<a href='#' onclick='verificar(" + obj_seguimientosE[0] + "," + id_programacion + ")' ><b class='naranja'>Verificar</a>" : "<b class='naranja'>Verificar</b>") + "") + "</div></div></td>");
+                                                + "<div><input class='td_fechaV form-control' type='text' id='" + obj_seguimientosE[0] + "' value='" + obj_seguimientosE[6] + "'>" + "" : "" + ((obj_seguimientosE[3] != null) ? "<a href='#' style='color:#c4c4c4 !important; cursor: no-drop;'><b class='naranja'>Verificar</a>" : "<b class='naranja'>Verificar</b>") + "") + "</div></div></td>");
                                     } else {
-                                        out.print("<td colspan='2'>" + ((obj_seguimientosE[5] != null) ? "" + obj_seguimientosE[5] + "<br>" + obj_seguimientosE[7] + "-" + obj_seguimientosE[6] + "" : "" + ((obj_seguimientosE[3] != null) ? "<a href='#' onclick='verificar(" + obj_seguimientosE[0] + "," + id_programacion + ")' ><b class='naranja'>Verificar</a>" : "<b class='naranja'>Verificar</b>") + "") + "</td>");
+                                        out.print("<td colspan='2'>" + ((obj_seguimientosE[5] != null) ? "" + obj_seguimientosE[5] + "<br>" + obj_seguimientosE[7] + "-" + obj_seguimientosE[6] + "" : "" + ((obj_seguimientosE[3] != null) ? "<a href='#' style='color:#c4c4c4 !important; cursor: no-drop;'><b class='naranja'>Verificar</a>" : "<b class='naranja'>Verificar</b>") + "") + "</td>");
                                     }
                                 } else {
                                     out.print("<td " + ((obj_seguimientosE[4] != null) ? " colspan='2' style='width:50%'" : "") + "" + ((obj_seguimientosE[5] != null) ? ">" + obj_seguimientosE[5] + "<hr>" + obj_seguimientosE[7] + "-" + obj_seguimientosE[6] : " align='center'><b class='naranja'>En proceso</b>") + "</td>");
                                 }
                                 if (obj_seguimientosE[3] == null) {
-                                    out.print("<td align='center'><a href='#' onclick='EliminarE(" + obj_seguimientosE[0] + "," + id_programacion + ")' style='color:#292929'><i class='far fa-trash-alt fa-lg'></i></a></td>");
+                                    out.print("<td align='center'><a href='#' style='color:#c4c4c4 !important; cursor: no-drop;'><i class='far fa-trash-alt fa-lg'></i></a></td>");
                                 }
                                 out.print("</tr>");
                             }
@@ -736,9 +736,9 @@ public class Tag_registro extends TagSupport {
                             }
                         } else {
                             if (obj_regp[4] == null || obj_regp[4].toString().equals("")) {
-                                btn_ag = "<button class='btn_regAc' onclick='mostrarConvencion(21)' style='height: 25px;width: 60px;'><i class='fas fa-plus'></i></button>";
+                                btn_ag = "<button class='btn_regAc' onclick='' style='height: 25px;width: 60px;'><i class='fas fa-plus' style='color:#c4c4c4 !important; cursor: no-drop;'></i></button>";
                             } else {
-                                btn_ag = "<button class='btn_regAc' onclick='mostrarConvencion(22)' style='height: 25px;width: 60px;'><i class='fas fa-pen'></i></button>";
+                                btn_ag = "<button class='btn_regAc' onclick='' style='height: 25px;width: 60px;'><i class='fas fa-pen' style='color:#c4c4c4 !important; cursor: no-drop;'></i></button>";
                             }
                         }
                         String reg = obj_regp[5].toString()
@@ -749,7 +749,7 @@ public class Tag_registro extends TagSupport {
                                 .replace("XXFIRMAXX", " - ")
                                 .replace("<textarea disabled", "<textarea id='editor'")
                                 .replace("<input disabled", "<input type='text' class='form-control'")
-                                .replace("<input name=\"XXIDXX\"", "<input name='idRA' value=" + obj_regp[0] + "");
+                                .replace("<input name=\"XXIDXX\"", "<input name='idRA' value=" + obj_regp[0] + " disabled");
 
                         if ((Integer) obj_regp[11] != id_rol) {
                             reg = reg.replace("button type='submit'", "button type='button' style='cursor: no-drop;' title='No tiene permiso de editar este registro'");
@@ -813,7 +813,8 @@ public class Tag_registro extends TagSupport {
                             reg = reg.replace("**", "")
                                     .replace("id='asis' rowspan='2'", "id='asis' rowspan='2'");
                         }
-
+                        reg = reg.replace("id=\"editor\"", "id=\"editor\" disabled ");
+                        reg = reg.replace("type=\"submit\" class=\"btn_regAct\"", "type=\"button\" class=\"btn_regAct\" disabled style='color:#c4c4c4 !important; cursor: no-drop;' ");
                         out.print("" + reg + "");
                         out.print("</div>");
                         out.print("</div>");
@@ -833,12 +834,13 @@ public class Tag_registro extends TagSupport {
                 } else {
                     //<editor-fold defaultstate="collapsed" desc="CONSULTA PRINCIPAL">
                     out.print("<div style='float:right;'>");
-                    out.print("<form action='Registro?opc=1&mod=ACTA' name='formA' method='post'>");
+//                    out.print("<form action='Registro?opc=1&mod=ACTA' name='formA' method='post'>");
                     out.print("<div style='display: flex;align-items: center;'>");
-                    out.print("<a href='#' data-toggle='modal' data-target='#Registrar'><i class='fa fa-plus fa-lg' style='color:#292929'></i></a>&nbsp;&nbsp;&nbsp;");
+//                    out.print("<a href='#' data-toggle='modal' data-target='#Registrar'><i class='fa fa-plus fa-lg' style='color:#292929'></i></a>&nbsp;&nbsp;&nbsp;");
+                    out.print("<a href='#'><i class='fa fa-plus fa-lg' style='color:#c4c4c4 !important; cursor: no-drop;'></i></a>&nbsp;&nbsp;&nbsp;");
                     out.print("<input type='text' class='form-control' name='Txt_filtro' id='Txt_filtro' placeholder='Buscar' onkeyup='Filtrar()' onchange='javascript:this.value=this.value.toUpperCase();'>");
                     out.print("</div>");
-                    out.print("</form>");
+//                    out.print("</form>");
                     out.print("</div>");
                     out.print("<h3>ACTAS</h3>");
                     if (id_acta == 0) {
@@ -1181,7 +1183,7 @@ public class Tag_registro extends TagSupport {
                                 out.print("<td align='center'><a href='Registro?opc=1&mod=ACTA&txt_filtro=&idRP=" + obj_acta[0] + "' title='No tiene permiso para editar este registro' style='cursor:no-drop;'><i class='fa fa-pencil-alt fa-lg' style='color:#c8c8c8; width: 10.5px; heigth:11px;' ></i></a></td>");
                                 out.print("<td align='center'><a href='Registro?opc=1&mod=ACTA&txt_filtro=&idRP=" + obj_acta[0] + "' title='Ingresar a firmar documento' style='font-size: 20px;'><i class='fas fa-file-signature' style='color:#292929; width: 10.5px; heigth:11px;' ></i></a></td>");
                             } else {
-                                out.print("<td align='center'><a href='Registro?opc=1&mod=ACTA&txt_filtro&idRA=" + obj_acta[0] + "' title='Editar cabecera del acta'><i class='fa fa-pencil-alt fa-lg' style='color:#292929; width: 10.5px; heigth:11px;' ></i></a></td>");
+                                out.print("<td align='center'><a href='#' title='Editar cabecera del acta'><i class='fa fa-pencil-alt fa-lg' style='color:#c4c4c4 !important; cursor: no-drop; width: 10.5px; heigth:11px;' ></i></a></td>");
                                 out.print("<td align='center'><a href='Registro?opc=1&mod=ACTA&txt_filtro=&idRP=" + obj_acta[0] + "' title='Editar contenido del acta' style='font-size: 20px;'><i class='fas fa-file-signature' style='color:#292929; width: 10.5px; heigth:11px;' ></i></a></td>");
                             }
 
@@ -1301,7 +1303,7 @@ public class Tag_registro extends TagSupport {
                 out.print("</fieldset>");
                 out.print("</div>");
                 //</editor-fold>
-                out.print("<div style='float:right'><i class='fa fa-plus fa-lg' onclick='mostrarConvencion(12)' style='color:#292929'></i></div>");
+                out.print("<div style='float:right'><i class='fa fa-plus fa-lg' style='color:#c4c4c4 !important; cursor: no-drop;'></i></div>");
                 out.print("<h3>R-TI-017</h3>");
                 out.print("<form action='Registro?opc=1&idD=0&mod=R017&txt_fechaI=&txt_fechaF=' name='formFiltro' method='post'>"
                         + "<div style='display:flex;justify-content: space-between;align-items: flex-end;'>"
@@ -1442,7 +1444,7 @@ public class Tag_registro extends TagSupport {
                 String[] mes = meses.split(",");
                 out.print("<div style='float:right;'>");
                 out.print("<form action='Registro?opc=1&mod=R026' name='formF' id='formF' method='post'>");
-                out.print("<a href='#' data-toggle='modal' data-target='#Registrar'><i class='fa fa-plus fa-lg' style='color:#292929'></i></a>&nbsp;&nbsp;&nbsp;");
+                out.print("<a href='#' ><i class='fa fa-plus fa-lg' style='color:#c4c4c4 !important; cursor: no-drop;'></i></a>&nbsp;&nbsp;&nbsp;");
                 out.print("<select name='txt_bus' id='filtro-id' onchange=\"this.form.submit()\">");
                 out.print("<option value='' style='display:none'>" + ((anio != 0) ? anio : "Seleccione Año") + "</option>");
                 for (int i = 0; i < lst_anios.size(); i++) {
@@ -1742,7 +1744,7 @@ public class Tag_registro extends TagSupport {
                                 }
                                 out.print("</td>");
                                 //</editor-fold>
-                                out.print("<center><td align='center'><input class='td_fechaVe form-control' type='text2' id='" + obj_cronograma[0] + "' value='" + obj_cronograma[10].toString().split(" ")[0] + "'></td></center>");
+                                out.print("<center><td align='center'><input class='td_fechaVe form-control' type='text2' id='" + obj_cronograma[0] + "' value='" + obj_cronograma[10].toString().split(" ")[0] + "' disabled></td></center>");
 //                                out.print("<td align='center'>" + obj_cronograma[10].toString().split(" ")[0] + "</td>");
                             } else {
                                 if (id_rol == 5) {
@@ -1874,7 +1876,7 @@ public class Tag_registro extends TagSupport {
                                 }
                                 out.print("</td>");
                                 //</editor-fold>
-                                out.print("<center><td align='center'><input class='td_fechaVe form-control' type='text' id='" + obj_cronograma[0] + "' value='" + obj_cronograma[10].toString().split(" ")[0] + "'></td></center>");
+                                out.print("<center><td align='center'><input class='td_fechaVe form-control' type='text' id='" + obj_cronograma[0] + "' value='" + obj_cronograma[10].toString().split(" ")[0] + "' disabled></td></center>");
                             } else {
                                 if (id_rol == 3) {
                                     out.print("<td align='center'><a href='Registro?opc=8&idC=" + obj_cronograma[0] + "&tipo=2'>Verificar</a></td>");
@@ -2009,7 +2011,7 @@ public class Tag_registro extends TagSupport {
                                 }
                                 out.print("</td>");
                                 //</editor-fold>
-                                out.print("<center><td align='center'><input class='td_fechaVe form-control' type='text2' id='" + obj_cronograma[0] + "' value='" + obj_cronograma[10].toString().split(" ")[0] + "'></td></center>");
+                                out.print("<center><td align='center'><input class='td_fechaVe form-control' type='text2' id='" + obj_cronograma[0] + "' value='" + obj_cronograma[10].toString().split(" ")[0] + "' disabled></td></center>");
 //                                out.print("<td align='center'>" + obj_cronograma[10].toString().split(" ")[0] + "</td>");
                             } else {
                                 if (id_rol == 5) {

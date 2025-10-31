@@ -179,7 +179,7 @@ public class Tag_lstd_verificacion extends TagSupport {
                     lsts_verificacion = jpa_lstVer.consultaListaDetalleVerificacionIFiltro(id_lstVer, filtro);
                 }
                 out.print("<div style='float:left'><i class='fa fa-arrow-left fa-lg' onclick='Volver()' style='color:#292929'></i></i></div>"
-                        + "<div style='float:right'><i class='fa fa-plus fa-lg' onclick='mostrarConvencion(10)' style='color:#292929'></i></div>");
+                        + "<div style='float:right'><i class='fa fa-plus fa-lg' style='color:#c4c4c4 !important; cursor: no-drop;'></i></div>");
                 if (lsts_verificacion != null) {
                     Object[] obj_lver = (Object[]) lsts_verificacion.get(0);
                     out.print("&nbsp;&nbsp;<h3>Listado de " + obj_lver[12] + "</h3>");
@@ -341,7 +341,8 @@ public class Tag_lstd_verificacion extends TagSupport {
                         } else {
                             out.print("<b class='rojo'>Dañado</b>");
                         }
-                        out.print("<td align='center'><a href='Lst_verificacion?opc=1&idLV=" + id_lstVer + "&idVR=" + obj_lstVer[0] + "&idHV=0&mod=LDV&txt_bus='><i class='fa fa-pencil-alt fa-lg' style='color:#292929'></i></a></td>");
+//                        out.print("<td align='center'><a href='Lst_verificacion?opc=1&idLV=" + id_lstVer + "&idVR=" + obj_lstVer[0] + "&idHV=0&mod=LDV&txt_bus='><i class='fa fa-pencil-alt fa-lg' style='color:#292929'></i></a></td>");
+                        out.print("<td align='center'><a href='#'><i class='fa fa-pencil-alt fa-lg' style='color:#c4c4c4 !important; cursor: no-drop;'></i></a></td>");
                         out.print("<td align='center'><a href='Lst_verificacion?opc=1&idLV=" + id_lstVer + "&idVR=" + obj_lstVer[0] + "&idHV=0&mod=MLV&txt_bus='><i class='fa fa-exchange-alt fa-lg' style='color:#292929'></i></a></td>");
                         out.print("<td align='center'><a href='Lst_verificacion?opc=1&idLV=" + id_lstVer + "&idVR=" + obj_lstVer[0] + "&idHV=0&mod=HVV&txt_bus='><i class='far fa-folder-open fa-lg' style='color:#292929'></i></a></td>");
                         out.print("<td align='center'><a href='Lst_verificacion?opc=1&idLV=" + id_lstVer + "&idVR=" + obj_lstVer[0] + "&mod=HLV&txt_bus='><i class='fa fa-heading fa-lg' style='color:#292929'></i></a></td>");
@@ -461,8 +462,7 @@ public class Tag_lstd_verificacion extends TagSupport {
                 //<editor-fold defaultstate="collapsed" desc="CONSULTA">
                 lst_verificacion = jpa_lstVer.consultaEquipoHojaVerificacion(id_verificacion);
                 Object[] obj_equipo = (Object[]) lst_verificacion.get(0);
-                out.print("<a href='Lst_verificacion?opc=1&idLV=" + id_lstVer + "&idLVR=0&mod=LDV&txt_bus='><i class='fa fa-arrow-left fa-lg' style='color:#292929'></i></a>&nbsp;&nbsp;&nbsp;");
-//                out.print("<a href='Lst_verificacion?opc=1&idLV=" + id_lstVer + "&idLVR=" + id_verificacion + "&mod=LDV&idH=1&txt_bus='><i class='fa fa-arrow-left fa-lg' style='color:#292929'></i></a>&nbsp;&nbsp;&nbsp;");
+                out.print("<a href='Lst_verificacion?opc=1&idLV=" + id_lstVer + "&idLVR=" + id_verificacion + "&mod=LDV&idH=1&txt_bus='><i class='fa fa-arrow-left fa-lg' style='color:#292929'></i></a>&nbsp;&nbsp;&nbsp;");
                 out.print("<h3>Hoja de Vida " + obj_equipo[3] + "</h3>");
                 out.print("<table class='table' id='resultados'>");
                 out.print("<tr>");
@@ -493,7 +493,8 @@ public class Tag_lstd_verificacion extends TagSupport {
                     out.print("<b class='rojo'>Dañado</b>");
                 }
                 out.print("</td>");
-                out.print("<td align='center'><a href='Lst_verificacion?opc=1&idLV=" + id_lstVer + "&idVR=" + id_verificacion + "&idHV=1&mod=HVV&txt_bus=' style='color:black;'><i class='fas fa-plus fa-lg' title='Agregar'></i></a></td>");
+                out.print("<td align='center'><a href='#' style='color:black;'><i class='fas fa-plus fa-lg' title='Agregar' style='color:#c4c4c4 !important; cursor: no-drop;'></i></a></td>");
+//                out.print("<td align='center'><a href='Lst_verificacion?opc=1&idLV=" + id_lstVer + "&idVR=" + id_verificacion + "&idHV=1&mod=HVV&txt_bus=' style='color:black;'><i class='fas fa-plus fa-lg' title='Agregar'></i></a></td>");
                 out.print("</tr>");
                 out.print("</table>");
                 //</editor-fold>
@@ -836,7 +837,7 @@ public class Tag_lstd_verificacion extends TagSupport {
                     //</editor-fold>
                 }
                 out.print("<div style='float:left'><a href='Lst_verificacion?opc=1&idLV=" + id_lstVer + "&idLVR=0&mod=LDV&txt_bus=' style='color:black'><i class='fa fa-arrow-left fa-lg' style='color:#292929'></i></a></div>"
-                        + "<div style='float:right'><i class='fa fa-plus fa-lg' onclick='mostrarConvencion(11)' style='color:#292929'></i></a></div>");
+                        + "<div style='float:right'><i class='fa fa-plus fa-lg' style='color:#c4c4c4 !important; cursor: no-drop;'></i></a></div>");
                 if (lst_movimiento != null) {
                     Object[] obj_logVer = (Object[]) lst_movimiento.get(0);
                     out.print("&nbsp;&nbsp;<h3>Movimiento de " + obj_logVer[15] + "</h3>");
@@ -881,7 +882,8 @@ public class Tag_lstd_verificacion extends TagSupport {
                         } else {
                             out.print("<b class='rojo'>Dañado</b>");
                         }
-                        out.print("<td align='center'><a href='Lst_verificacion?opc=1&idLV=" + id_lstVer + "&idVR=" + id_verificacion + "&idM=" + obj_EqMov[0] + "&mod=MLV&txt_bus='><i class='fa fa-pencil-alt fa-lg' style='color:#292929'></i></a></td>");
+//                        out.print("<td align='center'><a href='Lst_verificacion?opc=1&idLV=" + id_lstVer + "&idVR=" + id_verificacion + "&idM=" + obj_EqMov[0] + "&mod=MLV&txt_bus='><i class='fa fa-pencil-alt fa-lg' style='color:#292929'></i></a></td>");
+                        out.print("<td align='center'><a href='#'><i class='fa fa-pencil-alt fa-lg' style='color:#c4c4c4 !important; cursor: no-drop;'></i></a></td>");
                         out.print("</tr>");
                     }
                 } else {

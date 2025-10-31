@@ -13,7 +13,7 @@ public class ReferenciasMANT {
     public List Productos() throws Exception {
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            Connection con = DriverManager.getConnection("jdbc:sqlserver://172.16.2.116:1433;databaseName=EMP001_MANT", "sa", "plast");
+            Connection con = DriverManager.getConnection("jdbc:sqlserver://172.16.2.116:1433;databaseName=EMP001_MANT;encrypt=false;", "sa", "plast");
             String query = "SELECT COD,NOM FROM MAESTRO WHERE GRUP LIKE 'M%'";
             Statement sttm = con.createStatement();
             ResultSet rs = sttm.executeQuery(query);
@@ -33,7 +33,7 @@ public class ReferenciasMANT {
     public List StockMinimo() throws Exception {
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            Connection con = DriverManager.getConnection("jdbc:sqlserver://172.16.2.116:1433;databaseName=EMP001_MANT", "sa", "plast");
+            Connection con = DriverManager.getConnection("jdbc:sqlserver://172.16.2.116:1433;databaseName=EMP001_MANT;encrypt=false;", "sa", "plast");
             String query = "select case "
                     + "when (n.EXIST - m.MINIMO) = 0 "
                     + "then 'Alerta' "
