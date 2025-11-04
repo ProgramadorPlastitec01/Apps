@@ -14,8 +14,38 @@
     <body>
         <jsp:include page="Menu.jsp"></jsp:include>
             <div class="main-content" style="min-height: 694px;">
+                <!-- Alerta -->
+                <div id="alerta" class="alert alert-warning" style="display:none; margin-top:10px;">
+                    ⚠️ Atención: No se encontró información para los datos ingresados. 
+                    <button class="btn btn-sm btn-outline-dark" onclick="mostrarDetalles()">Ver detalles</button>
+                </div>
+
+                <!-- Modal de eventos -->
+                <div id="modalEventos" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+                     background:rgba(0,0,0,0.5); z-index:9999; justify-content:center; align-items:center;">
+                    <div style="background:white; padding:20px; border-radius:10px; width:80%; max-width:800px;">
+                        <h4>📋 Eventos sin información</h4>
+                        <table id="tablaEventos" border="1" width="100%" style="border-collapse:collapse;">
+                            <thead>
+                                <tr>
+                                    <th>Tipo</th>
+                                    <th>Orden</th>
+                                    <th>Producto</th>
+                                    <th>Lote</th>
+                                    <th>Mensaje</th>
+                                    <th>Fecha</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                        <div style="text-align:right; margin-top:10px;">
+                            <button class="btn btn-dark" onclick="cerrarModal()">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
             <Visual:Visual/>
             <Alert:Alert/>
+
         </div>
         <script>
             document.querySelectorAll('.editable').forEach(el => {
@@ -196,8 +226,12 @@
 
             document.addEventListener('DOMContentLoaded', dibujarCoordenadas);
         </script>
+        <script>
+            // Inicializa el arreglo global para almacenar eventos sin información
+            window.NoDataEvents = [];
+        </script>
 
-
+        <script src="Interface/Content/Assets/js/eventLogger.js"></script>
         <script src="Interface/Content/Assets/js/Print.js"></script>
         <script src="Interface/Content/Assets/modules/izitoast/js/iziToast.min.js"></script>
         <script src="Interface/Content/Assets/js/page/modules-toastr.js"></script>

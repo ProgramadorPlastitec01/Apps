@@ -11,6 +11,7 @@ import java.net.URLDecoder;
 import java.util.List;
 import Connection.ConnectionSignature;
 import Controller.CertificatesJpaController;
+import Controller.EventsJpaController;
 import Method.Util;
 
 public class Generate extends HttpServlet {
@@ -23,13 +24,15 @@ public class Generate extends HttpServlet {
             HttpSession session = request.getSession();
             CertificatesJpaController CertificatesJpa = new CertificatesJpaController();
             ConnectionSignature SignatureConn = new ConnectionSignature();
+            EventsJpaController EventConn = new EventsJpaController();
             String RolName = session.getAttribute("Rol/Usuario").toString();
             int IdRol = Integer.parseInt(session.getAttribute("idRol").toString());
             int Document = Integer.parseInt(session.getAttribute("Documento").toString());
             int CodeSig = Integer.parseInt(session.getAttribute("Codigo").toString());
             int opt = Integer.parseInt(request.getParameter("opt"));
             int Order = 0, IdCertificates = 0, TempDelete = 0;
-            String Type = "", Product = "", Batch = "", Html = "", Code = "", Consecutive = "", Customer = "", IdCertiMasive = "", Justification = "", Record = "", FormatName = "";
+            String Type = "", Product = "", Batch = "", Html = "", Code = "", Consecutive = "", Customer = "", IdCertiMasive = "",
+                    Justification = "", Record = "", FormatName = "", Message = "";
             boolean result = false;
             List lst_sign = null;
             List lst_id = null;
@@ -242,11 +245,36 @@ public class Generate extends HttpServlet {
                     request.getRequestDispatcher("Generate?opt=1&Type=" + Type).forward(request, response);
                     //</editor-fold>
                     break;
+                case 6:
+                    //<editor-fold defaultstate="collapsed" desc="REGISTER EVENTS">
+                    System.out.println(">>> EVENTO AUTO RECIBIDO <<<");
+                    System.out.println("Type: " + request.getParameter("Type"));
+                    System.out.println("IdCertificates: " + request.getParameter("IdCertificates"));
+                    System.out.println("Message: " + request.getParameter("Message"));
+
+                    try {
+                        Type = request.getParameter("Type");
+                    } catch (Exception e) {
+                        Type = "";
+                    }
+                    try {
+                        IdCertificates = Integer.parseInt(request.getParameter("IdCertificates"));
+                    } catch (Exception e) {
+                        IdCertificates = 0;
+                    }
+                    try {
+                        Message = request.getParameter("Message");
+                    } catch (Exception e) {
+                        Message = "";
+                    }
+                    EventConn.RegisterEvents(IdCertificates, Message);
+                    //</editor-fold>
+                    break;
             }
 
         } catch (Exception ex) {
             request.setAttribute("errorMessage", "Ha ocurrido un error procesando tu solicitud: " + ex.getMessage());
-//            request.getRequestDispatcher("GenerateReport.jsp").forward(request, response);
+            request.getRequestDispatcher("GenerateReport.jsp").forward(request, response);
         }
     }
 

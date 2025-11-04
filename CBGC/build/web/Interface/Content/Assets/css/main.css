@@ -3203,3 +3203,11 @@ thead.sticky-top {
 .table-secondary, .table-secondary>th, .table-secondary>td {
     background-color: #d6d8db;
 }
+.Prox{
+    font-size: 12px;
+    float: inline-end;
+    color: #29ff92;
+    font-weight: bold;
+    display: flex;
+    align-items: baseline;
+}

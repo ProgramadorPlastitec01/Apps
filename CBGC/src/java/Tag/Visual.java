@@ -29,7 +29,7 @@ public class Visual extends TagSupport {
         CertificatesJpaController CertificatesJpa = new CertificatesJpaController();
         ConnectionGeneracionLotes GeneracionLotesJpa = new ConnectionGeneracionLotes();
         ConnectionSignature SignatureConn = new ConnectionSignature();
-        String Type = "", Product = "", ProductFact = "", Batch = "", DataTechnicalSheet = "", Html = "", BatchLay = "", Record = "", FormatName = "";
+        String Type = "", Product = "", ProductFact = "", Batch = "", DataTechnicalSheet = "", Html = "", BatchLay = "", Record = "", FormatName = "", Message = "";
         int Order = 0, IdForm = 0, Count = 1, Count2 = 1, IdCertificates = 0, State = 0, IdSig = 0, TempDelete = 0;
         List lst_content = null;
         List lst_headFact = null;
@@ -179,6 +179,15 @@ public class Visual extends TagSupport {
                         Html = Html.replace("<h3 id=\"consValue\" class=\"mb-0\">XConsX</h3>", "<h3 id=\"consValue\" class=\"mb-0 editable\" contenteditable='true'>CC*****</h3>");
                         Html = Html.replace("XCodeX", "<span class='editable' contenteditable='true'>-----</span>");
                         Html = Html.replace("XSampleX", "<span class='editable' contenteditable='true'>----</span>");
+
+                        Message = "No se encuentra información en Factory por orden, producto y lote, favor verifique";
+
+                        // ✅ Ejecutar automáticamente cuando todo esté cargado
+                        out.print("<script>"
+                                + "window.addEventListener('load',function(){"
+                                + " registrarEvento('Factory','" + Order + "','" + ProductFact + "','" + Batch + "','" + Message.replace("'", "\\'") + "');"
+                                + "});"
+                                + "</script>");
                         //</editor-fold>
                     }
                     if (IdForm == 1) {
@@ -244,6 +253,14 @@ public class Visual extends TagSupport {
                                 Html = Html.replace("LBT" + i + "", "<span class='editable' contenteditable='true'>----</span>");
                                 Html = Html.replace("COS" + i + "", "<span class='editable' contenteditable='true'>----</span>");
                             }
+                            Message = "No se encuentra información materiales o ductos en Registros, favor verifique";
+
+                            // ✅ Ejecutar automáticamente cuando todo esté cargado
+                            out.print("<script>"
+                                    + "window.addEventListener('load',function(){"
+                                    + " registrarEvento('Registros LAB -  Materiales','" + Order + "','" + ProductFact + "','" + Batch + "','" + Message.replace("'", "\\'") + "');"
+                                    + "});"
+                                    + "</script>");
                             //</editor-fold>
                         }
                         lst_sheet = SettingJpa.ConsultSettingCategorie(Record + " - Ficha");
@@ -266,6 +283,17 @@ public class Visual extends TagSupport {
                                     }
                                 }
                             }
+                            //</editor-fold>
+                        } else {
+                            //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA">
+                            Message = "No se encuentra información de la ficha tecnica en Registros LAB, favor verifique";
+
+                            // ✅ Ejecutar automáticamente cuando todo esté cargado
+                            out.print("<script>"
+                                    + "window.addEventListener('load',function(){"
+                                    + " registrarEvento('Registros LAB - Ficha Tecnica','" + Order + "','" + ProductFact + "','" + Batch + "','" + Message.replace("'", "\\'") + "');"
+                                    + "});"
+                                    + "</script>");
                             //</editor-fold>
                         }
                         lst_parameter = SettingJpa.ConsultSettingCategorie(Record);
@@ -296,6 +324,17 @@ public class Visual extends TagSupport {
                                     }
                                 }
                             }
+                            //</editor-fold>
+                        } else {
+                            //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA">
+                            Message = "No se encuentra información de los controles, favor verifique";
+
+                            // ✅ Ejecutar automáticamente cuando todo esté cargado
+                            out.print("<script>"
+                                    + "window.addEventListener('load',function(){"
+                                    + " registrarEvento('Registros LAB - Controles','" + Order + "','" + ProductFact + "','" + Batch + "','" + Message.replace("'", "\\'") + "');"
+                                    + "});"
+                                    + "</script>");
                             //</editor-fold>
                         }
                         //</editor-fold>
@@ -362,6 +401,14 @@ public class Visual extends TagSupport {
                                 Html = Html.replace("LBT" + i + "", "<span class='editable' contenteditable='true'>----</span>");
                                 Html = Html.replace("COS" + i + "", "<span class='editable' contenteditable='true'>----</span>");
                             }
+                            Message = "No se encuentra información materiales o ductos en Registros, favor verifique";
+
+                            // ✅ Ejecutar automáticamente cuando todo esté cargado
+                            out.print("<script>"
+                                    + "window.addEventListener('load',function(){"
+                                    + " registrarEvento('Registros LAB -  Materiales','" + Order + "','" + ProductFact + "','" + Batch + "','" + Message.replace("'", "\\'") + "');"
+                                    + "});"
+                                    + "</script>");
                             //</editor-fold>
                         }
                         lst_sheet = SettingJpa.ConsultSettingCategorie(Record + " - Ficha");
@@ -384,6 +431,17 @@ public class Visual extends TagSupport {
                                     }
                                 }
                             }
+                            //</editor-fold>
+                        } else {
+                            //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA">
+                            Message = "No se encuentra información de la ficha tecnica en Registros LAB, favor verifique";
+
+                            // ✅ Ejecutar automáticamente cuando todo esté cargado
+                            out.print("<script>"
+                                    + "window.addEventListener('load',function(){"
+                                    + " registrarEvento('Registros LAB - Ficha Tecnica','" + Order + "','" + ProductFact + "','" + Batch + "','" + Message.replace("'", "\\'") + "');"
+                                    + "});"
+                                    + "</script>");
                             //</editor-fold>
                         }
                         lst_parameter = SettingJpa.ConsultSettingCategorie(Record);
@@ -415,6 +473,17 @@ public class Visual extends TagSupport {
                                 }
                             }
                             //</editor-fold>
+                        } else {
+                            //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA">
+                            Message = "No se encuentra información de los controles, favor verifique";
+
+                            // ✅ Ejecutar automáticamente cuando todo esté cargado
+                            out.print("<script>"
+                                    + "window.addEventListener('load',function(){"
+                                    + " registrarEvento('Registros LAB - Controles','" + Order + "','" + ProductFact + "','" + Batch + "','" + Message.replace("'", "\\'") + "');"
+                                    + "});"
+                                    + "</script>");
+                            //</editor-fold>
                         }
                         //</editor-fold>
                     }
@@ -431,6 +500,16 @@ public class Visual extends TagSupport {
                             Html = Html.replace("MIN" + Count + "", "<span class='editable' contenteditable='true'>-----</span>");
                             Html = Html.replace("MAX" + Count + "", "<span class='editable' contenteditable='true'>-----</span>");
                             Html = Html.replace("MEAN" + Count + "", "<span class='editable' contenteditable='true'>-----</span>");
+                            //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA">
+                            Message = "No se encuentra información de soldadura Registros LAB, favor verifique";
+
+                            // ✅ Ejecutar automáticamente cuando todo esté cargado
+                            out.print("<script>"
+                                    + "window.addEventListener('load',function(){"
+                                    + " registrarEvento('Soldadura','" + Order + "','" + ProductFact + "','" + Batch + "','" + Message.replace("'", "\\'") + "');"
+                                    + "});"
+                                    + "</script>");
+                            //</editor-fold>
                         }
                         Count++;
                         //</editor-fold>
