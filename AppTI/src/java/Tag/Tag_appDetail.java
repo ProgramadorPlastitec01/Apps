@@ -149,10 +149,10 @@ public class Tag_appDetail extends TagSupport {
                         out.print("</thead>");
                         out.print("<tbody>");
                         for (int i = 0; i < pers.length; i++) {
-                            String[] perste = pers[i].toString().split(" / ");
+                            String[] perste = pers[i].toString().split("/");
                             out.print("<tr class='text-center'>");
-                            out.print("<td>" + perste[0] + "</td>");
-                            String cargue = perste[1].toString().replace("EJECT", "").replace("APROB", "");
+                            out.print("<td>" + perste[0].toString().trim() + "</td>");
+                            String cargue = perste[1].toString().trim().replace("EJECT", "").replace("APROB", "");
                             out.print("<td>" + cargue.trim() + "</td>");
                             if (perste[4].toString().trim().equals("XX")) {
                                 out.print("<td class='text-center'><button class='btn btn-info' onclick='mostrarConvencion(4);ValidData(\"" + perste[2].trim() + "\", \"" + perste[3].trim() + "\");'><i class='fas fa-signature'></i></button></td>");
@@ -1087,15 +1087,26 @@ public class Tag_appDetail extends TagSupport {
                 lst_appDetail = AppDetail.ConsultDocumentType(idHead, typeSc[0] + "/" + typeSc[1]);
                 Object[] ObjDetail = {};
                 int stetx = 0, idDetail = 0;
-                String singExits = "";
+                boolean singExits = false;
                 try {
                     ObjDetail = (Object[]) lst_appDetail.get(0);
                     idDetail = Integer.parseInt(ObjDetail[0].toString());
                     stetx = Integer.parseInt(ObjDetail[6].toString());
                     try {
-                        singExits = ObjDetail[5].toString();
+                        String[] singData = ObjDetail[5].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                        for (int i = 0; i < singData.length; i++) {
+                            String[] dataSingDil = singData[i].toString().split("/");
+                            String signuser = dataSingDil[4].toString().trim();
+                            if (!signuser.contains("XX")) {
+                                singExits = true;
+                                break;
+                            }
+                        }
+                        
+                        // en este caso aaca toca agregar una validaicon para identificar si hay alguna firma 
+                        
                     } catch (Exception e) {
-                        singExits = "";
+                        
                     }
                 } catch (Exception e) {
                     stetx = 99;
@@ -1291,12 +1302,12 @@ public class Tag_appDetail extends TagSupport {
                             out.print("<div class='d-flex mb-2'>");
 
                             if (stetx != 99) {
-                                if (singExits.contains("XX")) {
+                                if (singExits) {
                                     out.print("<button class='btn btn-info mr-2' data-toggle='tooltip' data-placement='top' title='Firmar' onclick='window.location.href=\"AppDetail?opt=1&mod=3&idDoc=" + idDoc + "&idApp=" + idApp + "&idHead=" + idHead + "&type=" + type + "&idDet=" + Objdet[0] + "&swpt=2&step=" + step + "\";cargarDatos()'><i class=\"fas fa-signature\"></i></button>");
                                 }
                             }
 
-                            if (sigCount == 0) {
+                            if (singExits) {
                                 out.print("<button class='btn btn-warning mr-2' style='border-radius: 4px; opacity: 0.6;' disabled data-toggle='tooltip' data-placement='top' title='El documento ya tiene al menos una firma'><i class='fas fa-edit'></i></button>");
                             } else {
                                 out.print("<button class='btn btn-warning mr-2' data-toggle='tooltip' data-placement='top' title='Editar' onclick='window.location.href=\"AppDetail?opt=1&mod=3&idDoc=" + idDoc + "&idApp=" + idApp + "&idHead=" + idHead + "&type=" + type + "&idDet=" + Objdet[0] + "&step=" + step + "\";cargarDatos()'><i class=\"fas fa-edit\"></i></button>");
@@ -1390,7 +1401,7 @@ public class Tag_appDetail extends TagSupport {
                         String[] personal = ObjAp[5].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
                         boolean thrSing = true;
                         for (int i = 0; i < personal.length; i++) {
-                            String[] data = personal[i].toString().split(" / ");
+                            String[] data = personal[i].toString().split("/");
                             String tempCarg = data[1].toString().trim();
                             String sig_user = data[4].toString().trim();
                             if (!sig_user.equals("XX")) {
@@ -1400,10 +1411,10 @@ public class Tag_appDetail extends TagSupport {
                                     String[] DataSig = lst_sirh.toString().split("///");
                                     Gson gson = new Gson();
                                     String signt = gson.toJson(DataSig[3]);
-                                    Signatur = "<div style='max-width: 200px;'><canvas id='canva" + idSigz + "' width='" + canvasWidth + "' height='" + canvasHeight + "' style='border:1px solid #fff;'></canvas>"
+                                    Signatur = "<div style='max-width: 200px;'><canvas id='canva" + idSigz + i + "' width='" + canvasWidth + "' height='" + canvasHeight + "' style='border:1px solid #fff;'></canvas>"
                                             + "<script>"
-                                            + "function drawSign" + idSigz + "() { "
-                                            + "   const canvas = document.getElementById('canva" + idSigz + "'); "
+                                            + "function drawSign" + idSigz + i + "() { "
+                                            + "   const canvas = document.getElementById('canva" + idSigz + i + "'); "
                                             + "   const ctx = canvas.getContext('2d'); "
                                             + "   const coordenadas = JSON.parse(" + signt + "); "
                                             + "   ctx.clearRect(0, 0, canvas.width, canvas.height); "
@@ -1420,7 +1431,7 @@ public class Tag_appDetail extends TagSupport {
                                             + "       ctx.stroke(); "
                                             + "   }); "
                                             + "} "
-                                            + " drawSign" + idSigz + "();"
+                                            + " drawSign" + idSigz + i + "();"
                                             + "</script></div>";
 
                                     if (tempCarg.contains("APROB")) {
@@ -1454,7 +1465,7 @@ public class Tag_appDetail extends TagSupport {
                         out.print("<div class='mb-2 d-flex' style='justify-content: end;'>");
 
                         if (stetx != 99) {
-                            if (singExits.contains("XX")) {
+                            if (singExits) {
                                 out.print("<button class='btn btn-info mr-2' data-toggle='tooltip' data-placement='top' title='Firmar' onclick='window.location.href=\"AppDetail?opt=1&mod=3&idDoc=" + idDoc + "&idApp=" + idApp + "&idHead=" + idHead + "&type=" + type + "&idDet=" + ObjAp[0] + "&swpt=2&step=" + step + "\";cargarDatos()'><i class=\"fas fa-signature\"></i></button>");
                             }
                         }

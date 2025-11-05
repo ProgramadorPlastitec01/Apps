@@ -193,7 +193,7 @@ public class LocalChatBotServlet extends HttpServlet {
                 String doc = datosUsuario.get(userId + "_documento");
                 String cod = datosUsuario.get(userId + "_codigo");
 
-                String link = "http://localhost:8089/AppTI/Customer?opt=1&idDoct=" + doc;
+                String link = "http://localhost:8084/AppTI/Customer?opt=1&idDoct=" + doc;
 
                 respuesta = "Gracias. Puedes acceder a la página  soporte con el siguiente enlace:<br><a class='b_' href='" + link + "' target='_blank'>LINK</a>";
 

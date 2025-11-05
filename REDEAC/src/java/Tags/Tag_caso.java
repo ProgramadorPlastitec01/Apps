@@ -454,7 +454,7 @@ public class Tag_caso extends TagSupport {
                                 out.print("<td><b class='title'>Fecha: </b>" + obj_casosR[1] + "<hr><b class='title'>Reportante: </b>" + obj_casosR[4] + "</td>");
                                 out.print("<td valign='top'><b class='title'>Caso: </b>" + obj_casosR[5] + "</td>");
                                 out.print("<td><b class='title'>Prioridad: </b>" + obj_casosR[6] + "</td>");
-                                if (id_rol == 3 || id_rol == 5 || id_rol == 6) {
+                                if (id_rol == 3 || id_rol == 5 || id_rol == 6 || id_rol == 7) {
                                     out.print("<td align='center'><a href='Caso?opc=1&mod=CA&idC=" + obj_casosR[0] + "&txt_bus=' class='icon' title='Solucionar'><i class='fa fa-file-signature fa-lg'></i></a></td>");
                                 } else if (id_rol == 1) {
                                     int idC = Integer.parseInt(obj_casosR[0].toString());

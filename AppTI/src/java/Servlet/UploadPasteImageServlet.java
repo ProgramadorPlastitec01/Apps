@@ -60,7 +60,7 @@ public class UploadPasteImageServlet extends HttpServlet {
             }
 
             // 🔹 Construir URL pública accesible desde el editor
-            String fileUrl = "http://172.16.1.164/elFinder/files/Usuarios/"
+            String fileUrl = "http://172.16.2.117/elFinder/files/Usuarios/"
                     + idUsuario + "/ImagenesCapturadas/" + fileName;
 
             // 🔹 Armar respuesta JSON

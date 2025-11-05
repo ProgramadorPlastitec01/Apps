@@ -32,3 +32,9 @@
     border-radius: 5px;
     padding: 11px;
 }
+
+
+#CargoUser:empty::before{
+    content: attr(data-placeholder);
+    color: #aaa;
+}

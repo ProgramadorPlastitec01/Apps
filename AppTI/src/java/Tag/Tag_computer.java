@@ -102,6 +102,10 @@ public class Tag_computer extends TagSupport {
                 usuario = strc[9].toString();
                 hvInfo = true;
             } else {
+                cargouser = "<span contenteditable='true' id='CargoUser' data-placeholder='** Cargo usuario **'></span>";
+                area = "<span contenteditable='true' id='CargoUser' data-placeholder='** Area **'></span>";
+                nameUser = "<span contenteditable='true' id='CargoUser' data-placeholder='** Nombre usuario **'></span>";
+                usuario = "<span contenteditable='true' id='CargoUser' data-placeholder='** Usuario ** '></span>";
                 hvInfo = false;
             }
 //</editor-fold>
@@ -178,6 +182,7 @@ public class Tag_computer extends TagSupport {
                 Object[] ObjDetail = {};
                 int stetx = 0, idDetail = 0;
                 String singExits = "";
+
                 try {
                     ObjDetail = (Object[]) lst_compDetail.get(0);
                     idDetail = Integer.parseInt(ObjDetail[0].toString());
@@ -206,6 +211,7 @@ public class Tag_computer extends TagSupport {
                                     String[] ObjSi = lst_signa.toString().split("///");
                                     if (code.contains("-004") || code.contains("-013") || code.contains("-029") || code.contains("-031") || code.contains("-032")) {
 //                                      
+                                        format = format.replace("XXX" + usrx[0] + "XXX", "<canvas id='signaCanvas" + i + "' width='120' height='60' style='border: 1px solid #fff;'></canvas>");
                                         format = format.replace("Firma " + usrx[0] + "", "<canvas id='signaCanvas" + i + "' width='120' height='60' style='border: 1px solid #fff;'></canvas>");
                                     } else {
                                         format = format.replace("XXX" + usrx[0] + "XXX", "<canvas id='signaCanvas" + i + "' width='200' height='100' style='border: 1px solid #fff;'></canvas>");
@@ -598,11 +604,11 @@ public class Tag_computer extends TagSupport {
                         out.print("<form action='Computer?opt=1&mod=3&IdComputer=" + IdComputer + "&idDoc=" + idDoc + "&idpcHead=" + idPcHead + "&type=" + type + "' method='post' class='needs-validation' novalidate='' id='formSearchItem'>");
                         out.print("<h4 class='mb-4'>Items disponibles</h4>");
                         out.print("<div class='col-lg-6' style='margin: auto;' data-toggle='tooltip' data-placement='top' title=''>");
-                        out.print("<select class='form-control' name='cbxItem' style='margin-12px;' onchange='formSearchItem.submit()'>");
+                        out.print("<select class='form-control select2' name='cbxItem' style='margin-12px;' onchange='formSearchItem.submit()'>");
                         out.print("<option selected disabled>Seleccionar </option>");
                         for (int i = 0; i < lst_item.size(); i++) {
                             Object[] ObjDet = (Object[]) lst_item.get(i);
-                            out.print("<option value='" + ObjDet[0] + "'>Item: " + ObjDet[1] + "</option>");
+                            out.print("<option value='" + ObjDet[0] + "'>Item " + ObjDet[1] + "</option>");
                         }
                         out.print("</select>");
                         out.print("</div>");
@@ -724,6 +730,8 @@ public class Tag_computer extends TagSupport {
                         format = format.replace("XXXElaboradorXXX", "<b class='text-warning'>Pendiente Firma</b>");
                         format = format.replace("XXXUsuarioXXX", "<b class='text-warning'>Pendiente Firma</b>");
                         format = format.replace("XXXJefe o DirectorXXX", "<b class='text-warning'><b class='text-warning'>Pendiente Firma</b></b>");
+                        format = format.replace("XXXRealizadoXXX", "<b class='text-warning'><b class='text-warning'>Pendiente Firma</b></b>");
+                        format = format.replace("XXXUsuarioXXX", "<b class='text-warning'><b class='text-warning'>Pendiente Firma</b></b>");
 
 //                        en este momento se viene el remplazo de las firmas realizadas y validacion del modulo en general
 //                        try {
@@ -1026,11 +1034,23 @@ public class Tag_computer extends TagSupport {
                     format = format.replace("XXXPOSITIONXXX", cargouser);
                     format = format.replace("XXXUSERNAMEXXX", nameUser);
                     format = format.replace("XXXITEMXXX", item + "");
+                    format = format.replace("XXXTurno1XXX", "<b class='text-warning'>Pendiente Firma Turno1</b>");
+                    format = format.replace("XXXTurno2XXX", "<b class='text-warning'>Pendiente Firma Turno2</b>");
+                    format = format.replace("XXXTurno3XXX", "<b class='text-warning'>Pendiente Firma Turno3</b>");
+                    format = format.replace("XXXJefeXXX", "<b class='text-warning'>Pendiente Firma Jefe</b>");
 
                     if (stetx == 2) {
                         format = format.replace("id=\"idtabla\"", "id=\"idtabla\" class='inactive004'");
+                    } else if (stetx == 1) {
+                        format = format.replace("contenteditable='true'", "contenteditable='false'");
                     }
                     out.print(format);
+
+                    format = format.replace("<b class='text-warning'>Pendiente Firma Turno1</b>", "XXXTurno1XXX");
+                    format = format.replace("<b class='text-warning'>Pendiente Firma Turno2</b>", "XXXTurno2XXX");
+                    format = format.replace("<b class='text-warning'>Pendiente Firma Turno3</b>", "XXXTurno3XXX");
+                    format = format.replace("<b class='text-warning'>Pendiente Firma Jefe</b>", "XXXJefeXXX");
+
                     out.print(post_script);
 
                     if (stetx == 1 || stetx == 99) {
