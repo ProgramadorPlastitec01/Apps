@@ -69,7 +69,7 @@ public class Menu extends TagSupport {
             // ===================== BatchRecord =====================
             out.print("<li class=\"menu-header\">Batch Record</li>");
             out.print("<li class=\"dropdown\">");
-            out.print("<a href='#' class=\"nav-link\" onclick='cargarDatos()'><i class=\"far fa-folder-open\"></i><span>Anexos</span></a>");
+            out.print("<a href='FileManager.jsp' class=\"nav-link\" onclick='cargarDatos()'><i class=\"far fa-folder-open\"></i><span>Anexos</span></a>");
             out.print("</li>");
             out.print("<li class=\"menu-header\">Certificados</li>");
             out.print("<li class=\"dropdown\">");

@@ -3211,3 +3211,9 @@ thead.sticky-top {
     display: flex;
     align-items: baseline;
 }
+.DivBoxS{
+    width: 31%;
+    border: 1px solid #c1c1c166;
+    box-shadow: 4px 3px 0px 0px #c1c1c166;
+    border-radius: 5px;
+}
