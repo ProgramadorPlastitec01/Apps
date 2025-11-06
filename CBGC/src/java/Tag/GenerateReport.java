@@ -8,6 +8,7 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 import Controller.CertificatesJpaController;
 import Controller.FormatJpaController;
+import Connection.ConnectionSignature;
 import java.util.List;
 
 public class GenerateReport extends TagSupport {
@@ -17,11 +18,11 @@ public class GenerateReport extends TagSupport {
         JspWriter out = pageContext.getOut();
         CertificatesJpaController CertificateJpa = new CertificatesJpaController();
         FormatJpaController FormatJpa = new FormatJpaController();
+        ConnectionSignature SigntureJpa = new ConnectionSignature();
         List lst_ceriticate = null;
         List lst_format = null;
         String Type = "";
         int TempDelete = 0;
-        boolean UnauthorizedSignature = false;
         try {
             try {
                 Type = pageContext.getRequest().getParameter("Type");
@@ -33,15 +34,7 @@ public class GenerateReport extends TagSupport {
             } catch (Exception e) {
                 TempDelete = 0;
             }
-            try {
-                String param = pageContext.getRequest().getParameter("UnauthorizedSignature");
-                if (param != null) {
-                    UnauthorizedSignature = Boolean.parseBoolean(param);
-                }
-            } catch (Exception e) {
-                UnauthorizedSignature = false;
-            }
-            //<editor-fold defaultstate="collapsed" desc="Consult Report">
+            //<editor-fold defaultstate="collapsed" desc="CONSULT REPORT">
             out.print("<div class='sweet-local' tabindex='-1' id='Ventana1' style='opacity: 1.03; display:none;'>");
             out.print("<div class='contGeneral'>");
             out.print("<div style='display: flex; justify-content: space-between'>");
@@ -218,6 +211,8 @@ public class GenerateReport extends TagSupport {
             out.print("</div>");
             out.print("</section>");
         } catch (IOException ex) {
+            Logger.getLogger(GenerateReport.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
             Logger.getLogger(GenerateReport.class.getName()).log(Level.SEVERE, null, ex);
         }
 

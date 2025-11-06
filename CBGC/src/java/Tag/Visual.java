@@ -131,6 +131,7 @@ public class Visual extends TagSupport {
                         + "<i class=\"fas fa-arrow-left\"></i>"
                         + "</button>"
                         + "<h4>Generación Certificado</h4></div>"
+                        + ((State == 1) ? "<div><button class='btn btn-outline-warning btn-sm' style='border-radius: 4px; padding: 2px 9px;' onclick=\"javascript:location.href='Generate?opt=4&Type=" + Type + "&Temp=1&IdCertiMasive=" + IdCertificates + "';cargarDatos()\" ><i class='fas fa-signature'></i></button></div>" : "") + ""
                         + ((State == 0) ? "<div><button class='btn btn-outline-primary btn-sm' style='border-radius: 4px; padding: 2px 9px;' onclick='PrintHtml()'><i class='fas fa-print'></i></button></div>" : "") + ""
                         + "</div>");
                 out.print("</div>");
@@ -263,7 +264,7 @@ public class Visual extends TagSupport {
                                     + "</script>");
                             //</editor-fold>
                         }
-                        lst_sheet = SettingJpa.ConsultSettingCategorie(Record + " - Ficha");
+                        lst_sheet = SettingJpa.ConsultSettingCategorie(Record + "-Ficha");
                         if (lst_sheet != null) {
                             //<editor-fold defaultstate="collapsed" desc="TECNHNICAL SHEET">
                             Object[] ObjSheet = (Object[]) lst_sheet.get(0);
@@ -411,7 +412,7 @@ public class Visual extends TagSupport {
                                     + "</script>");
                             //</editor-fold>
                         }
-                        lst_sheet = SettingJpa.ConsultSettingCategorie(Record + " - Ficha");
+                        lst_sheet = SettingJpa.ConsultSettingCategorie(Record + "-Ficha");
                         if (lst_sheet != null) {
                             //<editor-fold defaultstate="collapsed" desc="TECNHNICAL SHEET">
                             Object[] ObjSheet = (Object[]) lst_sheet.get(0);
