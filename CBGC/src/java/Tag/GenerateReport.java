@@ -10,12 +10,14 @@ import Controller.CertificatesJpaController;
 import Controller.FormatJpaController;
 import Connection.ConnectionSignature;
 import java.util.List;
+import javax.servlet.http.HttpSession;
 
 public class GenerateReport extends TagSupport {
 
     @Override
     public int doStartTag() throws JspException {
         JspWriter out = pageContext.getOut();
+        HttpSession sesion = pageContext.getSession();
         CertificatesJpaController CertificateJpa = new CertificatesJpaController();
         FormatJpaController FormatJpa = new FormatJpaController();
         ConnectionSignature SigntureJpa = new ConnectionSignature();
@@ -23,6 +25,7 @@ public class GenerateReport extends TagSupport {
         List lst_format = null;
         String Type = "";
         int TempDelete = 0;
+        String Permission = "";
         try {
             try {
                 Type = pageContext.getRequest().getParameter("Type");
@@ -33,6 +36,11 @@ public class GenerateReport extends TagSupport {
                 TempDelete = Integer.parseInt(pageContext.getRequest().getParameter("TempDelete"));
             } catch (Exception e) {
                 TempDelete = 0;
+            }
+            try {
+                Permission = sesion.getAttribute("Permisos").toString();
+            } catch (Exception e) {
+                Permission = "";
             }
             //<editor-fold defaultstate="collapsed" desc="CONSULT REPORT">
             out.print("<div class='sweet-local' tabindex='-1' id='Ventana1' style='opacity: 1.03; display:none;'>");
@@ -111,9 +119,11 @@ public class GenerateReport extends TagSupport {
             out.print("<div class='d-flex'>"
                     + "<h4>Generar Certificado</h4>"
                     + "</div>");
-            out.print("<div class='d-flex'>"
-                    + "<button class='btn btn-" + ((TempDelete > 0) ? "green" : "warning") + " btn-sm mr-4' style='border-radius: 4px;'  onclick=\"javascript:location.href='Generate?opt=1&Type=" + Type + "&TempDelete=" + ((TempDelete > 0) ? "0" : "1") + "';cargarDatos()\" ><i class=\"fas fa-" + ((TempDelete > 0) ? "file-signature" : "file-prescription") + "\"></i></button>"
-                    + "<button class='btn btn-green btn-sm mr-4' style='border-radius: 4px;'  onclick='ExecuteForm()' ><i class='fas fa-signature'></i></button>");
+            out.print("<div class='d-flex'>");
+            if (Permission.contains("(5)")) {
+                out.print("<button class='btn btn-" + ((TempDelete > 0) ? "green" : "warning") + " btn-sm mr-4' style='border-radius: 4px;'  onclick=\"javascript:location.href='Generate?opt=1&Type=" + Type + "&TempDelete=" + ((TempDelete > 0) ? "0" : "1") + "';cargarDatos()\" ><i class=\"fas fa-" + ((TempDelete > 0) ? "file-signature" : "file-prescription") + "\"></i></button>");
+            }
+            out.print("<button class='btn btn-green btn-sm mr-4' style='border-radius: 4px;'  onclick='ExecuteForm()' ><i class='fas fa-signature'></i></button>");
             out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1)'><i class='fas fa-plus'></i></button></div>");
             out.print("</div>");
 
@@ -194,7 +204,9 @@ public class GenerateReport extends TagSupport {
                     out.print("<td class='d-flex'>");
                     out.print("<button class='btn btn-green btn-sm mr-2' style='border-radius: 4px;' onclick=\"javascript:location.href='Generate?opt=2&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "&TempDelete=" + TempDelete + "';cargarDatos()\" ><i class=\"fas fa-eye\"></i></button>");
                     if (State == 1) {
-                        out.print("<button class='btn btn-danger btn-sm' style='border-radius: 4px;' onclick=\"confirmarEliminacion('Generate?opt=5&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "')\"><i class='fas fa-trash'></i></button>");
+                        if (Permission.contains("(8)")) {
+                            out.print("<button class='btn btn-danger btn-sm' style='border-radius: 4px;' onclick=\"confirmarEliminacion('Generate?opt=5&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "')\"><i class='fas fa-trash'></i></button>");
+                        }
                     }
 
                     out.print("</td>");

@@ -36,7 +36,10 @@ public class ConnectionAdminUser {
             if (conn != null) {
                 String query = "SELECT u.id_usuario, u.nombres, u.apellidos,u.documento,u.codigo,u.usuario,u.contrasena,u.estado,r.id_rol,r.nombre_rol, "
                         + "       IF(u.contrasena = YEAR(CURDATE()) OR CHAR_LENGTH(u.contrasena) < 30, 'YES',  'NO') AS `CountCaracter`, "
-                        + "       u.usuario_registro,u.fecha_registro,u.fecha_modificacion "
+                        + "       u.usuario_registro,u.fecha_registro,u.fecha_modificacion, (SELECT CONCAT('(', GROUP_CONCAT(rp.id_permiso SEPARATOR ')('), ')(')\n"
+                        + "        FROM rol_permisos rp\n"
+                        + "        WHERE rp.id_rol = r.id_rol\n"
+                        + "    ) AS 'Permisos' "
                         + "FROM usuario u "
                         + "INNER JOIN usuario_app ua ON u.id_usuario = ua.id_usuario AND ua.id_app = 1 "
                         + "INNER JOIN rol r ON ua.id_rol = r.id_rol "
@@ -53,7 +56,8 @@ public class ConnectionAdminUser {
                             + rs.getString("contrasena").toString().trim() + "///" + rs.getString("estado").toString().trim() + "///"
                             + rs.getString("id_rol").toString().trim() + "///" + rs.getString("nombre_rol").toString().trim() + "///"
                             + rs.getString("CountCaracter").toString().trim() + "///" + rs.getString("usuario_registro").toString().trim() + "///"
-                            + rs.getString("fecha_registro").toString().trim() + "///" + rs.getString("fecha_modificacion").toString().trim() + "");
+                            + rs.getString("fecha_registro").toString().trim() + "///" + rs.getString("fecha_modificacion").toString().trim() + "///"
+                            + rs.getString("Permisos").toString().trim() + "");
                     count++;
                 }
                 conn.close();
