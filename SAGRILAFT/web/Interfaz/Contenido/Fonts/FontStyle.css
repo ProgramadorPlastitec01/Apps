@@ -1,0 +1,35 @@
+@font-face {
+    font-family: 'GreatVibes';
+    src: url('GreatVibes-Regular.ttf') format('truetype');
+}
+.GreatVibes{
+    font-family: 'GreatVibes', sans-serif;
+}
+@font-face {
+    font-family: 'Allura';
+    src: url('Allura-Regular.ttf') format('truetype');
+}
+.Allura{
+    font-family: 'Allura', sans-serif;
+}
+@font-face {
+    font-family: 'Coockie';
+    src: url('Cookie-Regular.ttf') format('truetype');
+}
+.Coockie{
+    font-family: 'Coockie', sans-serif;
+}
+@font-face {
+    font-family: 'Whisper';
+    src: url('Whisper-Regular.ttf') format('truetype');
+}
+.Whisper{
+    font-family: 'Whisper', sans-serif;
+}
+@font-face {
+    font-family: 'Tangerine';
+    src: url('Tangerine-Regular.ttf') format('truetype');
+}
+.Tangerine{
+    font-family: 'Tangerine', sans-serif;
+}

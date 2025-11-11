@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>jQuery TE | Downloaded Demo | v.1.4.0</title>
+        <link type="text/css" rel="stylesheet" href="../demo.css">
+        <link type="text/css" rel="stylesheet" href="../../jquery-te-1.4.0.css">
+        <script type="text/javascript" src="http://code.jquery.com/jquery.min.js" charset="utf-8"></script>
+        <script type="text/javascript" src="../../jquery-te-1.4.0.min.js" charset="utf-8"></script>
+        <script type="text/javascript">
+            function marcar(check, element) {
+                if (!check.checked) {
+                    element.setAttribute("checked", "true");
+                } else {
+                    element.removeAttribute("checked");
+                }
+            }
+            function agregarRMT057() {
+                var table = document.getElementById("table1");
+                var rowCount = table.rows.length;
+                var row = table.insertRow(rowCount);
+                var Tdcampo1 = row.insertCell(0);
+                Tdcampo1.setAttribute("contenteditable", "true")
+                Tdcampo1.setAttribute("colspan", "2")
+                Tdcampo1.innerHTML = "&nbsp;";
+                var Tdcampo2 = row.insertCell(0);
+                Tdcampo2.setAttribute("contenteditable", "true")
+                Tdcampo2.innerHTML = "&nbsp;";
+                var Tdcampo3 = row.insertCell(0);
+                Tdcampo3.setAttribute("contenteditable", "true")
+                Tdcampo3.innerHTML = "&nbsp;";
+                var Tdcampo4 = row.insertCell(0);
+                Tdcampo4.setAttribute("contenteditable", "true")
+                Tdcampo4.innerHTML = "&nbsp;";
+                var Tdcampo4 = row.insertCell(0);
+                Tdcampo4.setAttribute("contenteditable", "true")
+                Tdcampo4.innerHTML = "&nbsp;";
+                var Tdcampo4 = row.insertCell(0);
+                Tdcampo4.setAttribute("contenteditable", "true")
+                Tdcampo4.innerHTML = "&nbsp;";
+                var Tdcampo5 = row.insertCell(0);
+                Tdcampo5.setAttribute("contenteditable", "true")
+                Tdcampo5.innerHTML = "&nbsp;";
+                var Tdcampo6 = row.insertCell(0);
+                Tdcampo6.setAttribute("contenteditable", "true")
+                Tdcampo6.innerHTML = "&nbsp;";
+                var Tdcampo7 = row.insertCell(0);
+                Tdcampo7.setAttribute("contenteditable", "true")
+                Tdcampo7.innerHTML = "&nbsp;";
+                var Tdcampo8 = row.insertCell(0);
+                Tdcampo8.setAttribute("contenteditable", "true")
+                Tdcampo8.innerHTML = "&nbsp;";
+            }
+        </script>
+    </head>
+    <body>
+        <!------------------------------------------------------------ jQUERY TEXT EDITOR ------------------------------------------------------------>
+        <textarea name="textarea" class="jqte-test">
+            <table style="width: 100%" class="tableHTMLEditor" id="table1" contenteditable="false">
+                <tr>
+                    <td colspan="11" style="background-color:#CCC;" align="center"><b style="color:white;">COPIA NO CONTROLADA</b></td>
+                </tr>
+                <tr>
+                    <td style="width:20%" align="center" colspan="3">
+                   <img src="../../../Contenido/images/Logo.png" alt="Logo" style="width:200px;height:70px" /></td>
+                <td align="center" style="width:60%" colspan="4"><b style="color:#292929">VERIFICACION PATRONES DE COMPROBACION</b></td>
+                <td align="center" style="width:40%" contenteditable="false" colspan="4"><b style="color:#292929">CODIGO : R-MT-059 <hr /> VERSION : 00</b></td>
+                </tr>
+                <tr>
+                <td colspan="5"><b style="color:#292929">MAGNITUD: </b><u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                <td colspan="6"><b style="color:#292929">INSTRUMENTO PATRON: </b><u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                </tr>
+                <tr>
+                <td colspan="5"><b style="color:#292929">INSTRUMENTO: </b><u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                <td colspan="6"><b style="color:#292929">TOLERANCIA: </b><u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                </tr>
+                <tr>
+                    <td align="center"  style="width: 10%;"><b style="color:#68BB18;">FECHA</b></td>
+                    <td align="center"  style="width: 10%;"><b style="color:#68BB18;">CODIGO</b></td>
+                    <td align="center"  style="width: 10%;"><b style="color:#68BB18;">NOMINAL</b></td>
+                    <td align="center"  style="width: 10%;"><b style="color:#68BB18;">M1</b></td>
+                    <td align="center" style="width: 10%;"><b style="color:#68BB18;">M2</b></td>
+                    <td align="center" style="width: 10%;"><b style="color:#68BB18;">M3</b></td>
+                    <td align="center"  style="width: 10%;"><b style="color:#68BB18;">M4</b></td>
+                    <td align="center" style="width: 10%;"><b style="color:#68BB18;">PROMEDIO</b></td>
+                    <td align="center"  style="width: 20%;"><b style="color:#68BB18;">DESVIACION</b></td>
+                    <td align="center"  style="width: 20%;"><b style="color:#68BB18;">CONFORME SI/NO</b></td>
+                    <td align="center"  style="width: 20%;"><div style="float:right;margin: 0px"><img src="Interfaz/Contenido/Iconos/PlusP.png" alt="Logo" style="width:20px;height:20px" onclick="agregarRMT057()"/></div></td>
+                </tr>
+                <tr>
+                    <td contenteditable="true">&nbsp;</td>
+                    <td contenteditable="true">&nbsp;</td>
+                    <td contenteditable="true">&nbsp;</td>
+                    <td contenteditable="true">&nbsp;</td>
+                    <td contenteditable="true">&nbsp;</td>
+                    <td contenteditable="true">&nbsp;</td>
+                    <td contenteditable="true">&nbsp;</td>
+                    <td contenteditable="true">&nbsp;</td>
+                    <td contenteditable="true">&nbsp;</td>
+                    <td contenteditable="true" colspan="2">&nbsp;</td>
+                </tr>
+                </table>
+        </textarea>
+        <script>
+            $('.jqte-test').jqte();
+
+            // settings of status
+            var jqteStatus = true;
+            $(".status").click(function ()
+            {
+                jqteStatus = jqteStatus ? false : true;
+                $('.jqte-test').jqte({"status": jqteStatus})
+            });
+        </script>
+    </body>
+</html>

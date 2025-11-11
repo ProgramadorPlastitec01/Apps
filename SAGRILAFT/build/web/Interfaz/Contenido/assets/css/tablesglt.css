@@ -1,0 +1,717 @@
+.scrollbar{
+    height: 100%;
+    overflow-y: scroll;
+    margin-bottom: 10px;
+
+}
+
+.scrollbar::-webkit-scrollbar-thumb{
+    border-radius: 20px;
+    border: 1px solid white;
+    background: #002237;
+    width: 5px;
+}
+
+.scrollbar::-webkit-scrollbar{
+    background: lightgray;
+    height: 10px;
+    width: 8px;
+    border-radius: 20px;
+    border-right: none;
+    margin-right: 1px;
+}
+
+/* Estilos generales de la tabla */
+.tableSGLT {
+    width: 5000px;
+    table-layout: auto;
+}
+
+.tableSGLT tr {
+    font-size: 11px;
+    text-align: center;
+}
+
+.tableSGLT td {
+    padding: 0px 10px 0px 10px;
+}
+
+.Std td {
+    background: #5ecbeb;
+    color: black;
+    font-weight: bold;
+}
+
+/* Estilos Sticky */
+.Sticky,
+.Sticky2,
+.Sticky3,
+.Sticky4,
+.Sticky5,
+.Sticky6,
+.Sticky7,
+.Sticky8,
+.Sticky9,
+.Sticky10,
+.Sticky11{
+    position: -webkit-sticky;
+    position: sticky;
+    background: white; /* Asegura que el fondo sea blanco para evitar superposiciones */
+}
+
+/* Estilos específicos para cada Sticky */
+.Sticky {
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.Sticky2 {
+    top: 0;
+    left: 0;
+    z-index: 2;
+}
+
+.Sticky3 {
+    top: 13px;
+    left: 0;
+    z-index: 3;
+}
+
+.Sticky3:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-top: 1px solid #6a6a6a;  
+    border-right: 1px solid #6a6a6a;  
+    border-bottom:  1px solid #6a6a6a;  
+    /*box-shadow: 0px 1px 1px #6a6a6a;  Agregar sombra al pseudo-elemento */
+    z-index: -1; /* z-index para el borde */
+}
+
+
+.Sticky4 {
+    top: -3px;
+    left: 0;
+    z-index: 2;
+}
+
+.Sticky4:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-top:  1px solid #6a6a6a;
+    border-bottom:  1px solid #6a6a6a;
+    border-right:  1px solid #6a6a6a;
+    z-index: -1; /* z-index para el borde */
+}
+
+.Sticky5 {
+    top: 13px;
+    left: 0;
+    z-index: 1;
+}
+.Sticky5:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-right: 1px solid #6a6a6a;  
+    z-index: -1; /* z-index para el borde */
+}
+
+
+
+.Sticky6 {
+    top: 62px;
+    left: 0;
+    z-index: 1;
+}
+
+.Sticky6:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-top: 1px solid #6a6a6a;
+    border-right: 1px solid #6a6a6a;
+    border-bottom: 1px solid #6a6a6a;
+    z-index: -1; /* z-index para el borde */
+}
+
+.Sticky7 {
+    top: -20px;
+    left: 0;
+    z-index: 2;
+}
+.Sticky7:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-top: 1px solid #6a6a6a;
+    border-right: 1px solid #6a6a6a;
+    z-index: -1; /* z-index para el borde */
+}
+
+
+
+.Sticky8 {
+    top: 62px;
+    left: 0;
+    z-index: 1;
+}
+.Sticky8:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-right: 1px solid #6a6a6a;
+    border-bottom: 1px solid #6a6a6a;
+    z-index: -1; /* z-index para el borde */
+}
+
+.Sticky9 {
+    top: 13px;
+    left: 0;
+    z-index: 1;
+}
+.Sticky9:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-top: 1px solid #6a6a6a;  
+    border-right: 1px solid #6a6a6a;  
+    border-bottom: 1px solid #6a6a6a;  
+    z-index: -1; /* z-index para el borde */
+}
+
+.Sticky10 {
+    top: -20px;
+    z-index: 2;
+}
+.Sticky10:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-top: 1px solid #6a6a6a;
+    border-right: 1px solid #6a6a6a;
+    z-index: -1; /* z-index para el borde */
+}
+
+.Sticky11 {
+    top: -20px;
+    z-index: 2;
+}
+.Sticky11:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-top: 1px solid #6a6a6a;
+    border-right: 1px solid #6a6a6a;
+    z-index: -1; /* z-index para el borde */
+}
+
+/* Estilos específicos para las columnas verticales pegajosas */
+.StickyVTH {
+    position: -webkit-sticky;
+    position: sticky;
+    left: -25px;
+    top: -20px;
+    z-index: 4;
+    background: #002237;
+}
+.StickyVTH:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-top: 1px solid #6a6a6a;  
+    border-left: 1px solid #6a6a6a;  
+    border-bottom:  1px solid #6a6a6a;  
+    border-right: transparent;
+    box-shadow: 0px 1px 1px #6a6a6a; /* Agregar sombra al pseudo-elemento */
+    z-index: -1; /* z-index para el borde */
+}
+
+.StickyVTH1 {
+    position: -webkit-sticky;
+    position: sticky;
+    left: 72px;
+    top: -20px;
+    z-index: 4;
+    background: #002237;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+}
+.StickyVTH1:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-top: 1px solid #6a6a6a;  
+    border-left: 1px solid #6a6a6a;  
+    border-bottom:  1px solid #6a6a6a;  
+    box-shadow: 0px 1px 1px #6a6a6a; /* Agregar sombra al pseudo-elemento */
+    z-index: -1; /* z-index para el borde */
+}
+
+.StickyVTH2 {
+    position: -webkit-sticky;
+    position: sticky;
+    left: 172px;
+    top: -20px;
+    z-index: 4;
+    background: #002237;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+}
+.StickyVTH2:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-top: 1px solid #6a6a6a;  
+    border-left: 1px solid #6a6a6a;  
+    border-bottom:  1px solid #6a6a6a;  
+    border-right:   1px solid #6a6a6a;  
+    box-shadow: 0px 1px 1px #6a6a6a; /* Agregar sombra al pseudo-elemento */
+    z-index: -1; /* z-index para el borde */
+}
+
+.StickyVTH2INT {
+    position: -webkit-sticky;
+    position: sticky;
+    left: 173px;
+    top: -20px;
+    z-index: 4;
+    background: #002237;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+}
+.StickyVTH2INT:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-top: 1px solid #6a6a6a;  
+    border-left: 1px solid #6a6a6a;  
+    border-bottom:  1px solid #6a6a6a;  
+    border-right:   1px solid #6a6a6a;  
+    box-shadow: 0px 1px 1px #6a6a6a; /* Agregar sombra al pseudo-elemento */
+    z-index: -1; /* z-index para el borde */
+}
+
+.StickyVTH3 {
+    position: -webkit-sticky;
+    position: sticky;
+    left: 345px;
+    top: 13px;
+    z-index: 4;
+    background: #002237;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+}
+.StickyVTH3:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-top: 1px solid #6a6a6a;  
+    border-bottom:  1px solid #6a6a6a;  
+    box-shadow: 0px 1px 1px #6a6a6a; /* Agregar sombra al pseudo-elemento */
+    z-index: -1; /* z-index para el borde */
+}
+
+.StickyVTH3INT {
+    position: -webkit-sticky;
+    position: sticky;
+    left: 373px;
+    top: 13px;
+    z-index: 4;
+    background: #002237;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+}
+.StickyVTH3INT:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-top: 1px solid #6a6a6a;  
+    border-bottom:  1px solid #6a6a6a;  
+    box-shadow: 0px 1px 1px #6a6a6a; /* Agregar sombra al pseudo-elemento */
+    z-index: -1; /* z-index para el borde */
+}
+
+.StickyVTH4 {
+    position: -webkit-sticky;
+    position: sticky;
+    left: 432px;
+    top: 13px;
+    z-index: 4;
+    background: #002237;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+}
+
+.StickyVTH4:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-top: 1px solid #6a6a6a;  
+    border-left: 1px solid #6a6a6a;  
+    border-bottom:  1px solid #6a6a6a;  
+    box-shadow: 0px 1px 1px #6a6a6a; /* Agregar sombra al pseudo-elemento */
+    z-index: -1; /* z-index para el borde */
+}
+
+.StickyVTH4INT {
+    position: -webkit-sticky;
+    position: sticky;
+    left: 460px;
+    top: 13px;
+    z-index: 4;
+    background: #002237;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+}
+
+.StickyVTH4INT:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-top: 1px solid #6a6a6a;  
+    border-left: 1px solid #6a6a6a;  
+    border-bottom:  1px solid #6a6a6a;  
+    box-shadow: 0px 1px 1px #6a6a6a; /* Agregar sombra al pseudo-elemento */
+    z-index: -1; /* z-index para el borde */
+}
+
+.StickyVTH5 {
+    position: -webkit-sticky;
+    position: sticky;
+    left: 649.5px;
+    top: 13px;
+    z-index: 4;
+    background: #002237;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+}
+
+
+.StickyVTH5:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-top: 1px solid #6a6a6a;  
+    border-left: 1px solid #6a6a6a;  
+    border-bottom:  1px solid #6a6a6a;  
+    border-right:   1px solid #6a6a6a;  
+    box-shadow: 0px 1px 1px #6a6a6a; /* Agregar sombra al pseudo-elemento */
+    z-index: -1; /* z-index para el borde */
+}
+
+.StickyVTH5INT {
+    position: -webkit-sticky;
+    position: sticky;
+    left: 676.5px;
+    top: 13px;
+    z-index: 4;
+    background: #002237;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+}
+
+
+.StickyVTH5INT:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-top: 1px solid #6a6a6a;  
+    border-left: 1px solid #6a6a6a;  
+    border-bottom:  1px solid #6a6a6a;  
+    border-right:   1px solid #6a6a6a;  
+    box-shadow: 0px 1px 1px #6a6a6a; /* Agregar sombra al pseudo-elemento */
+    z-index: -1; /* z-index para el borde */
+}
+
+/* Estilos específicos para las columnas verticales pegajosas dentro del cuerpo de la tabla */
+.StickyVTB {
+    position: -webkit-sticky;
+    position: sticky;
+    left: -25px;
+    z-index: 0;
+    background: white;
+
+}
+.StickyVTB:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-left: 1px solid #6a6a6a;
+    border-right: 1px solid #6a6a6a;
+    border-bottom: 1px solid #6a6a6a;
+    box-shadow: 0px 1px 1px #6a6a6a; /* Agregar sombra al pseudo-elemento */
+    z-index: -1; /* z-index para el borde */
+}
+
+
+.StickyVTB2 {
+    position: -webkit-sticky;
+    position: sticky;
+    left: 71.78px;
+    z-index: 0;
+    background: white;
+}
+
+.StickyVTB2:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-right: 1px solid #6a6a6a;
+    border-bottom: 1px solid #6a6a6a;
+    z-index: -1; /* z-index para el borde */
+}
+.StickyVTB2INT {
+    position: -webkit-sticky;
+    position: sticky;
+    left: 73.78px;
+    z-index: 0;
+    background: white;
+}
+
+.StickyVTB2INT:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-right: 1px solid #6a6a6a;
+    border-bottom: 1px solid #6a6a6a;
+    z-index: -1; /* z-index para el borde */
+}
+
+
+.StickyVTB3 {
+    position: -webkit-sticky;
+    position: sticky;
+    left: 172.2px;
+    z-index: 0;
+    background: white;
+}
+
+.StickyVTB3:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-right: 1px solid #6a6a6a;
+    border-bottom: 1px solid #6a6a6a;
+    z-index: -1; /* z-index para el borde */
+}
+.StickyVTB3INT {
+    position: -webkit-sticky;
+    position: sticky;
+    left: 174.2px;
+    z-index: 0;
+    background: white;
+}
+
+.StickyVTB3INT:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-right: 1px solid #6a6a6a;
+    border-bottom: 1px solid #6a6a6a;
+    z-index: -1; /* z-index para el borde */
+}
+
+.StickyVTB4 {
+    position: -webkit-sticky;
+    position: sticky;
+    left: 346px;
+    z-index: 0;
+    background: white;
+}
+
+.StickyVTB4:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-right: 1px solid #6a6a6a;
+    border-bottom: 1px solid #6a6a6a;
+    z-index: -1; /* z-index para el borde */
+}
+.StickyVTB4INT {
+    position: -webkit-sticky;
+    position: sticky;
+    left: 374px;
+    z-index: 0;
+    background: white;
+}
+
+.StickyVTB4INT:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-right: 1px solid #6a6a6a;
+    border-bottom: 1px solid #6a6a6a;
+    z-index: -1; /* z-index para el borde */
+}
+
+.StickyVTB5 {
+    position: -webkit-sticky;
+    position: sticky;
+    left: 433.8px;
+    z-index: 0;
+    background: white;
+    width: 218px;
+}
+.StickyVTB5:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /*border-right: 1px solid #6a6a6a;*/
+    border-bottom: 1px solid #6a6a6a;
+    z-index: -1; /* z-index para el borde */
+}
+.StickyVTB5INT {
+    position: -webkit-sticky;
+    position: sticky;
+    left: 460.8px;
+    z-index: 0;
+    background: white;
+    width: 218px;
+}
+.StickyVTB5INT:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /*border-right: 1px solid #6a6a6a;*/
+    border-bottom: 1px solid #6a6a6a;
+    z-index: -1; /* z-index para el borde */
+}
+
+.StickyVTB6 {
+    position: -webkit-sticky;
+    position: sticky;
+    left: 650px;
+    z-index: 0;
+    background: white;
+}
+.StickyVTB6:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-right: 1px solid #6a6a6a;
+    border-bottom: 1px solid #6a6a6a;
+    border-left: 1px solid #6a6a6a;
+    box-shadow: 0px 1px 1px #6a6a6a; /* Agregar sombra al pseudo-elemento */
+    z-index: -1; /* z-index para el borde */
+}
+.StickyVTB6INT {
+    position: -webkit-sticky;
+    position: sticky;
+    left: 677px;
+    z-index: 0;
+    background: white;
+}
+.StickyVTB6INT:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-right: 1px solid #6a6a6a;
+    border-bottom: 1px solid #6a6a6a;
+    border-left: 1px solid #6a6a6a;
+    box-shadow: 0px 1px 1px #6a6a6a; /* Agregar sombra al pseudo-elemento */
+    z-index: -1; /* z-index para el borde */
+}
+
+
+.StickyVTH .StickyContent {
+    border: 1px solid #6a6a6a;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    padding: 5px; /* Ajusta según sea necesario */
+    width: 100%; /* Hacer que el div ocupe todo el ancho de la celda */
+    box-sizing: border-box; /* Incluir el ancho del borde y el padding en el ancho total */
+}
+.TdBorder{
+    border-right: 1px solid #6a6a6a;
+    border-bottom: 1px solid #6a6a6a;
+}
+.Borderhead{
+    border: 1px solid #6a6a6a;   
+}
+
+.hoverable:hover .SHover::after {
+    background-color: #f4f4f4;
+}

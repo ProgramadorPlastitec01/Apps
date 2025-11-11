@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>jQuery TE | Downloaded Demo | v.1.4.0</title>
+        <link type="text/css" rel="stylesheet" href="../demo.css">
+        <link type="text/css" rel="stylesheet" href="../../jquery-te-1.4.0.css">
+        <script type="text/javascript" src="http://code.jquery.com/jquery.min.js" charset="utf-8"></script>
+        <script type="text/javascript" src="../../jquery-te-1.4.0.min.js" charset="utf-8"></script>
+        <script type="text/javascript">
+            function marcar(check,element){
+                if (!check.checked) {
+                    element.setAttribute("checked", "true");
+                }else{
+                    element.removeAttribute("checked");
+                }
+            }
+            function agregar(){
+                var table = document.getElementById("table1");
+                var rowCount = table.rows.length;
+                var row = table.insertRow(rowCount);
+                var TdFecha = row.insertCell(0);
+                TdFecha.setAttribute("contenteditable","true")
+                TdFecha.innerHTML = "&nbsp;";
+                var TdEjecuto = row.insertCell(1);
+                TdEjecuto.setAttribute("contenteditable","true")
+                TdEjecuto.innerHTML = "&nbsp;";
+                var TdDescripcion = row.insertCell(2);
+                TdDescripcion.setAttribute("contenteditable","true")
+                TdDescripcion.setAttribute("onclick","agregar()")
+                TdDescripcion.setAttribute("colspan","3")
+                TdDescripcion.setAttribute("valign","top")
+                TdDescripcion.innerHTML = "&nbsp;";
+            }
+        </script>
+    </head>
+    <body>
+        <!------------------------------------------------------------ jQUERY TEXT EDITOR ------------------------------------------------------------>
+        <textarea name="textarea" class="jqte-test">
+            <table style="width: 100%" class="tableHTMLEditor" id="table1" contenteditable="false">
+                <tr>
+                    <td colspan="5" style="background-color:#CCC;" align="center"><b style="color:white;">COPIA NO CONTROLADA</b></td>
+                </tr>
+                <tr>
+                <td style="width:20%" align="center">
+                   <img src="../../../Contenido/images/Logo.png" alt="Logo" style="width:200px;height:70px" /></td>
+                <td align="center" style="width:60%" colspan="3"><b style="color:#292929">REPORTE DE <br />NO CONFORMIDAD METROLOGICA</b></td>
+                <td align="center" style="width:40%" contenteditable="false"><b style="color:#292929">CODIGO : R-MT-023 <hr /> VERSION : 02</b><hr /><b style="color:#292929">PROCEDIMIENTO ASOCIADO P-MT-003</b></td>
+                </tr>
+                <tr>
+                <td align="center"><b style="color:#292929">Fecha :</b>(AA-MM-DD) :<u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u><br/>Hora : <u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>AM:<u contenteditable="true">&nbsp;&nbsp;</u> PM:<u contenteditable="true">&nbsp;&nbsp;</u> </td>
+                <td align="center"><b style="color:#292929">Planta :</b><u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                <td align="center"><b style="color:#292929">Area :</b><u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                <td align="center"><b style="color:#292929">Maquina :</b><u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                <td align="center"><b style="color:#292929">Reportado por :</b><u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u><br/><b style="color:#292929">Cargo :</b><u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                </tr>
+                <tr>
+                    <th colspan="5">EQUIPO / INSTRUMENTO Y / O DOCUMENTACION</th>
+                </tr>
+                <tr>
+                    <td colspan="3"><b style="color:#292929">Nombre :</b><u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                    <td align="center" colspan="2"><b style="color:#292929">Critico :</b>(SI)<u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>(NO)<u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><b style="color:#292929">Codigo Interno :</b><u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                    <td align="center" colspan="2"><b style="color:#292929">Modelo :</b><u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                    <td align="center" ><b style="color:#292929">Serie :</b><u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                </tr>
+                <tr>
+                    <td colspan="5"><b style="color:#292929">Observaciones :</b><u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                </tr>
+                <tr>
+                    <th colspan="5">DESCRIPCION DE LA CONDICION ENCONTRADA</th>
+                </tr>
+                <tr>
+                    <td colspan="5" align="center"><b style="color:#292929">Instrumento</b>(<u contenteditable="true">&nbsp;</u>) <b style="color:#292929">Documentacion(</b><u contenteditable="true">&nbsp;</u>)</td>
+                </tr>
+                <tr>
+                    <td colspan="5" contenteditable="true"></td>
+                </tr>
+                <tr>
+                    <td colspan="3"><b style="color:#292929">PERIODO DE FALLA : </b> Indique el tiempo estimado desde que el registro  se encontraba apto  para el empleo el intrumento : <u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                    <td colspan="2"><b style="color:#292929">fuente de informacion :</b>Registro(<u contenteditable="true">&nbsp;</u>): <u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>otro(<u contenteditable="true">&nbsp;</u>): <u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                </tr>
+                <tr>
+                    <td colspan="5"><b style="color:#292929">Accion inmediata : </b><u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                </tr>
+                <tr>
+                    <td align="center" colspan="2"><b style="color:#292929">Causa de falla</b><u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                    <td align="center"><b style="color:#292929">Instrumento / equipo </b>(<u contenteditable="true">&nbsp;</u>)</td>
+                    <td align="center"><b style="color:#292929">Operacion </b>(<u contenteditable="true">&nbsp;</u>)</td>
+                    <td align="center"><b style="color:#292929">Otra </b>(<u contenteditable="true">&nbsp;</u>)</td>
+                </tr>
+                <tr>
+                    <td colspan="5" ><b style="color:#292929">Observaciones : </b><u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                </tr>
+                <tr>
+                    <td align="center" ><b style="color:#292929">Nivel de riesgo : </b></td>
+                    <td align="center"><b style="color:#292929">Alto </b>[<u contenteditable="true">&nbsp;</u>]</td>
+                    <td align="center"><b style="color:#292929">Medio </b>[<u contenteditable="true">&nbsp;</u>]</td>
+                    <td align="center"><b style="color:#292929">Bajo </b>[<u contenteditable="true">&nbsp;</u>]</td>
+                    <td align="center"><b style="color:#292929">Ninguno </b>[<u contenteditable="true">&nbsp;</u>]</td>
+                </tr>
+                 <tr>
+                    <td align="center"><b style="color:#292929">Proceso afectado : </b></td>
+                    <td align="center">si (<u contenteditable="true">&nbsp;</u>)</td>
+                    <td align="center">no (<u contenteditable="true">&nbsp;</u>)</td>
+                    <td colspan="3">como: <u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                </tr>
+                 <tr>
+                    <td align="center"><b style="color:#292929">Producto afectado : </b></td>
+                    <td align="center">si (<u contenteditable="true">&nbsp;</u>)</td>
+                    <td align="center">no (<u contenteditable="true">&nbsp;</u>)</td>
+                    <td colspan="3">como: <u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                </tr>
+                 <tr>
+                    <td align="center"><b style="color:#292929">Personal afectado : </b></td>
+                    <td align="center">si (<u contenteditable="true">&nbsp;</u>)</td>
+                    <td align="center">no (<u contenteditable="true">&nbsp;</u>)</td>
+                    <td colspan="3">como: <u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                </tr>
+                <tr>
+                    <td colspan="5" align="center"><b style="color:#292929">Accion tomada con proceso / producto</b></td>
+                </tr>
+                <tr>
+                    <td colspan="5" contenteditable="true"></td>
+                </tr>
+                <tr>
+                    <td colspan="5"><b style="color:#292929">Probabilidad de que se repita esta falla : </b><u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                </tr>
+               
+                <tr>
+                    <td colspan="3" ><b style="color:#292929">Observaciones : </b><u id="obs" contenteditable="false">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                    <td colspan="2" ><b style="color:#292929">Observaciones Drto.Mantenimiento : </b><u id="obsdrto" contenteditable="false">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                </tr>
+                <tr>
+                     <td colspan="3" ><b style="color:#292929">Firma : </b><u id="firma" contenteditable="false">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                     <td colspan="2" ><b style="color:#292929">Firma Drto.Mantenimiento : </b><u id="firmadrto" contenteditable="false">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                </tr>
+                 
+               
+                </table>
+        </textarea>
+        <script>
+            $('.jqte-test').jqte();
+	
+            // settings of status
+            var jqteStatus = true;
+            $(".status").click(function()
+            {
+                jqteStatus = jqteStatus ? false : true;
+                $('.jqte-test').jqte({"status" : jqteStatus})
+            });
+        </script>
+    </body>
+</html>

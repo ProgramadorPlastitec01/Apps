@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>jQuery TE | Downloaded Demo | v.1.4.0</title>
+        <link type="text/css" rel="stylesheet" href="../demo.css">
+        <link type="text/css" rel="stylesheet" href="../../jquery-te-1.4.0.css">
+        <script type="text/javascript" src="http://code.jquery.com/jquery.min.js" charset="utf-8"></script>
+        <script type="text/javascript" src="../../jquery-te-1.4.0.min.js" charset="utf-8"></script>
+        <script type="text/javascript">
+            function marcar(check, element) {
+                if (!check.checked) {
+                    element.setAttribute("checked", "true");
+                } else {
+                    element.removeAttribute("checked");
+                }
+            }
+            function agregarRMT10() {
+                var table = document.getElementById("table1");
+                var rowCount = table.rows.length;
+                var row = table.insertRow(rowCount);
+                var TdFecha = row.insertCell(0);
+                TdFecha.setAttribute("contenteditable", "true")
+                TdFecha.innerHTML = "&nbsp;";
+                var TdEjecuto = row.insertCell(1);
+                TdEjecuto.setAttribute("contenteditable", "true")
+                TdEjecuto.innerHTML = "&nbsp;";
+                var TdDescripcion = row.insertCell(2);
+                TdDescripcion.setAttribute("contenteditable", "true")
+                TdDescripcion.setAttribute("valign", "top")
+                TdDescripcion.innerHTML = "&nbsp;";
+                var TdFecha = row.insertCell(0);
+                TdFecha.setAttribute("contenteditable", "true")
+                TdFecha.innerHTML = "&nbsp;";
+                var TdFecha = row.insertCell(0);
+                TdFecha.setAttribute("contenteditable", "true")
+                TdFecha.innerHTML = "&nbsp;";
+                var TdFecha = row.insertCell(0);
+                TdFecha.setAttribute("contenteditable", "true")
+                TdFecha.innerHTML = "&nbsp;";
+                var TdFecha = row.insertCell(0);
+                TdFecha.setAttribute("contenteditable", "true")
+                TdFecha.innerHTML = "&nbsp;";
+                var TdFecha = row.insertCell(0);
+                TdFecha.setAttribute("contenteditable", "true")
+                TdFecha.innerHTML = "&nbsp;";
+                var TdFecha = row.insertCell(0);
+                TdFecha.setAttribute("contenteditable", "true")
+                TdFecha.innerHTML = "&nbsp;";
+                var TdFecha = row.insertCell(0);
+                TdFecha.setAttribute("contenteditable", "true")
+                TdFecha.innerHTML = "&nbsp;";
+                var TdFecha = row.insertCell(0);
+                TdFecha.setAttribute("contenteditable", "true")
+                TdFecha.innerHTML = "&nbsp;";
+                var TdFecha = row.insertCell(0);
+                TdFecha.setAttribute("contenteditable", "true")
+                TdFecha.innerHTML = "&nbsp;";
+            }
+        </script>
+    </head>
+    <body>
+        <!------------------------------------------------------------ jQUERY TEXT EDITOR ------------------------------------------------------------>
+        <textarea name="textarea" class="jqte-test">
+            <table style="width: 100%" class="tableHTMLEditor" id="table1" contenteditable="false">
+                <tr>
+                    <td colspan="12" style="background-color:#CCC;" align="center"><b style="color:white;">COPIA NO CONTROLADA</b></td>
+                </tr>
+                <tr>
+                    <td style="width:20%" align="center" colspan="4">
+                   <img src="../../../Contenido/images/Logo.png" alt="Logo" style="width:200px;height:70px" /></td>
+                <td align="center" style="width:60%" colspan="4"><b style="color:#292929">VERIFICACION EN PROCESO<br />INSTRUMENTOS SENSORES DE TEMPERATURA</b></td>
+                <td align="center" style="width:40%" contenteditable="false" colspan="4"><b style="color:#292929">CODIGO : R-MT-010 <hr /> VERSION : 04</b></td>
+                </tr>
+                <tr>
+                <td colspan="6"><b style="color:#292929">MAQUINA O EQUIPO: </b><u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Equipo_R&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                <td colspan="6"><b style="color:#292929">LOCALIZACION: </b><u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Localizacion_R&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                <tr>
+                <tr>
+                <td colspan="12"><b style="color:#292929">ERROR ADMITIDO POR INSTRUMENTO: </b><u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                <tr>
+                <tr>
+                    <td align="center" rowspan="2" style="width: 10%;"><b style="color:#68BB18;">FECHA</b></td>
+                    <td align="center" rowspan="2" style="width: 10%;"><b style="color:#68BB18;">PUNTO CONTROL</b></td>
+                    <td align="center" rowspan="2" style="width: 10%;"><b style="color:#68BB18;">CODIGO TERMOCUPLA</b></td>
+                    <td align="center" rowspan="2" style="width: 10%;"><b style="color:#68BB18;">INDICACION C MAQUINA</b></td>
+                    <td align="center" style="width: 10%;" colspan="2"><b style="color:#68BB18;">L MULTIMETRO</b></td>
+                    <td align="center" style="width: 10%;" colspan="2"><b style="color:#68BB18;">INDICACION</b></td>
+                    <td align="center" rowspan="2" style="width: 10%;"><b style="color:#68BB18;">DIFERENCIA</b></td>
+                    <td align="center" style="width: 10%;"><b style="color:#68BB18;">CONFORME</b></td>
+                    <td align="center" rowspan="2" style="width: 20%;"><b style="color:#68BB18;">EJECUTO</b></td>
+                    <td align="center" rowspan="2" style="width: 20%;"><b style="color:#68BB18;">OBSERVACIONES</b></td>
+                </tr>
+                <tr>
+                    <td align="center"><b style="color:#68BB18;">m V</b></td>
+                    <td align="center"><b style="color:#68BB18;">ohm</b></td>
+                    <td align="center"><b style="color:#68BB18;">IEC 584</b></td>
+                    <td align="center"><b style="color:#68BB18;">IEC 751</b></td>
+                    <td align="center"><b style="color:#68BB18;">SI / NO</b></td>
+                </tr>
+                <tr>
+                    <td contenteditable="true">&nbsp;</td>
+                    <td contenteditable="true">&nbsp;</td>
+                    <td contenteditable="true">&nbsp;</td>
+                    <td contenteditable="true">&nbsp;</td>
+                    <td contenteditable="true">&nbsp;</td>
+                    <td contenteditable="true">&nbsp;</td>
+                    <td contenteditable="true">&nbsp;</td>
+                    <td contenteditable="true">&nbsp;</td>
+                    <td contenteditable="true">&nbsp;</td>
+                    <td contenteditable="true">&nbsp;</td>
+                    <td contenteditable="true">&nbsp;</td>
+                    <td contenteditable="true">&nbsp;</td>
+                </tr>
+                </table>
+                <table style="width: 100%" class="tableHTMLEditor" id="table2" contenteditable="false">
+                <tr>
+                    <td align="center"><b style="color:#68BB18;">TIPO J (m V)</b></td>
+                    <td align="center"><b style="color:#68BB18;">TIPO K (m V)</b></td>
+                    <td align="center"><div style="float:right;margin: 0px"><img src="Interfaz/Contenido/Iconos/PlusP.png" alt="Logo" style="width:20px;height:20px" onclick="agregarRMT10()"/></div></td>
+                </tr>
+                <tr>
+                    <td  align="center"><img src="../../../Contenido/images/R-MT-010_22.png" style="width: 70%;" alt="Logo" /><br /><img src="../../../Contenido/images/R-MT-010_1.png" alt="Logo" /></td>
+                    <td  align="center"><img src="../../../Contenido/images/R-MT-010_11.png" style="width: 70%;" alt="Logo" /><br /><img src="../../../Contenido/images/R-MT-010_2.png" alt="Logo" /></td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center"><b style="color:#68BB18;">TIPO PT 100 (omhs)</b></td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center"><img src="../../../Contenido/images/R-MT-010_3.png" alt="Logo" /></td>
+                </tr>
+                </table>
+        </textarea>
+        <script>
+            $('.jqte-test').jqte();
+
+            // settings of status
+            var jqteStatus = true;
+            $(".status").click(function ()
+            {
+                jqteStatus = jqteStatus ? false : true;
+                $('.jqte-test').jqte({"status": jqteStatus})
+            });
+        </script>
+    </body>
+</html>
