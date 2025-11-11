@@ -1301,11 +1301,11 @@ public class Tag_appDetail extends TagSupport {
                             out.print("</div>");
                             out.print("<div class='d-flex mb-2'>");
 
-                            if (stetx != 99) {
+//                            if (stetx != 99) {
                                 if (singExits) {
                                     out.print("<button class='btn btn-info mr-2' data-toggle='tooltip' data-placement='top' title='Firmar' onclick='window.location.href=\"AppDetail?opt=1&mod=3&idDoc=" + idDoc + "&idApp=" + idApp + "&idHead=" + idHead + "&type=" + type + "&idDet=" + Objdet[0] + "&swpt=2&step=" + step + "\";cargarDatos()'><i class=\"fas fa-signature\"></i></button>");
                                 }
-                            }
+//                            }
 
                             if (singExits) {
                                 out.print("<button class='btn btn-warning mr-2' style='border-radius: 4px; opacity: 0.6;' disabled data-toggle='tooltip' data-placement='top' title='El documento ya tiene al menos una firma'><i class='fas fa-edit'></i></button>");

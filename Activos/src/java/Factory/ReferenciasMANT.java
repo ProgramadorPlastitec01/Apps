@@ -16,7 +16,7 @@ public class ReferenciasMANT {
 //            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 //            Connection con = DriverManager.getConnection("jdbc:jtds:sqlserver://172.16.2.119:1433;databaseName=EMP002_MANT;encrypt=false;trustServerCertificate=true;", "sa", "plast");
             Connection con = DriverManager.getConnection("jdbc:jtds:sqlserver://172.16.2.119:1433/EMP002_MANT;user=sa;password=plast;");
-            String query = "SELECT COD,NOM FROM MAESTRO WHERE GRUP LIKE 'M%'";
+            String query = "SELECT COD,NOM FROM MAESTRO WHERE GRUP LIKE 'M%' ";
             Statement sttm = con.createStatement();
             ResultSet rs = sttm.executeQuery(query);
             List<String> lst_productos = new ArrayList<String>();

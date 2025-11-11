@@ -305,11 +305,11 @@ public class ComputerControllerJpa {
 
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="PROCESS">
-    public boolean RegisterComputer(String Name, String Mail, String Description) {
+    public boolean RegisterComputer(String Name, String Mail, String Description, String nbuser) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
-            Query q = em.createNativeQuery("CALL `Sp_cpt_r_RegisterComputer`('" + Name + "','" + Mail + "','" + Description + "')");
+            Query q = em.createNativeQuery("CALL `Sp_cpt_r_RegisterComputer`('" + Name + "','" + Mail + "','" + Description + "', '" + nbuser + "')");
             int resultado = q.executeUpdate();
             em.getTransaction().commit();
             em.clear();

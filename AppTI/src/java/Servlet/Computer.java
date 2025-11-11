@@ -27,6 +27,7 @@ public class Computer extends HttpServlet {
         ItemJpaController ItemJpa = new ItemJpaController();
         HttpSession sesion = request.getSession();
         String UserRol = sesion.getAttribute("idRol").toString();
+        String NameUser = sesion.getAttribute("Nombres").toString();
 
         List lst_setting = null;
 
@@ -125,7 +126,7 @@ public class Computer extends HttpServlet {
                         Result = ComputerJpa.UpdateComputer(IdComputer, NumberPC, Mail, Description);
                         request.setAttribute("ComputerUpdate", Result);
                     } else {
-                        Result = ComputerJpa.RegisterComputer(NumberPC, Mail, Description);
+                        Result = ComputerJpa.RegisterComputer(NumberPC, Mail, Description, NameUser);
                         request.setAttribute("ComputerRegister", Result);
                     }
                     request.getRequestDispatcher("Computer?opt=1&IdComputer=0&StateCmp=" + StateCmp + "").forward(request, response);
