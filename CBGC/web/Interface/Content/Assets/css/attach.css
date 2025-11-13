@@ -9,3 +9,8 @@
     border-color: #f5c542 !important; /* resalta el borde */
     background-color: #fffbea; /* suave fondo amarillento */
 }
+.EditFolderBatch{
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+}

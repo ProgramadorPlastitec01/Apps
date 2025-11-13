@@ -55,7 +55,8 @@ a {
 /* Home */
 .home {
     width: 100%;
-    background-color: #dccbff;
+    background: #DCCBFF;
+    background: linear-gradient(180deg, rgba(220, 203, 255, 1) 0%, rgba(149, 124, 207, 1) 52%, rgba(96, 81, 145, 1) 100%);
 }
 
 /* Capa adicional para manejar la transición */

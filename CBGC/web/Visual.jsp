@@ -230,12 +230,119 @@
             // Inicializa el arreglo global para almacenar eventos sin información
             window.NoDataEvents = [];
         </script>
+        <div class="modal fade" id="htmlModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header bg-secondary text-white">
+                        <h5 class="modal-title">Vista previa del adjunto</h5>
+                    </div>
+                    <div class="modal-body" id="htmlModalBody" style="overflow:auto; max-height:68vh;">
+                        <!-- Contenido dinámico -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-primary" onclick="downloadHtmlAsPDF()">Descargar PDF</button>
+                    </div>
+                </div>
+            </div>
+        </div>>
+    </div>
+    <script>
+        function showHtmlAttachmentById(htmlContainerId) {
+            const container = document.getElementById(htmlContainerId);
+            if (!container)
+                return;
 
-        <script src="Interface/Content/Assets/js/eventLogger.js"></script>
-        <script src="Interface/Content/Assets/js/Print.js"></script>
-        <script src="Interface/Content/Assets/modules/izitoast/js/iziToast.min.js"></script>
-        <script src="Interface/Content/Assets/js/page/modules-toastr.js"></script>
-        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-        <script src="Interface/Content/Assets/modules/sweetalert/sweetalert.min.js"></script>
-    </body>
+            const modalBody = document.getElementById('htmlModalBody');
+            modalBody.innerHTML = container.innerHTML;
+
+            // 🔹 Ajuste dinámico del tamaño según el contenido
+            const modalDialog = modalBody.closest('.modal-dialog');
+            modalDialog.style.width = 'auto';
+            modalDialog.style.maxWidth = '68vw'; // ocupa hasta 95% del ancho de pantalla
+            modalBody.style.maxHeight = '58vh'; // ocupa hasta 85% de la altura
+
+            const modal = new bootstrap.Modal(document.getElementById('htmlModal'));
+            modal.show();
+
+            // 🔹 Ajusta automáticamente el alto si el contenido es pequeño
+            setTimeout(() => {
+                const contentHeight = modalBody.scrollHeight;
+                const windowHeight = window.innerHeight * 0.85;
+                if (contentHeight < windowHeight) {
+                    modalBody.style.maxHeight = contentHeight + 'px';
+                }
+            }, 200);
+        }
+
+        function downloadHtmlAsPDF() {
+            const content = document.getElementById('htmlModalBody').innerHTML;
+            const w = window.open('', '_blank');
+            w.document.write('<html><head><title>Adjunto</title></head><body>' + content + '</body></html>');
+            w.document.close();
+            setTimeout(() => w.print(), 400);
+        }
+        (function () {
+            function attachCloseHandlers() {
+                const modalEl = document.getElementById('htmlModal');
+                if (!modalEl)
+                    return;
+
+                // Asegurar una instancia de bootstrap.Modal
+                let modalInstance = null;
+                try {
+                    modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl);
+                } catch (e) {
+                    console.warn('Bootstrap Modal API no disponible:', e);
+                }
+
+                // Botones con data-bs-dismiss="modal" dentro del modal
+                const dismissButtons = modalEl.querySelectorAll('[data-bs-dismiss="modal"]');
+                dismissButtons.forEach(btn => {
+                    // quitar escuchadores antiguos si los hay
+                    btn.removeEventListener('click', btn._closeHandler || function () {});
+                    const handler = function (e) {
+                        e.preventDefault();
+                        if (modalInstance && typeof modalInstance.hide === 'function') {
+                            modalInstance.hide();
+                        } else {
+                            // fallback: ocultar manualmente
+                            modalEl.classList.remove('show');
+                            modalEl.style.display = 'none';
+                            document.body.classList.remove('modal-open');
+                            const backdrop = document.querySelector('.modal-backdrop');
+                            if (backdrop)
+                                backdrop.remove();
+                        }
+                    };
+                    btn.addEventListener('click', handler);
+                    btn._closeHandler = handler;
+                });
+
+                // Si cierras el modal por fuera (backdrop o ESC), asegúrate de que la instancia existe
+                // (opcional) manejar ESC manualmente si quieres:
+                document.addEventListener('keydown', function (ev) {
+                    if (ev.key === 'Escape') {
+                        if (modalInstance && typeof modalInstance.hide === 'function')
+                            modalInstance.hide();
+                    }
+                });
+            }
+
+            // Esperar a que DOM y bootstrap estén listos
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', attachCloseHandlers);
+            } else {
+                attachCloseHandlers();
+            }
+        })();
+    </script>
+
+    <script src="Interface/Content/Assets/js/eventLogger.js"></script>
+    <script src="Interface/Content/Assets/js/Print.js"></script>
+    <script src="Interface/Content/Assets/modules/izitoast/js/iziToast.min.js"></script>
+    <script src="Interface/Content/Assets/js/page/modules-toastr.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="Interface/Content/Assets/modules/sweetalert/sweetalert.min.js"></script>
+</body>
 </html>

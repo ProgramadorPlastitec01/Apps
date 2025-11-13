@@ -21,7 +21,6 @@
         <link rel="stylesheet" href="Interface/Content/Assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css">
         <link rel="stylesheet" href="Interface/Content/Assets/modules/bootstrap-daterangepicker/daterangepicker.css">
         <link rel="stylesheet" href="Interface/Content/Assets/modules/select2/dist/css/select2.min.css">
-        <link rel="stylesheet" href="Interface/Content/Assets/css/appDetail.css">
 
         <!-- Datepicker CSS -->
         <link rel="stylesheet" type="text/css" media="all" href="Interface/Content/Assets/rangeCalendar/daterangepicker.css" />
@@ -48,10 +47,6 @@
                 height: 200px;
             }
         </style>
-
-        <!-- Editores -->
-        <link rel="stylesheet" href="Interface/Editor/samples/toolbarconfigurator/lib/codemirror/neo.css">
-        <!-- End Editor -->
 
         <script>
             window.dataLayer = window.dataLayer || [];

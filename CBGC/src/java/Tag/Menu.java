@@ -14,6 +14,13 @@ public class Menu extends TagSupport {
     public int doStartTag() throws JspException {
         try {
             HttpSession sesion = pageContext.getSession();
+            String Permission = "";
+            String NameUser = sesion.getAttribute("Nombres").toString();
+            try {
+                Permission = sesion.getAttribute("Permisos").toString();
+            } catch (Exception e) {
+                Permission = "";
+            }
             JspWriter out = pageContext.getOut();
             //<editor-fold defaultstate="collapsed" desc="NAV BAR">
             out.print("<div class=\"navbar-bg\"></div>\n"
@@ -26,9 +33,9 @@ public class Menu extends TagSupport {
                     + "        <ul class=\"navbar-nav navbar-right\">\n");
             out.print(
                     "          <li class=\"dropdown\"><a href=\"#\" data-toggle=\"dropdown\" onclick='CloseDivStartEndDate()' class=\"nav-link dropdown-toggle nav-link-lg nav-link-user\">\n"
-                    + "            <div class=\"d-sm-none d-lg-inline-block\">ADMINISTRADOR<img alt=\"image\" class='ml-2' src='Interface/Content/Assets/img/avatar/avatar-7.png' style=\"width:40px; height:40px; border-radius:50% !important; object-fit:cover;\" ></div></a>\n"
+                    + "            <div class=\"d-sm-none d-lg-inline-block\">" + NameUser + "<img alt=\"image\" class='ml-2' src='Interface/Content/Assets/img/avatar/avatar-7.png' style=\"width:40px; height:40px; border-radius:50% !important; object-fit:cover;\" ></div></a>\n"
                     + "            <div class=\"dropdown-menu dropdown-menu-right\">\n"
-                    + "              <div class=\"dropdown-title\">Acceso hace " + 0 + " hr - " + 0 + " min</div>\n"
+                    + "              <div class=\"dropdown-title\">Opciones</div>\n"
                     + "              <a href=\"Profile?opt=1\" onclick='cargarDatos()' class=\"dropdown-item has-icon\">\n"
                     + "                <i class=\"fas fa-user\"></i> Perfil\n"
                     + "              </a>\n"
@@ -68,33 +75,42 @@ public class Menu extends TagSupport {
 
             // ===================== BatchRecord =====================
             out.print("<li class=\"menu-header\">Batch Record</li>");
-            out.print("<li class=\"dropdown\">");
-            out.print("<a href='FileManager.jsp' class=\"nav-link\" onclick='cargarDatos()'><i class=\"far fa-folder-open\"></i><span>Anexos</span></a>");
-            out.print("</li>");
-            out.print("<li class=\"menu-header\">Certificados</li>");
-            out.print("<li class=\"dropdown\">");
-            out.print("<a href='Generate?opt=1&Type=RegistrosLab' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/Registros_lab.png\" alt=\"\" class='ImgModule'/></i><span>Registro Lab</span></a>");
-            out.print("</li>");
-            
-            out.print("<li class=\"dropdown\">");
-            out.print("<a href='Generate?opt=1&Type=ControlGrafado' class=\"nav-link\" onclick='cargarDatos()'>"
-                    + "<i><img src=\"Interface/Imagen/Control_grafado.png\" alt=\"\" class='ImgModule'/></i><div><span>Control Grafado</span><div class='Prox'>Proximamente...</div></div></a>");
-            out.print("</li>");
-            
-            out.print("<li class=\"dropdown\">");
-            out.print("<a href='Generate?opt=1&Type=InspeccionManga' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/Inspeccion_manga.png\" alt=\"\" class='ImgModule'/></i><div><span>Inspección Manga</span><div class='Prox'>Proximamente...</div></div></a>");
-            out.print("</li>");
-            
-            out.print("<li class=\"dropdown\">");
-            out.print("<a href='Generate?opt=1&Type=SistemaTubo' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/ST_Desc_2.png\" alt=\"\" class='ImgModule'/></i><div><span>Sistema de Tubo</span><div class='Prox'>Proximamente...</div></div></a>");
-            out.print("</li>");
-            
-            // ===================== Consulta =====================
-            out.print("<li class=\"menu-header\">Consulta</li>");
-            out.print("<li class=\"dropdown\">");
-            out.print("<a href='#' class=\"nav-link\" onclick='cargarDatos()'><i class=\"far fa-file-alt\"></i><span>Reporte</span></a>");
-            out.print("</li>");
 
+            if (Permission.contains("(1)")) {
+                out.print("<li class=\"dropdown\">");
+                out.print("<a href='FileManager.jsp' class=\"nav-link\" onclick='cargarDatos()'><i class=\"far fa-folder-open\"></i><span>Batch Record</span></a>");
+                out.print("</li>");
+            }
+            out.print("<li class=\"menu-header\">Certificados</li>");
+            if (Permission.contains("(4)")) {
+                out.print("<li class=\"dropdown\">");
+                out.print("<a href='Generate?opt=1&Type=RegistrosLab' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/Registros_lab.png\" alt=\"\" class='ImgModule'/></i><span>Registro Lab</span></a>");
+                out.print("</li>");
+            }
+            if (Permission.contains("(11)")) {
+                out.print("<li class=\"dropdown\">");
+                out.print("<a href='Generate?opt=1&Type=ControlGrafado' class=\"nav-link\" onclick='cargarDatos()'>"
+                        + "<i><img src=\"Interface/Imagen/Control_grafado.png\" alt=\"\" class='ImgModule'/></i><div><span>Control Grafado</span><div class='Prox'>Proximamente...</div></div></a>");
+                out.print("</li>");
+            }
+            if (Permission.contains("(12)")) {
+                out.print("<li class=\"dropdown\">");
+                out.print("<a href='Generate?opt=1&Type=InspeccionManga' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/Inspeccion_manga.png\" alt=\"\" class='ImgModule'/></i><div><span>Inspección Manga</span><div class='Prox'>Proximamente...</div></div></a>");
+                out.print("</li>");
+            }
+            if (Permission.contains("(13)")) {
+                out.print("<li class=\"dropdown\">");
+                out.print("<a href='Generate?opt=1&Type=SistemaTubo' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/ST_Desc_2.png\" alt=\"\" class='ImgModule'/></i><div><span>Sistema de Tubo</span><div class='Prox'>Proximamente...</div></div></a>");
+                out.print("</li>");
+            }
+
+            if (Permission.contains("(14)")) {
+                // ===================== Consulta =====================
+                out.print("<li class=\"menu-header\">Consulta</li>");
+                out.print("<li class=\"dropdown\">");
+                out.print("<a href='#' class=\"nav-link\" onclick='cargarDatos()'><i class=\"far fa-file-alt\"></i><span>Reporte</span><div class='Prox'>Proximamente...</div></a>");
+                out.print("</li>");
+            }
 
             out.print("</ul>"); // cierre de sidebar-menu
 

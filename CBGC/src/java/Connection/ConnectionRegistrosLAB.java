@@ -426,7 +426,8 @@ public class ConnectionRegistrosLAB {
         }
         //</editor-fold>
     }
-     public List DimensionalQueryRGC74(int Order, String Product, String Batch, String Comparator, String OrderBy) throws Exception {
+
+    public List DimensionalQueryRGC74(int Order, String Product, String Batch, String Comparator, String OrderBy) throws Exception {
         //<editor-fold defaultstate="collapsed" desc="DIMESIONAL_QUERY R-GC-064">
         List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerRegistrosLab");
         if (lst_parameter != null) {
@@ -580,7 +581,7 @@ public class ConnectionRegistrosLAB {
         }
         //</editor-fold>
     }
-    
+
     public List QueryTechnicalSheetRGC74(int Order, String Product, String Qrt) throws Exception {
         //<editor-fold defaultstate="collapsed" desc="QUERY TECHNICALSHEET R-GC-074">
         List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerRegistrosLab");
@@ -634,8 +635,8 @@ public class ConnectionRegistrosLAB {
         }
         //</editor-fold>
     }
-    
-     public List QueryWelds(int Order, String Product, String Batch, String Comparator) throws Exception {
+
+    public List QueryWelds(int Order, String Product, String Batch, String Comparator) throws Exception {
         //<editor-fold defaultstate="collapsed" desc="QUERY WELD">
         List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerRegistrosLab");
         if (lst_parameter != null) {
@@ -695,4 +696,51 @@ public class ConnectionRegistrosLAB {
         //</editor-fold>
     }
 
+    public List ConsultClearance(int Order, String Batch) throws Exception {
+        //<editor-fold defaultstate="collapsed" desc="CLEARANCE">
+        List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerRegistrosLab");
+        if (lst_parameter != null) {
+            Object[] obj_data = (Object[]) lst_parameter.get(0);
+            String[] arr_data = obj_data[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+            login = arr_data[0];
+            password = arr_data[1];
+            url = "jdbc:mysql://" + arr_data[2];
+        } else {
+            return null;
+        }
+        Connection conn = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            conn = DriverManager.getConnection(url, login, password);
+            if (conn != null) {
+                String Qry = "SELECT rd.id_registro,rd.formato,rd.liberado "
+                        + "FROM registro_despeje rd "
+                        + "INNER JOIN registro r ON rd.id_registro = r.id_registro "
+                        + "INNER JOIN producto p ON r.id_producto = p.id_producto "
+                        + "INNER JOIN orden_produccion o ON p.id_orden_produccion = o.id_orden_produccion "
+                        + "WHERE o.numero = " + Order + " AND r.lote_producto LIKE '%" + Batch + "%'";
+                Statement sttm = conn.createStatement();
+                ResultSet rs = sttm.executeQuery(Qry);
+                List<String> lst_param = new ArrayList<String>();
+                int count = 0;
+                while (rs.next()) {
+                    lst_param.add(count, rs.getString("id_registro").trim() + " /// "
+                            + rs.getString("formato").trim() + " /// "
+                            + rs.getString("liberado").trim() + "");
+                    count++;
+                }
+                conn.close();
+                return lst_param;
+            } else {
+                return null;
+            }
+        } catch (SQLException ex) {
+            return null;
+        } catch (ClassNotFoundException ex) {
+            return null;
+        } catch (Exception ex) {
+            return null;
+        }
+        //</editor-fold>
+    }
 }

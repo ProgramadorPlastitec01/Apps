@@ -96,16 +96,14 @@
                     <div><h6>Certifcados y Batch Record Gestión Calidad</h6></div>
                     <div class="cont_form_user">
                         <p>
-                            Este sistema de información está diseñado para <b>facilitar el manejo, control y emisión de certificados de calidad</b>, apoyándose en la información proveniente de los aplicativos <b>REGISTROS LAB</b>, <b>CONTROL GRAFADO</b>, <b>SISTEMA DE TUBO</b> e <b>INSPECCIÓN MANGA</b>.  
-                            <br>
-                            Además de gestionar la documentación asociada a registros como <b>R-GC-046</b>, <b>R-GC-074</b>, <b>R-GC-194</b>, <b>R-GC-136</b> entre otros, el sistema genera un <b>Batch Record</b>, que consiste en la recopilación integral de todos los archivos correspondientes a un lote.  
-                            Como herramienta virtual, permite al usuario acceder a la información de forma <b style="color:#00281b">segura</b>, <b style="color:#00281b">rápida</b> y <b style="color:#00281b">confiable</b>, garantizando una adecuada gestión y trazabilidad en cada uno de los procesos.
+                            CBGC es una herramienta creada para apoyar al área de Calidad en la generación y control de certificados de producto y reportes de producción (Batch Record). Su principal objetivo es facilitar la consulta y recopilación de información que proviene de diferentes sistemas, permitiendo generar documentos completos y confiables sin depender de múltiples aplicaciones o procesos manuales.
+
+                            El aplicativo reúne en un solo lugar los datos necesarios para los certificados de calidad y los reportes por lote, ofreciendo espacios para ingresar información adicional cuando sea necesario. De esta forma, CBGC ayuda a que los procesos de calidad sean más ágiles, organizados y precisos, mejorando la trazabilidad y el seguimiento de la producción.
                         </p>
 
                     </div>
                 </div>
             </div>
-            <div class="ButtomFloat" onclick="ViewWindows(1)" ><img  class='ImgSizeFloat' src='Interface/Imagen/BOTTI.png'></div>
         </section>
         <script src="Interface/Content/Assets/js/ScriptLogin.js"></script>
         <script type="text/javascript">

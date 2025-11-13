@@ -10,12 +10,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
-
 @WebServlet("/FileManagerServlet")
-@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
-                 maxFileSize = 1024 * 1024 * 50,     // 50MB
-                 maxRequestSize = 1024 * 1024 * 100) // 100MB
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024 * 2, // 2MB
+        maxFileSize = 1024 * 1024 * 50,     // 50MB
+        maxRequestSize = 1024 * 1024 * 100  // 100MB
+)
 public class FileManagerServlet extends HttpServlet {
+    
     private static final String UPLOAD_DIR = "uploads";
 
     @Override
@@ -26,22 +28,44 @@ public class FileManagerServlet extends HttpServlet {
         String appPath = request.getServletContext().getRealPath("");
         String savePath = appPath + File.separator + UPLOAD_DIR + File.separator + lote;
 
+        // Verificar y crear carpeta si no existe
         File fileSaveDir = new File(savePath);
+        boolean isNewFolder = false;
         if (!fileSaveDir.exists()) {
-            fileSaveDir.mkdirs(); // crea carpeta del lote
+            isNewFolder = fileSaveDir.mkdirs(); // crea carpeta del lote
         }
 
-        for (Part part : request.getParts()) {
-            String fileName = extractFileName(part);
-            if (!fileName.isEmpty()) {
-                part.write(savePath + File.separator + fileName);
+        try {
+            boolean hasFiles = false;
+
+            for (Part part : request.getParts()) {
+                String fileName = extractFileName(part);
+                if (!fileName.isEmpty()) {
+                    hasFiles = true;
+                    part.write(savePath + File.separator + fileName);
+                }
             }
-        }
 
-        request.setAttribute("message", "Archivos subidos correctamente al lote: " + lote);
-        request.getRequestDispatcher("/FileManager.jsp").forward(request, response);
+            // Construir mensaje de éxito o advertencia según el caso
+            String msg;
+            if (isNewFolder && hasFiles) {
+                msg = "folder_created";
+            } else if (!isNewFolder && hasFiles) {
+                msg = "upload_success";
+            } else {
+                msg = "error_upload";
+            }
+
+            // Redirigir al JSP con parámetro msg
+            response.sendRedirect("FileManager.jsp?msg=" + msg);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            response.sendRedirect("FileManager.jsp?msg=error_upload");
+        }
     }
 
+    // Método auxiliar para obtener el nombre real del archivo
     private String extractFileName(Part part) {
         String contentDisp = part.getHeader("content-disposition");
         for (String token : contentDisp.split(";")) {
@@ -52,4 +76,3 @@ public class FileManagerServlet extends HttpServlet {
         return "";
     }
 }
-

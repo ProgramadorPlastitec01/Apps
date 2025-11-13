@@ -8,7 +8,6 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 import Controller.CertificatesJpaController;
 import Controller.FormatJpaController;
-import Connection.ConnectionSignature;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 
@@ -20,7 +19,6 @@ public class GenerateReport extends TagSupport {
         HttpSession sesion = pageContext.getSession();
         CertificatesJpaController CertificateJpa = new CertificatesJpaController();
         FormatJpaController FormatJpa = new FormatJpaController();
-        ConnectionSignature SigntureJpa = new ConnectionSignature();
         List lst_ceriticate = null;
         List lst_format = null;
         String Type = "";
@@ -123,8 +121,12 @@ public class GenerateReport extends TagSupport {
             if (Permission.contains("(5)")) {
                 out.print("<button class='btn btn-" + ((TempDelete > 0) ? "green" : "warning") + " btn-sm mr-4' style='border-radius: 4px;'  onclick=\"javascript:location.href='Generate?opt=1&Type=" + Type + "&TempDelete=" + ((TempDelete > 0) ? "0" : "1") + "';cargarDatos()\" ><i class=\"fas fa-" + ((TempDelete > 0) ? "file-signature" : "file-prescription") + "\"></i></button>");
             }
-            out.print("<button class='btn btn-green btn-sm mr-4' style='border-radius: 4px;'  onclick='ExecuteForm()' ><i class='fas fa-signature'></i></button>");
-            out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1)'><i class='fas fa-plus'></i></button></div>");
+            if (Permission.contains("(6)")) {
+                out.print("<button class='btn btn-green btn-sm mr-4' style='border-radius: 4px;'  onclick='ExecuteForm()' ><i class='fas fa-signature'></i></button>");
+            }
+            if (Permission.contains("(7)")) {
+                out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1)'><i class='fas fa-plus'></i></button></div>");
+            }
             out.print("</div>");
 
             //<editor-fold defaultstate="collapsed" desc="FORM-SIGNATURE MASIVE">
@@ -202,7 +204,7 @@ public class GenerateReport extends TagSupport {
                         out.print("<td class='text-center'><button class='btn btn-danter btn-sm' style='border-radius: 4px;'><i class=\"fas fa-times\"></i></button></td>");
                     }
                     out.print("<td class='d-flex'>");
-                    out.print("<button class='btn btn-green btn-sm mr-2' style='border-radius: 4px;' onclick=\"javascript:location.href='Generate?opt=2&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "&TempDelete=" + TempDelete + "';cargarDatos()\" ><i class=\"fas fa-eye\"></i></button>");
+                    out.print("<button class='btn btn-green btn-sm mr-2' style='border-radius: 4px;' onclick=\"javascript:location.href='Generate?opt=2&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "&TempDelete=" + TempDelete + "&Order=" + ObjCerti[5] + "&Batch=" + ObjCerti[7] + "';cargarDatos()\" ><i class=\"fas fa-eye\"></i></button>");
                     if (State == 1) {
                         if (Permission.contains("(8)")) {
                             out.print("<button class='btn btn-danger btn-sm' style='border-radius: 4px;' onclick=\"confirmarEliminacion('Generate?opt=5&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "')\"><i class='fas fa-trash'></i></button>");
