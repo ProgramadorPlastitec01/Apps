@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import Connection.ConnectionAdminUser;
+import Method.generateRandomPassword;
+import Method.Mail;
 import java.util.List;
 
 public class Session extends HttpServlet {
@@ -29,9 +31,10 @@ public class Session extends HttpServlet {
             ConnectionAdminUser UserJpa = new ConnectionAdminUser();
             int opt = Integer.parseInt(request.getParameter("opt"));
             int temp = 0, IdUser = 0, document = 0;
-            String user = "", password = "", passwordEncrypt = "", doc = "";
+            String user = "", password = "", passwordEncrypt = "", doc = "", mail = "";
             boolean result = false;
             List lst_user = null;
+            List lst_userRest = null;
             switch (opt) {
                 case 1:
                     //<editor-fold defaultstate="collapsed" desc="LOGIN">
@@ -48,16 +51,16 @@ public class Session extends HttpServlet {
                     } else {
                         user = request.getParameter("Txt_user");
                         password = request.getParameter("Txt_password");
-                        if (password.length() >= 8) {
+                        if (password.length() >= 10) {
                             passwordEncrypt = md5.md5(password);
                             lst_user = UserJpa.ConsultUserPassword(user, passwordEncrypt);
-                            if (result) {
+                            if (lst_user == null || lst_user.isEmpty() || lst_user.size() == 0) {
                                 lst_user = UserJpa.ConsultUserPassword(user, password);
                             }
                         } else {
                             lst_user = UserJpa.ConsultUserPassword(user, password);
                         }
-                        if (lst_user == null) {
+                        if (lst_user == null || lst_user.isEmpty() || lst_user.size() == 0) {
                             result = true;
                             request.setAttribute("Non_existent_user", result);
                             request.getRequestDispatcher("index.jsp").forward(request, response);
@@ -70,8 +73,8 @@ public class Session extends HttpServlet {
                                         result = true;
                                         request.setAttribute("Deactivaded_user", true);
                                         request.getRequestDispatcher("index.jsp").forward(request, response);
-                                    } else if (DataUser.equals("YES")) {
-                                        request.setAttribute("IdUser", DataUser[0]);
+                                    } else if (DataUser[10].equals("YES")) {
+                                        request.setAttribute("IdUser", DataUser[0].trim());
                                         request.setAttribute("Change_Password", true);
                                         request.getRequestDispatcher("index.jsp").forward(request, response);
                                     } else {
@@ -100,6 +103,40 @@ public class Session extends HttpServlet {
                             }
                         }
                     }
+                    //</editor-fold>
+                    break;
+                case 2:
+                    //<editor-fold defaultstate="collapsed" desc="RESET PASSWORD">
+                    document = Integer.parseInt(request.getParameter("Txt_document"));
+                    user = request.getParameter("Txt_user");
+                    mail = request.getParameter("Txt_mail");
+                    lst_userRest = UserJpa.ConsultResetPassword(document, user);
+                    if (lst_userRest != null) {
+                        String[] DataUser = lst_userRest.toString().replace("[", "").replace("]", "").split("///");
+                        String name = DataUser[1].trim() + " " + DataUser[2].trim();
+                        String newPassword = generateRandomPassword.generate(10);
+                        IdUser = Integer.parseInt(DataUser[0].trim());
+                        result = UserJpa.UpdateResetPassword(IdUser, newPassword);
+                        if (result) {
+                            Mail mailer = new Mail();
+                            mailer.RememeberPassword(name, newPassword, mail, getServletContext());
+                            request.setAttribute("Mail_Reset_Pass", result);
+                        }
+                        request.getRequestDispatcher("index.jsp").forward(request, response);
+                    } else {
+                        request.setAttribute("Unidentified_User", true);
+                        request.getRequestDispatcher("Start?opc=1").forward(request, response);
+                    }
+                    //</editor-fold>
+                    break;
+                case 3:
+                    //<editor-fold defaultstate="collapsed" desc="UPDATE PASSWORD">
+                    IdUser = Integer.parseInt(request.getParameter("IdUser"));
+                    password = request.getParameter("Txt_password");
+                    passwordEncrypt = md5.md5(password);
+                    result = UserJpa.UpdateResetPassword(IdUser, passwordEncrypt);
+                    request.setAttribute("Update_password", result);
+                    request.getRequestDispatcher("index.jsp").forward(request, response);
                     //</editor-fold>
                     break;
             }

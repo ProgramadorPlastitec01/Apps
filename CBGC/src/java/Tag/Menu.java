@@ -76,35 +76,35 @@ public class Menu extends TagSupport {
             // ===================== BatchRecord =====================
             out.print("<li class=\"menu-header\">Batch Record</li>");
 
-            if (Permission.contains("(1)")) {
+            if (Permission.contains("(2)")) {
                 out.print("<li class=\"dropdown\">");
                 out.print("<a href='FileManager.jsp' class=\"nav-link\" onclick='cargarDatos()'><i class=\"far fa-folder-open\"></i><span>Batch Record</span></a>");
                 out.print("</li>");
             }
             out.print("<li class=\"menu-header\">Certificados</li>");
-            if (Permission.contains("(4)")) {
+            if (Permission.contains("(5)")) {
                 out.print("<li class=\"dropdown\">");
                 out.print("<a href='Generate?opt=1&Type=RegistrosLab' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/Registros_lab.png\" alt=\"\" class='ImgModule'/></i><span>Registro Lab</span></a>");
                 out.print("</li>");
             }
-            if (Permission.contains("(11)")) {
+            if (Permission.contains("(12)")) {
                 out.print("<li class=\"dropdown\">");
                 out.print("<a href='Generate?opt=1&Type=ControlGrafado' class=\"nav-link\" onclick='cargarDatos()'>"
                         + "<i><img src=\"Interface/Imagen/Control_grafado.png\" alt=\"\" class='ImgModule'/></i><div><span>Control Grafado</span><div class='Prox'>Proximamente...</div></div></a>");
                 out.print("</li>");
             }
-            if (Permission.contains("(12)")) {
+            if (Permission.contains("(13)")) {
                 out.print("<li class=\"dropdown\">");
                 out.print("<a href='Generate?opt=1&Type=InspeccionManga' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/Inspeccion_manga.png\" alt=\"\" class='ImgModule'/></i><div><span>Inspección Manga</span><div class='Prox'>Proximamente...</div></div></a>");
                 out.print("</li>");
             }
-            if (Permission.contains("(13)")) {
+            if (Permission.contains("(14)")) {
                 out.print("<li class=\"dropdown\">");
                 out.print("<a href='Generate?opt=1&Type=SistemaTubo' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/ST_Desc_2.png\" alt=\"\" class='ImgModule'/></i><div><span>Sistema de Tubo</span><div class='Prox'>Proximamente...</div></div></a>");
                 out.print("</li>");
             }
 
-            if (Permission.contains("(14)")) {
+            if (Permission.contains("(15)")) {
                 // ===================== Consulta =====================
                 out.print("<li class=\"menu-header\">Consulta</li>");
                 out.print("<li class=\"dropdown\">");

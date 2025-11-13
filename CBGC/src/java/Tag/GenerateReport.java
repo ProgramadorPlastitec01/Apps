@@ -118,13 +118,13 @@ public class GenerateReport extends TagSupport {
                     + "<h4>Generar Certificado</h4>"
                     + "</div>");
             out.print("<div class='d-flex'>");
-            if (Permission.contains("(5)")) {
+            if (Permission.contains("(6)")) {
                 out.print("<button class='btn btn-" + ((TempDelete > 0) ? "green" : "warning") + " btn-sm mr-4' style='border-radius: 4px;'  onclick=\"javascript:location.href='Generate?opt=1&Type=" + Type + "&TempDelete=" + ((TempDelete > 0) ? "0" : "1") + "';cargarDatos()\" ><i class=\"fas fa-" + ((TempDelete > 0) ? "file-signature" : "file-prescription") + "\"></i></button>");
             }
-            if (Permission.contains("(6)")) {
+            if (Permission.contains("(7)")) {
                 out.print("<button class='btn btn-green btn-sm mr-4' style='border-radius: 4px;'  onclick='ExecuteForm()' ><i class='fas fa-signature'></i></button>");
             }
-            if (Permission.contains("(7)")) {
+            if (Permission.contains("(8)")) {
                 out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1)'><i class='fas fa-plus'></i></button></div>");
             }
             out.print("</div>");
@@ -206,7 +206,7 @@ public class GenerateReport extends TagSupport {
                     out.print("<td class='d-flex'>");
                     out.print("<button class='btn btn-green btn-sm mr-2' style='border-radius: 4px;' onclick=\"javascript:location.href='Generate?opt=2&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "&TempDelete=" + TempDelete + "&Order=" + ObjCerti[5] + "&Batch=" + ObjCerti[7] + "';cargarDatos()\" ><i class=\"fas fa-eye\"></i></button>");
                     if (State == 1) {
-                        if (Permission.contains("(8)")) {
+                        if (Permission.contains("(9)")) {
                             out.print("<button class='btn btn-danger btn-sm' style='border-radius: 4px;' onclick=\"confirmarEliminacion('Generate?opt=5&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "')\"><i class='fas fa-trash'></i></button>");
                         }
                     }

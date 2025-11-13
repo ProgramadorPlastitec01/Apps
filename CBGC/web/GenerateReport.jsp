@@ -10,7 +10,8 @@
         <link rel="stylesheet" href="Interface/Content/Assets/modules/datatables/Select-1.2.4/css/select.bootstrap4.min.css">
         <link rel="stylesheet" href="Interface/Content/Assets/modules/datatables/datatables.min.css">
         <link rel="stylesheet" href="Interface/Content/Assets/modules/izitoast/css/iziToast.min.css">
-        <title>JSP Page</title>
+        <link rel="icon" type="image/png" href="Interface/Imagen/Icon.fw.png">
+        <title>Generación</title>
     </head>
     <body>
         <jsp:include page="Menu.jsp"></jsp:include>
