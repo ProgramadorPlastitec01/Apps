@@ -149,14 +149,5 @@
             <script src="Interface/Content/Assets/js/page/modules-toastr.js"></script>
             <script src="Interface/Content/Assets/js/ScriptLogin.js"></script>
         <Alert:Alert/>
-        <script>
-                $(function () {
-                    iziToast.success({
-                        title: 'Prueba',
-                        message: 'El toast funciona correctamente',
-                        position: 'topRight'
-                    });
-                });
-        </script>
     </body>
 </html>

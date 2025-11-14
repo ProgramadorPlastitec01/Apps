@@ -40,24 +40,27 @@
                                     String claseCardBody = (loteSeleccionado == null)
                                             ? "card-body d-flex justify-content-between"
                                             : "card-body";
+                                    String SizeDiv = (loteSeleccionado == null)
+                                            ? "WidthDiv"
+                                            : "";
                                 %>
                                 <div class="<%= claseCardBody%>">
                                     <!-- Formulario de subida -->
                                     <Alert:Alert/>
                                     <!-- Listado de carpetas o archivos -->
-                                    <%
-                                        if (loteSeleccionado == null) {
-                                            // === VISTA 1: carpetas ===
-                                            File baseDir = new File(uploadPath);
-                                            if (baseDir.exists()) {
-                                                File[] carpetas = baseDir.listFiles(new FileFilter() {
-                                                    @Override
-                                                    public boolean accept(File file) {
-                                                        return file.isDirectory();
-                                                    }
-                                                });
-                                    %>
-                                    <div style="width: 66%">
+                                    <div class="<%= SizeDiv%>">
+                                        <%
+                                            if (loteSeleccionado == null) {
+                                                // === VISTA 1: carpetas ===
+                                                File baseDir = new File(uploadPath);
+                                                if (baseDir.exists()) {
+                                                    File[] carpetas = baseDir.listFiles(new FileFilter() {
+                                                        @Override
+                                                        public boolean accept(File file) {
+                                                            return file.isDirectory();
+                                                        }
+                                                    });
+                                        %>
                                         <h5 class="mt-3 mb-3">Lotes disponibles</h5>
 
                                         <div class="row g-3">
@@ -94,7 +97,7 @@
                                         <%
                                         } else {
                                         %>
-                                        <p class="alert alert-warning mt-3">No se ha creado la carpeta principal de uploads.</p>
+                                        <p class="alert alert-warning mt-3 text-center">No se ha creado la carpeta principal de uploads.</p>
                                         <%
                                             }
                                         } else {
