@@ -834,11 +834,11 @@ public class Tag_device extends TagSupport {
                         String[] DtaFormat = ObjFormat[4].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
 
                         //<editor-fold defaultstate="collapsed" desc="REPLACE DATA">
-                        format = format.replace("XXXTIPOOXXX", ObInfo[2].toString())
-                                .replace("XXXAMRCAXXX", ObInfo[3].toString())
-                                .replace("XXXMODELOXXX", ObInfo[4].toString())
-                                .replace("XXXSERIALXXX", ObInfo[5].toString())
-                                .replace("XXXITEMXXX", ObInfo[6].toString());
+                        format = format.replace("XXXTIPOOXXX", typeDvName)
+                                .replace("XXXAMRCAXXX", ObInfo[16].toString())
+                                .replace("XXXMODELOXXX", ObInfo[15].toString())
+                                .replace("XXXSERIALXXX", ObInfo[6].toString())
+                                .replace("XXXITEMXXX", ObInfo[5].toString());
                         format = format.replace("XXXNROPCXXX", nameDevice);
                         format = format.replace("XXXCARGOXXX", "<b>" + DtaFormat[2].toString() + "</b>")
                                 .replace("XXXAREAXXX", "<b>" + DtaFormat[3].toString() + "</b>")
@@ -1039,11 +1039,11 @@ public class Tag_device extends TagSupport {
                                     .replace("XXXCOLUMM4XXX", "<input type='text' class='form-control' name='txt_comm4' id='' data-toggle='tooltip' data-placement='top' title=''  value=''  required >")
                                     .replace("XXXCOLUMM5XXX", "<input type='text' class='form-control' name='txt_comm5' id='' data-toggle='tooltip' data-placement='top' title=''  value=''  required >");
                             format = format.replace("XXXNROPCXXX", nameDevice);
-                            format = format.replace("XXXTIPOOXXX", ObInfo[2].toString())
-                                    .replace("XXXAMRCAXXX", ObInfo[3].toString())
-                                    .replace("XXXMODELOXXX", ObInfo[4].toString())
-                                    .replace("XXXSERIALXXX", ObInfo[5].toString())
-                                    .replace("XXXITEMXXX", ObInfo[6].toString());
+                            format = format.replace("XXXTIPOOXXX", typeDvName)
+                                    .replace("XXXAMRCAXXX", ObInfo[16].toString())
+                                    .replace("XXXMODELOXXX", ObInfo[15].toString())
+                                    .replace("XXXSERIALXXX", ObInfo[6].toString())
+                                    .replace("XXXITEMXXX", ObInfo[5].toString());
                             format = format.replace("XXXPLUS1XXX", "<button type='buitton' class='btn btn-green btn-sm' onclick='mostrarConvencion(1)'><i class='fas fa-plus'></i></button>");
                             format = format.replace("XXXPLUS2XXX", "<button type='buitton' class='btn btn-green btn-sm' onclick='mostrarConvencion(2)'><i class='fas fa-plus'></i></button>");
 
