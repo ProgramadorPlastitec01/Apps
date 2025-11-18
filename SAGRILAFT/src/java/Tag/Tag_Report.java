@@ -93,12 +93,16 @@ public class Tag_Report extends TagSupport {
                             out.print("<b>" + (obj_company[19] == null ? "Sin fecha definida" : obj_company[19].equals("") ? "Sin fecha definida" : obj_company[19]) + "</b>");
                             out.print("</div>");
 
-                            out.print("<div style='width:22%'>");
+                            out.print("<div style='width:15%'>");
                             out.print("<b>" + (obj_company[17] == null ? "Sin valor anual" : obj_company[17].equals("") ? "Sin valor anual" : obj_company[17]) + "</b>");
                             out.print("</div>");
 
                             out.print("<div style='width:22%'>");
                             out.print((Integer.parseInt(obj_company[33].toString()) == 1 ? "<b style='color:green'>ACTIVO" : "<b style='color:A09F9F'>OBSOLETO") + "</b>");
+                            out.print("</div>");
+                            
+                            out.print("<div width='width: 18%;'>");
+                            out.print("<button class='btn btn-info btn-sm' data-toggle='tooltip' data-pacement='top' title='Ver documento' onclick='window.location.href=\"Document?opt=1&IdDoc="+ obj_company[1] +"&Event=Checking\"; cargarDatos()'><i class='fas fa-file'></i></button>");
                             out.print("</div>");
 
                             out.print("</div>");
@@ -107,6 +111,7 @@ public class Tag_Report extends TagSupport {
                             //<editor-fold defaultstate="collapsed" desc="CONTAINER">
                             out.print("<div class='DivAJRP mt-3 mb-3'>");
                             out.print("<div  class=\"accordion-body collapse\" id=\"panel-body-" + i + "\" data-parent=\"#accordion\">");
+//                            out.print("<button class='btn btn-'>tesst</button>");
                             out.print("<ul class=\"nav nav-tabs\" style='justify-content:center;' id=\"myTab2\" role=\"tablist\">\n"
                                     + "                      <li class=\"nav-item\">\n"
                                     + "                        <a class=\"nav-link active\" id=\"basic-tab2\" data-toggle=\"tab\" href=\"#basic\" role=\"tab\" aria-controls=\"BasicInformation\" aria-selected=\"true\">Información Basica</a>\n"

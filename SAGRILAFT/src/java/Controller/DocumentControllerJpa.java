@@ -563,5 +563,24 @@ public class DocumentControllerJpa implements Serializable {
         }
     }
 
+    public boolean DocumentRegisterConclude(int IdDoc, String Obse, String UserReg) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        try {
+            Query q = em.createNativeQuery("CALL `Sp_obs_r_RegisterObervationsForClonclude`(" + IdDoc + ",'" + Obse + "', '" + UserReg + "')");
+            int resultado = q.executeUpdate();
+            em.getTransaction().commit();
+            em.clear();
+            em.close();
+            if (resultado > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
 //</editor-fold>
 }

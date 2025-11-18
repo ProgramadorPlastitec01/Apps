@@ -1339,9 +1339,9 @@ public class Tag_Segmentation extends TagSupport {
                     } else {
                         if (obj_segmentation[34] != null) {
                             int days = Integer.parseInt(obj_segmentation[34].toString());
-                            if (days < 300) {
+                            if (days < 650) {
                                 out.print("<b style='color:green;'>Vigente</b>");
-                            } else if (days < 365) {
+                            } else if (days < 730) {
                                 out.print("<b style='color:orange;'>Proximo a vencer</b>");
                             } else {
                                 out.print("<b style='color:red;'>Vencido</b>");

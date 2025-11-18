@@ -259,18 +259,11 @@ public class Tag_Document extends TagSupport {
 
                 out.print("<div class='d-flex'>");
                 out.print("<div class='col-lg-6' style='display: grid;'>");
+
                 out.print("<input type='text' class='form-control mr-3' name='TxtBusinessName' id='' placeholder='Razon Social' value='" + (idSegx.equals("") ? "" : namex) + "'  data-toggle='tooltip' data-placement='top' title='Razon Social' required>");
-                out.print("<input type='text' class='form-control mr-3' name='TxtMail' id='' placeholder='Correo' data-toggle='tooltip' data-placement='top' title='Correo@correo.com' required>");
-
-                out.print("<div class='d-flex' style='align-items: center;'>");
-                out.print("<div class='col-lg-6'>");
-                out.print("<h6 class=''>Tipo de documento</h6>");
-                out.print("<div class='d-flex' style='align-items: baseline;'><input type='radio' class='mr-2' name='radType' value='vin' checked> Vinculación &nbsp;&nbsp;");
-                out.print("<input type='radio' class='mr-2' name='radType' value='act'> Actualización</div>");
-                out.print("</div>");
-//                out.print("</div>");
-
-                out.print("<div class='col-lg-6 wdtFixe' data-toggle='tooltip' data-placemente='top' title='Tipo de registro'>");
+                out.print("<div class='d-flex'>");
+                out.print("<input type='text' class='form-control col-lg-6 mt-2 mb-2' name='TxtMail' id='' placeholder='Correo' data-toggle='tooltip' data-placement='top' title='Correo@correo.com' required>");
+                out.print("<div class='col-lg-6 mt-2 mb-2 wdtFixe' data-toggle='tooltip' data-placemente='top' title='Tipo de registro'>");
                 out.print("<select class='form-control' name='TxtTemplate' required>");
                 out.print("<option selected disabled value=''>Seleccione registro</option>");
                 lst_config = ConfigJpa.ConsultSettingsByCategorie("DocumentType");
@@ -288,14 +281,54 @@ public class Tag_Document extends TagSupport {
                 out.print("</div>");
                 out.print("</div>");
 
-                out.print("<h6 style='margin: 0;'>Seleccionar acuerdo de seguridad que aplica:</h6>");
+                out.print("<div class='d-flex mt-2' style='align-items: center;'>");
+
+                out.print("<div class='col-lg-6'>");
+                out.print("<h6 class=''>Tipo de documento</h6>");
+
+                out.print("<label class='mr-2'>");
+                out.print("<input type='radio' class='selectgroup-input' name='radType' value='vin' checked>");
+                out.print("<span class='selectgroup-button selectgroup-button-icon'>Vinculación</span>");
+                out.print("</label>");
+
+                out.print("<label>");
+                out.print("<input type='radio' class='selectgroup-input' name='radType' value='act'> ");
+                out.print("<span class='selectgroup-button selectgroup-button-icon'>Actualización</span>");
+                out.print("</label>");
+
+                out.print("</div>");
+
+                out.print("<div class='col-lg-6'>");
+                out.print("<h6 class=''>Tipo de contraparte</h6>");
+
+                out.print("<label class='mr-2'>");
+                out.print("<input type='radio' class='selectgroup-input' name='ContraType' value='prv' checked>");
+                out.print("<span class='selectgroup-button selectgroup-button-icon'>Proveedor</span>");
+                out.print("</label>");
+
+                out.print("<label class=''>");
+                out.print("<input type='radio' class='selectgroup-input' name='ContraType' value='cli'>");
+                out.print("<span class='selectgroup-button selectgroup-button-icon'>Cliente</span>");
+                out.print("</label>");
+
+                out.print("</div>");
+
+                out.print("</div>");
+
+                out.print("<h6 class='mt-3' style='margin: 0;'>Seleccionar acuerdo de seguridad que aplica:</h6>");
                 lst_template = TemplateJpa.ConsultTemplateForm("AcuerdoSeguridad");
                 if (lst_template != null) {
-                    out.print("<div class='mb-2'>");
-                    out.print("<input type='radio' class='' name='TxtAgree' id='' value='0' checked> N/A &nbsp;&nbsp;");
+                    out.print("<div class=''>");
+                    out.print("<label class='mr-2'>");
+                    out.print("<input type='radio' class='selectgroup-input' name='TxtAgree' id='' value='0' checked> &nbsp;&nbsp;");
+                    out.print("<span class='selectgroup-button selectgroup-button-icon'>N/A</span>");
+                    out.print("</label>");
                     for (int i = 0; i < lst_template.size(); i++) {
                         Object[] ObjTemp = (Object[]) lst_template.get(i);
-                        out.print("<input type='radio' class='' name='TxtAgree' id='' value='" + ObjTemp[0] + "'> " + ObjTemp[2] + " &nbsp;&nbsp;  " + ((i == 1) ? "<br>" : "") + " ");
+                        out.print("<label class='mr-2'>");
+                        out.print("<input type='radio' class='selectgroup-input' name='TxtAgree' id='' value='" + ObjTemp[0] + "'>  ");
+                        out.print("<span class='selectgroup-button selectgroup-button-icon'>" + ObjTemp[2] + "</span>");
+                        out.print("</label>");
                     }
                     out.print("</div>");
                 } else {
@@ -510,7 +543,8 @@ public class Tag_Document extends TagSupport {
                     out.print("<div class=''>");
                     out.print("<button onclick='window.location.href=\"Document?opt=1\";cargarDatos()' class='btn btn-blue mr-4' data-toggle='tooltip' data-placemen='top' title='Atras'><i class='fas fa-arrow-left'></i></button> <h1>Revision de documentos</h1>");
                     out.print("</div>");
-                    out.print("<div class=''>");
+                    out.print("<div class='d-flex'>");
+                    out.print("<button onclick='mostrarConvencion(9)' class='btn btn-yellow mr-2' data-toggle='tooltip' data-placemen='top' title='Eventos'>Eventos <i class=\"fas fa-file\"></i></button>");
                     out.print("<button onclick='window.location.href=\"Document?opt=1&IdDoc=" + IdDoc + "&Event=Checking\";cargarDatos()' class='btn btn-blue mr-2' data-toggle='tooltip' data-placemen='top' title='Recargar'><i class=\"fas fa-undo-alt\"></i></button>");
                     out.print("</div>");
                     out.print("</div>");
@@ -531,24 +565,83 @@ public class Tag_Document extends TagSupport {
                     } else {
                         out.print("<div class='d-flex'>");
                         out.print("<button class='btn btn-warning mr-2' disabled><i class=\"fas fa-reply\"></i>&nbsp; Devolver</button>");
-                        List docs = DocumentJpa.ConsultDocumentObsxDoc(idDoc);
-                        try {
-                            if (docs != null || !docs.isEmpty()) {
-                                out.print("<button class='btn btn-primary' onclick='window.location.href=\"Document?opt=7&IdDoc=" + IdDoc + "\";cargarDatos()'>Concluir &nbsp; <i class=\"fas fa-share\"></i></button>");
-                            }
-                        } catch (Exception e) {
-                        }
+                        out.print("<button class='btn btn-blue mr-2' onclick='mostrarConvencion(8)'><i class=\"fas fa-step-forward\"></i>&nbsp; Concluir</button>");
+//                        List docs = DocumentJpa.ConsultDocumentObsxDoc(idDoc);
+//                        try {
+//                            if (docs != null || !docs.isEmpty()) {
+//                                out.print("<button class='btn btn-primary' onclick='window.location.href=\"Document?opt=7&IdDoc=" + IdDoc + "\";cargarDatos()'>Concluir &nbsp; <i class=\"fas fa-share\"></i></button>");
+//                            }
+//                        } catch (Exception e) {
+//                        }
                         out.print("</div>");
                         out.print("<button class='btn btn-success' disabled>Aprobar &nbsp;<i class=\"fas fa-share\"></i></button>");
                     }
                     out.print("</div>");
+                    
+                    
+                    
+                    //<editor-fold defaultstate="collapsed" desc="DOCUMENT OBSERVATIONS">
+                    out.print("<div class='sweet-local' tabindex='-1' id='Ventana9' style='opacity: 1.03; display:none;'>");
+                    out.print("<div class='cont_reg' style='width: 40%; margin-left: 55%;'>");
+                    out.print("<div style='display: flex; justify-content: space-between'>");
+                    out.print("<h3>Eventos del documento</h3>");
+                    out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(9)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
+                    out.print("</div>");
+                    out.print("<div class='cont_form_user'>");
+                    
+                    out.print("<table class='table table-bordered' id='table-1'>");
+                    out.print("<thead>");
+                    out.print("<tr>");
+                    out.print("<th>"
+                            + "</th>");
+                    out.print("</tr>");
+                    out.print("</thead>");
+                    out.print("<tbody>");
+                    out.print("<tr>");
+                    out.print("<td></td>");
+                    out.print("</tr>");
+                    out.print("</tbody>");
+                    out.print("</table>");
+
+                    out.print("</div>");
+                    out.print("</div>");
+                    out.print("</div>");
+                    //</editor-fold>
+
+                    //<editor-fold defaultstate="collapsed" desc="FORCE CONCLUDE DOCUMENT">
+                    out.print("<div class='sweet-local' tabindex='-1' id='Ventana8' style='opacity: 1.03; display:none;'>");
+                    out.print("<div class='cont_reg' style='width: 28%; margin-left: 45%;'>");
+                    out.print("<div style='display: flex; justify-content: space-between'>");
+                    out.print("<h2>Concluir documento</h2>");
+                    out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(8)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
+                    out.print("</div>");
+                    out.print("<div class='cont_form_user'>");
+
+                    out.print("<div class='mt-2'>");
+                    out.print("<span class=''>Justificación</span>");
+                    out.print("</div>");
+
+                    out.print("<form action='Document?opt=7&IdDoc=" + IdDoc + "' id='formConcluir' method='post' class='needs-validation' novalidate=''>");
+                    out.print("<textarea class='form-control' name='txtJustify' placeholder='Ingrese justificación...' required></textarea>");
+                    out.print("<div class='text-center mt-2'>");
+                    out.print("<button type='submit' class='btn btn-blue'>Concluir</button>");
+                    out.print("</div>");
+                    out.print("</form>");
+
+                    out.print("</div>");
+                    out.print("</div>");
+                    out.print("</div>");
+                    //</editor-fold>
 
                     //<editor-fold defaultstate="collapsed" desc="SECURITY AGREEMENT">
                     out.print("<div class='sweet-local' tabindex='-1' id='Ventana6' style='opacity: 1.03; display:none; z-index:300;'>");
                     out.print("<div class='cont_reg' style='margin-left: 22%; width: 73%;'>");
                     out.print("<div style='display: flex; justify-content: space-between'>");
                     out.print("<h2>Acuerdo de seguridad </h2>");
+                    out.print("<div class=''>");
+                    out.print("<button type='button' id='btnImprimir' class='btn btn-yellow mr-2' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-print'></i></button>");
                     out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(6)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
+                    out.print("</div>");
                     out.print("</div>");
                     out.print("<div class='cont_form_user'>");
 
@@ -585,6 +678,7 @@ public class Tag_Document extends TagSupport {
                             BuildDoc = BuildDoc.replace("XXXRAZONSOCIALXXX", Name);
                         }
                         out.print("<div class='mt-2' style='max-height: 500px; overflow-y: auto;padding: 50px;'>");
+                        out.print("<div id='dataDocument'>");
                         out.print(BuildDoc);
 
                         out.print("<table class='table-bordered' style='margin: auto;'>");
@@ -598,8 +692,8 @@ public class Tag_Document extends TagSupport {
                         out.print("<tr>");
 
                         out.print("<td>");
-                        out.print("<canvas id='sigAgree' width='350' height='180'></canvas>");
                         if (TypeSigw == 1) {
+                            out.print("<canvas id='sigAgree' width='350' height='180'></canvas>");
                             //<editor-fold defaultstate="collapsed" desc="DRAW">
                             out.print("<input type='hidden' id='coordenadasAgree' value='" + Signature_v + "'>");
                             out.print("<script>");
@@ -625,6 +719,7 @@ public class Tag_Document extends TagSupport {
                             out.print("</script>");
                             //</editor-fold>
                         } else if (TypeSigw == 2) {
+                            out.print("<canvas id='sigAgree' width='350' height='180'></canvas>");
                             //<editor-fold defaultstate="collapsed" desc="WRITE">
                             out.print("<div class='col-lg-12' data-toggle='tooltip' data-placemente='top' title=''>");
                             out.print("<input type='hidden' class='form-control' id='nameInputV' value='" + Signature_v.split("/")[0] + "'>");
@@ -655,57 +750,28 @@ public class Tag_Document extends TagSupport {
                             //</editor-fold>
                         } else if (TypeSigw == 3) {
                             //<editor-fold defaultstate="collapsed" desc="IMAGE">
-                            out.print("<input type='hidden' class='form-control' id='image-path-inputV' value='Interfaz/Contenido/SagrilaftDocs/Signature/" + Signature_v + "' >");
-                            out.print("<script>");
-                            out.print("document.addEventListener('DOMContentLoaded', function() { "
-                                    + "        const imagePathInputx = document.getElementById('image-path-inputV'); "
-                                    + "        const imageCanvasx = document.getElementById('sigAgree'); "
-                                    + "        const contextImagex = imageCanvasx.getContext('2d'); "
-                                    + "        const imagePathx = imagePathInputx.value; "
-                                    + " "
-                                    + "        const image = new Image(); "
-                                    + "        image.onload = function() { "
-                                    + "            contextImagex.clearRect(0, 0, imageCanvasx.width, imageCanvasx.height); "
-                                    + "            contextImagex.drawImage(image, 0, 0, imageCanvasx.width, imageCanvasx.height); "
-                                    + "        }; "
-                                    + "        image.src = imagePathx; "
-                                    + "    });");
-                            out.print("</script>");
-
+                            out.print("<div style='max-width: 315px;'>");
+                            out.print("<img style='border-bottom: 1px solid black;' src='Interfaz/Contenido/SagrilaftDocs/Signature/" + Signature_v + "' >");
+                            out.print("</div>");
                             //</editor-fold>
                         }
-                        out.print("<br><b>Firma representante legal: </b><br>");
+                        out.print("<br><b class='text-dark'>Firma representante legal: </b><br>");
                         try {
-                            out.print("<b>CC: " + FormData[2] + "</b>");
+                            out.print("<b class='text-dark'>CC: " + FormData[2] + "</b>");
                         } catch (Exception e) {
-                            out.print("<b>CC: </b>");
+                            out.print("<b class='text-dark'>CC: </b>");
                         }
-
                         out.print("</td>");
+
                         out.print("<td>");
-
-                        out.print("<input type='hidden' class='form-control' name='' id='image-pathLfo' value='Interfaz/Contenido/Imagen/FirmaLFO.png' >");
-                        out.print("<canvas id='lfo-canvas' width='350' height='180' style='border: 1px solid transparent;'></canvas>");
+                        out.print("<img src='Interfaz/Contenido/Imagen/FirmaLFO.png' width='315'>");
                         out.print("</td>");
-                        out.print("<script>");
-                        out.print("document.addEventListener('DOMContentLoaded', function() { "
-                                + "        const imagePathInput = document.getElementById('image-pathLfo'); "
-                                + "        const imageCanvas = document.getElementById('lfo-canvas'); "
-                                + "        const contextImage = imageCanvas.getContext('2d'); "
-                                + "        const imagePath = imagePathInput.value; "
-                                + " "
-                                + "        const image = new Image(); "
-                                + "        image.onload = function() { "
-                                + "            contextImage.clearRect(0, 0, imageCanvas.width, imageCanvas.height); "
-                                + "            contextImage.drawImage(image, 0, 0, imageCanvas.width, imageCanvas.height); "
-                                + "        }; "
-                                + "        image.src = imagePath; "
-                                + "    });");
-                        out.print("</script>");
+
                         out.print("</td>");
                         out.print("</tr>");
                         out.print("</tbody>");
                         out.print("</table>");
+                        out.print("</div>");
                         out.print("</div>");
                     } else {
                         out.print("<h4>No aplica acuerdo de seguridad</h4>");
@@ -915,6 +981,7 @@ public class Tag_Document extends TagSupport {
                     out.print("</div>");
 
                     //</editor-fold>
+                    
                     //<editor-fold defaultstate="collapsed" desc="APPROVE DOCUMENT">
                     out.print("<div class='sweet-local' tabindex='-1' id='Ventana3' style='opacity: 1.03; display:none;'>");
                     out.print("<div class='cont_reg'>");
@@ -1078,7 +1145,7 @@ public class Tag_Document extends TagSupport {
                         }
 
                         out.print("</div>");
-                        
+
                         out.print("<div class='d-flex align-items-center' style='bottom: 18px;width: 94%;justify-content: center;'>");
                         out.print("<button class='btn btn-blue mr-2' data-toggle='tooltip' data-placement='top' title='Guardar' onclick='cargarDatos()'>Firmar y aprobar <i class=\"fas fa-signature\"></i></button>");
                         out.print("</div>");
@@ -2052,9 +2119,9 @@ public class Tag_Document extends TagSupport {
                                         //</editor-fold>
                                     } else if (TypeSig == 3) {
                                         //<editor-fold defaultstate="collapsed" desc="SIGNATURE IMAGE">
-                                        
+
                                         Template = Template.replace("<canvas id='signature-canvasBoss' width='400' height='200'></canvas>", "<img src='Interfaz/Contenido/SagrilaftDocs/Signature/" + Signature + "' width='250px' style='margin-left: 25%;'>");
-                                        
+
                                         out.print("<input type='hidden' class='form-control' id='image-path-inputx' value='Interfaz/Contenido/SagrilaftDocs/Signature/" + Signature + "' >");
                                         out.print("<script>");
                                         out.print("document.addEventListener('DOMContentLoaded', function() { "

@@ -244,8 +244,8 @@ public class Tag_ClientSection extends TagSupport {
                             out.print("<h6> " + SectionOne + " <span class='text-danger'>*</span></h6>");
                             out.print("</div>");
                             out.print("<div class='mt-2'>");
-                            out.print("<input type='radio' class='' name='TxtTypeProc' id='' placeholder='' value='Vinculacion' " + ((form[1].toString().equals("Vinculacion")) ? "checked" : "") + " disabled> " + OptOne + " <br>");
-                            out.print("<input type='radio' class='' name='TxtTypeProc' id='' placeholder='' value='Actualizacion' " + ((form[1].toString().equals("Actualizacion")) ? "checked" : "") + " disabled> " + OptTwo + "");
+                            out.print("<input type='radio' class='' name='TxtTypeProc' id='' placeholder='' value='Vinculacion' " + ((form[1].toString().equals("Vinculacion")) ? "checked" : "") + " style='pointer-events: none;'> " + OptOne + " <br>");
+                            out.print("<input type='radio' class='' name='TxtTypeProc' id='' placeholder='' value='Actualizacion' " + ((form[1].toString().equals("Actualizacion")) ? "checked" : "") + " style='pointer-events: none;'> " + OptTwo + "");
                             out.print("</div>");
                             out.print("</div>");
                             out.print("<div class='col-lg-6'>");
@@ -262,13 +262,13 @@ public class Tag_ClientSection extends TagSupport {
                             out.print("<h6> " + SectionThree + " <span class='text-danger'>*</span></h6>");
                             out.print("</div>");
                             out.print("<div class='mt-2'>");
-                            out.print("<input type='radio' class='' name='TxtTypeThird' id='' onclick='ToActiveShield(\"TxtTypeThird\", \"TxtOther\")' value='Cliente' " + ((form[3].toString().equals("Cliente")) ? "checked" : "") + "> " + OptThree + "<br>");
-                            out.print("<input type='radio' class='' name='TxtTypeThird' id='' onclick='ToActiveShield(\"TxtTypeThird\", \"TxtOther\")' value='Proveedor' " + ((form[3].toString().equals("Proveedor")) ? "checked" : "") + "> " + OptFourth + "<br>");
+                            out.print("<input type='radio' class='' name='TxtTypeThird' id='' onclick='ToActiveShield(\"TxtTypeThird\", \"TxtOther\")' value='Cliente' " + ((form[3].toString().equals("Cliente")) ? "checked" : "") + " style='pointer-events: none;'> " + OptThree + "<br>");
+                            out.print("<input type='radio' class='' name='TxtTypeThird' id='' onclick='ToActiveShield(\"TxtTypeThird\", \"TxtOther\")' value='Proveedor' " + ((form[3].toString().equals("Proveedor")) ? "checked" : "") + " style='pointer-events: none;'> " + OptFourth + "<br>");
                             if (form[3].toString().contains("Otro")) {
-                                out.print("<input type='radio' class='' name='TxtTypeThird' id='TxtTypeThird' onclick='ToActiveShield(\"TxtTypeThird\", \"TxtOther\")' value='Otro' checked> " + Optfifth + "");
+                                out.print("<input type='radio' class='' name='TxtTypeThird' id='TxtTypeThird' onclick='ToActiveShield(\"TxtTypeThird\", \"TxtOther\")' value='Otro' checked style='pointer-events: none;'> " + Optfifth + "");
                                 out.print("<input type='text' class='form-control' name='TxtOther' id='TxtOther' placeholder='¿Cual?' value='" + form[3].toString().toString().split("/")[1] + "' required>");
                             } else {
-                                out.print("<input type='radio' class='' name='TxtTypeThird' id='TxtTypeThird' onclick='ToActiveShield(\"TxtTypeThird\", \"TxtOther\")' value='Otro' > " + Optfifth + "");
+                                out.print("<input type='radio' class='' name='TxtTypeThird' id='TxtTypeThird' onclick='ToActiveShield(\"TxtTypeThird\", \"TxtOther\")' value='Otro' style='pointer-events: none;' > " + Optfifth + "");
                                 out.print("<input type='hidden' class='form-control' name='TxtOther' id='TxtOther' placeholder='¿Cual?' required>");
                             }
                             out.print("</div>");
@@ -419,9 +419,10 @@ public class Tag_ClientSection extends TagSupport {
                             out.print("</div>");
                             out.print("<div class='mt-2'>");
                             out.print("<div class='col-lg-12' data-toggle='tooltip' data-placemente='top' title=''>");
-                            out.print("<select class='form-control select2' name='CbxCiiu1' style=''>");
+                            out.print("<select class='form-control select2' name='CbxCiiu1' style='' required>");
                             if (form[11].toString().equals("N/A")) {
-                                out.print("<option value='1'>0</option>");
+                                out.print("<option selected disabled value=''>Seleccionar CIUU 1</option>");
+//                                out.print("<option value='1'>0</option>");
                             } else {
                                 try {
 
@@ -450,7 +451,7 @@ public class Tag_ClientSection extends TagSupport {
                             out.print("<div class='mt-2'>");
                             out.print("<select class='form-control select2' name='CbxCiiu2'>");
                             if (form[12].toString().equals("N/A")) {
-                                out.print("<option value='1'>0</option>");
+                                out.print("<option value='0'>0</option>");
                             } else {
                                 try {
                                     out.print("<option value='" + form[12].toString() + "'>" + form[12].toString().split("/")[1] + "</option>");

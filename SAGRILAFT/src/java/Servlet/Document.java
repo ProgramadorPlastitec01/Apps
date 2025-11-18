@@ -46,7 +46,7 @@ public class Document extends HttpServlet {
         HttpSession sesion = request.getSession();
         String UserName = sesion.getAttribute("Nombres").toString();
         String[] DtaFormat = {};
-        String idSegx = "", namex = "", formatx = "", tempx = "";
+        String idSegx = "", namex = "", formatx = "", tempx = "", justify = "";
         try {
             try {
                 Format = request.getParameter("TxtFormat");
@@ -117,6 +117,7 @@ public class Document extends HttpServlet {
 
                     String nombreUsuario = "";
                     String TypeDoc = "";
+                    String TypeContra = "";
                     try {
                         IdDoc = Integer.parseInt(request.getParameter("IdDoc"));
                     } catch (Exception e) {
@@ -137,6 +138,11 @@ public class Document extends HttpServlet {
                     } catch (Exception e) {
                         TypeDoc = "";
                     }
+                    try {
+                        TypeContra = request.getParameter("ContraType");
+                    } catch (Exception e) {
+                        TypeContra = "";
+                    }
 
                     BusinessName = request.getParameter("TxtBusinessName");
                     Mail = request.getParameter("TxtMail");
@@ -149,11 +155,18 @@ public class Document extends HttpServlet {
                         Object[] ObjTemplate = (Object[]) lst_template.get(0);
                         Template = ObjTemplate[1].toString();
                         formClient = ObjTemplate[7].toString();
+                        String tyDoc = "", tyCon = "";
                         if (TypeDoc.equals("vin")) {
-                            formClient = formClient.replace("[[0][N/A]", "[[0][Vinculacion]");
+                            tyDoc = "Vinculacion";
                         } else if (TypeDoc.equals("act")) {
-                            formClient = formClient.replace("[[0][N/A]", "[[0][Actualizacion]");
+                            tyDoc = "Actualizacion";
                         }
+                        if (TypeContra.equals("prv")) {
+                            tyCon = "Proveedor";
+                        } else if (TypeContra.equals("cli")) {
+                            tyCon = "Cliente";
+                        }
+                        formClient = formClient.replace("[[0][N/A][N/A][N/A]", "[[0][" + tyDoc + "][N/A][" + tyCon + "]");
                     }
                     if (RenewUser == 1) {
                         //<editor-fold defaultstate="collapsed" desc="RE NEW DOCUMENT">
@@ -447,6 +460,10 @@ public class Document extends HttpServlet {
                     //<editor-fold defaultstate="collapsed" desc="CONCLUDE DOCUMENT">
                     IdDoc = Integer.parseInt(request.getParameter("IdDoc"));
                     result = DocumentJpa.UpdateDocumentStateFinal(IdDoc, 15, 3);
+                    justify = request.getParameter("txtJustify");
+                    if (result) {
+                        DocumentJpa.DocumentRegisterConclude(IdDoc, justify, UserName);
+                    }
                     request.setAttribute("ConcludeDocument", result);
                     request.getRequestDispatcher("Document?opt=1&IdDoc=" + IdDoc + "&Event=Checking").forward(request, response);
 //</editor-fold>

@@ -255,6 +255,79 @@
             }
         </script>
 
+        <script>
+            document.getElementById('btnImprimir').addEventListener('click', () => {
+                // Obtener el contenido de la sección a imprimir
+                const contenido = document.getElementById('dataDocument').outerHTML;
+                // Crear una nueva ventana o iframe para imprimir
+                const ventanaImpresion = window.open('', '_blank', 'width=800, height=600');
+                // Escribir el contenido HTML en la ventana
+                let cont = `<html>
+                            <head>
+                                <title>Imprimir</title>
+                                <style>
+                                    body { 
+                                        font-family: Arial, sans-serif;
+                                        margin-top: 20mm;  /* Margen superior */
+                                        margin-bottom: 20mm; /* Margen inferior */
+                                    }
+                                    #content {
+                                        margin-top: 10mm;
+                                        margin-bottom: 10mm;
+                                    }
+                                    table {
+                                        width: 100%;
+                                        border-collapse: collapse; /* Evitar bordes duplicados */
+                                    }
+                                    table, th, td {
+                                        border: 1px solid black; /* Borde negro */
+                                    }
+                                    th, td {
+                                        padding: 8px; /* Espaciado interno */
+                                        text-align: left; /* Alineación del texto */
+                                    }
+                                </style>
+                            </head>
+                            <body>
+                                <div id="content">XXXDATAXXX</div>
+                            </body>
+                        </html>`;
+                cont = cont.replace('XXXDATAXXX', contenido);
+                ventanaImpresion.document.write(cont);
+                // Esperar a que la nueva ventana cargue el contenido y luego enviar a imprimir
+                ventanaImpresion.document.close(); // Cerrar el documento
+                ventanaImpresion.print(); // Imprimir
+                ventanaImpresion.close(); // Cerrar la ventana después de imprimir
+            });
+        </script>
+
+
+
+        <script>
+            document.getElementById('formConcluir').addEventListener('submit', function (e) {
+                e.preventDefault(); // Detiene el envío automático
+
+                swal({
+                    title: "¿Desea concluir este documento?",
+                    text: "Una vez concluido no podrá modificarlo.",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Sí, concluir",
+                    cancelButtonText: "Cancelar",
+                    closeOnConfirm: false
+                },
+                        function (isConfirm) {
+                            if (isConfirm) {
+                                document.getElementById('formConcluir').submit();
+                            }
+                        });
+            });
+        </script>
+
+
+
         <script src="Interfaz/Contenido/assets/modules/datatables/datatables.min.js"></script>
         <script src="Interfaz/Contenido/assets/modules/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js"></script>
         <script src="Interfaz/Contenido/assets/modules/datatables/Select-1.2.4/js/dataTables.select.min.js"></script>

@@ -11,6 +11,9 @@ import Controller.DocumentControllerJpa;
 import java.util.Calendar;
 import java.util.List;
 import java.io.File;
+import javax.servlet.http.HttpSession;
+
+import Mail.SendMail;
 
 public class ClientSection extends HttpServlet {
 
@@ -18,7 +21,18 @@ public class ClientSection extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=ISO-8859-1");
         request.setCharacterEncoding("UTF-8");
+        String NameSession = "";
+        HttpSession sesion = request.getSession();
+        try {
+            NameSession = sesion.getAttribute("Nombre").toString();
+        } catch (Exception e) {
+            NameSession = "Not Found!";
+        }
+
         DocumentControllerJpa DocumentJpa = new DocumentControllerJpa();
+        
+        SendMail MailData = new SendMail();
+        
         int opt = 0, IdDoc = 0, module = 0, NroIdenti = 0, counter = 0, TypeSig = 0, IdSig = 0, State = 0;
         String Format = "", Forms = "", TypeProc = "", DateInit = "", TypeThird = "", FinalForm = "", ValidAction = "", AlterText = "",
                 BusinessName = "", NroDv = "", Country = "", City = "", Address = "", Phones = "", Mail = "", WebPage = "", PostalCode = "",
@@ -874,6 +888,9 @@ public class ClientSection extends HttpServlet {
                     //<editor-fold defaultstate="collapsed" desc="CLOSE DOCUMENT">
                     IdDoc = Integer.parseInt(request.getParameter("IdDoc"));
                     result = DocumentJpa.UpdateDocumentStateFinal(IdDoc, 15, 3);
+                    if (result) {
+                        MailData.NotifyPlastitecDocumentEnd(NameSession);
+                    }
                     request.getRequestDispatcher("ClientSection?opt=1").forward(request, response);
                     //</editor-fold>
                     break;
