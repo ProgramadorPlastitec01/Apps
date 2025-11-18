@@ -279,8 +279,10 @@ public class Tag_start extends TagSupport {
             out.print("</div>");
             //</editor-fold>
 
+            out.print("</div>");
+            
             //<editor-fold defaultstate="collapsed" desc="DOCUMENTOS EN PROCESO">
-            out.print("<div class=\"col-lg-6\">");
+            out.print("<div class=\"col-lg-12\">");
             out.print("<div class=\"card\" id='O' style='display:" + (Module.contains("O") ? "block" : "none") + "'>");
 
             out.print("<div class='text-center'>");
@@ -332,9 +334,10 @@ public class Tag_start extends TagSupport {
             out.print("</div>");
             out.print("</div>");
             //</editor-fold>
-
+            
+            
             //<editor-fold defaultstate="collapsed" desc="DOCUMENT PC IN PROCESS">
-            out.print("<div class=\"col-lg-6\" >");
+            out.print("<div class=\"col-lg-12\" >");
             out.print("<div class=\"card\" id='P' style='display:" + (Module.contains("P") ? "block" : "none") + "'>");
 
             out.print("<div class='text-center'>");
@@ -350,6 +353,8 @@ public class Tag_start extends TagSupport {
                 out.print("<th>PC</th>");
                 out.print("<th>Documento</th>");
                 out.print("<th>Estado</th>");
+                out.print("<th>Responsable</th>");
+                out.print("<th>Fecha registro</th>");
                 out.print("<th>Acceso</th>");
                 out.print("</tr>");
                 out.print("</thead>");
@@ -361,6 +366,10 @@ public class Tag_start extends TagSupport {
                     String[] docTemp = ObjComputerDetail[5].toString().split("/");
                     out.print("<td>" + docTemp[1] + "</td>");
                     out.print("<td>" + ObjComputerDetail[6] + "</td>");
+                    
+                    out.print("<td>" + ObjComputerDetail[9] + "</td>");
+                    out.print("<td>" + ObjComputerDetail[10] + "</td>");
+                    
                     String typeDevice = ObjComputerDetail[7].toString();
                     String link = "";
                     if (typeDevice.equals("Computer")) {
@@ -389,8 +398,7 @@ public class Tag_start extends TagSupport {
             out.print("</div>");
 
             //</editor-fold>
-            out.print("</div>");
-
+            
             out.print("</div>");
 
             out.print("</section>");

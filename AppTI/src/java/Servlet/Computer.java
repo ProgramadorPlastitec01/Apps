@@ -142,7 +142,7 @@ public class Computer extends HttpServlet {
                     typeDoc = request.getParameter("CbxPcType");
                     dte_doc = request.getParameter("txtDte");
 
-                    Result = CompDetailJpa.registerPcHeader(IdComputer, dte_doc, typeDoc, "Admin");
+                    Result = CompDetailJpa.registerPcHeader(IdComputer, dte_doc, typeDoc, NameUser);
                     request.setAttribute("registerPcHeader", Result);
                     request.getRequestDispatcher("Computer?opt=1&mod=" + module + "&IdComputer=" + IdComputer + "&idDet=0").forward(request, response);
                     //</editor-fold>

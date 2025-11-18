@@ -19,6 +19,7 @@ public class User extends HttpServlet {
 
         HttpSession sesion = request.getSession();
         String UserRol = sesion.getAttribute("idRol").toString();
+        String name_user = sesion.getAttribute("Nombres").toString();
         UserControllerJpa UserJpa = new UserControllerJpa();
 
         int opt = Integer.parseInt(request.getParameter("opt"));
@@ -56,7 +57,7 @@ public class User extends HttpServlet {
                         result = UserJpa.UpdtaeUser(idUser, name, lastname, document, code, user, idrol);
                         request.setAttribute("UserUpdate", result);
                     } else {
-                        result = UserJpa.UserRegister(name, lastname, document, code, user, idrol, "ADMIN");
+                        result = UserJpa.UserRegister(name, lastname, document, code, user, idrol, name_user);
                         request.setAttribute("UserRegister", result);
                     }
 

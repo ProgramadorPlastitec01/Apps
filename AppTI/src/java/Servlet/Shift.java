@@ -35,7 +35,8 @@ public class Shift extends HttpServlet {
             int opt = Integer.parseInt(request.getParameter("opt"));
             int idShift = 0;
             boolean result = false;
-            String User = "ADMIN", weekSelect = "", ValWeek = "", WeekAct = "", WeekNext = "", hiddenTurnoId = "", compileData = "";
+            String name_user = sesion.getAttribute("Nombres").toString();
+            String User = name_user, weekSelect = "", ValWeek = "", WeekAct = "", WeekNext = "", hiddenTurnoId = "", compileData = "";
             switch (opt) {
                 case 1:
                     try {
