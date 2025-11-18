@@ -306,6 +306,7 @@ public class Tag_minute extends TagSupport {
                 out.print("<button class='btn btn-green mr-4'  onclick=\"mostrarConvencion(5)\" data-toggle='tooltip' data-placement='top' title='Enviar Correo'><i class=\"fas fa-envelope-open-text\"></i></button>");
                 out.print("<h4>ACTA TECNOLOGIA DE INFORMACIÓN / R-TI-014 </h4>");
                 out.print("<div class='d-flex' style='align-items: center;'>");
+//                out.print("<button class='btn btn-outline-secondary' id='btnImprimir' data-toggle='tooltip' data-placement='top' title='Cerrar' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
                 out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(4)' data-toggle='tooltip' data-placement='top' title='Cerrar' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
                 out.print("</div>");
                 out.print("</div>");

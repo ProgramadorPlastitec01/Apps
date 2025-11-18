@@ -99,7 +99,7 @@ public class AppDetailControllerJpa implements Serializable {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
         try {
-            Query q = etm.createNativeQuery("CALL `Sp_app_ConsultAppDocumentInProcess`()");
+            Query q = etm.createNativeQuery("CALL `Sp_app_ConsultDocumentInProcess`()");
             List consulta = q.getResultList();
             etm.getTransaction().commit();
             etm.clear();
@@ -114,24 +114,24 @@ public class AppDetailControllerJpa implements Serializable {
         }
     }
 
-    public List ConsultAppProcess(int idApp) {
-        EntityManager etm = getEntityManager();
-        etm.getTransaction().begin();
-        try {
-            Query q = etm.createNativeQuery("CALL `Sp_app_ConsultDocumentInProcess`(" + idApp + ")");
-            List consulta = q.getResultList();
-            etm.getTransaction().commit();
-            etm.clear();
-            etm.close();
-            if (!consulta.isEmpty()) {
-                return consulta;
-            } else {
-                return null;
-            }
-        } catch (Exception ex) {
-            return null;
-        }
-    }
+//    public List ConsultAppProcess(int idApp) {
+//        EntityManager etm = getEntityManager();
+//        etm.getTransaction().begin();
+//        try {
+//            Query q = etm.createNativeQuery("CALL `Sp_app_ConsultDocumentInProcess`(" + idApp + ")");
+//            List consulta = q.getResultList();
+//            etm.getTransaction().commit();
+//            etm.clear();
+//            etm.close();
+//            if (!consulta.isEmpty()) {
+//                return consulta;
+//            } else {
+//                return null;
+//            }
+//        } catch (Exception ex) {
+//            return null;
+//        }
+//    }
 
 //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="PROCESS">

@@ -114,6 +114,25 @@ public class ComputerDetailJpaController implements Serializable {
         }
     }
 
+    public List ConsultDocumentInProcess() {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_cpd_c_computerDetailInProcess`()");
+            List consult = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consult.isEmpty()) {
+                return consult;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="PROCESS">
     public boolean registerPcHeader(int idHead, String dte, String structure, String userReg) {

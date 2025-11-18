@@ -15,6 +15,7 @@ import Controller.UserControllerJpa;
 import Controller.PendingControllerJpa;
 import Controller.ShiftControllerJpa;
 import Controller.AppDetailControllerJpa;
+import Controller.ComputerDetailJpaController;
 
 import SQL.ConnectionsBd;
 
@@ -32,6 +33,7 @@ public class Tag_start extends TagSupport {
         ConnectionsBd ConnectionBd = new ConnectionsBd();
         UserControllerJpa UserJpa = new UserControllerJpa();
         AppDetailControllerJpa AppDetailJpa = new AppDetailControllerJpa();
+        ComputerDetailJpaController ComputerDetailJpa = new ComputerDetailJpaController();
 
         int IdUser = Integer.parseInt(sesion.getAttribute("idUsuario").toString());
         String NameUser = sesion.getAttribute("Nombres").toString();
@@ -42,7 +44,7 @@ public class Tag_start extends TagSupport {
         int CurrMonth = (cal.get(Calendar.MONTH));
 //        nombreMes = nombreMes.substring(0, 1).toUpperCase() + nombreMes.substring(1).toLowerCase();
         List lst_items = null, lst_follow = null, lst_activity = null, lst_module = null, lst_tickets = null, lst_user = null, lst_pending = null,
-                lst_shift = null, lst_appDetail = null;
+                lst_shift = null, lst_appDetail = null, lst_computerDetail = null;
         int CountP = 0;
         String Module = "";
 
@@ -276,58 +278,54 @@ public class Tag_start extends TagSupport {
             out.print("</div>");
             out.print("</div>");
             //</editor-fold>
-            
-            //<editor-fold defaultstate="collapsed" desc="DOCUMENTOS EN PROCESO">
 
-            out.print("<div class=\"col-lg-6\" style='box-shadow: 0px 1px 13px -1px #afafaf; padding: 15px; border-radius: 5px;'>");
+            //<editor-fold defaultstate="collapsed" desc="DOCUMENTOS EN PROCESO">
+            out.print("<div class=\"col-lg-6\">");
             out.print("<div class=\"card\" id='O' style='display:" + (Module.contains("O") ? "block" : "none") + "'>");
-            
+
             out.print("<div class='text-center'>");
             out.print("<h5>APLICACIONES EN PROCESO</h5>");
             out.print("</div>");
-            
+
             lst_appDetail = AppDetailJpa.ConsultAppDocProcess();
             if (lst_appDetail != null) {
-                out.print("<div id='accordion'>");
+                out.print("<div style='max-height: 330px;overflow-y: auto;'>");
+                out.print("<table class='table table-sm' id='table-1'>");
+                out.print("<thead>");
+                out.print("<tr>");
+                out.print("<th>Aplicación</th>");
+                out.print("<th>Documento</th>");
+                out.print("<th>Estado</th>");
+                out.print("<th>Acceso</th>");
+                out.print("</tr>");
+                out.print("</thead>");
+                out.print("<tbody>");
                 for (int i = 0; i < lst_appDetail.size(); i++) {
                     Object[] ObjApp = (Object[]) lst_appDetail.get(i);
-                    String[] stuc = ObjApp[3].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
-                    out.print("<div class='accordion'>");
-                    out.print("<div class='accordion-header' role='button' data-toggle='collapse' data-target='#panel-body-" + i + "'>");
-                    out.print("<h4><b>" + ObjApp[2] + "</b> - " + stuc[0].toUpperCase() + " </h4>");
-                    out.print("</div>");
-                    out.print("<div class='accordion-body collapse' id='panel-body-" + i + "' data-parent='#accordion'>");
-                    out.print("<table class='table table-sm' >");
-                    out.print("<thead>");
                     out.print("<tr>");
-                    out.print("<th>Documento</th>");
-                    out.print("<th>Estado</th>");
-                    out.print("<th>Acceder</th>");
-                    out.print("</tr>");
-                    out.print("</thead>");
-                    out.print("<tbody>");
-                    int idHead = Integer.parseInt(ObjApp[0].toString());
-                    int idApp =  Integer.parseInt(ObjApp[1].toString());
-                    List lst_appDetailx = AppDetailJpa.ConsultAppProcess(idHead);
-                    if (lst_appDetailx != null) {
-                        for (int j = 0; j < lst_appDetailx.size(); j++) {
-                            Object[] ObjDet = (Object[]) lst_appDetailx.get(j);
-                            out.print("<tr>");
-                            out.print("<td>" + ObjDet[2].toString() + "</td>");
-                            out.print("<td>" + ObjDet[3].toString() + "</td>");
-                            out.print("<td class='text-center'><button class='btn btn-green btn-sm' onclick='window.location.href=\"AppDetail?opt=1&idApp=" + idApp + "&mod=2&idHead=" + idHead + "\"'><i class='fas fa-share'></i></button></td>");
-                            out.print("</tr>");
-                        }
-                    } else {
-                        out.print("<tr>");
-                        out.print("<td class='text-center' colspan='3'> Documento en proceso <br> <button class='btn btn-info btn-sm' onclick='window.location.href=\"AppDetail?opt=1&idApp=" + idApp + "&mod=2&idHead=" + idHead + "\"'><i class='fas fa-share'></i></button> </td>");
-                        out.print("</tr>");
+                    out.print("<td><b>" + ObjApp[4] + "</b></td>");
+                    String[] docTemp = ObjApp[5].toString().split("/");
+                    out.print("<td>" + docTemp[1] + "</td>");
+                    out.print("<td>" + ObjApp[6] + "</td>");
+                    String typeDevice = ObjApp[7].toString();
+                    String link = "";
+                    String[] structure = ObjApp[5].toString().split("/");
+                    if (typeDevice.equals("App")) {
+//                      link = "AppDetail?opt=1&mod=3&idApp=" + idApp + "&idDoc=" + id + "&idHead=" + idHead + "&type=" + structure[i] + "&step=" + i + "\";cargarDatos()";
+                        link = "AppDetail?opt=1&mod=3&idApp=" + ObjApp[2] + "&idDoc=" + structure[0] + "&idHead=" + ObjApp[1] + "&type=" + ObjApp[5] + "";
+                    } else if (typeDevice.equals("DocsApp")) {
+//                        link = "AppDetail?opt=1&idApp=" + idApp + "&mod=2&idHead=" + ObjHead[1] + "";
+                        link = "AppDetail?opt=1&idApp=" + ObjApp[2] + "&mod=2&idHead=" + ObjApp[1] + "";
                     }
-                    out.print("</tbody>");
-                    out.print("</table>");
-                    out.print("</div>");
-                    out.print("</div>");
+                    out.print("<td class='text-center'><button class='btn btn-yellow btn-sm' onclick='window.location.href=\"" + link + "\";cargarDatos()'><i class='fas fa-share'></i></button></td>");
+                    out.print("</tr>");
                 }
+                out.print("</tbody>");
+                out.print("</table>");
+                out.print("</div>");
+            } else {
+                out.print("<div class='text-center'>");
+                out.print("<h6>No se ha encontrado documentos en proceso</h6>");
                 out.print("</div>");
             }
 
@@ -335,6 +333,62 @@ public class Tag_start extends TagSupport {
             out.print("</div>");
             //</editor-fold>
 
+            //<editor-fold defaultstate="collapsed" desc="DOCUMENT PC IN PROCESS">
+            out.print("<div class=\"col-lg-6\" >");
+            out.print("<div class=\"card\" id='P' style='display:" + (Module.contains("P") ? "block" : "none") + "'>");
+
+            out.print("<div class='text-center'>");
+            out.print("<h6>DOCUMENTOS EN PROCESO</h6>");
+            out.print("</div>");
+
+            lst_computerDetail = ComputerDetailJpa.ConsultDocumentInProcess();
+            if (lst_computerDetail != null) {
+                out.print("<div style='max-height: 330px;overflow-y: auto;'>");
+                out.print("<table class='table table-sm' id='table-1'>");
+                out.print("<thead>");
+                out.print("<tr>");
+                out.print("<th>PC</th>");
+                out.print("<th>Documento</th>");
+                out.print("<th>Estado</th>");
+                out.print("<th>Acceso</th>");
+                out.print("</tr>");
+                out.print("</thead>");
+                out.print("<tbody>");
+                for (int i = 0; i < lst_computerDetail.size(); i++) {
+                    Object[] ObjComputerDetail = (Object[]) lst_computerDetail.get(i);
+                    out.print("<tr>");
+                    out.print("<td><b>" + ObjComputerDetail[4] + "</b></td>");
+                    String[] docTemp = ObjComputerDetail[5].toString().split("/");
+                    out.print("<td>" + docTemp[1] + "</td>");
+                    out.print("<td>" + ObjComputerDetail[6] + "</td>");
+                    String typeDevice = ObjComputerDetail[7].toString();
+                    String link = "";
+                    if (typeDevice.equals("Computer")) {
+                        link = "Computer?opt=1&mod=3&IdComputer=" + ObjComputerDetail[2] + "&idpcHead=" + ObjComputerDetail[1] + "&type=" + ObjComputerDetail[5] + "";
+                    } else if (typeDevice.equals("Device")) {
+                        link = "Device?opt=1&act=4&idDevice=" + ObjComputerDetail[2] + "&idDeviceHead=" + ObjComputerDetail[1] + "&type=" + ObjComputerDetail[5] + "";
+                    } else if (typeDevice.equals("DocsComputer")) {
+                        link = "Computer?opt=1&IdComputer=" + ObjComputerDetail[2] + "&idpcHead=" + ObjComputerDetail[1] + "&mod=2";
+                    } else if (typeDevice.equals("DocsDevice")) {
+                        link = "Device?opt=1&act=3&idDevice=" + ObjComputerDetail[2] + "&idDeviceHead=" + ObjComputerDetail[1] + "";
+                    }
+                    out.print("<td class='text-center'><button class='btn btn-yellow btn-sm' onclick='window.location.href=\"" + link + "\";cargarDatos()'><i class='fas fa-share'></i></button></td>");
+                    out.print("</tr>");
+                }
+                out.print("</tbody>");
+                out.print("</table>");
+                out.print("</div>");
+
+            } else {
+                out.print("<div class='text-center'>");
+                out.print("<h6>No se ha encontrado documentos en proceso</h6>");
+                out.print("</div>");
+            }
+
+            out.print("</div>");
+            out.print("</div>");
+
+            //</editor-fold>
             out.print("</div>");
 
             out.print("</div>");
@@ -359,19 +413,19 @@ public class Tag_start extends TagSupport {
                 "Total Pendientes", "Bitacora", "Aplicativo en gestión", "Actas sin firmas",
                 "Actividad mensuales", "PC en gestión", "Equipos en gestión", "Programaciones pendientes",
                 "Pendientes vencidos", "Pendientes por vencer", "Pendientes vigentes",
-                "Pendientes Anuales", "Actividad Reciente", "Programacion de turno", "App en proceso"
+                "Pendientes Anuales", "Actividad Reciente", "Programacion de turno", "App en proceso", "Documentos en proceso"
             };
             String[] ArgIcon = {
                 "fa-bell", "fa-folder-open", "fa-lightbulb", "fa-file-alt",
                 "fa-calendar", "fa-laptop", "fa-tablet", "fa-clipboard-check",
                 "fa-exclamation", "fa-hourglass-half", "fa-check",
-                "fa-list", "fa-comments", "fa-user-clock", "fas fa-rocket"
+                "fa-list", "fa-comments", "fa-user-clock", "fas fa-rocket", "fas fa-file"
             };
             String[] DivOpenClose = {
                 "A", "B", "C", "D",
                 "E", "F", "G", "H",
                 "K", "L", "M", "I",
-                "J", "N", "O"
+                "J", "N", "O", "P"
             };
 
             for (int i = 0; i < ArgModule.length; i++) {

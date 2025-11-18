@@ -1097,7 +1097,7 @@ public class Tag_appDetail extends TagSupport {
                         for (int i = 0; i < singData.length; i++) {
                             String[] dataSingDil = singData[i].toString().split("/");
                             String signuser = dataSingDil[4].toString().trim();
-                            if (!signuser.contains("XX")) {
+                            if (signuser.contains("XX")) {
                                 singExits = true;
                                 break;
                             }
