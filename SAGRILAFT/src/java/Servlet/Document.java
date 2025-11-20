@@ -337,6 +337,10 @@ public class Document extends HttpServlet {
                             String benfF = DataFinal[7];
                             int CiuuOne = Integer.parseInt(DataFinal[4].toString().split("/")[0]);
                             int CiuuTwo = Integer.parseInt(DataFinal[5].toString().split("/")[0]);
+                            if (CiuuTwo == 0) {
+                                CiuuTwo = 1;
+                            }
+  
                             String City = DataFinal[3];
                             String LegalR = DataFinal[6];
                             String IsPep = DataFinal[8];

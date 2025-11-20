@@ -21,7 +21,7 @@ public class Segmentation extends HttpServlet {
         ConfigurationControllerJpa ConfigJpa = new ConfigurationControllerJpa();
         int opt = 0, IdSegmentation = 0, Temp = 0, Qualification = 0, Experience = 0, Relationship = 0, Burden = 0,
                 BaselIndex = 0, CorruptionIndex = 0, BiberyIndex = 0, State = 0, IdVisit = 0, Code = 0, Validity = 0,
-                AnnualFrequecy = 0, Antiquity = 0, Report = 0, idDoc = 0;
+                AnnualFrequecy = 0, Antiquity = 0, Report = 0, idDoc = 0, idUserCli = 0;
         String Format = "", Observation = "", Date = "", PEP = "", Affair = "", Description = "", FileDocs = "", Area = "",
                 TextFilter = "", InitialDate = "", EndDate = "", ConsultMysql = "", ContacPerson = "", PerformsPost = "",
                 SupplyChain = "", BeneficiaryFinal = "", TypeServiceOffered = "", BusinessAssociate = "", TypePerson = "", nameCompany = "";
@@ -282,9 +282,15 @@ public class Segmentation extends HttpServlet {
                     } catch (NumberFormatException e) {
                         Temp = 0;
                     }
+                    try {
+                        idUserCli = Integer.parseInt(request.getParameter("idUserCli"));
+                    } catch (NumberFormatException e) {
+                        idUserCli = 0;
+                    }
                     request.setAttribute("Temp", Temp);
                     request.setAttribute("Format", Format);
                     request.setAttribute("Report", Report);
+                    request.setAttribute("idUserCli", idUserCli);
                     request.setAttribute("BusinessAssociate", BusinessAssociate);
                     request.getRequestDispatcher("Report.jsp").forward(request, response);
                     //</editor-fold>

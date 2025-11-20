@@ -25,7 +25,7 @@ public class Tag_Report extends TagSupport {
         CIIUControllerJpa CIUUJpa = new CIIUControllerJpa();
         ConfigurationControllerJpa ConfigurationJpa = new ConfigurationControllerJpa();
         List lst_segmentation = null, lst_CIIU = null, lst_Conf = null, lst_Configuration = null, lst_Company = null, lst_Conf7 = null;
-        int Qualification = 0, Experience = 0, Relationship = 0, LevelCode2 = 0, Report = 0, vcv = 0, Temp = 0;
+        int Qualification = 0, Experience = 0, Relationship = 0, LevelCode2 = 0, Report = 0, vcv = 0, Temp = 0, idUserCli = 0;
         double CalcQ = 0.0, CalcEx = 0.0, CalcRel = 0.0, sumT = 0.0, LevelCode1 = 0.0, LevelRisk = 0;
         String Format = "", BusinessAssociate = "", VlrFormatt = "", ConsultQuery = "";
         try {
@@ -55,6 +55,11 @@ public class Tag_Report extends TagSupport {
                     Temp = Integer.parseInt(pageContext.getRequest().getAttribute("Temp").toString());
                 } catch (NumberFormatException e) {
                     Temp = 0;
+                }
+                try {
+                    idUserCli = Integer.parseInt(pageContext.getRequest().getAttribute("idUserCli").toString());
+                } catch (NumberFormatException e) {
+                    idUserCli = 0;
                 }
                 out.print("<section class='section'>");
                 out.print("<div class='section-header'>");
@@ -584,7 +589,7 @@ public class Tag_Report extends TagSupport {
                         out.print("<i class=\"fas fa-check\" style='color:#002237;'></i> <b data-toggle=\"tooltip\" data-placement=\"top\" title=\"\" data-original-title=\"Fecha Monitoreo \">" + (obj_segmetantion[19] == null ? "Sin fecha definida" : obj_segmetantion[19].equals("") ? "Sin fecha definida" : obj_segmetantion[19]) + "</b>");
                         out.print("</div>");
                         out.print("<div class='article-cta BottomDown'>");
-                        out.print("<a href='Segmentation?opt=6&Report=1&BusinessAssociate=" + obj_segmetantion[7] + "' class='btn btn-blue'>Consultar <i class='fas fa-chevron-right'></i></a>");
+                        out.print("<a href='Segmentation?opt=6&Report=1&BusinessAssociate=" + obj_segmetantion[7] + "&idUserCli="+ obj_segmetantion[38] +"' class='btn btn-blue'>Consultar <i class='fas fa-chevron-right'></i></a>");
                         out.print("</div>");
                         out.print("</div>");
                         out.print("</article>");
