@@ -712,6 +712,7 @@ public class SendMail {
     }
     
     public void NotifyPlastitecDocumentEnd(String Client) throws javax.mail.MessagingException{
+        //<editor-fold defaultstate="collapsed" desc="MAIL TO NOTIFY END OF PROCESS">
         LocalDate currentDate = LocalDate.now();
         int CurrentYear = currentDate.getYear();
         try {
@@ -789,5 +790,68 @@ public class SendMail {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    //</editor-fold>
     }
+    
+     public void NotifyMailClient(String user, String Client, String MailCl) throws javax.mail.MessagingException {
+        //<editor-fold defaultstate="collapsed" desc="MAIL TO NOTIFY CLIENT">
+        try {
+            Properties propiedades = new Properties();
+            lst_Config = ConfigJpa.ConsultSettingsByCategorie("MailConfig");
+            if (lst_Config != null) {
+                Object[] objParam = (Object[]) lst_Config.get(0);
+                String[] datMail = objParam[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                propiedades.setProperty("mail.smtp.host", datMail[0]);
+                propiedades.setProperty("mail.smtp.starttls.enable", datMail[1]);
+                propiedades.setProperty("mail.smtp.port", datMail[2]);//465...25
+                propiedades.setProperty("mail.smtp.auth", datMail[3]);
+                propiedades.setProperty("mail.smtp.user", datMail[4]);
+                propiedades.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+                propiedades.setProperty("mail.smtp.socketFactory.fallback", "true");
+                mail = datMail[4].toString();
+                Password = datMail[5].toString();
+            } else {
+            }
+            Session session = Session.getDefaultInstance(propiedades);
+            try {
+                String MailClient = "";
+//                lst_Config = ConfigJpa.ConsultSettingsByCategorie("MailCopy");
+//                if (lst_Config != null) {
+//                    Object[] ObjCopy = (Object[]) lst_Config.get(0);
+//                    MailClient = ObjCopy[2].toString() + ", " + MailCl;
+//                }
+                try {
+                    MimeMessage message = new MimeMessage(session);
+                    message.setRecipients(Message.RecipientType.TO, MailClient);
+                    message.setSubject("PT Recordatorio - Credenciales");
+                    message.setFrom(new InternetAddress(mail));
+                    lst_Config = ConfigJpa.ConsultSettingsByCategorie("MailNotifyClient");
+                    int anio = LocalDate.now().getYear();
+                    String texto_mail = "";
+                    if (lst_Config != null) {
+                        Object[] objParam = (Object[]) lst_Config.get(0);
+                        String link = "http://" + objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[0] + ":" + objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[1] + "/SAGRILAFT/";
+                        texto_mail = objParam[2].toString();
+                        texto_mail = texto_mail.replace("XXXCLIENTEXXX", Client);
+                        texto_mail = texto_mail.replace("XXXUSERXXX", user);
+                        texto_mail = texto_mail.replace("XXXPASSXXX", "" + anio);
+                        texto_mail = texto_mail.replace("XXXLINKXXX", link);
+                    }
+                    message.setContent(texto_mail, "text/html; charset=UTF-8");//Mensaje
+                    Transport transport = session.getTransport("smtp");
+                    transport.connect(mail, Password);// Su Correo y Contraseña
+                    transport.sendMessage(message, message.getAllRecipients());
+                    transport.close();
+                } catch (Exception e) {
+                    MailClient = MailClient.toString();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//</editor-fold>
+    }
+    
 }

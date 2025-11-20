@@ -212,7 +212,7 @@ public class Segmentation extends HttpServlet {
                         if (!Format.equals("")) {
                             ConsultMysql = ConsultMysql + "s.Format = '" + Format + "'";
                         }
-                        if (State < 2) {
+                        if (State < 3) {
                             ConsultMysql = ConsultMysql + " AND s.State = " + State;
                         }
                         if (Validity > 0) {

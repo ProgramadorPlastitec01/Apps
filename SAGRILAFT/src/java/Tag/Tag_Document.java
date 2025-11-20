@@ -37,6 +37,7 @@ public class Tag_Document extends TagSupport {
         List lst_config = null;
         List lst_user = null;
         List lst_template = null;
+        List lst_observation = null;
         String StateIcon = "", StateTitle = "", ListAttach = "", Event = "", Info = "";
         int IdDoc = 0, idUser = 0, idRol = 0, Temp = 0, ste = 0, IdDocx = 0;
         String idSegx = "", namex = "", formatx = "", tempx = "";
@@ -486,6 +487,7 @@ public class Tag_Document extends TagSupport {
                             out.print("<a class='dropdown-item has-icon' href='#' onclick='window.location.href=\"Document?opt=1&IdDoc=" + objDoc[0] + "\";cargarDatos()'><i class='fas fa-pen'></i> Editar documento</a>");
                         }
                         out.print("<a class='dropdown-item has-icon' href='#' onclick='window.location.href=\"Document?opt=6&IdDoc=" + objDoc[0] + "&idClient=" + objDoc[14] + "\";timer()'><i class='fas fa-reply-all'></i> Reenviar correo</a>");
+                        out.print("<a class='dropdown-item has-icon' href='#' onclick='window.location.href=\"Document?opt=8&IdDoc=" + objDoc[0] + "\";timer()'><i class=\"fas fa-bell\"></i> Notificar</a>");
                         out.print("</div>");
                         out.print("</td>");
                         out.print("</tr>");
@@ -577,9 +579,7 @@ public class Tag_Document extends TagSupport {
                         out.print("<button class='btn btn-success' disabled>Aprobar &nbsp;<i class=\"fas fa-share\"></i></button>");
                     }
                     out.print("</div>");
-                    
-                    
-                    
+
                     //<editor-fold defaultstate="collapsed" desc="DOCUMENT OBSERVATIONS">
                     out.print("<div class='sweet-local' tabindex='-1' id='Ventana9' style='opacity: 1.03; display:none;'>");
                     out.print("<div class='cont_reg' style='width: 40%; margin-left: 55%;'>");
@@ -588,26 +588,40 @@ public class Tag_Document extends TagSupport {
                     out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(9)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
                     out.print("</div>");
                     out.print("<div class='cont_form_user'>");
-                    
-                    out.print("<table class='table table-bordered' id='table-1'>");
-                    out.print("<thead>");
-                    out.print("<tr>");
-                    out.print("<th>"
-                            + "</th>");
-                    out.print("</tr>");
-                    out.print("</thead>");
-                    out.print("<tbody>");
-                    out.print("<tr>");
-                    out.print("<td></td>");
-                    out.print("</tr>");
-                    out.print("</tbody>");
-                    out.print("</table>");
 
+                    lst_observation = DocumentJpa.ConsultDocumentObservationsxDoc(idDoc);
+                    if (lst_observation != null) {
+                        out.print("<table class='table table-sm' id='table-1'>");
+                        out.print("<thead>");
+                        out.print("<tr>");
+                        out.print("<th>Tipo</th>");
+                        out.print("<th>Observación</th>");
+                        out.print("<th>Fecha</th>");
+                        out.print("<th>Responsable</th>");
+                        out.print("</tr>");
+                        out.print("</thead>");
+                        out.print("<tbody>");
+                        for (int i = 0; i < lst_observation.size(); i++) {
+                            Object[] ObObs = (Object[]) lst_observation.get(i);
+                            out.print("<tr>");
+                            out.print("<td>" + ObObs[3] + "</td>");
+                            out.print("<td>" + ObObs[4] + "</td>");
+                            out.print("<td>" + ObObs[5] + "</td>");
+                            out.print("<td>" + ObObs[6] + "</td>");
+                            out.print("</tr>");
+                        }
+                        out.print("</tbody>");
+                        out.print("</table>");
+                    } else {
+                        out.print("<div class='text-center'>");
+                        out.print("<h4>No se han registrado notas para este documento</h4>");
+                        out.print("</div>");
+                    }
                     out.print("</div>");
                     out.print("</div>");
                     out.print("</div>");
+
                     //</editor-fold>
-
                     //<editor-fold defaultstate="collapsed" desc="FORCE CONCLUDE DOCUMENT">
                     out.print("<div class='sweet-local' tabindex='-1' id='Ventana8' style='opacity: 1.03; display:none;'>");
                     out.print("<div class='cont_reg' style='width: 28%; margin-left: 45%;'>");
@@ -981,7 +995,6 @@ public class Tag_Document extends TagSupport {
                     out.print("</div>");
 
                     //</editor-fold>
-                    
                     //<editor-fold defaultstate="collapsed" desc="APPROVE DOCUMENT">
                     out.print("<div class='sweet-local' tabindex='-1' id='Ventana3' style='opacity: 1.03; display:none;'>");
                     out.print("<div class='cont_reg'>");
@@ -1410,6 +1423,7 @@ public class Tag_Document extends TagSupport {
                         }
 
                         //</editor-fold>
+                        
                         //<editor-fold defaultstate="collapsed" desc="TRIBUTARY INFORMATION">
                         try {
                             DataClient = ModuleCliente[3].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
@@ -1609,6 +1623,7 @@ public class Tag_Document extends TagSupport {
                         }
 
                         //</editor-fold>
+                        
                         //<editor-fold defaultstate="collapsed" desc="SHAREHOLDING STRUCTURE">
                         try {
                             DataClient = ModuleCliente[6].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
@@ -2048,6 +2063,7 @@ public class Tag_Document extends TagSupport {
                         }
 
                         //</editor-fold>
+                        
                         //<editor-fold defaultstate="collapsed" desc="SIGNATURE BOSS">
                         try {
                             DataClient = ModuleCliente[15].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");

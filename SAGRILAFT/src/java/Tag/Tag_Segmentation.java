@@ -1055,8 +1055,12 @@ public class Tag_Segmentation extends TagSupport {
             out.print("<h5 class='mt-2'>Estado:</h5>");
             out.print("<div class='selectgroup m-2' >");
             out.print("<label class=\"selectgroup-item\" >");
-            out.print("<input type=\"radio\" name=\"State\" value=\"2\" class=\"selectgroup-input\" checked>");
+            out.print("<input type=\"radio\" name=\"State\" value=\"3\" class=\"selectgroup-input\" checked>");
             out.print("<span class=\"selectgroup-button selectgroup-button-icon\">Todas</span>");
+            out.print("</label>");
+            out.print("<label class=\"selectgroup-item\" >");
+            out.print("<input type=\"radio\" name=\"State\" value=\"2\" class=\"selectgroup-input\">");
+            out.print("<span class=\"selectgroup-button selectgroup-button-icon\">Pausados</span>");
             out.print("</label>");
             out.print("<label class=\"selectgroup-item\">");
             out.print("<input type=\"radio\" name=\"State\" value=\"1\" class=\"selectgroup-input\" >");
@@ -1146,11 +1150,11 @@ public class Tag_Segmentation extends TagSupport {
             out.print("<thead>");
             out.print("<tr>");
             out.print("<th>DOC</th>");
-            if (Format.equals("NATIONAL")) {
-                out.print("<th>NIT</th>");
-            } else {
-                out.print("<th>TAX</th>");
-            }
+//            if (Format.equals("NATIONAL")) {
+//                out.print("<th>NIT</th>");
+//            } else {
+//                out.print("<th>TAX</th>");
+//            }
             out.print("<th>Cliente / Proveedor</th>");
             if (Format.equals("NATIONAL")) {
                 out.print("<th>ACT. Primaria</th>");
@@ -1194,7 +1198,7 @@ public class Tag_Segmentation extends TagSupport {
                     out.print("</td>");
                     //</editor-fold>
                     //<editor-fold defaultstate="collapsed" desc="NIT/ID">
-                    out.print("<td>" + obj_segmentation[6] + "</td>");
+//                    out.print("<td>" + obj_segmentation[6] + "</td>");
                     //</editor-fold>
                     //<editor-fold defaultstate="collapsed" desc="CLIENT">
                     out.print("<td style='cursor:pointer;' data-toggle='tooltip' id='" + i + "' data-placement='top' title='" + ((obj_segmentation[5] == null) ? "" : obj_segmentation[5]) + "'>" + ((obj_segmentation[7] == null) ? "" : obj_segmentation[7]) + "</td>");
@@ -1316,65 +1320,83 @@ public class Tag_Segmentation extends TagSupport {
                     //</editor-fold>
                     //<editor-fold defaultstate="collapsed" desc="DAYS">
                     String[] validObs = {};
-                    try {
-                        validObs = obj_segmentation[31].toString().split("///");
-                        if (validObs.length == 2) {
-                            out.print("<td> - </td>");
-                        } else {
-                            out.print("<td>" + ((obj_segmentation[34] == null) ? "" : obj_segmentation[34]) + "</td>");
-                        }
-                    } catch (Exception e) {
+                    State = Integer.parseInt(obj_segmentation[33].toString());
+                    if (State == 2) {
                         out.print("<td> - </td>");
+                    } else {
+                        try {
+                            validObs = obj_segmentation[31].toString().split("///");
+                            if (validObs.length == 2) {
+                                out.print("<td> - </td>");
+                            } else {
+                                out.print("<td>" + ((obj_segmentation[34] == null) ? "" : obj_segmentation[34]) + "</td>");
+                            }
+                        } catch (Exception e) {
+                            out.print("<td> - </td>");
+                        }
                     }
                     //</editor-fold>
                     //<editor-fold defaultstate="collapsed" desc="VALIDITY">
-                    out.print("<td>");
-                    if (validObs.length == 2) {
-                        try {
-                            String dateNewDoc = validObs[1].toString();
-                            out.print("<div class='text-center'><b class='text-success'>Documento renovado</b> <br> <b class='text-dark'><i>" + dateNewDoc + "</i></b></div>");
-                        } catch (Exception e) {
-                            out.print("Error");
-                        }
+                    out.print("<td class='text-center'>");
+                    if (State == 2) {
+                        out.print("<div class=''>");
+                        out.print("<b data-toggle='tooltip' data-placement='top' title='El cliente actualmente tiene la validación de documentos pausada'>Pausado</b>");
+                        out.print("</div>");
                     } else {
-                        if (obj_segmentation[34] != null) {
-                            int days = Integer.parseInt(obj_segmentation[34].toString());
-                            if (days < 650) {
-                                out.print("<b style='color:green;'>Vigente</b>");
-                            } else if (days < 730) {
-                                out.print("<b style='color:orange;'>Proximo a vencer</b>");
-                            } else {
-                                out.print("<b style='color:red;'>Vencido</b>");
+                        if (validObs.length == 2) {
+                            try {
+                                String dateNewDoc = validObs[1].toString();
+                                out.print("<div class='text-center'><b class='text-success'>Documento renovado</b> <br> <b class='text-dark'><i>" + dateNewDoc + "</i></b></div>");
+                            } catch (Exception e) {
+                                out.print("Error");
                             }
                         } else {
-                            out.print("<b>Sin datos registrados</b>");
+                            if (obj_segmentation[34] != null) {
+                                int days = Integer.parseInt(obj_segmentation[34].toString());
+                                if (days < 650) {
+                                    out.print("<b style='color:green;'>Vigente</b>");
+                                } else if (days < 730) {
+                                    out.print("<b style='color:orange;'>Proximo a vencer</b>");
+                                } else {
+                                    out.print("<b style='color:red;'>Vencido</b>");
+                                }
+                            } else {
+                                out.print("<b>Sin datos registrados</b>");
+                            }
                         }
                     }
                     out.print("</td>");
                     //</editor-fold>
                     //<editor-fold defaultstate="collapsed" desc="OPC">
                     out.print("<td style='display:flex;justify-content: space-evenly;'>");
-                    if (validObs.length == 2) {
-                    } else {
-                        if (obj_segmentation[34] != null) {
-                            int days = Integer.parseInt(obj_segmentation[34].toString());
-                            if (days > 365 || (days < 365 && days > 300)) {
-                                String Info = "[" + obj_segmentation[0] + "][" + obj_segmentation[7] + "][" + Format + "][4]";
-                                out.print("<div><button onclick=\"window.location.href='Document?opt=1&idSegx=" + obj_segmentation[0] + "&name=" + obj_segmentation[7] + "&format=" + Format + "&tempo=4&IdDocx=" + obj_segmentation[1] + "'\" class='btn btn-warning btn-sm mr-2' data-toggle='tooltip' data-placement='top' title='Generar documento'><i class=\"fas fa-file-medical\"></i></button></div>");
+
+                    if (State != 2) {
+                        if (validObs.length == 2) {
+                        } else {
+                            if (obj_segmentation[34] != null) {
+                                int days = Integer.parseInt(obj_segmentation[34].toString());
+                                if (days > 365 || (days < 365 && days > 300)) {
+                                    String Info = "[" + obj_segmentation[0] + "][" + obj_segmentation[7] + "][" + Format + "][4]";
+                                    out.print("<div><button onclick=\"window.location.href='Document?opt=1&idSegx=" + obj_segmentation[0] + "&name=" + obj_segmentation[7] + "&format=" + Format + "&tempo=4&IdDocx=" + obj_segmentation[1] + "'\" class='btn btn-warning btn-sm mr-2' data-toggle='tooltip' data-placement='top' title='Generar documento'><i class=\"fas fa-file-medical\"></i></button></div>");
+                                }
                             }
                         }
                     }
-                    State = Integer.parseInt(obj_segmentation[33].toString());
-                    out.print("<div><button onclick=\"window.location.href='Segmentation?opt=3&IdSegmentation=" + obj_segmentation[0] + "&State=" + ((State == 1) ? "0" : "1") + "&Format=" + Format + "'\" class='btn btn-outline-" + ((State == 1) ? "success" : "danger") + " btn-sm mr-2' data-toggle='tooltip' data-placement='top' title='" + ((State == 1) ? "Activo" : "Inactivo") + "'><i class='fas fa-" + ((State == 1) ? "check" : "times") + "'></i></button></div>");
+//                    out.print("<div><button onclick=\"window.location.href='Segmentation?opt=3&IdSegmentation=" + obj_segmentation[0] + "&State=" + ((State == 1) ? "0" : "1") + "&Format=" + Format + "'\" class='btn btn-outline-" + ((State == 1) ? "success" : "danger") + " btn-sm mr-2' data-toggle='tooltip' data-placement='top' title='" + ((State == 1) ? "Activo" : "Inactivo") + "'><i class='fas fa-" + ((State == 1) ? "check" : "times") + "'></i></button></div>");
                     out.print("<div class='dropdown d-inline'>\n");
                     out.print("<button class='btn btn-outline-primary btn-sm  dropdown-toggle' type='button' id='dropdownMenuButton2' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>\n");
                     out.print("<i class='fas fa-cog'></i>");
                     out.print("</a><div class='dropdown-menu menuDropdow'>");
-                    out.print("<a class='dropdown-item has-icon' onclick=\"window.location.href='Segmentation?opt=1&IdSegmentation=" + obj_segmentation[0] + "&Format=" + Format + "'\" class='btn btn-outline-danger btn-sm mr-2' data-toggle='tooltip' data-placement='top' title='Actualizar'><i class='fas fa-user-edit'></i>Actualizar</a>");
-                    out.print("<a class='dropdown-item has-icon' onclick=\"window.location.href='Segmentation?opt=1&IdSegmentation=" + obj_segmentation[0] + "&Temp=2&Format=" + Format + "'\" class='btn btn-outline-primary btn-sm mr-2' data-toggle='tooltip' data-placement='top' title='Ver detalle'><i class='fas fa-eye'></i>Detalle</a>");
-                    //<editor-fold defaultstate="collapsed" desc="CONDITION RISK LEVE VISIT">
-                    out.print("<a class='dropdown-item has-icon' onclick=\"window.location.href='Segmentation?opt=1&IdSegmentation=" + obj_segmentation[0] + "&Temp=1&Format=" + Format + "'\" class='btn btn-outline-info btn-sm mr-2' data-toggle='tooltip' data-placement='top' title='Aplica visita'><i class=\"fas fa-portrait\"></i>Visita</a>");
-                    //</editor-fold>
+                    if (State != 2) {
+                        out.print("<a class='dropdown-item has-icon' onclick=\"window.location.href='Segmentation?opt=1&IdSegmentation=" + obj_segmentation[0] + "&Format=" + Format + "'\" class='btn btn-outline-danger btn-sm mr-2' data-toggle='tooltip' data-placement='top' title='Actualizar'><i class='fas fa-user-edit'></i>Actualizar</a>");
+                        out.print("<a class='dropdown-item has-icon' onclick=\"window.location.href='Segmentation?opt=1&IdSegmentation=" + obj_segmentation[0] + "&Temp=2&Format=" + Format + "'\" class='btn btn-outline-primary btn-sm mr-2' data-toggle='tooltip' data-placement='top' title='Ver detalle'><i class='fas fa-eye'></i>Detalle</a>");
+                        //<editor-fold defaultstate="collapsed" desc="CONDITION RISK LEVE VISIT">
+                        out.print("<a class='dropdown-item has-icon' onclick=\"window.location.href='Segmentation?opt=1&IdSegmentation=" + obj_segmentation[0] + "&Temp=1&Format=" + Format + "'\" class='btn btn-outline-info btn-sm mr-2' data-toggle='tooltip' data-placement='top' title='Aplica visita'><i class=\"fas fa-portrait\"></i>Visita</a>");
+                        //</editor-fold>
+                        out.print("<a class='dropdown-item has-icon' onclick=\"window.location.href='Segmentation?opt=3&IdSegmentation=" + obj_segmentation[0] + "&State=2&Format=" + Format + "'\" class='btn btn-outline-info btn-sm mr-2' data-toggle='tooltip' data-placement='top' title='Pausar temporalmente'><i class=\"far fa-pause-circle\"></i>Pausar</a>");
+                    } else {
+                        out.print("<a class='dropdown-item has-icon' onclick=\"window.location.href='Segmentation?opt=3&IdSegmentation=" + obj_segmentation[0] + "&State=1&Format=" + Format + "'\" class='btn btn-outline-info btn-sm mr-2' data-toggle='tooltip' data-placement='top' title='Activar'><i class=\"fas fa-play\"></i>Activar</a>");
+                    }
                     out.print("</div>");
                     out.print("</div>");
                     out.print("</td>");

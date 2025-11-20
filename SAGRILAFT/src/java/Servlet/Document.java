@@ -176,6 +176,7 @@ public class Document extends HttpServlet {
                             Object[] Obj_doc = (Object[]) lst_document.get(0);
                             IdDoc = Integer.parseInt(Obj_doc[0].toString());
                             UserJpa.UserRenewDocument(IdDoc, IdDocx);
+                            DocumentJpa.UpdateDocumentRenewUser(IdDoc);
                             if (result) {
                                 lst_document = DocumentJpa.ConsultLastdocument(Mail);
                                 if (lst_document != null) {
@@ -468,6 +469,24 @@ public class Document extends HttpServlet {
                     request.getRequestDispatcher("Document?opt=1&IdDoc=" + IdDoc + "&Event=Checking").forward(request, response);
 //</editor-fold>
                     break;
+                case 8:
+                    //<editor-fold defaultstate="collapsed" desc="RE SEND MAIL CLIENT">
+                    IdDoc = Integer.parseInt(request.getParameter("IdDoc"));
+//                    idClient = Integer.parseInt(request.getParameter("idClient"));
+//                    result = UserJpa.UserUpdatePass(idClient);
+//                    if (result) {
+                    lst_document = DocumentJpa.ConsultDocumentByIdDoc(IdDoc);
+                    if (lst_document != null) {
+                        Object[] obUSer = (Object[]) lst_document.get(0);
+                        MailJpa.NotifyMailClient(obUSer[5].toString(), obUSer[2].toString(), obUSer[8].toString());
+                        result = true;
+                    }
+//                    }
+                    request.setAttribute("ResendClientCredencials", result);
+                    request.getRequestDispatcher("Document?opt=1&IdDoc=0").forward(request, response);
+                    //</editor-fold>
+                    break;
+
             }
 
         } catch (Exception e) {

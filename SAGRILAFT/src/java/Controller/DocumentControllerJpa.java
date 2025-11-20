@@ -382,6 +382,25 @@ public class DocumentControllerJpa implements Serializable {
             return false;
         }
     }
+
+    public boolean UpdateDocumentRenewUser(int IdDoc) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        try {
+            Query q = em.createNativeQuery("CALL `Sp_doc_u_uopdateIdUserNewDocument`(" + IdDoc + ")");
+            int resultado = q.executeUpdate();
+            em.getTransaction().commit();
+            em.clear();
+            em.close();
+            if (resultado == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
 //</editor-fold>
 //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="SIGNATURE PROCESS">
@@ -530,6 +549,24 @@ public class DocumentControllerJpa implements Serializable {
         etm.getTransaction().begin();
         try {
             Query q = etm.createNativeQuery("CALL `sp_obs_c_ConsultObservationsDocument`('" + idDoc + "',  " + state + ")");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+    public List ConsultDocumentObservationsxDoc(int idDoc) {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_obs_c_ConsultObservationsIdDoc`('" + idDoc + "')");
             List consulta = q.getResultList();
             etm.getTransaction().commit();
             etm.clear();

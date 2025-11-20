@@ -181,8 +181,8 @@ public class Tag_ClientSection extends TagSupport {
                     }
 
                     //</editor-fold>
+                    
                     out.print("<div class='card'>");
-
                     out.print("<script> ");
                     out.print("function validarRadios(formId, radioName, mssg) { ");
                     out.print("    var form = document.getElementById(formId); ");
