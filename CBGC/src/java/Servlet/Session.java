@@ -51,7 +51,7 @@ public class Session extends HttpServlet {
                     } else {
                         user = request.getParameter("Txt_user");
                         password = request.getParameter("Txt_password");
-                        if (password.length() >= 10) {
+                        if (password.length() >= 8) {
                             passwordEncrypt = md5.md5(password);
                             lst_user = UserJpa.ConsultUserPassword(user, passwordEncrypt);
                             if (lst_user == null || lst_user.isEmpty() || lst_user.size() == 0) {

@@ -96,7 +96,7 @@ public class Format extends TagSupport {
                     Object[] Objform = (Object[]) lst_format.get(0);
                     out.print("<form action='Format?opt=2&IdFormat=" + Objform[0] + "&Temp=2' method='post' class='needs-validation' novalidate='' onsubmit='return cargarDatosForm(this)'>");
                     out.print("<div class='d-flex justify-content-center'>");
-                    out.print("<input type='hidden' class='form-control' name='dataFormat' value='" + Objform[4] + "' >");
+                    out.print("<input type='hidden' class='form-control' name='dataFormat' value='" + Objform[3] + "' >");
                     out.print("<input type='text' class='form-control col-lg-3' name='Application' id='' value='" + Objform[1] + "' placeholder='Aplicacion' data-toggle='tooltip' data-placement='top' title='Aplicacion' >");
                     out.print("<input type='text' class='form-control col-lg-4' name='Record' id='' value='" + Objform[2] + "' placeholder='Nombre' data-toggle='tooltip' data-placement='top' title='Nombre' >");
                     int val = Integer.parseInt(Objform[3].toString()) + 1;

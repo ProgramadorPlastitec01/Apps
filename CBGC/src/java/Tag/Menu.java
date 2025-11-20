@@ -35,14 +35,16 @@ public class Menu extends TagSupport {
                     "          <li class=\"dropdown\"><a href=\"#\" data-toggle=\"dropdown\" onclick='CloseDivStartEndDate()' class=\"nav-link dropdown-toggle nav-link-lg nav-link-user\">\n"
                     + "            <div class=\"d-sm-none d-lg-inline-block\">" + NameUser + "<img alt=\"image\" class='ml-2' src='Interface/Content/Assets/img/avatar/avatar-7.png' style=\"width:40px; height:40px; border-radius:50% !important; object-fit:cover;\" ></div></a>\n"
                     + "            <div class=\"dropdown-menu dropdown-menu-right\">\n"
-                    + "              <div class=\"dropdown-title\">Opciones</div>\n"
-                    + "              <a href=\"Profile?opt=1\" onclick='cargarDatos()' class=\"dropdown-item has-icon\">\n"
-                    + "                <i class=\"fas fa-user\"></i> Perfil\n"
-                    + "              </a>\n"
-                    + "              <a href=\"Setting.jsp\" onclick='cargarDatos()' class=\"dropdown-item has-icon\">\n"
+                    + "              <div class=\"dropdown-title\">Opciones</div>\n");
+//                    + "              <a href=\"Profile?opt=1\" onclick='cargarDatos()' class=\"dropdown-item has-icon\">\n"
+//                    + "                <i class=\"fas fa-user\"></i> Perfil\n"
+//                    + "              </a>\n"
+            out.print(
+                    "              <a href=\"Setting.jsp\" onclick='cargarDatos()' class=\"dropdown-item has-icon\">\n"
                     + "                <i class=\"fas fa-cog\"></i> Configuración\n"
-                    + "              </a>\n"
-                    + "              <div class=\"dropdown-divider\"></div>\n"
+                    + "              </a>\n");
+            out.print(
+                    "              <div class=\"dropdown-divider\"></div>\n"
                     + "              <a href=\"Leave.jsp\"  class=\"dropdown-item has-icon text-danger\">\n"
                     + "                <i class=\"fas fa-sign-out-alt\"></i> Salir\n"
                     + "              </a>\n"
@@ -89,18 +91,21 @@ public class Menu extends TagSupport {
             }
             if (Permission.contains("(12)")) {
                 out.print("<li class=\"dropdown\">");
-                out.print("<a href='Generate?opt=1&Type=ControlGrafado' class=\"nav-link\" onclick='cargarDatos()'>"
+//                out.print("<a href='Generate?opt=1&Type=ControlGrafado' class=\"nav-link\" onclick='cargarDatos()'>"
+                out.print("<a href='#' class=\"nav-link\" onclick='cargarDatos()'>"
                         + "<i><img src=\"Interface/Imagen/Control_grafado.png\" alt=\"\" class='ImgModule'/></i><div><span>Control Grafado</span><div class='Prox'>Proximamente...</div></div></a>");
                 out.print("</li>");
             }
             if (Permission.contains("(13)")) {
                 out.print("<li class=\"dropdown\">");
-                out.print("<a href='Generate?opt=1&Type=InspeccionManga' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/Inspeccion_manga.png\" alt=\"\" class='ImgModule'/></i><div><span>Inspección Manga</span><div class='Prox'>Proximamente...</div></div></a>");
+//                out.print("<a href='Generate?opt=1&Type=InspeccionManga' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/Inspeccion_manga.png\" alt=\"\" class='ImgModule'/></i><div><span>Inspección Manga</span><div class='Prox'>Proximamente...</div></div></a>");
+                out.print("<a href='#' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/Inspeccion_manga.png\" alt=\"\" class='ImgModule'/></i><div><span>Inspección Manga</span><div class='Prox'>Proximamente...</div></div></a>");
                 out.print("</li>");
             }
             if (Permission.contains("(14)")) {
                 out.print("<li class=\"dropdown\">");
-                out.print("<a href='Generate?opt=1&Type=SistemaTubo' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/ST_Desc_2.png\" alt=\"\" class='ImgModule'/></i><div><span>Sistema de Tubo</span><div class='Prox'>Proximamente...</div></div></a>");
+                out.print("<a href='#' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/ST_Desc_2.png\" alt=\"\" class='ImgModule'/></i><div><span>Sistema de Tubo</span><div class='Prox'>Proximamente...</div></div></a>");
+//                out.print("<a href='Generate?opt=1&Type=SistemaTubo' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/ST_Desc_2.png\" alt=\"\" class='ImgModule'/></i><div><span>Sistema de Tubo</span><div class='Prox'>Proximamente...</div></div></a>");
                 out.print("</li>");
             }
 

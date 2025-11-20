@@ -115,17 +115,17 @@ public class GenerateReport extends TagSupport {
 
             out.print("<div class='card-header' style='justify-content: space-between;'>");
             out.print("<div class='d-flex'>"
-                    + "<h4>Generar Certificado</h4>"
+                    + "<h4>Generar Certificado <b class='text-info'>" + Type + "</b></h4>"
                     + "</div>");
             out.print("<div class='d-flex'>");
             if (Permission.contains("(6)")) {
-                out.print("<button class='btn btn-" + ((TempDelete > 0) ? "green" : "warning") + " btn-sm mr-4' style='border-radius: 4px;'  onclick=\"javascript:location.href='Generate?opt=1&Type=" + Type + "&TempDelete=" + ((TempDelete > 0) ? "0" : "1") + "';cargarDatos()\" ><i class=\"fas fa-" + ((TempDelete > 0) ? "file-signature" : "file-prescription") + "\"></i></button>");
+                out.print("<button class='btn btn-" + ((TempDelete > 0) ? "green" : "warning") + " btn-sm mr-4' style='border-radius: 4px;'  onclick=\"javascript:location.href='Generate?opt=1&Type=" + Type + "&TempDelete=" + ((TempDelete > 0) ? "0" : "1") + "';cargarDatos()\"  data-toggle='tooltip' data-placement='top' title='Consultar "+ ((TempDelete > 0) ? "Activos" : "Eliminados") +"' ><i class=\"fas fa-" + ((TempDelete > 0) ? "file-signature" : "file-prescription") + "\"></i></button>");
             }
             if (Permission.contains("(7)")) {
-                out.print("<button class='btn btn-green btn-sm mr-4' style='border-radius: 4px;'  onclick='ExecuteForm()' ><i class='fas fa-signature'></i></button>");
+                out.print("<button class='btn btn-green btn-sm mr-4' style='border-radius: 4px;'  onclick='ExecuteForm()' ><i class='fas fa-signature'  data-toggle='tooltip' data-placement='top' title='Firma Masiva'></i></button>");
             }
             if (Permission.contains("(8)")) {
-                out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1)'><i class='fas fa-plus'></i></button></div>");
+                out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1)'  data-toggle='tooltip' data-placement='top' title='Generar Certificados'><i class='fas fa-plus' ></i></button></div>");
             }
             out.print("</div>");
 
@@ -156,8 +156,9 @@ public class GenerateReport extends TagSupport {
             if (TempDelete > 0) {
                 out.print("<th>Justificacion</th>");
             }
+            out.print("<th>Fecha </br> Generación</th>");
             out.print("<th>Estado</th>");
-            out.print("<th>OPC</th>");
+            out.print("<th>Ver</th>");
             out.print("</tr>");
             out.print("</thead>");
             out.print("<tbody>");
@@ -188,16 +189,17 @@ public class GenerateReport extends TagSupport {
                     if (TempDelete > 0) {
                         out.print("<td>" + ObjCerti[9] + "</td>");
                     }
+                    out.print("<td>" + ObjCerti[10].toString().trim() + "</td>");
                     try {
                         switch (State) {
                             case 1:
-                                out.print("<td class='text-center'><button class='btn btn-info btn-sm' style='border-radius: 4px;' ><i class=\"fas fa-spinner fa-spin\"></i></button></td>");
+                                out.print("<td class='text-center'><span data-toggle='tooltip' data-placement='top' title='En gestión' ><i  style='font-size:22px' class=\"fas fa-spinner fa-spin text-info\"></i></span></td>");
                                 break;
                             case 2:
-                                out.print("<td class='text-center'><button class='btn btn-danger btn-sm' style='border-radius: 4px;'><i class=\"fas fa-trash\"></i></button></td>");
+                                out.print("<td class='text-center' data-toggle='tooltip' data-placement='top' title='Eliminado'><span><i   style='font-size:22px' class=\"fas fa-trash text-danger\"></i></span></td>");
                                 break;
                             default:
-                                out.print("<td class='text-center'><button class='btn btn-success btn-sm' style='border-radius: 4px;'><i class=\"fas fa-check\"></i></button></td>");
+                                out.print("<td class='text-center' data-toggle='tooltip' data-placement='top' title='Finalizado'><span><i  style='font-size:22px' class=\"fas fa-check text-success\" ></i></span></td>");
                                 break;
                         }
                     } catch (IOException | NumberFormatException e) {
@@ -207,7 +209,7 @@ public class GenerateReport extends TagSupport {
                     out.print("<button class='btn btn-green btn-sm mr-2' style='border-radius: 4px;' onclick=\"javascript:location.href='Generate?opt=2&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "&TempDelete=" + TempDelete + "&Order=" + ObjCerti[5] + "&Batch=" + ObjCerti[7] + "';cargarDatos()\" ><i class=\"fas fa-eye\"></i></button>");
                     if (State == 1) {
                         if (Permission.contains("(9)")) {
-                            out.print("<button class='btn btn-danger btn-sm' style='border-radius: 4px;' onclick=\"confirmarEliminacion('Generate?opt=5&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "')\"><i class='fas fa-trash'></i></button>");
+                            out.print("<button class='btn btn-danger btn-sm' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Eliminar Certificado' onclick=\"confirmarEliminacion('Generate?opt=5&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "')\"><i class='fas fa-trash'></i></button>");
                         }
                     }
 
