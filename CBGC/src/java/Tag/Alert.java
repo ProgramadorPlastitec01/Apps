@@ -302,7 +302,7 @@ public class Alert extends TagSupport {
 
                 out.print("        <!-- Formulario -->");
                 out.print("        <form action='Session?opt=3' method='post' autocomplete='off'>");
-                out.print("            <input type='text' name='IdUser' id='IdUser' value='" + IdUser + "'>");
+                out.print("            <input type='hidden' name='IdUser' id='IdUser' value='" + IdUser + "'>");
                 out.print("            <div class='inputs-container'>");
                 out.print("                <input class='form-control' type='password' name='Txt_password_new' id='pass-input' placeholder='Nueva Contraseña' autocomplete='new-password' readonly>");
                 out.print("    <div id='pass-msg' class='validation-msg'></div>"); // Mensaje de contraseña
