@@ -517,8 +517,8 @@ public class Orden extends HttpServlet {
                     id_registro = Integer.parseInt(request.getParameter("Id_registro").toString());
                     id_registro_despeje = Integer.parseInt(request.getParameter("Id_registro_despeje").toString());
                     if (rol.equals("Administrador")) {
-//                        rol_firma = "_**INSPECTORA_";
-//                        rol_firma = "_**OPERARIO_";
+                        rol_firma = "_**INSPECTORA_";
+                        rol_firma = "_**OPERARIO_";
                         rol_firma = "_**COORDINADOR_";
                     } else if (rol.equals("Inspectora_calidad")) {
                         rol_firma = "_**INSPECTORA_";

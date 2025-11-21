@@ -2622,9 +2622,9 @@ public class Tag_orden extends TagSupport {
                         text_plantilla = text_plantilla.replace("_**PRODUCTO_", obj_registro[24].toString());
                         text_plantilla = text_plantilla.replace("_**CODIGO_FT_", obj_registro[26].toString().toString().replace("FT-EX-", ""));
                         text_plantilla = text_plantilla.replace("_**VERSION_FT_", " " + obj_registro[27].toString() + " ");
-//                        text_plantilla = text_plantilla.replace("_**OPERARIO_","<b style=\"color:red\">_**OPERARIO_</b>" );
-//                        text_plantilla = text_plantilla.replace("_**COORDINADOR_", "<b style=\"color:red\">_**COORDINADOR_</b>");
-//                        text_plantilla = text_plantilla.replace("_**INSPECTORA_", "<b style=\"color:red\">_**INSPECTORA_</b>");
+                        text_plantilla = text_plantilla.replace("_**OPERARIO_","<b style=\"color:black\">_**OPERARIO_</b>" );
+                        text_plantilla = text_plantilla.replace("_**COORDINADOR_", "<b style=\"color:black\">_**COORDINADOR_</b>");
+                        text_plantilla = text_plantilla.replace("_**INSPECTORA_", "<b style=\"color:blue\">_**INSPECTORA_</b>");
                         out.print(text_plantilla);
                     }
                     out.print("</textarea>");

@@ -569,7 +569,7 @@ public class RegistroJpaController {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
         try {
-            Query q = etm.createNativeQuery("update registro_despeje set formato = replace(formato,'" + rol + "','<b style=\"color:black\">" + urg + "</b>') where id_registro_despeje = " + ird + "");
+            Query q = etm.createNativeQuery("update registro_despeje set formato = replace(formato,'" + rol + "','<b style=\"color:" + ((rol.equals("Inspectora_calidad")) ? "blue" : (rol.equals("Coordinadora_calidad")) ? "blue" : "black") + "\">" + urg + "</b>') where id_registro_despeje = " + ird + "");
             int exitoso = q.executeUpdate();
             etm.getTransaction().commit();
             etm.clear();
