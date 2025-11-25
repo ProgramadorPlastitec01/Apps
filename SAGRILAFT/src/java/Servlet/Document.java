@@ -46,7 +46,7 @@ public class Document extends HttpServlet {
         HttpSession sesion = request.getSession();
         String UserName = sesion.getAttribute("Nombres").toString();
         String[] DtaFormat = {};
-        String idSegx = "", namex = "", formatx = "", tempx = "", justify = "";
+        String idSegx = "", namex = "", formatx = "", tempx = "", justify = "", cbxReg = "";
         try {
             try {
                 Format = request.getParameter("TxtFormat");
@@ -88,6 +88,11 @@ public class Document extends HttpServlet {
                         ste = 0;
                     }
                     try {
+                        cbxReg = request.getParameter("cbxReg");
+                    } catch (Exception e) {
+                        cbxReg = "";
+                    }
+                    try {
                         idSegx = request.getParameter("idSegx");
                         namex = request.getParameter("name");
                         formatx = request.getParameter("format");
@@ -106,6 +111,7 @@ public class Document extends HttpServlet {
                     request.setAttribute("EventDoc", Event);
                     request.setAttribute("ste", ste);
                     request.setAttribute("IdDocx", IdDocx);
+                    request.setAttribute("cbxReg", cbxReg);
                     request.getRequestDispatcher("Document.jsp").forward(request, response);
                     //</editor-fold>
                     break;

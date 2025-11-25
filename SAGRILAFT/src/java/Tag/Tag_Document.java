@@ -38,7 +38,7 @@ public class Tag_Document extends TagSupport {
         List lst_user = null;
         List lst_template = null;
         List lst_observation = null;
-        String StateIcon = "", StateTitle = "", ListAttach = "", Event = "", Info = "";
+        String StateIcon = "", StateTitle = "", ListAttach = "", Event = "", Info = "", cbxReg = "";
         int IdDoc = 0, idUser = 0, idRol = 0, Temp = 0, ste = 0, IdDocx = 0;
         String idSegx = "", namex = "", formatx = "", tempx = "";
         String[] ArgInfo = {};
@@ -80,6 +80,11 @@ public class Tag_Document extends TagSupport {
             Event = pageContext.getRequest().getAttribute("EventDoc").toString();
         } catch (Exception e) {
             Event = "Main";
+        }
+        try {
+            cbxReg = pageContext.getRequest().getAttribute("cbxReg").toString();
+        } catch (Exception e) {
+            cbxReg = "";
         }
         try {
             Info = pageContext.getRequest().getAttribute("Info").toString();
@@ -244,7 +249,7 @@ public class Tag_Document extends TagSupport {
 //</editor-fold>
                 }
                 //<editor-fold defaultstate="collapsed" desc="NEW DOCUMENT">
-                out.print("<div class='sweet-local' tabindex='-1' id='Ventana1' style='opacity: 1.03; display:" + (idSegx.equals("") ? "none" : "block") + ";'>");
+                out.print("<div class='sweet-local' tabindex='-1' id='Ventana1' style='opacity: 1.03; display:" + (idSegx.equals("") ? ((cbxReg != "") ? "block" : "none") : "block") + ";'>");
                 out.print("<div class='cont_reg' style='width: 70%; margin-left: 24%;'>");
                 out.print("<div style='display: flex; justify-content: space-between'>");
                 out.print("<h2>Nuevo Cliente</h2>");
@@ -257,30 +262,38 @@ public class Tag_Document extends TagSupport {
                     out.print("<input type='hidden' name='IdDocx' value='" + IdDocx + "'>");
                     out.print("<input type='hidden' name='idSegx' value='" + idSegx + "'>");
                 }
-
+                
+                
+                
                 out.print("<div class='d-flex'>");
+                
+                
                 out.print("<div class='col-lg-6' style='display: grid;'>");
-
-                out.print("<input type='text' class='form-control mr-3' name='TxtBusinessName' id='' placeholder='Razon Social' value='" + (idSegx.equals("") ? "" : namex) + "'  data-toggle='tooltip' data-placement='top' title='Razon Social' required>");
+                
                 out.print("<div class='d-flex'>");
-                out.print("<input type='text' class='form-control col-lg-6 mt-2 mb-2' name='TxtMail' id='' placeholder='Correo' data-toggle='tooltip' data-placement='top' title='Correo@correo.com' required>");
-                out.print("<div class='col-lg-6 mt-2 mb-2 wdtFixe' data-toggle='tooltip' data-placemente='top' title='Tipo de registro'>");
-                out.print("<select class='form-control' name='TxtTemplate' required>");
-                out.print("<option selected disabled value=''>Seleccione registro</option>");
+                out.print("<div class='mr-2 mt-2 mb-2 wdtFixe' data-toggle='tooltip' data-placemente='top' title='Tipo de registro'>");
+                out.print("<select class='form-control' name='TxtTemplate' id='idtemplateshr' required onchange='searchDocs(this.value)'>");
+                if (cbxReg.equals("")) {
+                    out.print("<option selected disabled value=''>Seleccione registro</option>");
+                }
                 lst_config = ConfigJpa.ConsultSettingsByCategorie("DocumentType");
                 if (lst_config != null) {
                     Object[] objType = (Object[]) lst_config.get(0);
                     String[] DataType = objType[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
                     for (int i = 0; i < DataType.length; i++) {
                         String[] TypeDetail = DataType[i].split("/");
-                        out.print("<option value='" + DataType[i] + "'>" + TypeDetail[1].toString() + "</option>");
+                        out.print("<option value='" + DataType[i] + "' " + ((cbxReg.equals(DataType[i])) ? "selected" : "") + " >" + TypeDetail[1].toString() + "</option>");
                     }
                 } else {
                     out.print("<option>Error</option>");
                 }
                 out.print("</select>");
                 out.print("</div>");
+                out.print("<input type='text' class='form-control col-lg-6 mt-2 mb-2' name='TxtMail' id='' placeholder='Correo' data-toggle='tooltip' data-placement='top' title='Correo@correo.com' required>");
+                
                 out.print("</div>");
+
+                out.print("<input type='text' class='form-control mr-3' name='TxtBusinessName' id='' placeholder='Razon Social' value='" + (idSegx.equals("") ? "" : namex) + "'  data-toggle='tooltip' data-placement='top' title='Razon Social' required>");
 
                 out.print("<div class='d-flex mt-2' style='align-items: center;'>");
 
@@ -338,32 +351,58 @@ public class Tag_Document extends TagSupport {
 
                 out.print("</div>");
 
-                out.print("<div class='col-lg-6'>");
+                out.print("<div class='col-lg-6' id='formatResults'>");
 
-                out.print("<div id='accordion' class=''>");
-                out.print("<div class='accordion'>");
-                out.print("<div class='accordion-header' role=\"button\" data-toggle=\"collapse\" data-target=\"#panel-body-1\" aria-expanded=\"true\" style='padding: 4px 15px;border: 1px solid #0022376b;box-shadow: 1px 1px 3px 0px #002237ab;'>");
-                out.print("<div class='' style='display: flex;'><b><span style='font-size: 13px; margin-bottom: 5px;'>Archivos anexos</span>&nbsp;<span><i class='fas fa-question-circle'></i></span></b> </div>");
-                out.print("</div>");
-                out.print("<div class='accordion-body collapse show' id=\"panel-body-1\" data-parent=\"#accordion\">");
-                lst_config = ConfigJpa.ConsultSettingsByCategorie("Attach");
-                if (lst_config != null) {
-                    for (int i = 0; i < lst_config.size(); i++) {
-                        Object[] ObjAtch = (Object[]) lst_config.get(i);
-                        out.print("<div class='ml-4' style='display: flex;border-bottom: 1px solid #d9d9d9;padding-bottom: 2px;'>");
-                        out.print("<input type='checkbox' id='Attach" + ObjAtch[0] + "' onclick='moving(" + ObjAtch[0] + ")' value='" + ObjAtch[0] + "' checked>&nbsp;&nbsp;");
-                        out.print("<span>" + ObjAtch[2].toString().split("/")[0] + "</span>");
-                        out.print("</div>");
-                        ListAttach += "[" + ObjAtch[0] + "]";
-                    }
+                if (cbxReg.equals("")) {
+                    out.print("<h3>Seleccione un registro</h3>");
                 } else {
-                    out.print("<p>Error al consultar los documentos</p>");
+                    String[] regData = cbxReg.split("/");
+                    int idRegd = Integer.parseInt(regData[0].toString());
+                    out.print("<h5>Registro seleccionado: <b>" + regData[1] + "</b></h5>");
+                    out.print("<div class=''>");
+                    lst_config = ConfigJpa.ConsultSettingsByCategorie("Attach" + idRegd);
+                    if (lst_config != null) {
+                        for (int i = 0; i < lst_config.size(); i++) {
+                            Object[] ObjAtch = (Object[]) lst_config.get(i);
+                            out.print("<div class='ml-4 mt-2' style='display: flex;border-bottom: 1px solid #d9d9d9;padding-bottom: 2px;'>");
+                            out.print("<input type='checkbox' id='Attach" + ObjAtch[0] + "' onclick='moving(" + ObjAtch[0] + ")' value='" + ObjAtch[0] + "' checked>&nbsp;&nbsp;");
+                            out.print("<span>" + ObjAtch[2].toString().split("/")[0] + "</span>");
+                            out.print("</div>");
+                            ListAttach += "[" + ObjAtch[0] + "]";
+                        }
+                    } else {
+                        out.print("<div class='text-center mt-4'>");
+                        out.print("<h6>No se han encontrado documentos relacionados a este registro, favor comunicarse al área TI.</h6>");
+                        out.print("</div>");
+                    }
+                    out.print("</div>");
                 }
-                out.print("<input type='hidden' class='form-control' name='TxtFiles' id='ListAttach' value='" + ListAttach + "'>");
-                out.print("</div>");
-                out.print("</div>");
-                out.print("</div>");
 
+                //<editor-fold defaultstate="collapsed" desc="OLD">
+//                out.print("<div id='accordion' class=''>");
+//                out.print("<div class='accordion'>");
+//                out.print("<div class='accordion-header' role=\"button\" data-toggle=\"collapse\" data-target=\"#panel-body-1\" aria-expanded=\"true\" style='padding: 4px 15px;border: 1px solid #0022376b;box-shadow: 1px 1px 3px 0px #002237ab;'>");
+//                out.print("<div class='' style='display: flex;'><b><span style='font-size: 13px; margin-bottom: 5px;'>Archivos anexos</span>&nbsp;<span><i class='fas fa-question-circle'></i></span></b> </div>");
+//                out.print("</div>");
+//                out.print("<div class='accordion-body collapse show' id=\"panel-body-1\" data-parent=\"#accordion\">");
+//                lst_config = ConfigJpa.ConsultSettingsByCategorie("Attach");
+//                if (lst_config != null) {
+//                    for (int i = 0; i < lst_config.size(); i++) {
+//                        Object[] ObjAtch = (Object[]) lst_config.get(i);
+//                        out.print("<div class='ml-4' style='display: flex;border-bottom: 1px solid #d9d9d9;padding-bottom: 2px;'>");
+//                        out.print("<input type='checkbox' id='Attach" + ObjAtch[0] + "' onclick='moving(" + ObjAtch[0] + ")' value='" + ObjAtch[0] + "' checked>&nbsp;&nbsp;");
+//                        out.print("<span>" + ObjAtch[2].toString().split("/")[0] + "</span>");
+//                        out.print("</div>");
+//                        ListAttach += "[" + ObjAtch[0] + "]";
+//                    }
+//                } else {
+//                    out.print("<p>Error al consultar los documentos</p>");
+//                }
+//                out.print("<input type='hidden' class='form-control' name='TxtFiles' id='ListAttach' value='" + ListAttach + "'>");
+//                out.print("</div>");
+//                out.print("</div>");
+//                out.print("</div>");
+//</editor-fold>
                 out.print("</div>");
 
                 out.print("</div>");
@@ -1423,7 +1462,6 @@ public class Tag_Document extends TagSupport {
                         }
 
                         //</editor-fold>
-                        
                         //<editor-fold defaultstate="collapsed" desc="TRIBUTARY INFORMATION">
                         try {
                             DataClient = ModuleCliente[3].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
@@ -1623,7 +1661,6 @@ public class Tag_Document extends TagSupport {
                         }
 
                         //</editor-fold>
-                        
                         //<editor-fold defaultstate="collapsed" desc="SHAREHOLDING STRUCTURE">
                         try {
                             DataClient = ModuleCliente[6].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
@@ -2063,7 +2100,6 @@ public class Tag_Document extends TagSupport {
                         }
 
                         //</editor-fold>
-                        
                         //<editor-fold defaultstate="collapsed" desc="SIGNATURE BOSS">
                         try {
                             DataClient = ModuleCliente[15].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");

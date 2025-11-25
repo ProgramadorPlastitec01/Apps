@@ -325,7 +325,12 @@
                         });
             });
         </script>
-
+        
+        <script>
+            function searchDocs(dta){
+                window.location.href = "Document?opt=1&cbxReg="+ dta +"";
+            }
+        </script>
 
 
         <script src="Interfaz/Contenido/assets/modules/datatables/datatables.min.js"></script>
@@ -336,6 +341,8 @@
         <script src="Interfaz/Contenido/assets/js/page/modules-toastr.js"></script>
         <script src="Interfaz/Contenido/assets/js/ExportExcel.js"></script>
         <script src="Interfaz/Contenido/assets/js/SignatureSecond.js"></script>
+        
+        <script src="Interfaz/Contenido/assets/js/JsonExecute.js"></script>
 
         <script type="text/javascript" src="Interfaz/Alertas/dist/sweetalert.min.js"></script>
         <link href="Interfaz/Alertas/dist/sweetalert.css" rel="stylesheet" type="text/css"/>

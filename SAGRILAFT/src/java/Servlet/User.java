@@ -14,8 +14,9 @@ public class User extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=ISO-8859-1");
+        response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
+        
         UserControllerJpa UserJpa = new UserControllerJpa();
         String Name = "", LstName = "", User = "", Mail = "", Position = "";
         int Role = 0, Document = 0, opt = 0, IdUser = 0, State = 0;

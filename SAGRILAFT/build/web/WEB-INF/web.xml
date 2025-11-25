@@ -52,6 +52,10 @@
         <servlet-name>Document</servlet-name>
         <servlet-class>Servlet.Document</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DinamicExecute</servlet-name>
+        <servlet-class>Servlet.DinamicExecute</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
         <url-pattern>/Login</url-pattern>
@@ -103,6 +107,10 @@
     <servlet-mapping>
         <servlet-name>Document</servlet-name>
         <url-pattern>/Document</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DinamicExecute</servlet-name>
+        <url-pattern>/DinamicExecute</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
