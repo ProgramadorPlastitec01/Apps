@@ -80,7 +80,8 @@ public class Menu extends TagSupport {
 
             if (Permission.contains("(2)")) {
                 out.print("<li class=\"dropdown\">");
-                out.print("<a href='FileManager.jsp' class=\"nav-link\" onclick='cargarDatos()'><i class=\"far fa-folder-open\"></i><span>Batch Record</span></a>");
+                out.print("<a href='#' class=\"nav-link\" onclick='cargarDatos()'><div class='Prox'>Proximamente...</div></a>");
+//                out.print("<a href='FileManager.jsp' class=\"nav-link\" onclick='cargarDatos()'><i class=\"far fa-folder-open\"></i><span>Batch Record</span></a>");
                 out.print("</li>");
             }
             out.print("<li class=\"menu-header\">Certificados</li>");
@@ -93,18 +94,23 @@ public class Menu extends TagSupport {
                 out.print("<li class=\"dropdown\">");
 //                out.print("<a href='Generate?opt=1&Type=ControlGrafado' class=\"nav-link\" onclick='cargarDatos()'>"
                 out.print("<a href='#' class=\"nav-link\" onclick='cargarDatos()'>"
-                        + "<i><img src=\"Interface/Imagen/Control_grafado.png\" alt=\"\" class='ImgModule'/></i><div><span>Control Grafado</span><div class='Prox'>Proximamente...</div></div></a>");
+                        + "<i><img src=\"Interface/Imagen/Control_grafado.png\" alt=\"\" class='ImgModule'/></i>"
+                        + "<div class='DivDis'>"
+                        + "<span>Control Grafado</span>"
+                        + "<div class='Prox'> Proximamente...</div>"
+                        + "</div>"
+                        + "</a>");
                 out.print("</li>");
             }
             if (Permission.contains("(13)")) {
                 out.print("<li class=\"dropdown\">");
 //                out.print("<a href='Generate?opt=1&Type=InspeccionManga' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/Inspeccion_manga.png\" alt=\"\" class='ImgModule'/></i><div><span>Inspección Manga</span><div class='Prox'>Proximamente...</div></div></a>");
-                out.print("<a href='#' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/Inspeccion_manga.png\" alt=\"\" class='ImgModule'/></i><div><span>Inspección Manga</span><div class='Prox'>Proximamente...</div></div></a>");
+                out.print("<a href='#' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/Inspeccion_manga.png\" alt=\"\" class='ImgModule'/></i><div class='DivDis'><span>Inspección Manga</span><div class='Prox'>Proximamente...</div></div></a>");
                 out.print("</li>");
             }
             if (Permission.contains("(14)")) {
                 out.print("<li class=\"dropdown\">");
-                out.print("<a href='#' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/ST_Desc_2.png\" alt=\"\" class='ImgModule'/></i><div><span>Sistema de Tubo</span><div class='Prox'>Proximamente...</div></div></a>");
+                out.print("<a href='#' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/ST_Desc_2.png\" alt=\"\" class='ImgModule'/></i><div class='DivDis'><span>Sistema de Tubo</span><div class='Prox'>Proximamente...</div></div></a>");
 //                out.print("<a href='Generate?opt=1&Type=SistemaTubo' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/ST_Desc_2.png\" alt=\"\" class='ImgModule'/></i><div><span>Sistema de Tubo</span><div class='Prox'>Proximamente...</div></div></a>");
                 out.print("</li>");
             }
@@ -113,7 +119,7 @@ public class Menu extends TagSupport {
                 // ===================== Consulta =====================
                 out.print("<li class=\"menu-header\">Consulta</li>");
                 out.print("<li class=\"dropdown\">");
-                out.print("<a href='#' class=\"nav-link\" onclick='cargarDatos()'><i class=\"far fa-file-alt\"></i><span>Reporte</span><div class='Prox'>Proximamente...</div></a>");
+                out.print("<a href='#' class=\"nav-link\" onclick='cargarDatos()'><div class='Prox'>Proximamente...</div></a>");
                 out.print("</li>");
             }
 
