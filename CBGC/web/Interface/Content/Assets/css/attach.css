@@ -1,0 +1,19 @@
+.hover-card {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.hover-card:hover {
+    transform: scale(1.07);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    border-color: #f5c542 !important; /* resalta el borde */
+    background-color: #fffbea; /* suave fondo amarillento */
+}
+.EditFolderBatch{
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+}
+.WidthDiv{
+    width: 66%;
+}
