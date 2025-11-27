@@ -390,16 +390,23 @@ public class Device extends HttpServlet {
 
                     try {
                         txt_otherItem = request.getParameter("txt_otherItem").replace("] [", ",");
-                        itmsToAsig = txt_otherItem.replace("[", "").replace("]", "").split(",");
+                        if (txt_otherItem.equals("")) {
+                            txt_otherItem = "[NoN]";
+                        } else {
+                            itmsToAsig = txt_otherItem.replace("[", "").replace("]", "").split(",");
+                        }
                     } catch (Exception e) {
                         txt_otherItem = "[NoN]";
                     }
                     try {
                         txt_soft = request.getParameter("txt_soft").replace("] [", "---");
+                        if (txt_soft.equals("")) {
+                            txt_soft = "[NoN]";
+                        }
                     } catch (Exception e) {
                         txt_soft = "[NoN]";
                     }
-
+ 
                     structure = txt_otherItem + txt_soft + txt_post + txt_area + txt_location + txt_bossname + txt_name + txt_indentity + txt_place + txt_user
                             + txt_day + txt_month + txt_anio + txt_comm1 + txt_comm2 + txt_comm3 + txt_comm4 + txt_comm5 + textcal + textFll;
 

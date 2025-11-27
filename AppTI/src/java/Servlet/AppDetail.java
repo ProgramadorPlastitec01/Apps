@@ -535,7 +535,46 @@ public class AppDetail extends HttpServlet {
                     request.getRequestDispatcher("AppDetail?opt=1&mod=2&idApp=" + idApp + "&idHead=" + idHead + "&idDet=0").forward(request, response);
                     //</editor-fold>
                     break;
+                case 9:
+                    //<editor-fold defaultstate="collapsed" desc="CHANGE STATE - LIST OF REG 14">
+                    String idDet_masive = "";
+                    try {
+                        module = Integer.parseInt(request.getParameter("mod"));
+                    } catch (Exception e) {
+                        module = 0;
+                    }
+                    try {
+                        idApp = Integer.parseInt(request.getParameter("idApp"));
+                    } catch (Exception e) {
+                        idApp = 0;
+                    }
+                    try {
+                        idHead = Integer.parseInt(request.getParameter("idHead"));
+                    } catch (Exception e) {
+                        idHead = 0;
+                    }
+                    try {
+                        step = Integer.parseInt(request.getParameter("step"));
+                    } catch (Exception e) {
+                        step = 0;
+                    }
+                    try {
+                        idDet_masive = request.getParameter("idDetail");
+                    } catch (Exception e) {
+                        idDet_masive = "";
+                    }
+                    result = AppHeader.UpdateStateHead(idHead);
 
+                    if (result) {
+                        idDet_masive = idDet_masive.replace("][", ",").replace("[", "").replace("]", "");
+                        result = AppDetail.UpdateDetailState_masive(idDet_masive);
+                        activitySystem.ActivityRegister(idUser, 2, "Aplicativo", "Se realiza cambio de estado o proceso en App con ID " + idApp + " ", 1, userSession);
+                    }
+
+                    request.setAttribute("UpdateStateHead", result);
+                    request.getRequestDispatcher("AppDetail?opt=1&mod=" + module + "&idApp=" + idApp + "&idHead=" + idHead + "").forward(request, response);
+                    //</editor-fold>
+                    break;
             }
         } catch (Exception ex) {
             request.setAttribute("errorMessage", "Ha ocurrido un error procesando tu solicitud: " + ex.getMessage());

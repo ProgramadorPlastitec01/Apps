@@ -1087,7 +1087,9 @@ public class Tag_appDetail extends TagSupport {
                 lst_appDetail = AppDetail.ConsultDocumentType(idHead, typeSc[0] + "/" + typeSc[1]);
                 Object[] ObjDetail = {};
                 int stetx = 0, idDetail = 0;
-                boolean singExits = false;
+//                boolean SignPending = false;
+                int signComplete = 0, SignPending = 0, SignTotal = 0;
+
                 try {
                     ObjDetail = (Object[]) lst_appDetail.get(0);
                     idDetail = Integer.parseInt(ObjDetail[0].toString());
@@ -1098,15 +1100,16 @@ public class Tag_appDetail extends TagSupport {
                             String[] dataSingDil = singData[i].toString().split("/");
                             String signuser = dataSingDil[4].toString().trim();
                             if (signuser.contains("XX")) {
-                                singExits = true;
-                                break;
+                                SignPending++;
+                            } else {
+                                signComplete++;
                             }
+                            SignTotal++;
                         }
-                        
+
                         // en este caso aaca toca agregar una validaicon para identificar si hay alguna firma 
-                        
                     } catch (Exception e) {
-                        
+
                     }
                 } catch (Exception e) {
                     stetx = 99;
@@ -1129,8 +1132,15 @@ public class Tag_appDetail extends TagSupport {
 
                 if (code.contains("-014") && type.contains("Levantamiento")) {
                     out.print("<button class='btn btn-green mr-2' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Agregar acta' onclick='window.location.href=\"AppDetail?opt=1&mod=3&idDoc=" + idDoc + "&idApp=" + idApp + "&swpt=1&idHead=" + idHead + "&type=" + type + "\";cargarDatos()'><i class='fas fa-plus'></i></button>");
-                }
-                if (stetx == 1) {
+                    if (stetx == 1) {
+                        String idDetMasive = "";
+                        for (int i = 0; i < lst_appDetail.size(); i++) {
+                            Object[] masvDe = (Object[]) lst_appDetail.get(i);
+                            idDetMasive += "["+ masvDe[0].toString() +"]";
+                        }
+                        out.print("<button class='btn btn-yellow' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Continuar' onclick='window.location.href=\"AppDetail?opt=9&idApp=" + idApp + "&idDetail=" + idDetMasive + "&mod=2&swpt=1&idHead=" + idHead + "&step=" + step + "&xtemp=1\";cargarDatos()'><i class=\"fas fa-share\"></i></button>");
+                    }
+                } else if (stetx == 1) {
                     out.print("<button class='btn btn-yellow' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Continuar' onclick='window.location.href=\"AppDetail?opt=4&idApp=" + idApp + "&idDetail=" + idDetail + "&mod=2&swpt=1&idHead=" + idHead + "&step=" + step + "&xtemp=1\";cargarDatos()'><i class=\"fas fa-share\"></i></button>");
                 }
 
@@ -1183,10 +1193,7 @@ public class Tag_appDetail extends TagSupport {
                             String[] typeDoc = Objdet[3].toString().split("/");
                             String affair = conect[0].toString();
                             lst_format = FormatJpa.ConsultFormatId(idDoc);
-                            int sigCount = 0;
-                            int sigCatn = 0;
                             String signt = "";
-                            String signttotal = "";
                             if (lst_format != null) {
                                 Object[] ObjDoc = (Object[]) lst_format.get(0);
                                 format = ObjDoc[3].toString();
@@ -1200,17 +1207,23 @@ public class Tag_appDetail extends TagSupport {
                                 int iterator = 1;
 
                                 String[] people = Objdet[5].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
-
+                                SignPending = 0;
                                 for (int j = 0; j < people.length; j++) {
                                     String newPers = "", advice = "";
                                     int signa = 0;
-                                    String[] detail = people[j].split(" / ");
-                                    try {
-                                        signa = Integer.parseInt(detail[4].toString().trim());
-                                    } catch (Exception e) {
-                                        signa = 0;
+                                    String[] detail = people[j].split("/");
+                                    if (detail[4].toString().trim().equals("XX")) {
+                                        SignPending++;
+                                    } else {
+                                        try {
+                                            signa = Integer.parseInt(detail[4].toString().trim());
+                                        } catch (Exception e) {
+                                            signa = 0;
+                                        }
                                     }
                                     if (signa > 0) {
+                                        //<editor-fold defaultstate="collapsed" desc="SIGNATURE">
+
                                         lst_sirh = SirhJpa.Consultar_firmas(signa);
                                         if (lst_sirh.size() > 0) {
                                             String[] ObjSig = lst_sirh.toString().split("///");
@@ -1252,10 +1265,9 @@ public class Tag_appDetail extends TagSupport {
                                                     + "dibujarCoordenadas_" + iterator2 + j + "();"
                                                     + "</script>";
                                         }
-
+                                        //</editor-fold>
                                     } else {
                                         advice = "Sin firma";
-                                        sigCount++;
                                     }
                                     newPers = "<tr>"
                                             + "<td colspan='4' class='text-center'>" + detail[0] + "</td>"
@@ -1277,16 +1289,9 @@ public class Tag_appDetail extends TagSupport {
                             out.print("<div class='accordion'>");
                             out.print("<div class=\"accordion-header\" role=\"button\" data-toggle=\"collapse\" data-target=\"#panel-body-" + i + "\"  " + ((i == 0) ? "aria-expanded=\"true\"" : "") + " style='box-shadow: 0px 1px 4px 0px #a7a7a7;'>");
                             out.print("<div class='d-flex' style='justify-content: space-between;'><h4 class=''>" + Objdet[2].toString() + " - " + affair + "</h4>");
-                            int countSig = 0;
-                            String[] dataUser = Objdet[5].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
-                            for (int j = 0; j < dataUser.length; j++) {
-                                String[] dataSign = dataUser[j].toString().split(" / ");
-                                if (dataSign[4].toString().equals("XX")) {
-                                    countSig++;
-                                }
-                            }
-                            if (countSig > 0) {
-                                out.print("<h4 class='text-warning'>" + countSig + " " + ((countSig == 1) ? "firma" : "firmas") + " pendientes <i class=\"fas fa-exclamation-circle\"></i> </h4>");
+
+                            if (SignPending > 0) {
+                                out.print("<h4 class='text-warning'>" + SignPending + " " + ((SignPending == 1) ? "firma" : "firmas") + " pendientes <i class=\"fas fa-exclamation-circle\"></i> </h4>");
                             } else {
                                 out.print("<h4 class='text-info'>Documento Firmado</h4>");
                             }
@@ -1299,20 +1304,18 @@ public class Tag_appDetail extends TagSupport {
                             out.print("<div class=''>");
                             out.print("<h6>Contenido del documento</h6>");
                             out.print("</div>");
+
                             out.print("<div class='d-flex mb-2'>");
-
-//                            if (stetx != 99) {
-                                if (singExits) {
-                                    out.print("<button class='btn btn-info mr-2' data-toggle='tooltip' data-placement='top' title='Firmar' onclick='window.location.href=\"AppDetail?opt=1&mod=3&idDoc=" + idDoc + "&idApp=" + idApp + "&idHead=" + idHead + "&type=" + type + "&idDet=" + Objdet[0] + "&swpt=2&step=" + step + "\";cargarDatos()'><i class=\"fas fa-signature\"></i></button>");
-                                }
-//                            }
-
-                            if (singExits) {
+                            if (SignPending > 0) {
+                                out.print("<button class='btn btn-info mr-2' data-toggle='tooltip' data-placement='top' title='Firmar' onclick='window.location.href=\"AppDetail?opt=1&mod=3&idDoc=" + idDoc + "&idApp=" + idApp + "&idHead=" + idHead + "&type=" + type + "&idDet=" + Objdet[0] + "&swpt=2&step=" + step + "\";cargarDatos()'><i class=\"fas fa-signature\"></i></button>");
+                            }
+                            if (signComplete > 0) {
                                 out.print("<button class='btn btn-warning mr-2' style='border-radius: 4px; opacity: 0.6;' disabled data-toggle='tooltip' data-placement='top' title='El documento ya tiene al menos una firma'><i class='fas fa-edit'></i></button>");
                             } else {
                                 out.print("<button class='btn btn-warning mr-2' data-toggle='tooltip' data-placement='top' title='Editar' onclick='window.location.href=\"AppDetail?opt=1&mod=3&idDoc=" + idDoc + "&idApp=" + idApp + "&idHead=" + idHead + "&type=" + type + "&idDet=" + Objdet[0] + "&step=" + step + "\";cargarDatos()'><i class=\"fas fa-edit\"></i></button>");
                             }
                             out.print("</div>");
+
                             //</editor-fold>                        
                             out.print("</div>");
                             out.print(format);
@@ -1465,7 +1468,7 @@ public class Tag_appDetail extends TagSupport {
                         out.print("<div class='mb-2 d-flex' style='justify-content: end;'>");
 
                         if (stetx != 99) {
-                            if (singExits) {
+                            if (SignPending > 0) {
                                 out.print("<button class='btn btn-info mr-2' data-toggle='tooltip' data-placement='top' title='Firmar' onclick='window.location.href=\"AppDetail?opt=1&mod=3&idDoc=" + idDoc + "&idApp=" + idApp + "&idHead=" + idHead + "&type=" + type + "&idDet=" + ObjAp[0] + "&swpt=2&step=" + step + "\";cargarDatos()'><i class=\"fas fa-signature\"></i></button>");
                             }
                         }
@@ -1904,17 +1907,21 @@ public class Tag_appDetail extends TagSupport {
                 out.print("<div class='col-12'>");
                 out.print("<div class='card'>");
                 out.print("<div class='card-header' style='justify-content: space-between;'>");
-                out.print("<h4>Aplicativos PT</h4>");
+                out.print("<span class=''> </span>");
+                out.print("<h3>Aplicativos PT</h3>");
 //                out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1)'><i class='fas fa-plus'></i></button>");
+
+                out.print("<div><input class='form-control' style='border-radius: 5px; height: 43px;' type='text' id='myInput' placeholder='Buscar' onkeyup='filterCards()'></div>");
+
                 out.print("</div>");
                 out.print("<div class='card-body'>");
                 out.print("<div class='table-responsive'>");
                 lst_app = AppJpa.ConsultActiveAppV2();
                 if (lst_app != null) {
-                    out.print("<div class='row' style='width: 100%;'> ");
+                    out.print("<div class='row' style='width: 100%;' id='cardContainer'> ");
                     for (int i = 0; i < lst_app.size(); i++) {
                         Object[] ObjApp = (Object[]) lst_app.get(i);
-                        out.print("<div class='col-12 col-md-6 col-lg-4'>");
+                        out.print("<div class='col-12 col-md-6 col-lg-4 card-container'>");
                         out.print("<div class='card card-primary'>");
                         out.print("<div class='card-header'>");
                         out.print("<h4>" + ObjApp[1] + "</h4>");
@@ -1931,7 +1938,7 @@ public class Tag_appDetail extends TagSupport {
                             ste = 0;
                         }
                         out.print("<p class='textSquare'>Estado <code>." + ((ObjApp[4] == null) ? "Sin estado" : ((ste < 9) ? "En proceso" : "Activo")) + "</code></p>");
-                        out.print("<button class='btn btn-green btn-sm' style='position: absolute;right: 0;bottom: 0px;' onclick='window.location.href=\"AppDetail?opt=1&idApp=" + ObjApp[0] + "&mod=1\";cargarDatos()'><i class='fas fa-arrow-right'></i></button>");
+                        out.print("<button class='btn btn-green btn-sm' style='position: absolute; right: 0; bottom: 0px; margin: 10px;' onclick='window.location.href=\"AppDetail?opt=1&idApp=" + ObjApp[0] + "&mod=1\";cargarDatos()'><i class='fas fa-arrow-right'></i></button>");
                         out.print("</div>");
                         out.print("</div>");
                         out.print("</div>");

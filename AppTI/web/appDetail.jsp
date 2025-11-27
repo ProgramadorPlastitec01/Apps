@@ -5,7 +5,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>User</title>
+        <title>App</title>
         <link rel="stylesheet" href="Interface/Content/Assets/modules/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css">
         <link rel="stylesheet" href="Interface/Content/Assets/modules/datatables/Select-1.2.4/css/select.bootstrap4.min.css">
         <link rel="stylesheet" href="Interface/Content/Assets/modules/datatables/datatables.min.css">
@@ -375,6 +375,27 @@
                 }
             }
         </script>
+        
+        <script>
+            function filterCards() {
+                const input = document.getElementById('myInput');
+                const filter = input.value.toLowerCase();
+                const cardContainer = document.getElementById('cardContainer');
+                const cards = cardContainer.getElementsByClassName('card-container');
+
+                for (let i = 0; i < cards.length; i++) {
+                    const card = cards[i];
+                    const title = card.getElementsByTagName('h4')[0].innerText.toLowerCase();
+                    const bodyText = card.innerText.toLowerCase();
+                    if (title.includes(filter) || bodyText.includes(filter)) {
+                        card.style.display = ''; // Muestra la tarjeta
+                    } else {
+                        card.style.display = 'none'; // Oculta la tarjeta
+                    }
+                }
+            }
+        </script>
+        
         <!-- Cargar jQuery -->
         <!--<script src="Interface/Content/Assets/modules/jquery.min.js"></script>-->
          <!--Cargar Moment.js--> 

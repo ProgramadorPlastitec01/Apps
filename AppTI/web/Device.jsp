@@ -188,7 +188,7 @@
                     iziToast.warning({
                         title: 'Atención!',
                         message: msg,
-                        position: 'topRight'
+                        position: 'topRight',
                     });
                 };
 

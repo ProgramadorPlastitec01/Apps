@@ -132,7 +132,6 @@ public class AppDetailControllerJpa implements Serializable {
 //            return null;
 //        }
 //    }
-
 //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="PROCESS">
     public boolean NewDocumentByHead(int idHead, String date, String type, String content, String personal, String user) {
@@ -278,6 +277,27 @@ public class AppDetailControllerJpa implements Serializable {
             em.clear();
             em.close();
             if (resultado == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean UpdateDetailState_masive(String idDet_masive) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        try {
+            Query q = em.createNativeQuery("UPDATE app_detail a "
+                    + "SET a.state = 2 "
+                    + "WHERE a.id_app_detail IN (" + idDet_masive + ") ");
+            int resultado = q.executeUpdate();
+            em.getTransaction().commit();
+            em.clear();
+            em.close();
+            if (resultado > 0) {
                 return true;
             } else {
                 return false;

@@ -1100,8 +1100,7 @@ public class Tag_device extends TagSupport {
                     }
                     //</editor-fold>
                 } else if (code.contains("-004") || code.contains("-013") || code.contains("-029") || code.contains("-031") || code.contains("-032")) {
-                    //<editor-fold defaultstate="collapsed" desc="PREVENTIVE MAINTENANCE 004 // INSTALLED PROGRAMS 029">
-
+                    //<editor-fold defaultstate="collapsed" desc="OTHER DOCUMENTS">
                     format = format.replace("XXXDATEXXX", CurrentDate);
                     format = format.replace("XXXAREAXXX", area);
                     format = format.replace("XXXUSUARIOXXX", usuario);
