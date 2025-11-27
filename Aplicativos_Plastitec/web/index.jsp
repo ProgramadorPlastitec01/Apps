@@ -135,13 +135,13 @@
 
     <!--<body style="overflow-x: hidden;  background-size: auto; background-repeat: repeat; background-attachment: fixed;"  onload="alerData()">-->
     <body style="overflow-x: hidden; background: white;" onload="alerData()">
-    
-    <!--HALLOWEN-->
-    <!--<body id="bodyWeen" class="bodyWeen_da" style="overflow-x: hidden; 
-          background-repeat: no-repeat;
-          background-size: cover;
-          background-attachment: fixed;
-          background-attachment: fixed;" onload="alerData()">-->
+
+        <!--HALLOWEN-->
+        <!--<body id="bodyWeen" class="bodyWeen_da" style="overflow-x: hidden; 
+              background-repeat: no-repeat;
+              background-size: cover;
+              background-attachment: fixed;
+              background-attachment: fixed;" onload="alerData()">-->
         <!--FIN HALLOWEN-->
         <header>
             <nav id="caja" class="navegacion">
@@ -211,8 +211,8 @@
                         border: 2px solid #19284b;"><i style="font-size: 20px;" class="fas fa-headset"></i></button>
                 <!--<button id="btn_dp" onclick="divLoginR()" class="phone2" style="background: #eb5d27;
                         border: 1px solid black"><img src="Argo/Interfaz/images/terror_1.png" width="34"></button>-->
-<!--                                <button id="btn_dp" onclick="divLoginR()" class="phone2" style="background: #fff;
-                                        border: 2px solid #bf1913; padding: 0%;"><i class="fas fa-gift"></i></button>-->
+                <!--                                <button id="btn_dp" onclick="divLoginR()" class="phone2" style="background: #fff;
+                                                        border: 2px solid #bf1913; padding: 0%;"><i class="fas fa-gift"></i></button>-->
                 <button id="btn_dp" onclick="divVideo()" class="phone3" style="background: #fff;
                         border: 2px solid #1c2b4d; padding: 0%;"><i class="fas fa-play"></i></button>
 
@@ -308,15 +308,15 @@
 
         <!--<section style="padding-bottom: 10px;">-->
         <div style="margin: 3%;">
-        <!--<img style="background: white;border-radius: 17px" src="Argo/Interfaz/images/Navidad20242.fw.png" width="75%">-->
-        <!--<img style="background: white;border-radius: 17px" src="Argo/Interfaz/images/plast_gorro.png">-->
-        <!--<img style="background: white;border-radius: 17px" src="Argo/Interfaz/images_24/">-->
-        <img src="Argo/Interfaz/images/plastNT.png" alt=""/>
-        <!--<img src="Argo/Interfaz/images/plast_halloween_hw4.fw.png">-->
-        <!--</div>-->
-        <!--</section>-->
-        <!--<div  onclick="switchbk()">-->
-        <!--<button onclick="switchbk()">cambiar</button>-->
+            <!--<img style="background: white;border-radius: 17px" src="Argo/Interfaz/images/Navidad20242.fw.png" width="75%">-->
+            <!--<img style="background: white;border-radius: 17px" src="Argo/Interfaz/images/plast_gorro.png">-->
+            <!--<img style="background: white;border-radius: 17px" src="Argo/Interfaz/images_24/">-->
+            <img src="Argo/Interfaz/images/plastNT.png" alt=""/>
+            <!--<img src="Argo/Interfaz/images/plast_halloween_hw4.fw.png">-->
+            <!--</div>-->
+            <!--</section>-->
+            <!--<div  onclick="switchbk()">-->
+            <!--<button onclick="switchbk()">cambiar</button>-->
         </div>
 
         <div style="width: 105%;">
@@ -390,13 +390,33 @@
                             <img src="Argo/Interfaz/images/Bitacora_produccion.png" alt="tec" width="200" style="">
                         </div>
                         <div class="back BitacoraP" style="background: #ede2e2;">
-                           <h1 style="color: black; padding: 5%; padding-top: 10%;">Bitacora Produccion</h1>
+                            <h1 style="color: black; padding: 5%; padding-top: 10%;">Bitacora Produccion</h1>
                             <button class="button-33 bp" role="button" 
                                     onclick="javascript:window.open('http://172.16.2.117:8084/Bitacora_produccion/Ingreso.jsp', '', 'width=auto,height=auto,left=50,\n\
 										top=50,toolbar=yes');
                                             void 0">Ingresar</button>
                         </div>
                     </div>
+                </div>
+
+                <div class="tile blue">
+                    <div class="card">
+                        <div class="front">
+                            <!--<img src="Argo/Interfaz/images/CopecNv.fw.png" alt="tec" width="200">-->
+                            <img src="Argo/Interfaz/images/CGBC.png" alt="tec" width="180">
+                            <div class="DivFront">
+                                <img src="Argo/Interfaz/images/newest.png" width="50" alt=""/>
+                            </div>
+                            <!--<img src="Argo/Interfaz/images/Copec_hw.fw.png" alt="tec" width="200">-->
+                        </div>
+                        <div class="back ControlM" style="background: #ede2e2;">
+                            <h1 style="color: black; padding: 5%; padding-top: 10%;">CBGC</h1>
+                            <button  class="button-33 mcb" role="button" 
+                                     onclick="javascript:window.open('http://172.16.5.99:8084/CBGC/', '', 'width=auto,height=auto,left=50,\n\
+										top=50,toolbar=yes');
+                                             void 0">Ingresar</button>
+                        </div>
+                    </div>	
                 </div>
 
                 <div class="tile blue">
@@ -819,10 +839,10 @@
                         </div>
                         <div class="back LAB" style="background: #ede2e2;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">SAGRILAFT</h1>
-<!--                            <button  class="button-33 rl" role="button" 
-                                     onclick="javascript:window.open('https://sagrilaft.plastitec-sa.com/SAGRILAFT/', '', 'width=auto,height=auto,left=50,\n\top=50,toolbar=yes');
-                                             void 0">Ingresar</button>-->
-                             <button  class="button-33 rl" role="button" 
+                            <!--                            <button  class="button-33 rl" role="button" 
+                                                                 onclick="javascript:window.open('https://sagrilaft.plastitec-sa.com/SAGRILAFT/', '', 'width=auto,height=auto,left=50,\n\top=50,toolbar=yes');
+                                                                         void 0">Ingresar</button>-->
+                            <button  class="button-33 rl" role="button" 
                                      onclick="javascript:window.open('http://172.16.2.98:8084/SAGRILAFT/', '', 'width=auto,height=auto,left=50,\n\top=50,toolbar=yes');
                                              void 0">Ingresar</button>
                             <!--<button  class="button-33 rl" role="button" 
@@ -907,9 +927,9 @@
         </div>
 
 
-<!--        <div onclick="Animate()">
-            <img src="Argo/Interfaz/images/Calabaza_br.fw.png" alt="" style="position: absolute;bottom: -86%;right: 77px;" onclick="Animate()"/>
-        </div>-->
+        <!--        <div onclick="Animate()">
+                    <img src="Argo/Interfaz/images/Calabaza_br.fw.png" alt="" style="position: absolute;bottom: -86%;right: 77px;" onclick="Animate()"/>
+                </div>-->
         <!--<img id="imgTest" class="imgTest" src="Argo/Interfaz/images/plastEsterEggs.png" style="position: absolute;margin: auto;text-align: center;left: 37%;bottom: -37%;">-->
 
         <!--<footer id="footer" style="display: flex; justify-content: space-between; padding: 5px; align-items: right;">-->
@@ -952,18 +972,18 @@
         <script>
 
         </script>
-<!--        <script>
-            function switchBk() {
-                const clasBod = document.getElementById("bodyWeen").classname;
-                if (clasBod == "bodyWeen_da") {
-                    document.getElementById("bodyWeen").classname = "bodyWeen_oc";
-                } else if (clasBod == "bodyWeen_oc") {
-                    document.getElementById("bodyWeen").classname = "bodyWeen_da";
-                }
-//                alert("Buenos dias");
-            }
-            setInterval(switchBk, 1000);
-        </script>-->
+        <!--        <script>
+                    function switchBk() {
+                        const clasBod = document.getElementById("bodyWeen").classname;
+                        if (clasBod == "bodyWeen_da") {
+                            document.getElementById("bodyWeen").classname = "bodyWeen_oc";
+                        } else if (clasBod == "bodyWeen_oc") {
+                            document.getElementById("bodyWeen").classname = "bodyWeen_da";
+                        }
+        //                alert("Buenos dias");
+                    }
+                    setInterval(switchBk, 1000);
+                </script>-->
         <script>
             function Animate() {
                 if (document.getElementById("imgTest").style.display == "block") {
@@ -974,16 +994,16 @@
                 }
             }
         </script>
-<!--        <script>
-            function alerData() {
-                swal({
-                    title: "Bienvenido!",
-                    text: "Se han agregado cambios a la pagina de aplicativos, favor recargar. <br> Pulsar las teclas Ctrl + Shift + R <br><img src='Argo/Interfaz/images/Teclado.png' width='250px;'>",
-                    type: "info",
-                    html: true,
-                });
-            }
-        </script>-->
+        <!--        <script>
+                    function alerData() {
+                        swal({
+                            title: "Bienvenido!",
+                            text: "Se han agregado cambios a la pagina de aplicativos, favor recargar. <br> Pulsar las teclas Ctrl + Shift + R <br><img src='Argo/Interfaz/images/Teclado.png' width='250px;'>",
+                            type: "info",
+                            html: true,
+                        });
+                    }
+                </script>-->
         <!--JULIO-->
         <!--<script src="Argo/Interfaz/js/snowjs.js" ></script>-->
         <!--SEPTIEMBRE-->
