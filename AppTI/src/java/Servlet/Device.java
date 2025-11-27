@@ -369,7 +369,7 @@ public class Device extends HttpServlet {
                     int CounterSoftware = 0;
 
                     txt_post = "[" + request.getParameter("txt_post") + "]";
-                    txt_area = "[" + request.getParameter("txt_area") + "]";
+                    txt_area = "[" + request.getParameter("cbxArea") + "]";
                     txt_location = "[" + request.getParameter("txt_location") + "]";
                     txt_bossname = "[" + request.getParameter("txt_bossname") + "]";
                     txt_name = "[" + request.getParameter("txt_name") + "]";
@@ -399,7 +399,7 @@ public class Device extends HttpServlet {
                         txt_otherItem = "[NoN]";
                     }
                     try {
-                        txt_soft = request.getParameter("txt_soft").replace("] [", "---");
+                        txt_soft = request.getParameter("txt_soft").replace("] [", "---").replace("][", "---");
                         if (txt_soft.equals("")) {
                             txt_soft = "[NoN]";
                         }

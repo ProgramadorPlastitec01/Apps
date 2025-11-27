@@ -29,17 +29,17 @@
                 if (document.getElementById("dvDetFront" + cont).style.display === "block") {
                     document.getElementById("dvDetFront" + cont).style.display = "none";
                     document.getElementById("dvDetBack" + cont).style.display = "block";
-                    document.getElementById("arrow"+ cont).classList.remove("fa-chevron-down");
-                    document.getElementById("arrow"+ cont).classList.add("fa-chevron-up");
+                    document.getElementById("arrow" + cont).classList.remove("fa-chevron-down");
+                    document.getElementById("arrow" + cont).classList.add("fa-chevron-up");
                 } else {
                     document.getElementById("dvDetFront" + cont).style.display = "block";
                     document.getElementById("dvDetBack" + cont).style.display = "none";
-                    document.getElementById("arrow"+ cont).classList.remove("fa-chevron-up");
-                    document.getElementById("arrow"+ cont).classList.add("fa-chevron-down");
+                    document.getElementById("arrow" + cont).classList.remove("fa-chevron-up");
+                    document.getElementById("arrow" + cont).classList.add("fa-chevron-down");
                 }
             }
         </script>
-        
+
         <script>
             function showPages(id) {
                 var totalNumberOfPages = 5;
@@ -53,7 +53,7 @@
                 }
             }
         </script>
-        
+
         <script>
             function filterCards() {
                 const input = document.getElementById('myInput');
@@ -73,31 +73,45 @@
                 }
             }
         </script>
-        
+
         <script>
             function editar(event) {
                 event.stopPropagation();
             }
         </script>
-        
+
+
         <script>
-            let contador = 0;
-
+            /* --- Actualiza el input oculto con SOLO las filas que no contienen inputs --- */
             function actualizarInputOculto() {
-                const filas = document.querySelectorAll('#tabla-body tr:not(:first-child)');
-                const valores = [];
+                // seleccionar solo las filas que tienen el botón eliminar
+                var filas = [];
+                var todas = document.querySelectorAll('#tabla-body tr');
+                for (var i = 0; i < todas.length; i++) {
+                    if (todas[i].querySelector('.btn-danger')) {
+                        filas.push(todas[i]);
+                    }
+                }
 
-                filas.forEach(fila => {
-                    const columnas = fila.querySelectorAll('td');
-                    const idName = columnas[0].textContent.trim();
-                    const idType = columnas[1].textContent.trim();
-                    const idVersion = columnas[2].textContent.trim();
-                    valores.push('[' + idName + '/' + idType + '/' + idVersion + ']');
-                });
+                var valores = [];
+
+                for (var j = 0; j < filas.length; j++) {
+                    var columnas = filas[j].getElementsByTagName('td');
+                    var idName = columnas[0].textContent.trim();
+                    var idType = columnas[1].textContent.trim();
+                    var idVersion = columnas[2].textContent.trim();
+
+                    // sin template literals -> concatenación tradicional:
+                    var valor = '[' + idName + '/' + idType + '/' + idVersion + ']';
+
+                    valores.push(valor);
+                }
 
                 document.getElementById('infoOculta').value = valores.join(' ');
             }
 
+
+            /* --- Agregar fila (igual que antes pero llamando a la función robusta) --- */
             function agregarFila() {
                 const idName = document.getElementById('idName').value.trim();
                 const idType = document.getElementById('idType').value.trim();
@@ -112,11 +126,11 @@
                 const nuevaFila = document.createElement('tr');
 
                 let filaHtml = `
-                    <td>xxNamexx</td>
-                    <td>xxTypexx</td>
-                    <td>xxVersionxx</td>
-                    <td><button class="btn btn-danger" onclick="eliminarFila(this)">Eliminar</button></td>`;
-
+                <td>xxNamexx</td>
+                <td>xxTypexx</td>
+                <td>xxVersionxx</td>
+                <td><button type="button" class="btn btn-danger btn-eliminar">Eliminar</button></td>
+            `;
 
                 filaHtml = filaHtml
                         .replace('xxNamexx', idName)
@@ -124,31 +138,43 @@
                         .replace('xxVersionxx', idVersion);
 
                 nuevaFila.innerHTML = filaHtml;
-
                 tablaBody.appendChild(nuevaFila);
+
                 actualizarInputOculto();
 
-                // Limpiar inputs
+                // Limpiar inputs de captura
                 document.getElementById('idName').value = '';
                 document.getElementById('idType').value = '';
                 document.getElementById('idVersion').value = '';
             }
 
+            /* --- Manejo de eliminación con delegación (más fiable que onclick inline) --- */
+            document.addEventListener('click', function (e) {
+                // si pulsaron un botón eliminar dentro del tbody
+                if (e.target && e.target.matches('#tabla-body .btn-eliminar, .btn-eliminar')) {
+                    const fila = e.target.closest('tr');
+                    if (fila)
+                        fila.remove();
+                    // actualizar oculto inmediatamente
+                    actualizarInputOculto();
+                }
+            });
+
             function eliminarFila(boton) {
                 const fila = boton.closest('tr');
                 fila.remove();
-                actualizarContador(-1);
-                actualizarInputOculto();
+                actualizarInputOculto(); // <- YA NO NECESITAS actualizarContador
             }
         </script>
-        
+
+
         <script>
             function sigMode(mode) {
                 let hdmShield = document.getElementById('idSigMode');
                 hdmShield.value = mode;
             }
         </script>
-        
+
         <script>
             function guardarHTMLTabla() {
                 const contenedor = document.getElementById("idtabla"); // ← asegúrate de que coincide el ID
@@ -176,8 +202,9 @@
                 document.getElementById("htmlTabla").value = contenido;
                 document.getElementById("Form04").submit();
             }
+
         </script>
-        
+
         <script>
             function validData003() {
                 const form = document.getElementById("formR03");
@@ -194,21 +221,27 @@
 
                 if (!infoField) {
                     showWarning('No se ha seleccionado items.');
-                } else if (!infoHide) {
-                    showWarning('No se ha ingresado software instalado.');
-                } else {
                     if (form.checkValidity()) {
                         form.submit();  // solo se envía si pasa validaciones
                     } else {
                         form.reportValidity(); // muestra mensajes nativos de HTML5
                     }
+                } else if (!infoHide) {
+                    showWarning('No se ha ingresado software instalado.');
+                    if (form.checkValidity()) {
+                        form.submit();  // solo se envía si pasa validaciones
+                    } else {
+                        form.reportValidity(); // muestra mensajes nativos de HTML5
+                    }
+                } else {
                 }
             }
+
         </script>
-        
+
         <Alerts:Alert/>
-        
-        
+
+
         <script src="Interface/Content/Assets/modules/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js"></script>
         <script src="Interface/Content/Assets/modules/datatables/Select-1.2.4/js/dataTables.select.min.js"></script>
         <script src="Interface/Content/Assets/modules/datatables/datatables.min.js"></script>

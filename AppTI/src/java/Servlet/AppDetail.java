@@ -570,7 +570,6 @@ public class AppDetail extends HttpServlet {
                         result = AppDetail.UpdateDetailState_masive(idDet_masive);
                         activitySystem.ActivityRegister(idUser, 2, "Aplicativo", "Se realiza cambio de estado o proceso en App con ID " + idApp + " ", 1, userSession);
                     }
-
                     request.setAttribute("UpdateStateHead", result);
                     request.getRequestDispatcher("AppDetail?opt=1&mod=" + module + "&idApp=" + idApp + "&idHead=" + idHead + "").forward(request, response);
                     //</editor-fold>

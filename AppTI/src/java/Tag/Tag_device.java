@@ -257,6 +257,7 @@ public class Tag_device extends TagSupport {
                 }
 
                 //</editor-fold>
+                
                 //<editor-fold defaultstate="collapsed" desc="FORM SIGNATURES">
                 String[] Signatures = {};
                 boolean useSign = false;
@@ -840,8 +841,7 @@ public class Tag_device extends TagSupport {
                                 .replace("XXXSERIALXXX", ObInfo[6].toString())
                                 .replace("XXXITEMXXX", ObInfo[5].toString());
                         format = format.replace("XXXNROPCXXX", nameDevice);
-                        format = format.replace("XXXCARGOXXX", "<b>" + DtaFormat[2].toString() + "</b>")
-                                .replace("XXXAREAXXX", "<b>" + DtaFormat[3].toString() + "</b>")
+                        format = format.replace("XXXCARGOXXX", "<b>" + DtaFormat[2].toString() + "</b>")                                
                                 .replace("XXXUBICACIONXXX", "<b>" + DtaFormat[4].toString() + "</b>")
                                 .replace("XXXBOSSNAMEXXX", "<b>" + DtaFormat[5].toString() + "</b>")
                                 .replace("XXXNAMEXXX", "<b>" + DtaFormat[6].toString() + "</b>")
@@ -856,6 +856,13 @@ public class Tag_device extends TagSupport {
                                 .replace("XXXCOLUMM3XXX", "<b>" + DtaFormat[15].toString() + "</b>")
                                 .replace("XXXCOLUMM4XXX", "<b>" + DtaFormat[16].toString() + "</b>")
                                 .replace("XXXCOLUMM5XXX", "<b>" + DtaFormat[17].toString()) + "</b>";
+                        
+                        try {
+                            format = format.replace("XXXAREAXXX", "<b>" + DtaFormat[3].toString().split("/")[1] + "</b>");
+                        } catch (Exception e) {
+                            format = format.replace("XXXAREAXXX", "<b>" + DtaFormat[3].toString() + "</b>");
+                        }
+                        
 
                         format = format.replace("XXXElaboradorXXX", "<b class='text-warning'>Pendiente Firma</b>");
                         format = format.replace("XXXUsuarioXXX", "<b class='text-warning'>Pendiente Firma</b>");
@@ -893,7 +900,7 @@ public class Tag_device extends TagSupport {
                                 format = format.replace("XXXPLUS2XXX", "Error al consultar software instalado");
                             }
                         } else {
-                            format = format.replace("<tr><td colspan=\"5\" class=\"text-center\" style=\"padding: 15px;\">XXXPLUS2XXX</td></tr>", "");
+                            format = format.replace("<tr><td colspan=\"5\" class=\"text-center\" style=\"padding: 15px;\">XXXPLUS2XXX</td></tr>", "<tr><td colspan=\"3\" class=\"text-center\" style=\"padding: 5px;\">Sin software instalado</td></tr>");
                         }
                         //</editor-fold>
 
@@ -1134,6 +1141,8 @@ public class Tag_device extends TagSupport {
                 out.print("</div>");
                 out.print("</div>");
                 out.print("</section>");
+                
+                
                 //</editor-fold>
             } else if (action == 3) {
                 //<editor-fold defaultstate="collapsed" desc="DEVICE DETAIL">
