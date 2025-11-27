@@ -211,7 +211,6 @@ public class Tag_ClientSection extends TagSupport {
                         //<editor-fold defaultstate="collapsed" desc="FORMS CLIENT">
                         if (estTl == 0) {
                             //<editor-fold defaultstate="collapsed" desc="START STATE">
-
                             String title = bundle.getString("formOne.title");
                             String infoOne = bundle.getString("formOne.infoOne");
                             String SectionOne = bundle.getString("formOne.SectionOne");
