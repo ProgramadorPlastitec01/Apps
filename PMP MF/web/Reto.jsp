@@ -330,6 +330,7 @@
 
         <Alertas:Alertas />
         <!-- Bootstrap core JavaScript-->
+        <script src="Interfaz/Scripts/Print.js"></script>
         <script src="Interfaz/StylePage/vendor/jquery/jquery.min.js"></script>
         <script src="Interfaz/StylePage/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
         <!-- Core plugin JavaScript-->

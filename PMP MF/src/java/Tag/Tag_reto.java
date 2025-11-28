@@ -995,9 +995,9 @@ public class Tag_reto extends TagSupport {
                     out.print("<div class=\"card shadow mb-4\">");
                     out.print("<div class=\"card-body\">");
                     out.print("<div style='float:right'>");
-                    out.print("<span class='fas fa-print fa-size_small' onclick=\"Imprimir();\" title='Imprimir'></span>");
+                    out.print("<span class='fas fa-print fa-size_small' onclick=\"PrintHtml();\" title='Imprimir'></span>");
                     out.print("</div>");
-                    out.print("<div id='Div_export'>");
+                    out.print("<div id='Imprimir'><div id='HtmlContent'>");
                     lst_registro = RegistroJpa.Traer_registro_ot("R-MTF-052", FechaReto);
                     //<editor-fold defaultstate="collapsed" desc="CABECERA">
                     if (lst_registro != null) {
