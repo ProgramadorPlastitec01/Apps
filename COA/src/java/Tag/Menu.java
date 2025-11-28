@@ -60,11 +60,11 @@ public class Menu extends TagSupport {
             out.print("<aside id=\"sidebar-wrapper\">");
 
             out.print("<div class=\"sidebar-brand\">");
-            out.print("<a style='color:#fff' href=\"Start.jsp\"><img src=\"Interface/Imagen/Logo3.fw.png\" alt=\"\" style=\"width: 50%;\"/></a>");
+            out.print("<a style='color:#fff' href=\"Start.jsp\"><img src=\"Interface/Imagen/LogoSText.fw.png\" alt=\"\" class='mt-2 mb-2' style=\"width: 35%;\"/></a>");
             out.print("</div>");
 
             out.print("<div class=\"sidebar-brand sidebar-brand-sm\">");
-            out.print("<a style='color:#fff' href=\"Start.jsp\"><img src=\"Interface/Imagen/Logo4.fw.png\" alt=\"\" style=\"width: 80%;\"/></a>");
+            out.print("<a style='color:#fff' href=\"Start.jsp\"><img src=\"Interface/Imagen/LogoSText.fw.png\" alt=\"\" style=\"width: 80%;\"/></a>");
             out.print("</div>");
 
             out.print("<div class=\"mt-0 p-3 hide-sidebar-mini\">");

@@ -22,7 +22,7 @@
         <jsp:include page="Library.jsp"></jsp:include>
             <header class="header">
                 <nav class="nav">
-                    <img src="Interface/Imagen/Logo2.fw.png" alt="" style="width: 16%;"/>
+                    <img src="Interface/Imagen/Logo1.fw.png" class="mt-1" alt="" style="width: 16%;"/>
                     <button class="button" id="form-open">Login</button>
                 </nav>
             </header>
