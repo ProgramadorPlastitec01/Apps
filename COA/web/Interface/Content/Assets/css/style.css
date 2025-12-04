@@ -1853,7 +1853,7 @@ h6 .badge {
         background-color: #fcfcfd;
         color: #0b0025; }
     .nav-collapse .navbar-nav .nav-item:focus > a, .nav-collapse .navbar-nav .nav-item.active > a {
-        background-color: #0b0025;
+        background-color: #dccbff;
         color: #fff; }
 
     .navbar {
@@ -1900,8 +1900,8 @@ a.dropdown-item {
     font-weight: 500;
     line-height: 1.2; }
 a.dropdown-item:focus, a.dropdown-item:active, a.dropdown-item.active {
-    background-color: #0b0025;
-    color: #fff !important; }
+    background-color: #dccbff;
+    color: black !important; }
 
 .dropdown-divider {
     border-top-color: #f9f9f9; }

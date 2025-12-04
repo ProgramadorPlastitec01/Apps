@@ -9,7 +9,7 @@ import javax.persistence.Query;
 public class EventsJpaController {
 
     public EventsJpaController() {
-        emf = Persistence.createEntityManagerFactory("CBGCPU");
+        emf = Persistence.createEntityManagerFactory("COAPU");
     }
     private EntityManagerFactory emf = null;
 

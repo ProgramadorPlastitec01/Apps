@@ -19,6 +19,9 @@ public class Start extends TagSupport {
             out.print("<div class='section-header'>");
             out.print("<h1 class='text-center'>Inicio </h1>");
             out.print("</div>");
+           out.print("<div class='section-body'>");
+            out.print("<h3 class='text-center'>Bienvenido</h3>");
+            out.print("</div>");
             out.print("</section>");
         } catch (IOException ex) {
             Logger.getLogger(Start.class.getName()).log(Level.SEVERE, null, ex);

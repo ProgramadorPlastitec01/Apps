@@ -10,7 +10,7 @@ import javax.persistence.Query;
 public class FormatJpaController implements Serializable {
 
     public FormatJpaController() {
-        emf = Persistence.createEntityManagerFactory("CBGCPU");
+        emf = Persistence.createEntityManagerFactory("COAPU");
     }
     private EntityManagerFactory emf = null;
 

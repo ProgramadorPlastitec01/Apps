@@ -16,6 +16,18 @@
         <servlet-name>AdvConfig</servlet-name>
         <servlet-class>Servlet.AdvConfig</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>User</servlet-name>
+        <servlet-class>Servlet.User</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Role</servlet-name>
+        <servlet-class>Servlet.Role</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Start</servlet-name>
+        <servlet-class>Servlet.Start</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Session</servlet-name>
         <url-pattern>/Session</url-pattern>
@@ -31,6 +43,18 @@
     <servlet-mapping>
         <servlet-name>AdvConfig</servlet-name>
         <url-pattern>/AdvConfig</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>User</servlet-name>
+        <url-pattern>/User</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Role</servlet-name>
+        <url-pattern>/Role</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Start</servlet-name>
+        <url-pattern>/Start</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

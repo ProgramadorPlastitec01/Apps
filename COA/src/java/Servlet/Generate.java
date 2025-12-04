@@ -25,14 +25,14 @@ public class Generate extends HttpServlet {
             CertificatesJpaController CertificatesJpa = new CertificatesJpaController();
             ConnectionSignature SignatureConn = new ConnectionSignature();
             EventsJpaController EventConn = new EventsJpaController();
-            String RolName = session.getAttribute("Rol/Usuario").toString();
+            String RolName = session.getAttribute("Rol/Nombres").toString();
             int IdRol = Integer.parseInt(session.getAttribute("idRol").toString());
             int Document = Integer.parseInt(session.getAttribute("Documento").toString());
             int CodeSig = Integer.parseInt(session.getAttribute("Codigo").toString());
             int opt = Integer.parseInt(request.getParameter("opt"));
             int Order = 0, IdCertificates = 0, TempDelete = 0, Doc = 0, Cod = 0, Temp = 0;
             String Type = "", Product = "", Batch = "", Html = "", Code = "", Consecutive = "", Customer = "", IdCertiMasive = "",
-                    Justification = "", Record = "", FormatName = "", Message = "";
+                    Justification = "", Record = "", FormatName = "", Message = "", Amount = "";
             boolean result = false, UnauthorizedSignature = false;
             List lst_sign = null;
             List lst_id = null;
@@ -124,9 +124,14 @@ public class Generate extends HttpServlet {
                     } catch (Exception e) {
                         Consecutive = "CC****";
                     }
+                    try {
+                        Amount = request.getParameter("AmountValue");
+                    } catch (Exception e) {
+                        Amount = "*****";
+                    }
                     if (IdCertificates > 0) {
                         //<editor-fold defaultstate="collapsed" desc="UPDATE">
-                        result = CertificatesJpa.CertificatesUpdate(IdCertificates, Consecutive, Html);
+                        result = CertificatesJpa.CertificatesUpdate(IdCertificates, Consecutive, Amount, Html);
                         if (result) {
                             request.setAttribute("UpdateCertificate", result);
                         }
@@ -165,7 +170,7 @@ public class Generate extends HttpServlet {
                         } catch (Exception e) {
                             FormatName = "";
                         }
-                        result = CertificatesJpa.CertificatesRegister(Type, Code, Order, Product, Batch, Consecutive, Customer, RolName, Html);
+                        result = CertificatesJpa.CertificatesRegister(Type, Code, Order, Product, Batch, Consecutive, Customer, Amount, RolName, Html);
                         if (result) {
                             lst_id = CertificatesJpa.ConsultCeritcateTypeId(Type);
                             if (lst_id != null) {

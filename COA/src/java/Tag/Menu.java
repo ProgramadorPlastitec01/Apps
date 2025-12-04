@@ -85,43 +85,20 @@ public class Menu extends TagSupport {
                 out.print("</li>");
             }
             out.print("<li class=\"menu-header\">Certificados</li>");
-            if (Permission.contains("(5)")) {
+//            if (Permission.contains("(5)")) {
                 out.print("<li class=\"dropdown\">");
-                out.print("<a href='Generate?opt=1&Type=RegistrosLab' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/Registros_lab.png\" alt=\"\" class='ImgModule'/></i><span>Registro Lab</span></a>");
+                out.print("<a href='Generate?opt=1&Type=' class=\"nav-link\" onclick='cargarDatos()'><i class=\"fas fa-file-import\"></i><span>Generación</span></a>");
+//                out.print("<a href='Generate?opt=1&Type=RegistrosLab' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/Registros_lab.png\" alt=\"\" class='ImgModule'/></i><span>Generación</span></a>");
                 out.print("</li>");
-            }
-            if (Permission.contains("(12)")) {
-                out.print("<li class=\"dropdown\">");
-//                out.print("<a href='Generate?opt=1&Type=ControlGrafado' class=\"nav-link\" onclick='cargarDatos()'>"
-                out.print("<a href='#' class=\"nav-link\" onclick='cargarDatos()'>"
-                        + "<i><img src=\"Interface/Imagen/Control_grafado.png\" alt=\"\" class='ImgModule'/></i>"
-                        + "<div class='DivDis'>"
-                        + "<span>Control Grafado</span>"
-                        + "<div class='Prox'> Proximamente...</div>"
-                        + "</div>"
-                        + "</a>");
-                out.print("</li>");
-            }
-            if (Permission.contains("(13)")) {
-                out.print("<li class=\"dropdown\">");
-//                out.print("<a href='Generate?opt=1&Type=InspeccionManga' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/Inspeccion_manga.png\" alt=\"\" class='ImgModule'/></i><div><span>Inspección Manga</span><div class='Prox'>Proximamente...</div></div></a>");
-                out.print("<a href='#' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/Inspeccion_manga.png\" alt=\"\" class='ImgModule'/></i><div class='DivDis'><span>Inspección Manga</span><div class='Prox'>Proximamente...</div></div></a>");
-                out.print("</li>");
-            }
-            if (Permission.contains("(14)")) {
-                out.print("<li class=\"dropdown\">");
-                out.print("<a href='#' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/ST_Desc_2.png\" alt=\"\" class='ImgModule'/></i><div class='DivDis'><span>Sistema de Tubo</span><div class='Prox'>Proximamente...</div></div></a>");
-//                out.print("<a href='Generate?opt=1&Type=SistemaTubo' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/ST_Desc_2.png\" alt=\"\" class='ImgModule'/></i><div><span>Sistema de Tubo</span><div class='Prox'>Proximamente...</div></div></a>");
-                out.print("</li>");
-            }
+//            }
 
-            if (Permission.contains("(15)")) {
+//            if (Permission.contains("(15)")) {
                 // ===================== Consulta =====================
                 out.print("<li class=\"menu-header\">Consulta</li>");
                 out.print("<li class=\"dropdown\">");
                 out.print("<a href='#' class=\"nav-link\" onclick='cargarDatos()'><div class='Prox'>Proximamente...</div></a>");
                 out.print("</li>");
-            }
+//            }
 
             out.print("</ul>"); // cierre de sidebar-menu
 
@@ -129,6 +106,7 @@ public class Menu extends TagSupport {
             out.print("</div>");
             out.print("</div>");
             //</editor-fold>
+            
         } catch (IOException ex) {
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
         }
