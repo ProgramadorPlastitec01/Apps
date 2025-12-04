@@ -31,7 +31,7 @@ public class Visual extends TagSupport {
         ConnectionGeneracionLotes GeneracionLotesJpa = new ConnectionGeneracionLotes();
         ConnectionSignature SignatureConn = new ConnectionSignature();
         String Type = "", Product = "", ProductFact = "", Batch = "", DataTechnicalSheet = "", Html = "", BatchLay = "", Record = "", FormatName = "", Message = "";
-        int Order = 0, IdForm = 0, Count = 1, Count2 = 1, IdCertificates = 0, State = 0, IdSig = 0, TempDelete = 0;
+        int Order = 0, IdForm = 0, Count = 1, Count2 = 1, IdCertificates = 0, State = 0, IdSig = 0, TempDelete = 0, StateCerti = 0;
         List lst_content = null;
         List lst_headFact = null;
         List lst_RLab = null;
@@ -69,6 +69,11 @@ public class Visual extends TagSupport {
             } catch (NumberFormatException e) {
                 IdCertificates = 0;
             }
+            try {
+                StateCerti = Integer.parseInt(Optional.ofNullable(pageContext.getRequest().getParameter("StateCerti")).orElse("0"));
+            } catch (NumberFormatException e) {
+                StateCerti = 0;
+            }
             // Procesar Order
             try {
                 Order = Integer.parseInt(Optional.ofNullable(pageContext.getRequest().getParameter("Order")).orElse("0"));
@@ -100,6 +105,69 @@ public class Visual extends TagSupport {
             }
             if (lst_content != null) {
                 Object[] Obj_Format = (Object[]) lst_content.get(0);
+                out.print("<div class='row'>");
+                out.print("<div class='col-12'>");
+                out.print("<div class='card'>");
+                out.print("<div class='card-header' style='justify-content: space-between;'>");
+                out.print("<div class='d-flex justify-content-between' style='width:100%'>");
+                // COLUMNA IZQUIERDA
+                out.print("<div class='mr-2 d-flex align-items-baseline'>");
+                // Botón volver
+                out.print("<button class='btn btn-outline-primary btn-sm mr-2' "
+                        + "style='border-radius: 4px; padding: 2px 9px;' "
+                        + "onclick=\"javascript:location.href='Generate?opt=1&Type="
+                        + Type + "&TempDelete=" + TempDelete + "';cargarDatos()\">"
+                        + "<i class='fas fa-arrow-left'></i>"
+                        + "</button>");
+                // Título
+                out.print("<h4>Generación Certificado</h4>");
+                out.print("</div>"); // Cierra columna izquierda
+                // COLUMNA DERECHA (botones según estado)
+                // Estado 1 → Finalizar
+                if (StateCerti == 1) {
+                    out.print("<div>"
+                            + "<button class='btn btn-outline-success btn-sm' "
+                            + "style='border-radius: 4px; padding: 2px 9px;' "
+                            + "onclick=\"javascript:location.href='Generate?opt=4&Type="
+                            + Type + "&Temp=1&IdCertiMasive=" + IdCertificates
+                            + "';cargarDatos()\" data-toggle='tooltip' "
+                            + "data-placement='top' title='Finalizar'>"
+                            + "<i class='fas fa-check'></i>"
+                            + "</button></div>");
+                }
+                // Estado 2 → Firmar
+                if (StateCerti == 2) {
+                    out.print("<div class='d-flex'>");
+                    out.print("<div class='mr-4'>"
+                            + "<button class='btn btn-outline-danger btn-sm' "
+                            + "style='border-radius: 4px; padding: 2px 9px;' onclick=\"confirmarDevolucion('Generate?opt=5&Type=" + Type + "&IdCertificates=" + IdCertificates + "&Category=Return')\" data-toggle='tooltip' "
+                            + "data-placement='top' title='Devolver'>"
+                            + "<i class=\"fas fa-undo-alt\"></i>"
+                            + "</button></div>");
+                    out.print("<div>"
+                            + "<button class='btn btn-outline-warning btn-sm' "
+                            + "style='border-radius: 4px; padding: 2px 9px;' "
+                            + "onclick=\"javascript:location.href='Generate?opt=4&Type="
+                            + Type + "&Temp=1&IdCertiMasive=" + IdCertificates
+                            + "';cargarDatos()\" data-toggle='tooltip' "
+                            + "data-placement='top' title='Firmar'>"
+                            + "<i class='fas fa-signature'></i>"
+                            + "</button></div>");
+                    out.print("</div>");
+                }
+                // Estado 3 → Imprimir
+                if (StateCerti == 3) {
+                    out.print("<div>"
+                            + "<button class='btn btn-outline-primary btn-sm' "
+                            + "style='border-radius: 4px; padding: 2px 9px;' "
+                            + "onclick='PrintHtml()' data-toggle='tooltip' "
+                            + "data-placement='top' title='Imprimir'>"
+                            + "<i class='fas fa-print'></i>"
+                            + "</button></div>");
+                }
+                out.print("</div>"); // Cierra contenedor principal
+                out.print("</div>");
+
                 if (IdCertificates > 0) {
                     //<editor-fold defaultstate="collapsed" desc="VALIDATION BY ID">
                     Html = Obj_Format[3].toString();
@@ -123,21 +191,6 @@ public class Visual extends TagSupport {
                     State = 99;
                     //</editor-fold>
                 }
-                out.print("<div class='row'>");
-                out.print("<div class='col-12'>");
-                out.print("<div class='card'>");
-                out.print("<div class='card-header' style='justify-content: space-between;'>");
-                out.print("<div class='d-flex justify-content-between' style='width:100%' >"
-                        + "<div class='mr-2 d-flex align-items-baseline'>"
-                        + "<button class='btn btn-outline-primary btn-sm mr-2' style='border-radius: 4px; padding: 2px 9px;'  onclick=\"javascript:location.href='Generate?opt=1&Type=" + Type + "&TempDelete=" + TempDelete + "';cargarDatos()\" >"
-                        + "<i class=\"fas fa-arrow-left\"></i>"
-                        + "</button>"
-                        + "<h4>Generación Certificado</h4></div>"
-                        + ((State == 1) ? "<div><button class='btn btn-outline-warning btn-sm' style='border-radius: 4px; padding: 2px 9px;' onclick=\"javascript:location.href='Generate?opt=4&Type=" + Type + "&Temp=1&IdCertiMasive=" + IdCertificates + "';cargarDatos()\" ><i class='fas fa-signature'></i></button></div>" : "") + ""
-                        + ((State == 0) ? "<div><button class='btn btn-outline-primary btn-sm' style='border-radius: 4px; padding: 2px 9px;' onclick='PrintHtml()'><i class='fas fa-print'></i></button></div>" : "") + ""
-                        + "</div>");
-                out.print("</div>");
-
                 out.print("<div class='p-3'>");
 
                 if (IdCertificates == 0) {
@@ -535,127 +588,129 @@ public class Visual extends TagSupport {
                     out.print("<input type='hidden' name='FormatName' value='" + FormatName + "'>");
                     out.print("</form>");
                     out.print("<div class='DivButtonPending'>");
-                    out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='saveHtml()'><i class='fas fa-save'></i></button>");
+                    out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='saveHtml()' data-toggle='tooltip' data-placement='top' title='Guardar'><i class='fas fa-save'></i></button>");
                     out.print("</div>");
                     out.print(" <script src=\"Interface/Content/Assets/js/DeleteRow.js\"></script>");
                     //</editor-fold>
                     //</editor-fold>
                 } else {
                     //<editor-fold defaultstate="collapsed" desc="VIEW CERTIFICATE UPDATE - CLOSE">
-                    if (State == 0) {
+                    if (StateCerti == 2 || StateCerti == 3) {
                         //<editor-fold defaultstate="collapsed" desc="CLOSE">
                         out.print("<div id='Imprimir'><div id='HtmlContent'>");
                         Html = Html.replace("contenteditable=\"true\"", "contenteditable=\"false\"");
                         Html = Html.replaceAll("<input type=\"checkbox\"", "<input type=\"checkbox\" class=\"disabled\" ");
                         Html = Html.replaceAll("<input name=\"result\" type=\"radio\"", "<input name=\"result\" type=\"radio\" class=\"disabled\"");
-                        lst_sign = SignatureConn.ConsultSignatureId(IdSig);
-                        if (lst_sign != null) {
-                            String[] ArgSign = Util.parseResult(lst_sign.get(0));
-                            String valorCoord = ArgSign[3].replace("\"", "&quot;").replace("'", "&#39;");
-                            Html = Html.replaceAll(
-                                    "<input type=\"hidden\" id=\"coordenadas-hidden\" value=\"\">",
-                                    "<input type='hidden' id=\"coordenadas-hidden\" value=\"" + valorCoord + "\">"
-                            );
-                            Html = Html.replaceAll(
-                                    "<button class=\"btn btn-sm btn-danger me-2 mr-2\" title=\"Eliminar fila o grupo\"><i class=\"fas fa-times\"></i></button>",
-                                    ""
-                            );
+                        if (StateCerti == 3) {
+                            lst_sign = SignatureConn.ConsultSignatureId(IdSig);
+                            if (lst_sign != null) {
+                                String[] ArgSign = Util.parseResult(lst_sign.get(0));
+                                String valorCoord = ArgSign[3].replace("\"", "&quot;").replace("'", "&#39;");
+                                Html = Html.replaceAll(
+                                        "<input type=\"hidden\" id=\"coordenadas-hidden\" value=\"\">",
+                                        "<input type='hidden' id=\"coordenadas-hidden\" value=\"" + valorCoord + "\">"
+                                );
 
+                            }
                         }
+                        Html = Html.replaceAll(
+                                "<button class=\"btn btn-sm btn-danger me-2 mr-2\" title=\"Eliminar fila o grupo\"><i class=\"fas fa-times\"></i></button>",
+                                ""
+                        );
 
                         out.print(Html);
                         // 🔹 Implementación de la lista de archivos adjuntos
-                        String appPath = pageContext.getServletContext().getRealPath("/");
-                        String uploadPath = appPath + "uploads"; // igual que en tu FileManager
-
-                        File carpeta = new File(uploadPath + File.separator + Batch);
-                        //<editor-fold defaultstate="collapsed" desc="VALIDATION COMM">
-//                        out.print("Ruta lote adjuntos: " + carpeta.getAbsolutePath()); // 🔍 Verifica en consola
-//                        out.print("UploadPath: " + uploadPath); // 🔍 Verifica en consola
+//                        String appPath = pageContext.getServletContext().getRealPath("/");
+//                        String uploadPath = appPath + "uploads"; // igual que en tu FileManager
 //
-//                        out.print("<div style='color:#0f0'>Batch: " + Batch + "</div>");
-//                            out.print("<div style='color:#0f0'>Total archivos encontrados: "
-//                                    + (archivos != null ? archivos.length : 0)
-//                                    + "</div>");
-
-//                            if (archivos != null) {
-//                                for (File f : archivos) {
-//                                    out.print("<div style='color:#0f0'>→ " + f.getName() + " (" + (f.isFile() ? "archivo" : "carpeta") + ")</div>");
+//                        File carpeta = new File(uploadPath + File.separator + Batch);
+//                        //<editor-fold defaultstate="collapsed" desc="VALIDATION COMM">
+////                        out.print("Ruta lote adjuntos: " + carpeta.getAbsolutePath()); // 🔍 Verifica en consola
+////                        out.print("UploadPath: " + uploadPath); // 🔍 Verifica en consola
+////
+////                        out.print("<div style='color:#0f0'>Batch: " + Batch + "</div>");
+////                            out.print("<div style='color:#0f0'>Total archivos encontrados: "
+////                                    + (archivos != null ? archivos.length : 0)
+////                                    + "</div>");
+//
+////                            if (archivos != null) {
+////                                for (File f : archivos) {
+////                                    out.print("<div style='color:#0f0'>→ " + f.getName() + " (" + (f.isFile() ? "archivo" : "carpeta") + ")</div>");
+////                                }
+////                            }
+//                        //</editor-fold>
+//                        if (carpeta.exists() && carpeta.isDirectory()) {
+//                            //<editor-fold defaultstate="collapsed" desc="ATTACH">
+//                            File[] archivos = carpeta.listFiles(file -> file.isFile() && !file.getName().startsWith("."));
+//
+//                            StringBuilder attachListHtml = new StringBuilder(4096);
+//
+//                            if (archivos != null && archivos.length > 0) {
+//                                attachListHtml.append("<ul class='list-group list-group-flush'>");
+//                                for (File archivo : archivos) {
+//                                    if (archivo.isFile()) {
+//                                        String nombre = archivo.getName();
+//                                        attachListHtml.append("<li class='list-group-item p-2'>");
+//                                        attachListHtml.append("<a href='uploads/").append(Batch).append("/").append(nombre)
+//                                                .append("' target='_blank' class='text-decoration-none'>")
+//                                                .append("<i class='fas fa-paperclip me-2 text-muted'></i>")
+//                                                .append(nombre)
+//                                                .append("</a>");
+//                                        attachListHtml.append("</li>");
+//                                    }
 //                                }
+//                                // 🔹 Nuevos adjuntos: estructuras HTML o registros de la base de datos
+//                                lst_clearence = RegistrosLabJpa.ConsultClearance(Order, Batch);
+//                                if (lst_clearence != null && !lst_clearence.isEmpty()) {
+//                                    for (int i = 0; i < lst_clearence.size(); i++) {
+//                                        String[] ArgClearence = Util.parseResult(lst_clearence.get(i));
+//                                        String htmlId = "attachHtml_" + i;
+//
+//                                        // Evitar que ocurran problemas si hay un cierre </script> dentro del HTML
+//                                        String safeHtmlForDom = ArgClearence[1]
+//                                                .replace("</script>", "<\\/script>")
+//                                                // elimina class="table" o class='table' en cualquier formato
+//                                                .replace("Interfaz/Contenido/images", "Interface/Imagen/")
+//                                                .replaceAll("true", "false")
+//                                                .replaceAll("class\\s*=\\s*['\"]table['\"]", "");
+//                                        // también limpia variantes como class="table table-bordered"
+//
+//                                        // 1) Link en la lista que solo pasa el id del contenedor oculto
+//                                        attachListHtml.append("<li class='list-group-item p-2'>");
+//                                        attachListHtml.append("<div>");
+//                                        attachListHtml.append("<i class='fas fa-paperclip me-2 text-muted'></i>");
+//                                        attachListHtml.append("<a href='#' class='text-decoration-none' onclick=\"showHtmlAttachmentById('")
+//                                                .append(htmlId)
+//                                                .append("'); return false;\">");
+//                                        attachListHtml.append("Registro Despeje");
+//                                        attachListHtml.append("</a>");
+//                                        attachListHtml.append("</div>");
+//                                        attachListHtml.append("</li>");
+//
+//                                        // 2) Contenedor oculto con el HTML real (se agrega dentro del mismo StringBuilder)
+//                                        attachListHtml.append("<div id='").append(htmlId).append("' style='display:none;'>");
+//                                        attachListHtml.append(safeHtmlForDom);
+//                                        attachListHtml.append("</div>");
+//                                    }
+//                                }
+//                                attachListHtml.append("</ul>");
+//                            } else {
+//                                attachListHtml.append("<div class='text-muted text-center'>No hay archivos adjuntos disponibles.</div>");
 //                            }
-                        //</editor-fold>
-                        if (carpeta.exists() && carpeta.isDirectory()) {
-                            //<editor-fold defaultstate="collapsed" desc="ATTACH">
-                            File[] archivos = carpeta.listFiles(file -> file.isFile() && !file.getName().startsWith("."));
-
-                            StringBuilder attachListHtml = new StringBuilder(4096);
-
-                            if (archivos != null && archivos.length > 0) {
-                                attachListHtml.append("<ul class='list-group list-group-flush'>");
-                                for (File archivo : archivos) {
-                                    if (archivo.isFile()) {
-                                        String nombre = archivo.getName();
-                                        attachListHtml.append("<li class='list-group-item p-2'>");
-                                        attachListHtml.append("<a href='uploads/").append(Batch).append("/").append(nombre)
-                                                .append("' target='_blank' class='text-decoration-none'>")
-                                                .append("<i class='fas fa-paperclip me-2 text-muted'></i>")
-                                                .append(nombre)
-                                                .append("</a>");
-                                        attachListHtml.append("</li>");
-                                    }
-                                }
-                                // 🔹 Nuevos adjuntos: estructuras HTML o registros de la base de datos
-                                lst_clearence = RegistrosLabJpa.ConsultClearance(Order, Batch);
-                                if (lst_clearence != null && !lst_clearence.isEmpty()) {
-                                    for (int i = 0; i < lst_clearence.size(); i++) {
-                                        String[] ArgClearence = Util.parseResult(lst_clearence.get(i));
-                                        String htmlId = "attachHtml_" + i;
-
-                                        // Evitar que ocurran problemas si hay un cierre </script> dentro del HTML
-                                        String safeHtmlForDom = ArgClearence[1]
-                                                .replace("</script>", "<\\/script>")
-                                                // elimina class="table" o class='table' en cualquier formato
-                                                .replace("Interfaz/Contenido/images", "Interface/Imagen/")
-                                                .replaceAll("true", "false")
-                                                .replaceAll("class\\s*=\\s*['\"]table['\"]", "");
-                                        // también limpia variantes como class="table table-bordered"
-
-                                        // 1) Link en la lista que solo pasa el id del contenedor oculto
-                                        attachListHtml.append("<li class='list-group-item p-2'>");
-                                        attachListHtml.append("<div>");
-                                        attachListHtml.append("<i class='fas fa-paperclip me-2 text-muted'></i>");
-                                        attachListHtml.append("<a href='#' class='text-decoration-none' onclick=\"showHtmlAttachmentById('")
-                                                .append(htmlId)
-                                                .append("'); return false;\">");
-                                        attachListHtml.append("Registro Despeje");
-                                        attachListHtml.append("</a>");
-                                        attachListHtml.append("</div>");
-                                        attachListHtml.append("</li>");
-
-                                        // 2) Contenedor oculto con el HTML real (se agrega dentro del mismo StringBuilder)
-                                        attachListHtml.append("<div id='").append(htmlId).append("' style='display:none;'>");
-                                        attachListHtml.append(safeHtmlForDom);
-                                        attachListHtml.append("</div>");
-                                    }
-                                }
-                                attachListHtml.append("</ul>");
-                            } else {
-                                attachListHtml.append("<div class='text-muted text-center'>No hay archivos adjuntos disponibles.</div>");
-                            }
-
-                            // Inyecta el contenido al div con ID AttachList
-                            out.print("<script>");
-                            out.print("window.addEventListener('DOMContentLoaded', function() {");
-                            out.print("const attachDiv = document.getElementById('AttachList');");
-                            out.print("if (attachDiv) { attachDiv.innerHTML = `"
-                                    + attachListHtml.toString().replace("`", "\\`").replace("\\", "\\\\").replace("\n", "")
-                                    + "`; }");
-                            out.print("});");
-                            out.print("</script>");
-                            //</editor-fold>
-                        } else {
-                            System.out.println("Carpeta no encontrada: " + carpeta.getAbsolutePath());
-                        }
+//
+//                            // Inyecta el contenido al div con ID AttachList
+//                            out.print("<script>");
+//                            out.print("window.addEventListener('DOMContentLoaded', function() {");
+//                            out.print("const attachDiv = document.getElementById('AttachList');");
+//                            out.print("if (attachDiv) { attachDiv.innerHTML = `"
+//                                    + attachListHtml.toString().replace("`", "\\`").replace("\\", "\\\\").replace("\n", "")
+//                                    + "`; }");
+//                            out.print("});");
+//                            out.print("</script>");
+//                            //</editor-fold>
+//                        } else {
+//                            System.out.println("Carpeta no encontrada: " + carpeta.getAbsolutePath());
+//                        }
 
                         out.print("</div>");
                         out.print("</div>");
@@ -674,7 +729,7 @@ public class Visual extends TagSupport {
                         out.print("<input type='hidden' name='IdCertificates' value='" + IdCertificates + "'>");
                         out.print("</form>");
                         out.print("<div class='DivButtonPending'>");
-                        out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='saveHtml()'><i class='fas fa-save'></i></button>");
+                        out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='saveHtml()' data-toggle='tooltip' data-placement='top' title='Guardar'><i class='fas fa-save'></i></button>");
                         out.print("</div>");
                         out.print(" <script src=\"Interface/Content/Assets/js/DeleteRow.js\"></script>");
                         //</editor-fold>

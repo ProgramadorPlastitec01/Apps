@@ -13,7 +13,7 @@
         <link rel="icon" type="image/png" href="Interface/Imagen/Icon.fw.png">
         <title>Generación</title>
     </head>
-    <body>
+    <body class="sidebar-mini">
         <jsp:include page="Menu.jsp"></jsp:include>
             <div class="main-content" style="min-height: 694px;">
             <Generate:GenerateReport/>
@@ -221,7 +221,38 @@
                 });
             }
         </script>
+        <script>
+            function confirmarFinalizar(url) {
+                swal({
+                    title: "¿Está seguro de finalizar?",
+                    text: "Una vez finalizado no podrá realizar cambios o modificaciones al documento.",
+                    icon: "warning",
+                    buttons: {
+                        cancel: {
+                            text: "Cancelar",
+                            visible: true,
+                            className: "btn btn-secondary",
+                            closeModal: true,
+                        },
+                        confirm: {
+                            text: "Aceptar",
+                            visible: true,
+                            className: "btn btn-success",
+                            closeModal: false,
+                        },
+                    },
+                    dangerMode: true,
+                }).then((value) => {
 
+                    // SI CANCELA → no hace nada
+                    if (!value)
+                        return;
+
+                    // SI ACEPTA → redirige
+                    window.location.href = url;
+                });
+            }
+        </script>
 
         <script src="Interface/Content/Assets/modules/izitoast/js/iziToast.min.js"></script>
         <script src="Interface/Content/Assets/js/page/modules-toastr.js"></script>

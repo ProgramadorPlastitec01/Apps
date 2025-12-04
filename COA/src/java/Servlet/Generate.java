@@ -30,8 +30,8 @@ public class Generate extends HttpServlet {
             int Document = Integer.parseInt(session.getAttribute("Documento").toString());
             int CodeSig = Integer.parseInt(session.getAttribute("Codigo").toString());
             int opt = Integer.parseInt(request.getParameter("opt"));
-            int Order = 0, IdCertificates = 0, TempDelete = 0, Doc = 0, Cod = 0, Temp = 0;
-            String Type = "", Product = "", Batch = "", Html = "", Code = "", Consecutive = "", Customer = "", IdCertiMasive = "",
+            int Order = 0, IdCertificates = 0, TempDelete = 0, Doc = 0, Cod = 0, Temp = 0, StateCerti = 0;
+            String Type = "", Product = "", Batch = "", Html = "", Code = "", Consecutive = "", Customer = "", IdCertiMasive = "", Category = "",
                     Justification = "", Record = "", FormatName = "", Message = "", Amount = "";
             boolean result = false, UnauthorizedSignature = false;
             List lst_sign = null;
@@ -91,6 +91,11 @@ public class Generate extends HttpServlet {
                     } catch (Exception e) {
                         TempDelete = 0;
                     }
+                    try {
+                        StateCerti = Integer.parseInt(request.getParameter("StateCerti"));
+                    } catch (Exception e) {
+                        StateCerti = 0;
+                    }
                     request.setAttribute("Type", Type);
                     request.setAttribute("Order", Order);
                     request.setAttribute("Product", Product);
@@ -99,6 +104,7 @@ public class Generate extends HttpServlet {
                     request.setAttribute("FormatName", FormatName);
                     request.setAttribute("IdCertificates", IdCertificates);
                     request.setAttribute("TempDelete", TempDelete);
+                    request.setAttribute("StateCerti", StateCerti);
                     request.getRequestDispatcher("Visual.jsp").forward(request, response);
                     //</editor-fold>
                     break;
@@ -239,7 +245,7 @@ public class Generate extends HttpServlet {
                     //</editor-fold>
                     break;
                 case 5:
-                    //<editor-fold defaultstate="collapsed" desc="DELETE CERTIFICATE">
+                    //<editor-fold defaultstate="collapsed" desc="DELETE/RETURN CERTIFICATE">
                     try {
                         Type = request.getParameter("Type");
                     } catch (Exception e) {
@@ -251,13 +257,22 @@ public class Generate extends HttpServlet {
                         IdCertificates = 0;
                     }
                     try {
+                        Category = request.getParameter("Category");
+                    } catch (Exception e) {
+                        Category = "";
+                    }
+                    try {
                         Justification = request.getParameter("Justification");
                     } catch (Exception e) {
                         Justification = "";
                     }
-                    result = CertificatesJpa.DeleteCertificate(IdCertificates, Justification);
+                    result = CertificatesJpa.RegisterNovelty(IdCertificates, Category, Justification, RolName);
                     if (result) {
-                        request.setAttribute("DeleteCertificates", result);
+                        if (Category.equals("Delete")) {
+                            request.setAttribute("DeleteCertificates", result);
+                        } else {
+                            request.setAttribute("DeleteCertificates", result);
+                        }
                     }
                     request.getRequestDispatcher("Generate?opt=1&Type=" + Type).forward(request, response);
                     //</editor-fold>
@@ -285,6 +300,25 @@ public class Generate extends HttpServlet {
                         Message = "";
                     }
                     EventConn.RegisterEvents(IdCertificates, Message);
+                    //</editor-fold>
+                    break;
+                case 7:
+                    //<editor-fold defaultstate="collapsed" desc="CONFIRM CERTIFICATE">
+                    try {
+                        Type = request.getParameter("Type");
+                    } catch (Exception e) {
+                        Type = "";
+                    }
+                    try {
+                        IdCertificates = Integer.parseInt(request.getParameter("IdCertificates"));
+                    } catch (Exception e) {
+                        IdCertificates = 0;
+                    }
+                    result = CertificatesJpa.UpdateCertificateFinish(IdCertificates);
+                    if (result) {
+                        request.setAttribute("FinishCertificate", result);
+                    }
+                    request.getRequestDispatcher("Generate?opt=1&Type=" + Type).forward(request, response);
                     //</editor-fold>
                     break;
             }

@@ -151,11 +151,30 @@ public class CertificatesJpaController implements Serializable {
         }
     }
 
-    public boolean DeleteCertificate(int IdC, String Djt) {
+    public boolean RegisterNovelty(int IdC, String Ctg, String Dpc, String Urg) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
-            Query q = em.createNativeQuery("CALL `Sp_ctf_u_DeleteCertificate`('" + IdC + "','" + Djt + "')");
+            Query q = em.createNativeQuery("CALL `Sp_nvt_r_RegisterNovelty`('" + IdC + "','" + IdC + "','" + Ctg + "','" + Dpc + "','" + Urg + "')");
+            int resultado = q.executeUpdate();
+            em.getTransaction().commit();
+            em.clear();
+            em.close();
+            if (resultado == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean UpdateCertificateFinish(int IdC) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        try {
+            Query q = em.createNativeQuery("CALL `Sp_ctf_u_UpdateCertificateFinish`('" + IdC + "')");
             int resultado = q.executeUpdate();
             em.getTransaction().commit();
             em.clear();

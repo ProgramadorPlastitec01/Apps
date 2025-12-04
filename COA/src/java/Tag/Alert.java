@@ -14,7 +14,6 @@ public class Alert extends TagSupport {
         JspWriter out = pageContext.getOut();
         try {
             //<editor-fold defaultstate="collapsed" desc="CERTIFICATE">
-            //<editor-fold defaultstate="collapsed" desc="UPDATE CERTIFICATE">
             if (pageContext.getRequest().getAttribute("UpdateCertificate") != null) {
                 boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("UpdateCertificate").toString());
                 if (result) {
@@ -39,8 +38,6 @@ public class Alert extends TagSupport {
                     out.print("</script>");
                 }
             }
-            //</editor-fold>
-            //<editor-fold defaultstate="collapsed" desc="REGISTER CERTIFICATE">
             if (pageContext.getRequest().getAttribute("RegisterCertificates") != null) {
                 boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("RegisterCertificates").toString());
                 if (result) {
@@ -65,8 +62,6 @@ public class Alert extends TagSupport {
                     out.print("</script>");
                 }
             }
-            //</editor-fold>
-            //<editor-fold defaultstate="collapsed" desc="REGISTER SIGNATURE">
             if (pageContext.getRequest().getAttribute("RegisterSignature") != null) {
                 boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("RegisterSignature").toString());
                 if (result) {
@@ -91,8 +86,6 @@ public class Alert extends TagSupport {
                     out.print("</script>");
                 }
             }
-            //</editor-fold>
-            //<editor-fold defaultstate="collapsed" desc="DELETE CERTIFICATE">
             if (pageContext.getRequest().getAttribute("DeleteCertificates") != null) {
                 boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("DeleteCertificates").toString());
                 if (result) {
@@ -117,8 +110,30 @@ public class Alert extends TagSupport {
                     out.print("</script>");
                 }
             }
-            //</editor-fold>
-            //<editor-fold defaultstate="collapsed" desc="GENERATE CERTIFICATE">
+            if (pageContext.getRequest().getAttribute("ReturnCertificates") != null) {
+                boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("ReturnCertificates").toString());
+                if (result) {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-2\").ready(function() {\n"
+                            + "  iziToast.warning({\n"
+                            + "    title: 'Correcto',\n"
+                            + "    message: 'Se devolvio el certificado a estado anterior.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                } else {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-4\").ready(function() {\n"
+                            + "  iziToast.error({\n"
+                            + "    title: 'Error',\n"
+                            + "    message: 'Ha ocurrido un problema en el registro.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                }
+            }
             if (pageContext.getRequest().getAttribute("GenerateCertificate") != null) {
                 boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("GenerateCertificate").toString());
                 if (result) {
@@ -143,7 +158,30 @@ public class Alert extends TagSupport {
                     out.print("</script>");
                 }
             }
-            //</editor-fold>
+            if (pageContext.getRequest().getAttribute("FinishCertificate") != null) {
+                boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("FinishCertificate").toString());
+                if (result) {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-2\").ready(function() {\n"
+                            + "  iziToast.success({\n"
+                            + "    title: 'Correcto',\n"
+                            + "    message: 'Se finalizo el certificado correctamente.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                } else {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-4\").ready(function() {\n"
+                            + "  iziToast.error({\n"
+                            + "    title: 'Error',\n"
+                            + "    message: 'Ha ocurrido un problema en el registro.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                }
+            }
             //</editor-fold>
             //<editor-fold defaultstate="collapsed" desc="SESSION">
             //<editor-fold defaultstate="collapsed" desc="UPDATE PASSWORD">

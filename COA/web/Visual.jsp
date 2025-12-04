@@ -11,7 +11,7 @@
         <link rel="stylesheet" href="Interface/Content/Assets/modules/izitoast/css/iziToast.min.css">
 
     </head>
-    <body>
+    <body class="sidebar-mini">
         <jsp:include page="Menu.jsp"></jsp:include>
             <div class="main-content" style="min-height: 694px;">
                 <!-- Alerta -->
@@ -61,7 +61,8 @@
                         e.preventDefault();
                     }
                 });
-            });
+            }
+            );
         </script>
         <script>
             function saveHtml() {
@@ -339,6 +340,50 @@
                 attachCloseHandlers();
             }
         })();
+    </script>
+    <script>
+        function confirmarDevolucion(url) {
+            swal({
+                title: "¿Está seguro de devolver?",
+                text: "Por favor, justifique la razón de la devolucion",
+                content: {
+                    element: "textarea",
+                    attributes: {
+                        placeholder: "Escriba aquí la justificación...",
+                        id: "razonDevolucion"
+                    },
+                },
+                icon: "warning",
+                buttons: {
+                    cancel: {
+                        text: "Cancelar",
+                        visible: true,
+                        className: "btn btn-secondary",
+                        closeModal: true,
+                    },
+                    confirm: {
+                        text: "Devolver",
+                        visible: true,
+                        className: "btn btn-green",
+                        closeModal: false,
+                    },
+                },
+                dangerMode: true,
+            }).then((value) => {
+                if (value) {
+                    const razon = document.getElementById("razonDevolucion").value.trim();
+                    if (!razon) {
+                        swal("Debe justificar la devolución", {
+                            icon: "error",
+                        });
+                        return;
+                    }
+                    // Redirige al servlet con la razón codificada
+                    const razonEncoded = encodeURIComponent(razon);
+                    window.location.href = url + "&Justification=" + razonEncoded;
+                }
+            });
+        }
     </script>
 
     <script src="Interface/Content/Assets/js/eventLogger.js"></script>
