@@ -15,9 +15,9 @@
         <jsp:include page="Menu.jsp"></jsp:include>
             <div class="main-content" style="min-height: 694px;">
                 <!-- Alerta -->
-                <div id="alerta" class="alert alert-warning" style="display:none; margin-top:10px;">
+                <div id="alerta" class="alert alert-warning" style="display:none; margin-top:10px; background-color: #f9e4c7; color: black">
                     ⚠️ Atención: No se encontró información para los datos ingresados. 
-                    <button class="btn btn-sm btn-outline-dark" onclick="mostrarDetalles()">Ver detalles</button>
+                    <button class="btn btn-sm btn-dark" onclick="mostrarDetalles()">Ver detalles</button>
                 </div>
 
                 <!-- Modal de eventos -->

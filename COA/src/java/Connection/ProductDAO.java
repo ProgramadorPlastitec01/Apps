@@ -50,21 +50,31 @@ public class ProductDAO {
             conn = DriverManager.getConnection(url, login, password);
 
             if (conn != null) {
-                String sql = "SELECT "
+                String sql = "SELECT  "
                         + "    p.codigo, "
                         + "    p.nombre, "
                         + "    COALESCE( "
                         + "        GROUP_CONCAT( "
-                        + "            DISTINCT NULLIF(r.lote_producto, 'N/A')  "
+                        + "            DISTINCT r.lote_producto "
                         + "            ORDER BY r.lote_producto SEPARATOR ', ' "
-                        + "        ), '' "
-                        + "    ) AS lotes "
+                        + "        ), "
+                        + "    '') AS lotes "
                         + "FROM producto p "
-                        + "INNER JOIN orden_produccion o "
+                        + "INNER JOIN orden_produccion o  "
                         + "    ON p.id_orden_produccion = o.id_orden_produccion "
-                        + "LEFT JOIN registro r "
+                        + "LEFT JOIN registro r  "
                         + "    ON r.id_producto = p.id_producto "
-                        + "WHERE o.numero = ? "
+                        + "WHERE  "
+                        + "    o.numero = ? "
+                        + "    AND r.lote_producto IS NOT NULL "
+                        + "    AND r.lote_producto <> 'N/A' "
+                        + "    AND r.lote_producto IN ( "
+                        + "        SELECT lote_producto "
+                        + "        FROM registro r2 "
+                        + "        WHERE r2.id_producto = p.id_producto "
+                        + "        GROUP BY lote_producto "
+                        + "        HAVING SUM(r2.estado = 1) = 0 "
+                        + "    ) "
                         + "GROUP BY p.codigo, p.nombre;";
                 PreparedStatement ps = conn.prepareStatement(sql);
                 ps.setString(1, orden);

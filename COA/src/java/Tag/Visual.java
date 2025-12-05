@@ -14,7 +14,6 @@ import Controller.SettingJpaController;
 import Controller.CertificatesJpaController;
 import java.util.List;
 import Method.Util;
-import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -43,7 +42,7 @@ public class Visual extends TagSupport {
         List lst_sheet = null;
         List lst_prm = null;
         List lst_sign = null;
-        List lst_clearence = null;
+        List lst_tags = null;
         try {
             //<editor-fold defaultstate="collapsed" desc="ENVIRONMENT VARIABLES">
             // Variables recibidas
@@ -110,27 +109,22 @@ public class Visual extends TagSupport {
                 out.print("<div class='card'>");
                 out.print("<div class='card-header' style='justify-content: space-between;'>");
                 out.print("<div class='d-flex justify-content-between' style='width:100%'>");
-                // COLUMNA IZQUIERDA
                 out.print("<div class='mr-2 d-flex align-items-baseline'>");
-                // Botón volver
                 out.print("<button class='btn btn-outline-primary btn-sm mr-2' "
                         + "style='border-radius: 4px; padding: 2px 9px;' "
                         + "onclick=\"javascript:location.href='Generate?opt=1&Type="
                         + Type + "&TempDelete=" + TempDelete + "';cargarDatos()\">"
                         + "<i class='fas fa-arrow-left'></i>"
                         + "</button>");
-                // Título
                 out.print("<h4>Generación Certificado</h4>");
-                out.print("</div>"); // Cierra columna izquierda
-                // COLUMNA DERECHA (botones según estado)
-                // Estado 1 → Finalizar
+                out.print("</div>");
+                //<editor-fold defaultstate="collapsed" desc="BUTTOM'S">
                 if (StateCerti == 1) {
                     out.print("<div>"
                             + "<button class='btn btn-outline-success btn-sm' "
                             + "style='border-radius: 4px; padding: 2px 9px;' "
-                            + "onclick=\"javascript:location.href='Generate?opt=4&Type="
-                            + Type + "&Temp=1&IdCertiMasive=" + IdCertificates
-                            + "';cargarDatos()\" data-toggle='tooltip' "
+                            + "onclick=\"javascript:location.href='Generate?opt=7&Type=" + Type + "&IdCertificates=" + IdCertificates + "';cargarDatos()\""
+                            + " data-toggle='tooltip' "
                             + "data-placement='top' title='Finalizar'>"
                             + "<i class='fas fa-check'></i>"
                             + "</button></div>");
@@ -167,7 +161,7 @@ public class Visual extends TagSupport {
                 }
                 out.print("</div>"); // Cierra contenedor principal
                 out.print("</div>");
-
+                //</editor-fold>
                 if (IdCertificates > 0) {
                     //<editor-fold defaultstate="collapsed" desc="VALIDATION BY ID">
                     Html = Obj_Format[3].toString();
@@ -219,7 +213,7 @@ public class Visual extends TagSupport {
                         //</editor-fold>
                     } else {
                         //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA">
-                        Html = Html.replace("XOrderX", "<span class='editable' contenteditable='true'>-----</span>");
+                        Html = Html.replace("XOrderX", String.valueOf(Order));
                         Html = Html.replace("XClientX", "<span class='editable' contenteditable='true'>-----</span>");
                         Html = Html.replace("XAddressX", "<span class='editable' contenteditable='true'>-----</span>");
                         Html = Html.replace("XPhoneX", "<span class='editable' contenteditable='true'>-----</span>");
@@ -227,10 +221,10 @@ public class Visual extends TagSupport {
                         Html = Html.replace("XCountryX", "<span class='editable' contenteditable='true'>-----</span>");
                         Html = Html.replace("XBillX", "<span class='editable' contenteditable='true'>-----</span>");
                         Html = Html.replace("XReissue_listX", "<span class='editable' contenteditable='true'>-----</span>");
-                        Html = Html.replace("XProductX", "<span class='editable' contenteditable='true'>-----</span>");
+                        Html = Html.replace("XProductX", ProductFact);
                         Html = Html.replace("XAbilityX", "<span class='editable' contenteditable='true'>-----</span>");
                         Html = Html.replace("XBatchX", Batch);
-                        Html = Html.replace("XQuatityGenX", "<span class='editable' contenteditable='true'>-----</span>" + " UNIDADES");
+                        Html = Html.replace("XQuatityGenX", "<span class='editable' contenteditable='true'>----- UNIDADES</span>");
                         Html = Html.replace("XClient_OrderX", "<span class='editable' contenteditable='true'>-----</span>");
                         Html = Html.replace("<h3 id=\"consValue\" class=\"mb-0\">XConsX</h3>", "<h3 id=\"consValue\" class=\"mb-0 editable\" contenteditable='true'>CC*****</h3>");
                         Html = Html.replace("XCodeX", "<span class='editable' contenteditable='true'>-----</span>");
@@ -246,11 +240,55 @@ public class Visual extends TagSupport {
                                 + "</script>");
                         //</editor-fold>
                     }
+                    lst_tags = FactoryJpa.ConsultTags(Order, ProductFact, Batch);
+                    if (lst_tags != null && !lst_tags.isEmpty() && lst_tags.size() > 0) {
+                        //<editor-fold defaultstate="collapsed" desc="DATE MANUFACTURE AND EXPIRATION">
+                        String[] ArgTags = Util.parseResult(lst_tags.get(1));
+                        if (ArgTags[5].contains("-")) {
+                            String[] DateExpiración = ArgTags[5].split("-");
+                            Html = Html.replace("XYearMANX", DateExpiración[0]);
+                            Html = Html.replace("XMonthMANX", DateExpiración[1]);
+                            Html = Html.replace("XDayMANX", DateExpiración[2]);
+                        } else {
+                            Html = Html.replace("XYearMANX", "<span class='editable' contenteditable='true'>-----</span>");
+                            Html = Html.replace("XMonthMANX", "<span class='editable' contenteditable='true'>-----</span>");
+                            Html = Html.replace("XDayMANX", "<span class='editable' contenteditable='true'>-----</span>");
+                        }
+                        if (ArgTags[6].contains("-")) {
+                            String[] DateExpiración = ArgTags[6].split("-");
+                            Html = Html.replace("XYearEXPX", DateExpiración[0]);
+                            Html = Html.replace("XMonthEXPX", DateExpiración[1]);
+                            Html = Html.replace("XDayEXPX", DateExpiración[2]);
+                        } else {
+                            Html = Html.replace("XYearEXPX", "<span class='editable' contenteditable='true'>-----</span>");
+                            Html = Html.replace("XMonthEXPX", "<span class='editable' contenteditable='true'>-----</span>");
+                            Html = Html.replace("XDayEXPX", "<span class='editable' contenteditable='true'>-----</span>");
+                        }
+                        //</editor-fold>
+                    } else {
+                        //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA">
+                        Html = Html.replace("XYearMANX", "<span class='editable' contenteditable='true'>-----</span>");
+                        Html = Html.replace("XMonthMANX", "<span class='editable' contenteditable='true'>-----</span>");
+                        Html = Html.replace("XDayMANX", "<span class='editable' contenteditable='true'>-----</span>");
+                        Html = Html.replace("XYearEXPX", "<span class='editable' contenteditable='true'>-----</span>");
+                        Html = Html.replace("XMonthEXPX", "<span class='editable' contenteditable='true'>-----</span>");
+                        Html = Html.replace("XDayEXPX", "<span class='editable' contenteditable='true'>-----</span>");
+
+                        Message = "No se encuentra información en Tags por orden, producto y lote, favor verifique";
+
+                        // ✅ Ejecutar automáticamente cuando todo esté cargado
+                        out.print("<script>"
+                                + "window.addEventListener('load',function(){"
+                                + " registrarEvento('Tags','" + Order + "','" + ProductFact + "','" + Batch + "','" + Message.replace("'", "\\'") + "');"
+                                + "});"
+                                + "</script>");
+                        //</editor-fold>
+                    }
                     if (IdForm == 1) {
                         //<editor-fold defaultstate="collapsed" desc="R-GC-046">
                         lst_RLab = RegistrosLabJpa.ConsultMaterials(Order, Product, Batch);
                         if (lst_RLab != null && !lst_RLab.isEmpty() && lst_RLab.size() > 0) {
-                            //<editor-fold defaultstate="collapsed" desc="MATERIAL REGISTROS LAB">
+                            //<editor-fold defaultstate="collapsed" desc="MATERIAL REGISTROS LAB AND GENERACION DE LOTES">
                             String[] ArgMaterials = Util.parseResult(lst_RLab.get(0));
                             String[] etiquetas = {
                                 "REF1", "LBT1", "REF2", "LBT2", "REF3", "LBT3",
@@ -279,6 +317,15 @@ public class Visual extends TagSupport {
                                     Html = Html.replace("COS" + Cnt + "", "CC" + ArgLay[0]);
                                 } else {
                                     Html = Html.replace("COS" + Cnt, "<span class='editable' contenteditable='true'>-----</span>");
+
+                                    Message = "No se encuentra información en Generacion de lotes en el módulo de Control consecutivos por el lote, favor verifique";
+
+                                    // ✅ Ejecutar automáticamente cuando todo esté cargado
+                                    out.print("<script>"
+                                            + "window.addEventListener('load',function(){"
+                                            + " registrarEvento('Generacion de lotes / Control Consecutivos','" + Order + "','" + ProductFact + "','" + ArgImP[i] + "','" + Message.replace("'", "\\'") + "');"
+                                            + "});"
+                                            + "</script>");
                                 }
                                 Cnt++;
                             }
@@ -297,6 +344,15 @@ public class Visual extends TagSupport {
                                     //<editor-fold defaultstate="collapsed" desc="VALIDATION">
                                     Html = Html.replace("REF" + Cnt2, "<span class='editable' contenteditable='true'>-----</span>");
                                     Html = Html.replace("COS" + Cnt2, "<span class='editable' contenteditable='true'>-----</span>");
+
+                                    Message = "No se encuentra información en Generacion de lotes en el módulo de repcepción material por el lote, favor verifique";
+
+                                    // ✅ Ejecutar automáticamente cuando todo esté cargado
+                                    out.print("<script>"
+                                            + "window.addEventListener('load',function(){"
+                                            + " registrarEvento('Generacion de lotes / Recepción Material','" + Order + "','" + ProductFact + "','" + ArgTnt[o] + "','" + Message.replace("'", "\\'") + "');"
+                                            + "});"
+                                            + "</script>");
                                     //</editor-fold>
                                 }
                                 Cnt2++;
@@ -427,6 +483,14 @@ public class Visual extends TagSupport {
                                     Html = Html.replace("COS" + Cnt + "", "CC" + ArgLay[0]);
                                 } else {
                                     Html = Html.replace("COS" + Cnt, "<span class='editable' contenteditable='true'>-----</span>");
+                                    Message = "No se encuentra información en Generacion de lotes en el módulo de Control consecutivos por el lote, favor verifique";
+
+                                    // ✅ Ejecutar automáticamente cuando todo esté cargado
+                                    out.print("<script>"
+                                            + "window.addEventListener('load',function(){"
+                                            + " registrarEvento('Generacion de lotes / Control Consecutivos','" + Order + "','" + ProductFact + "','" + ArgImP[i] + "','" + Message.replace("'", "\\'") + "');"
+                                            + "});"
+                                            + "</script>");
                                 }
                                 Cnt++;
                             }
@@ -445,6 +509,14 @@ public class Visual extends TagSupport {
                                     //<editor-fold defaultstate="collapsed" desc="VALIDATION">
                                     Html = Html.replace("REF" + Cnt2, "<span class='editable' contenteditable='true'>-----</span>");
                                     Html = Html.replace("COS" + Cnt2, "<span class='editable' contenteditable='true'>-----</span>");
+                                    Message = "No se encuentra información en Generacion de lotes en el módulo de repcepción material por el lote, favor verifique";
+
+                                    // ✅ Ejecutar automáticamente cuando todo esté cargado
+                                    out.print("<script>"
+                                            + "window.addEventListener('load',function(){"
+                                            + " registrarEvento('Generacion de lotes / Recepción Material','" + Order + "','" + ProductFact + "','" + ArgTnt[o] + "','" + Message.replace("'", "\\'") + "');"
+                                            + "});"
+                                            + "</script>");
                                     //</editor-fold>
                                 }
                                 Cnt2++;
@@ -750,7 +822,6 @@ public class Visual extends TagSupport {
                 Logger.getLogger(Visual.class.getName()).log(Level.SEVERE, null, ex1);
             }
         }
-
         return super.doStartTag();
     }
 }

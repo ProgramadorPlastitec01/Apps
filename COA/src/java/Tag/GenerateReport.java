@@ -172,7 +172,7 @@ public class GenerateReport extends TagSupport {
                     + "                              </div>\n"
                     + "                            </th>");
             if (Type.equals("")) {
-                out.print("<th>Modulo</th>");
+                out.print("<th>App</th>");
             }
             out.print("<th>Registro</th>");
             out.print("<th>Numero <br/> Certificado</th>");
@@ -216,17 +216,17 @@ public class GenerateReport extends TagSupport {
                         String NameSys = ObjCerti[1].toString();
                         out.print("<td><img src='Interface/Imagen/" + (NameSys.equals("RegistrosLab") ? "Registros_lab" : NameSys.equals("InspeccionManga") ? "Inspeccion_manga" : NameSys.equals("ControlGrafado") ? "Control_grafado" : "ST_Desc_2") + ".png' alt='' class='ImgModuleModule'  data-toggle=\"tooltip\" data-placement=\"top\" title=\"\" data-original-title=\"" + NameSys + "\"/></td>");
                     }
-                    out.print("<td>" + ObjCerti[2] + "</td>");
-                    out.print("<td>" + ObjCerti[3] + "</td>");
-                    out.print("<td>" + ObjCerti[4] + "</td>");
-                    out.print("<td>" + ObjCerti[5] + "</td>");
-                    out.print("<td>" + ObjCerti[6] + "</td>");
-                    out.print("<td>" + ObjCerti[7] + "</td>");
+                    out.print("<td>" + ((ObjCerti[2] == null) ? "" : ObjCerti[2]) + "</td>");
+                    out.print("<td>" + ((ObjCerti[3] == null) ? "" : ObjCerti[3]) + "</td>");
+                    out.print("<td>" + ((ObjCerti[4] == null) ? "" : ObjCerti[4]) + "</td>");
+                    out.print("<td>" + ((ObjCerti[5] == null) ? "" : ObjCerti[5]) + "</td>");
+                    out.print("<td>" + ((ObjCerti[6] == null) ? "" : ObjCerti[6]) + "</td>");
+                    out.print("<td>" + ((ObjCerti[7] == null) ? "" : ObjCerti[7]) + "</td>");
                     if (TempDelete > 0) {
-                        out.print("<td>" + ObjCerti[9] + "</td>");
+                        out.print("<td>" + ((ObjCerti[9] == null) ? "" : ObjCerti[9]) + "</td>");
                     }
-                    out.print("<td>" + ObjCerti[10] + "</td>");
-                    out.print("<td>" + ObjCerti[9].toString().trim() + "</td>");
+                    out.print("<td>" + ((ObjCerti[10] == null) ? "" : ObjCerti[10]) + "</td>");
+                    out.print("<td>" + ((ObjCerti[9] == null) ? "" : ObjCerti[9].toString().trim()) + "</td>");
                     try {
                         switch (State) {
                             case 0:

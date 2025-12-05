@@ -24,7 +24,7 @@ public class ConnectionSQLServer {
 
         try {
             // Obtener parámetros de conexión
-            List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerSQLServer");
+            List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerSQLServerFactory");
             if (lst_parameter == null || lst_parameter.isEmpty()) {
                 return null;
             }
@@ -78,6 +78,103 @@ public class ConnectionSQLServer {
                     + "WHERE p.NUM = " + Orden + " "
                     + "  AND p.COD LIKE '%" + Producto + "%' "
                     + "  AND d.LOTE = '" + Lote + "'";
+
+            sttm = con.createStatement();
+            rs = sttm.executeQuery(query);
+
+            List<String> lst_resultado = new ArrayList<>();
+            ResultSetMetaData metaData = rs.getMetaData();
+            int columnCount = metaData.getColumnCount();
+
+            // Crear cabecera
+            StringBuilder header = new StringBuilder();
+            for (int i = 1; i <= columnCount; i++) {
+                if (i > 1) {
+                    header.append("]///[");
+                }
+                header.append(metaData.getColumnName(i));
+            }
+            lst_resultado.add(header.toString());
+
+            // Crear filas
+            int rowCount = 0;
+            while (rs.next()) {
+                StringBuilder row = new StringBuilder();
+                for (int i = 1; i <= columnCount; i++) {
+                    if (i > 1) {
+                        row.append("]///[");
+                    }
+                    String value = rs.getString(i);
+                    row.append(value != null ? value.trim() : "NULL");
+                }
+                lst_resultado.add(row.toString());
+                rowCount++;
+            }
+
+            // Si hay cabecera pero no filas → devolver null
+            if (rowCount == 0) {
+                return null;
+            }
+
+            return lst_resultado;
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        } finally {
+            // Liberar recursos de forma segura
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (Exception ignore) {
+                }
+            }
+            if (sttm != null) {
+                try {
+                    sttm.close();
+                } catch (Exception ignore) {
+                }
+            }
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (Exception ignore) {
+                }
+            }
+        }
+    }
+
+    public List<String> ConsultTags(int Orden, String Producto, String Lote) throws Exception {
+        Connection con = null;
+        Statement sttm = null;
+        ResultSet rs = null;
+
+        try {
+            // Obtener parámetros de conexión
+            List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerSQLServerTags");
+            if (lst_parameter == null || lst_parameter.isEmpty()) {
+                return null;
+            }
+
+            Object[] obj_data = (Object[]) lst_parameter.get(0);
+            String[] arr_data = obj_data[2].toString()
+                    .replace("][", "///")
+                    .replace("[", "")
+                    .replace("]", "")
+                    .split("///");
+            String login = arr_data[0];
+            String password = arr_data[1];
+            String url = "jdbc:sqlserver://" + arr_data[2];
+
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            con = DriverManager.getConnection(url, login, password);
+
+            // Consulta SQL
+            String query = "SELECT top(1) o.OrderNumber,e.OrderLineId, o.ProductCode ,e.BoxNumber, e.Batch,FORMAT( e.CreationDate, 'yyyy-MM-dd') AS CreationDate, FORMAT( e.ExpirationDate, 'yyyy-MM-dd') AS ExpirationDate "
+                    + "FROM ExternalTag e "
+                    + "INNER JOIN OrderLine o ON e.OrderLineId = o.OrderLineId "
+                    + "WHERE o.OrderNumber = " + Orden + " AND o.ProductCode = '" + Producto + "' AND e.Batch = '" + Lote + "' "
+                    + "order by e.BoxNumber asc";
 
             sttm = con.createStatement();
             rs = sttm.executeQuery(query);
