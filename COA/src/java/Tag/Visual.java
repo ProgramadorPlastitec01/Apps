@@ -655,7 +655,7 @@ public class Visual extends TagSupport {
                     out.print("<form id='FormGenerate' action='Generate?opt=3' method='post' class='needs-validation' novalidate='' onsubmit='return FormGenerate(this)'>");
                     out.print("<input type='hidden' name='Type' value='" + Type + "'>");
                     out.print("<input type='hidden' name='Order' value='" + Order + "'>");
-                    out.print("<input type='hidden' name='Product' value='" + Product + "'>");
+                    out.print("<input type='hidden' name='Product' value='" + ProductFact + "'>");
                     out.print("<input type='hidden' name='Batch' value='" + Batch + "'>");
                     out.print("<input type='hidden' name='FormatName' value='" + FormatName + "'>");
                     out.print("</form>");

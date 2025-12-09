@@ -1,6 +1,7 @@
 package Tag;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpSession;
@@ -16,6 +17,7 @@ public class Menu extends TagSupport {
             HttpSession sesion = pageContext.getSession();
             String Permission = "";
             String NameUser = sesion.getAttribute("Nombres").toString();
+            int year = LocalDate.now().getYear();
             try {
                 Permission = sesion.getAttribute("Permisos").toString();
             } catch (Exception e) {
@@ -32,13 +34,13 @@ public class Menu extends TagSupport {
                     + "        </form>\n"
                     + "        <ul class=\"navbar-nav navbar-right\">\n");
             out.print(
-                    "          <li class=\"dropdown\"><a href=\"#\" data-toggle=\"dropdown\" onclick='CloseDivStartEndDate()' class=\"nav-link dropdown-toggle nav-link-lg nav-link-user\">\n"
+                    "          <li class=\"dropdown\"><a href=\"#\" data-toggle=\"dropdown\" onclick='CloseDivStartEndDate()' class=\"nav-link dropdown-toggle nav-link-lg nav-link-user text-primary\">\n"
                     + "            <div class=\"d-sm-none d-lg-inline-block\">" + NameUser + "<img alt=\"image\" class='ml-2' src='Interface/Content/Assets/img/avatar/avatar-7.png' style=\"width:40px; height:40px; border-radius:50% !important; object-fit:cover;\" ></div></a>\n"
                     + "            <div class=\"dropdown-menu dropdown-menu-right\">\n"
-                    + "              <div class=\"dropdown-title\">Opciones</div>\n");
-//                    + "              <a href=\"Profile?opt=1\" onclick='cargarDatos()' class=\"dropdown-item has-icon\">\n"
-//                    + "                <i class=\"fas fa-user\"></i> Perfil\n"
-//                    + "              </a>\n"
+                    + "              <div class=\"dropdown-title\">Opciones</div>\n"
+                    + "              <a href=\"Profile?opt=1\" onclick='cargarDatos()' class=\"dropdown-item has-icon\">\n"
+                    + "                <i class=\"fas fa-user\"></i> Perfil\n"
+                    + "              </a>\n");
             out.print(
                     "              <a href=\"Setting.jsp\" onclick='cargarDatos()' class=\"dropdown-item has-icon\">\n"
                     + "                <i class=\"fas fa-cog\"></i> Configuración\n"
@@ -59,12 +61,12 @@ public class Menu extends TagSupport {
             out.print("<div style='height:92%;'>");
             out.print("<aside id=\"sidebar-wrapper\">");
 
-            out.print("<div class=\"sidebar-brand\">");
-            out.print("<a style='color:#fff' href=\"Start.jsp\"><img src=\"Interface/Imagen/LogoSText.fw.png\" alt=\"\" class='mt-2 mb-2' style=\"width: 35%;\"/></a>");
+            out.print("<div class=\"sidebar-brand mb-2\">");
+            out.print("<a style='color:#fff' href=\"Start.jsp\"><img src=\"Interface/Imagen/LogoSWhite.png\" alt=\"\" class='mt-2 mb-2' style=\"width: 35%;\"/></a>");
             out.print("</div>");
 
             out.print("<div class=\"sidebar-brand sidebar-brand-sm\">");
-            out.print("<a style='color:#fff' href=\"Start.jsp\"><img src=\"Interface/Imagen/LogoSText.fw.png\" alt=\"\" style=\"width: 80%;\"/></a>");
+            out.print("<a style='color:#fff' href=\"Start.jsp\"><img src=\"Interface/Imagen/LogoSWhite.png\" alt=\"\" style=\"width: 80%;\"/></a>");
             out.print("</div>");
 
             out.print("<div class=\"mt-0 p-3 hide-sidebar-mini\">");
@@ -78,35 +80,61 @@ public class Menu extends TagSupport {
             // ===================== BatchRecord =====================
             out.print("<li class=\"menu-header\">Batch Record</li>");
 
-            if (Permission.contains("(2)")) {
+            if (Permission.contains("[2]")) {
                 out.print("<li class=\"dropdown\">");
-                out.print("<a href='#' class=\"nav-link\" onclick='cargarDatos()'><div class='Prox'>Proximamente...</div></a>");
-//                out.print("<a href='FileManager.jsp' class=\"nav-link\" onclick='cargarDatos()'><i class=\"far fa-folder-open\"></i><span>Batch Record</span></a>");
+                out.print("<a href='FileManager.jsp' class=\"nav-link\" onclick='cargarDatos()'><i class=\"fas fa-folder\"></i><span>Batch Record</span></a>");
                 out.print("</li>");
             }
-            out.print("<li class=\"menu-header\">Certificados</li>");
-//            if (Permission.contains("(5)")) {
+            out.print("<li class=\"menu-header\">Gestión</li>");
+            if (Permission.contains("[5]")) {
                 out.print("<li class=\"dropdown\">");
                 out.print("<a href='Generate?opt=1&Type=' class=\"nav-link\" onclick='cargarDatos()'><i class=\"fas fa-file-import\"></i><span>Generación</span></a>");
-//                out.print("<a href='Generate?opt=1&Type=RegistrosLab' class=\"nav-link\" onclick='cargarDatos()'><i><img src=\"Interface/Imagen/Registros_lab.png\" alt=\"\" class='ImgModule'/></i><span>Generación</span></a>");
                 out.print("</li>");
-//            }
-
-//            if (Permission.contains("(15)")) {
-                // ===================== Consulta =====================
-                out.print("<li class=\"menu-header\">Consulta</li>");
+            }
+            if (Permission.contains("[5]")) {
                 out.print("<li class=\"dropdown\">");
-                out.print("<a href='#' class=\"nav-link\" onclick='cargarDatos()'><div class='Prox'>Proximamente...</div></a>");
+                out.print("<a href='Generate?opt=1&Type=' class=\"nav-link\" onclick='cargarDatos()'><i class=\"fas fa-signature\"></i><span>Revisión</span></a>");
                 out.print("</li>");
-//            }
+            }
+            if (Permission.contains("[5]")) {
+                out.print("<li class=\"dropdown\">");
+                out.print("<a href='Generate?opt=1&Type=' class=\"nav-link\" onclick='cargarDatos()'><i class=\"fas fa-user-tie\"></i><span>Clientes</span></a>");
+                out.print("</li>");
+            }
 
-            out.print("</ul>"); // cierre de sidebar-menu
+            // ===================== Consulta =====================
+            out.print("<li class=\"menu-header\">Consulta</li>");
+
+            if (Permission.contains("[5]")) {
+                out.print("<li class=\"dropdown\">");
+                out.print("<a href='Generate?opt=1&Type=' class=\"nav-link\" onclick='cargarDatos()'><i class=\"fas fa-comment-alt\"></i><span>Novedades</span></a>");
+                out.print("</li>");
+            }
+            if (Permission.contains("[5]")) {
+                out.print("<li class=\"dropdown\">");
+                out.print("<a href='Generate?opt=1&Type=' class=\"nav-link\" onclick='cargarDatos()'><i class=\"fas fa-file-alt\"></i><span>Reporte</span></a>");
+                out.print("</li>");
+            }
+
+            out.print("</ul>");
 
             out.print("</aside>");
             out.print("</div>");
             out.print("</div>");
+
+            out.print("<div style=' position: absolute;\n"
+                    + "    bottom: 0;\n"
+                    + "    width: 100%;\n"
+                    + "    padding: 2px;\n"
+                    + "    text-align: center;\n"
+                    + "    color: #000000;\n"
+                    + "    font-size: 10px;\n"
+                    + "    background-color: #dccbff;"
+                    + "    z-index:1000;'>");
+            out.print("© " + year + " - PLASTITEC S.A.S Desarrollado por Tecnología Información");
+            out.print("</div>");
             //</editor-fold>
-            
+
         } catch (IOException ex) {
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
         }
