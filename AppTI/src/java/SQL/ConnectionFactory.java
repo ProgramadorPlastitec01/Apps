@@ -12,8 +12,10 @@ public class ConnectionFactory {
     public List ConsulNewReference(String Ref) throws Exception {
         try {
             Ref = Ref.trim();
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            Connection con = DriverManager.getConnection("jdbc:sqlserver://172.16.2.116:1433;databaseName=EMP001_MANT", "sa", "plast");
+//            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            Class.forName("net.sourceforge.jtds.jdbc.Driver");
+//            Connection con = DriverManager.getConnection("jdbc:sqlserver://172.16.2.116:1433;databaseName=EMP001_MANT", "sa", "plast");
+            Connection con = DriverManager.getConnection("jdbc:jtds:sqlserver://172.16.2.116:1433/EMP001_MANT;user=sa;password=plast;");
             String query = "SELECT  "
                     + "    k.COD as FactCod, "
                     + "    m.NOM as NameProd, "
@@ -22,7 +24,7 @@ public class ConnectionFactory {
                     + "FROM kardexa k "
                     + "LEFT JOIN maestro m ON k.COD = m.COD "
                     + "LEFT JOIN [EMP001_COMP].[dbo].COMPRAS2 c ON k.OC = c.OC "
-                    + "WHERE k.COD LIKE '"+ Ref +"' AND (k.tipo = '1051' or k.tipo = '1151') "
+                    + "WHERE k.COD LIKE '" + Ref + "' AND (k.tipo = '1051' or k.tipo = '1151') "
                     + "GROUP BY "
                     + "    k.COD, "
                     + "    m.NOM, "
@@ -40,7 +42,7 @@ public class ConnectionFactory {
                     + "FROM kardexhi k "
                     + "LEFT JOIN maestro m ON k.COD = m.COD "
                     + "LEFT JOIN [EMP001_COMP].[dbo].COMPRAS2 c ON k.OC = c.OC "
-                    + "WHERE k.COD LIKE '"+ Ref +"' AND (k.tipo = '1051' or k.tipo = '1151') "
+                    + "WHERE k.COD LIKE '" + Ref + "' AND (k.tipo = '1051' or k.tipo = '1151') "
                     + "GROUP BY "
                     + "    k.COD, "
                     + "    m.NOM, "
@@ -58,7 +60,7 @@ public class ConnectionFactory {
                     + "FROM kardex k "
                     + "LEFT JOIN maestro m ON k.COD = m.COD "
                     + "LEFT JOIN [EMP001_COMP].[dbo].COMPRAS2 c ON k.OC = c.OC "
-                    + "WHERE k.COD LIKE '"+ Ref +"' AND (k.tipo = '1051' or k.tipo = '1151') "
+                    + "WHERE k.COD LIKE '" + Ref + "' AND (k.tipo = '1051' or k.tipo = '1151') "
                     + "GROUP BY "
                     + "    k.COD, "
                     + "    m.NOM, "
@@ -91,8 +93,10 @@ public class ConnectionFactory {
 
     public List ConsulReferenceENT(String Ref, String dtIn, String dtFn) throws Exception {
         try {
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            Connection con = DriverManager.getConnection("jdbc:sqlserver://172.16.2.116:1433;databaseName=EMP001_MANT", "sa", "plast");
+//            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+//            Connection con = DriverManager.getConnection("jdbc:sqlserver://172.16.2.116:1433;databaseName=EMP001_MANT", "sa", "plast");
+            Class.forName("net.sourceforge.jtds.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:jtds:sqlserver://172.16.2.116:1433/EMP001_MANT;user=sa;password=plast;");
             String query = "SELECT k.COD as 'Cod', k.DOC as 'Doc', CONVERT(DATE, k.FECHA) as 'Date', k.DES as 'desc', k.tipo as 'Type', cast(k.cant as INT) as 'cant' "
                     + "FROM kardex k "
                     + "WHERE k.COD LIKE '" + Ref + "%' AND (k.tipo = '1051' OR k.tipo = '1151') AND  k.FECHA BETWEEN CONVERT(DATETIME,'" + dtIn + "', 120) AND CONVERT(DATETIME,'" + dtFn + "', 120) "
@@ -126,8 +130,10 @@ public class ConnectionFactory {
 
     public List ConsulReferenceSAL(String Ref, String dtIn, String dtFn) throws Exception {
         try {
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            Connection con = DriverManager.getConnection("jdbc:sqlserver://172.16.2.116:1433;databaseName=EMP001_MANT", "sa", "plast");
+//            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+//            Connection con = DriverManager.getConnection("jdbc:sqlserver://172.16.2.116:1433;databaseName=EMP001_MANT", "sa", "plast");
+            Class.forName("net.sourceforge.jtds.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:jtds:sqlserver://172.16.2.116:1433/EMP001_MANT;user=sa;password=plast;");
             String query = "SELECT k.COD as 'Cod', k.DOC as 'Doc', CONVERT(DATE, k.FECHA) as 'Date', k.DES as 'desc', k.tipo as 'Type' "
                     + "FROM kardex k "
                     + "WHERE k.COD LIKE '" + Ref + "%' AND k.tipo = '3051' AND  k.FECHA BETWEEN CONVERT(DATETIME,'" + dtIn + "', 120) AND CONVERT(DATETIME,'" + dtFn + "', 120) "

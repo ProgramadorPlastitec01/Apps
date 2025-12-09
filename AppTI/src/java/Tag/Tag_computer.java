@@ -733,52 +733,7 @@ public class Tag_computer extends TagSupport {
                         format = format.replace("XXXRealizadoXXX", "<b class='text-warning'><b class='text-warning'>Pendiente Firma</b></b>");
                         format = format.replace("XXXUsuarioXXX", "<b class='text-warning'><b class='text-warning'>Pendiente Firma</b></b>");
 
-//                        en este momento se viene el remplazo de las firmas realizadas y validacion del modulo en general
-//                        try {
-//                            String[] usrs = ObjFormat[5].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
-//                            for (int i = 0; i < usrs.length; i++) {
-//                                //<editor-fold defaultstate="collapsed" desc="BUILD SINATURES BY DOC">
-//                                String[] usrx = usrs[i].split("/");
-//                                String temId = usrx[1].toString();
-//                                if (temId.equals("XX")) {
-//                                    format = format.replace("XXX" + usrx[0] + "XXX", "<b class='text-warning'>Pendiente Firma</b>");
-//                                } else {
-//                                    int idSigx = Integer.parseInt(temId.toString());
-//                                    List lst_signa = ConnectJpa.Consultar_firmas(idSigx);
-//                                    if (lst_signa != null) {
-//                                        String[] ObjSi = lst_signa.toString().split("///");
-//                                        format = format.replace("XXX" + usrx[0] + "XXX", "<canvas id='signaCanvas" + i + "' width='200' height='100' style='border: 1px solid #fff;'></canvas>");
-//                                        String json = ObjSi[3].toString();
-//                                        out.print("<input type='hidden' class='form-control' name='' id='coor" + i + "' value='" + json + "'>");
-//                                        post_script += "<script>"
-//                                                + " function dibujarCoordenadas" + i + "() { "
-//                                                + "            const canvas = document.getElementById('signaCanvas" + i + "'); "
-//                                                + "            const ctx = canvas.getContext('2d'); "
-//                                                + "            const coordenadas = JSON.parse(document.getElementById('coor" + i + "').value); "
-//                                                + "            const escalaX = canvas.width / 400; "
-//                                                + "            const escalaY = canvas.height / 200; "
-//                                                + "            ctx.clearRect(0, 0, canvas.width, canvas.height); "
-//                                                + "            coordenadas.forEach(coord => { "
-//                                                + "                ctx.beginPath(); "
-//                                                + "                ctx.moveTo(coord.lx * escalaX, coord.ly * escalaY); "
-//                                                + "                ctx.lineTo(coord.mx * escalaX, coord.my * escalaY); "
-//                                                + "                ctx.strokeStyle = 'black'; "
-//                                                + "                ctx.lineWidth = 2; "
-//                                                + "                ctx.stroke(); "
-//                                                + "            }); "
-//                                                + "        } "
-//                                                + " "
-//                                                + " window.addEventListener('load', dibujarCoordenadas" + i + "); "
-//                                                + "</script>";
-//                                    } else {
-//                                        format = format.replace("XXX" + usrx[1] + "XXX", "<b class='text-warning'>Pendiente Firma</b>");
-//                                    }
-//                                }
-//                                //</editor-fold>
-//                            }
-//
-//                        } catch (Exception e) {
-//                        }
+
                         //</editor-fold>
                         //<editor-fold defaultstate="collapsed" desc="ITEMS PLUS">
                         String ItmsPlus = DtaFormat[0].toString();

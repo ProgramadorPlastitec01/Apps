@@ -204,22 +204,28 @@
                     iziToast.warning({
                         title: 'Atención!',
                         message: msg,
-                        position: 'topRight'
+                        position: 'topRight',
                     });
                 };
 
                 if (!infoField) {
                     showWarning('No se ha seleccionado items.');
-                } else if (!infoHide) {
-                    showWarning('No se ha ingresado software instalado.');
-                } else {
                     if (form.checkValidity()) {
                         form.submit();  // solo se envía si pasa validaciones
                     } else {
                         form.reportValidity(); // muestra mensajes nativos de HTML5
                     }
+                } else if (!infoHide) {
+                    showWarning('No se ha ingresado software instalado.');
+                    if (form.checkValidity()) {
+                        form.submit();  // solo se envía si pasa validaciones
+                    } else {
+                        form.reportValidity(); // muestra mensajes nativos de HTML5
+                    }
+                } else {
                 }
             }
+
         </script>
 
         <Alerts:Alert/>        

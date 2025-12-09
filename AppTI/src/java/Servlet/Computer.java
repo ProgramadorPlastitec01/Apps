@@ -323,12 +323,19 @@ public class Computer extends HttpServlet {
 
                     try {
                         txt_otherItem = request.getParameter("txt_otherItem").replace("] [", ",");
-                        itmsToAsig = txt_otherItem.replace("[", "").replace("]", "").split(",");
+                        if (txt_otherItem.equals("")) {
+                            txt_otherItem = "[NoN]";
+                        } else {
+                            itmsToAsig = txt_otherItem.replace("[", "").replace("]", "").split(",");
+                        }
                     } catch (Exception e) {
                         txt_otherItem = "[NoN]";
                     }
                     try {
                         txt_soft = request.getParameter("txt_soft").replace("] [", "---").replace("][", "---");
+                        if (txt_soft.equals("")) {
+                            txt_soft = "[NoN]";
+                        }
                     } catch (Exception e) {
                         txt_soft = "[NoN]";
                     }
@@ -463,7 +470,7 @@ public class Computer extends HttpServlet {
                         }
                     }
                     //</editor-fold>
-                    
+
                     if (idDetail > 0) {
                         Result = CompDetailJpa.UpdatePcDetailContent(idDetail, htmlTabla, 0);
                     } else {
