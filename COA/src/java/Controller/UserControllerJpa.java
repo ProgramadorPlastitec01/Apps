@@ -347,11 +347,11 @@ public class UserControllerJpa implements Serializable {
         }
     }
 
-    public boolean UpdataUserProfile(int idUser, String Code, String nme, String lnm, String usr, String pass, String ico) {
+    public boolean UpdataUserProfile(int idUser, String name, String lnm, int dcm, int cde, String usr, String pss) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
-            Query q = em.createNativeQuery("CALL `Sp_usr_u_UpdataUserProfile`('" + idUser + "','" + Code + "','" + nme + "','" + lnm + "','" + usr + "','" + pass + "','" + ico + "')");
+            Query q = em.createNativeQuery("CALL `Sp_usr_u_UpdateUserProfile`('" + idUser + "','" + name + "','" + lnm + "','" + dcm + "','" + cde + "','" + usr + "','" + pss + "')");
             int resultado = q.executeUpdate();
             em.getTransaction().commit();
             em.clear();
@@ -365,5 +365,24 @@ public class UserControllerJpa implements Serializable {
             return false;
         }
     }
+    public boolean UpdateSignature(int idUser, String Signature) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        try {
+            Query q = em.createNativeQuery("CALL `Sp_usr_u_UpdateSignature`('" + idUser + "','" + Signature + "')");
+            int resultado = q.executeUpdate();
+            em.getTransaction().commit();
+            em.clear();
+            em.close();
+            if (resultado == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    
 //</editor-fold>
 }

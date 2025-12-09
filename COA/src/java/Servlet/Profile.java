@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import Encript.ControlEncryption;
 
 public class Profile extends HttpServlet {
 
@@ -15,32 +16,42 @@ public class Profile extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("utf-8");
-        int idUser = 0;
-        String code = "", name = "", lastname = "", user = "", pass = "", pass2 = "", icon = "";
-        boolean result = false;
-
         HttpSession sesion = request.getSession();
+        ControlEncryption md5 = new ControlEncryption();
+        int idUser = 0, document = 0, code = 0;
+        String name = "", lastname = "", user = "", pass = "", pass2 = "", msg = "";
+        boolean result = false;
         int opt = Integer.parseInt(request.getParameter("opt"));
         UserControllerJpa UserJpa = new UserControllerJpa();
 
         try {
             switch (opt) {
                 case 1:
+                    try {
+                        msg = request.getParameter("msg");
+                        if (!msg.equals("")) {
+                            request.setAttribute("SignatureUpdate", true);
+                        }
+                    } catch (Exception e) {
+                        msg = "";
+                    }
                     request.getRequestDispatcher("Profile.jsp").forward(request, response);
                     break;
                 case 2:
                     idUser = Integer.parseInt(request.getParameter("idUser"));
-                    code = request.getParameter("code");
                     name = request.getParameter("name");
                     lastname = request.getParameter("lastname");
+                    document = Integer.parseInt(request.getParameter("document").toString());
+                    code = Integer.parseInt(request.getParameter("code").toString());
                     user = request.getParameter("user");
                     pass = request.getParameter("pass");
                     pass2 = request.getParameter("pass2");
                     if (pass.equals("")) {
                         pass = pass2;
+                    } else {
+                        pass = md5.md5(pass);
                     }
-                    icon = request.getParameter("icon");
-                    result = UserJpa.UpdataUserProfile(idUser, code, name, lastname, user, pass, icon);
+                    result = UserJpa.UpdataUserProfile(idUser, name, lastname, document, code, user, pass);
                     request.setAttribute("UpdateProfile", result);
                     request.getRequestDispatcher("Profile?opt=1").forward(request, response);
                     break;

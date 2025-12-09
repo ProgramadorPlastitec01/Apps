@@ -122,7 +122,7 @@ public class Menu extends TagSupport {
             out.print("</div>");
             out.print("</div>");
 
-            out.print("<div style=' position: absolute;\n"
+            out.print("<div style=' position: fixed;\n"
                     + "    bottom: 0;\n"
                     + "    width: 100%;\n"
                     + "    padding: 2px;\n"
@@ -134,7 +134,6 @@ public class Menu extends TagSupport {
             out.print("© " + year + " - PLASTITEC S.A.S Desarrollado por Tecnología Información");
             out.print("</div>");
             //</editor-fold>
-
         } catch (IOException ex) {
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
         }

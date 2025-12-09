@@ -3219,7 +3219,7 @@ thead.sticky-top {
 }
 
 .DivDis{
-    
+
 }
 .sidebar-mini .DivDis{
     display: none;
@@ -3229,4 +3229,16 @@ thead.sticky-top {
     border: 1px solid #c1c1c166;
     box-shadow: 4px 3px 0px 0px #c1c1c166;
     border-radius: 5px;
+}
+.CardHeaderSig{
+    border-bottom-color: #e7e7e7;
+    line-height: 3px;
+    -ms-grid-row-align: center;
+    align-self: center;
+    width: 100%;
+    min-height: 43px;
+    padding: 19px 4px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 0, 0, .125);
 }
