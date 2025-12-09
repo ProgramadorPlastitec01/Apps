@@ -70,7 +70,7 @@ function PrintHtml() {
         return;
     }
 
-    // Reemplazar el canvas con la imagen de la firma
+    // Reemplazar el canvas por imagen
     const canvas = document.getElementById('signature-canvas');
     const imgFirma = renderSignatureToImage('signature-canvas', 'coordenadas-hidden');
     if (canvas && imgFirma)
@@ -78,7 +78,7 @@ function PrintHtml() {
 
     const htmlContent = objeto.innerHTML;
 
-    // 📍 Agregar <base> para rutas relativas
+    // Base para rutas
     const basePath = window.location.origin + window.location.pathname.replace(/\/[^\/]*$/, '/');
 
     const ventana = window.open('', '_blank');
@@ -88,19 +88,84 @@ function PrintHtml() {
         <head>
             <base href="${basePath}">
             <title>Vista para imprimir</title>
+
             <link rel="stylesheet" href="Interface/Content/Assets/modules/bootstrap/css/bootstrap.min.css">
-            <link rel="stylesheet" href="Interface/Content/Assets/css/style.min.css" type="text/css" />
+            <link rel="stylesheet" href="Interface/Content/Assets/css/style.min.css" type="text/css">
             <link rel="stylesheet" href="Interface/Content/Assets/css/main.css">
             <link rel="stylesheet" href="Interface/Content/Assets/css/style.css">
             <link rel="stylesheet" href="Interface/Content/Assets/modules/fontawesome/css/all.min.css">
+
             <style>
-                /* 🔹 Quita borde al canvas convertido */
+                /* 🔹 RESET GLOBAL (reduce márgenes y paddings al mínimo) */
+                html, body {
+                    margin: 0 !important;
+                    padding: 0 !important;
+                    width: 100%;
+                    font-size: 13px;
+                }
+
+                body.container {
+                    padding: 5px !important;  /* Puedes bajarlo a 0 si quieres CERO márgenes */
+                }
+
+                * {
+                    box-sizing: border-box;
+                }
+
+                /* 🔹 Eliminar paddings de Bootstrap */
+                .container, .container-fluid, .row, [class*="col-"] {
+                    padding-left: 2px !important;
+                    padding-right: 2px !important;
+                }
+                /* 🔹 Comprimir todos los td/th */
+                table td, 
+                table th {
+                    padding: 1px 2px !important;
+                    line-height: 1.05 !important;
+                }
+
+                /* 🔹 Quitar padding y márgenes de las celdas con textos largos o multilínea */
+                table td p,
+                table th p {
+                    margin: 0 !important;
+                    padding: 0 !important;
+                }
+
+                /* 🔹 Comprimir títulos multilínea */
+                table td.fw-bold,
+                table th.fw-bold {
+                    padding-top: 0 !important;
+                    padding-bottom: 0 !important;
+                    line-height: 1.05 !important;
+                }
+
+                /* 🔹 Comprimir celdas que tienen texto bilingüe (ESP / ENG) */
+                table td.text-start,
+                table td.text-end,
+                table td.text-center {
+                    padding-top: 1px !important;
+                    padding-bottom: 1px !important;
+                }
+
+                /* 🔹 Quitar padding del contenedor de secciones (1.1 / 2.1 etc) */
+                td[colspan] {
+                    padding-top: 1px !important;
+                    padding-bottom: 1px !important;
+                }
+
+                /* 🔹 Evitar saltos de línea innecesarios */
+                tr, td, th {
+                    page-break-inside: avoid !important;
+                }
+            }
+
+                /* 🔹 Imagen de firma sin borde */
                 .firma-img {
                     border: none !important;
                     background: transparent !important;
                 }
 
-                /* 🔹 Forzar estilos secundarios */
+                /* 🔹 Ajustar colores */
                 body .bg-secondary {
                     background-color: #6c757d !important;
                     color: #fff !important;
@@ -113,8 +178,17 @@ function PrintHtml() {
                     color: #000 !important;
                 }
 
-                /* 🔹 Forzar colores en impresión */
+                /* 🔹 Ajustes estrictos para impresión */
                 @media print {
+                    @page {
+                        margin: 5mm;  /* ⭐ Ajusta márgenes del papel */
+                    }
+
+                    body {
+                        margin: 0 !important;
+                        padding: 0 !important;
+                    }
+
                     .bg-secondary,
                     .table-secondary,
                     .table-secondary > th,
@@ -138,4 +212,5 @@ function PrintHtml() {
         ventana.close();
     };
 }
+
 

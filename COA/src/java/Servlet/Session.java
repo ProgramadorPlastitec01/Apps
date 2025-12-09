@@ -88,6 +88,7 @@ public class Session extends HttpServlet {
                                 session.setAttribute("Apellido", obj_session[10]);
                                 session.setAttribute("Permisos", obj_session[14]);
                                 session.setAttribute("Estado", obj_session[11]);
+                                session.setAttribute("Firma", obj_session[15]);
                                 request.setAttribute("welcome", true);
                                 request.getRequestDispatcher("Start?opc=1").forward(request, response);
                             }

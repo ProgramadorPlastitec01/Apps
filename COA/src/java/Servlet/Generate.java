@@ -30,6 +30,7 @@ public class Generate extends HttpServlet {
             int Document = Integer.parseInt(session.getAttribute("Documento").toString());
             int CodeSig = Integer.parseInt(session.getAttribute("Codigo").toString());
             int opt = Integer.parseInt(request.getParameter("opt"));
+            String Signature = session.getAttribute("Firma").toString();
             int Order = 0, IdCertificates = 0, TempDelete = 0, Doc = 0, Cod = 0, Temp = 0, StateCerti = 0;
             String Type = "", Product = "", Batch = "", Html = "", Code = "", Consecutive = "", Customer = "", IdCertiMasive = "", Category = "",
                     Justification = "", Record = "", FormatName = "", Message = "", Amount = "";
@@ -213,15 +214,13 @@ public class Generate extends HttpServlet {
                         Temp = 0;
                     }
                     if ((IdRol == 1) || (IdRol == 2)) {
-                        lst_sign = SignatureConn.ConsultSignature(Document, CodeSig);
-                        if (lst_sign != null) {
-                            String[] ArgSign = Util.parseResult(lst_sign.get(0));
+                        if (Signature != null) {
                             if (Temp == 0) {
                                 //<editor-fold defaultstate="collapsed" desc="SIGNATURE MASIVE">
                                 String[] IdsCerti = IdCertiMasive.replace("][", "///").replace("[", "").replace("]", "").split("///");
                                 for (int i = 0; i < IdsCerti.length; i++) {
                                     IdCertificates = Integer.parseInt(IdsCerti[i]);
-                                    result = CertificatesJpa.CertificatesUpdateSignature(IdCertificates, ArgSign[0]);
+                                    result = CertificatesJpa.CertificatesUpdateSignature(IdCertificates, Signature);
                                 }
                                 if (result) {
                                     request.setAttribute("UpdateCertificate", result);
@@ -231,15 +230,13 @@ public class Generate extends HttpServlet {
                             } else {
                                 //<editor-fold defaultstate="collapsed" desc="SIGNATURE UNIQUE">
                                 IdCertificates = Integer.parseInt(IdCertiMasive);
-                                result = CertificatesJpa.CertificatesUpdateSignature(IdCertificates, ArgSign[0]);
+                                result = CertificatesJpa.CertificatesUpdateSignature(IdCertificates, Signature);
                                 if (result) {
                                     request.setAttribute("UpdateCertificate", result);
                                 }
                                 request.getRequestDispatcher("Generate?opt=2&Type=" + Type + "&IdCertificates=" + IdCertificates + "&TempDelete=0").forward(request, response);
                                 //</editor-fold>
                             }
-                        } else {
-                            request.getRequestDispatcher("Generate?opt=1&Type=" + Type).forward(request, response);
                         }
                     }
                     //</editor-fold>

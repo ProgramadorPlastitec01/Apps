@@ -29,8 +29,8 @@ public class Visual extends TagSupport {
         CertificatesJpaController CertificatesJpa = new CertificatesJpaController();
         ConnectionGeneracionLotes GeneracionLotesJpa = new ConnectionGeneracionLotes();
         ConnectionSignature SignatureConn = new ConnectionSignature();
-        String Type = "", Product = "", ProductFact = "", Batch = "", DataTechnicalSheet = "", Html = "", BatchLay = "", Record = "", FormatName = "", Message = "";
-        int Order = 0, IdForm = 0, Count = 1, Count2 = 1, IdCertificates = 0, State = 0, IdSig = 0, TempDelete = 0, StateCerti = 0;
+        String Type = "", Product = "", ProductFact = "", Batch = "", DataTechnicalSheet = "", Html = "", BatchLay = "", Record = "", FormatName = "", Message = "", IdSig = "";
+        int Order = 0, IdForm = 0, Count = 1, Count2 = 1, IdCertificates = 0, State = 0, TempDelete = 0, StateCerti = 0;
         List lst_content = null;
         List lst_headFact = null;
         List lst_RLab = null;
@@ -167,7 +167,7 @@ public class Visual extends TagSupport {
                     Html = Obj_Format[3].toString();
                     State = Integer.parseInt(Obj_Format[4].toString());
                     if (Obj_Format[5] != null) {
-                        IdSig = Integer.parseInt(Obj_Format[5].toString());
+                        IdSig = Obj_Format[5].toString();
                     }
                     //</editor-fold>
                 } else {
@@ -674,15 +674,10 @@ public class Visual extends TagSupport {
                         Html = Html.replaceAll("<input type=\"checkbox\"", "<input type=\"checkbox\" class=\"disabled\" ");
                         Html = Html.replaceAll("<input name=\"result\" type=\"radio\"", "<input name=\"result\" type=\"radio\" class=\"disabled\"");
                         if (StateCerti == 3) {
-                            lst_sign = SignatureConn.ConsultSignatureId(IdSig);
-                            if (lst_sign != null) {
-                                String[] ArgSign = Util.parseResult(lst_sign.get(0));
-                                String valorCoord = ArgSign[3].replace("\"", "&quot;").replace("'", "&#39;");
-                                Html = Html.replaceAll(
-                                        "<input type=\"hidden\" id=\"coordenadas-hidden\" value=\"\">",
-                                        "<input type='hidden' id=\"coordenadas-hidden\" value=\"" + valorCoord + "\">"
-                                );
-
+                            if (IdSig != null && !IdSig.equals("")) {
+                                Html = Html.replaceAll("<div id=\"SignatureImage\"></div>", "<div id=\"SignatureImage\"><img src=\"Interface/Uploads/Signature/" + IdSig + "\" height=\"58px\" alt=\"Logo\" class=\"ImgSig\"></div>");
+                            }else{
+                                Html = Html.replaceAll("<div id=\"SignatureImage\"></div>", "<div id=\"SignatureImage\"><span class='text-warning'>--- No existe firma asociada ---</span></div>");
                             }
                         }
                         Html = Html.replaceAll(
