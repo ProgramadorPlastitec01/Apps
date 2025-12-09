@@ -262,14 +262,11 @@ public class Tag_Document extends TagSupport {
                     out.print("<input type='hidden' name='IdDocx' value='" + IdDocx + "'>");
                     out.print("<input type='hidden' name='idSegx' value='" + idSegx + "'>");
                 }
-                
-                
-                
+
                 out.print("<div class='d-flex'>");
-                
-                
+
                 out.print("<div class='col-lg-6' style='display: grid;'>");
-                
+
                 out.print("<div class='d-flex'>");
                 out.print("<div class='mr-2 mt-2 mb-2 wdtFixe' data-toggle='tooltip' data-placemente='top' title='Tipo de registro'>");
                 out.print("<select class='form-control' name='TxtTemplate' id='idtemplateshr' required onchange='searchDocs(this.value)'>");
@@ -290,7 +287,7 @@ public class Tag_Document extends TagSupport {
                 out.print("</select>");
                 out.print("</div>");
                 out.print("<input type='text' class='form-control col-lg-6 mt-2 mb-2' name='TxtMail' id='' placeholder='Correo' data-toggle='tooltip' data-placement='top' title='Correo@correo.com' required>");
-                
+
                 out.print("</div>");
 
                 out.print("<input type='text' class='form-control mr-3' name='TxtBusinessName' id='' placeholder='Razon Social' value='" + (idSegx.equals("") ? "" : namex) + "'  data-toggle='tooltip' data-placement='top' title='Razon Social' required>");
@@ -370,6 +367,7 @@ public class Tag_Document extends TagSupport {
                             out.print("</div>");
                             ListAttach += "[" + ObjAtch[0] + "]";
                         }
+                        out.print("<input type='hidden' class='form-control' name='TxtFiles' id='ListAttach' value='" + ListAttach + "'>");
                     } else {
                         out.print("<div class='text-center mt-4'>");
                         out.print("<h6>No se han encontrado documentos relacionados a este registro, favor comunicarse al área TI.</h6>");
@@ -618,12 +616,17 @@ public class Tag_Document extends TagSupport {
                         out.print("<button class='btn btn-success' disabled>Aprobar &nbsp;<i class=\"fas fa-share\"></i></button>");
                     }
                     out.print("</div>");
-                    
-                     out.print("<div id='Imprimir1' style=\"max-width: 100%;\">");
-                        out.print("<div id='mi-tabla'>");
-                        out.print(Template);
-                        out.print("</div>");
-                        out.print("</div>");
+
+                    out.print("<div id='Imprimir1' style=\"max-width: 100%;\">");
+                    out.print("<div id='mi-tabla'>");
+                    out.print(Template);
+                    out.print("</div>");
+                    out.print("</div>");
+                    out.print("<script>");
+                    out.print(" document.addEventListener(\"DOMContentLoaded\", function() {\n"
+                            + "    document.body.classList.add(\"sidebar-mini\");\n"
+                            + " });");
+                    out.print("</script>");
 
                     //<editor-fold defaultstate="collapsed" desc="DOCUMENT OBSERVATIONS">
                     out.print("<div class='sweet-local' tabindex='-1' id='Ventana9' style='opacity: 1.03; display:none;'>");
@@ -2228,11 +2231,11 @@ public class Tag_Document extends TagSupport {
 //                        }
 //                        //</editor-fold>
 
-                        out.print("<div id='Imprimir1' style=\"max-width: 100%;\">");
-                        out.print("<div id='mi-tabla'>");
-                        out.print(Template);
-                        out.print("</div>");
-                        out.print("</div>");
+//                        out.print("<div id='Imprimir1' style=\"max-width: 100%;\">");
+//                        out.print("<div id='mi-tabla'>");
+//                        out.print(Template);
+//                        out.print("</div>");
+//                        out.print("</div>");
                     } catch (Exception e) {
                         out.print("<div class=''>");
                         out.print(Template);

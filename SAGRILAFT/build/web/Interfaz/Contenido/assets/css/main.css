@@ -1705,6 +1705,18 @@ div:empty:not(:focus):before {
     pointer-events: auto;
 }
 
+.tabla-ajustada {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabla-ajustada td,
+.tabla-ajustada th {
+    /*word-break: break-word;*/
+    white-space: normal;
+}
+
+
 /* Posiciones cuando el menú está abierto (orden correcto hacia la izquierda) */
 .menu-container.open .option:nth-child(2) { transform: translateY(-50%) translateX(-130px); }
 .menu-container.open .option:nth-child(3) { transform: translateY(-50%) translateX(-210px); }

@@ -172,7 +172,7 @@ public class Document extends HttpServlet {
                         } else if (TypeContra.equals("cli")) {
                             tyCon = "Cliente";
                         }
-                        formClient = formClient.replace("[[0][N/A][N/A][N/A]", "[[0][" + tyDoc + "][N/A][" + tyCon + "]");
+                        formClient = formClient.replace("[[0]]/", "[[0][" + tyDoc + "][N/A][" + tyCon + "]/");
                     }
                     if (RenewUser == 1) {
                         //<editor-fold defaultstate="collapsed" desc="RE NEW DOCUMENT">

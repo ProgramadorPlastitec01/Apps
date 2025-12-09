@@ -6,12 +6,12 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Cient | SGLT</title>
-        <script type = "text/javascript" >
+<!--        <script type = "text/javascript" >
             history.pushState(null, null, 'ClientSection.jsp');
             window.addEventListener('popstate', function (event) {
                 history.pushState(null, null, 'ClientSection.jsp');
             });
-        </script>
+        </script>-->
         <link rel="stylesheet" href="Interfaz/Contenido/assets/modules/datatables/datatables.min.css">
         <link rel="stylesheet" href="Interfaz/Contenido/assets/modules/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css">
         <link rel="stylesheet" href="Interfaz/Contenido/assets/modules/datatables/Select-1.2.4/css/select.bootstrap4.min.css">

@@ -17,6 +17,10 @@ import Mail.SendMail;
 
 public class ClientSection extends HttpServlet {
 
+    private String parseOrDefault(String value) {
+        return (value == null || value.trim().isEmpty()) ? "N/A" : value.trim();
+    }
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=ISO-8859-1");
@@ -30,9 +34,9 @@ public class ClientSection extends HttpServlet {
         }
 
         DocumentControllerJpa DocumentJpa = new DocumentControllerJpa();
-        
+
         SendMail MailData = new SendMail();
-        
+
         int opt = 0, IdDoc = 0, module = 0, NroIdenti = 0, counter = 0, TypeSig = 0, IdSig = 0, State = 0;
         String Format = "", Forms = "", TypeProc = "", DateInit = "", TypeThird = "", FinalForm = "", ValidAction = "", AlterText = "",
                 BusinessName = "", NroDv = "", Country = "", City = "", Address = "", Phones = "", Mail = "", WebPage = "", PostalCode = "",
@@ -42,7 +46,8 @@ public class ClientSection extends HttpServlet {
                 DateDocum = "", TypeDoc = "", Place = "", NroDoc = "", IsPep = "", Participaction = "", Entity = "", AccountType = "",
                 AccountNumb = "", ResourceOrigin = "", CoinType = "", Assets = "", Passives = "", Heritage = "", Income = "", Expenses = "",
                 OtherIncome = "", ConceptIncome = "", AnioReport = "", UndReport = "", Quest = "", Obs = "", MoneyOne = "", MoneyTwo = "", DetailOne = "",
-                DetailTwo = "", ReadDoc = "", FilesDocs = "", IdFiles = "", FileToAttch = "", FilesChange = "", Signature = "", TypeLtter = "", NroIdentix = "";
+                DetailTwo = "", ReadDoc = "", FilesDocs = "", IdFiles = "", FileToAttch = "", FilesChange = "", Signature = "", TypeLtter = "", NroIdentix = "",
+                TypeDocGeneral = "", DateComerc = "", ActivityComercial = "";
         boolean result = false;
         List lst_DocumentJpa = null;
         String[] DtaFormat = {};
@@ -126,26 +131,25 @@ public class ClientSection extends HttpServlet {
                 case 3:
                     //<editor-fold defaultstate="collapsed" desc="MODULE 1 - GENERAL INFORMATION">
                     module = 1;
-                    IdDoc = Integer.parseInt(request.getParameter("IdDoc"));
-                    BusinessName = request.getParameter("TxtNameBusi");
-                    NroIdentix = request.getParameter("NmbIndeti");
-                    NroDv = request.getParameter("TxtDv");
-                    Country = request.getParameter("TxtCountry");
-                    City = request.getParameter("TxtCity");
-                    Address = request.getParameter("TxtAddress");
-                    Phones = request.getParameter("TxtPhones");
-                    Mail = request.getParameter("TxtMail");
-                    WebPage = request.getParameter("TxtWebPage");
-                    PostalCode = request.getParameter("TxtPostalCode");
-                    CodeCiiu_1 = request.getParameter("CbxCiiu1");
-                    CodeCiiu_2 = request.getParameter("CbxCiiu2");
-                    NroComercial = request.getParameter("TxtNroComercial");
-                    TypeCompany = request.getParameter("TypeCompany");
-                    ClasiCompany = request.getParameter("TxtClasiCompany");
-                    ValidAction = request.getParameter("TxtValidAction");
+                    IdDoc = Integer.parseInt(parseOrDefault(request.getParameter("IdDoc")));
+                    BusinessName = parseOrDefault(request.getParameter("TxtNameBusi"));
+                    TypeDocGeneral = parseOrDefault(request.getParameter("CbxTypeDocGeneral"));
+                    NroIdentix = parseOrDefault(request.getParameter("NmbIndeti"));
+                    NroDv = parseOrDefault(request.getParameter("TxtDv"));
+                    City = parseOrDefault(request.getParameter("TxtCity"));
+                    Address = parseOrDefault(request.getParameter("TxtAddress"));
+                    Phones = parseOrDefault(request.getParameter("TxtPhones"));
+                    Mail = parseOrDefault(request.getParameter("TxtMail"));
+                    WebPage = parseOrDefault(request.getParameter("TxtWebPage"));
+                    CodeCiiu_1 = parseOrDefault(request.getParameter("CbxCiiu1"));
+                    NroComercial = parseOrDefault(request.getParameter("TxtNroComercial"));
+                    DateComerc = parseOrDefault(request.getParameter("TxtDateComer"));
+                    TypeCompany = parseOrDefault(request.getParameter("TypeCompany"));
+                    ActivityComercial = parseOrDefault(request.getParameter("comercialActiv"));
+                    ValidAction = parseOrDefault(request.getParameter("TxtValidAction"));
 
-                    Forms = "[[" + module + "][" + BusinessName + "][" + NroIdentix + "][" + NroDv + "][" + Country + "][" + City + "][" + Address + "][" + Phones + "][" + Mail + "]"
-                            + "[" + WebPage + "][" + PostalCode + "][" + CodeCiiu_1 + "][" + CodeCiiu_2 + "][" + NroComercial + "][" + TypeCompany + "][" + ClasiCompany + "]]";
+                    Forms = "[[" + module + "][" + BusinessName + "][" + TypeDocGeneral + "][" + NroIdentix + "][" + NroDv + "][" + City + "][" + Address + "][" + Phones + "][" + Mail + "]"
+                            + "[" + WebPage + "][" + CodeCiiu_1 + "][" + NroComercial + "][" + DateComerc + "][" + TypeCompany + "][" + ActivityComercial + "]]";
                     for (int i = 0; i < DtaFormat.length; i++) {
                         if (i == DtaFormat.length - 1) {
                             if (i != module) {
@@ -221,43 +225,26 @@ public class ClientSection extends HttpServlet {
                     //</editor-fold>
                     break;
                 case 5:
-                    //<editor-fold defaultstate="collapsed" desc="TRIBUTARY INFORMATION">
+                    //<editor-fold defaultstate="collapsed" desc="MODULE 3 - PEP">
                     module = 3;
                     IdDoc = Integer.parseInt(request.getParameter("IdDoc"));
                     ValidAction = request.getParameter("TxtValidAction");
-                    Iva = request.getParameter("TxtIva");
-                    if (Iva.equals("Otro")) {
-                        AlterText = request.getParameter("TxtOther");
-                        Iva = "Otro/" + AlterText;
-                    }
-                    try {
-                        Resolution = request.getParameter("TxtResolution");
+                    String parcialForm = "";
+                    IsPep = request.getParameter("IsPep");
+                    if (IsPep.equals("Si")) {
+                        for (int i = 1; i <= 6; i++) {
+                            Quest = request.getParameter("Txt_Quest" + i + "");
 
-                    } catch (Exception e) {
-                        Resolution = "NA";
-                    }
-
-                    SelfRetaining = request.getParameter("TxtRetaining");
-                    if (SelfRetaining.contains("Otro")) {
-                        AlterText = request.getParameter("TxtOther2");
-                        SelfRetaining = "Otro/" + AlterText;
-                    } else if (SelfRetaining.contains("Si")) {
-                        ReteSource = request.getParameter("TxtReteSource");
-                        if (ReteSource.equals("Si")) {
-                            ValueReteSource = request.getParameter("TxtOther3");
+                            Obs = request.getParameter("Txt_Obs" + i + "");
+                            if (Obs.equals("")) {
+                                Obs = "NA";
+                            }
+                            parcialForm += "[" + Quest + "/" + Obs + "]";
                         }
-                        SelfRetaining = SelfRetaining + "/" + ReteSource + "/" + ValueReteSource;
+                        Forms = "[[" + module + "][Si]" + parcialForm + "]";
+                    } else {
+                        Forms = "[[" + module + "][No][1][2][3][4][5][6]]";
                     }
-                    DataRetaining = request.getParameter("TxtDataRetain");
-                    if (DataRetaining.equals("Otro")) {
-                        AlterText = request.getParameter("TxtOther4");
-                        DataRetaining = "Otro/" + AlterText;
-                    }
-                    Ica = request.getParameter("TxtIca");
-                    TributaryCity = request.getParameter("TxtCityTri");
-                    UserZone = request.getParameter("TxtUserZone");
-
-                    Forms = "[[" + module + "][" + Iva + "][" + Resolution + "][" + SelfRetaining + "][" + DataRetaining + "][" + Ica + "][" + TributaryCity + "][" + UserZone + "]]";
 
                     for (int i = 0; i < DtaFormat.length; i++) {
                         if (i == DtaFormat.length - 1) {
@@ -276,11 +263,75 @@ public class ClientSection extends HttpServlet {
                     }
                     if (ValidAction.equals("2")) {
                         module++;
+                    } else if (ValidAction.equals("3")) {
+                        module = module + 2;
                     }
                     result = DocumentJpa.UpdateDocumentFormClient(IdDoc, FinalForm, module);
                     request.setAttribute("UpdateFormClient", result);
                     request.getRequestDispatcher("ClientSection?opt=1").forward(request, response);
                     //</editor-fold>
+                    
+                    
+//                    //<editor-fold defaultstate="collapsed" desc="TRIBUTARY INFORMATION">
+//                    module = 3;
+//                    IdDoc = Integer.parseInt(request.getParameter("IdDoc"));
+//                    ValidAction = request.getParameter("TxtValidAction");
+//                    Iva = request.getParameter("TxtIva");
+//                    if (Iva.equals("Otro")) {
+//                        AlterText = request.getParameter("TxtOther");
+//                        Iva = "Otro/" + AlterText;
+//                    }
+//                    try {
+//                        Resolution = request.getParameter("TxtResolution");
+//
+//                    } catch (Exception e) {
+//                        Resolution = "NA";
+//                    }
+//
+//                    SelfRetaining = request.getParameter("TxtRetaining");
+//                    if (SelfRetaining.contains("Otro")) {
+//                        AlterText = request.getParameter("TxtOther2");
+//                        SelfRetaining = "Otro/" + AlterText;
+//                    } else if (SelfRetaining.contains("Si")) {
+//                        ReteSource = request.getParameter("TxtReteSource");
+//                        if (ReteSource.equals("Si")) {
+//                            ValueReteSource = request.getParameter("TxtOther3");
+//                        }
+//                        SelfRetaining = SelfRetaining + "/" + ReteSource + "/" + ValueReteSource;
+//                    }
+//                    DataRetaining = request.getParameter("TxtDataRetain");
+//                    if (DataRetaining.equals("Otro")) {
+//                        AlterText = request.getParameter("TxtOther4");
+//                        DataRetaining = "Otro/" + AlterText;
+//                    }
+//                    Ica = request.getParameter("TxtIca");
+//                    TributaryCity = request.getParameter("TxtCityTri");
+//                    UserZone = request.getParameter("TxtUserZone");
+//
+//                    Forms = "[[" + module + "][" + Iva + "][" + Resolution + "][" + SelfRetaining + "][" + DataRetaining + "][" + Ica + "][" + TributaryCity + "][" + UserZone + "]]";
+//
+//                    for (int i = 0; i < DtaFormat.length; i++) {
+//                        if (i == DtaFormat.length - 1) {
+//                            if (i != module) {
+//                                FinalForm += "[" + DtaFormat[i] + "]";
+//                            } else {
+//                                FinalForm += Forms;
+//                            }
+//                        } else {
+//                            if (i != module) {
+//                                FinalForm += "[" + DtaFormat[i] + "]/";
+//                            } else {
+//                                FinalForm += Forms + "/";
+//                            }
+//                        }
+//                    }
+//                    if (ValidAction.equals("2")) {
+//                        module++;
+//                    }
+//                    result = DocumentJpa.UpdateDocumentFormClient(IdDoc, FinalForm, module);
+//                    request.setAttribute("UpdateFormClient", result);
+//                    request.getRequestDispatcher("ClientSection?opt=1").forward(request, response);
+//                    //</editor-fold>
                     break;
                 case 6:
                     //<editor-fold defaultstate="collapsed" desc="PAYMENT CONDITIONS">
@@ -535,7 +586,7 @@ public class ClientSection extends HttpServlet {
                     module = 9;
                     IdDoc = Integer.parseInt(request.getParameter("IdDoc"));
                     ValidAction = request.getParameter("TxtValidAction");
-                    String parcialForm = "";
+                    String SparcialForm = "";
                     IsPep = request.getParameter("IsPep");
                     if (IsPep.equals("Si")) {
                         for (int i = 1; i <= 6; i++) {
@@ -545,9 +596,9 @@ public class ClientSection extends HttpServlet {
                             if (Obs.equals("")) {
                                 Obs = "NA";
                             }
-                            parcialForm += "[" + Quest + "/" + Obs + "]";
+                            SparcialForm += "[" + Quest + "/" + Obs + "]";
                         }
-                        Forms = "[[" + module + "][Si]" + parcialForm + "]";
+                        Forms = "[[" + module + "][Si]" + SparcialForm + "]";
                     } else {
                         Forms = "[[" + module + "][No][1][2][3][4][5][6]]";
                     }
