@@ -164,7 +164,7 @@ public class Email {
                 message.setSubject("Activos en Proceso No Finalizado " + obj_proceso[9] + "-" + obj_proceso[1] + "");
 
                 MimeBodyPart htmlPart = new MimeBodyPart();
-                String htmlContent = "\n"
+                String htmlContent = ""
                         + "<p style='font-family: Segoe UI; font-size: 14px;'>Buen día,</p>"
                         + "<p style='font-family: Segoe UI; font-size: 14px;'>El área <b>" + obj_proceso[8] + "</b> envio el activo  <b>" + obj_proceso[1] + "</b> que se encuentra <b style='color:red;'>" + obj_proceso[10] + "</b>,Se requiere definir si se libera definitivamente o se devuleve a activos en proceso.</p>"
                         + "<table style='width:50%; font-family: Segoe UI;'>"
