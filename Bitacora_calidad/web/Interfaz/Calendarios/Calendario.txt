@@ -1,0 +1,12 @@
+   out.print("<label>Fecha turno:</label>");
+                        out.print("<input name='txt_fch_turno' id='date_turno' type='text' class='input_field' placeholder='Insertar fecha del turno'/>");          
+                        out.print("<script type='text/javascript'>");
+                        out.print("$(function() { $( '#date_turno' ).datepicker({ altFormat: 'yy, d MM, DD' }); });");
+                        out.print("</script>");
+
+----
+
+        <link href="Calendarios/themes/base/jquery.ui.all.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="Calendarios/jquery-1.4.2.js"></script>
+        <script type="text/javascript" src="Calendarios/jquery.ui.core.js"></script>
+        <script type="text/javascript" src="Calendarios/jquery.ui.datepicker.js"></script>

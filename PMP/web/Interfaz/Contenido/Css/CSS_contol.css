@@ -1,0 +1,13 @@
+.fr-element.fr-view img {
+    width:  auto;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+} 
+
+.regis img {
+    width: auto;
+    height: 300px !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+}

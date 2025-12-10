@@ -1,0 +1,88 @@
+/* general styles */
+body {
+    color: #2f3640;
+    /*font-family: Tahoma, Geneva, sans-serif;*/
+    font-family:"Segoe UI";
+    font-size: 13px;
+}
+
+.table {
+    width:100%
+}
+.table th{
+    padding: 5px 10px 5px 10px;
+    border: none;
+    font-size: 12px;
+    font-weight: bold;
+    color: #FFF;
+    background-color:#03899C;
+}
+
+.table td{
+    padding: 2px 5px 5px 2px;
+    border-color: #03899C;
+    font-size: 11px;
+    color: #2f3640;
+    background-color:#fff;
+    border-right: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    text-transform: uppercase;
+}
+.table td b{
+    font-size: 11px;
+    color: #000;
+}
+
+.navigation {
+    margin:10px 0 20px;
+}
+.navigation, .navigation a {
+    color:#608000;
+    font-size:12px;
+}
+.navigation a {
+    margin-right:4px;
+}
+a:link, a:visited {
+    text-decoration:underline
+}
+.footer, .footer * {
+    color:#802D00;
+    font-size:15px
+}
+
+.jqte-test {
+    display:block;
+    margin:0 0 10px;
+    padding:6px;
+    width:95%;
+    background:#FFF;
+    border:#AAA 1px solid;
+    font-size:13px;
+}
+textarea.jqte-test, div.jqte-test, span.jqte-test {
+    min-height:100px;
+}
+button {
+    display:block;
+    width:154px;
+    background:#03899C;
+    color:#03899C;
+    font-size:13px;
+    font-weight:bold;   
+    cursor:pointer;
+}
+button:hover {
+    background:#03899C;
+    color:#fff;
+    text-decoration:none !important;
+    cursor:pointer
+}
+
+button:active {
+    background:#03899C;
+    color:#fff;
+    box-shadow:0 0 3px #000,inset 0 -2px 2px #333;
+    -webkit-box-shadow:0 0 3px #000, inset 0 -2px 2px #333;
+    -moz-box-shadow:0 0 3px #000, inset 0 -2px 2px #333;
+}

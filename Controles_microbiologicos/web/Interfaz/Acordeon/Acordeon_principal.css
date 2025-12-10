@@ -1,0 +1,78 @@
+article.accordion
+{
+    display: block;
+    width:100%;
+    background-color: #FFF;
+    border-radius: 11px;
+}
+
+article.accordion section
+{
+    display: block;
+    width:100%;
+    height: 2em;
+    padding: 0 0;
+    margin: 0 0 0.5em 0;
+    color: #fff;
+    background-color: #f5f5f5;
+    overflow: hidden;
+    /*	border-radius: 3px;*/
+    border-radius: 11px;
+    
+}
+
+article.accordion section h3
+{
+/*    font-weight: bold;*/
+    width: 100%;
+    line-height: 2em;
+    padding: 0 10px;
+    margin: 0;
+    color: #ddd;
+    background-color: #A146BF;
+    border-radius: 11px;
+}
+table{
+}
+.table article.accordion section h3 a:last-child {
+    border-radius: 0 0 11px 0;
+}
+article.accordion section h3 a
+{
+    width:100%;
+    color: #fff;
+    background-color: #A146BF;
+    /*test arriba*/
+    display: block;
+    font-size: 14px;
+    width: 100%;
+    line-height: 2em;
+    text-decoration: none;
+    outline: 0 none;
+    border-radius: 11px;
+     
+}
+article.accordion section:target
+{
+    height: 100%;
+    background-color: #fff;
+   // border: 1px solid #B4045F;
+       
+}
+
+article.accordion section:target h3
+{
+    font-size: 1.6em;
+    color: #333;
+   border-radius: 11px;
+}
+article.accordion section,
+article.accordion section h3
+{
+    -webkit-transition: all 0s ease;
+    -moz-transition: all 0s ease;
+    -ms-transition: all 0s ease;
+    -o-transition: all 0s ease;
+    transition: all 0s ease;
+   // border-radius: 11px;
+}

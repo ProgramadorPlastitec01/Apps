@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+    <servlet>
+        <servlet-name>CES</servlet-name>
+        <servlet-class>Servlets.CES</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CAFE</servlet-name>
+        <servlet-class>Servlets.CAFE</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CES</servlet-name>
+        <url-pattern>/CES</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CAFE</servlet-name>
+        <url-pattern>/CAFE</url-pattern>
+    </servlet-mapping>
+    <session-config>
+        <session-timeout>
+            2880
+        </session-timeout>
+    </session-config>
+</web-app>

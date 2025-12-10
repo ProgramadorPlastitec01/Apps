@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+        <title>jOrgChart - A jQuery OrgChart Plugin</title>
+    </head>
+    <body >
+        <script src="api_google_1.js"></script>
+        <script src="api_google_2.js"></script>
+        <link rel="stylesheet" href="jquery.jOrgChart.css"/>
+        <script src="jquery.jOrgChart.js"></script>
+        <script src="Js_mapa.js"></script>
+        <script src="Jq_mapa.js"></script>
+       <ul id="org" style="display:none">
+            <li style="border: 2px black solid">
+                Food
+                <ul>
+                    <li id="beer"><div style="border: 2px blue solid">Beer</div></li>
+                    <li style="border: 2px solid blue">Vegetables
+                        <ul>
+                            <li>Pumpkin</li>
+                            <li>
+                                <a href="http://tquila.com" target="_blank">Aubergine</a>
+                                <p>A link and paragraph is all we need.</p>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="fruit">Fruit
+                        <ul>
+                            <li>Apple
+                                <ul>
+                                    <li>Granny Smith</li>
+                                </ul>
+                            </li>
+                            <li>Berries
+                                <ul>
+                                    <li>Blueberry</li>
+                                    <li>Cucumber</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>Bread</li>
+                    <li class="collapsed">Chocolate
+                        <ul>
+                            <li>Topdeck</li>
+                            <li>Reese's Cups</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>     
+        
+        <div id="chart" class="orgChart"></div>
+    </body>
+</html>

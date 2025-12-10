@@ -1,0 +1,39 @@
+table{
+    width:100%;
+    font-size: 11px;
+}
+thead tr:last-of-type th{
+    border-bottom-width:1px;
+}
+tbody th{
+    border-right-width:1px;
+    background-color: #C45FB6;
+    color: #FFFFFF;
+}
+th:empty{
+    border:none;
+}
+th,td{
+    vertical-align:top;
+    padding:0.50em;
+    border:1px solid #ccc;
+}
+th{
+    font-weight:bold;
+    text-align:center
+}
+tbody tr:nth-of-type(odd){
+    background:rgba(0,0,0,0.05);
+}
+tfoot{
+    text-align:center;
+}
+tfoot td{
+    border-top-width:2px;
+}
+tr:hover{
+    background-color: #DBDADA;
+}
+tbody tr:hover{
+    background-color: #DBDADA;
+}

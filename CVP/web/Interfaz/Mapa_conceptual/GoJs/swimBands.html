@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Layer Bands using a Background Part</title>
+        <meta name="description" content="Showing bands for the layers in a diagram." />
+        <meta charset="UTF-8">
+        <script src="go.js"></script>
+    </head>
+    <body onload="init()">
+        <script id="code">
+            var HORIZONTAL = true;  // this constant parameter can only be set here, not dynamically
+            function BandedTreeLayout() {
+                go.TreeLayout.call(this);
+                this.layerStyle = go.TreeLayout.LayerUniform;  // needed for straight layers
+            }
+            go.Diagram.inherit(BandedTreeLayout, go.TreeLayout);
+            BandedTreeLayout.prototype.commitLayers = function (layerRects, offset) {
+                var bands = this.diagram.findPartForKey("_BANDS");
+                if (bands) {
+                    var model = this.diagram.model;
+                    bands.location = this.arrangementOrigin.copy().add(offset);
+                    for (var it = bands.elements; it.next(); ) {
+                        var idx = it.key;
+                        var elt = it.value;  // the item panel representing a band
+                        elt.visible = idx < layerRects.length;
+                    }
+                    var arr = bands.data.itemArray;
+                    for (var i = 0; i < layerRects.length; i++) {
+                        var itemdata = arr[i];
+                        if (itemdata) {
+                            model.setDataProperty(itemdata, "bounds", layerRects[i]);
+                        }
+                    }
+                }
+            };
+            function init() {
+                //   if (window.goSamples)
+                //    goSamples();  // init for these samples -- you don't need to call this
+                var $ = go.GraphObject.make;
+                myDiagram = $(go.Diagram, "myDiagramDiv",
+                        {
+                            initialContentAlignment: go.Spot.Center,
+                            layout: $(BandedTreeLayout, // custom layout is defined above
+                                    {
+                                        angle: HORIZONTAL ? 0 : 90,
+                                        arrangement: HORIZONTAL ? go.TreeLayout.ArrangementVertical : go.TreeLayout.ArrangementHorizontal
+                                    }),
+                            "undoManager.isEnabled": true
+                        });
+                myDiagram.nodeTemplate =
+                        $(go.Node, go.Panel.Auto,
+                                $(go.Shape, "Rectangle",
+                                        new go.Binding("fill", "color"),
+                                        new go.Binding("stroke", "border")),
+                                $(go.TextBlock, {margin: 8},
+                                        new go.Binding("text", "key"),
+                                        new go.Binding("stroke", "fontc")));
+                myDiagram.nodeTemplateMap.add("Bands",
+                        $(go.Part, "Position",
+                                new go.Binding("itemArray"),
+                                {
+                                    isLayoutPositioned: false, // but still in document bounds
+                                    locationSpot: new go.Spot(0, 0, HORIZONTAL ? 0 : 16, HORIZONTAL ? 16 : 0), // account for header height
+                                    layerName: "Background",
+                                    pickable: false,
+                                    selectable: false,
+                                    itemTemplate:
+                                            $(go.Panel, HORIZONTAL ? "Vertical" : "Horizontal",
+                                                    new go.Binding("position", "bounds", function (b) {
+                                                        return b.position;
+                                                    }),
+                                                    $(go.TextBlock,
+                                                            {
+                                                                angle: HORIZONTAL ? 0 : 250,
+                                                                textAlign: "center",
+                                                                wrap: go.TextBlock.None,
+                                                                font: "bold 12pt sans-serif",
+                                                                stroke: "white",
+                                                                background: $(go.Brush, "Linear", {0: "green"})
+                                                            },
+                                                            new go.Binding("text"),
+                                                            // always bind "width" because the angle does the rotation
+                                                            new go.Binding("width", "bounds", function (r) {
+                                                                return HORIZONTAL ? r.width : r.height;
+                                                            })
+                                                            ),
+                                                    // option 1: rectangular bands:
+                                                    $(go.Shape,
+                                                            {stroke: null, strokeWidth: 0},
+                                                            new go.Binding("desiredSize", "bounds", function (r) {
+                                                                return r.size;
+                                                            }),
+                                                            new go.Binding("fill", "itemIndex", function (i) {
+                                                                return i % 2 == 0 ? go.Brush.darken("whitesmoke") : "whitesmoke";
+                                                            }).ofObject())
+                                                    )
+                                }
+                        ));
+
+                myDiagram.linkTemplate =
+                        $(go.Link,
+                                {routing: go.Link.Orthogonal, // Orthogonal routing
+                                    corner: 10}, // with rounded corners
+                                $(go.Shape),
+                                $(go.Shape, {toArrow: "Standard"})
+                                );
+                var nodearray = [
+                    {// this is the information needed for the headers of the bands
+                        key: "_BANDS",
+                        category: "Bands",
+                        itemArray: [
+                            {text: "Org"},
+                            {text: "Grupos"},
+                            {text: "Sub-grupos"},
+                            {text: "Validaciones"},
+                            {text: "Enlaces"}
+                        ]
+                    },
+                    {key: "PLASTITEC", color: "aqua", border: "#292929"},
+                    {key: "AREAS LIMPIAS", parent: "PLASTITEC", color: "aqua", font_color: "white", border: "aqua"},
+                    {key: "PROD. INSUMOS", parent: "PLASTITEC", color: "aqua", font_color: "white", border: "aqua"},
+                    {key: "PROD. FARMACEUTICA", parent: "PLASTITEC", color: "aqua", font_color: "white", border: "aqua"},
+                    {key: "SISTEMAS DE INFORMACION", parent: "PLASTITEC", color: "aqua", font_color: "white", border: "aqua"},
+                    {key: "APLICATIVOS", parent: "SISTEMAS DE INFORMACION", color: "aqua", font_color: "white", border: "aqua"},
+                    {key: "INSPECCION MANGA", parent: "APLICATIVOS", color: "aqua", font_color: "white", border: "aqua"},
+                    {key: "CONTROL GRAFADO", parent: "APLICATIVOS", color: "aqua", font_color: "white", border: "aqua"},
+                    {key: "REGISTROS LAB", parent: "APLICATIVOS", color: "aqua", font_color: "white", border: "aqua"},
+                    {key: "CONTROL FORMULAS", parent: "APLICATIVOS", color: "aqua", font_color: "white", border: "aqua"},
+                    {key: "DARUMA", parent: "APLICATIVOS", color: "aqua", font_color: "white", border: "aqua"},
+                    {key: "ENLACE", parent: "DARUMA", color: "aqua", font_color: "white", border: "aqua"}
+                ];
+                myDiagram.model = new go.TreeModel(nodearray);
+                // create the Overview and initialize it to show the main Diagram
+            }
+        </script>
+        <div id="sample">
+            <div id="myDiagramDiv" style="border: solid 1px black; width:70%; height:600px;"></div>
+        </div>
+    </body>
+</html>

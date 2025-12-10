@@ -1,0 +1,48 @@
+/* Basic styling */
+/* Draw the lines */
+.jOrgChart {
+    font-family:"Segoe UI";
+    font-size: 12px;
+}
+.jOrgChart .line {
+    height : 20px;
+    width  : 4px;
+}
+.jOrgChart .down {
+    background-color: grey;	
+    margin: 0px auto;
+}
+
+.jOrgChart .top {
+    border-top : 4px solid grey;
+}
+
+.jOrgChart .left {
+    border-right : 2px solid grey;
+
+}
+
+.jOrgChart .right {
+    border-left  : 2px solid grey;
+}
+
+/* node cell */
+.jOrgChart td {
+    text-align: center;
+    vertical-align  : top;
+    padding: 0;
+}
+
+/* The node */
+.jOrgChart .node {
+    background-color : #fff;
+    display: inline-block;
+    width  : 200px;
+    height : auto;
+    z-index : 10;
+    margin: 0 auto;
+    padding: 5px 5px 5px 5px;
+}
+.jOrgChart .node:hover {
+    background-color : #eee;
+}

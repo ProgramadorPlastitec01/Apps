@@ -1,0 +1,6 @@
+ul.MuiList-root li:nth-child(6) {
+    display: none !important;
+}
+ul.MuiList-root li:nth-child(4) {
+    display: none !important;
+}

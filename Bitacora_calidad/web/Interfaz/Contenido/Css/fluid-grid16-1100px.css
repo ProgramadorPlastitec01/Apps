@@ -1,0 +1,38 @@
+.wrapper{
+    max-width:1100px;
+    margin:0 auto;
+    padding:1.5em 1em;
+}
+.grids{
+    max-width:1120px;
+    clear:both;
+    margin:0 0 0 -2.679%;
+    list-style:none; /* So we can make grids out of lists. */
+}
+[class^="grid-"]{
+    float:left;
+    margin:0 2.679% 0 0;
+}
+.grids [class^="grid-"]{
+    margin:0 0 0 2.679%;
+}
+/*
+.grid-1{ width:3.571% }
+.grid-2{ width:9.821% }
+.grid-3{ width:16.071% }
+.grid-4{ width:22.321% }
+*/
+.grid-5{ width:45.571% }
+.grid-6{ width:43.821%; text-align: justify; float: right;}
+.grid-7{ width:48.071%; }
+.grid-8{ width:49.321%; }
+/*
+.grid-9{ width:51.571% }
+.grid-10{ width:50.821% }
+.grid-11{ width:66.071% }
+.grid-12{ width:72.321% }
+.grid-13{ width:78.571% }
+.grid-14{ width:84.821% }
+.grid-15{ width:91.071% }
+.grid-16{ width:97.321%; margin:0; }
+*/

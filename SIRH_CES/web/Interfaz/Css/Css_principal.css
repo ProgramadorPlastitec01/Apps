@@ -1,0 +1,90 @@
+body{
+    background-image: linear-gradient(to right top, #370535, #852748, #c85f4c, #f1a74f, #f9f871);
+    /*background-image: linear-gradient(to right top, #453461, #375287, #0072A5, #0092B7, #00B0BB, #2ECDB4);*/
+    /*background-image: linear-gradient(to right top, #453461, #B8A2D7, #00AC8C, #005B43);*/
+    text-align: center;
+    font-family:"Segoe UI";
+}
+
+input:focus, input.form-control:focus {
+
+    outline:none !important;
+    outline-width: 0 !important;
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+b{
+    color:#852748;
+}
+.B_color{
+    color:#852748;
+    font-size: 18px;
+}
+.B_color2{
+/*    color:#852748;
+    font-size: 25px;*/
+    font-size: 25px;
+    color:#852748;
+}
+hr {
+    border: 0;
+    height: 1px;
+    width: 50%;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+}
+h1{
+    color:#fff;
+    font-size: 42px;
+    text-shadow: 2px 2px #852748;
+}
+h3{
+    color:#852748;
+}
+h4{
+    color:#fff;
+}
+
+.circle{
+    background: rgba(255, 255, 255, 0.3);
+    border:none;
+    border-radius:25px;
+    text-align: center;
+}
+.circle2{
+    background: #fff;
+    border:none;
+    border-radius:25px;
+    text-align: center;
+}
+#datos{
+    background: rgba(255, 255, 255, 0.3);
+    border:none;
+    border-radius:25px;
+    font-size: 16px;
+    text-align: center;
+}
+
+
+input[type="text"]{
+    background: rgba(255, 255, 255, 0.5);
+    width: 60%;
+    height: 50px;
+    font-size: 18px;
+    border-radius:25px;
+    color:#c85f4c;
+    text-align: center;
+    border:none;
+}
+
+input[type="submit"]{
+    background-color: #c85f4c;
+    width: 40%;
+    height: 50px;
+    font-size: 18px;
+    border-radius:25px;
+    color:#fff;
+    text-align: center;
+    border:none;
+}
