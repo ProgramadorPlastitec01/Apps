@@ -9,7 +9,6 @@ import Controller.FormatJpaController;
 import Connection.ConnectionSQLServer;
 import Connection.ConnectionRegistrosLAB;
 import Connection.ConnectionGeneracionLotes;
-import Connection.ConnectionSignature;
 import Controller.SettingJpaController;
 import Controller.CertificatesJpaController;
 import java.util.List;
@@ -28,7 +27,6 @@ public class Visual extends TagSupport {
         SettingJpaController SettingJpa = new SettingJpaController();
         CertificatesJpaController CertificatesJpa = new CertificatesJpaController();
         ConnectionGeneracionLotes GeneracionLotesJpa = new ConnectionGeneracionLotes();
-        ConnectionSignature SignatureConn = new ConnectionSignature();
         String Type = "", Product = "", ProductFact = "", Batch = "", DataTechnicalSheet = "", Html = "", BatchLay = "", Record = "", FormatName = "", Message = "", IdSig = "";
         int Order = 0, IdForm = 0, Count = 1, Count2 = 1, IdCertificates = 0, State = 0, TempDelete = 0, StateCerti = 0;
         List lst_content = null;
@@ -193,23 +191,24 @@ public class Visual extends TagSupport {
                     if (lst_headFact != null && !lst_headFact.isEmpty() && lst_headFact.size() > 0) {
                         //<editor-fold defaultstate="collapsed" desc="HEAD FACTORY">
                         String[] ArgHead = Util.parseResult(lst_headFact.get(1));
-                        Html = Html.replace("XOrderX", ArgHead[0]);
-                        Html = Html.replace("XClientX", ArgHead[1]);
-                        Html = Html.replace("XAddressX", ArgHead[2]);
-                        Html = Html.replace("XPhoneX", ArgHead[3]);
-                        Html = Html.replace("XCityX", ArgHead[4]);
-                        Html = Html.replace("XCountryX", ArgHead[5]);
-                        Html = Html.replace("XBillX", ArgHead[6]);
-                        Html = Html.replace("XReissue_listX", ArgHead[7]);
-                        Html = Html.replace("XProductX", ArgHead[9]);
-                        Html = Html.replace("XAbilityX", ArgHead[10]);
+                        Html = Html.replace("XOrderX", (ArgHead[0].equals("NULL") || ArgHead[0] == null) ? "" + Order + "" : ArgHead[0]);
+                        Html = Html.replace("XClientX", (ArgHead[1].equals("NULL") || ArgHead[1] == null) ? "<span class='editable' contenteditable='true'>-----</span>" : ArgHead[1]);
+                        Html = Html.replace("XAddressX", (ArgHead[2].equals("NULL") || ArgHead[2] == null) ? "<span class='editable' contenteditable='true'>-----</span>" : ArgHead[2]);
+                        Html = Html.replace("XPhoneX", (ArgHead[3].equals("NULL") || ArgHead[3] == null) ? "<span class='editable' contenteditable='true'>-----</span>" : ArgHead[3]);
+                        Html = Html.replace("XCityX", (ArgHead[4].equals("NULL") || ArgHead[4] == null) ? "<span class='editable' contenteditable='true'>-----</span>" : ArgHead[4]);
+                        Html = Html.replace("XCountryX", (ArgHead[5].equals("NULL") || ArgHead[5] == null) ? "<span class='editable' contenteditable='true'>-----</span>" : ArgHead[5]);
+                        Html = Html.replace("XBillX", (ArgHead[6].equals("NULL") || ArgHead[6] == null) ? "<span class='editable' contenteditable='true'>-----</span>" : ArgHead[6]);
+                        Html = Html.replace("XReissue_listX", (ArgHead[7].equals("NULL") || ArgHead[7] == null) ? "<span class='editable' contenteditable='true'>-----</span>" : ArgHead[7]);
+                        Html = Html.replace("XProductX", (ArgHead[9].equals("NULL") || ArgHead[9] == null) ? "<span class='editable' contenteditable='true'>-----</span>" : ArgHead[9]);
+                        Html = Html.replace("XAbilityX", (ArgHead[10].equals("NULL") || ArgHead[10] == null) ? "<span class='editable' contenteditable='true'>-----</span>" : ArgHead[10]);
                         Html = Html.replace("XBatchX", Batch);
                         Html = Html.replace("XQuatityGenX", ArgHead[11] + " UNIDADES");
-                        Html = Html.replace("XClient_OrderX", ArgHead[12]);
+                        Html = Html.replace("XClient_OrderX", (ArgHead[12].equals("NULL") || ArgHead[12] == null) ? "<span class='editable' contenteditable='true'>-----</span>" : ArgHead[12]);
                         Html = Html.replace("<h3 id=\"consValue\" class=\"mb-0\">XConsX</h3>", "<h3 id=\"consValue\" class=\"mb-0 editable\" contenteditable='true'>CC*****</h3>");
 
                         Html = Html.replace("XCodeX", "<span class='editable' contenteditable='true'>-----</span>");
                         Html = Html.replace("XSampleX", "<span class='editable' contenteditable='true'>----</span>");
+                        Html = Html.replace("XNumberPartX", "<span class='editable' contenteditable='true'>----</span>");
                         //</editor-fold>
                     } else {
                         //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA">
@@ -284,336 +283,550 @@ public class Visual extends TagSupport {
                                 + "</script>");
                         //</editor-fold>
                     }
-                    if (IdForm == 1) {
-                        //<editor-fold defaultstate="collapsed" desc="R-GC-046">
-                        lst_RLab = RegistrosLabJpa.ConsultMaterials(Order, Product, Batch);
-                        if (lst_RLab != null && !lst_RLab.isEmpty() && lst_RLab.size() > 0) {
-                            //<editor-fold defaultstate="collapsed" desc="MATERIAL REGISTROS LAB AND GENERACION DE LOTES">
-                            String[] ArgMaterials = Util.parseResult(lst_RLab.get(0));
-                            String[] etiquetas = {
-                                "REF1", "LBT1", "REF2", "LBT2", "REF3", "LBT3",
-                                "REF4", "LBT4", "REF5", "LBT5", "REF6", "LBT6",
-                                "REF7", "LBT7", "LBT8", "LBT9"
-                            };
+                    switch (IdForm) {
+                        case 1:
+                            //<editor-fold defaultstate="collapsed" desc="R-GC-046">
+                            lst_RLab = RegistrosLabJpa.ConsultMaterials(Order, Product, Batch);
+                            if (lst_RLab != null && !lst_RLab.isEmpty() && lst_RLab.size() > 0) {
+                                //<editor-fold defaultstate="collapsed" desc="MATERIAL REGISTROS LAB AND GENERACION DE LOTES">
+                                String[] ArgMaterials = Util.parseResult(lst_RLab.get(0));
+                                String[] etiquetas = {
+                                    "REF1", "LBT1", "REF2", "LBT2", "REF3", "LBT3",
+                                    "REF4", "LBT4", "REF5", "LBT5", "REF6", "LBT6",
+                                    "REF7", "LBT7", "LBT8", "LBT9"
+                                };
 
-                            for (int i = 0; i < etiquetas.length; i++) {
-                                String valor = ArgMaterials[i].trim();
-                                String etiqueta = etiquetas[i];
+                                for (int i = 0; i < etiquetas.length; i++) {
+                                    String valor = ArgMaterials[i].trim();
+                                    String etiqueta = etiquetas[i];
 
-                                if (valor.equals("N/A")) {
-                                    Html = Html.replace(etiqueta, "<span class='editable' contenteditable='true'>-----</span>");
-                                } else {
-                                    Html = Html.replace(etiqueta, valor);
-                                }
-                            }
-
-                            BatchLay = ArgMaterials[1];
-                            String[] ArgImP = {ArgMaterials[1], ArgMaterials[3], ArgMaterials[5], ArgMaterials[7], ArgMaterials[9], ArgMaterials[11], ArgMaterials[13]};
-                            int Cnt = 1;
-                            for (int i = 0; i < ArgImP.length; i++) {
-                                lst_Glotes1 = GeneracionLotesJpa.ConsultarCC_GeneracionLote(ArgImP[i]);
-                                if (lst_Glotes1 != null && !lst_Glotes1.isEmpty() && lst_Glotes1.size() > 0) {
-                                    String[] ArgLay = lst_Glotes1.get(0).toString().replace("]", "").replace("[", "").split("///");
-                                    Html = Html.replace("COS" + Cnt + "", "CC" + ArgLay[0]);
-                                } else {
-                                    Html = Html.replace("COS" + Cnt, "<span class='editable' contenteditable='true'>-----</span>");
-
-                                    Message = "No se encuentra información en Generacion de lotes en el módulo de Control consecutivos por el lote, favor verifique";
-
-                                    // ✅ Ejecutar automáticamente cuando todo esté cargado
-                                    out.print("<script>"
-                                            + "window.addEventListener('load',function(){"
-                                            + " registrarEvento('Generacion de lotes / Control Consecutivos','" + Order + "','" + ProductFact + "','" + ArgImP[i] + "','" + Message.replace("'", "\\'") + "');"
-                                            + "});"
-                                            + "</script>");
-                                }
-                                Cnt++;
-                            }
-
-                            String[] ArgTnt = {ArgMaterials[14], ArgMaterials[15]};
-                            int Cnt2 = 8;
-                            for (int o = 0; o < ArgTnt.length; o++) {
-                                lst_GlotesRep = GeneracionLotesJpa.ConsultarCC_RepcecionMaterial(ArgTnt[o]);
-                                if (lst_GlotesRep != null && !lst_GlotesRep.isEmpty() && lst_GlotesRep.size() > 0) {
-                                    //<editor-fold defaultstate="collapsed" desc="CC RECECTION">
-                                    String[] ArgInk = Util.parseResult(lst_GlotesRep.get(0));
-                                    Html = Html.replace("REF" + Cnt2 + "", ArgInk[1].replace("M", ""));
-                                    Html = Html.replace("COS" + Cnt2 + "", "CC" + ArgInk[0]);
-                                    //</editor-fold>
-                                } else {
-                                    //<editor-fold defaultstate="collapsed" desc="VALIDATION">
-                                    Html = Html.replace("REF" + Cnt2, "<span class='editable' contenteditable='true'>-----</span>");
-                                    Html = Html.replace("COS" + Cnt2, "<span class='editable' contenteditable='true'>-----</span>");
-
-                                    Message = "No se encuentra información en Generacion de lotes en el módulo de repcepción material por el lote, favor verifique";
-
-                                    // ✅ Ejecutar automáticamente cuando todo esté cargado
-                                    out.print("<script>"
-                                            + "window.addEventListener('load',function(){"
-                                            + " registrarEvento('Generacion de lotes / Recepción Material','" + Order + "','" + ProductFact + "','" + ArgTnt[o] + "','" + Message.replace("'", "\\'") + "');"
-                                            + "});"
-                                            + "</script>");
-                                    //</editor-fold>
-                                }
-                                Cnt2++;
-                            }
-                            //</editor-fold>
-                        } else {
-                            //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA">
-                            for (int i = 1; i < 10; i++) {
-                                Html = Html.replace("REF" + i + "", "<span class='editable' contenteditable='true'>----</span>");
-                                Html = Html.replace("LBT" + i + "", "<span class='editable' contenteditable='true'>----</span>");
-                                Html = Html.replace("COS" + i + "", "<span class='editable' contenteditable='true'>----</span>");
-                            }
-                            Message = "No se encuentra información materiales o ductos en Registros, favor verifique";
-
-                            // ✅ Ejecutar automáticamente cuando todo esté cargado
-                            out.print("<script>"
-                                    + "window.addEventListener('load',function(){"
-                                    + " registrarEvento('Registros LAB -  Materiales','" + Order + "','" + ProductFact + "','" + Batch + "','" + Message.replace("'", "\\'") + "');"
-                                    + "});"
-                                    + "</script>");
-                            //</editor-fold>
-                        }
-                        lst_sheet = SettingJpa.ConsultSettingCategorie(Record + "-Ficha");
-                        if (lst_sheet != null) {
-                            //<editor-fold defaultstate="collapsed" desc="TECNHNICAL SHEET">
-                            Object[] ObjSheet = (Object[]) lst_sheet.get(0);
-                            if (ObjSheet[2] != null && !ObjSheet[2].equals("")) {
-                                lst_prm = RegistrosLabJpa.QueryTechnicalSheet(Order, Product, ObjSheet[2].toString());
-                                if (lst_prm != null) {
-                                    String[] ArgPrm = Util.parseResult(lst_prm.get(0));
-                                    DataTechnicalSheet = ArgPrm[16];
-                                    int ForCant = Integer.parseInt(ArgPrm[0].trim());
-                                    for (int i = 1; i < ForCant; i++) {
-                                        if (ArgPrm[i].contains("0 +/- 0")) {
-                                            Html = Html.replaceFirst("PRM" + Count2 + "", "<span class='editable' contenteditable='true'>-----</span>");
-                                        } else {
-                                            Html = Html.replaceFirst("PRM" + Count2 + "", ArgPrm[i]);
-                                        }
-                                        Count2++;
+                                    if (valor.equals("N/A")) {
+                                        Html = Html.replace(etiqueta, "<span class='editable' contenteditable='true'>-----</span>");
+                                    } else {
+                                        Html = Html.replace(etiqueta, valor);
                                     }
                                 }
-                            }
-                            //</editor-fold>
-                        } else {
-                            //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA">
-                            Message = "No se encuentra información de la ficha tecnica en Registros LAB, favor verifique";
 
-                            // ✅ Ejecutar automáticamente cuando todo esté cargado
-                            out.print("<script>"
-                                    + "window.addEventListener('load',function(){"
-                                    + " registrarEvento('Registros LAB - Ficha Tecnica','" + Order + "','" + ProductFact + "','" + Batch + "','" + Message.replace("'", "\\'") + "');"
-                                    + "});"
-                                    + "</script>");
-                            //</editor-fold>
-                        }
-                        lst_parameter = SettingJpa.ConsultSettingCategorie(Record);
-                        if (lst_parameter != null) {
-                            //<editor-fold defaultstate="collapsed" desc="DATA PARAMETER">
-                            Object[] ObjParameter = (Object[]) lst_parameter.get(0);
-                            if (ObjParameter[2] != null) {
-                                lst_data = RegistrosLabJpa.DimensionalQuery(Order, Product, Batch, ObjParameter[2].toString(), ObjParameter[3].toString());
-                                if (lst_data != null) {
-                                    for (int i = 0; i < lst_data.size(); i++) {
-                                        String[] ArgData = Util.parseResult(lst_data.get(i));
-                                        if (ArgData[1].trim().equals("0")) {
-                                            Html = Html.replaceFirst("MIN" + Count + "", "<span class='editable' contenteditable='true'>-----</span>");
+                                BatchLay = ArgMaterials[1];
+                                String[] ArgImP = {ArgMaterials[1], ArgMaterials[3], ArgMaterials[5], ArgMaterials[7], ArgMaterials[9], ArgMaterials[11], ArgMaterials[13]};
+                                int Cnt = 1;
+                                for (int i = 0; i < ArgImP.length; i++) {
+                                    lst_Glotes1 = GeneracionLotesJpa.ConsultarCC_GeneracionLote(ArgImP[i]);
+                                    if (lst_Glotes1 != null && !lst_Glotes1.isEmpty() && lst_Glotes1.size() > 0) {
+                                        String[] ArgLay = lst_Glotes1.get(0).toString().replace("]", "").replace("[", "").split("///");
+                                        Html = Html.replace("COS" + Cnt + "", "CC" + ArgLay[0]);
+                                    } else {
+                                        Html = Html.replace("COS" + Cnt, "<span class='editable' contenteditable='true'>-----</span>");
+
+                                        Message = "No se encuentra información en Generacion de lotes en el módulo de Control consecutivos por el lote, favor verifique";
+
+                                        // ✅ Ejecutar automáticamente cuando todo esté cargado
+                                        out.print("<script>"
+                                                + "window.addEventListener('load',function(){"
+                                                + " registrarEvento('Generacion de lotes / Control Consecutivos','" + Order + "','" + ProductFact + "','" + ArgImP[i] + "','" + Message.replace("'", "\\'") + "');"
+                                                + "});"
+                                                + "</script>");
+                                    }
+                                    Cnt++;
+                                }
+
+                                String[] ArgTnt = {ArgMaterials[14], ArgMaterials[15]};
+                                int Cnt2 = 8;
+                                for (int o = 0; o < ArgTnt.length; o++) {
+                                    if (ArgTnt[o].equals("N/A")) {
+                                        //<editor-fold defaultstate="collapsed" desc="VALIDATION">
+                                        Html = Html.replace("REF" + Cnt2, "<span class='editable' contenteditable='true'>-----</span>");
+                                        Html = Html.replace("COS" + Cnt2, "<span class='editable' contenteditable='true'>-----</span>");
+                                        Message = "No se encuentra información en Generacion de lotes en el módulo de repcepción material por el lote, favor verifique";
+
+                                        // ✅ Ejecutar automáticamente cuando todo esté cargado
+                                        out.print("<script>"
+                                                + "window.addEventListener('load',function(){"
+                                                + " registrarEvento('Generacion de lotes / Recepción Material','" + Order + "','" + ProductFact + "','" + ArgTnt[o] + "','" + Message.replace("'", "\\'") + "');"
+                                                + "});"
+                                                + "</script>");
+                                        //</editor-fold>    
+                                    } else {
+                                        lst_GlotesRep = GeneracionLotesJpa.ConsultarCC_RepcecionMaterial(ArgTnt[o]);
+                                        if (lst_GlotesRep != null && !lst_GlotesRep.isEmpty() && lst_GlotesRep.size() > 0) {
+                                            //<editor-fold defaultstate="collapsed" desc="CC RECECTION">
+                                            String[] ArgInk = Util.parseResult(lst_GlotesRep.get(0));
+                                            Html = Html.replace("REF" + Cnt2 + "", ArgInk[1].replace("M", ""));
+                                            Html = Html.replace("COS" + Cnt2 + "", "CC" + ArgInk[0]);
+                                            //</editor-fold>
                                         } else {
-                                            Html = Html.replaceFirst("MIN" + Count + "", ArgData[1]);
+                                            //<editor-fold defaultstate="collapsed" desc="VALIDATION">
+                                            Html = Html.replace("REF" + Cnt2, "<span class='editable' contenteditable='true'>-----</span>");
+                                            Html = Html.replace("COS" + Cnt2, "<span class='editable' contenteditable='true'>-----</span>");
+
+                                            Message = "No se encuentra información en Generacion de lotes en el módulo de repcepción material por el lote, favor verifique";
+
+                                            // ✅ Ejecutar automáticamente cuando todo esté cargado
+                                            out.print("<script>"
+                                                    + "window.addEventListener('load',function(){"
+                                                    + " registrarEvento('Generacion de lotes / Recepción Material','" + Order + "','" + ProductFact + "','" + ArgTnt[o] + "','" + Message.replace("'", "\\'") + "');"
+                                                    + "});"
+                                                    + "</script>");
+                                            //</editor-fold>
                                         }
-                                        if (ArgData[2].trim().equals("0")) {
-                                            Html = Html.replaceFirst("MAX" + Count + "", "<span class='editable' contenteditable='true'>-----</span>");
-                                        } else {
-                                            Html = Html.replaceFirst("MAX" + Count + "", ArgData[2]);
+                                    }
+                                    Cnt2++;
+                                }
+                                //</editor-fold>
+                            } else {
+                                //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA">
+                                for (int i = 1; i < 10; i++) {
+                                    Html = Html.replace("REF" + i + "", "<span class='editable' contenteditable='true'>----</span>");
+                                    Html = Html.replace("LBT" + i + "", "<span class='editable' contenteditable='true'>----</span>");
+                                    Html = Html.replace("COS" + i + "", "<span class='editable' contenteditable='true'>----</span>");
+                                }
+                                Message = "No se encuentra información materiales o ductos en Registros, favor verifique";
+
+                                // ✅ Ejecutar automáticamente cuando todo esté cargado
+                                out.print("<script>"
+                                        + "window.addEventListener('load',function(){"
+                                        + " registrarEvento('Registros LAB -  Materiales','" + Order + "','" + ProductFact + "','" + Batch + "','" + Message.replace("'", "\\'") + "');"
+                                        + "});"
+                                        + "</script>");
+                                //</editor-fold>
+                            }
+                            lst_sheet = SettingJpa.ConsultSettingCategorie(Record + "-Ficha");
+                            if (lst_sheet != null) {
+                                //<editor-fold defaultstate="collapsed" desc="TECNHNICAL SHEET">
+                                Object[] ObjSheet = (Object[]) lst_sheet.get(0);
+                                if (ObjSheet[2] != null && !ObjSheet[2].equals("")) {
+                                    lst_prm = RegistrosLabJpa.QueryTechnicalSheet(Order, Product, ObjSheet[2].toString());
+                                    if (lst_prm != null) {
+                                        String[] ArgPrm = Util.parseResult(lst_prm.get(0));
+                                        DataTechnicalSheet = ArgPrm[16];
+                                        int ForCant = Integer.parseInt(ArgPrm[0].trim());
+                                        for (int i = 1; i < ForCant; i++) {
+                                            if (ArgPrm[i].contains("0 +/- 0")) {
+                                                Html = Html.replaceFirst("PRM" + Count2 + "", "<span class='editable' contenteditable='true'>-----</span>");
+                                            } else {
+                                                Html = Html.replaceFirst("PRM" + Count2 + "", ArgPrm[i]);
+                                            }
+                                            Count2++;
                                         }
-                                        if (ArgData[3].trim().equals("0.00")) {
-                                            Html = Html.replaceFirst("MEAN" + Count + "", "<span class='editable' contenteditable='true'>-----</span>");
-                                        } else {
-                                            Html = Html.replaceFirst("MEAN" + Count + "", ArgData[3]);
-                                        }
-                                        Count++;
                                     }
                                 }
+                                //</editor-fold>
+                            } else {
+                                //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA">
+                                Message = "No se encuentra información de la ficha tecnica en Registros LAB, favor verifique";
+
+                                // ✅ Ejecutar automáticamente cuando todo esté cargado
+                                out.print("<script>"
+                                        + "window.addEventListener('load',function(){"
+                                        + " registrarEvento('Registros LAB - Ficha Tecnica','" + Order + "','" + ProductFact + "','" + Batch + "','" + Message.replace("'", "\\'") + "');"
+                                        + "});"
+                                        + "</script>");
+                                //</editor-fold>
                             }
-                            //</editor-fold>
-                        } else {
-                            //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA">
-                            Message = "No se encuentra información de los controles, favor verifique";
-
-                            // ✅ Ejecutar automáticamente cuando todo esté cargado
-                            out.print("<script>"
-                                    + "window.addEventListener('load',function(){"
-                                    + " registrarEvento('Registros LAB - Controles','" + Order + "','" + ProductFact + "','" + Batch + "','" + Message.replace("'", "\\'") + "');"
-                                    + "});"
-                                    + "</script>");
-                            //</editor-fold>
-                        }
-                        //</editor-fold>
-                    } else {
-                        //<editor-fold defaultstate="collapsed" desc="R-GC-074">
-                        lst_RLab = RegistrosLabJpa.ConsultMaterialsRGC74(Order, Product, Batch);
-                        if (lst_RLab != null && !lst_RLab.isEmpty() && lst_RLab.size() > 0) {
-                            //<editor-fold defaultstate="collapsed" desc="MATERIAL REGISTROS LAB">
-                            String[] ArgMaterials = Util.parseResult(lst_RLab.get(0));
-                            String[] etiquetas = {
-                                "REF1", "LBT1", "REF2", "LBT2", "REF3", "LBT3",
-                                "REF4", "LBT4", "REF5", "LBT5", "REF6", "LBT6",
-                                "REF7", "LBT7", "REF8", "LBT8", "LBT9"
-                            };
-
-                            for (int i = 0; i < etiquetas.length; i++) {
-                                String valor = ArgMaterials[i].trim();
-                                String etiqueta = etiquetas[i];
-
-                                if (valor.equals("N/A")) {
-                                    Html = Html.replace(etiqueta, "<span class='editable' contenteditable='true'>-----</span>");
-                                } else {
-                                    Html = Html.replace(etiqueta, valor);
-                                }
-                            }
-
-                            BatchLay = ArgMaterials[1];
-                            String[] ArgImP = {ArgMaterials[1], ArgMaterials[3], ArgMaterials[5], ArgMaterials[7], ArgMaterials[9], ArgMaterials[11], ArgMaterials[13], ArgMaterials[15]};
-                            int Cnt = 1;
-                            for (int i = 0; i < ArgImP.length; i++) {
-                                lst_Glotes1 = GeneracionLotesJpa.ConsultarCC_GeneracionLote(ArgImP[i]);
-                                if (lst_Glotes1 != null && !lst_Glotes1.isEmpty() && lst_Glotes1.size() > 0) {
-                                    String[] ArgLay = lst_Glotes1.get(0).toString().replace("]", "").replace("[", "").split("///");
-                                    Html = Html.replace("COS" + Cnt + "", "CC" + ArgLay[0]);
-                                } else {
-                                    Html = Html.replace("COS" + Cnt, "<span class='editable' contenteditable='true'>-----</span>");
-                                    Message = "No se encuentra información en Generacion de lotes en el módulo de Control consecutivos por el lote, favor verifique";
-
-                                    // ✅ Ejecutar automáticamente cuando todo esté cargado
-                                    out.print("<script>"
-                                            + "window.addEventListener('load',function(){"
-                                            + " registrarEvento('Generacion de lotes / Control Consecutivos','" + Order + "','" + ProductFact + "','" + ArgImP[i] + "','" + Message.replace("'", "\\'") + "');"
-                                            + "});"
-                                            + "</script>");
-                                }
-                                Cnt++;
-                            }
-
-                            String[] ArgTnt = {ArgMaterials[16]};
-                            int Cnt2 = 9;
-                            for (int o = 0; o < ArgTnt.length; o++) {
-                                lst_GlotesRep = GeneracionLotesJpa.ConsultarCC_RepcecionMaterial(ArgTnt[o]);
-                                if (lst_GlotesRep != null && !lst_GlotesRep.isEmpty() && lst_GlotesRep.size() > 0) {
-                                    //<editor-fold defaultstate="collapsed" desc="CC RECECTION">
-                                    String[] ArgInk = Util.parseResult(lst_GlotesRep.get(0));
-                                    Html = Html.replace("REF" + Cnt2 + "", ArgInk[1].replace("M", ""));
-                                    Html = Html.replace("COS" + Cnt2 + "", "<span class='editable' contenteditable='true'>CC" + ArgInk[0] + "</span>");
-                                    //</editor-fold>
-                                } else {
-                                    //<editor-fold defaultstate="collapsed" desc="VALIDATION">
-                                    Html = Html.replace("REF" + Cnt2, "<span class='editable' contenteditable='true'>-----</span>");
-                                    Html = Html.replace("COS" + Cnt2, "<span class='editable' contenteditable='true'>-----</span>");
-                                    Message = "No se encuentra información en Generacion de lotes en el módulo de repcepción material por el lote, favor verifique";
-
-                                    // ✅ Ejecutar automáticamente cuando todo esté cargado
-                                    out.print("<script>"
-                                            + "window.addEventListener('load',function(){"
-                                            + " registrarEvento('Generacion de lotes / Recepción Material','" + Order + "','" + ProductFact + "','" + ArgTnt[o] + "','" + Message.replace("'", "\\'") + "');"
-                                            + "});"
-                                            + "</script>");
-                                    //</editor-fold>
-                                }
-                                Cnt2++;
-                            }
-                            //</editor-fold>
-                        } else {
-                            //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA">
-                            for (int i = 1; i < 10; i++) {
-                                Html = Html.replace("REF" + i + "", "<span class='editable' contenteditable='true'>----</span>");
-                                Html = Html.replace("LBT" + i + "", "<span class='editable' contenteditable='true'>----</span>");
-                                Html = Html.replace("COS" + i + "", "<span class='editable' contenteditable='true'>----</span>");
-                            }
-                            Message = "No se encuentra información materiales o ductos en Registros, favor verifique";
-
-                            // ✅ Ejecutar automáticamente cuando todo esté cargado
-                            out.print("<script>"
-                                    + "window.addEventListener('load',function(){"
-                                    + " registrarEvento('Registros LAB -  Materiales','" + Order + "','" + ProductFact + "','" + Batch + "','" + Message.replace("'", "\\'") + "');"
-                                    + "});"
-                                    + "</script>");
-                            //</editor-fold>
-                        }
-                        lst_sheet = SettingJpa.ConsultSettingCategorie(Record + "-Ficha");
-                        if (lst_sheet != null) {
-                            //<editor-fold defaultstate="collapsed" desc="TECNHNICAL SHEET">
-                            Object[] ObjSheet = (Object[]) lst_sheet.get(0);
-                            if (!ObjSheet[2].equals("") || ObjSheet[2] != null) {
-                                lst_prm = RegistrosLabJpa.QueryTechnicalSheetRGC74(Order, Product, ObjSheet[2].toString());
-                                if (lst_prm != null) {
-                                    String[] ArgPrm = Util.parseResult(lst_prm.get(0));
-                                    DataTechnicalSheet = ArgPrm[11];
-                                    int ForCant = Integer.parseInt(ArgPrm[0].trim());
-                                    for (int i = 1; i < ForCant; i++) {
-                                        if (ArgPrm[i].contains("0 +/- 0")) {
-                                            Html = Html.replaceFirst("PRM" + Count2 + "", "<span class='editable' contenteditable='true'>-----</span>");
-                                        } else {
-                                            Html = Html.replaceFirst("PRM" + Count2 + "", ArgPrm[i]);
+                            lst_parameter = SettingJpa.ConsultSettingCategorie(Record);
+                            if (lst_parameter != null) {
+                                //<editor-fold defaultstate="collapsed" desc="DATA PARAMETER">
+                                Object[] ObjParameter = (Object[]) lst_parameter.get(0);
+                                if (ObjParameter[2] != null) {
+                                    lst_data = RegistrosLabJpa.DimensionalQuery(Order, Product, Batch, ObjParameter[2].toString(), ObjParameter[3].toString());
+                                    if (lst_data != null) {
+                                        for (int i = 0; i < lst_data.size(); i++) {
+                                            String[] ArgData = Util.parseResult(lst_data.get(i));
+                                            if (ArgData[1].trim().equals("0")) {
+                                                Html = Html.replaceFirst("MIN" + Count + "", "<span class='editable' contenteditable='true'>-----</span>");
+                                            } else {
+                                                Html = Html.replaceFirst("MIN" + Count + "", ArgData[1]);
+                                            }
+                                            if (ArgData[2].trim().equals("0")) {
+                                                Html = Html.replaceFirst("MAX" + Count + "", "<span class='editable' contenteditable='true'>-----</span>");
+                                            } else {
+                                                Html = Html.replaceFirst("MAX" + Count + "", ArgData[2]);
+                                            }
+                                            if (ArgData[3].trim().equals("0.00")) {
+                                                Html = Html.replaceFirst("MEAN" + Count + "", "<span class='editable' contenteditable='true'>-----</span>");
+                                            } else {
+                                                Html = Html.replaceFirst("MEAN" + Count + "", ArgData[3]);
+                                            }
+                                            Count++;
                                         }
-                                        Count2++;
                                     }
                                 }
+                                //</editor-fold>
+                            } else {
+                                //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA">
+                                Message = "No se encuentra información de los controles, favor verifique";
+
+                                // ✅ Ejecutar automáticamente cuando todo esté cargado
+                                out.print("<script>"
+                                        + "window.addEventListener('load',function(){"
+                                        + " registrarEvento('Registros LAB - Controles','" + Order + "','" + ProductFact + "','" + Batch + "','" + Message.replace("'", "\\'") + "');"
+                                        + "});"
+                                        + "</script>");
+                                //</editor-fold>
                             }
                             //</editor-fold>
-                        } else {
-                            //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA">
-                            Message = "No se encuentra información de la ficha tecnica en Registros LAB, favor verifique";
+                            break;
+                        case 2:
+                            //<editor-fold defaultstate="collapsed" desc="R-GC-074">
+                            lst_RLab = RegistrosLabJpa.ConsultMaterialsRGC74(Order, Product, Batch);
+                            if (lst_RLab != null && !lst_RLab.isEmpty() && lst_RLab.size() > 0) {
+                                //<editor-fold defaultstate="collapsed" desc="MATERIAL REGISTROS LAB">
+                                String[] ArgMaterials = Util.parseResult(lst_RLab.get(0));
+                                String[] etiquetas = {
+                                    "REF1", "LBT1", "REF2", "LBT2", "REF3", "LBT3",
+                                    "REF4", "LBT4", "REF5", "LBT5", "REF6", "LBT6",
+                                    "REF7", "LBT7", "REF8", "LBT8", "LBT9"
+                                };
 
-                            // ✅ Ejecutar automáticamente cuando todo esté cargado
-                            out.print("<script>"
-                                    + "window.addEventListener('load',function(){"
-                                    + " registrarEvento('Registros LAB - Ficha Tecnica','" + Order + "','" + ProductFact + "','" + Batch + "','" + Message.replace("'", "\\'") + "');"
-                                    + "});"
-                                    + "</script>");
-                            //</editor-fold>
-                        }
-                        lst_parameter = SettingJpa.ConsultSettingCategorie(Record);
-                        if (lst_parameter != null) {
-                            //<editor-fold defaultstate="collapsed" desc="DATA PARAMETER">
-                            Object[] ObjParameter = (Object[]) lst_parameter.get(0);
-                            if (ObjParameter[2] != null) {
-                                lst_data = RegistrosLabJpa.DimensionalQueryRGC74(Order, Product, Batch, ObjParameter[2].toString(), ObjParameter[3].toString());
-                                if (lst_data != null) {
-                                    for (int i = 0; i < lst_data.size(); i++) {
-                                        String[] ArgData = Util.parseResult(lst_data.get(i));
-                                        if (ArgData[1].trim().equals("0")) {
-                                            Html = Html.replaceFirst("MIN" + Count + "", "<span class='editable' contenteditable='true'>-----</span>");
-                                        } else {
-                                            Html = Html.replaceFirst("MIN" + Count + "", ArgData[1]);
-                                        }
-                                        if (ArgData[2].trim().equals("0")) {
-                                            Html = Html.replaceFirst("MAX" + Count + "", "<span class='editable' contenteditable='true'>-----</span>");
-                                        } else {
-                                            Html = Html.replaceFirst("MAX" + Count + "", ArgData[2]);
-                                        }
-                                        if (ArgData[3].trim().equals("0.00")) {
-                                            Html = Html.replaceFirst("MEAN" + Count + "", "<span class='editable' contenteditable='true'>-----</span>");
-                                        } else {
-                                            Html = Html.replaceFirst("MEAN" + Count + "", ArgData[3]);
-                                        }
-                                        Count++;
+                                for (int i = 0; i < etiquetas.length; i++) {
+                                    String valor = ArgMaterials[i].trim();
+                                    String etiqueta = etiquetas[i];
+
+                                    if (valor.equals("N/A")) {
+                                        Html = Html.replace(etiqueta, "<span class='editable' contenteditable='true'>-----</span>");
+                                    } else {
+                                        Html = Html.replace(etiqueta, valor);
                                     }
                                 }
+
+                                BatchLay = ArgMaterials[1];
+                                String[] ArgImP = {ArgMaterials[1], ArgMaterials[3], ArgMaterials[5], ArgMaterials[7], ArgMaterials[9], ArgMaterials[11], ArgMaterials[13], ArgMaterials[15]};
+                                int Cnt = 1;
+                                for (int i = 0; i < ArgImP.length; i++) {
+                                    lst_Glotes1 = GeneracionLotesJpa.ConsultarCC_GeneracionLote(ArgImP[i]);
+                                    if (lst_Glotes1 != null && !lst_Glotes1.isEmpty() && lst_Glotes1.size() > 0) {
+                                        String[] ArgLay = lst_Glotes1.get(0).toString().replace("]", "").replace("[", "").split("///");
+                                        Html = Html.replace("COS" + Cnt + "", "CC" + ArgLay[0]);
+                                    } else {
+                                        Html = Html.replace("COS" + Cnt, "<span class='editable' contenteditable='true'>-----</span>");
+                                        Message = "No se encuentra información en Generacion de lotes en el módulo de Control consecutivos por el lote, favor verifique";
+
+                                        // ✅ Ejecutar automáticamente cuando todo esté cargado
+                                        out.print("<script>"
+                                                + "window.addEventListener('load',function(){"
+                                                + " registrarEvento('Generacion de lotes / Control Consecutivos','" + Order + "','" + ProductFact + "','" + ArgImP[i] + "','" + Message.replace("'", "\\'") + "');"
+                                                + "});"
+                                                + "</script>");
+                                    }
+                                    Cnt++;
+                                }
+
+                                String[] ArgTnt = {ArgMaterials[16]};
+                                int Cnt2 = 9;
+                                for (int o = 0; o < ArgTnt.length; o++) {
+                                    if (ArgTnt[o].equals("N/A")) {
+                                        //<editor-fold defaultstate="collapsed" desc="VALIDATION">
+                                        Html = Html.replace("REF" + Cnt2, "<span class='editable' contenteditable='true'>-----</span>");
+                                        Html = Html.replace("COS" + Cnt2, "<span class='editable' contenteditable='true'>-----</span>");
+                                        Message = "No se encuentra información en Generacion de lotes en el módulo de repcepción material por el lote, favor verifique";
+
+                                        // ✅ Ejecutar automáticamente cuando todo esté cargado
+                                        out.print("<script>"
+                                                + "window.addEventListener('load',function(){"
+                                                + " registrarEvento('Generacion de lotes / Recepción Material','" + Order + "','" + ProductFact + "','" + ArgTnt[o] + "','" + Message.replace("'", "\\'") + "');"
+                                                + "});"
+                                                + "</script>");
+                                        //</editor-fold>
+                                    } else {
+                                        lst_GlotesRep = GeneracionLotesJpa.ConsultarCC_RepcecionMaterial(ArgTnt[o]);
+                                        if (lst_GlotesRep != null && !lst_GlotesRep.isEmpty() && lst_GlotesRep.size() > 0) {
+                                            //<editor-fold defaultstate="collapsed" desc="CC RECECTION">
+                                            String[] ArgInk = Util.parseResult(lst_GlotesRep.get(0));
+                                            Html = Html.replace("REF" + Cnt2 + "", ArgInk[1].replace("M", ""));
+                                            Html = Html.replace("COS" + Cnt2 + "", "<span class='editable' contenteditable='true'>CC" + ArgInk[0] + "</span>");
+                                            //</editor-fold>
+                                        } else {
+                                            //<editor-fold defaultstate="collapsed" desc="VALIDATION">
+                                            Html = Html.replace("REF" + Cnt2, "<span class='editable' contenteditable='true'>-----</span>");
+                                            Html = Html.replace("COS" + Cnt2, "<span class='editable' contenteditable='true'>-----</span>");
+                                            Message = "No se encuentra información en Generacion de lotes en el módulo de repcepción material por el lote, favor verifique";
+
+                                            // ✅ Ejecutar automáticamente cuando todo esté cargado
+                                            out.print("<script>"
+                                                    + "window.addEventListener('load',function(){"
+                                                    + " registrarEvento('Generacion de lotes / Recepción Material','" + Order + "','" + ProductFact + "','" + ArgTnt[o] + "','" + Message.replace("'", "\\'") + "');"
+                                                    + "});"
+                                                    + "</script>");
+                                            //</editor-fold>
+                                        }
+                                    }
+                                    Cnt2++;
+                                }
+                                //</editor-fold>
+                            } else {
+                                //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA">
+                                for (int i = 1; i < 10; i++) {
+                                    Html = Html.replace("REF" + i + "", "<span class='editable' contenteditable='true'>----</span>");
+                                    Html = Html.replace("LBT" + i + "", "<span class='editable' contenteditable='true'>----</span>");
+                                    Html = Html.replace("COS" + i + "", "<span class='editable' contenteditable='true'>----</span>");
+                                }
+                                Message = "No se encuentra información materiales o ductos en Registros, favor verifique";
+
+                                // ✅ Ejecutar automáticamente cuando todo esté cargado
+                                out.print("<script>"
+                                        + "window.addEventListener('load',function(){"
+                                        + " registrarEvento('Registros LAB -  Materiales','" + Order + "','" + ProductFact + "','" + Batch + "','" + Message.replace("'", "\\'") + "');"
+                                        + "});"
+                                        + "</script>");
+                                //</editor-fold>
+                            }
+                            lst_sheet = SettingJpa.ConsultSettingCategorie(Record + "-Ficha");
+                            if (lst_sheet != null) {
+                                //<editor-fold defaultstate="collapsed" desc="TECNHNICAL SHEET">
+                                Object[] ObjSheet = (Object[]) lst_sheet.get(0);
+                                if (!ObjSheet[2].equals("") || ObjSheet[2] != null) {
+                                    lst_prm = RegistrosLabJpa.QueryTechnicalSheetRGC74(Order, Product, ObjSheet[2].toString());
+                                    if (lst_prm != null) {
+                                        String[] ArgPrm = Util.parseResult(lst_prm.get(0));
+                                        DataTechnicalSheet = ArgPrm[11];
+                                        int ForCant = Integer.parseInt(ArgPrm[0].trim());
+                                        for (int i = 1; i < ForCant; i++) {
+                                            if (ArgPrm[i].contains("0 +/- 0")) {
+                                                Html = Html.replaceFirst("PRM" + Count2 + "", "<span class='editable' contenteditable='true'>-----</span>");
+                                            } else {
+                                                Html = Html.replaceFirst("PRM" + Count2 + "", ArgPrm[i]);
+                                            }
+                                            Count2++;
+                                        }
+                                    }
+                                }
+                                //</editor-fold>
+                            } else {
+                                //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA">
+                                Message = "No se encuentra información de la ficha tecnica en Registros LAB, favor verifique";
+
+                                // ✅ Ejecutar automáticamente cuando todo esté cargado
+                                out.print("<script>"
+                                        + "window.addEventListener('load',function(){"
+                                        + " registrarEvento('Registros LAB - Ficha Tecnica','" + Order + "','" + ProductFact + "','" + Batch + "','" + Message.replace("'", "\\'") + "');"
+                                        + "});"
+                                        + "</script>");
+                                //</editor-fold>
+                            }
+                            lst_parameter = SettingJpa.ConsultSettingCategorie(Record);
+                            if (lst_parameter != null) {
+                                //<editor-fold defaultstate="collapsed" desc="DATA PARAMETER">
+                                Object[] ObjParameter = (Object[]) lst_parameter.get(0);
+                                if (ObjParameter[2] != null) {
+                                    lst_data = RegistrosLabJpa.DimensionalQueryRGC74(Order, Product, Batch, ObjParameter[2].toString(), ObjParameter[3].toString());
+                                    if (lst_data != null) {
+                                        for (int i = 0; i < lst_data.size(); i++) {
+                                            String[] ArgData = Util.parseResult(lst_data.get(i));
+                                            if (ArgData[1].trim().equals("0")) {
+                                                Html = Html.replaceFirst("MIN" + Count + "", "<span class='editable' contenteditable='true'>-----</span>");
+                                            } else {
+                                                Html = Html.replaceFirst("MIN" + Count + "", ArgData[1]);
+                                            }
+                                            if (ArgData[2].trim().equals("0")) {
+                                                Html = Html.replaceFirst("MAX" + Count + "", "<span class='editable' contenteditable='true'>-----</span>");
+                                            } else {
+                                                Html = Html.replaceFirst("MAX" + Count + "", ArgData[2]);
+                                            }
+                                            if (ArgData[3].trim().equals("0.00")) {
+                                                Html = Html.replaceFirst("MEAN" + Count + "", "<span class='editable' contenteditable='true'>-----</span>");
+                                            } else {
+                                                Html = Html.replaceFirst("MEAN" + Count + "", ArgData[3]);
+                                            }
+                                            Count++;
+                                        }
+                                    }
+                                }
+                                //</editor-fold>
+                            } else {
+                                //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA">
+                                Message = "No se encuentra información de los controles, favor verifique";
+
+                                // ✅ Ejecutar automáticamente cuando todo esté cargado
+                                out.print("<script>"
+                                        + "window.addEventListener('load',function(){"
+                                        + " registrarEvento('Registros LAB - Controles','" + Order + "','" + ProductFact + "','" + Batch + "','" + Message.replace("'", "\\'") + "');"
+                                        + "});"
+                                        + "</script>");
+                                //</editor-fold>
                             }
                             //</editor-fold>
-                        } else {
-                            //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA">
-                            Message = "No se encuentra información de los controles, favor verifique";
+                            break;
+                        default:
+                            //<editor-fold defaultstate="collapsed" desc="R-GC-194">
+                            lst_RLab = RegistrosLabJpa.ConsultMaterialsRGC194(Order, Product, Batch);
+                            if (lst_RLab != null && !lst_RLab.isEmpty() && lst_RLab.size() > 0) {
+                                //<editor-fold defaultstate="collapsed" desc="MATERIAL REGISTROS LAB AND GENERACION DE LOTES">
+                                String[] ArgMaterials = Util.parseResult(lst_RLab.get(0));
+                                String[] etiquetas = {
+                                    "REF1", "LBT1", "REF2", "LBT2", "REF3", "LBT3", "REF4", "LBT4", "LBT5"
+                                };
 
-                            // ✅ Ejecutar automáticamente cuando todo esté cargado
-                            out.print("<script>"
-                                    + "window.addEventListener('load',function(){"
-                                    + " registrarEvento('Registros LAB - Controles','" + Order + "','" + ProductFact + "','" + Batch + "','" + Message.replace("'", "\\'") + "');"
-                                    + "});"
-                                    + "</script>");
+                                for (int i = 0; i < etiquetas.length; i++) {
+                                    String valor = ArgMaterials[i].trim();
+                                    String etiqueta = etiquetas[i];
+
+                                    if (valor.equals("N/A")) {
+                                        Html = Html.replace(etiqueta, "<span class='editable' contenteditable='true'>-----</span>");
+                                    } else {
+                                        Html = Html.replace(etiqueta, valor);
+                                    }
+                                }
+
+                                BatchLay = ArgMaterials[1];
+                                String[] ArgImP = {ArgMaterials[1], ArgMaterials[3], ArgMaterials[5], ArgMaterials[7]};
+                                int Cnt = 1;
+                                for (int i = 0; i < ArgImP.length; i++) {
+                                    lst_Glotes1 = GeneracionLotesJpa.ConsultarCC_GeneracionLote(ArgImP[i]);
+                                    if (lst_Glotes1 != null && !lst_Glotes1.isEmpty() && lst_Glotes1.size() > 0) {
+                                        String[] ArgLay = lst_Glotes1.get(0).toString().replace("]", "").replace("[", "").split("///");
+                                        Html = Html.replace("COS" + Cnt + "", "CC" + ArgLay[0]);
+                                    } else {
+                                        Html = Html.replace("COS" + Cnt, "<span class='editable' contenteditable='true'>-----</span>");
+
+                                        Message = "No se encuentra información en Generacion de lotes en el módulo de Control consecutivos por el lote, favor verifique";
+
+                                        // ✅ Ejecutar automáticamente cuando todo esté cargado
+                                        out.print("<script>"
+                                                + "window.addEventListener('load',function(){"
+                                                + " registrarEvento('Generacion de lotes / Control Consecutivos','" + Order + "','" + ProductFact + "','" + ArgImP[i] + "','" + Message.replace("'", "\\'") + "');"
+                                                + "});"
+                                                + "</script>");
+                                    }
+                                    Cnt++;
+                                }
+
+                                String[] ArgTnt = {ArgMaterials[8]};
+                                int Cnt2 = 5;
+                                for (int o = 0; o < ArgTnt.length; o++) {
+                                    lst_GlotesRep = GeneracionLotesJpa.ConsultarCC_RepcecionMaterial(ArgTnt[o]);
+                                    if (ArgTnt[o].equals("N/A")) {
+                                        //<editor-fold defaultstate="collapsed" desc="VALIDATION">
+                                        Html = Html.replace("REF" + Cnt2, "<span class='editable' contenteditable='true'>-----</span>");
+                                        Html = Html.replace("COS" + Cnt2, "<span class='editable' contenteditable='true'>-----</span>");
+
+                                        Message = "No se encuentra información en Generacion de lotes en el módulo de repcepción material por el lote, favor verifique";
+
+                                        // ✅ Ejecutar automáticamente cuando todo esté cargado
+                                        out.print("<script>"
+                                                + "window.addEventListener('load',function(){"
+                                                + " registrarEvento('Generacion de lotes / Recepción Material','" + Order + "','" + ProductFact + "','" + ArgTnt[o] + "','" + Message.replace("'", "\\'") + "');"
+                                                + "});"
+                                                + "</script>");
+                                        //</editor-fold>
+                                    } else {
+                                        if (lst_GlotesRep != null && !lst_GlotesRep.isEmpty() && lst_GlotesRep.size() > 0) {
+                                            //<editor-fold defaultstate="collapsed" desc="CC RECECTION">
+                                            String[] ArgInk = Util.parseResult(lst_GlotesRep.get(0));
+                                            Html = Html.replace("REF" + Cnt2 + "", ArgInk[1].replace("M", ""));
+                                            Html = Html.replace("COS" + Cnt2 + "", "CC" + ArgInk[0]);
+                                            //</editor-fold>
+                                        } else {
+                                            //<editor-fold defaultstate="collapsed" desc="VALIDATION">
+                                            Html = Html.replace("REF" + Cnt2, "<span class='editable' contenteditable='true'>-----</span>");
+                                            Html = Html.replace("COS" + Cnt2, "<span class='editable' contenteditable='true'>-----</span>");
+
+                                            Message = "No se encuentra información en Generacion de lotes en el módulo de repcepción material por el lote, favor verifique";
+
+                                            // ✅ Ejecutar automáticamente cuando todo esté cargado
+                                            out.print("<script>"
+                                                    + "window.addEventListener('load',function(){"
+                                                    + " registrarEvento('Generacion de lotes / Recepción Material','" + Order + "','" + ProductFact + "','" + ArgTnt[o] + "','" + Message.replace("'", "\\'") + "');"
+                                                    + "});"
+                                                    + "</script>");
+                                            //</editor-fold>
+                                        }
+                                    }
+                                    Cnt2++;
+                                }
+                                //</editor-fold>
+                            } else {
+                                //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA">
+                                for (int i = 1; i < 10; i++) {
+                                    Html = Html.replace("REF" + i + "", "<span class='editable' contenteditable='true'>----</span>");
+                                    Html = Html.replace("LBT" + i + "", "<span class='editable' contenteditable='true'>----</span>");
+                                    Html = Html.replace("COS" + i + "", "<span class='editable' contenteditable='true'>----</span>");
+                                }
+                                Message = "No se encuentra información materiales o ductos en Registros, favor verifique";
+
+                                // ✅ Ejecutar automáticamente cuando todo esté cargado
+                                out.print("<script>"
+                                        + "window.addEventListener('load',function(){"
+                                        + " registrarEvento('Registros LAB -  Materiales','" + Order + "','" + ProductFact + "','" + Batch + "','" + Message.replace("'", "\\'") + "');"
+                                        + "});"
+                                        + "</script>");
+                                //</editor-fold>
+                            }
+                            lst_sheet = SettingJpa.ConsultSettingCategorie(Record + "-Ficha");
+                            if (lst_sheet != null) {
+                                //<editor-fold defaultstate="collapsed" desc="TECNHNICAL SHEET">
+                                Object[] ObjSheet = (Object[]) lst_sheet.get(0);
+                                if (ObjSheet[2] != null && !ObjSheet[2].equals("")) {
+                                    lst_prm = RegistrosLabJpa.QueryTechnicalSheetRGC194(Order, Product, ObjSheet[2].toString());
+                                    if (lst_prm != null) {
+                                        String[] ArgPrm = Util.parseResult(lst_prm.get(0));
+                                        DataTechnicalSheet = ArgPrm[13];
+                                        int ForCant = Integer.parseInt(ArgPrm[0].trim());
+                                        for (int i = 1; i < ForCant; i++) {
+                                            if (ArgPrm[i].contains("0 +/- 0")) {
+                                                Html = Html.replaceFirst("PRM" + Count2 + "", "<span class='editable' contenteditable='true'>-----</span>");
+                                            } else {
+                                                Html = Html.replaceFirst("PRM" + Count2 + "", ArgPrm[i]);
+                                            }
+                                            Count2++;
+                                        }
+                                    }
+                                }
+                                //</editor-fold>
+                            } else {
+                                //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA">
+                                Message = "No se encuentra información de la ficha tecnica en Registros LAB, favor verifique";
+
+                                // ✅ Ejecutar automáticamente cuando todo esté cargado
+                                out.print("<script>"
+                                        + "window.addEventListener('load',function(){"
+                                        + " registrarEvento('Registros LAB - Ficha Tecnica','" + Order + "','" + ProductFact + "','" + Batch + "','" + Message.replace("'", "\\'") + "');"
+                                        + "});"
+                                        + "</script>");
+                                //</editor-fold>
+                            }
+                            lst_parameter = SettingJpa.ConsultSettingCategorie(Record);
+                            if (lst_parameter != null) {
+                                //<editor-fold defaultstate="collapsed" desc="DATA PARAMETER">
+                                Object[] ObjParameter = (Object[]) lst_parameter.get(0);
+                                if (ObjParameter[2] != null) {
+                                    lst_data = RegistrosLabJpa.DimensionalQueryRGC194(Order, Product, Batch, ObjParameter[2].toString(), ObjParameter[3].toString());
+                                    if (lst_data != null) {
+                                        for (int i = 0; i < lst_data.size(); i++) {
+                                            String[] ArgData = Util.parseResult(lst_data.get(i));
+                                            if (ArgData[1].trim().equals("0")) {
+                                                Html = Html.replaceFirst("MIN" + Count + "", "<span class='editable' contenteditable='true'>-----</span>");
+                                            } else {
+                                                Html = Html.replaceFirst("MIN" + Count + "", ArgData[1]);
+                                            }
+                                            if (ArgData[2].trim().equals("0")) {
+                                                Html = Html.replaceFirst("MAX" + Count + "", "<span class='editable' contenteditable='true'>-----</span>");
+                                            } else {
+                                                Html = Html.replaceFirst("MAX" + Count + "", ArgData[2]);
+                                            }
+                                            if (ArgData[3].trim().equals("0.00")) {
+                                                Html = Html.replaceFirst("MEAN" + Count + "", "<span class='editable' contenteditable='true'>-----</span>");
+                                            } else {
+                                                Html = Html.replaceFirst("MEAN" + Count + "", ArgData[3]);
+                                            }
+                                            Count++;
+                                        }
+                                    }
+                                }
+                                //</editor-fold>
+                            } else {
+                                //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA">
+                                Message = "No se encuentra información de los controles, favor verifique";
+
+                                // ✅ Ejecutar automáticamente cuando todo esté cargado
+                                out.print("<script>"
+                                        + "window.addEventListener('load',function(){"
+                                        + " registrarEvento('Registros LAB - Controles','" + Order + "','" + ProductFact + "','" + Batch + "','" + Message.replace("'", "\\'") + "');"
+                                        + "});"
+                                        + "</script>");
+                                //</editor-fold>
+                            }
                             //</editor-fold>
-                        }
-                        //</editor-fold>
+                            break;
                     }
                     String[] ArgCategory = {"boca", "cola"};
                     for (int i = 0; i < ArgCategory.length; i++) {
@@ -676,7 +889,7 @@ public class Visual extends TagSupport {
                         if (StateCerti == 3) {
                             if (IdSig != null && !IdSig.equals("")) {
                                 Html = Html.replaceAll("<div id=\"SignatureImage\"></div>", "<div id=\"SignatureImage\"><img src=\"Interface/Uploads/Signature/" + IdSig + "\" height=\"58px\" alt=\"Logo\" class=\"ImgSig\"></div>");
-                            }else{
+                            } else {
                                 Html = Html.replaceAll("<div id=\"SignatureImage\"></div>", "<div id=\"SignatureImage\"><span class='text-warning'>--- No existe firma asociada ---</span></div>");
                             }
                         }

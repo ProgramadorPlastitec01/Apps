@@ -97,6 +97,7 @@
                         var idRegisterText = document.getElementById('IdRegister')?.textContent.trim() || '';
                         var Code = document.getElementById('codeValue')?.textContent.trim() || '';
                         var Amount = document.getElementById('AmountValue')?.textContent.trim() || '';
+                        var DateDispatch = document.getElementById('DateDispatch')?.textContent.trim() || '';
                 // Función helper para agregar inputs ocultos
                 const addHidden = (name, value) => {
                     var input = document.createElement('input');
@@ -117,6 +118,8 @@
                     addHidden('codeValue', Code);
                 if (Amount)
                     addHidden('AmountValue', Amount);
+                if (DateDispatch)
+                    addHidden('DateDispatch', DateDispatch);
                 form.submit();
             }
 

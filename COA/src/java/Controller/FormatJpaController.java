@@ -55,11 +55,12 @@ public class FormatJpaController implements Serializable {
             return null;
         }
     }
-    public List ConsultFormatActive() {
+
+    public List ConsultFormatActive(String Apt) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
         try {
-            Query q = etm.createNativeQuery("CALL `Sp_fmt_c_ConsultFormatActive`()");
+            Query q = etm.createNativeQuery("CALL `Sp_fmt_c_ConsultFormatActive`('" + Apt + "')");
             List consulta = q.getResultList();
             etm.getTransaction().commit();
             etm.clear();
@@ -92,6 +93,7 @@ public class FormatJpaController implements Serializable {
             return false;
         }
     }
+
     public boolean FormatRegisterNew(String apc, String rcd, int vso, String tpc, String urg) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
@@ -129,6 +131,7 @@ public class FormatJpaController implements Serializable {
             return false;
         }
     }
+
     public boolean FormatUpdateState(int IdFormat, int State) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
@@ -147,6 +150,7 @@ public class FormatJpaController implements Serializable {
             return false;
         }
     }
+
     public boolean UpdateFormatData(int IdFormat, String Template) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();

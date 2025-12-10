@@ -12,7 +12,6 @@ import java.util.List;
 import Connection.ConnectionSignature;
 import Controller.CertificatesJpaController;
 import Controller.EventsJpaController;
-import Method.Util;
 
 public class Generate extends HttpServlet {
 
@@ -33,7 +32,7 @@ public class Generate extends HttpServlet {
             String Signature = session.getAttribute("Firma").toString();
             int Order = 0, IdCertificates = 0, TempDelete = 0, Doc = 0, Cod = 0, Temp = 0, StateCerti = 0;
             String Type = "", Product = "", Batch = "", Html = "", Code = "", Consecutive = "", Customer = "", IdCertiMasive = "", Category = "",
-                    Justification = "", Record = "", FormatName = "", Message = "", Amount = "";
+                    Justification = "", Record = "", FormatName = "", Message = "", Amount = "", DateDispatch = "";
             boolean result = false, UnauthorizedSignature = false;
             List lst_sign = null;
             List lst_id = null;
@@ -136,9 +135,14 @@ public class Generate extends HttpServlet {
                     } catch (Exception e) {
                         Amount = "*****";
                     }
+                    try {
+                        DateDispatch = request.getParameter("DateDispatch");
+                    } catch (Exception e) {
+                        DateDispatch = "*****";
+                    }
                     if (IdCertificates > 0) {
                         //<editor-fold defaultstate="collapsed" desc="UPDATE">
-                        result = CertificatesJpa.CertificatesUpdate(IdCertificates, Consecutive, Amount, Html);
+                        result = CertificatesJpa.CertificatesUpdate(IdCertificates, Consecutive, Amount, DateDispatch ,Html);
                         if (result) {
                             request.setAttribute("UpdateCertificate", result);
                         }
@@ -177,7 +181,7 @@ public class Generate extends HttpServlet {
                         } catch (Exception e) {
                             FormatName = "";
                         }
-                        result = CertificatesJpa.CertificatesRegister(Type, Code, Order, Product, Batch, Consecutive, Customer, Amount, RolName, Html);
+                        result = CertificatesJpa.CertificatesRegister(Type, Code, Order, Product, Batch, Consecutive, Customer, Amount, DateDispatch, RolName, Html);
                         if (result) {
                             lst_id = CertificatesJpa.ConsultCeritcateTypeId(Type);
                             if (lst_id != null) {
@@ -190,7 +194,7 @@ public class Generate extends HttpServlet {
                             }
                             request.setAttribute("RegisterCertificates", result);
                         }
-                        request.getRequestDispatcher("Generate?opt=2&Type=" + Type + "&Order=" + Order + "&Product=" + Product + "&Batch=" + Batch + "&FormatName=" + FormatName + "&IdCertificates=" + IdCertificates)
+                        request.getRequestDispatcher("Generate?opt=2&Type=" + Type + "&Order=" + Order + "&Product=" + Product + "&Batch=" + Batch + "&FormatName=" + FormatName + "&IdCertificates=" + IdCertificates + "&StateCerti=1")
                                 .forward(request, response);
                         //</editor-fold>
                     }

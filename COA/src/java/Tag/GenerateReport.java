@@ -82,12 +82,12 @@ public class GenerateReport extends TagSupport {
 
             out.print("<div class='col-6' data-toggle='tooltip' data-placement='top' title='Registro'>");
             out.print("<select class='form-control' style='margin-top:12px' name='FormatName' required>");
-            lst_format = FormatJpa.ConsultFormatActive();
+            lst_format = FormatJpa.ConsultFormatActive(Type);
             if (lst_format != null) {
                 out.print("<option value=''>-- Seleccione un registro --</option>");
                 for (int i = 0; i < lst_format.size(); i++) {
                     Object[] ObjFormat = (Object[]) lst_format.get(i);
-                    out.print("<option value='" + ObjFormat[0] + "/" + ObjFormat[2] + "'>" + ObjFormat[2] + " V" + ObjFormat[3] + "</option>");
+                    out.print("<option value='" + ObjFormat[0] + "/" + ObjFormat[2] + "'>" + ObjFormat[2] + " - " + ObjFormat[4] + "</option>");
                 }
             } else {
                 out.print("<option value=''>-- Seleccione un registro --</option>");
@@ -165,12 +165,12 @@ public class GenerateReport extends TagSupport {
             out.print("<table class='table table-bordered' id='table-2'>");
             out.print("<thead>");
             out.print("<tr>");
-            out.print("<th class=\"text-center\">\n"
-                    + "                              <div class=\"custom-checkbox custom-control\">\n"
-                    + "                                <input type=\"checkbox\" data-checkboxes=\"mygroup\" data-checkbox-role=\"dad\" class=\"custom-control-input\" id=\"checkbox-all\">\n"
-                    + "                                <label for=\"checkbox-all\" class=\"custom-control-label\">&nbsp;</label>\n"
-                    + "                              </div>\n"
-                    + "                            </th>");
+//            out.print("<th class=\"text-center\">\n"
+//                    + "                              <div class=\"custom-checkbox custom-control\">\n"
+//                    + "                                <input type=\"checkbox\" data-checkboxes=\"mygroup\" data-checkbox-role=\"dad\" class=\"custom-control-input\" id=\"checkbox-all\">\n"
+//                    + "                                <label for=\"checkbox-all\" class=\"custom-control-label\">&nbsp;</label>\n"
+//                    + "                              </div>\n"
+//                    + "                            </th>");
             if (Type.equals("")) {
                 out.print("<th>App</th>");
             }
@@ -201,14 +201,14 @@ public class GenerateReport extends TagSupport {
                     out.print("<tr>");
                     try {
                         State = Integer.parseInt(ObjCerti[8].toString());
-                        if (State == 1) {
-                            out.print("<td><div class=\"custom-checkbox custom-control\">\n"
-                                    + "                                <input type=\"checkbox\" data-checkboxes=\"mygroup\"  onclick='Masive(this.value);' value='" + ObjCerti[0] + "' class=\"custom-control-input\" id=\"checkbox-" + i + "\">\n"
-                                    + "                                <label for=\"checkbox-" + i + "\" class=\"custom-control-label\">&nbsp;</label>\n"
-                                    + "                              </div></td>");
-                        } else {
-                            out.print("<td class='text-center'></td>");
-                        }
+//                        if (State == 1) {
+//                            out.print("<td><div class=\"custom-checkbox custom-control\">\n"
+//                                    + "                                <input type=\"checkbox\" data-checkboxes=\"mygroup\"  onclick='Masive(this.value);' value='" + ObjCerti[0] + "' class=\"custom-control-input\" id=\"checkbox-" + i + "\">\n"
+//                                    + "                                <label for=\"checkbox-" + i + "\" class=\"custom-control-label\">&nbsp;</label>\n"
+//                                    + "                              </div></td>");
+//                        } else {
+//                            out.print("<td class='text-center'></td>");
+//                        }
                     } catch (Exception e) {
                         State = 1;
                     }
@@ -226,7 +226,7 @@ public class GenerateReport extends TagSupport {
                         out.print("<td>" + ((ObjCerti[9] == null) ? "" : ObjCerti[9]) + "</td>");
                     }
                     out.print("<td>" + ((ObjCerti[10] == null) ? "" : ObjCerti[10]) + "</td>");
-                    out.print("<td>" + ((ObjCerti[9] == null) ? "" : ObjCerti[9].toString().trim()) + "</td>");
+                    out.print("<td>" + ((ObjCerti[11] == null) ? "" : ObjCerti[11].toString().trim()) + "</td>");
                     try {
                         switch (State) {
                             case 0:
