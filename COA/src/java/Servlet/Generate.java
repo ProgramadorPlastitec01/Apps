@@ -9,7 +9,6 @@ import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.List;
-import Connection.ConnectionSignature;
 import Controller.CertificatesJpaController;
 import Controller.EventsJpaController;
 
@@ -22,19 +21,15 @@ public class Generate extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             CertificatesJpaController CertificatesJpa = new CertificatesJpaController();
-            ConnectionSignature SignatureConn = new ConnectionSignature();
             EventsJpaController EventConn = new EventsJpaController();
             String RolName = session.getAttribute("Rol/Nombres").toString();
             int IdRol = Integer.parseInt(session.getAttribute("idRol").toString());
-            int Document = Integer.parseInt(session.getAttribute("Documento").toString());
-            int CodeSig = Integer.parseInt(session.getAttribute("Codigo").toString());
             int opt = Integer.parseInt(request.getParameter("opt"));
             String Signature = session.getAttribute("Firma").toString();
             int Order = 0, IdCertificates = 0, TempDelete = 0, Doc = 0, Cod = 0, Temp = 0, StateCerti = 0;
             String Type = "", Product = "", Batch = "", Html = "", Code = "", Consecutive = "", Customer = "", IdCertiMasive = "", Category = "",
                     Justification = "", Record = "", FormatName = "", Message = "", Amount = "", DateDispatch = "";
-            boolean result = false, UnauthorizedSignature = false;
-            List lst_sign = null;
+            boolean result = false;
             List lst_id = null;
             switch (opt) {
                 case 1:
@@ -320,6 +315,11 @@ public class Generate extends HttpServlet {
                         request.setAttribute("FinishCertificate", result);
                     }
                     request.getRequestDispatcher("Generate?opt=1&Type=" + Type).forward(request, response);
+                    //</editor-fold>
+                    break;
+                case 8:
+                    //<editor-fold defaultstate="collapsed" desc="CONSULT SIGNATURE REPORT">
+                    
                     //</editor-fold>
                     break;
             }

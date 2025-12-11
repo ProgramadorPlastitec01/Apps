@@ -1,0 +1,144 @@
+package Tag;
+
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.tagext.TagSupport;
+import Controller.CertificatesJpaController;
+import java.util.List;
+import javax.servlet.http.HttpSession;
+
+public class SignatureReport extends TagSupport {
+
+    @Override
+    public int doStartTag() throws JspException {
+        JspWriter out = pageContext.getOut();
+        HttpSession sesion = pageContext.getSession();
+        CertificatesJpaController CertificateJpa = new CertificatesJpaController();
+        int State = 0;
+        String Permission = "";
+        String Type = "";
+        List lst_ceriticate = null;
+        try {
+            try {
+                Type = pageContext.getRequest().getParameter("Type");
+            } catch (Exception e) {
+                Type = "";
+            }
+            try {
+                Permission = sesion.getAttribute("Permisos").toString();
+            } catch (Exception e) {
+                Permission = "";
+            }
+            out.print("<div class='section-body'>");
+            out.print("<div class='row'>");
+            out.print("<div class='col-12'>");
+            out.print("<div class='card'>");
+            out.print("<div class='card-body'>");
+            out.print("<div class='table-responsive'>");
+            out.print("<table class='table table-bordered' id='table-2'>");
+            out.print("<thead>");
+            out.print("<tr>");
+            out.print("<th class=\"text-center\">\n"
+                    + "                              <div class=\"custom-checkbox custom-control\">\n"
+                    + "                                <input type=\"checkbox\" data-checkboxes=\"mygroup\" data-checkbox-role=\"dad\" class=\"custom-control-input\" id=\"checkbox-all\">\n"
+                    + "                                <label for=\"checkbox-all\" class=\"custom-control-label\">&nbsp;</label>\n"
+                    + "                              </div>\n"
+                    + "                            </th>");
+            out.print("<th>App</th>");
+            out.print("<th>Registro</th>");
+            out.print("<th>Numero <br/> Certificado</th>");
+            out.print("<th>Cliente</th>");
+            out.print("<th>Orden</th>");
+            out.print("<th>Producto</th>");
+            out.print("<th>Lote</th>");
+            out.print("<th>Cantidades</th>");
+            out.print("<th>Fecha </br> Despacho</th>");
+            out.print("<th>Estado</th>");
+            out.print("<th>Ver</th>");
+            out.print("</tr>");
+            out.print("</thead>");
+            out.print("<tbody>");
+            lst_ceriticate = CertificateJpa.ConsultCertificatesSignature();
+            if (lst_ceriticate != null) {
+                for (int i = 0; i < lst_ceriticate.size(); i++) {
+                    Object[] ObjCerti = (Object[]) lst_ceriticate.get(i);
+                    out.print("<tr>");
+                    try {
+                        State = Integer.parseInt(ObjCerti[8].toString());
+                        if (State == 1) {
+                            out.print("<td><div class=\"custom-checkbox custom-control\">\n"
+                                    + "                                <input type=\"checkbox\" data-checkboxes=\"mygroup\"  onclick='Masive(this.value);' value='" + ObjCerti[0] + "' class=\"custom-control-input\" id=\"checkbox-" + i + "\">\n"
+                                    + "                                <label for=\"checkbox-" + i + "\" class=\"custom-control-label\">&nbsp;</label>\n"
+                                    + "                              </div></td>");
+                        } else {
+                            out.print("<td class='text-center'></td>");
+                        }
+                    } catch (Exception e) {
+                        State = 1;
+                    }
+                    if (Type.equals("")) {
+                        String NameSys = ObjCerti[1].toString();
+                        out.print("<td><img src='Interface/Imagen/" + (NameSys.equals("RegistrosLab") ? "Registros_lab" : NameSys.equals("InspeccionManga") ? "Inspeccion_manga" : NameSys.equals("ControlGrafado") ? "Control_grafado" : "ST_Desc_2") + ".png' alt='' class='ImgModuleModule'  data-toggle=\"tooltip\" data-placement=\"top\" title=\"\" data-original-title=\"" + NameSys + "\"/></td>");
+                    }
+                    out.print("<td>" + ((ObjCerti[2] == null) ? "" : ObjCerti[2]) + "</td>");
+                    out.print("<td>" + ((ObjCerti[3] == null) ? "" : ObjCerti[3]) + "</td>");
+                    out.print("<td>" + ((ObjCerti[4] == null) ? "" : ObjCerti[4]) + "</td>");
+                    out.print("<td>" + ((ObjCerti[5] == null) ? "" : ObjCerti[5]) + "</td>");
+                    out.print("<td>" + ((ObjCerti[6] == null) ? "" : ObjCerti[6]) + "</td>");
+                    out.print("<td>" + ((ObjCerti[7] == null) ? "" : ObjCerti[7]) + "</td>");
+                    out.print("<td>" + ((ObjCerti[10] == null) ? "" : ObjCerti[10]) + "</td>");
+                    out.print("<td>" + ((ObjCerti[11] == null) ? "" : ObjCerti[11].toString().trim()) + "</td>");
+                    try {
+                        switch (State) {
+                            case 0:
+                                out.print("<td class='text-center' data-toggle='tooltip' data-placement='top' title='Eliminado'><span><i   style='font-size:22px' class=\"fas fa-trash text-danger\"></i></span></td>");
+                                break;
+                            case 1:
+                                out.print("<td class='text-center'><span data-toggle='tooltip' data-placement='top' title='En gestión' ><i  style='font-size:22px' class=\"fas fa-spinner fa-spin text-info\"></i></span></td>");
+                                break;
+                            case 2:
+                                out.print("<td class='text-center' data-toggle='tooltip' data-placement='top' title='Finalizado'><span><i  style='font-size:22px' class=\"fas fa-check text-success\" ></i></span></td>");
+                                break;
+                            default:
+                                out.print("<td class='text-center'><span data-toggle='tooltip' data-placement='top' title='Firmado' ><i  style='font-size:22px' class=\"fas fa-signature text-primary\"></i></span></td>");
+                                break;
+                        }
+                    } catch (IOException | NumberFormatException e) {
+                        out.print("<td class='text-center'><button class='btn btn-danter btn-sm' style='border-radius: 4px;'><i class=\"fas fa-times\"></i></button></td>");
+                    }
+                    out.print("<td >");
+                    out.print("<div class='d-flex'>");
+                    if (State == 1) {
+                        if (Permission.contains("[9]")) {
+                            out.print("<button class='btn btn-danger btn-sm' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Eliminar' onclick=\"confirmarEliminacion('Generate?opt=5&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "&Category=Delete')\"><i class='fas fa-trash'></i></button>");
+                        }
+                    }
+                    out.print("</div>");
+                    if (State > 1 && State < 2) {
+                        out.print("<div class='d-flex mt-2 text-center'>");
+                        out.print("<button class='btn btn-success btn-sm mr-2' style='border-radius: 4px;' onclick=\"confirmarFinalizar('Generate?opt=7&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "')\" data-toggle='tooltip' data-placement='bottom' title='Finalizar'><i class=\"fas fa-check\"></i></button>");
+                        out.print("</div>");
+
+                    }
+                    out.print("</td>");
+                    out.print("</tr>");
+                }
+            }
+            out.print("</tbody>");
+            out.print("</table>");
+            out.print("</div>");
+
+            out.print("</div>");
+            out.print("</div>");
+            out.print("</div>");
+        } catch (IOException ex) {
+            Logger.getLogger(SignatureReport.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(SignatureReport.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return super.doStartTag();
+    }
+}
