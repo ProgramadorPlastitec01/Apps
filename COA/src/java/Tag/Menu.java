@@ -93,7 +93,7 @@ public class Menu extends TagSupport {
             }
             if (Permission.contains("[5]")) {
                 out.print("<li class=\"dropdown\">");
-                out.print("<a href='Generate?opt=1&Type=' class=\"nav-link\" onclick='cargarDatos()'><i class=\"fas fa-signature\"></i><span>Revisión</span></a>");
+                out.print("<a href='Generate?opt=8' class=\"nav-link\" onclick='cargarDatos()'><i class=\"fas fa-signature\"></i><span>Revisión</span></a>");
                 out.print("</li>");
             }
             if (Permission.contains("[5]")) {

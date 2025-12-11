@@ -26,7 +26,7 @@ public class Generate extends HttpServlet {
             int IdRol = Integer.parseInt(session.getAttribute("idRol").toString());
             int opt = Integer.parseInt(request.getParameter("opt"));
             String Signature = session.getAttribute("Firma").toString();
-            int Order = 0, IdCertificates = 0, TempDelete = 0, Doc = 0, Cod = 0, Temp = 0, StateCerti = 0;
+            int Order = 0, IdCertificates = 0, TempDelete = 0, TempM = 0, Temp = 0, StateCerti = 0;
             String Type = "", Product = "", Batch = "", Html = "", Code = "", Consecutive = "", Customer = "", IdCertiMasive = "", Category = "",
                     Justification = "", Record = "", FormatName = "", Message = "", Amount = "", DateDispatch = "";
             boolean result = false;
@@ -91,6 +91,11 @@ public class Generate extends HttpServlet {
                     } catch (Exception e) {
                         StateCerti = 0;
                     }
+                    try {
+                        TempM = Integer.parseInt(request.getParameter("TempM"));
+                    } catch (Exception e) {
+                        TempM = 0;
+                    }
                     request.setAttribute("Type", Type);
                     request.setAttribute("Order", Order);
                     request.setAttribute("Product", Product);
@@ -100,6 +105,7 @@ public class Generate extends HttpServlet {
                     request.setAttribute("IdCertificates", IdCertificates);
                     request.setAttribute("TempDelete", TempDelete);
                     request.setAttribute("StateCerti", StateCerti);
+                    request.setAttribute("TempM", TempM);
                     request.getRequestDispatcher("Visual.jsp").forward(request, response);
                     //</editor-fold>
                     break;
@@ -137,7 +143,7 @@ public class Generate extends HttpServlet {
                     }
                     if (IdCertificates > 0) {
                         //<editor-fold defaultstate="collapsed" desc="UPDATE">
-                        result = CertificatesJpa.CertificatesUpdate(IdCertificates, Consecutive, Amount, DateDispatch ,Html);
+                        result = CertificatesJpa.CertificatesUpdate(IdCertificates, Consecutive, Amount, DateDispatch, Html);
                         if (result) {
                             request.setAttribute("UpdateCertificate", result);
                         }
@@ -224,7 +230,7 @@ public class Generate extends HttpServlet {
                                 if (result) {
                                     request.setAttribute("UpdateCertificate", result);
                                 }
-                                request.getRequestDispatcher("Generate?opt=1&Type=" + Type).forward(request, response);
+                                request.getRequestDispatcher("Generate?opt=8").forward(request, response);
                                 //</editor-fold>
                             } else {
                                 //<editor-fold defaultstate="collapsed" desc="SIGNATURE UNIQUE">
@@ -319,7 +325,7 @@ public class Generate extends HttpServlet {
                     break;
                 case 8:
                     //<editor-fold defaultstate="collapsed" desc="CONSULT SIGNATURE REPORT">
-                    
+                    request.getRequestDispatcher("SignatureReport.jsp").forward(request, response);
                     //</editor-fold>
                     break;
             }

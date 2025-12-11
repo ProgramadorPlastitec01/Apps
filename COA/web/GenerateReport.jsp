@@ -13,7 +13,7 @@
         <link rel="icon" type="image/png" href="Interface/Imagen/Icon.fw.png">
         <title>Generación</title>
     </head>
-    <body class="sidebar-mini">
+    <body>
         <jsp:include page="Menu.jsp"></jsp:include>
             <div class="main-content" style="min-height: 694px;">
             <Generate:GenerateReport/>
@@ -139,42 +139,6 @@
                     });
                 });
             });
-
-            function Masive(ide) {
-                var id = "[" + ide + "]";
-                var input = document.getElementById("IdCerti");
-                var content = input.value;
-
-                if (content.includes(id)) {
-                    input.value = content.replace(id, "");
-                } else {
-                    input.value += id;
-                }
-            }
-
-
-            function ExecuteForm() {
-                const form = document.getElementById("myForm");
-                const idCerti = document.getElementById("IdCerti");
-
-                // Validar que haya al menos un id seleccionado
-                if (!idCerti || idCerti.value.trim() === "" || idCerti.value.trim() === "[]") {
-                    iziToast.warning({
-                        title: 'Validación requerida',
-                        message: 'Debes seleccionar al menos un certificado para firmar.',
-                        position: 'bottomRight',
-                        timeout: 5000
-                    });
-                    return false; // Detiene el envío
-                }
-
-                // Validar el formulario HTML5 normalmente
-                if (form.checkValidity()) {
-                    form.submit();
-                } else {
-                    form.reportValidity();
-                }
-            }
 
         </script>
         <script>

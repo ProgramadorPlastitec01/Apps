@@ -165,12 +165,6 @@ public class GenerateReport extends TagSupport {
             out.print("<table class='table table-bordered' id='table-2'>");
             out.print("<thead>");
             out.print("<tr>");
-//            out.print("<th class=\"text-center\">\n"
-//                    + "                              <div class=\"custom-checkbox custom-control\">\n"
-//                    + "                                <input type=\"checkbox\" data-checkboxes=\"mygroup\" data-checkbox-role=\"dad\" class=\"custom-control-input\" id=\"checkbox-all\">\n"
-//                    + "                                <label for=\"checkbox-all\" class=\"custom-control-label\">&nbsp;</label>\n"
-//                    + "                              </div>\n"
-//                    + "                            </th>");
             if (Type.equals("")) {
                 out.print("<th>App</th>");
             }
@@ -201,14 +195,6 @@ public class GenerateReport extends TagSupport {
                     out.print("<tr>");
                     try {
                         State = Integer.parseInt(ObjCerti[8].toString());
-//                        if (State == 1) {
-//                            out.print("<td><div class=\"custom-checkbox custom-control\">\n"
-//                                    + "                                <input type=\"checkbox\" data-checkboxes=\"mygroup\"  onclick='Masive(this.value);' value='" + ObjCerti[0] + "' class=\"custom-control-input\" id=\"checkbox-" + i + "\">\n"
-//                                    + "                                <label for=\"checkbox-" + i + "\" class=\"custom-control-label\">&nbsp;</label>\n"
-//                                    + "                              </div></td>");
-//                        } else {
-//                            out.print("<td class='text-center'></td>");
-//                        }
                     } catch (Exception e) {
                         State = 1;
                     }
@@ -247,7 +233,7 @@ public class GenerateReport extends TagSupport {
                     }
                     out.print("<td >");
                     out.print("<div class='d-flex'>");
-                    out.print("<button class='btn btn-green btn-sm mr-2' style='border-radius: 4px;' onclick=\"javascript:location.href='Generate?opt=2&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "&TempDelete=" + TempDelete + "&Order=" + ObjCerti[5] + "&Batch=" + ObjCerti[7] + "&StateCerti=" + State + "';cargarDatos()\"  data-toggle='tooltip' data-placement='top' title='Ver'><i class=\"fas fa-eye\"></i></button>");
+                    out.print("<button class='btn btn-green btn-sm mr-2' style='border-radius: 4px;' onclick=\"javascript:location.href='Generate?opt=2&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "&TempDelete=" + TempDelete + "&Order=" + ObjCerti[5] + "&Batch=" + ObjCerti[7] + "&StateCerti=" + State + "&TempM=0';cargarDatos()\"  data-toggle='tooltip' data-placement='top' title='Ver'><i class=\"fas fa-eye\"></i></button>");
                     if (State == 1) {
                         if (Permission.contains("[9]")) {
                             out.print("<button class='btn btn-danger btn-sm' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Eliminar' onclick=\"confirmarEliminacion('Generate?opt=5&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "&Category=Delete')\"><i class='fas fa-trash'></i></button>");
@@ -258,13 +244,11 @@ public class GenerateReport extends TagSupport {
                         out.print("<div class='d-flex mt-2 text-center'>");
                         out.print("<button class='btn btn-success btn-sm mr-2' style='border-radius: 4px;' onclick=\"confirmarFinalizar('Generate?opt=7&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "')\" data-toggle='tooltip' data-placement='bottom' title='Finalizar'><i class=\"fas fa-check\"></i></button>");
                         out.print("</div>");
-
                     }
                     out.print("</td>");
                     out.print("</tr>");
                 }
             }
-
             out.print("</tbody>");
             out.print("</table>");
             out.print("</div>");

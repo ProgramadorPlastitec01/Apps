@@ -181,7 +181,7 @@ function PrintHtml() {
                 @media print {
 
                 body {
-                    border: 1px solid #000 !important;
+                    border: 1px solid #f6f6f6 !important;
                     margin: 5mm !important;   /* espacio entre borde y el borde de la hoja */
                     padding: 5mm !important;  /* espacio interno */
                     box-sizing: border-box !important;

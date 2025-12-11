@@ -28,7 +28,7 @@ public class Visual extends TagSupport {
         CertificatesJpaController CertificatesJpa = new CertificatesJpaController();
         ConnectionGeneracionLotes GeneracionLotesJpa = new ConnectionGeneracionLotes();
         String Type = "", Product = "", ProductFact = "", Batch = "", DataTechnicalSheet = "", Html = "", BatchLay = "", Record = "", FormatName = "", Message = "", IdSig = "";
-        int Order = 0, IdForm = 0, Count = 1, Count2 = 1, IdCertificates = 0, State = 0, TempDelete = 0, StateCerti = 0;
+        int Order = 0, IdForm = 0, Count = 1, Count2 = 1, IdCertificates = 0, State = 0, TempDelete = 0, StateCerti = 0, TempM = 0;
         List lst_content = null;
         List lst_headFact = null;
         List lst_RLab = null;
@@ -77,6 +77,11 @@ public class Visual extends TagSupport {
             } catch (NumberFormatException e) {
                 Order = 0;
             }
+            try {
+                TempM = Integer.parseInt(Optional.ofNullable(pageContext.getRequest().getParameter("TempM")).orElse("0"));
+            } catch (NumberFormatException e) {
+                TempM = 0;
+            }
             // Procesar ProductFact
             try {
                 ProductFact = Product.replace("2C", "3C");
@@ -108,12 +113,20 @@ public class Visual extends TagSupport {
                 out.print("<div class='card-header' style='justify-content: space-between;'>");
                 out.print("<div class='d-flex justify-content-between' style='width:100%'>");
                 out.print("<div class='mr-2 d-flex align-items-baseline'>");
-                out.print("<button class='btn btn-outline-primary btn-sm mr-2' "
-                        + "style='border-radius: 4px; padding: 2px 9px;' "
-                        + "onclick=\"javascript:location.href='Generate?opt=1&Type="
-                        + Type + "&TempDelete=" + TempDelete + "';cargarDatos()\">"
-                        + "<i class='fas fa-arrow-left'></i>"
-                        + "</button>");
+                if (TempM == 0) {
+                    out.print("<button class='btn btn-outline-primary btn-sm mr-2' "
+                            + "style='border-radius: 4px; padding: 2px 9px;' "
+                            + "onclick=\"javascript:location.href='Generate?opt=1&Type="
+                            + Type + "&TempDelete=" + TempDelete + "';cargarDatos()\">"
+                            + "<i class='fas fa-arrow-left'></i>"
+                            + "</button>");
+                } else {
+                    out.print("<button class='btn btn-outline-primary btn-sm mr-2' "
+                            + "style='border-radius: 4px; padding: 2px 9px;' "
+                            + "onclick=\"javascript:location.href='Generate?opt=8';cargarDatos()\">"
+                            + "<i class='fas fa-arrow-left'></i>"
+                            + "</button>");
+                }
                 out.print("<h4>Generación Certificado</h4>");
                 out.print("</div>");
                 //<editor-fold defaultstate="collapsed" desc="BUTTOM'S">
