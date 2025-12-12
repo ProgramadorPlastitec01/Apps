@@ -36,6 +36,24 @@ public class CertificatesJpaController implements Serializable {
             return null;
         }
     }
+    public List ConsultCertificatesSignature() {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_ctf_c_ConsultCertificatesSignature`()");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
 
     public List ConsultCeritcateTypeDelete(String Type) {
         EntityManager etm = getEntityManager();
@@ -94,11 +112,11 @@ public class CertificatesJpaController implements Serializable {
         }
     }
 
-    public boolean CertificatesRegister(String Tpe, String Cde, int Ord, String Pdt, String Btc, String Cql, String Ctm, String Amt, String Urg, String Fmt) {
+    public boolean CertificatesRegister(String Tpe, String Cde, int Ord, String Pdt, String Btc, String Cql, String Ctm, String Amt, String Ddt, String Urg, String Fmt) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
-            Query q = em.createNativeQuery("CALL `Sp_cft_r_RegisterCertificates`('" + Tpe + "','" + Cde + "','" + Ord + "','" + Pdt + "','" + Btc + "','" + Cql + "','" + Ctm + "','" + Amt + "','" + Urg + "','" + Fmt + "')");
+            Query q = em.createNativeQuery("CALL `Sp_cft_r_RegisterCertificates`('" + Tpe + "','" + Cde + "','" + Ord + "','" + Pdt + "','" + Btc + "','" + Cql + "','" + Ctm + "','" + Amt + "','" + Ddt + "','" + Urg + "','" + Fmt + "')");
             int resultado = q.executeUpdate();
             em.getTransaction().commit();
             em.clear();
@@ -113,11 +131,11 @@ public class CertificatesJpaController implements Serializable {
         }
     }
 
-    public boolean CertificatesUpdate(int IdC, String Cql, String Amt, String Fmt) {
+    public boolean CertificatesUpdate(int IdC, String Cql, String Amt, String Ddt, String Fmt) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
-            Query q = em.createNativeQuery("CALL `Sp_ctf_u_UpdateCertificates`('" + IdC + "','" + Cql + "','" + Amt + "','" + Fmt + "')");
+            Query q = em.createNativeQuery("CALL `Sp_ctf_u_UpdateCertificates`('" + IdC + "','" + Cql + "','" + Amt + "','" + Ddt + "','" + Fmt + "')");
             int resultado = q.executeUpdate();
             em.getTransaction().commit();
             em.clear();

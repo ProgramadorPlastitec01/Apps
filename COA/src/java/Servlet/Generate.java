@@ -9,10 +9,8 @@ import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.List;
-import Connection.ConnectionSignature;
 import Controller.CertificatesJpaController;
 import Controller.EventsJpaController;
-import Method.Util;
 
 public class Generate extends HttpServlet {
 
@@ -23,19 +21,15 @@ public class Generate extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             CertificatesJpaController CertificatesJpa = new CertificatesJpaController();
-            ConnectionSignature SignatureConn = new ConnectionSignature();
             EventsJpaController EventConn = new EventsJpaController();
             String RolName = session.getAttribute("Rol/Nombres").toString();
             int IdRol = Integer.parseInt(session.getAttribute("idRol").toString());
-            int Document = Integer.parseInt(session.getAttribute("Documento").toString());
-            int CodeSig = Integer.parseInt(session.getAttribute("Codigo").toString());
             int opt = Integer.parseInt(request.getParameter("opt"));
             String Signature = session.getAttribute("Firma").toString();
-            int Order = 0, IdCertificates = 0, TempDelete = 0, Doc = 0, Cod = 0, Temp = 0, StateCerti = 0;
+            int Order = 0, IdCertificates = 0, TempDelete = 0, TempM = 0, Temp = 0, StateCerti = 0;
             String Type = "", Product = "", Batch = "", Html = "", Code = "", Consecutive = "", Customer = "", IdCertiMasive = "", Category = "",
-                    Justification = "", Record = "", FormatName = "", Message = "", Amount = "";
-            boolean result = false, UnauthorizedSignature = false;
-            List lst_sign = null;
+                    Justification = "", Record = "", FormatName = "", Message = "", Amount = "", DateDispatch = "";
+            boolean result = false;
             List lst_id = null;
             switch (opt) {
                 case 1:
@@ -97,6 +91,11 @@ public class Generate extends HttpServlet {
                     } catch (Exception e) {
                         StateCerti = 0;
                     }
+                    try {
+                        TempM = Integer.parseInt(request.getParameter("TempM"));
+                    } catch (Exception e) {
+                        TempM = 0;
+                    }
                     request.setAttribute("Type", Type);
                     request.setAttribute("Order", Order);
                     request.setAttribute("Product", Product);
@@ -106,6 +105,7 @@ public class Generate extends HttpServlet {
                     request.setAttribute("IdCertificates", IdCertificates);
                     request.setAttribute("TempDelete", TempDelete);
                     request.setAttribute("StateCerti", StateCerti);
+                    request.setAttribute("TempM", TempM);
                     request.getRequestDispatcher("Visual.jsp").forward(request, response);
                     //</editor-fold>
                     break;
@@ -136,9 +136,14 @@ public class Generate extends HttpServlet {
                     } catch (Exception e) {
                         Amount = "*****";
                     }
+                    try {
+                        DateDispatch = request.getParameter("DateDispatch");
+                    } catch (Exception e) {
+                        DateDispatch = "*****";
+                    }
                     if (IdCertificates > 0) {
                         //<editor-fold defaultstate="collapsed" desc="UPDATE">
-                        result = CertificatesJpa.CertificatesUpdate(IdCertificates, Consecutive, Amount, Html);
+                        result = CertificatesJpa.CertificatesUpdate(IdCertificates, Consecutive, Amount, DateDispatch, Html);
                         if (result) {
                             request.setAttribute("UpdateCertificate", result);
                         }
@@ -177,7 +182,7 @@ public class Generate extends HttpServlet {
                         } catch (Exception e) {
                             FormatName = "";
                         }
-                        result = CertificatesJpa.CertificatesRegister(Type, Code, Order, Product, Batch, Consecutive, Customer, Amount, RolName, Html);
+                        result = CertificatesJpa.CertificatesRegister(Type, Code, Order, Product, Batch, Consecutive, Customer, Amount, DateDispatch, RolName, Html);
                         if (result) {
                             lst_id = CertificatesJpa.ConsultCeritcateTypeId(Type);
                             if (lst_id != null) {
@@ -190,7 +195,7 @@ public class Generate extends HttpServlet {
                             }
                             request.setAttribute("RegisterCertificates", result);
                         }
-                        request.getRequestDispatcher("Generate?opt=2&Type=" + Type + "&Order=" + Order + "&Product=" + Product + "&Batch=" + Batch + "&FormatName=" + FormatName + "&IdCertificates=" + IdCertificates)
+                        request.getRequestDispatcher("Generate?opt=2&Type=" + Type + "&Order=" + Order + "&Product=" + Product + "&Batch=" + Batch + "&FormatName=" + FormatName + "&IdCertificates=" + IdCertificates + "&StateCerti=1")
                                 .forward(request, response);
                         //</editor-fold>
                     }
@@ -225,7 +230,7 @@ public class Generate extends HttpServlet {
                                 if (result) {
                                     request.setAttribute("UpdateCertificate", result);
                                 }
-                                request.getRequestDispatcher("Generate?opt=1&Type=" + Type).forward(request, response);
+                                request.getRequestDispatcher("Generate?opt=8").forward(request, response);
                                 //</editor-fold>
                             } else {
                                 //<editor-fold defaultstate="collapsed" desc="SIGNATURE UNIQUE">
@@ -316,6 +321,11 @@ public class Generate extends HttpServlet {
                         request.setAttribute("FinishCertificate", result);
                     }
                     request.getRequestDispatcher("Generate?opt=1&Type=" + Type).forward(request, response);
+                    //</editor-fold>
+                    break;
+                case 8:
+                    //<editor-fold defaultstate="collapsed" desc="CONSULT SIGNATURE REPORT">
+                    request.getRequestDispatcher("SignatureReport.jsp").forward(request, response);
                     //</editor-fold>
                     break;
             }

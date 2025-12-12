@@ -178,26 +178,21 @@ function PrintHtml() {
                     color: #000 !important;
                 }
 
-                /* 🔹 Ajustes estrictos para impresión */
                 @media print {
-                    @page {
-                        margin: 5mm;  /* ⭐ Ajusta márgenes del papel */
-                    }
 
-                    body {
-                        margin: 0 !important;
-                        padding: 0 !important;
-                    }
-
-                    .bg-secondary,
-                    .table-secondary,
-                    .table-secondary > th,
-                    .table-secondary > td,
-                    .table-secondary thead th {
-                        -webkit-print-color-adjust: exact !important;
-                        print-color-adjust: exact !important;
-                    }
+                body {
+                    border: 1px solid #f6f6f6 !important;
+                    margin: 5mm !important;   /* espacio entre borde y el borde de la hoja */
+                    padding: 5mm !important;  /* espacio interno */
+                    box-sizing: border-box !important;
                 }
+
+                html {
+                    border: none !important;
+                    padding: 0 !important;
+                    margin: 0 !important;
+                }
+            }
             </style>
         </head>
         <body class="container">
