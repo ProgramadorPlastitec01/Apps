@@ -3,10 +3,10 @@
     <persistence-unit name="LocativosPU" transaction-type="RESOURCE_LOCAL">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
         <properties>
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://172.16.2.111:3307/locativos_va030905"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/locativos_va030905"/>
             <!--<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3307/locativos_va030905"/>-->
             <property name="javax.persistence.jdbc.user" value="root"/>
-            <property name="javax.persistence.jdbc.password" value="x85Ov4"/>
+            <property name="javax.persistence.jdbc.password" value="94#qS0"/>
             <!--<property name="javax.persistence.jdbc.password" value="hEMu88"/>-->
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
         </properties>

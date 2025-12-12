@@ -704,8 +704,12 @@ public class Tag_computer extends TagSupport {
                         String[] DtaFormat = ObjFormat[4].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
 
                         //<editor-fold defaultstate="collapsed" desc="REPLACE DATA">
-                        format = format.replace("XXXTIPOOXXX", ObInfo[2].toString())
-                                .replace("XXXAMRCAXXX", ObInfo[3].toString())
+                        try {
+                            format = format.replace("XXXTIPOOXXX", ObInfo[2].toString());
+                        } catch (Exception e) {
+                            format = format.replace("XXXTIPOOXXX", "-");
+                        }
+                        format = format.replace("XXXAMRCAXXX", ObInfo[3].toString())
                                 .replace("XXXMODELOXXX", ObInfo[4].toString())
                                 .replace("XXXSERIALXXX", ObInfo[5].toString())
                                 .replace("XXXITEMXXX", ObInfo[6].toString());
@@ -732,7 +736,6 @@ public class Tag_computer extends TagSupport {
                         format = format.replace("XXXJefe o DirectorXXX", "<b class='text-warning'><b class='text-warning'>Pendiente Firma</b></b>");
                         format = format.replace("XXXRealizadoXXX", "<b class='text-warning'><b class='text-warning'>Pendiente Firma</b></b>");
                         format = format.replace("XXXUsuarioXXX", "<b class='text-warning'><b class='text-warning'>Pendiente Firma</b></b>");
-
 
                         //</editor-fold>
                         //<editor-fold defaultstate="collapsed" desc="ITEMS PLUS">

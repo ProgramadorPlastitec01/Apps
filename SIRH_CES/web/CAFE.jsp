@@ -83,13 +83,13 @@
                     if (obj_parametros[2].toString().contains(ipAddress)) {
             %>
                     if (decimal === "11.0501") {
-                        location.href = 'http://172.16.1.164:8084/SIRH_CES/CES?opc=3';
+                        location.href = 'http://172.16.1.247:8080/SIRH_CES/CES?opc=3';
                     }
                     if (decimal === "19.0501") {
-                        location.href = 'http://172.16.1.164:8084/SIRH_CES/CES?opc=3';
+                        location.href = 'http://172.16.1.247:8080/SIRH_CES/CES?opc=3';
                     }
                     if (decimal === "04.0501") {
-                        location.href = 'http://172.16.1.164:8084/SIRH_CES/CES?opc=3';
+                        location.href = 'http://172.16.1.247:8080/SIRH_CES/CES?opc=3';
                     }
             <%
                             }
@@ -109,10 +109,10 @@
                     var datos = document.getElementById('Tr_datos').innerHTML;
                     if (datos.includes('ESCANEAR') || datos.includes('NO PERMITIDO')) {
                     } else {
-                        location.href = 'http://172.16.1.164:8084/SIRH_CES/CAFE?opc=1&dts=0';
+                        location.href = 'http://172.16.1.247:8080/SIRH_CES/CAFE?opc=1&dts=0';
                     }
                 } catch (error) {
-                    location.href = 'http://172.16.1.164:8084/SIRH_CES/CAFE?opc=3';
+                    location.href = 'http://172.16.1.247:8080/SIRH_CES/CAFE?opc=3';
                 }
             }
         </script>

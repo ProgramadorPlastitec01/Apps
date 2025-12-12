@@ -3,8 +3,8 @@
   <persistence-unit name="ControlesMicrobiologicosPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://172.16.2.111:3307/controles_microbiologicos_va"/>
-      <property name="javax.persistence.jdbc.password" value="x85Ov4"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/controles_microbiologicos_va"/>
+      <property name="javax.persistence.jdbc.password" value="94#qS0"/>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
       <property name="javax.persistence.jdbc.user" value="root"/>
     </properties>

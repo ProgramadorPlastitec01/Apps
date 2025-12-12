@@ -84,16 +84,16 @@
                             if (obj_parametros[2].toString().contains(ipAddress)) {
             %>
                     if (decimal === "7.5901") {
-                        location.href = 'http://172.16.1.164:8084/SIRH_CES/CAFE?opc=3';
+                        location.href = 'http://172.16.1.247:8080/SIRH_CES/CAFE?opc=3';
                     }
                     if (decimal === "15.5901") {
-                        location.href = 'http://172.16.1.164:8084/SIRH_CES/CAFE?opc=3';
+                        location.href = 'http://172.16.1.247:8080/SIRH_CES/CAFE?opc=3';
                     }
                     if (decimal === "00.5901") {
-                        location.href = 'http://172.16.1.164:8084/SIRH_CES/CAFE?opc=3';
+                        location.href = 'http://172.16.1.247:8080/SIRH_CES/CAFE?opc=3';
                     }
                     if (decimal === "13.001") {
-                        location.href = 'http://172.16.1.164:8084/SIRH_CES/CAFE?opc=3';
+                        location.href = 'http://172.16.1.247:8080/SIRH_CES/CAFE?opc=3';
                     }
             <%
         }
@@ -102,10 +102,10 @@
 
 
                     if (decimal === "21.0001") {
-                        location.href = 'http://172.16.1.164:8084/SIRH_CES/CES?opc=3';
+                        location.href = 'http://172.16.1.247:8080/SIRH_CES/CES?opc=3';
                     }
                     if (decimal === "05.0101") {
-                        location.href = 'http://172.16.1.164:8084/SIRH_CES/CES?opc=3';
+                        location.href = 'http://172.16.1.247:8080/SIRH_CES/CES?opc=3';
                     }
                 }
                 function checkTime(i) {
@@ -121,10 +121,10 @@
                     var datos = document.getElementById('Tr_datos').innerHTML;
                     if (datos.includes('ESCANEAR') || datos.includes('NO PERMITIDO')) {
                     } else {
-                        location.href = 'http://172.16.1.164:8084/SIRH_CES/CES?opc=1&dts=0';
+                        location.href = 'http://172.16.1.247:8080/SIRH_CES/CES?opc=1&dts=0';
                     }
                 } catch (error) {
-                    location.href = 'http://172.16.1.164:8084/SIRH_CES/CES?opc=3';
+                    location.href = 'http://172.16.1.247:8080/SIRH_CES/CES?opc=3';
                 }
             }
         </script>
