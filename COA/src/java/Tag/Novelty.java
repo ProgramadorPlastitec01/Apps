@@ -36,7 +36,7 @@ public class Novelty extends TagSupport {
             out.print("<th>Producto</th>");
             out.print("<th>Lote</th>");
             out.print("<th>Descripcion</th>");
-            out.print("<th>Usuario</th>");
+            out.print("<th>Responsable</th>");
             out.print("</tr>");
             out.print("</thead>");
 
