@@ -652,7 +652,7 @@
                         <div class="back Nexus" style="background: #ede2e2;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">Nexus</h1>
                             <button  class="button-33 nx" role="button" 
-                                     onclick="javascript:window.open('http://172.16.2.117:8084/AppTI/index.jsp', '', 'width=auto,height=auto,left=50,\n\
+                                     onclick="javascript:window.open('http://172.16.1.247:8080/AppTI/index.jsp', '', 'width=auto,height=auto,left=50,\n\
 										top=50,toolbar=yes');
                                              void 0">Ingresar</button>
                         </div>
