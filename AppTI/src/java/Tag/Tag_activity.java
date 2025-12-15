@@ -125,8 +125,14 @@ public class Tag_activity extends TagSupport {
                     out.print("<tbody>");
                     for (int i = 0; i < lst_activityDet.size(); i++) {
                         Object[] vw = (Object[]) lst_activityDet.get(i);
-                        String[] pcDv_name = vw[2].toString().replace("[", "").replace("]", "").split("/");
-                        String namepcDv = pcDv_name[1].toString();
+                        String[] pcDv_name = {};
+                        String namepcDv = "";
+                        try {
+                            pcDv_name = vw[2].toString().replace("[", "").replace("]", "").split("/");
+                            namepcDv = pcDv_name[1].toString();
+                        } catch (Exception e) {
+                            namepcDv = "-";
+                        }
                         out.print("<tr style='font-size: 12px;'>");
                         out.print("<td><b>" + namepcDv + "</b></td>");
                         if (vw[7] != null) {
@@ -286,8 +292,15 @@ public class Tag_activity extends TagSupport {
                     out.print("<tbody>");
                     for (int i = 0; i < lst_activityDet.size(); i++) {
                         Object[] ObjDeta = (Object[]) lst_activityDet.get(i);
-                        String[] pcDv_name = ObjDeta[2].toString().replace("[", "").replace("]", "").split("/");
-                        String namepcDv = pcDv_name[1].toString();
+                        String[] pcDv_name = {};
+                        String namepcDv = "";
+                        try {
+                            pcDv_name = ObjDeta[2].toString().replace("[", "").replace("]", "").split("/");
+                            namepcDv = pcDv_name[1].toString();
+                        } catch (Exception e) {
+                            namepcDv = "-";
+                        }
+
                         out.print("<tr>");
                         out.print("<td>" + namepcDv + "</td>");
                         if (ObjDeta[3] == null) {
