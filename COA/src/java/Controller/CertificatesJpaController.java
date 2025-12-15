@@ -36,6 +36,7 @@ public class CertificatesJpaController implements Serializable {
             return null;
         }
     }
+
     public List ConsultCertificatesSignature() {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
@@ -169,11 +170,11 @@ public class CertificatesJpaController implements Serializable {
         }
     }
 
-    public boolean RegisterNovelty(int IdC, String Ctg, String Dpc, String Urg) {
+    public boolean RegisterNovelty(int IdC, String Ctg, String Dpc, String Urg, int Ste) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
-            Query q = em.createNativeQuery("CALL `Sp_nvt_r_RegisterNovelty`('" + IdC + "','" + IdC + "','" + Ctg + "','" + Dpc + "','" + Urg + "')");
+            Query q = em.createNativeQuery("CALL `Sp_nvt_r_RegisterNovelty`('" + IdC + "','" + IdC + "','" + Ctg + "','" + Dpc + "','" + Urg + "','" + Ste + "')");
             int resultado = q.executeUpdate();
             em.getTransaction().commit();
             em.clear();

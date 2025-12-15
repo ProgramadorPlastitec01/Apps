@@ -26,7 +26,7 @@ public class Generate extends HttpServlet {
             int IdRol = Integer.parseInt(session.getAttribute("idRol").toString());
             int opt = Integer.parseInt(request.getParameter("opt"));
             String Signature = session.getAttribute("Firma").toString();
-            int Order = 0, IdCertificates = 0, TempDelete = 0, TempM = 0, Temp = 0, StateCerti = 0;
+            int Order = 0, IdCertificates = 0, TempDelete = 0, TempM = 0, Temp = 0, StateCerti = 0, State = 0;
             String Type = "", Product = "", Batch = "", Html = "", Code = "", Consecutive = "", Customer = "", IdCertiMasive = "", Category = "",
                     Justification = "", Record = "", FormatName = "", Message = "", Amount = "", DateDispatch = "";
             boolean result = false;
@@ -268,7 +268,12 @@ public class Generate extends HttpServlet {
                     } catch (Exception e) {
                         Justification = "";
                     }
-                    result = CertificatesJpa.RegisterNovelty(IdCertificates, Category, Justification, RolName);
+                    try {
+                        State = Integer.parseInt(request.getParameter("State"));
+                    } catch (Exception e) {
+                        State = 0;
+                    }
+                    result = CertificatesJpa.RegisterNovelty(IdCertificates, Category, Justification, RolName, State);
                     if (result) {
                         if (Category.equals("Delete")) {
                             request.setAttribute("DeleteCertificates", result);

@@ -145,7 +145,7 @@ public class Visual extends TagSupport {
                     out.print("<div class='d-flex'>");
                     out.print("<div class='mr-4'>"
                             + "<button class='btn btn-outline-danger btn-sm' "
-                            + "style='border-radius: 4px; padding: 2px 9px;' onclick=\"confirmarDevolucion('Generate?opt=5&Type=" + Type + "&IdCertificates=" + IdCertificates + "&Category=Return')\" data-toggle='tooltip' "
+                            + "style='border-radius: 4px; padding: 2px 9px;' onclick=\"confirmarDevolucion('Generate?opt=5&Type=" + Type + "&IdCertificates=" + IdCertificates + "&Category=Return&State=1')\" data-toggle='tooltip' "
                             + "data-placement='top' title='Devolver'>"
                             + "<i class=\"fas fa-undo-alt\"></i>"
                             + "</button></div>");
