@@ -26,7 +26,7 @@ public class Generate extends HttpServlet {
             int IdRol = Integer.parseInt(session.getAttribute("idRol").toString());
             int opt = Integer.parseInt(request.getParameter("opt"));
             String Signature = session.getAttribute("Firma").toString();
-            int Order = 0, IdCertificates = 0, TempDelete = 0, TempM = 0, Temp = 0, StateCerti = 0, State = 0;
+            int Order = 0, IdCertificates = 0, TempDelete = 0, TempM = 0, Temp = 0, StateCerti = 0, State = 0, StateM = 0, IdCertificate = 0;
             String Type = "", Product = "", Batch = "", Html = "", Code = "", Consecutive = "", Customer = "", IdCertiMasive = "", Category = "",
                     Justification = "", Record = "", FormatName = "", Message = "", Amount = "", DateDispatch = "";
             boolean result = false;
@@ -35,12 +35,24 @@ public class Generate extends HttpServlet {
                 case 1:
                     //<editor-fold defaultstate="collapsed" desc="GENERAL">
                     try {
+                        StateM = Integer.parseInt(request.getParameter("StateM"));
+                    } catch (Exception e) {
+                        StateM = 0;
+                    }
+                    try {
+                        IdCertificate = Integer.parseInt(request.getParameter("IdCertificate"));
+                    } catch (Exception e) {
+                        IdCertificate = 0;
+                    }
+                    try {
                         Type = request.getParameter("Type");
                     } catch (Exception e) {
                         Type = "";
                     }
                     request.setAttribute("Type", Type);
+                    request.setAttribute("StateM", StateM);
                     request.setAttribute("TempDelete", TempDelete);
+                    request.setAttribute("IdCertificate", IdCertificate);
                     request.getRequestDispatcher("GenerateReport.jsp").forward(request, response);
                     //</editor-fold>
                     break;
@@ -330,6 +342,12 @@ public class Generate extends HttpServlet {
                     break;
                 case 8:
                     //<editor-fold defaultstate="collapsed" desc="CONSULT SIGNATURE REPORT">
+                    try {
+                        StateM = Integer.parseInt(request.getParameter("StateM"));
+                    } catch (Exception e) {
+                        StateM = 0;
+                    }
+                    request.setAttribute("StateM", StateM);
                     request.getRequestDispatcher("SignatureReport.jsp").forward(request, response);
                     //</editor-fold>
                     break;

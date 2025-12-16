@@ -22,13 +22,23 @@ public class GenerateReport extends TagSupport {
         List lst_ceriticate = null;
         List lst_format = null;
         String Type = "";
-        int TempDelete = 0, State = 0;
+        int TempDelete = 0, State = 0, StateM = 0, IdCertificate = 0;
         String Permission = "";
         try {
             try {
                 Type = pageContext.getRequest().getParameter("Type");
             } catch (Exception e) {
                 Type = "";
+            }
+            try {
+                IdCertificate = Integer.parseInt(pageContext.getRequest().getParameter("IdCertificate"));
+            } catch (Exception e) {
+                IdCertificate = 0;
+            }
+            try {
+                StateM = Integer.parseInt(pageContext.getRequest().getParameter("StateM"));
+            } catch (Exception e) {
+                StateM = 0;
             }
             try {
                 TempDelete = Integer.parseInt(pageContext.getRequest().getParameter("TempDelete"));
@@ -145,9 +155,16 @@ public class GenerateReport extends TagSupport {
                     + "<i><img src='Interface/Imagen/ST_Desc_2.png' alt='' class='ImgModule'/></i></a>");
 
             out.print("<a onclick='window.location.href=\"Generate?opt=1&Type=\";cargarDatos()' "
-                    + "class='btn btn-icon btn-outline-dark " + (Type.equals("") ? "active" : "") + "' "
+                    + "class='btn btn-icon btn-outline-dark " + ((IdCertificate > 0) ? "" : Type.equals("") ? "active" : "") + "' "
                     + "data-toggle='tooltip' data-placement='top' title='Todos'>"
                     + "<i class=\"fas fa-asterisk\"></i></a>");
+
+            if (IdCertificate > 0) {
+                out.print("<a onclick='window.location.href=\"Generate?opt=1&Type=\";cargarDatos()' "
+                        + "class='btn btn-icon btn-outline-danger " + (Type.equals("") ? "active" : "") + "' "
+                        + "data-toggle='tooltip' data-placement='top' title='Limpiar'>"
+                        + "<i class=\"fas fa-eraser\"></i></a>");
+            }
 
             out.print("</div>");
 
@@ -175,10 +192,12 @@ public class GenerateReport extends TagSupport {
             out.print("</tr>");
             out.print("</thead>");
             out.print("<tbody>");
-            if (TempDelete > 0) {
+            if (IdCertificate > 0) {
+                lst_ceriticate = CertificateJpa.ConsultCertificatesId(Type, IdCertificate);
+            } else if (TempDelete > 0) {
                 lst_ceriticate = CertificateJpa.ConsultCeritcateTypeDelete(Type);
             } else {
-                lst_ceriticate = CertificateJpa.ConsultCeritcateType(Type);
+                lst_ceriticate = CertificateJpa.ConsultCeritcateType(Type, StateM);
             }
             if (lst_ceriticate != null) {
                 for (int i = 0; i < lst_ceriticate.size(); i++) {

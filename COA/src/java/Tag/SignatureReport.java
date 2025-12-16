@@ -21,7 +21,13 @@ public class SignatureReport extends TagSupport {
         String Permission = "";
         List lst_ceriticate = null;
         String Type = "";
+        int StateM = 0;
         try {
+            try {
+                StateM = Integer.parseInt(pageContext.getRequest().getParameter("StateM"));
+            } catch (Exception e) {
+                StateM = 0;
+            }
             try {
                 Permission = sesion.getAttribute("Permisos").toString();
             } catch (Exception e) {
@@ -33,8 +39,8 @@ public class SignatureReport extends TagSupport {
             out.print("<div class='col-12'>");
             out.print("<div class='card'>");
             out.print("<div class='card-header' style='justify-content: space-between;'>"
-                    + "<h4>Revisión</h4>");
-             if (Permission.contains("[7]")) {
+                    + "<h4>Revisión " + ((StateM == 2) ? "<b class='text-success'>Estado Finalizado</b>" : "<b class='text-primary'>Estado Finalizado</b>") + "</h4>");
+            if (Permission.contains("[7]")) {
                 out.print("<button class='btn btn-warning ' style='border-radius: 4px;'  onclick='ExecuteForm()' ><i class='fas fa-signature'  data-toggle='tooltip' data-placement='top' title='Firma Masiva'></i></button>");
             }
             out.print("</div>");
@@ -71,7 +77,7 @@ public class SignatureReport extends TagSupport {
             out.print("</tr>");
             out.print("</thead>");
             out.print("<tbody>");
-            lst_ceriticate = CertificateJpa.ConsultCertificatesSignature();
+            lst_ceriticate = CertificateJpa.ConsultCertificatesSignature(StateM);
             if (lst_ceriticate != null) {
                 for (int i = 0; i < lst_ceriticate.size(); i++) {
                     Object[] ObjCerti = (Object[]) lst_ceriticate.get(i);

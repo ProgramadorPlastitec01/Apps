@@ -12,5 +12,6 @@
             <div class="main-content" style="min-height: 694px;">
             <Start:Start/>
         </div>
+        <script src="Interface/Content/Assets/modules/chart.min.js"></script>
     </body>
 </html>

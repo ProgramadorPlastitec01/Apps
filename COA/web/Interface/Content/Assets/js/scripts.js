@@ -102,6 +102,11 @@ $(function() {
       height: 315
     }).niceScroll();
   }
+  if($("#top-5-scroll2").length) {
+    $("#top-5-scroll2").css({
+      height: 384
+    }).niceScroll();
+  }
 
   $(".main-content").css({
     minHeight: $(window).outerHeight() - 95

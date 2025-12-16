@@ -3245,3 +3245,6 @@ thead.sticky-top {
 .ImgSig{
     width: 83px;
 }
+.ClicButtom{
+    cursor: pointer;
+}

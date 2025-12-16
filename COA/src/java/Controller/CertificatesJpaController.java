@@ -18,11 +18,29 @@ public class CertificatesJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public List ConsultCeritcateType(String Type) {
+    public List ConsultCeritcateType(String Type, int State) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
         try {
-            Query q = etm.createNativeQuery("CALL `Sp_ctf_c_ConsultCertificates`('" + Type + "')");
+            Query q = etm.createNativeQuery("CALL `Sp_ctf_c_ConsultCertificates`('" + Type + "','" + State + "')");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+    public List ConsultCertificatesId(String Type, int IdCertificate) {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_ctf_c_ConsultCertificatesId`('" + Type + "','" + IdCertificate + "')");
             List consulta = q.getResultList();
             etm.getTransaction().commit();
             etm.clear();
@@ -37,11 +55,11 @@ public class CertificatesJpaController implements Serializable {
         }
     }
 
-    public List ConsultCertificatesSignature() {
+    public List ConsultCertificatesSignature(int State) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
         try {
-            Query q = etm.createNativeQuery("CALL `Sp_ctf_c_ConsultCertificatesSignature`()");
+            Query q = etm.createNativeQuery("CALL `Sp_ctf_c_ConsultCertificatesSignature`('" + State + "')");
             List consulta = q.getResultList();
             etm.getTransaction().commit();
             etm.clear();
