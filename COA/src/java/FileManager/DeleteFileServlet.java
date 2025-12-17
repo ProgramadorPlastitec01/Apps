@@ -15,29 +15,47 @@ public class DeleteFileServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String lote = request.getParameter("lote");
-        String fileName = request.getParameter("file");
-        String msg = "error_delete"; // valor por defecto
+        String cliente = request.getParameter("cliente");
+        String anio    = request.getParameter("anio");
+        String orden   = request.getParameter("orden");
+        String lote    = request.getParameter("lote");
+        String archivo = request.getParameter("archivo");
 
-        if (lote != null && fileName != null) {
-            String appPath = request.getServletContext().getRealPath("");
-            String filePath = appPath + File.separator + "uploads" + File.separator + lote + File.separator + fileName;
-            File file = new File(filePath);
+        String msg = "error_delete";
+
+        if (cliente != null && anio != null && orden != null && lote != null && archivo != null) {
+
+            String basePath = request.getServletContext().getRealPath("/Certificates");
+
+            File file = new File(
+                basePath + File.separator
+                + cliente + File.separator
+                + anio + File.separator
+                + orden + File.separator
+                + lote + File.separator
+                + archivo
+            );
 
             if (file.exists()) {
                 if (file.delete()) {
-                    msg = "delete_success"; // borrado correcto
+                    msg = "delete_success";
                 } else {
-                    msg = "error_delete"; // no se pudo eliminar
+                    msg = "error_delete";
                 }
             } else {
-                msg = "file_not_found"; // archivo no existe
+                msg = "file_not_found";
             }
         } else {
-            msg = "invalid_params"; // parámetros nulos
+            msg = "invalid_params";
         }
 
-        // Redirigir de nuevo al lote con el mensaje para toastr
-        response.sendRedirect("FileManager.jsp?lote=" + lote + "&msg=" + msg);
+        response.sendRedirect(
+            "FileManager.jsp"
+            + "?cliente=" + cliente
+            + "&anio=" + anio
+            + "&orden=" + orden
+            + "&lote=" + lote
+            + "&msg=" + msg
+        );
     }
 }

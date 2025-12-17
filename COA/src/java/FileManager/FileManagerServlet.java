@@ -2,6 +2,7 @@ package FileManager;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -17,62 +18,50 @@ import javax.servlet.http.Part;
         maxRequestSize = 1024 * 1024 * 100  // 100MB
 )
 public class FileManagerServlet extends HttpServlet {
-    
-    private static final String UPLOAD_DIR = "uploads";
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        String lote = request.getParameter("lote");
-        String appPath = request.getServletContext().getRealPath("");
-        String savePath = appPath + File.separator + UPLOAD_DIR + File.separator + lote;
 
-        // Verificar y crear carpeta si no existe
-        File fileSaveDir = new File(savePath);
-        boolean isNewFolder = false;
-        if (!fileSaveDir.exists()) {
-            isNewFolder = fileSaveDir.mkdirs(); // crea carpeta del lote
+        String cliente = request.getParameter("cliente");
+        String anio    = request.getParameter("anio");
+        String orden   = request.getParameter("orden");
+        String lote    = request.getParameter("lote");
+
+        String basePath = getServletContext().getRealPath("/Certificates");
+
+        String uploadPath = basePath
+                + File.separator + cliente
+                + File.separator + anio
+                + File.separator + orden
+                + File.separator + lote;
+
+        File uploadDir = new File(uploadPath);
+        if (!uploadDir.exists()) {
+            uploadDir.mkdirs();
         }
 
-        try {
-            boolean hasFiles = false;
+        boolean uploaded = false;
 
-            for (Part part : request.getParts()) {
-                String fileName = extractFileName(part);
-                if (!fileName.isEmpty()) {
-                    hasFiles = true;
-                    part.write(savePath + File.separator + fileName);
-                }
-            }
+        for (Part part : request.getParts()) {
 
-            // Construir mensaje de éxito o advertencia según el caso
-            String msg;
-            if (isNewFolder && hasFiles) {
-                msg = "folder_created";
-            } else if (!isNewFolder && hasFiles) {
-                msg = "upload_success";
-            } else {
-                msg = "error_upload";
-            }
+            if ("files".equals(part.getName()) && part.getSize() > 0) {
 
-            // Redirigir al JSP con parámetro msg
-            response.sendRedirect("FileManager.jsp?msg=" + msg);
+                String fileName = Paths.get(part.getSubmittedFileName())
+                                       .getFileName().toString();
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            response.sendRedirect("FileManager.jsp?msg=error_upload");
-        }
-    }
-
-    // Método auxiliar para obtener el nombre real del archivo
-    private String extractFileName(Part part) {
-        String contentDisp = part.getHeader("content-disposition");
-        for (String token : contentDisp.split(";")) {
-            if (token.trim().startsWith("filename")) {
-                return token.substring(token.indexOf("=") + 2, token.length() - 1);
+                part.write(uploadPath + File.separator + fileName);
+                uploaded = true;
             }
         }
-        return "";
+
+        String redirect = "FileManager.jsp"
+                + "?cliente=" + cliente
+                + "&anio=" + anio
+                + "&orden=" + orden
+                + "&lote=" + lote
+                + "&msg=" + (uploaded ? "upload_success" : "error_upload");
+
+        response.sendRedirect(redirect);
     }
 }

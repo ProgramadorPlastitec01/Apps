@@ -243,6 +243,9 @@ public class GenerateReport extends TagSupport {
                     }
                     out.print("<td >");
                     out.print("<div class='d-flex'>");
+                    if (State == 1) {
+                        out.print("<button class='btn btn-success btn-sm mr-2' style='border-radius: 4px;' onclick=\"confirmarFinalizar('Generate?opt=7&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "&Customer=" + ObjCerti[4] + "&Anio=" + ObjCerti[12] + "&Order=" + ObjCerti[5] + "&Batch=" + ObjCerti[7] + "')\" data-toggle='tooltip' data-placement='bottom' title='Finalizar'><i class=\"fas fa-check\"></i></button>");
+                    }
                     out.print("<button class='btn btn-green btn-sm mr-2' style='border-radius: 4px;' onclick=\"javascript:location.href='Generate?opt=2&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "&TempDelete=" + TempDelete + "&Order=" + ObjCerti[5] + "&Batch=" + ObjCerti[7] + "&StateCerti=" + State + "&TempM=0';cargarDatos()\"  data-toggle='tooltip' data-placement='top' title='Ver'><i class=\"fas fa-eye\"></i></button>");
                     if (State == 1) {
                         if (Permission.contains("[9]")) {
@@ -250,11 +253,9 @@ public class GenerateReport extends TagSupport {
                         }
                     }
                     out.print("</div>");
-                    if (State > 1 && State < 2) {
-                        out.print("<div class='d-flex mt-2 text-center'>");
-                        out.print("<button class='btn btn-success btn-sm mr-2' style='border-radius: 4px;' onclick=\"confirmarFinalizar('Generate?opt=7&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "')\" data-toggle='tooltip' data-placement='bottom' title='Finalizar'><i class=\"fas fa-check\"></i></button>");
-                        out.print("</div>");
-                    }
+//                    out.print("<div class='d-flex mt-2 text-center'>");
+//                    out.print("<button class='btn btn-success btn-sm mr-2' style='border-radius: 4px;' onclick=\"confirmarFinalizar('Generate?opt=7&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "')\" data-toggle='tooltip' data-placement='bottom' title='Finalizar'><i class=\"fas fa-check\"></i></button>");
+//                    out.print("</div>");
                     out.print("</td>");
                     out.print("</tr>");
                 }

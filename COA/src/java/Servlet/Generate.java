@@ -11,6 +11,7 @@ import java.net.URLDecoder;
 import java.util.List;
 import Controller.CertificatesJpaController;
 import Controller.EventsJpaController;
+import java.io.File;
 
 public class Generate extends HttpServlet {
 
@@ -26,7 +27,7 @@ public class Generate extends HttpServlet {
             int IdRol = Integer.parseInt(session.getAttribute("idRol").toString());
             int opt = Integer.parseInt(request.getParameter("opt"));
             String Signature = session.getAttribute("Firma").toString();
-            int Order = 0, IdCertificates = 0, TempDelete = 0, TempM = 0, Temp = 0, StateCerti = 0, State = 0, StateM = 0, IdCertificate = 0;
+            int Order = 0, IdCertificates = 0, TempDelete = 0, TempM = 0, Temp = 0, StateCerti = 0, State = 0, StateM = 0, IdCertificate = 0, Anio = 0;
             String Type = "", Product = "", Batch = "", Html = "", Code = "", Consecutive = "", Customer = "", IdCertiMasive = "", Category = "",
                     Justification = "", Record = "", FormatName = "", Message = "", Amount = "", DateDispatch = "";
             boolean result = false;
@@ -333,9 +334,48 @@ public class Generate extends HttpServlet {
                     } catch (Exception e) {
                         IdCertificates = 0;
                     }
+                    // Variables del formulario
+                    try {
+                        Customer = request.getParameter("Customer");
+                    } catch (Exception e) {
+                        Customer = "";
+                    }
+                    try {
+                        Anio = Integer.parseInt(request.getParameter("Anio"));
+                    } catch (Exception e) {
+                        Anio = 0;
+                    }
+                    try {
+                        Order = Integer.parseInt(request.getParameter("Order"));
+                    } catch (Exception e) {
+                        Order = 0;
+                    }
+                    try {
+                        Batch = request.getParameter("Batch");
+                    } catch (Exception e) {
+                        Batch = "";
+                    }
                     result = CertificatesJpa.UpdateCertificateFinish(IdCertificates);
+
                     if (result) {
-                        request.setAttribute("FinishCertificate", result);
+                        // Ruta base
+                        String basePath = getServletContext().getRealPath("/Certificates");
+                        // Construcción de la ruta
+                        File dirLote = new File(
+                                basePath
+                                + File.separator + Customer
+                                + File.separator + Anio
+                                + File.separator + Order
+                                + File.separator + Batch
+                        );
+                        // Crear carpetas si no existen
+                        if (!dirLote.exists()) {
+                            boolean created = dirLote.mkdirs();
+                            if (!created) {
+                                System.out.println("No se pudo crear la estructura de carpetas");
+                            }
+                        }
+                        request.setAttribute("FinishCertificate", true);
                     }
                     request.getRequestDispatcher("Generate?opt=1&Type=" + Type).forward(request, response);
                     //</editor-fold>
