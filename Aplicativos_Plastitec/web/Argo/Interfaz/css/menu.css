@@ -534,7 +534,7 @@ body{
 
 /*------------------------------------ NORMAL--------------------------------------------------------------------------*/
 
-.button-34 {
+/*.button-34 {
     border-radius: 20px;
     box-shadow: rgb(0 0 0 / 40%) 0 -25px 18px -14px inset, rgb(0 0 0 / 74%) 0 1px 2px, rgb(0 0 0 / 25%) 0 2px 4px, rgb(35 35 35 / 62%) 0 4px 8px, rgb(2 58 130 / 25%) 0 8px 16px, rgb(0 71 132 / 25%) 0 16px 32px;
     color: black;
@@ -550,10 +550,10 @@ body{
     background: #233969;
     color:white;
     font-weight: 600;
-}
+}*/
 
 /*------------------------------------ NAVIDAD--------------------------------------------------------------------------*/
-/*.button-34 {
+.button-34 {
     border-radius: 20px;
     box-shadow: rgb(17 133 10 / 40%) 0 -25px 18px -14px inset, rgb(30 101 36 / 74%) 0 1px 2px, rgb(147 0 0 / 25%) 0 2px 4px, rgb(15 159 28 / 12%) 0 4px 8px, rgb(211 211 211 / 25%) 0 8px 16px, rgb(0 185 33 / 25%) 0 16px 32px;
     color: black;
@@ -569,7 +569,7 @@ body{
     background: #c30202ed;
     color: #ffffff;
     font-weight: 600;
-}*/
+}
 /*.button-34 {
     border-radius: 20px;
     box-shadow: rgb(105 105 105 / 40%) 0 -25px 18px -14px inset, rgb(141 141 141 / 74%) 0 1px 2px, rgb(147 0 0 / 25%) 0 2px 4px, rgb(15 159 28 / 12%) 0 4px 8px, rgb(211 211 211 / 25%) 0 8px 16px, rgb(135 135 135 / 25%) 0 16px 32px;
@@ -665,14 +665,15 @@ body{
             font-size:13.6px;
             bottom: 0;*/
     /*OCTUBRE*/
-    background: linear-gradient(90deg, rgba(110,10,180,1) 0%, rgba(62,18,162,1) 57%, rgba(75,9,181,1) 100%);
-    padding:10px 0;
+    
+    /*background: linear-gradient(90deg, rgba(110,10,180,1) 0%, rgba(62,18,162,1) 57%, rgba(75,9,181,1) 100%);*/
+    /*padding:10px 0;*/
     color:white;
     position:fixed;
     width: 100%;
-    font-size:13.6px;
+    /*font-size:13.6px;*/
     bottom: 0;
-    background: #000;
+    background: #a30100;
 }
 
 #footer a{
