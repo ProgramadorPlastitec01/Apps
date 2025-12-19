@@ -39,7 +39,6 @@ public class Visual extends TagSupport {
         List lst_welds = null;
         List lst_sheet = null;
         List lst_prm = null;
-        List lst_sign = null;
         List lst_tags = null;
         try {
             //<editor-fold defaultstate="collapsed" desc="ENVIRONMENT VARIABLES">
@@ -197,7 +196,6 @@ public class Visual extends TagSupport {
                     //</editor-fold>
                 }
                 out.print("<div class='p-3'>");
-
                 if (IdCertificates == 0) {
                     //<editor-fold defaultstate="collapsed" desc="GENERATION CERO">
                     lst_headFact = FactoryJpa.Products(Order, ProductFact, Batch);
@@ -219,14 +217,12 @@ public class Visual extends TagSupport {
                         Html = Html.replace("XClient_OrderX", (ArgHead[12].equals("NULL") || ArgHead[12] == null) ? "<span class='editable' contenteditable='true'>-----</span>" : ArgHead[12]);
                         Html = Html.replace("<h3 id=\"consValue\" class=\"mb-0\">XConsX</h3>", "<h3 id=\"consValue\" class=\"mb-0 editable\" contenteditable='true'>CC*****</h3>");
 
-                        Html = Html.replace("XCodeX", "<span class='editable' contenteditable='true'>-----</span>");
                         Html = Html.replace("XSampleX", "<span class='editable' contenteditable='true'>----</span>");
                         Html = Html.replace("XNumberPartX", "<span class='editable' contenteditable='true'>----</span>");
                         //</editor-fold>
                     } else {
                         //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA">
                         Html = Html.replace("XOrderX", String.valueOf(Order));
-                        Html = Html.replace("XClientX", "<span class='editable' contenteditable='true'>-----</span>");
                         Html = Html.replace("XAddressX", "<span class='editable' contenteditable='true'>-----</span>");
                         Html = Html.replace("XPhoneX", "<span class='editable' contenteditable='true'>-----</span>");
                         Html = Html.replace("XCityX", "<span class='editable' contenteditable='true'>-----</span>");
@@ -237,9 +233,7 @@ public class Visual extends TagSupport {
                         Html = Html.replace("XAbilityX", "<span class='editable' contenteditable='true'>-----</span>");
                         Html = Html.replace("XBatchX", Batch);
                         Html = Html.replace("XQuatityGenX", "<span class='editable' contenteditable='true'>----- UNIDADES</span>");
-                        Html = Html.replace("XClient_OrderX", "<span class='editable' contenteditable='true'>-----</span>");
                         Html = Html.replace("<h3 id=\"consValue\" class=\"mb-0\">XConsX</h3>", "<h3 id=\"consValue\" class=\"mb-0 editable\" contenteditable='true'>CC*****</h3>");
-                        Html = Html.replace("XCodeX", "<span class='editable' contenteditable='true'>-----</span>");
                         Html = Html.replace("XSampleX", "<span class='editable' contenteditable='true'>----</span>");
 
                         Message = "No se encuentra información en Factory por orden, producto y lote, favor verifique";
@@ -276,6 +270,9 @@ public class Visual extends TagSupport {
                             Html = Html.replace("XMonthEXPX", "<span class='editable' contenteditable='true'>-----</span>");
                             Html = Html.replace("XDayEXPX", "<span class='editable' contenteditable='true'>-----</span>");
                         }
+                        Html = Html.replace("XClientX", ArgTags[8]);
+                        Html = Html.replace("XCodeX", ArgTags[9]);
+                        Html = Html.replace("XClient_OrderX", ArgTags[7]);
                         //</editor-fold>
                     } else {
                         //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA">
@@ -285,6 +282,10 @@ public class Visual extends TagSupport {
                         Html = Html.replace("XYearEXPX", "<span class='editable' contenteditable='true'>-----</span>");
                         Html = Html.replace("XMonthEXPX", "<span class='editable' contenteditable='true'>-----</span>");
                         Html = Html.replace("XDayEXPX", "<span class='editable' contenteditable='true'>-----</span>");
+                        
+                        Html = Html.replace("XClientX", "<span class='editable' contenteditable='true'>-----</span>");
+                        Html = Html.replace("XCodeX", "<span class='editable' contenteditable='true'>-----</span>");
+                        Html = Html.replace("XClient_OrderX", "<span class='editable' contenteditable='true'>-----</span>");
 
                         Message = "No se encuentra información en Tags por orden, producto y lote, favor verifique";
 
@@ -409,7 +410,7 @@ public class Visual extends TagSupport {
                                 Object[] ObjSheet = (Object[]) lst_sheet.get(0);
                                 if (ObjSheet[2] != null && !ObjSheet[2].equals("")) {
                                     lst_prm = RegistrosLabJpa.QueryTechnicalSheet(Order, Product, ObjSheet[2].toString());
-                                    if (lst_prm != null) {
+                                    if (lst_prm != null && lst_prm.size() > 0) {
                                         String[] ArgPrm = Util.parseResult(lst_prm.get(0));
                                         DataTechnicalSheet = ArgPrm[16];
                                         int ForCant = Integer.parseInt(ArgPrm[0].trim());

@@ -170,9 +170,10 @@ public class ConnectionSQLServer {
             con = DriverManager.getConnection(url, login, password);
 
             // Consulta SQL
-            String query = "SELECT top(1) o.OrderNumber,e.OrderLineId, o.ProductCode ,e.BoxNumber, e.Batch,FORMAT( e.CreationDate, 'yyyy-MM-dd') AS CreationDate, FORMAT( e.ExpirationDate, 'yyyy-MM-dd') AS ExpirationDate "
+            String query = "SELECT top(1) o.OrderNumber,e.OrderLineId, o.ProductCode ,e.BoxNumber, e.Batch,FORMAT( e.CreationDate, 'yyyy-MM-dd') AS CreationDate, FORMAT( e.ExpirationDate, 'yyyy-MM-dd') AS ExpirationDate,  od.AddresseeCode, od.CustomerName, od.PurchaseOrderNumber "
                     + "FROM ExternalTag e "
                     + "INNER JOIN OrderLine o ON e.OrderLineId = o.OrderLineId "
+                    + "INNER JOIN [dbo].[Order] od ON o.OrderNumber = od.OrderNumber "
                     + "WHERE o.OrderNumber = " + Orden + " AND o.ProductCode = '" + Producto + "' AND e.Batch = '" + Lote + "' "
                     + "order by e.BoxNumber asc";
 

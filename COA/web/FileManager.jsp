@@ -1,5 +1,8 @@
 <%@page import="java.io.File"%>
 <%@page import="java.io.FileFilter"%>
+<%@page import="Connection.LinkBatchRecord"%>
+<%@page import="java.util.List"%>
+<%@page import="Method.Util"%>
 <%@taglib uri="/WEB-INF/tlds/alert" prefix="Alert" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
@@ -14,6 +17,12 @@
         <style>
             .modal-backdrop{
                 position: relative !important;
+            }
+            #filterInput {
+                padding-left: 15px;
+                width: 209px;
+                float: right;
+
             }
         </style>
     </head>
@@ -38,6 +47,8 @@
                                     <%
                                         HttpSession sesion = request.getSession();
                                         String Permission = "";
+                                        LinkBatchRecord LinkBatch = new LinkBatchRecord();
+                                        List lst_link = null;
                                         try {
                                             Permission = sesion.getAttribute("Permisos").toString();
                                         } catch (Exception e) {
@@ -68,30 +79,47 @@
                                     %>
 
                                     <!-- ================== BREADCRUMB ================== -->
-                                    <nav aria-label="breadcrumb">
-                                        <ol class="breadcrumb">
-                                            <li class="breadcrumb-item"><a href="FileManager.jsp">Clientes</a></li>
-                                                <% if (cliente != null) {%>
-                                            <li class="breadcrumb-item">
-                                                <a href="FileManager.jsp?cliente=<%=cliente%>"><%=cliente%></a>
-                                            </li>
-                                            <% } %>
-                                            <% if (anio != null) {%>
-                                            <li class="breadcrumb-item">
-                                                <a href="FileManager.jsp?cliente=<%=cliente%>&anio=<%=anio%>"><%=anio%></a>
-                                            </li>
-                                            <% } %>
-                                            <% if (orden != null) {%>
-                                            <li class="breadcrumb-item">
-                                                <a href="FileManager.jsp?cliente=<%=cliente%>&anio=<%=anio%>&orden=<%=orden%>"><%=orden%></a>
-                                            </li>
-                                            <% } %>
-                                            <% if (lote != null) {%>
-                                            <li class="breadcrumb-item active"><%=lote%></li>
-                                                <% } %>
-                                        </ol>
-                                    </nav>
-
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div style="width: 74%">
+                                            <nav aria-label="breadcrumb">
+                                                <ol class="breadcrumb">
+                                                    <li class="breadcrumb-item"><a href="FileManager.jsp">Clientes</a></li>
+                                                        <% if (cliente != null) {%>
+                                                    <li class="breadcrumb-item">
+                                                        <a href="FileManager.jsp?cliente=<%=cliente%>"><%=cliente%></a>
+                                                    </li>
+                                                    <% } %>
+                                                    <% if (anio != null) {%>
+                                                    <li class="breadcrumb-item">
+                                                        <a href="FileManager.jsp?cliente=<%=cliente%>&anio=<%=anio%>"><%=anio%></a>
+                                                    </li>
+                                                    <% } %>
+                                                    <% if (orden != null) {%>
+                                                    <li class="breadcrumb-item">
+                                                        <a href="FileManager.jsp?cliente=<%=cliente%>&anio=<%=anio%>&orden=<%=orden%>"><%=orden%></a>
+                                                    </li>
+                                                    <% } %>
+                                                    <% if (lote != null) {%>
+                                                    <li class="breadcrumb-item active"><%=lote%></li>
+                                                        <% } %>
+                                                </ol>
+                                            </nav>
+                                        </div>
+                                        <div class="row mb-3 justify-content-end">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text">
+                                                        <i class="fas fa-filter"></i>
+                                                    </div>
+                                                </div>
+                                                <input type="text"
+                                                       id="filterInput"
+                                                       class="form-control"
+                                                       placeholder="Filtrar carpetas o archivos..."
+                                                       onkeyup="filterItems()">
+                                            </div>
+                                        </div>
+                                    </div>
                                     <Alert:Alert/>
 
                                     <!-- ================== LISTADO ================== -->
@@ -111,17 +139,16 @@
 
 
 
-
                                     <!-- ================== SUBIDA SOLO EN LOTE ================== -->
                                     <%                                        if (Permission.contains("[2]")) {
                                     %>
-                                    <div class="d-flex justify-content-between">
+                                    <div class="d-flex justify-content-between align-content-center">
                                         <div>
                                             <h5 class="mb-3">
                                                 <i class="fas fa-folder-open" style="font-size: 20px; color:#dccbff"></i> Archivos del lote:<b style="color:#0b0025"> <%= lote%></b>
                                             </h5>
                                         </div>
-                                        <div class="d-flex justify-content-end mb-2">
+                                        <div class="mb-3">
                                             <button class="btn btn-green"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#uploadModal">
@@ -129,6 +156,7 @@
                                             </button>
                                         </div> 
                                     </div>
+
 
                                     <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog">
                                         <div class="modal-dialog modal-md modal-dialog-centered" role="document">
@@ -179,6 +207,7 @@
                                     <%
                                     } else {
                                     %>
+
                                     <h5 class="mb-3">
                                         <i class="fas fa-folder-open text-warning"></i> Archivos del lote: <%= lote%>
                                     </h5>
@@ -188,17 +217,19 @@
                                     <table class="table table-bordered table-hover">
                                         <thead class="table-light">
                                             <tr>
-                                                <th>Archivo</th>
+                                                <th>Tipo</th>
+                                                <th>Informacion</th>
                                                 <th width="160">Acciones</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody id="fileTable">
 
                                             <%
                                                 if (archivos != null && archivos.length > 0) {
                                                     for (File archivo : archivos) {
                                             %>
-                                            <tr>
+                                            <tr class="file-row">
+                                                <td>Archivo Fisico</td>
                                                 <td><%= archivo.getName()%></td>
                                                 <td class="text-center">
                                                     <div class="btn-group btn-group-sm">
@@ -241,11 +272,37 @@
                                             } else {
                                             %>
                                             <tr>
-                                                <td colspan="2" class="text-center text-muted">
-                                                    No hay archivos en este lote
+                                                <td colspan="3" class="text-center text-muted">
+                                                    No hay archivos subidos en este lote
                                                 </td>
                                             </tr>
                                             <%
+                                                }
+                                            %>
+                                            <%
+                                                lst_link = LinkBatch.LinkBatchRecord(orden, lote);
+                                                if (lst_link != null) {
+                                                    for (int i = 0; i < lst_link.size(); i++) {
+                                                        String[] ArgLink = Util.parseResult(lst_link.get(i));
+                                            %>
+                                            <tr class="file-row">
+                                                <td><%= ArgLink[1]%></td>
+                                                <td><%= ArgLink[2]%></td>
+                                                <td class="text-center">
+                                                    <div class="btn-group btn-group-sm">
+
+                                                        <!-- VER -->
+                                                        <a class="btn btn-info mr-3"
+                                                           href="<%= ArgLink[3]%>"
+                                                           target="_blank"
+                                                           title="Ver registro">
+                                                            <i class="fas fa-eye"></i>
+                                                        </a>
+
+                                                    </div>
+                                                </td>
+                                            </tr>    
+                                            <%                                                }
                                                 }
                                             %>
                                         </tbody>
@@ -266,7 +323,7 @@
 
                                     %>
 
-                                    <div class="row g-3 mt-2">
+                                    <div class="row g-3 mt-2"  id="folderGrid">
                                         <%                                            if (carpetas != null && carpetas.length > 0) {
                                                 for (File carpeta : carpetas) {
 
@@ -292,7 +349,7 @@
                                                     }
                                         %>
 
-                                        <div class="col-6 col-md-4 col-lg-3">
+                                        <div class="col-6 col-md-4 col-lg-3 folder-item">
                                             <div class="card text-center p-3 shadow-sm border border-warning rounded hover-card">
                                                 <a href="<%=link%>" class="text-decoration-none text-dark">
                                                     <i class="fas fa-folder" style="font-size:48px;color:#f5e047ad;"></i>
@@ -317,7 +374,7 @@
                                         }
                                     } else {
                                     %>
-                                    <div class="alert alert-warning">
+                                    <div class="alert alert-warning text-center">
                                         No existe la ruta de certificados.
                                     </div>
                                     <%
@@ -370,20 +427,68 @@
         <script>
             <%
                 String msg = request.getParameter("msg");
-                if ("delete_success".equals(msg)) {
+
+                if ("upload_success".equals(msg)) {
             %>
-            Swal.fire('Eliminado', 'Archivo eliminado correctamente', 'success');
+            iziToast.success({
+                title: 'Éxito',
+                message: 'Archivo(s) subido(s) correctamente',
+                position: 'bottomRight'
+            });
+            <%
+            } else if ("error_upload".equals(msg)) {
+            %>
+            iziToast.error({
+                title: 'Error',
+                message: 'No se pudo subir el archivo',
+                position: 'bottomRight'
+            });
+            <%
+            } else if ("delete_success".equals(msg)) {
+            %>
+            iziToast.warning({
+                title: 'Eliminado',
+                message: 'Archivo eliminado correctamente',
+                position: 'bottomRight'
+            });
             <%
             } else if ("error_delete".equals(msg)) {
             %>
-            Swal.fire('Error', 'No se pudo eliminar el archivo', 'error');
+            iziToast.error({
+                title: 'Error',
+                message: '"No se pudo eliminar el archivo',
+                position: 'bottomRight'
+            });
             <%
             } else if ("file_not_found".equals(msg)) {
             %>
-            Swal.fire('Atención', 'El archivo no existe', 'warning');
+            iziToast.warning({
+                title: 'Atención',
+                message: '"El archivo no existe',
+                position: 'bottomRight'
+            });
             <%
                 }
             %>
+        </script>
+        <script>
+            function filterItems() {
+                const filter = document.getElementById("filterInput").value.toLowerCase();
+
+                // 🔹 Filtrar archivos (tabla)
+                const fileRows = document.querySelectorAll(".file-row");
+                fileRows.forEach(row => {
+                    const text = row.innerText.toLowerCase();
+                    row.style.display = text.includes(filter) ? "" : "none";
+                });
+
+                // 🔹 Filtrar carpetas (cards)
+                const folders = document.querySelectorAll(".folder-item");
+                folders.forEach(folder => {
+                    const text = folder.innerText.toLowerCase();
+                    folder.style.display = text.includes(filter) ? "" : "none";
+                });
+            }
         </script>
 
         <script src="Interface/Content/Assets/modules/izitoast/js/iziToast.min.js"></script>

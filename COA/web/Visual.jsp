@@ -64,41 +64,85 @@
             }
             );
         </script>
+
         <script>
+            document.addEventListener('DOMContentLoaded', function () {
+
+                // Quitar borde rojo al editar
+                ['clientValue', 'AmountValue', 'DateDispatch'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        el.addEventListener('input', function () {
+                            this.style.border = '';
+                        });
+                    }
+                });
+
+            });
             function saveHtml() {
+
                 var form = document.getElementById('FormGenerate');
                 if (!form) {
-                    alert("Formulario no encontrado");
+                    iziToast.error({
+                        title: 'Error',
+                        message: 'Formulario no encontrado',
+                        position: 'bottomRight'
+                    });
                     return;
                 }
 
                 var htmlContainer = document.getElementById('HtmlContent');
-                // 🔹 Sincronizar el estado actual de los inputs con sus atributos HTML
+
+                // Sincronizar inputs
                 if (htmlContainer) {
                     htmlContainer.querySelectorAll('input').forEach(input => {
                         if (input.type === 'radio' || input.type === 'checkbox') {
-                            if (input.checked) {
-                                input.setAttribute('checked', 'checked');
-                            } else {
-                                input.removeAttribute('checked');
-                            }
+                            input.checked
+                                    ? input.setAttribute('checked', 'checked')
+                                    : input.removeAttribute('checked');
                         } else {
                             input.setAttribute('value', input.value);
                         }
                     });
                 }
 
-                // Obtener el contenido HTML actualizado
+                // HTML actualizado
                 var contentHtml = htmlContainer ? htmlContainer.innerHTML : "";
                 var encodedHtml = encodeURIComponent(contentHtml);
-                // Capturar elementos con ID
+
+                // ===== CAPTURA =====
+                var clientSpan = document.getElementById('clientValue');
+                        var clientText = clientSpan?.textContent.trim() || '';
+
+                var amountSpan = document.getElementById('AmountValue');
+                        var amountRaw = amountSpan?.textContent.trim() || '';
+                var amountClean = amountRaw.replace(/[^\d]/g, '');
+                var amountNumber = Number(amountClean);
+
+                var dateSpan = document.getElementById('DateDispatch');
+                        var dateText = dateSpan?.textContent.trim() || '';
+
                 var consText = document.getElementById('consValue')?.textContent.trim() || '';
-                        var clientText = document.getElementById('clientValue')?.textContent.trim() || '';
                         var idRegisterText = document.getElementById('IdRegister')?.textContent.trim() || '';
                         var Code = document.getElementById('codeValue')?.textContent.trim() || '';
-                        var Amount = document.getElementById('AmountValue')?.textContent.trim() || '';
-                        var DateDispatch = document.getElementById('DateDispatch')?.textContent.trim() || '';
-                // Función helper para agregar inputs ocultos
+
+                // ===== VALIDACIONES =====
+                if (clientText === '' || clientText === '-----') {
+                    showWarning(clientSpan, 'Debe ingresar el Cliente.');
+                    return;
+                }
+
+                if (!amountClean || isNaN(amountNumber) || amountNumber <= 0) {
+                    showWarning(amountSpan, 'El monto debe ser mayor a cero.');
+                    return;
+                }
+
+                if (dateText === '' || dateText === '___________') {
+                    showWarning(dateSpan, 'Debe ingresar la fecha de despacho.');
+                    return;
+                }
+
+                // ===== HIDDEN INPUTS =====
                 const addHidden = (name, value) => {
                     var input = document.createElement('input');
                     input.type = 'hidden';
@@ -106,24 +150,40 @@
                     input.value = value;
                     form.appendChild(input);
                 };
-                // Agregar datos al formulario
+
                 addHidden('Html', encodedHtml);
+                addHidden('clientValue', clientText);
+                addHidden('AmountValue', amountNumber);
+                addHidden('DateDispatch', dateText);
+
                 if (consText)
                     addHidden('ConsValue', consText);
-                if (clientText)
-                    addHidden('clientValue', clientText);
                 if (idRegisterText)
                     addHidden('IdRegisterValue', idRegisterText);
                 if (Code)
                     addHidden('codeValue', Code);
-                if (Amount)
-                    addHidden('AmountValue', Amount);
-                if (DateDispatch)
-                    addHidden('DateDispatch', DateDispatch);
+
+                // ===== SUBMIT =====
                 form.submit();
             }
 
+            /* ===================== ALERTA ===================== */
+            function showWarning(element, message) {
+                iziToast.warning({
+                    title: 'Atención!',
+                    message: message,
+                    position: 'bottomRight',
+                    timeout: 4000
+                });
+
+                if (element) {
+                    element.focus();
+                    element.style.border = '2px solid red';
+                }
+            }
         </script>
+
+
         <script>
             function dibujarCoordenadas() {
                 const canvas = document.getElementById('signature-canvas');

@@ -39,7 +39,7 @@ public class SignatureReport extends TagSupport {
             out.print("<div class='col-12'>");
             out.print("<div class='card'>");
             out.print("<div class='card-header' style='justify-content: space-between;'>"
-                    + "<h4>Revisión " + ((StateM == 2) ? "<b class='text-success'>Estado Finalizado</b>" : "<b class='text-primary'>Estado Finalizado</b>") + "</h4>");
+                    + "<h4>Revisión " + ((StateM == 2) ? "<b class='text-success'>Estado Finalizado</b>" : (StateM == 3) ? "<b class='text-primary'>Estado Finalizado</b>":"") + "</h4>");
             if (Permission.contains("[7]")) {
                 out.print("<button class='btn btn-warning ' style='border-radius: 4px;'  onclick='ExecuteForm()' ><i class='fas fa-signature'  data-toggle='tooltip' data-placement='top' title='Firma Masiva'></i></button>");
             }

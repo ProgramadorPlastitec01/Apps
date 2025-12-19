@@ -45,7 +45,7 @@ public class Start extends TagSupport {
                     out.print("            <div class=\"card-header\"><h4>" + ObjAmountC[3] + "</h4></div>");
                     if (ObjAmountC[4] != null) {
                         int Amount = Integer.parseInt(ObjAmountC[4].toString());
-                        out.print("            <div class=\"card-body\">" + ((Amount == 0) ? "<span class='text-small'>Gestionado</span>" : ObjAmountC[4]) + "</div>");
+                        out.print("            <div class=\"card-body\">" + ((Amount == 0) ? "<span class='text-small'>Sin datos</span>" : ObjAmountC[4]) + "</div>");
                     }
                     out.print("          </div>");
                     out.print("        </div>");
@@ -55,32 +55,32 @@ public class Start extends TagSupport {
             //</editor-fold>
             out.print("</div>");
 
-            out.print("    <div class=\"row\">");
+            out.print("<div class=\"row\">");
             //<editor-fold defaultstate="collapsed" desc="TABLA CON CLIENTES">
-            out.print("  <div class=\"col-md-8\">");
-            out.print("    <div class=\"card\">");
-
-            out.print("      <div class=\"card-header\">");
-            out.print("         <h4>Clientes líderes en certificados gestionados (Top 5)</h4>");
-            out.print("        <div class=\"card-header-action\">");
-            out.print("          <a href=\"#\" class=\"btn btn-danger\">Ver mas <i class=\"fas fa-chevron-right\"></i></a>");
-            out.print("        </div>");
-            out.print("      </div>");
-
-            out.print("      <div class=\"card-body p-0\">");
-            out.print("        <div class=\"table-responsive table-invoice\">");
-            out.print("          <table class=\"table table-striped\">");
-
-            out.print("            <tr>");
-            out.print("              <th>Cliente</th>");
-            out.print("              <th>Cantidad</th>");
-            out.print("              <th>Ultimo generado</th>");
-            out.print("              <th>Ultimo CC</th>");
-            out.print("              <th>Action</th>");
-            out.print("            </tr>");
-
             lst_ranking = StartJpa.ConsultRankingCustomer();
             if (lst_ranking != null) {
+                out.print("  <div class=\"col-md-8\">");
+                out.print("    <div class=\"card\">");
+
+                out.print("      <div class=\"card-header\">");
+                out.print("         <h4>Clientes líderes en certificados gestionados (Top 5)</h4>");
+                out.print("        <div class=\"card-header-action\">");
+                out.print("          <a href=\"#\" class=\"btn btn-danger\">Ver mas <i class=\"fas fa-chevron-right\"></i></a>");
+                out.print("        </div>");
+                out.print("      </div>");
+
+                out.print("      <div class=\"card-body p-0\">");
+                out.print("        <div class=\"table-responsive table-invoice\">");
+                out.print("          <table class=\"table table-striped\">");
+
+                out.print("            <tr>");
+                out.print("              <th>Cliente</th>");
+                out.print("              <th>Cantidad</th>");
+                out.print("              <th>Ultimo generado</th>");
+                out.print("              <th>Ultimo CC</th>");
+                out.print("              <th>Action</th>");
+                out.print("            </tr>");
+
                 for (int i = 0; i < lst_ranking.size(); i++) {
                     Object[] ObjRanking = (Object[]) lst_ranking.get(i);
                     out.print("            <tr>");
@@ -91,14 +91,14 @@ public class Start extends TagSupport {
                     out.print("              <td><a href=\"#\" class=\"btn btn-primary\">Detalle</a></td>");
                     out.print("            </tr>");
                 }
+
+                out.print("          </table>");
+                out.print("        </div>");
+                out.print("      </div>");
+
+                out.print("    </div>");
+                out.print("  </div>");
             }
-
-            out.print("          </table>");
-            out.print("        </div>");
-            out.print("      </div>");
-
-            out.print("    </div>");
-            out.print("  </div>");
             //</editor-fold>
             //<editor-fold defaultstate="collapsed" desc="ULTIMOS CERTIFICADOS">
             lst_ultimate = StartJpa.ConsultUltimateCertificate();
@@ -136,7 +136,7 @@ public class Start extends TagSupport {
             //</editor-fold>
             out.print("</div>");
 
-            out.print("    <div class=\"row\">");
+            out.print("<div class=\"row\">");
             //<editor-fold defaultstate="collapsed" desc="CONTADOR TRAZABILIDAD CERTIFICADOS">
             lst_accountants = StartJpa.ConsultAccountants();
             if (lst_accountants != null && !lst_accountants.isEmpty()) {
@@ -217,16 +217,16 @@ public class Start extends TagSupport {
 
             //</editor-fold>
             //<editor-fold defaultstate="collapsed" desc="GRAFICA">
-            out.print("<div class='col-lg-7 '>");
-            out.print("  <div class='card'>");
-            out.print("    <div class='card-header'>");
-            out.print("     <h4>Certificados emitidos (últimos 7 meses)</h4>");
-            out.print("    </div>");
-            out.print("<div class=\"card-body\">");
-            //<editor-fold defaultstate="collapsed" desc="ESTADISITICA GRAFICA">
             String labels = "", data = "";
             lst_statistics = StartJpa.ConsultStatistics();
             if (lst_statistics != null && !lst_statistics.isEmpty()) {
+                out.print("<div class='col-lg-7 '>");
+                out.print("  <div class='card'>");
+                out.print("    <div class='card-header'>");
+                out.print("     <h4>Certificados emitidos (últimos 7 meses)</h4>");
+                out.print("    </div>");
+                out.print("<div class=\"card-body\">");
+                //<editor-fold defaultstate="collapsed" desc="ESTADISITICA GRAFICA">
                 StringBuilder lbl = new StringBuilder();
                 StringBuilder dat = new StringBuilder();
                 for (int i = 0; i < lst_statistics.size(); i++) {
@@ -275,44 +275,11 @@ public class Start extends TagSupport {
                 out.print("}");
                 out.print("});");
                 out.print("</script>");
+                //</editor-fold>
+                out.print("</div>");
+                out.print("</div>");
+                out.print("</div>");
             }
-            //</editor-fold>
-            //            //<editor-fold defaultstate="collapsed" desc="CONTADORES ESTADISTICOS">
-//            lst_accountants = StartJpa.ConsultAccountants();
-//            if (lst_accountants != null && !lst_accountants.isEmpty()) {
-//                Object[] ObjAccountants = (Object[]) lst_accountants.get(0);
-//                out.print("      <div class='statistic-details mt-sm-4'>");
-//
-//                out.print("        <div class='statistic-details-item'>");
-//                out.print("          <span class='text-muted'><span class='text-primary'><i class='fas fa-caret-up'></i></span> 7%</span>");
-//                out.print("          <div class='detail-value'>" + ObjAccountants[0] + "</div>");
-//                out.print("          <div class='detail-name'>Certificados hoy</div>");
-//                out.print("        </div>");
-//
-//                out.print("        <div class='statistic-details-item'>");
-//                out.print("          <span class='text-muted'><span class='text-danger'><i class='fas fa-caret-down'></i></span> 23%</span>");
-//                out.print("          <div class='detail-value'>" + ObjAccountants[1] + "</div>");
-//                out.print("          <div class='detail-name'>Certificados esta semana</div>");
-//                out.print("        </div>");
-//
-//                out.print("        <div class='statistic-details-item'>");
-//                out.print("          <span class='text-muted'><span class='text-primary'><i class='fas fa-caret-up'></i></span> 9%</span>");
-//                out.print("          <div class='detail-value'>" + ObjAccountants[2] + "</div>");
-//                out.print("          <div class='detail-name'>Certificados este mes</div>");
-//                out.print("        </div>");
-//
-//                out.print("        <div class='statistic-details-item'>");
-//                out.print("          <span class='text-muted'><span class='text-primary'><i class='fas fa-caret-up'></i></span> 19%</span>");
-//                out.print("          <div class='detail-value'>" + ObjAccountants[3] + "</div>");
-//                out.print("          <div class='detail-name'>Certificados este año</div>");
-//                out.print("        </div>");
-//
-//                out.print("      </div>");
-//            }
-//            //</editor-fold>
-            out.print("</div>");
-            out.print("</div>");
-            out.print("</div>");
             //</editor-fold>
             out.print("</div>");
 

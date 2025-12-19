@@ -8,15 +8,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
         <!-- CSS -->
+        <link rel="stylesheet" href="Interface/Content/Assets/css/login2.css">
+        <link rel="stylesheet" href="Interface/Content/Assets/css/main.css">
         <link rel="stylesheet" href="Interface/Content/Assets/modules/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="Interface/Content/Assets/modules/fontawesome/css/all.min.css">
-        <link rel="stylesheet" href="Interface/Content/Assets/css/login2.css">
-
+        <link rel="stylesheet" href="Interface/Content/Assets/modules/izitoast/css/iziToast.min.css">
+        <link rel="stylesheet" href="Interface/Content/Assets/css/resetpass.css">
         <link rel="icon" type="image/png" href="Interface/Imagen/Icon.fw.png">
     </head>
 
     <body>
-
+        <jsp:include page="Library.jsp"></jsp:include>
         <div class="login-layout">
 
             <!-- IZQUIERDA -->
@@ -126,6 +128,7 @@
             <div class="login-right"></div>
 
         </div>
+        <Alert:Alert/>
 
         <!-- JS -->
         <script>
@@ -153,9 +156,9 @@
         </script>
 
         <script src="Interface/Content/Assets/modules/jquery.min.js"></script>
+        <script src="Interface/Content/Assets/modules/izitoast/js/iziToast.min.js"></script>
         <script src="Interface/Content/Assets/modules/bootstrap/js/bootstrap.min.js"></script>
-
-        <Alert:Alert/>
+        <script src="Interface/Content/Assets/js/page/modules-toastr.js"></script>
 
     </body>
 </html>

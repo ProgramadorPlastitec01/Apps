@@ -1,6 +1,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="/WEB-INF/tlds/advconfig" prefix="AdvConfig" %>
+<%@taglib uri="/WEB-INF/tlds/alert" prefix="Alert" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -24,6 +25,7 @@
                 </div>
             </div>
         </div>
+        <Alert:Alert/>
         <script src="Interface/Content/Assets/modules/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js"></script>
         <script src="Interface/Content/Assets/modules/datatables/Select-1.2.4/js/dataTables.select.min.js"></script>
         <script src="Interface/Content/Assets/modules/datatables/datatables.min.js"></script>

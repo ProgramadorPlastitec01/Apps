@@ -38,7 +38,7 @@ public class AdvConfig extends TagSupport {
                 out.print("<div class='cont_form_user'>");
                 if (lst_setting != null) {
                     Object[] ObjSetting = (Object[]) lst_setting.get(0);
-                    out.print("<form action='advConfig?opt=2&idSett=" + idSett + "' method='post'>");
+                    out.print("<form action='AdvConfig?opt=2&idSett=" + idSett + "' method='post'>");
                     out.print("<input type='text' class='form-control col-lg-5 mb-2' style='margin:auto;' name='txtCateogrie' id='' placeholder='Categoria' data-toggle='tooltip' data-placement='top' title='Categoria' value='"+ ObjSetting[1] +"'>");
                     out.print("<div class='d-flex justify-content-around'>");
                     out.print("<textarea class='form-control col-lg-5' name='txtValue' data-toggle='tooltip' data-placement='top' title='Valor'>"+ ObjSetting[2] +"</textarea>");

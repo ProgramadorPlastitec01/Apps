@@ -334,7 +334,6 @@ public class Generate extends HttpServlet {
                     } catch (Exception e) {
                         IdCertificates = 0;
                     }
-                    // Variables del formulario
                     try {
                         Customer = request.getParameter("Customer");
                     } catch (Exception e) {
