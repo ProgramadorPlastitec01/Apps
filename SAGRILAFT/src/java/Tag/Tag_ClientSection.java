@@ -3720,103 +3720,45 @@ public class Tag_ClientSection extends TagSupport {
 //                                out.print("</script>");
 //                                //</editor-fold>
                             } else if (estTl == 4) {
-                                //<editor-fold defaultstate="collapsed" desc="SHAREHOLDING STRUCTURE">
-                                String title = bundle.getString("formF.title");
-                                String infoOne = bundle.getString("formF.infoOne");
-                                String infoTwo = bundle.getString("formF.infoTwo");
-                                String SectionOne = bundle.getString("formF.SectionOne");
-                                String SectionTwo = bundle.getString("formF.SectionTwo");
-                                String SectionThree = bundle.getString("formF.SectionThree");
-                                String SectionFour = bundle.getString("formF.SectionFour");
+                                //<editor-fold defaultstate="collapsed" desc="LEGAL REPRESENTATIVE">
+                                String title = bundle.getString("formE.title");
+                                String SectionOne = bundle.getString("formE.SectionOne");
+                                String SectionTwo = bundle.getString("formE.SectionTwo");
+                                String SectionThree = bundle.getString("formE.SectionThree");
+                                String SectionFour = bundle.getString("formE.SectionFour");
+                                String SectionFive = bundle.getString("formE.SectionFive");
+                                String SectionSix = bundle.getString("formE.SectionSix");
+                                String SectionSeven = bundle.getString("formE.SectionSeven");
+                                String SectionEight = bundle.getString("formE.SectionEight");
 
-//                                String[] form = TemplForm[estTl].replace("][", "///").replace("[", "").replace("]", "").split("///");
                                 String validate = "";
                                 int counter = 0;
                                 out.print("<div class='section-body' style='color: black'>");
                                 out.print("<h2 class='' style='position: absolute;font-size: 20px; color: black; font-weight: 700; margin: 30px 0 25px 0;'><i class=\"fas fa-caret-right\"></i> &nbsp; " + title + "</h2>");
                                 out.print("<div class='row' style='background: #e7e7e7; padding-top: 47px;'>");
-                                out.print("<div class='col-12 col-md-10 col-sm-12' style='margin: auto; margin-top: 15px;'>");
+                                out.print("<div class='col-12 col-md-12 col-sm-12' style='margin: auto; margin-top: 15px;'>");
                                 out.print("<div class='card' style='border-radius: 5px;'>");
                                 out.print("<div class='card-body'>");
                                 out.print("<div class='' style='height:auto;'>");
                                 out.print("<div class='empty-state-icon'>");
                                 out.print("Todos los campos con asterisco (<span class='text-danger'>*</span>) son obligatorios");
                                 out.print("</div>");
-                                out.print("<div class='empty-state-icon mt-2'>");
-                                out.print("<i class='fas fa-caret-right'></i> &nbsp; " + infoOne + "");
-                                out.print("</div>");
-                                out.print("<div class='empty-state-icon mt-2'>");
-                                out.print("<i class='fas fa-caret-right'></i> &nbsp; " + infoTwo + "");
-                                out.print("</div>");
-                                out.print("<form action='ClientSection?opt=8&IdDoc=" + IdDOc + "' method='post' class='needs-validation' novalidate=''>");
-                                if (form[1].toString().equals("N/A")) {
-                                    //<editor-fold defaultstate="collapsed" desc="EMPTY FORM">
-                                    out.print("<div id='formulario'>");
-                                    out.print("<div class='d-flex'>");
-                                    out.print("<div class='col-lg-4'>");
-                                    out.print("<div class='mt-4'>");
-                                    out.print("<h6>" + SectionOne + " <span class='text-danger'>*</span></h6>");
-                                    out.print("</div>");
-                                    out.print("<div class='mt-2'>");
-                                    out.print("<input type='text' class='form-control' name='TxtName' id='' placeholder='' data-toggle='tooltip' data-placement='top' title='Denominacion Social o Nombre completo' required>");
-                                    out.print("</div>");
-                                    out.print("</div>");
-                                    out.print("<div class='col-lg-4'>");
-                                    out.print("<div class='mt-4'>");
-                                    out.print("<h6>" + SectionTwo + " <span class='text-danger'>*</span></h6>");
-                                    out.print("</div>");
-                                    out.print("<div class='d-flex'>");
-                                    out.print("<div class='col-lg-5' style='margin-left: -15px;' data-toggle='tooltip' data-placemente='top' title=''>");
-                                    out.print("<select class='form-control' name='CbxTypeDoc' required>");
-                                    out.print("<option value='Tipo'>Tipo </option>");
-                                    lst_config = ConfigJpa.ConsultSettingsByCategorie("TypeDocumentUser");
-                                    if (lst_config != null) {
-                                        Object[] objType = (Object[]) lst_config.get(0);
-                                        String[] DataTypeDoc = objType[2].toString().replace("][", "///").replace("]", "").replace("[", "").split("///");
-                                        for (int i = 0; i < DataTypeDoc.length; i++) {
-                                            out.print("<option value='" + DataTypeDoc[i] + "'>" + DataTypeDoc[i] + " </option>");
-                                        }
-                                    }
-                                    out.print("</select>");
-                                    out.print("</div>");
-                                    out.print("<input type='text' class='form-control col-lg-9' name='NmbNroDoc' id=''  required>");
-                                    out.print("</div>");
-                                    out.print("</div>");
-                                    out.print("<div class='col-lg-2'>");
-                                    out.print("<div class='text-center mt-4'>");
-                                    out.print("<h6>" + SectionThree + " <span class='text-danger'>*</span></h6>");
-                                    out.print("</div>");
-                                    out.print("<div class='d-flex mt-2 justify-content-center'>");
-                                    out.print("<input type='radio' value='Si' name='is_pep'> &nbsp; Si &nbsp;&nbsp;");
-                                    out.print("<input type='radio' value='No' name='is_pep' checked> &nbsp; No &nbsp;&nbsp;");
-                                    out.print("</div>");
-                                    out.print("</div>");
-                                    out.print("<div class='col-lg-2'>");
-                                    out.print("<div class='mt-4'>");
-                                    out.print("<h6>% " + SectionFour + " <span class='text-danger'>*</span></h6>");
-                                    out.print("</div>");
-                                    out.print("<div class='mt-2'>");
-                                    out.print("<input type='number' class='form-control' name='TxtPart' id=''  required>");
-                                    out.print("</div>");
-                                    out.print("</div>");
-                                    out.print("</div>");
-                                    out.print("</div>");
-                                    //</editor-fold>
-                                } else {
+                                out.print("<form action='ClientSection?opt=6&IdDoc=" + IdDOc + "' method='post' class='needs-validation' novalidate=''>");
+                                if (information) {
                                     //<editor-fold defaultstate="collapsed" desc="ONE OR MORE">
                                     validate = "";
                                     counter = 0;
                                     out.print("<div id='formulario'>");
                                     for (int i = 1; i < form.length; i++) {
                                         String[] DataForm = form[i].split("/");
-                                        if (DataForm[5].equals("0")) {
+                                        if (DataForm[6].equals("0")) {
                                             validate = "";
                                         } else {
-                                            validate = DataForm[5];
-                                            counter = Integer.parseInt(DataForm[5].toString());
+                                            validate = DataForm[6];
+                                            counter = Integer.parseInt(DataForm[6].toString());
                                         }
                                         out.print("<div id='DataForm" + i + "' class='d-flex person'>");
-                                        out.print("<div class='col-lg-4'>");
+                                        out.print("<div class='col-lg-3'>");
                                         out.print("<div class='mt-4'>");
                                         out.print("<h6>" + SectionOne + " <span class='text-danger'>*</span></h6>");
                                         out.print("</div>");
@@ -3829,7 +3771,7 @@ public class Tag_ClientSection extends TagSupport {
                                         out.print("<h6>" + SectionTwo + " <span class='text-danger'>*</span></h6>");
                                         out.print("</div>");
                                         out.print("<div class='d-flex'>");
-                                        out.print("<div class='col-lg-5' style='margin-left: -15px;' data-toggle='tooltip' data-placemente='top' title='' >");
+                                        out.print("<div class='col-lg-4' style='margin-left: -15px;' data-toggle='tooltip' data-placemente='top' title='' >");
                                         out.print("<select class='form-control' name='CbxTypeDoc" + validate + "' required>");
                                         out.print("<option value='" + DataForm[1] + "'>" + DataForm[1] + " </option>");
                                         out.print("<option value='Tipo'>Tipo </option>");
@@ -3843,24 +3785,35 @@ public class Tag_ClientSection extends TagSupport {
                                         }
                                         out.print("</select>");
                                         out.print("</div>");
-                                        out.print("<input type='number' class='form-control col-lg-9' name='NmbNroDoc" + validate + "' id='' placeholder='Numero de documento' value='" + DataForm[2] + "' data-toggle='tooltip' data-placement='top' title='' required>");
+                                        out.print("<input type='number' class='form-control col-lg-8' name='NmbNroDoc" + validate + "' id='' placeholder='Numero de documento' value='" + DataForm[2] + "' data-toggle='tooltip' data-placement='top' title='' required>");
                                         out.print("</div>");
                                         out.print("</div>");
-                                        out.print("<div class='col-lg-2'>");
-                                        out.print("<div class='text-center mt-4'>");
-                                        out.print("<h6>" + SectionThree + " <span class='text-danger'>*</span></h6>");
-                                        out.print("</div>");
-                                        out.print("<div class='d-flex mt-2 justify-content-center'>");
-                                        out.print("<input type='radio' value='Si' name='is_pep" + validate + "' " + ((DataForm[3].contains("Si")) ? "checked" : "") + "> &nbsp; Si &nbsp;&nbsp;");
-                                        out.print("<input type='radio' value='No' name='is_pep" + validate + "' " + ((DataForm[3].contains("No")) ? "checked" : "") + "> &nbsp; No &nbsp;&nbsp;");
-                                        out.print("</div>");
-                                        out.print("</div>");
+                                        
                                         out.print("<div class='col-lg-2'>");
                                         out.print("<div class='mt-4'>");
-                                        out.print("<h6>% " + SectionFour + " <span class='text-danger'>*</span></h6>");
+                                        out.print("<h6>" + SectionFour + " <span class='text-danger'>*</span></h6>");
                                         out.print("</div>");
                                         out.print("<div class='mt-2'>");
-                                        out.print("<input type='number' class='form-control' name='TxtPart" + validate + "' id=''  value='" + DataForm[4] + "' required>");
+                                        out.print("<input type='text' class='form-control' name='TxtMail" + validate + "' id=''  value='" + DataForm[3] + "' required>");
+                                        out.print("</div>");
+                                        out.print("</div>");
+                                        
+                                        out.print("<div class='col-lg-2'>");
+                                        out.print("<div class='mt-4'>");
+                                        out.print("<h6>" + SectionFive + " <span class='text-danger'>*</span></h6>");
+                                        out.print("</div>");
+                                        out.print("<div class='mt-2'>");
+                                        out.print("<input type='text' class='form-control' name='TxtPhone" + validate + "' id=''  value='" + DataForm[4] + "' required>");
+                                        out.print("</div>");
+                                        out.print("</div>");
+                                        
+                                        out.print("<div class='col-lg-1'>");
+                                        out.print("<div class='text-center mt-4'>");
+                                        out.print("<h6>" + SectionSix + " <span class='text-danger'>*</span></h6>");
+                                        out.print("</div>");
+                                        out.print("<div class='d-flex mt-2 justify-content-center' style='align-items: baseline;'>");
+                                        out.print("<input type='radio' value='Si' name='is_pep" + validate + "' " + ((DataForm[5].contains("Si")) ? "checked" : "") + "> &nbsp; Si &nbsp;&nbsp;");
+                                        out.print("<input type='radio' value='No' name='is_pep" + validate + "' " + ((DataForm[5].contains("No")) ? "checked" : "") + "> &nbsp; No &nbsp;&nbsp;");
                                         out.print("</div>");
                                         out.print("</div>");
                                         if (i != 1) {
@@ -3873,9 +3826,74 @@ public class Tag_ClientSection extends TagSupport {
                                     }
                                     out.print("</div>");
                                     //</editor-fold>
+                                } else {
+                                    //<editor-fold defaultstate="collapsed" desc="EMPTY FORM">
+                                    out.print("<div id='formulario'>");                                    
+                                    out.print("<div class='d-flex'>");                                    
+                                    out.print("<div class='col-lg-3'>");
+                                    out.print("<div class='mt-4'>");
+                                    out.print("<h6>" + SectionOne + " <span class='text-danger'>*</span></h6>");
+                                    out.print("</div>");
+                                    out.print("<div class='mt-2'>");
+                                    out.print("<input type='text' class='form-control' name='TxtName' id='' placeholder='' data-toggle='tooltip' data-placement='top' title='" + SectionOne + "' required>");
+                                    out.print("</div>");
+                                    out.print("</div>");                                    
+                                    out.print("<div class='col-lg-4'>");
+                                    out.print("<div class='mt-4'>");
+                                    out.print("<h6 style='font-size: 15px;'>" + SectionTwo + " - " + SectionThree + " <span class='text-danger'>*</span></h6>");
+                                    out.print("</div>");
+                                    out.print("<div class='d-flex'>");
+                                    out.print("<div class='col-lg-4' style='margin-left: -15px;' data-toggle='tooltip' data-placemente='top' title=''>");
+                                    out.print("<select class='form-control' name='CbxTypeDoc' required>");
+                                    //<editor-fold defaultstate="collapsed" desc="SELECT TYPE DOCUMENT">
+                                    out.print("<option value='Tipo'>Tipo </option>");
+                                    lst_config = ConfigJpa.ConsultSettingsByCategorie("TypeDocumentUser");
+                                    if (lst_config != null) {
+                                        Object[] objType = (Object[]) lst_config.get(0);
+                                        String[] DataTypeDoc = objType[2].toString().replace("][", "///").replace("]", "").replace("[", "").split("///");
+                                        for (int i = 0; i < DataTypeDoc.length; i++) {
+                                            out.print("<option value='" + DataTypeDoc[i] + "'>" + DataTypeDoc[i] + " </option>");
+                                        }
+                                    }
+                                    //</editor-fold>
+                                    out.print("</select>");
+                                    out.print("</div>");
+                                    out.print("<input type='number' class='form-control col-lg-8' name='NmbNroDoc' id=''  required>");
+                                    out.print("</div>");
+                                    out.print("</div>");                                    
+                                    out.print("<div class='col-lg-2'>");
+                                    out.print("<div class='mt-4'>");
+                                    out.print("<h6>" + SectionFour + " <span class='text-danger'>*</span></h6>");
+                                    out.print("</div>");
+                                    out.print("<div class='mt-2'>");
+                                    out.print("<input type='text' class='form-control' name='TxtMail' id='' required>");
+                                    out.print("</div>");
+                                    out.print("</div>");
+                                    
+                                    out.print("<div class='col-lg-2'>");
+                                    out.print("<div class='mt-4'>");
+                                    out.print("<h6>" + SectionFive+ " <span class='text-danger'>*</span></h6>");
+                                    out.print("</div>");
+                                    out.print("<div class='mt-2'>");
+                                    out.print("<input type='text' class='form-control' name='TxtPhone' id='' required>");
+                                    out.print("</div>");
+                                    out.print("</div>");
+                                    
+                                    out.print("<div class='col-lg-1'>");
+                                    out.print("<div class='text-center mt-4'>");
+                                    out.print("<h6>" + SectionSix + " <span class='text-danger'>*</span></h6>");
+                                    out.print("</div>");
+                                    out.print("<div class='d-flex mt-2 justify-content-center' style='align-items: baseline;'>");
+                                    out.print("<input type='radio' value='Si' name='is_pep'> &nbsp; Si &nbsp;&nbsp;");
+                                    out.print("<input type='radio' value='No' name='is_pep' checked> &nbsp; No &nbsp;&nbsp;");
+                                    out.print("</div>");
+                                    out.print("</div>");
+                                    out.print("</div>");
+                                    out.print("</div>");
+                                    //</editor-fold>
                                 }
                                 out.print("<div class='text-center mt-4' style='margin-bottom: 50px;'>");
-                                out.print("<button type='button' onclick='agregarPersona(" + counter + ")' class='btn btn-info'><i class='fas fa-plus'></i></button>");
+                                out.print("<button type='button' onclick='agregarPersonarep(" + counter + ")' class='btn btn-info'><i class='fas fa-plus'></i></button>");
                                 out.print("<input type='hidden' class='form-control' name='TxtCounterPerson' id='CounterPerson' value='" + ((validate.toString().equals("")) ? "" : validate) + "' >");
                                 out.print("</div>");
                                 out.print("<input type='hidden' class='form-control' name='TxtFormat' value='" + Format + "'>");
@@ -3894,39 +3912,258 @@ public class Tag_ClientSection extends TagSupport {
                                 out.print("</div>");
                                 out.print("</div>");
                                 out.print("</div>");
-                                //</editor-fold>
-                                
-                                //<editor-fold defaultstate="collapsed" desc="FINAL BENEFICIARIES">
-                                String title2 = bundle.getString("formG.title");
-                                String infoOne2 = bundle.getString("formG.infoOne");
-                                String infoTwo2 = bundle.getString("formG.infoTwo");
-                                String SectionOne2 = bundle.getString("formG.SectionOne");
-                                String SectionTwo2 = bundle.getString("formG.SectionTwo");
-                                String SectionThree2 = bundle.getString("formG.SectionThree");
 
-//                                String[] form = TemplForm[estTl].replace("][", "///").replace("[", "").replace("]", "").split("///");
-                                String validate2 = "";
-                                int counter2 = 0;
+                                //</editor-fold>
+                            } else if (estTl == 5) {
+                                //<editor-fold defaultstate="collapsed" desc="SHAREHOLDING STRUCTURE">
+                                String[] formAcc = {};
+                                String[] formBenf = {};
+                                if (information) {
+//                                    form = TemplForm[estTl].replace("][", "///").replace("[", "").replace("]", "").split("///");
+                                    form = TemplForm[estTl].split("---");
+                                    try {
+                                        formAcc = form[0].replace("][", "///").replace("[", "").replace("]", "").split("///");
+                                        formBenf = form[1].replace("][", "///").replace("[", "").replace("]", "").split("///");
+                                    } catch (Exception e) {
+                                    }
+                                }
+
+                                String title = bundle.getString("formF.title");
+                                String infoOne = bundle.getString("formF.infoOne");
+                                String infoTwo = bundle.getString("formF.infoTwo");
+                                String SectionOne = bundle.getString("formF.SectionOne");
+                                String SectionTwo = bundle.getString("formF.SectionTwo");
+                                String SectionThree = bundle.getString("formF.SectionThree");
+                                String SectionFour = bundle.getString("formF.SectionFour");
+
+                                String validateAcc = "";
+                                int counter = 0;
                                 out.print("<div class='section-body' style='color: black'>");
                                 out.print("<h2 class='' style='position: absolute;font-size: 20px; color: black; font-weight: 700; margin: 30px 0 25px 0;'><i class=\"fas fa-caret-right\"></i> &nbsp; " + title + "</h2>");
                                 out.print("<div class='row' style='background: #e7e7e7; padding-top: 47px;'>");
                                 out.print("<div class='col-12 col-md-10 col-sm-12' style='margin: auto; margin-top: 15px;'>");
                                 out.print("<div class='card' style='border-radius: 5px;'>");
                                 out.print("<div class='card-body'>");
-                                out.print("<div class='' style='height: auto;'>");
+                                out.print("<div class='' style='height:auto;'>");
+                                out.print("<div class='empty-state-icon'>");
+                                out.print("<h4>" + title + "</h4>");
+                                out.print("</div>");
                                 out.print("<div class='empty-state-icon'>");
                                 out.print("Todos los campos con asterisco (<span class='text-danger'>*</span>) son obligatorios");
                                 out.print("</div>");
                                 out.print("<div class='empty-state-icon mt-2'>");
-                                out.print("<i class='fas fa-caret-right'></i> &nbsp; " + infoOne);
+                                out.print("<i class='fas fa-caret-right'></i> &nbsp; " + infoOne + "");
                                 out.print("</div>");
                                 out.print("<div class='empty-state-icon mt-2'>");
-                                out.print("<i class='fas fa-caret-right'></i> &nbsp; " + infoTwo);
+                                out.print("<i class='fas fa-caret-right'></i> &nbsp; " + infoTwo + "");
                                 out.print("</div>");
-                                out.print("<form action='ClientSection?opt=9&IdDoc=" + IdDOc + "' method='post' class='needs-validation' novalidate=''>");
-                                if (form[1].toString().equals("N/A")) {
+                                out.print("<form action='ClientSection?opt=7&IdDoc=" + IdDOc + "' method='post' class='needs-validation' novalidate=''>");
+                                if (information) {
+                                    //<editor-fold defaultstate="collapsed" desc="ONE OR MORE">
+                                    validateAcc = "";
+                                    counter = 0;
+                                    out.print("<div id='formulario'>");
+                                    for (int i = 1; i < formAcc.length; i++) {
+                                        String[] DataForm = formAcc[i].split("/");
+                                        if (DataForm[5].equals("0")) {
+                                            validateAcc = "";
+                                        } else {
+                                            validateAcc = DataForm[5];
+                                            counter = Integer.parseInt(DataForm[5].toString());
+                                        }
+                                        out.print("<div id='DataForm" + i + "' class='d-flex person'>");
+                                        out.print("<div class='col-lg-4'>");
+                                        out.print("<div class='mt-4'>");
+                                        out.print("<h6>" + SectionOne + " <span class='text-danger'>*</span></h6>");
+                                        out.print("</div>");
+                                        out.print("<div class='mt-2'>");
+                                        out.print("<input type='text' class='form-control' name='TxtName" + validateAcc + "' id='' placeholder='Nombre completo' value='" + DataForm[0] + "' data-toggle='tooltip' data-placement='top' title='Denominacion Social o Nombre completo' required>");
+                                        out.print("</div>");
+                                        out.print("</div>");
+                                        out.print("<div class='col-lg-4'>");
+                                        out.print("<div class='mt-4'>");
+                                        out.print("<h6>" + SectionTwo + " <span class='text-danger'>*</span></h6>");
+                                        out.print("</div>");
+                                        out.print("<div class='d-flex'>");
+                                        out.print("<div class='col-lg-5' style='margin-left: -15px;' data-toggle='tooltip' data-placemente='top' title='' >");
+                                        out.print("<select class='form-control' name='CbxTypeDoc" + validateAcc + "' required>");
+                                        out.print("<option value='" + DataForm[1] + "'>" + DataForm[1] + " </option>");
+                                        out.print("<option value='Tipo'>Tipo </option>");
+                                        lst_config = ConfigJpa.ConsultSettingsByCategorie("TypeDocumentUser");
+                                        if (lst_config != null) {
+                                            Object[] objType = (Object[]) lst_config.get(0);
+                                            String[] DataTypeDoc = objType[2].toString().replace("][", "///").replace("]", "").replace("[", "").split("///");
+                                            for (int e = 0; e < DataTypeDoc.length; e++) {
+                                                out.print("<option value='" + DataTypeDoc[e] + "'>" + DataTypeDoc[e] + " </option>");
+                                            }
+                                        }
+                                        out.print("</select>");
+                                        out.print("</div>");
+                                        out.print("<input type='number' class='form-control col-lg-9' name='NmbNroDoc" + validateAcc + "' id='' placeholder='Numero de documento' value='" + DataForm[2] + "' data-toggle='tooltip' data-placement='top' title='' required>");
+                                        out.print("</div>");
+                                        out.print("</div>");
+                                        out.print("<div class='col-lg-2'>");
+                                        out.print("<div class='text-center mt-4'>");
+                                        out.print("<h6>" + SectionThree + " <span class='text-danger'>*</span></h6>");
+                                        out.print("</div>");
+                                        out.print("<div class='d-flex mt-2 justify-content-center'>");
+                                        out.print("<input type='radio' value='Si' name='is_pep" + validateAcc + "' " + ((DataForm[3].contains("Si")) ? "checked" : "") + "> &nbsp; Si &nbsp;&nbsp;");
+                                        out.print("<input type='radio' value='No' name='is_pep" + validateAcc + "' " + ((DataForm[3].contains("No")) ? "checked" : "") + "> &nbsp; No &nbsp;&nbsp;");
+                                        out.print("</div>");
+                                        out.print("</div>");
+                                        out.print("<div class='col-lg-2'>");
+                                        out.print("<div class='mt-4'>");
+                                        out.print("<h6>% " + SectionFour + " <span class='text-danger'>*</span></h6>");
+                                        out.print("</div>");
+                                        out.print("<div class='mt-2'>");
+                                        out.print("<input type='number' class='form-control' name='TxtPart" + validateAcc + "' id=''  value='" + DataForm[4] + "' required>");
+                                        out.print("</div>");
+                                        out.print("</div>");
+                                        if (i != 1) {
+                                            out.print("<div class='boton-delete'>");
+                                            out.print("<button class='btn btn-danger' onclick='DeleteItem(" + i + ")'><i class='fas fa-trash'></i></button>");
+                                            out.print("</div>");
+                                        }
+
+                                        out.print("</div>");
+                                    }
+                                    out.print("</div>");
+                                    //</editor-fold>
+                                } else {
                                     //<editor-fold defaultstate="collapsed" desc="EMPTY FORM">
                                     out.print("<div id='formulario'>");
+                                    out.print("<div class='d-flex'>");
+                                    out.print("<div class='col-lg-4'>");
+                                    out.print("<div class='mt-4'>");
+                                    out.print("<h6>" + SectionOne + " <span class='text-danger'>*</span></h6>");
+                                    out.print("</div>");
+                                    out.print("<div class='mt-2'>");
+                                    out.print("<input type='text' class='form-control' name='TxtNameAcc' id='' placeholder='' data-toggle='tooltip' data-placement='top' title='Denominacion Social o Nombre completo' required>");
+                                    out.print("</div>");
+                                    out.print("</div>");
+                                    out.print("<div class='col-lg-4'>");
+                                    out.print("<div class='mt-4'>");
+                                    out.print("<h6>" + SectionTwo + " <span class='text-danger'>*</span></h6>");
+                                    out.print("</div>");
+                                    out.print("<div class='d-flex'>");
+                                    out.print("<div class='col-lg-5' style='margin-left: -15px;' data-toggle='tooltip' data-placemente='top' title=''>");
+                                    out.print("<select class='form-control' name='CbxTypeDocAcc' required>");
+                                    out.print("<option value='Tipo'>Tipo </option>");
+                                    lst_config = ConfigJpa.ConsultSettingsByCategorie("TypeDocumentUser");
+                                    if (lst_config != null) {
+                                        Object[] objType = (Object[]) lst_config.get(0);
+                                        String[] DataTypeDoc = objType[2].toString().replace("][", "///").replace("]", "").replace("[", "").split("///");
+                                        for (int i = 0; i < DataTypeDoc.length; i++) {
+                                            out.print("<option value='" + DataTypeDoc[i] + "'>" + DataTypeDoc[i] + " </option>");
+                                        }
+                                    }
+                                    out.print("</select>");
+                                    out.print("</div>");
+                                    out.print("<input type='text' class='form-control col-lg-9' name='NmbNroDocAcc' id=''  required>");
+                                    out.print("</div>");
+                                    out.print("</div>");
+                                    out.print("<div class='col-lg-2'>");
+                                    out.print("<div class='text-center mt-4'>");
+                                    out.print("<h6>" + SectionThree + " <span class='text-danger'>*</span></h6>");
+                                    out.print("</div>");
+                                    out.print("<div class='d-flex mt-2 justify-content-center'>");
+                                    out.print("<input type='radio' value='Si' name='is_pepAcc'> &nbsp; Si &nbsp;&nbsp;");
+                                    out.print("<input type='radio' value='No' name='is_pepAcc' checked> &nbsp; No &nbsp;&nbsp;");
+                                    out.print("</div>");
+                                    out.print("</div>");
+                                    out.print("<div class='col-lg-2'>");
+                                    out.print("<div class='mt-4'>");
+                                    out.print("<h6>% " + SectionFour + " <span class='text-danger'>*</span></h6>");
+                                    out.print("</div>");
+                                    out.print("<div class='mt-2'>");
+                                    out.print("<input type='number' class='form-control' name='TxtPartAcc' id=''  required>");
+                                    out.print("</div>");
+                                    out.print("</div>");
+                                    out.print("</div>");
+                                    out.print("</div>");
+                                    //</editor-fold>
+                                }
+                                out.print("<div class='text-center mt-4' style='margin-bottom: 10px;'>");
+                                out.print("<button type='button' onclick='agregarPersona(" + counter + ")' class='btn btn-info'>Agregar Accionario <i class='fas fa-plus'></i></button>");
+                                out.print("<input type='hidden' class='form-control' name='TxtCounterPersonAcc' id='CounterPersonAcc' value='" + ((validateAcc.toString().equals("")) ? "" : validateAcc) + "' >");
+                                out.print("</div>");
+                                out.print("<input type='hidden' class='form-control' name='TxtValidAction' id='TxtValidAction' value=''>");
+
+                                //</editor-fold>
+                                //<editor-fold defaultstate="collapsed" desc="FINAL BENEFICIARIES">
+                                title = bundle.getString("formG.title");
+                                infoOne = bundle.getString("formG.infoOne");
+                                infoTwo = bundle.getString("formG.infoTwo");
+                                SectionOne = bundle.getString("formG.SectionOne");
+                                SectionTwo = bundle.getString("formG.SectionTwo");
+                                SectionThree = bundle.getString("formG.SectionThree");
+
+                                String validateBenf = "";
+                                counter = 0;
+
+                                out.print("<div class='empty-state-icon'>");
+                                out.print("<h4>" + title + "</h4>");
+                                out.print("</div>");
+                                if (information) {
+                                    //<editor-fold defaultstate="collapsed" desc="ONE OR MORE">
+                                    validateBenf = "";
+                                    counter = 0;
+                                    out.print("<div id='formulario'>");
+                                    for (int i = 0; i < formBenf.length; i++) {
+                                        String[] DataForm = formBenf[i].split("/");
+                                        if (DataForm[4].equals("0")) {
+                                            validateBenf = "";
+                                        } else {
+                                            validateBenf = DataForm[4];
+                                            counter = Integer.parseInt(DataForm[4].toString());
+                                        }
+                                        out.print("<div id='DataForm" + i + "' class='d-flex person'>");
+                                        out.print("<div class='col-lg-4'>");
+                                        out.print("<div class='mt-4'>");
+                                        out.print("<h6> " + SectionOne + " <span class='text-danger'>*</span></h6>");
+                                        out.print("</div>");
+                                        out.print("<div class='mt-2'>");
+                                        out.print("<input type='text' class='form-control' name='TxtName" + validateBenf + "' id='TxtName' value='" + DataForm[0] + "' placeholder='Nombre completo' data-toggle='tooltip' data-placement='top' title='Nombre completo' required>");
+                                        out.print("</div>");
+                                        out.print("</div>");
+                                        out.print("<div class='col-lg-4'>");
+                                        out.print("<div class='mt-4'>");
+                                        out.print("<h6> " + SectionTwo + " <span class='text-danger'>*</span></h6>");
+                                        out.print("</div>");
+                                        out.print("<div class='d-flex'>");
+                                        out.print("<div class='col-lg-4' style='margin-left: -15px;' data-toggle='tooltip' data-placemente='top' title=''>");
+                                        out.print("<select class='form-control' name='CbxTypeDoc" + validateBenf + "' required>");
+                                        out.print("<option value='" + DataForm[1] + "'>" + DataForm[1] + " </option>");
+                                        out.print("<option value='PP'>PP </option>");
+                                        out.print("<option value='CC'>CC </option>");
+                                        out.print("<option value='CE'>CE </option>");
+                                        out.print("<option value='NIT'>NIT </option>");
+                                        out.print("</select>");
+                                        out.print("</div>");
+                                        out.print("<input type='number' class='form-control col-lg-9' name='NmbNroDoc" + validateBenf + "' id='NmbNroDoc' value='" + DataForm[2] + "' placeholder='Numero documento' data-toggle='tooltip' data-placement='top' title='' required>");
+                                        out.print("</div>");
+                                        out.print("</div>");
+                                        out.print("<div class='col-lg-2'>");
+                                        out.print("<div class='text-center mt-4'>");
+                                        out.print("<h6> " + SectionThree + " <span class='text-danger'>*</span></h6>");
+                                        out.print("</div>");
+                                        out.print("<div class='d-flex mt-2 justify-content-center'>");
+                                        out.print("<input type='radio' value='Si' name='is_pep" + validateBenf + "' " + ((DataForm[3].contains("Si")) ? "checked" : "") + "> &nbsp; Si &nbsp;&nbsp;");
+                                        out.print("<input type='radio' value='No' name='is_pep" + validateBenf + "' " + ((DataForm[3].contains("No")) ? "checked" : "") + "> &nbsp; No &nbsp;&nbsp;");
+                                        out.print("</div>");
+                                        out.print("</div>");
+                                        if (i != 1) {
+                                            out.print("<div class='boton-delete'>");
+                                            out.print("<button class='btn btn-danger' onclick='DeleteItem(" + i + ")'><i class='fas fa-trash'></i></button>");
+                                            out.print("</div>");
+                                        }
+                                        out.print("</div>");
+                                    }
+                                    out.print("</div>");
+                                    //</editor-fold>
+                                } else {
+                                    //<editor-fold defaultstate="collapsed" desc="EMPTY FORM">
+                                    out.print("<div id='formularioC'>");
                                     out.print("<div class='d-flex person'>");
                                     out.print("<div class='col-lg-4'>");
                                     out.print("<div class='mt-4'>");
@@ -3966,69 +4203,11 @@ public class Tag_ClientSection extends TagSupport {
                                     out.print("</div>");
                                     out.print("</div>");
                                     //</editor-fold>
-                                } else {
-                                    //<editor-fold defaultstate="collapsed" desc="ONE OR MORE">
-                                    validate = "";
-                                    counter = 0;
-                                    out.print("<div id='formulario'>");
-                                    for (int i = 1; i < form.length; i++) {
-                                        String[] DataForm = form[i].split("/");
-                                        if (DataForm[4].equals("0")) {
-                                            validate = "";
-                                        } else {
-                                            validate = DataForm[4];
-                                            counter = Integer.parseInt(DataForm[4].toString());
-                                        }
-                                        out.print("<div id='DataForm" + i + "' class='d-flex person'>");
-                                        out.print("<div class='col-lg-4'>");
-                                        out.print("<div class='mt-4'>");
-                                        out.print("<h6> " + SectionOne + " <span class='text-danger'>*</span></h6>");
-                                        out.print("</div>");
-                                        out.print("<div class='mt-2'>");
-                                        out.print("<input type='text' class='form-control' name='TxtName" + validate + "' id='TxtName' value='" + DataForm[0] + "' placeholder='Nombre completo' data-toggle='tooltip' data-placement='top' title='Nombre completo' required>");
-                                        out.print("</div>");
-                                        out.print("</div>");
-                                        out.print("<div class='col-lg-4'>");
-                                        out.print("<div class='mt-4'>");
-                                        out.print("<h6> " + SectionTwo + " <span class='text-danger'>*</span></h6>");
-                                        out.print("</div>");
-                                        out.print("<div class='d-flex'>");
-                                        out.print("<div class='col-lg-4' style='margin-left: -15px;' data-toggle='tooltip' data-placemente='top' title=''>");
-                                        out.print("<select class='form-control' name='CbxTypeDoc" + validate + "' required>");
-                                        out.print("<option value='" + DataForm[1] + "'>" + DataForm[1] + " </option>");
-                                        out.print("<option value='PP'>PP </option>");
-                                        out.print("<option value='CC'>CC </option>");
-                                        out.print("<option value='CE'>CE </option>");
-                                        out.print("<option value='NIT'>NIT </option>");
-                                        out.print("</select>");
-                                        out.print("</div>");
-                                        out.print("<input type='number' class='form-control col-lg-9' name='NmbNroDoc" + validate + "' id='NmbNroDoc' value='" + DataForm[2] + "' placeholder='Numero documento' data-toggle='tooltip' data-placement='top' title='' required>");
-                                        out.print("</div>");
-                                        out.print("</div>");
-                                        out.print("<div class='col-lg-2'>");
-                                        out.print("<div class='text-center mt-4'>");
-                                        out.print("<h6> " + SectionThree + " <span class='text-danger'>*</span></h6>");
-                                        out.print("</div>");
-                                        out.print("<div class='d-flex mt-2 justify-content-center'>");
-                                        out.print("<input type='radio' value='Si' name='is_pep" + validate + "' " + ((DataForm[3].contains("Si")) ? "checked" : "") + "> &nbsp; Si &nbsp;&nbsp;");
-                                        out.print("<input type='radio' value='No' name='is_pep" + validate + "' " + ((DataForm[3].contains("No")) ? "checked" : "") + "> &nbsp; No &nbsp;&nbsp;");
-                                        out.print("</div>");
-                                        out.print("</div>");
-                                        if (i != 1) {
-                                            out.print("<div class='boton-delete'>");
-                                            out.print("<button class='btn btn-danger' onclick='DeleteItem(" + i + ")'><i class='fas fa-trash'></i></button>");
-                                            out.print("</div>");
-                                        }
-                                        out.print("</div>");
-                                    }
-                                    out.print("</div>");
-                                    //</editor-fold>
                                 }
                                 out.print("<div class='text-center mt-4' style='margin-bottom: 50px;'>");
-                                out.print("<button type='button' onclick='agregarPersonaPlus(" + counter + ")' class='btn btn-info'><i class='fas fa-plus'></i></button>");
-                                out.print("<input type='hidden' class='form-control' name='TxtCounterPerson' id='CounterPerson' value='" + ((validate.toString().equals("")) ? "" : validate) + "' >");
+                                out.print("<button type='button' onclick='agregarPersonaPlus(" + counter + ")' class='btn btn-info'>Agregar Beneficiario <i class='fas fa-plus'></i></button>");
+                                out.print("<input type='hidden' class='form-control' name='TxtCounterPersonBenf' id='CounterPersonBenf' value='" + ((validateBenf.toString().equals("")) ? "" : validateBenf) + "' >");
                                 out.print("</div>");
-                                out.print("<input type='hidden' class='form-control' name='TxtFormat' value='" + Format + "'>");
                                 out.print("<input type='hidden' class='form-control' name='TxtValidAction' id='TxtValidAction' value=''>");
                                 out.print("<div class='d-flex align-items-center' style='position: absolute;bottom: 18px;width: 94%;justify-content: center;'>");
                                 out.print("<button class='btn btn-blue mr-2' data-toggle='tooltip' data-placement='top' title='" + ButtonSave + "' onclick='ValidAction(\"TxtValidAction\",1)'><i class='fas fa-save'></i></button>");
@@ -4049,8 +4228,6 @@ public class Tag_ClientSection extends TagSupport {
                                 out.print("</div>");
                                 out.print("</div>");
                                 //</editor-fold>
-                                
-                                
 //                                //<editor-fold defaultstate="collapsed" desc="PAYMENT CONDITIONS - OLD">
 //                                String title = bundle.getString("formD.title");
 //                                String SectionOne = bundle.getString("formD.SectionOne");
@@ -4166,135 +4343,6 @@ public class Tag_ClientSection extends TagSupport {
 //                                out.print("</div>");
 //                                out.print("</div>");
 //                                //</editor-fold>
-                            } else if (estTl == 5) {
-                                //<editor-fold defaultstate="collapsed" desc="LEGAL REPRESENTATIVE">
-                                String title = bundle.getString("formE.title");
-                                String SectionOne = bundle.getString("formE.SectionOne");
-                                String SectionTwo = bundle.getString("formE.SectionTwo");
-                                String SectionThree = bundle.getString("formE.SectionThree");
-                                String SectionFour = bundle.getString("formE.SectionFour");
-                                String SectionFive = bundle.getString("formE.SectionFive");
-                                String SectionSix = bundle.getString("formE.SectionSix");
-
-//                                String[] form = TemplForm[estTl].replace("][", "///").replace("[", "").replace("]", "").split("///");
-                                out.print("<div class='section-body' style='color: black'>");
-                                out.print("<h2 class='' style='position: absolute;font-size: 20px; color: black; font-weight: 700; margin: 30px 0 25px 0;'><i class=\"fas fa-caret-right\"></i> &nbsp; " + title + "</h2>");
-                                out.print("<div class='row' style='background: #e7e7e7; padding-top: 47px;'>");
-                                out.print("<div class='col-12 col-md-7 col-sm-12' style='margin: auto; margin-top: 15px;'>");
-                                out.print("<div class='card' style='border-radius: 5px;'>");
-                                out.print("<div class='card-body'>");
-                                out.print("<div class='' data-height='360'>");
-                                out.print("<div class='empty-state-icon'>");
-                                out.print("Todos los campos con asterisco (<span class='text-danger'>*</span>) son obligatorios");
-                                out.print("</div>");
-                                out.print("<form action='ClientSection?opt=7&IdDoc=" + IdDOc + "' method='post' class='needs-validation' novalidate=''>");
-
-                                out.print("<div class='d-flex'>");
-                                out.print("<div class='col-lg-6'>");
-                                out.print("<div class='mt-4'>");
-                                out.print("<h6>" + SectionOne + " <span class='text-danger'>*</span></h6>");
-                                out.print("</div>");
-                                out.print("<div class='mt-2'>");
-                                out.print("<input type='text' class='form-control' name='TxtNames' id='' value='" + ((form[1].toString().equals("N/A")) ? "" : form[1].toString()) + "' required>");
-                                out.print("</div>");
-                                out.print("</div>");
-                                out.print("<div class='col-lg-6'>");
-                                out.print("<div class='mt-4'>");
-                                out.print("<h6>" + SectionTwo + " <span class='text-danger'>*</span></h6>");
-                                out.print("</div>");
-                                out.print("<div class='mt-2'>");
-                                out.print("<input type='text' class='form-control' name='TxtLastName' id='' value='" + ((form[2].toString().equals("N/A")) ? "" : form[2].toString()) + "' required>");
-                                out.print("</div>");
-                                out.print("</div>");
-                                out.print("</div>");
-
-                                out.print("<div class='d-flex'>");
-                                out.print("<div class='col-lg-6'>");
-                                out.print("<div class='mt-4'>");
-                                out.print("<h6>" + SectionThree + "<span class='text-danger'>*</span></h6>");
-                                out.print("</div>");
-                                out.print("<div class='col-lg-12 d-flex mt-2'>");
-                                out.print("<div class='col-lg-6' style='margin-left: -30px;' data-toggle='tooltip' data-placemente='top' title=''>");
-                                out.print("<select class='form-control' name='CbxTypeDoc' required>");
-                                String[] DataType = {};
-                                if (!form[3].toString().equals("N/A")) {
-                                    DataType = form[3].toString().split("/");
-                                    out.print("<option value='" + DataType[0].toString() + "'>" + DataType[0].toString() + " </option>");
-                                } else {
-                                    out.print("<option selected disabled value=''>Tipo </option>");
-                                }
-                                lst_config = ConfigJpa.ConsultSettingsByCategorie("TypeDocumentUser");
-                                if (lst_config != null) {
-                                    Object[] objType = (Object[]) lst_config.get(0);
-                                    String[] DataTypeDoc = objType[2].toString().replace("][", "///").replace("]", "").replace("[", "").split("///");
-                                    for (int i = 0; i < DataTypeDoc.length; i++) {
-                                        out.print("<option value='" + DataTypeDoc[i] + "'>" + DataTypeDoc[i] + " </option>");
-                                    }
-                                }
-                                out.print("</select>");
-
-                                out.print("</div>");
-                                out.print("<input type='text' class='form-control col-lg-8' name='NmbNroDoc' id='' value='" + ((!form[3].toString().equals("N/A")) ? DataType[1].toString() : "") + "' required>");
-
-                                out.print("</div>");
-                                out.print("</div>");
-                                out.print("<div class='col-lg-6'>");
-                                out.print("<div class='mt-4'>");
-                                out.print("<h6>" + SectionFour + " <span class='text-danger'>*</span></h6>");
-                                out.print("</div>");
-                                out.print("<div class='col-lg-12 d-flex mt-2'>");
-                                out.print("<div class='col-lg-7' style='margin-left: -30px;' data-toggle='tooltip' data-placemente='top' title=''>");
-                                String[] DataDate = {};
-                                if (!form[4].toString().equals("N/A")) {
-                                    DataDate = form[4].toString().split("/");
-                                    out.print("<input type='date' class='form-control' name='TxtDate' id=''  value='" + DataDate[0].toString() + "' required>");
-                                    out.print("</div>");
-                                    out.print("<input type='text' class='form-control col-lg-7' name='TxtPlace' id=''  value='" + DataDate[1].toString() + "' required>");
-                                } else {
-                                    out.print("<input type='date' class='form-control' name='TxtDate' id=''  required>");
-                                    out.print("</div>");
-                                    out.print("<input type='text' class='form-control col-lg-7' name='TxtPlace' id=''  required>");
-
-                                }
-                                out.print("</div>");
-                                out.print("</div>");
-                                out.print("</div>");
-                                out.print("<div class='d-flex'>");
-                                out.print("<div class='col-lg-6'>");
-                                out.print("<div class='mt-4'>");
-                                out.print("<h6>" + SectionFive + " <span class='text-danger'>*</span></h6>");
-                                out.print("</div>");
-                                out.print("<div class='mt-2'>");
-                                out.print("<input type='number' class='form-control' name='TxtPhones' id='' value='" + ((form[5].toString().equals("N/A")) ? "" : form[5].toString()) + "' required>");
-                                out.print("</div>");
-                                out.print("</div>");
-                                out.print("<div class='col-lg-6'>");
-                                out.print("<div class='mt-4'>");
-                                out.print("<h6>" + SectionSix + " <span class='text-danger'>*</span></h6>");
-                                out.print("</div>");
-                                out.print("<div class='mt-2'>");
-                                out.print("<input type='email' class='form-control' name='TxtMail' id='' value='" + ((form[6].toString().equals("N/A")) ? "" : form[6].toString()) + "' required>");
-                                out.print("</div>");
-                                out.print("</div>");
-                                out.print("</div>");
-
-                                out.print("<input type='hidden' class='form-control' name='TxtFormat' value='" + Format + "'>");
-                                out.print("<input type='hidden' class='form-control' name='TxtValidAction' id='TxtValidAction' value=''>");
-                                out.print("<div class='d-flex align-items-center' style='position: absolute;bottom: 18px;width: 94%;justify-content: center;'>");
-                                out.print("<button class='btn btn-blue mr-2' data-toggle='tooltip' data-placement='top' title='" + ButtonSave + "' onclick='ValidAction(\"TxtValidAction\",1)'><i class='fas fa-save'></i></button>");
-                                out.print("<button class='btn btn-blue' data-toggle='tooltip' data-placement='top' title='" + ButtonAd + "' onclick='ValidAction(\"TxtValidAction\",2)'><i class=\"fas fa-share-square\"></i></button>");
-                                if (bntFinal) {
-                                    out.print("<button class='btn btn-success' type='button' onclick='window.location.href=\"ClientSection?opt=18&IdDoc=" + IdDOc + "\"' style='top: 50px; right: 8px;' data-toggle='tooltip' data-placement='left' title='Finalizar'><i class=\"fas fa-check-circle\"></i></button>");
-                                }
-                                out.print("</div>");
-                                out.print("</form>");
-                                out.print("</div>");
-                                out.print("</div>");
-                                out.print("</div>");
-                                out.print("</div>");
-                                out.print("</div>");
-                                out.print("</div>");
-                                //</editor-fold>
                             } else if (estTl == 6) {
                                 //<editor-fold defaultstate="collapsed" desc="SHAREHOLDING STRUCTURE">
                                 String title = bundle.getString("formF.title");
@@ -4602,7 +4650,7 @@ public class Tag_ClientSection extends TagSupport {
                                 }
                                 out.print("<div class='text-center mt-4' style='margin-bottom: 50px;'>");
                                 out.print("<button type='button' onclick='agregarPersonaPlus(" + counter + ")' class='btn btn-info'><i class='fas fa-plus'></i></button>");
-                                out.print("<input type='hidden' class='form-control' name='TxtCounterPerson' id='CounterPerson' value='" + ((validate.toString().equals("")) ? "" : validate) + "' >");
+                                out.print("<input type='hidden' class='form-control' name='TxtCounterPersonBenf' id='CounterPersonBenf' value='" + ((validate.toString().equals("")) ? "" : validate) + "' >");
                                 out.print("</div>");
                                 out.print("<input type='hidden' class='form-control' name='TxtFormat' value='" + Format + "'>");
                                 out.print("<input type='hidden' class='form-control' name='TxtValidAction' id='TxtValidAction' value=''>");

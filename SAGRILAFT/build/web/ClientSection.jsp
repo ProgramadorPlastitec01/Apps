@@ -6,12 +6,12 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Cient | SGLT</title>
-<!--        <script type = "text/javascript" >
-            history.pushState(null, null, 'ClientSection.jsp');
-            window.addEventListener('popstate', function (event) {
-                history.pushState(null, null, 'ClientSection.jsp');
-            });
-        </script>-->
+        <!--        <script type = "text/javascript" >
+                    history.pushState(null, null, 'ClientSection.jsp');
+                    window.addEventListener('popstate', function (event) {
+                        history.pushState(null, null, 'ClientSection.jsp');
+                    });
+                </script>-->
         <link rel="stylesheet" href="Interfaz/Contenido/assets/modules/datatables/datatables.min.css">
         <link rel="stylesheet" href="Interfaz/Contenido/assets/modules/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css">
         <link rel="stylesheet" href="Interfaz/Contenido/assets/modules/datatables/Select-1.2.4/css/select.bootstrap4.min.css">
@@ -214,7 +214,7 @@
                 }
             }
         </script>
-        
+
         <script>
             function validImg2(lg, nm) {
                 var signat = document.getElementById("file-input").value;
@@ -302,7 +302,7 @@
         <script>
             let contador = 1; // Contador para identificar cada grupo de campos de persona
 
-            function agregarPersona(count) {
+            function agregarPersonarep(count) {
                 if (count == 0) {
                 } else {
                     contador = document.getElementById("CounterPerson").value;
@@ -311,17 +311,17 @@
                 const formulario = document.getElementById('formulario');
                 const nuevaPersona = document.createElement('div');
                 nuevaPersona.id = 'persona' + contador;
-                nuevaPersona.className = 'd-flex person mt-2'; // Agregando la clase 'd-flex'
+                nuevaPersona.className = 'd-flex mt-2'; // Agregando la clase 'd-flex'
 
                 let contenidoHTML = `
-                        <div class="col-lg-4">
+                        <div class="col-lg-3">
                           <div class="">
-                            <input type="text" class="form-control" name="TxtNameXXXX" placeholder="Nombre completo" data-toggle="tooltip" data-placement="top" title="Denominación Social o Nombre completo" required>
+                            <input type="text" class="form-control" name="TxtNameXXXX" required>
                           </div>
                         </div>
                         <div class="col-lg-4">
                           <div class="d-flex">
-                            <div class="col-lg-5" style="margin-left: -15px;" data-toggle="tooltip" data-placement="top" title="">
+                            <div class="col-lg-4" style="margin-left: -15px;">
                               <select class="form-control" name="CbxTypeDocXXXX" required>
                                 <option value="">Tipo</option>
                                 <option value="PP">PP</option>
@@ -332,18 +332,101 @@
                                 <option value="Otro">Otro</option>
                               </select>
                             </div>
-                            <input type="number" class="form-control col-lg-9" name="NmbNroDocXXXX" placeholder="Número de documento" data-toggle="tooltip" data-placement="top" title="" required>
+                            <input type="number" class="form-control col-lg-8" name="NmbNroDocXXXX" required>
                           </div>
                         </div>
                         <div class="col-lg-2">
-                          <div class="d-flex mt-2 justify-content-center">
+                          <div class="">
+                            <input type="text" class="form-control" name="TxtMailXXXX"  required>
+                          </div>
+                        </div>
+                        <div class="col-lg-2">
+                          <div class="">
+                            <input type="text" class="form-control" name="TxtPhoneXXXX" placeholder="" required>
+                          </div>
+                        </div>
+                        <div style="width: 90px;">
+                          <div class="d-flex mt-2 justify-content-center" style="align-items: baseline;">
                             <input type="radio" name="is_pepXXXX" value="Si"> &nbsp; Si &nbsp;&nbsp;
                             <input type="radio" name="is_pepXXXX" value="No" checked> &nbsp; No &nbsp;&nbsp;
                           </div>
                         </div>
+                      `;
+                contenidoHTML = contenidoHTML.replaceAll('XXXX', contador);
+                nuevaPersona.innerHTML = contenidoHTML;
+
+                // Agregar botón de eliminar si no es la primera persona
+                if (contador > 1) {
+                    const botonEliminarDiv = document.createElement('div');
+                    botonEliminarDiv.className = 'boton-eliminar';
+                    const botonEliminar = document.createElement('a');
+                    // Crea un elemento i para el icono de Font Awesome
+                    const iconoEliminar = document.createElement('i');
+                    iconoEliminar.className = 'fas fa-trash';
+                    botonEliminar.appendChild(iconoEliminar); // Adjunta el icono al botón
+                    botonEliminarDiv.appendChild(botonEliminar);
+                    nuevaPersona.appendChild(botonEliminarDiv);
+
+                    // Agrega la clase 'btn btn-danger' al botón
+                    botonEliminar.className = 'btn btn-danger btn-sm';
+
+                    // Agrega el evento para eliminar la persona al hacer clic en el botón
+                    botonEliminar.onclick = function () {
+                        formulario.removeChild(nuevaPersona);
+                    };
+                    document.getElementById("CounterPerson").value = contador;
+                }
+
+                formulario.appendChild(nuevaPersona);
+            }
+
+        </script>
+
+        <script>
+            let contador = 1; // Contador para identificar cada grupo de campos de persona
+
+            function agregarPersona(count) {
+                if (count == 0) {
+                } else {
+                    contador = document.getElementById("CounterPersonAcc").value;
+                }
+                contador++; // Incrementa el contador
+                const formulario = document.getElementById('formulario');
+                const nuevaPersona = document.createElement('div');
+                nuevaPersona.id = 'persona' + contador;
+                nuevaPersona.className = 'd-flex person mt-2'; // Agregando la clase 'd-flex'
+
+                let contenidoHTML = `
+                        <div class="col-lg-4">
+                          <div class="">
+                            <input type="text" class="form-control" name="TxtNameXXXXAcc" placeholder="Nombre completo" data-toggle="tooltip" data-placement="top" title="Denominación Social o Nombre completo" required>
+                          </div>
+                        </div>
+                        <div class="col-lg-4">
+                          <div class="d-flex">
+                            <div class="col-lg-5" style="margin-left: -15px;" data-toggle="tooltip" data-placement="top" title="">
+                              <select class="form-control" name="CbxTypeDocXXXXAcc" required>
+                                <option value="">Tipo</option>
+                                <option value="PP">PP</option>
+                                <option value="CC">CC</option>
+                                <option value="CE">CE</option>
+                                <option value="TAX ID">TAX ID</option>
+                                <option value="NIT">NIT</option>
+                                <option value="Otro">Otro</option>
+                              </select>
+                            </div>
+                            <input type="number" class="form-control col-lg-9" name="NmbNroDocXXXXAcc" placeholder="Número de documento" data-toggle="tooltip" data-placement="top" title="" required>
+                          </div>
+                        </div>
+                        <div class="col-lg-2">
+                          <div class="d-flex mt-2 justify-content-center">
+                            <input type="radio" name="is_pepXXXXAcc" value="Si"> &nbsp; Si &nbsp;&nbsp;
+                            <input type="radio" name="is_pepXXXXAcc" value="No" checked> &nbsp; No &nbsp;&nbsp;
+                          </div>
+                        </div>
                         <div class="col-lg-2">
                           <div class="mt-2">
-                            <input type="number" class="form-control" name="TxtPartXXXX" placeholder="% Participación" data-toggle="tooltip" data-placement="top" title="Porcentaje de participación" required>
+                            <input type="number" class="form-control" name="TxtPartXXXXAcc" placeholder="% Participación" data-toggle="tooltip" data-placement="top" title="Porcentaje de participación" required>
                           </div>
                         </div>
                       `;
@@ -369,7 +452,7 @@
                     botonEliminar.onclick = function () {
                         formulario.removeChild(nuevaPersona);
                     };
-                    document.getElementById("CounterPerson").value = contador;
+                    document.getElementById("CounterPersonAcc").value = contador;
                 }
 
                 formulario.appendChild(nuevaPersona);
@@ -382,10 +465,10 @@
             function agregarPersonaPlus(count) {
                 if (count == 0) {
                 } else {
-                    contador = document.getElementById("CounterPerson").value;
+                    contador = document.getElementById("CounterPersonBenf").value;
                 }
                 contador++; // Incrementa el contador
-                const formulario = document.getElementById('formulario');
+                const formulario = document.getElementById('formularioC');
                 const nuevaPersona = document.createElement('div');
                 nuevaPersona.id = 'persona' + contador;
                 nuevaPersona.className = 'd-flex person mt-4';
@@ -441,13 +524,14 @@
                     botonEliminar.onclick = function () {
                         formulario.removeChild(nuevaPersona);
                     };
-                    document.getElementById("CounterPerson").value = contador;
+                    document.getElementById("CounterPersonBenf").value = contador;
                 }
 
                 formulario.appendChild(nuevaPersona);
             }
 
         </script>
+
 
         <script>
             function DeleteItem(id) {
