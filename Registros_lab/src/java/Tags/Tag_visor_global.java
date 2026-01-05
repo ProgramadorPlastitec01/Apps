@@ -18,9 +18,17 @@ public class Tag_visor_global extends TagSupport {
         JspWriter out = pageContext.getOut();
         try {
             //PERMISOS POR ROL
-            String[] rol_usuario = pageContext.getSession().getAttribute("Rol/Nombres").toString().split("/");
-            String rol = rol_usuario[0];
-            String usuario = rol_usuario[1];
+            String rol = "";
+            String usuario = "";
+            try {
+                String[] rol_usuario = pageContext.getSession().getAttribute("Rol/Nombres").toString().split("/");
+                rol = rol_usuario[0];
+                usuario = rol_usuario[1];
+
+            } catch (Exception e) {
+                rol = "Consulta";
+                usuario = "";
+            }
             ///JPAS
             ProductoJpaController jpacpdt = new ProductoJpaController();
             RegistroJpaController jpacrgt = new RegistroJpaController();
@@ -84,25 +92,27 @@ public class Tag_visor_global extends TagSupport {
                 lst_plantilla = jpacrgt.Plantillas_registro(id_registro);
                 Object[] obj_plantilla = (Object[]) lst_plantilla.get(0);
                 //<!-- HTML EDITOR -->
-                //<editor-fold defaultstate="collapsed" desc="CAMBIO DE SESION">
-                out.print("<button class='accordion'>Cambiar Usuario</button>");
-                out.print("<div class='panel'>");
-                out.print("<div style='width:30%;float:left;'>");
-                out.print("<form action=\"Registro?opc=41&irg=" + id_registro + "\" method=\"post\">");
-                out.print("<br /><input type=\"text\" name=\"Txt_user\" id=\"Txt_user\" placeholder=\"Usuario\" onchange='javascript:this.value = this.value.toUpperCase();'/><br />");
-                out.print("<input type=\"password\" name=\"Txt_password\" id=\"Txt_password\" placeholder=\"Contraseña\" /><br />");
-                out.print("<input type=\"submit\" value=\"Iniciar\" /><br/><br/>");
-                out.print("</form>");
-                out.print("</div>");
-                out.print("<div style='width:69%;float:left;'>");
-                out.print("<br /><b>Usuario Actual :</b>" + obj_usuario[1] + " " + obj_usuario[2] + "<br />");
-                out.print("<b>Rol : </b>" + obj_usuario[9] + "<br /><br />");
-                rol = obj_usuario[9].toString();
-                out.print("<b class='naranja'>Para cambiar de usuario temporalmente para diligenciar completamente el registro de despeje, favor introducir a la izquierda los datos de sesión.<br />Luego dedar Iniciar verificar si es su sesión.</b>");
-                out.print("</div>");
-                out.print("</div>");
-                out.print("<br /><br />");
+                if (!rol.equals("Consulta")) {
+                    //<editor-fold defaultstate="collapsed" desc="CAMBIO DE SESION">
+                    out.print("<button class='accordion'>Cambiar Usuario</button>");
+                    out.print("<div class='panel'>");
+                    out.print("<div style='width:30%;float:left;'>");
+                    out.print("<form action=\"Registro?opc=41&irg=" + id_registro + "\" method=\"post\">");
+                    out.print("<br /><input type=\"text\" name=\"Txt_user\" id=\"Txt_user\" placeholder=\"Usuario\" onchange='javascript:this.value = this.value.toUpperCase();'/><br />");
+                    out.print("<input type=\"password\" name=\"Txt_password\" id=\"Txt_password\" placeholder=\"Contraseña\" /><br />");
+                    out.print("<input type=\"submit\" value=\"Iniciar\" /><br/><br/>");
+                    out.print("</form>");
+                    out.print("</div>");
+                    out.print("<div style='width:69%;float:left;'>");
+                    out.print("<br /><b>Usuario Actual :</b>" + obj_usuario[1] + " " + obj_usuario[2] + "<br />");
+                    out.print("<b>Rol : </b>" + obj_usuario[9] + "<br /><br />");
+                    rol = obj_usuario[9].toString();
+                    out.print("<b class='naranja'>Para cambiar de usuario temporalmente para diligenciar completamente el registro de despeje, favor introducir a la izquierda los datos de sesión.<br />Luego dedar Iniciar verificar si es su sesión.</b>");
+                    out.print("</div>");
+                    out.print("</div>");
+                    out.print("<br /><br />");
 //</editor-fold> 
+                }
                 out.print("<link type=\"text/css\" rel=\"stylesheet\" href=\"Interfaz/HTML_Editor/demo/demo.css\" />");
                 out.print("<link type=\"text/css\" rel=\"stylesheet\" href=\"Interfaz/HTML_Editor/jquery-te-1.4.0.css\" />");
                 out.print("<script type=\"text/javascript\" src=\"Interfaz/HTML_Editor/HtmlEditor.js\" charset=\"utf-8\"></script>");
@@ -186,7 +196,7 @@ public class Tag_visor_global extends TagSupport {
                         out.print("<form action='Orden?opc=17&Id_registro=" + id_registro + "&Id_registro_despeje=" + obj_plantilla[0] + "&iut=" + obj_usuario[0] + "' method='post' name='FormFirmarDespeje' id='FormFirmarDespeje'>");
                         //+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='#' onclick='FirmarDespeje();'><img src=\"Interfaz/Contenido/Iconos/Edit.png\" style=\"width: 22px;height: 22px\" alt=\"\" title='Firmar Despeje' /></a> Firmar registro "
                         int temp = Integer.parseInt(obj_plantilla[7].toString());
-                        if (temp == 32 || temp == 33 || temp == 40 || temp == 41 || temp == 42 ) {
+                        if (temp == 32 || temp == 33 || temp == 40 || temp == 41 || temp == 42) {
                             out.print("<span class='fas fa-signature fa-size_small' onclick='FirmarDespeje();' title='Firmar Despeje'></span> Firmar registro &nbsp;&nbsp;"
                                     + "<select name='Cbx_firma' id='Cbx_firma'>"
                                     + "<option value='1'>Firma 1</option>"
@@ -226,9 +236,9 @@ public class Tag_visor_global extends TagSupport {
 //                        visor = visor.replace("<td colspan=\"7\" id=\"Txt_observaciones_2\" contenteditable=\"true\">", "<td colspan=\"7\" id=\"Txt_observaciones_2\" contenteditable=\"false\">");
 //                        visor = visor.replace("<td colspan=\"7\" id=\"Txt_observaciones_3\" contenteditable=\"true\">", "<td colspan=\"7\" id=\"Txt_observaciones_3\" contenteditable=\"false\">");
 //                    } else {
-                        visor = visor.replace("<td colspan=\"7\" id=\"Txt_observaciones_1\" contenteditable=\"false\">", "<td colspan=\"7\" id=\"Txt_observaciones_1\" contenteditable=\"true\">");
-                        visor = visor.replace("<td colspan=\"7\" id=\"Txt_observaciones_2\" contenteditable=\"false\">", "<td colspan=\"7\" id=\"Txt_observaciones_2\" contenteditable=\"true\">");
-                        visor = visor.replace("<td colspan=\"7\" id=\"Txt_observaciones_3\" contenteditable=\"false\">", "<td colspan=\"7\" id=\"Txt_observaciones_3\" contenteditable=\"true\">");
+                    visor = visor.replace("<td colspan=\"7\" id=\"Txt_observaciones_1\" contenteditable=\"false\">", "<td colspan=\"7\" id=\"Txt_observaciones_1\" contenteditable=\"true\">");
+                    visor = visor.replace("<td colspan=\"7\" id=\"Txt_observaciones_2\" contenteditable=\"false\">", "<td colspan=\"7\" id=\"Txt_observaciones_2\" contenteditable=\"true\">");
+                    visor = visor.replace("<td colspan=\"7\" id=\"Txt_observaciones_3\" contenteditable=\"false\">", "<td colspan=\"7\" id=\"Txt_observaciones_3\" contenteditable=\"true\">");
 //                    }
                     out.print("<div id='Imprimir'>");
                     out.print(visor + "");

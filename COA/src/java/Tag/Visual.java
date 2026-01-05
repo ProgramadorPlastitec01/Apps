@@ -130,14 +130,18 @@ public class Visual extends TagSupport {
                 out.print("</div>");
                 //<editor-fold defaultstate="collapsed" desc="BUTTOM'S">
                 if (StateCerti == 1) {
-                    out.print("<div>"
-                            + "<button class='btn btn-outline-success btn-sm' "
-                            + "style='border-radius: 4px; padding: 2px 9px;' "
-                            + "onclick=\"javascript:location.href='Generate?opt=7&Type=" + Type + "&IdCertificates=" + IdCertificates + "';cargarDatos()\""
-                            + " data-toggle='tooltip' "
-                            + "data-placement='top' title='Finalizar'>"
-                            + "<i class='fas fa-check'></i>"
-                            + "</button></div>");
+                    List lstId = CertificatesJpa.ConsultCertificatesId(Type, IdCertificates);
+                    if (lstId != null) {
+                        Object[] ObjId = (Object[]) lstId.get(0);
+                        out.print("<div>"
+                                + "<button class='btn btn-outline-success btn-sm' "
+                                + "style='border-radius: 4px; padding: 2px 9px;' "
+                                + "onclick=\"javascript:location.href='Generate?opt=7&Type=" + Type + "&IdCertificates=" + IdCertificates + "&Customer=" + ObjId[4] + "&Anio=" + ObjId[12] + "&Order=" + ObjId[5] + "&Batch=" + ObjId[7] + "';cargarDatos()\""
+                                + " data-toggle='tooltip' "
+                                + "data-placement='top' title='Finalizar'>"
+                                + "<i class='fas fa-check'></i>"
+                                + "</button></div>");
+                    }
                 }
                 // Estado 2 → Firmar
                 if (StateCerti == 2) {
@@ -158,6 +162,7 @@ public class Visual extends TagSupport {
                             + "<i class='fas fa-signature'></i>"
                             + "</button></div>");
                     out.print("</div>");
+
                 }
                 // Estado 3 → Imprimir
                 if (StateCerti == 3) {
@@ -282,7 +287,7 @@ public class Visual extends TagSupport {
                         Html = Html.replace("XYearEXPX", "<span class='editable' contenteditable='true'>-----</span>");
                         Html = Html.replace("XMonthEXPX", "<span class='editable' contenteditable='true'>-----</span>");
                         Html = Html.replace("XDayEXPX", "<span class='editable' contenteditable='true'>-----</span>");
-                        
+
                         Html = Html.replace("XClientX", "<span class='editable' contenteditable='true'>-----</span>");
                         Html = Html.replace("XCodeX", "<span class='editable' contenteditable='true'>-----</span>");
                         Html = Html.replace("XClient_OrderX", "<span class='editable' contenteditable='true'>-----</span>");

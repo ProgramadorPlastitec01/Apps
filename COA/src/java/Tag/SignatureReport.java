@@ -21,8 +21,13 @@ public class SignatureReport extends TagSupport {
         String Permission = "";
         List lst_ceriticate = null;
         String Type = "";
-        int StateM = 0;
+        int StateM = 0, IdCertificate = 0;
         try {
+            try {
+                IdCertificate = Integer.parseInt(pageContext.getRequest().getParameter("IdCertificate"));
+            } catch (Exception e) {
+                IdCertificate = 0;
+            }
             try {
                 StateM = Integer.parseInt(pageContext.getRequest().getParameter("StateM"));
             } catch (Exception e) {
@@ -39,10 +44,16 @@ public class SignatureReport extends TagSupport {
             out.print("<div class='col-12'>");
             out.print("<div class='card'>");
             out.print("<div class='card-header' style='justify-content: space-between;'>"
-                    + "<h4>Revisión " + ((StateM == 2) ? "<b class='text-success'>Estado Finalizado</b>" : (StateM == 3) ? "<b class='text-primary'>Estado Finalizado</b>":"") + "</h4>");
+                    + "<h4>Revisión " + ((StateM == 2) ? "<b class='text-success'>Estado Finalizado</b>" : (StateM == 3) ? "<b class='text-primary'>Estado Finalizado</b>" : "") + "</h4>");
+            out.print("<div>");
+            if (IdCertificate > 0) {
+                out.print("<button class='btn btn-danger mr-4' style='border-radius: 4px;'  onclick='window.location.href=\"Generate?opt=8\";cargarDatos()' "
+                        + "data-toggle='tooltip' data-placement='top' title='Limpiar' ><i class=\"fas fa-eraser\"></i></button>");
+            }
             if (Permission.contains("[7]")) {
                 out.print("<button class='btn btn-warning ' style='border-radius: 4px;'  onclick='ExecuteForm()' ><i class='fas fa-signature'  data-toggle='tooltip' data-placement='top' title='Firma Masiva'></i></button>");
             }
+            out.print("</div>");
             out.print("</div>");
             //<editor-fold defaultstate="collapsed" desc="FORM-SIGNATURE MASIVE">
             out.print("<form action='Generate?opt=4' method='post' id='myForm' class='needs-validation' novalidate='' onsubmit='return FormGenerate(this)'>");
@@ -77,7 +88,11 @@ public class SignatureReport extends TagSupport {
             out.print("</tr>");
             out.print("</thead>");
             out.print("<tbody>");
-            lst_ceriticate = CertificateJpa.ConsultCertificatesSignature(StateM);
+            if (IdCertificate > 0) {
+                lst_ceriticate = CertificateJpa.ConsultCertificatesSignatureId(StateM, IdCertificate);
+            } else {
+                lst_ceriticate = CertificateJpa.ConsultCertificatesSignature(StateM);
+            }
             if (lst_ceriticate != null) {
                 for (int i = 0; i < lst_ceriticate.size(); i++) {
                     Object[] ObjCerti = (Object[]) lst_ceriticate.get(i);

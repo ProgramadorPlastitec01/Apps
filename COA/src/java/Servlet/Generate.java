@@ -197,7 +197,7 @@ public class Generate extends HttpServlet {
                         }
                         result = CertificatesJpa.CertificatesRegister(Type, Code, Order, Product, Batch, Consecutive, Customer, Amount, DateDispatch, RolName, Html);
                         if (result) {
-                            lst_id = CertificatesJpa.ConsultCeritcateTypeId(Type);
+                            lst_id = CertificatesJpa.ConsultCertificatesIdType(Type);
                             if (lst_id != null) {
                                 try {
                                     Object[] ObjId = (Object[]) lst_id.get(0);
