@@ -1,6 +1,7 @@
 <%@page import="java.io.File"%>
 <%@page import="java.io.FileFilter"%>
 <%@page import="Connection.LinkBatchRecord"%>
+<%@page import="Controller.CertificatesJpaController"%>
 <%@page import="java.util.List"%>
 <%@page import="Method.Util"%>
 <%@taglib uri="/WEB-INF/tlds/alert" prefix="Alert" %>
@@ -48,7 +49,9 @@
                                         HttpSession sesion = request.getSession();
                                         String Permission = "";
                                         LinkBatchRecord LinkBatch = new LinkBatchRecord();
+                                        CertificatesJpaController CertificatesJpa = new CertificatesJpaController();
                                         List lst_link = null;
+                                        List lst_certificate = null;
                                         try {
                                             Permission = sesion.getAttribute("Permisos").toString();
                                         } catch (Exception e) {
@@ -271,11 +274,6 @@
                                                 }
                                             } else {
                                             %>
-                                            <tr>
-                                                <td colspan="3" class="text-center text-muted">
-                                                    No hay archivos subidos en este lote
-                                                </td>
-                                            </tr>
                                             <%
                                                 }
                                             %>
@@ -294,6 +292,32 @@
                                                         <!-- VER -->
                                                         <a class="btn btn-info mr-3"
                                                            href="<%= ArgLink[3]%>"
+                                                           target="_blank"
+                                                           title="Ver registro">
+                                                            <i class="fas fa-eye"></i>
+                                                        </a>
+
+                                                    </div>
+                                                </td>
+                                            </tr>    
+                                            <%                                                }
+                                                }
+                                            %>
+                                            <%
+                                                lst_certificate = CertificatesJpa.ConsultCertificatesBatchRecord(orden, lote);
+                                                if (lst_certificate != null) {
+                                                    for (int i = 0; i < lst_certificate.size(); i++) {
+                                                        Object[] ArgCertificate = (Object[]) lst_certificate.get(i);
+                                            %>
+                                            <tr class="file-row">
+                                                <td><%= ArgCertificate[1]%></td>
+                                                <td><%= ArgCertificate[2]%></td>
+                                                <td class="text-center">
+                                                    <div class="btn-group btn-group-sm">
+
+                                                        <!-- VER -->
+                                                        <a class="btn btn-info mr-3"
+                                                           href="<%= ArgCertificate[3]%>"
                                                            target="_blank"
                                                            title="Ver registro">
                                                             <i class="fas fa-eye"></i>

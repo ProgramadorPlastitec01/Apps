@@ -29,7 +29,7 @@ public class Generate extends HttpServlet {
             String Signature = session.getAttribute("Firma").toString();
             int Order = 0, IdCertificates = 0, TempDelete = 0, TempM = 0, Temp = 0, StateCerti = 0, State = 0, StateM = 0, IdCertificate = 0, Anio = 0;
             String Type = "", Product = "", Batch = "", Html = "", Code = "", Consecutive = "", Customer = "", IdCertiMasive = "", Category = "",
-                    Justification = "", Record = "", FormatName = "", Message = "", Amount = "", DateDispatch = "";
+                    Justification = "", Record = "", FormatName = "", Message = "", Amount = "", DateDispatch = "", MaterialBatches = "";
             boolean result = false;
             List lst_id = null;
             switch (opt) {
@@ -154,6 +154,11 @@ public class Generate extends HttpServlet {
                     } catch (Exception e) {
                         DateDispatch = "*****";
                     }
+                    try {
+                        MaterialBatches = request.getParameter("MaterialBatches");
+                    } catch (Exception e) {
+                        MaterialBatches = "";
+                    }
                     if (IdCertificates > 0) {
                         //<editor-fold defaultstate="collapsed" desc="UPDATE">
                         result = CertificatesJpa.CertificatesUpdate(IdCertificates, Consecutive, Amount, DateDispatch, Html);
@@ -195,7 +200,7 @@ public class Generate extends HttpServlet {
                         } catch (Exception e) {
                             FormatName = "";
                         }
-                        result = CertificatesJpa.CertificatesRegister(Type, Code, Order, Product, Batch, Consecutive, Customer, Amount, DateDispatch, RolName, Html);
+                        result = CertificatesJpa.CertificatesRegister(Type, Code, Order, Product, Batch, Consecutive, Customer, Amount, DateDispatch, RolName,MaterialBatches ,Html);
                         if (result) {
                             lst_id = CertificatesJpa.ConsultCertificatesIdType(Type);
                             if (lst_id != null) {

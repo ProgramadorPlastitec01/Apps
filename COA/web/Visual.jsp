@@ -151,10 +151,40 @@
                     form.appendChild(input);
                 };
 
+
+                // Limpiar hidden inputs previos
+
+                let batchValues = [];
+
+                if (htmlContainer) {
+                    htmlContainer.querySelectorAll('[id^="IdBatchM"]').forEach(td => {
+                        const value = td.textContent.trim();
+                        if (value !== '') {
+                            batchValues.push(value);
+                        }
+                    });
+                }
+
+                // Validar que exista al menos un lote
+                if (batchValues.length === 0) {
+                    iziToast.warning({
+                        title: 'Atención',
+                        message: 'Debe existir al menos un lote de material.',
+                        position: 'bottomRight'
+                    });
+                    return;
+                }
+
+                // UNIFICAR (eliminar duplicados sin alertar)
+                const uniqueBatches = [...new Set(batchValues)];
+
                 addHidden('Html', encodedHtml);
                 addHidden('clientValue', clientText);
                 addHidden('AmountValue', amountNumber);
                 addHidden('DateDispatch', dateText);
+                addHidden('MaterialBatches', uniqueBatches.join(','));
+                addHidden('MaterialBatchCount', uniqueBatches.length);
+
 
                 if (consText)
                     addHidden('ConsValue', consText);
