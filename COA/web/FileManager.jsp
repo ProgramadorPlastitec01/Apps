@@ -52,6 +52,7 @@
                                         CertificatesJpaController CertificatesJpa = new CertificatesJpaController();
                                         List lst_link = null;
                                         List lst_certificate = null;
+                                        List lst_material = null;
                                         try {
                                             Permission = sesion.getAttribute("Permisos").toString();
                                         } catch (Exception e) {
@@ -304,10 +305,12 @@
                                                 }
                                             %>
                                             <%
+                                                String MaterialBatch = "";
                                                 lst_certificate = CertificatesJpa.ConsultCertificatesBatchRecord(orden, lote);
                                                 if (lst_certificate != null) {
                                                     for (int i = 0; i < lst_certificate.size(); i++) {
                                                         Object[] ArgCertificate = (Object[]) lst_certificate.get(i);
+                                                        MaterialBatch += ArgCertificate[4];
                                             %>
                                             <tr class="file-row">
                                                 <td><%= ArgCertificate[1]%></td>
@@ -318,6 +321,32 @@
                                                         <!-- VER -->
                                                         <a class="btn btn-info mr-3"
                                                            href="<%= ArgCertificate[3]%>"
+                                                           target="_blank"
+                                                           title="Ver registro">
+                                                            <i class="fas fa-eye"></i>
+                                                        </a>
+
+                                                    </div>
+                                                </td>
+                                            </tr>    
+                                            <%                                                }
+                                                }
+                                            %>
+                                            <%
+                                                lst_material = LinkBatch.AttachmentBatchRecord(MaterialBatch);
+                                                if (lst_material != null) {
+                                                    for (int i = 0; i < lst_material.size(); i++) {
+                                                        String[] ArgBatch = Util.parseResult(lst_material.get(i));
+                                            %>
+                                            <tr class="file-row">
+                                                <td><%= ArgBatch[1]%></td>
+                                                <td><%= ArgBatch[3]%></td>
+                                                <td class="text-center">
+                                                    <div class="btn-group btn-group-sm">
+
+                                                        <!-- VER -->
+                                                        <a class="btn btn-info mr-3"
+                                                           href="DownloadGL?File_name=<%= ArgBatch[2].trim()%>"
                                                            target="_blank"
                                                            title="Ver registro">
                                                             <i class="fas fa-eye"></i>

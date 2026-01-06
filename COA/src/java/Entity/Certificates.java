@@ -79,8 +79,6 @@ public class Certificates implements Serializable {
     @Column(name = "registration_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date registrationDate;
-    @OneToMany(mappedBy = "idCertificate")
-    private Collection<Attach> attachCollection;
 
     public Certificates() {
     }
@@ -202,13 +200,6 @@ public class Certificates implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Attach> getAttachCollection() {
-        return attachCollection;
-    }
-
-    public void setAttachCollection(Collection<Attach> attachCollection) {
-        this.attachCollection = attachCollection;
-    }
 
     @Override
     public int hashCode() {
