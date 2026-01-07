@@ -15,19 +15,21 @@ import java.util.List;
 import Method.Util;
 import java.io.IOException;
 import java.util.Optional;
+import javax.servlet.http.HttpSession;
 
 public class Visual extends TagSupport {
 
     @Override
     public int doStartTag() throws JspException {
         JspWriter out = pageContext.getOut();
+        HttpSession sesion = pageContext.getSession();
         FormatJpaController FormatJpa = new FormatJpaController();
         ConnectionSQLServer FactoryJpa = new ConnectionSQLServer();
         ConnectionRegistrosLAB RegistrosLabJpa = new ConnectionRegistrosLAB();
         SettingJpaController SettingJpa = new SettingJpaController();
         CertificatesJpaController CertificatesJpa = new CertificatesJpaController();
         ConnectionGeneracionLotes GeneracionLotesJpa = new ConnectionGeneracionLotes();
-        String Type = "", Product = "", ProductFact = "", Batch = "", DataTechnicalSheet = "", Html = "", BatchLay = "", Record = "", FormatName = "", Message = "", IdSig = "";
+        String Type = "", Product = "", ProductFact = "", Batch = "", DataTechnicalSheet = "", Html = "", BatchLay = "", Record = "", FormatName = "", Message = "", IdSig = "", Permission = "";
         int Order = 0, IdForm = 0, Count = 1, Count2 = 1, IdCertificates = 0, State = 0, TempDelete = 0, StateCerti = 0, TempM = 0;
         List lst_content = null;
         List lst_headFact = null;
@@ -93,6 +95,11 @@ public class Visual extends TagSupport {
             } catch (NumberFormatException e) {
                 TempDelete = 0;
             }
+            try {
+                Permission = sesion.getAttribute("Permisos").toString();
+            } catch (Exception e) {
+                Permission = "";
+            }
             //</editor-fold>
             out.print("<section class='section'>");
             if (IdCertificates > 0) {
@@ -130,49 +137,57 @@ public class Visual extends TagSupport {
                 out.print("</div>");
                 //<editor-fold defaultstate="collapsed" desc="BUTTOM'S">
                 if (StateCerti == 1) {
-                    List lstId = CertificatesJpa.ConsultCertificatesId(Type, IdCertificates);
-                    if (lstId != null) {
-                        Object[] ObjId = (Object[]) lstId.get(0);
-                        out.print("<div>"
-                                + "<button class='btn btn-outline-success btn-sm' "
-                                + "style='border-radius: 4px; padding: 2px 9px;' "
-                                + "onclick=\"javascript:location.href='Generate?opt=7&Type=" + Type + "&IdCertificates=" + IdCertificates + "&Customer=" + ObjId[4] + "&Anio=" + ObjId[12] + "&Order=" + ObjId[5] + "&Batch=" + ObjId[7] + "';cargarDatos()\""
-                                + " data-toggle='tooltip' "
-                                + "data-placement='top' title='Finalizar'>"
-                                + "<i class='fas fa-check'></i>"
-                                + "</button></div>");
+                    if (Permission.contains("[28]")) {
+                        List lstId = CertificatesJpa.ConsultCertificatesId(Type, IdCertificates);
+                        if (lstId != null) {
+                            Object[] ObjId = (Object[]) lstId.get(0);
+                            out.print("<div>"
+                                    + "<button class='btn btn-outline-success btn-sm' "
+                                    + "style='border-radius: 4px; padding: 2px 9px;' "
+                                    + "onclick=\"javascript:location.href='Generate?opt=7&Type=" + Type + "&IdCertificates=" + IdCertificates + "&Customer=" + ObjId[4] + "&Anio=" + ObjId[12] + "&Order=" + ObjId[5] + "&Batch=" + ObjId[7] + "';cargarDatos()\""
+                                    + " data-toggle='tooltip' "
+                                    + "data-placement='top' title='Finalizar'>"
+                                    + "<i class='fas fa-check'></i>"
+                                    + "</button></div>");
+                        }
                     }
                 }
                 // Estado 2 → Firmar
                 if (StateCerti == 2) {
                     out.print("<div class='d-flex'>");
-                    out.print("<div class='mr-4'>"
-                            + "<button class='btn btn-outline-danger btn-sm' "
-                            + "style='border-radius: 4px; padding: 2px 9px;' onclick=\"confirmarDevolucion('Generate?opt=5&Type=" + Type + "&IdCertificates=" + IdCertificates + "&Category=Return&State=1')\" data-toggle='tooltip' "
-                            + "data-placement='top' title='Devolver'>"
-                            + "<i class=\"fas fa-undo-alt\"></i>"
-                            + "</button></div>");
-                    out.print("<div>"
-                            + "<button class='btn btn-outline-warning btn-sm' "
-                            + "style='border-radius: 4px; padding: 2px 9px;' "
-                            + "onclick=\"javascript:location.href='Generate?opt=4&Type="
-                            + Type + "&Temp=1&IdCertiMasive=" + IdCertificates
-                            + "';cargarDatos()\" data-toggle='tooltip' "
-                            + "data-placement='top' title='Firmar'>"
-                            + "<i class='fas fa-signature'></i>"
-                            + "</button></div>");
+                    if (Permission.contains("[19]")) {
+                        out.print("<div class='mr-4'>"
+                                + "<button class='btn btn-outline-danger btn-sm' "
+                                + "style='border-radius: 4px; padding: 2px 9px;' onclick=\"confirmarDevolucion('Generate?opt=5&Type=" + Type + "&IdCertificates=" + IdCertificates + "&Category=Return&State=1')\" data-toggle='tooltip' "
+                                + "data-placement='top' title='Devolver'>"
+                                + "<i class=\"fas fa-undo-alt\"></i>"
+                                + "</button></div>");
+                    }
+                    if (Permission.contains("[11]")) {
+                        out.print("<div>"
+                                + "<button class='btn btn-outline-warning btn-sm' "
+                                + "style='border-radius: 4px; padding: 2px 9px;' "
+                                + "onclick=\"javascript:location.href='Generate?opt=4&Type="
+                                + Type + "&Temp=1&IdCertiMasive=" + IdCertificates
+                                + "';cargarDatos()\" data-toggle='tooltip' "
+                                + "data-placement='top' title='Firmar'>"
+                                + "<i class='fas fa-signature'></i>"
+                                + "</button></div>");
+                    }
                     out.print("</div>");
 
                 }
                 // Estado 3 → Imprimir
                 if (StateCerti == 3) {
-                    out.print("<div>"
-                            + "<button class='btn btn-outline-primary btn-sm' "
-                            + "style='border-radius: 4px; padding: 2px 9px;' "
-                            + "onclick='PrintHtml()' data-toggle='tooltip' "
-                            + "data-placement='top' title='Imprimir'>"
-                            + "<i class='fas fa-print'></i>"
-                            + "</button></div>");
+                    if (Permission.contains("[26]")) {
+                        out.print("<div>"
+                                + "<button class='btn btn-outline-primary btn-sm' "
+                                + "style='border-radius: 4px; padding: 2px 9px;' "
+                                + "onclick='PrintHtml()' data-toggle='tooltip' "
+                                + "data-placement='top' title='Imprimir'>"
+                                + "<i class='fas fa-print'></i>"
+                                + "</button></div>");
+                    }
                 }
                 out.print("</div>"); // Cierra contenedor principal
                 out.print("</div>");
@@ -892,19 +907,21 @@ public class Visual extends TagSupport {
                     out.print(Html);
                     out.print("</div>");
 
-                    //<editor-fold defaultstate="collapsed" desc="FORM SAVE">
-                    out.print("<form id='FormGenerate' action='Generate?opt=3' method='post' class='needs-validation' novalidate='' onsubmit='return FormGenerate(this)'>");
-                    out.print("<input type='hidden' name='Type' value='" + Type + "'>");
-                    out.print("<input type='hidden' name='Order' value='" + Order + "'>");
-                    out.print("<input type='hidden' name='Product' value='" + ProductFact + "'>");
-                    out.print("<input type='hidden' name='Batch' value='" + Batch + "'>");
-                    out.print("<input type='hidden' name='FormatName' value='" + FormatName + "'>");
-                    out.print("</form>");
-                    out.print("<div class='DivButtonPending'>");
-                    out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='saveHtml()' data-toggle='tooltip' data-placement='top' title='Guardar'><i class='fas fa-save'></i></button>");
-                    out.print("</div>");
-                    out.print(" <script src=\"Interface/Content/Assets/js/DeleteRow.js\"></script>");
-                    //</editor-fold>
+                    if (Permission.contains("[10]")) {
+                        //<editor-fold defaultstate="collapsed" desc="FORM SAVE">
+                        out.print("<form id='FormGenerate' action='Generate?opt=3' method='post' class='needs-validation' novalidate='' onsubmit='return FormGenerate(this)'>");
+                        out.print("<input type='hidden' name='Type' value='" + Type + "'>");
+                        out.print("<input type='hidden' name='Order' value='" + Order + "'>");
+                        out.print("<input type='hidden' name='Product' value='" + ProductFact + "'>");
+                        out.print("<input type='hidden' name='Batch' value='" + Batch + "'>");
+                        out.print("<input type='hidden' name='FormatName' value='" + FormatName + "'>");
+                        out.print("</form>");
+                        out.print("<div class='DivButtonPending'>");
+                        out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='saveHtml()' data-toggle='tooltip' data-placement='top' title='Guardar'><i class='fas fa-save'></i></button>");
+                        out.print("</div>");
+                        out.print(" <script src=\"Interface/Content/Assets/js/DeleteRow.js\"></script>");
+                        //</editor-fold>
+                    }
                     //</editor-fold>
                 } else {
                     //<editor-fold defaultstate="collapsed" desc="VIEW CERTIFICATE UPDATE - CLOSE">
@@ -935,17 +952,19 @@ public class Visual extends TagSupport {
                         out.print("<div id='HtmlContent'>");
                         out.print(Html);
                         out.print("</div>");
-                        out.print("<form id='FormGenerate' action='Generate?opt=3' method='post' class='needs-validation' novalidate='' onsubmit='return FormGenerate(this)'>");
-                        out.print("<input type='hidden' name='Type' value='" + Type + "'>");
-                        out.print("<input type='hidden' name='Order' value='" + Order + "'>");
-                        out.print("<input type='hidden' name='Product' value='" + Product + "'>");
-                        out.print("<input type='hidden' name='Batch' value='" + Batch + "'>");
-                        out.print("<input type='hidden' name='FormatName' value='" + FormatName + "'>");
-                        out.print("<input type='hidden' name='IdCertificates' value='" + IdCertificates + "'>");
-                        out.print("</form>");
-                        out.print("<div class='DivButtonPending'>");
-                        out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='saveHtml()' data-toggle='tooltip' data-placement='top' title='Guardar'><i class='fas fa-save'></i></button>");
-                        out.print("</div>");
+                        if (Permission.contains("[29]")) {
+                            out.print("<form id='FormGenerate' action='Generate?opt=3' method='post' class='needs-validation' novalidate='' onsubmit='return FormGenerate(this)'>");
+                            out.print("<input type='hidden' name='Type' value='" + Type + "'>");
+                            out.print("<input type='hidden' name='Order' value='" + Order + "'>");
+                            out.print("<input type='hidden' name='Product' value='" + Product + "'>");
+                            out.print("<input type='hidden' name='Batch' value='" + Batch + "'>");
+                            out.print("<input type='hidden' name='FormatName' value='" + FormatName + "'>");
+                            out.print("<input type='hidden' name='IdCertificates' value='" + IdCertificates + "'>");
+                            out.print("</form>");
+                            out.print("<div class='DivButtonPending'>");
+                            out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='saveHtml()' data-toggle='tooltip' data-placement='top' title='Guardar'><i class='fas fa-save'></i></button>");
+                            out.print("</div>");
+                        }
                         out.print(" <script src=\"Interface/Content/Assets/js/DeleteRow.js\"></script>");
                         //</editor-fold>
                     }

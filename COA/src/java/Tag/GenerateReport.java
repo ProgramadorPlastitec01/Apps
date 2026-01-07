@@ -50,73 +50,75 @@ public class GenerateReport extends TagSupport {
             } catch (Exception e) {
                 Permission = "";
             }
-            //<editor-fold defaultstate="collapsed" desc="CONSULT REPORT">
-            out.print("<div class='sweet-local' tabindex='-1' id='Ventana1' style='opacity: 1.03; display:none;'>");
-            out.print("<div class='contGeneral'>");
-            out.print("<div style='display: flex; justify-content: space-between'>");
-            out.print("<h2>Generar Reporte</h2>");
-            out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(1)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
-            out.print("</div>");
+            if (Permission.contains("[8]")) {
+                //<editor-fold defaultstate="collapsed" desc="CONSULT REPORT">
+                out.print("<div class='sweet-local' tabindex='-1' id='Ventana1' style='opacity: 1.03; display:none;'>");
+                out.print("<div class='contGeneral'>");
+                out.print("<div style='display: flex; justify-content: space-between'>");
+                out.print("<h2>Generar Reporte</h2>");
+                out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(1)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
+                out.print("</div>");
 
-            out.print("<div class='cont_form_user'>");
-            out.print("<form action='Generate?opt=2' method='post' class='needs-validation' novalidate='' onsubmit='return FormGenerate(this)'>");
-            out.print("<input type='hidden' name='Type' value='" + Type + "'>");
+                out.print("<div class='cont_form_user'>");
+                out.print("<form action='Generate?opt=2' method='post' class='needs-validation' novalidate='' onsubmit='return FormGenerate(this)'>");
+                out.print("<input type='hidden' name='Type' value='" + Type + "'>");
 
-            out.print("<div class='d-flex justify-content-center'>");
+                out.print("<div class='d-flex justify-content-center'>");
 
-            // Input de Orden
-            out.print("<div class='col-6' data-toggle='tooltip' data-placement='top' title='Orden'>");
-            out.print("<input type='number' class='form-control' name='Order' id='orderInput' min='0' placeholder='Orden/Pedido' required autocomplete='off'>");
-            out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un orden!</div>");
-            out.print("</div>");
+                // Input de Orden
+                out.print("<div class='col-6' data-toggle='tooltip' data-placement='top' title='Orden'>");
+                out.print("<input type='number' class='form-control' name='Order' id='orderInput' min='0' placeholder='Orden/Pedido' required autocomplete='off'>");
+                out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un orden!</div>");
+                out.print("</div>");
 
-            // Select de Producto
-            out.print("<div class='col-6 d-none' data-toggle='tooltip' data-placement='top' title='Producto' id='producto-section'>");
-            out.print("<select class='form-control' style='margin-top:12px' name='Product' id='resultadoProductos' required>");
-            out.print("<option value=''>-- Seleccione un producto --</option>");
-            out.print("</select>");
-            out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe seleccionar un producto!</div>");
-            out.print("</div>");
+                // Select de Producto
+                out.print("<div class='col-6 d-none' data-toggle='tooltip' data-placement='top' title='Producto' id='producto-section'>");
+                out.print("<select class='form-control' style='margin-top:12px' name='Product' id='resultadoProductos' required>");
+                out.print("<option value=''>-- Seleccione un producto --</option>");
+                out.print("</select>");
+                out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe seleccionar un producto!</div>");
+                out.print("</div>");
 
-            out.print("</div>");
+                out.print("</div>");
 
-            out.print("<div class='d-flex'>");
+                out.print("<div class='d-flex'>");
 
-            // Select de Lotes
-            out.print("<div class='col-6 mt-2 d-none' data-toggle='tooltip' title='Lote' id='lote-section'>");
-            out.print("<select class='form-control' name='Batch' id='resultadoLotes' required>");
-            out.print("<option value=''>-- Seleccione un lote --</option>");
-            out.print("</select>");
-            out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un lote!</div>");
-            out.print("</div>");
+                // Select de Lotes
+                out.print("<div class='col-6 mt-2 d-none' data-toggle='tooltip' title='Lote' id='lote-section'>");
+                out.print("<select class='form-control' name='Batch' id='resultadoLotes' required>");
+                out.print("<option value=''>-- Seleccione un lote --</option>");
+                out.print("</select>");
+                out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un lote!</div>");
+                out.print("</div>");
 
-            out.print("<div class='col-6 d-none' data-toggle='tooltip' data-placement='top' title='Registro' id='registro-section'>");
-            out.print("<select class='form-control' style='margin-top:12px' name='FormatName' required>");
-            lst_format = FormatJpa.ConsultFormatActive(Type);
-            if (lst_format != null) {
-                out.print("<option value=''>-- Seleccione un registro --</option>");
-                for (int i = 0; i < lst_format.size(); i++) {
-                    Object[] ObjFormat = (Object[]) lst_format.get(i);
-                    out.print("<option value='" + ObjFormat[0] + "/" + ObjFormat[2] + "'>" + ObjFormat[2] + " - " + ObjFormat[4] + "</option>");
+                out.print("<div class='col-6 d-none' data-toggle='tooltip' data-placement='top' title='Registro' id='registro-section'>");
+                out.print("<select class='form-control' style='margin-top:12px' name='FormatName' required>");
+                lst_format = FormatJpa.ConsultFormatActive(Type);
+                if (lst_format != null) {
+                    out.print("<option value=''>-- Seleccione un registro --</option>");
+                    for (int i = 0; i < lst_format.size(); i++) {
+                        Object[] ObjFormat = (Object[]) lst_format.get(i);
+                        out.print("<option value='" + ObjFormat[0] + "/" + ObjFormat[2] + "'>" + ObjFormat[2] + " - " + ObjFormat[4] + "</option>");
+                    }
+                } else {
+                    out.print("<option value=''>-- Seleccione un registro --</option>");
                 }
-            } else {
-                out.print("<option value=''>-- Seleccione un registro --</option>");
+                out.print("</select>");
+                out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe seleccionar un producto!</div>");
+                out.print("</div>");
+
+                out.print("</div>");
+                out.print("<div class='text-center mt-2'>");
+                out.print("<button class='btn btn-green' id='btnGenerar' disabled >Generar</button>");
+                out.print("</div>");
+
+                out.print("</form>");
+                out.print("</div>");
+
+                out.print("</div>");
+                out.print("</div>");
+                //</editor-fold>
             }
-            out.print("</select>");
-            out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe seleccionar un producto!</div>");
-            out.print("</div>");
-
-            out.print("</div>");
-            out.print("<div class='text-center mt-2'>");
-            out.print("<button class='btn btn-green' id='btnGenerar' disabled >Generar</button>");
-            out.print("</div>");
-
-            out.print("</form>");
-            out.print("</div>");
-
-            out.print("</div>");
-            out.print("</div>");
-            //</editor-fold>
             out.print("<section class=\"section\">");
             out.print("<div class=\"section-header d-flex justify-content-between\" style='margin-bottom: 8px;'>");
             out.print("<h4>Certificados Calidad</h4>");
@@ -188,7 +190,7 @@ public class GenerateReport extends TagSupport {
             out.print("<th>Cantidades</th>");
             out.print("<th>Fecha </br> Despacho</th>");
             out.print("<th>Estado</th>");
-            out.print("<th>Ver</th>");
+            out.print("<th>Opc</th>");
             out.print("</tr>");
             out.print("</thead>");
             out.print("<tbody>");
@@ -244,18 +246,21 @@ public class GenerateReport extends TagSupport {
                     out.print("<td >");
                     out.print("<div class='d-flex'>");
                     if (State == 1) {
-                        out.print("<button class='btn btn-success btn-sm mr-2' style='border-radius: 4px;' onclick=\"confirmarFinalizar('Generate?opt=7&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "&Customer=" + ObjCerti[4] + "&Anio=" + ObjCerti[12] + "&Order=" + ObjCerti[5] + "&Batch=" + ObjCerti[7] + "')\" data-toggle='tooltip' data-placement='bottom' title='Finalizar'><i class=\"fas fa-check\"></i></button>");
+                        if (Permission.contains("[28]")) {
+                            out.print("<button class='btn btn-success btn-sm mr-2' style='border-radius: 4px;' onclick=\"confirmarFinalizar('Generate?opt=7&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "&Customer=" + ObjCerti[4] + "&Anio=" + ObjCerti[12] + "&Order=" + ObjCerti[5] + "&Batch=" + ObjCerti[7] + "')\" data-toggle='tooltip' data-placement='bottom' title='Finalizar'><i class=\"fas fa-check\"></i></button>");
+                        }
                     }
-                    out.print("<button class='btn btn-green btn-sm mr-2' style='border-radius: 4px;' onclick=\"javascript:location.href='Generate?opt=2&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "&TempDelete=" + TempDelete + "&Order=" + ObjCerti[5] + "&Batch=" + ObjCerti[7] + "&StateCerti=" + State + "&TempM=0';cargarDatos()\"  data-toggle='tooltip' data-placement='top' title='Ver'><i class=\"fas fa-eye\"></i></button>");
+                    if (Permission.contains("[25]")) {
+                        out.print("<button class='btn btn-green btn-sm mr-2' style='border-radius: 4px;' onclick=\"javascript:location.href='Generate?opt=2&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "&TempDelete=" + TempDelete + "&Order=" + ObjCerti[5] + "&Batch=" + ObjCerti[7] + "&StateCerti=" + State + "&TempM=0';cargarDatos()\"  data-toggle='tooltip' data-placement='top' title='Ver'><i class=\"fas fa-eye\"></i></button>");
+                    } else {
+                        out.print("<button class='btn btn-green disabled btn-sm mr-2' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Sin permiso'><i class=\"fas fa-eye\"></i></button>");
+                    }
                     if (State == 1) {
                         if (Permission.contains("[9]")) {
                             out.print("<button class='btn btn-danger btn-sm' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Eliminar' onclick=\"confirmarEliminacion('Generate?opt=5&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "&Category=Delete&State=0')\"><i class='fas fa-trash'></i></button>");
                         }
                     }
                     out.print("</div>");
-//                    out.print("<div class='d-flex mt-2 text-center'>");
-//                    out.print("<button class='btn btn-success btn-sm mr-2' style='border-radius: 4px;' onclick=\"confirmarFinalizar('Generate?opt=7&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "')\" data-toggle='tooltip' data-placement='bottom' title='Finalizar'><i class=\"fas fa-check\"></i></button>");
-//                    out.print("</div>");
                     out.print("</td>");
                     out.print("</tr>");
                 }

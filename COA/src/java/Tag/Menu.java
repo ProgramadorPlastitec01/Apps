@@ -41,10 +41,12 @@ public class Menu extends TagSupport {
                     + "              <a href=\"Profile?opt=1\" onclick='cargarDatos()' class=\"dropdown-item has-icon\">\n"
                     + "                <i class=\"fas fa-user\"></i> Perfil\n"
                     + "              </a>\n");
-            out.print(
-                    "              <a href=\"Setting.jsp\" onclick='cargarDatos()' class=\"dropdown-item has-icon\">\n"
-                    + "                <i class=\"fas fa-cog\"></i> Configuración\n"
-                    + "              </a>\n");
+            if (Permission.contains("[16]")) {
+                out.print(
+                        "              <a href=\"Setting.jsp\" onclick='cargarDatos()' class=\"dropdown-item has-icon\">\n"
+                        + "                <i class=\"fas fa-cog\"></i> Configuración\n"
+                        + "              </a>\n");
+            }
             out.print(
                     "              <div class=\"dropdown-divider\"></div>\n"
                     + "              <a href=\"Leave.jsp\"  class=\"dropdown-item has-icon text-danger\">\n"
@@ -80,23 +82,23 @@ public class Menu extends TagSupport {
             // ===================== BatchRecord =====================
             out.print("<li class=\"menu-header\">Batch Record</li>");
 
-            if (Permission.contains("[2]")) {
+            if (Permission.contains("[12]")) {
                 out.print("<li class=\"dropdown\">");
                 out.print("<a href='FileManager.jsp' class=\"nav-link\" onclick='cargarDatos()'><i class=\"fas fa-folder\"></i><span>Batch Record</span></a>");
                 out.print("</li>");
             }
             out.print("<li class=\"menu-header\">Gestión</li>");
-            if (Permission.contains("[5]")) {
+            if (Permission.contains("[13]")) {
                 out.print("<li class=\"dropdown\">");
                 out.print("<a href='Generate?opt=1&Type=' class=\"nav-link\" onclick='cargarDatos()'><i class=\"fas fa-file-import\"></i><span>Generación</span></a>");
                 out.print("</li>");
             }
-            if (Permission.contains("[5]")) {
+            if (Permission.contains("[14]")) {
                 out.print("<li class=\"dropdown\">");
                 out.print("<a href='Generate?opt=8' class=\"nav-link\" onclick='cargarDatos()'><i class=\"fas fa-signature\"></i><span>Revisión</span></a>");
                 out.print("</li>");
             }
-            if (Permission.contains("[5]")) {
+            if (Permission.contains("[15]")) {
                 out.print("<li class=\"dropdown\">");
                 out.print("<a href='Novelty?opt=1' class=\"nav-link\" onclick='cargarDatos()'><i class=\"fas fa-comment-alt\"></i><span>Novedades</span></a>");
                 out.print("</li>");
@@ -105,12 +107,12 @@ public class Menu extends TagSupport {
             // ===================== Consulta =====================
             out.print("<li class=\"menu-header\">Consulta</li>");
 
-            if (Permission.contains("[5]")) {
+            if (Permission.contains("[20]")) {
                 out.print("<li class=\"dropdown\">");
                 out.print("<a href='#' class=\"nav-link\" onclick='cargarDatos()'><i class=\"fas fa-user-tie\"></i><span>Clientes</span></a>");
                 out.print("</li>");
             }
-            if (Permission.contains("[5]")) {
+            if (Permission.contains("[21]")) {
                 out.print("<li class=\"dropdown\">");
                 out.print("<a href='#' class=\"nav-link\" onclick='cargarDatos()'><i class=\"fas fa-file-alt\"></i><span>Reporte</span></a>");
                 out.print("</li>");

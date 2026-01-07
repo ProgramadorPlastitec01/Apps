@@ -145,7 +145,7 @@
 
 
                                     <!-- ================== SUBIDA SOLO EN LOTE ================== -->
-                                    <%                                        if (Permission.contains("[2]")) {
+                                    <%                                        if (Permission.contains("[3]")) {
                                     %>
                                     <div class="d-flex justify-content-between align-content-center">
                                         <div>
@@ -254,7 +254,8 @@
                                                            title="Descargar archivo">
                                                             <i class="fas fa-download"></i>
                                                         </a>
-
+                                                        <%                                        if (Permission.contains("[4]")) {
+                                                        %>
                                                         <!-- ELIMINAR -->
                                                         <button type="button"
                                                                 class="btn btn-danger"
@@ -268,6 +269,8 @@
                                                                                 )">
                                                             <i class="fas fa-trash"></i>
                                                         </button>
+                                                        <%                                        }
+                                                        %>
 
                                                     </div>
                                                 </td>
