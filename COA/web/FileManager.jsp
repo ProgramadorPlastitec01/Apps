@@ -11,7 +11,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Gestor de Archivos - COA</title>
+        <title>Batch Record</title>
 
         <link rel="stylesheet" href="Interface/Content/Assets/css/attach.css">
         <link rel="stylesheet" href="Interface/Content/Assets/modules/izitoast/css/iziToast.min.css">

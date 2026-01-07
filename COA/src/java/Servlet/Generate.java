@@ -200,7 +200,7 @@ public class Generate extends HttpServlet {
                         } catch (Exception e) {
                             FormatName = "";
                         }
-                        result = CertificatesJpa.CertificatesRegister(Type, Code, Order, Product, Batch, Consecutive, Customer, Amount, DateDispatch, RolName,MaterialBatches ,Html);
+                        result = CertificatesJpa.CertificatesRegister(Type, Code, Order, Product, Batch, Consecutive, Customer, Amount, DateDispatch, RolName, MaterialBatches, Html);
                         if (result) {
                             lst_id = CertificatesJpa.ConsultCertificatesIdType(Type);
                             if (lst_id != null) {
@@ -257,7 +257,7 @@ public class Generate extends HttpServlet {
                                 if (result) {
                                     request.setAttribute("UpdateCertificate", result);
                                 }
-                                request.getRequestDispatcher("Generate?opt=2&Type=" + Type + "&IdCertificates=" + IdCertificates + "&TempDelete=0").forward(request, response);
+                                request.getRequestDispatcher("Generate?opt=2&Type=" + Type + "&IdCertificates=" + IdCertificates + "&TempDelete=0&StateCerti=3").forward(request, response);
                                 //</editor-fold>
                             }
                         }
@@ -393,6 +393,18 @@ public class Generate extends HttpServlet {
                     }
                     request.setAttribute("StateM", StateM);
                     request.getRequestDispatcher("SignatureReport.jsp").forward(request, response);
+                    //</editor-fold>
+                    break;
+                case 9:
+                    //<editor-fold defaultstate="collapsed" desc="VIEW CERTIFICATE">
+                    try {
+                        IdCertificates = Integer.parseInt(request.getParameter("IdCertificates"));
+                    } catch (Exception e) {
+                        IdCertificates = 0;
+                    }
+                    request.setAttribute("IdCertificates", IdCertificates);
+                    request.getRequestDispatcher("CertifiedView.jsp").forward(request, response);
+
                     //</editor-fold>
                     break;
             }
