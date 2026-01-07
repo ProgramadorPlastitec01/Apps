@@ -879,6 +879,15 @@ public class Visual extends TagSupport {
                         Html = Html.replace("XFichaTecnicaX", DataTechnicalSheet);
                         //</editor-fold>
                     }
+                    if (StateCerti == 0) {
+                        out.print("<table class=\"table table-bordered mb-1\" style=\"width:100%\">\n"
+                                + "		<tr>\n"
+                                + "			<td colspan=\"10\" style=\"height: 0px;\" class=\"bg-warning text-white text-center fw-bold py-1\">\n"
+                                + "				BORRADOR\n"
+                                + "			</td>\n"
+                                + "		</tr>\n"
+                                + "	</table>");
+                    }
                     out.print("<div id='HtmlContent'>");
                     out.print(Html);
                     out.print("</div>");

@@ -66,12 +66,12 @@ public class GenerateReport extends TagSupport {
 
             // Input de Orden
             out.print("<div class='col-6' data-toggle='tooltip' data-placement='top' title='Orden'>");
-            out.print("<input type='number' class='form-control' name='Order' id='orderInput' min='0' placeholder='Orden/Pedido' required autocomplete='off' onblur='SearchForProductsOrder()'>");
+            out.print("<input type='number' class='form-control' name='Order' id='orderInput' min='0' placeholder='Orden/Pedido' required autocomplete='off'>");
             out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un orden!</div>");
             out.print("</div>");
 
             // Select de Producto
-            out.print("<div class='col-6' data-toggle='tooltip' data-placement='top' title='Producto'>");
+            out.print("<div class='col-6 d-none' data-toggle='tooltip' data-placement='top' title='Producto' id='producto-section'>");
             out.print("<select class='form-control' style='margin-top:12px' name='Product' id='resultadoProductos' required>");
             out.print("<option value=''>-- Seleccione un producto --</option>");
             out.print("</select>");
@@ -83,14 +83,14 @@ public class GenerateReport extends TagSupport {
             out.print("<div class='d-flex'>");
 
             // Select de Lotes
-            out.print("<div class='col-6 mt-2' data-toggle='tooltip' title='Lote'>");
+            out.print("<div class='col-6 mt-2 d-none' data-toggle='tooltip' title='Lote' id='lote-section'>");
             out.print("<select class='form-control' name='Batch' id='resultadoLotes' required>");
             out.print("<option value=''>-- Seleccione un lote --</option>");
             out.print("</select>");
             out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un lote!</div>");
             out.print("</div>");
 
-            out.print("<div class='col-6' data-toggle='tooltip' data-placement='top' title='Registro'>");
+            out.print("<div class='col-6 d-none' data-toggle='tooltip' data-placement='top' title='Registro' id='registro-section'>");
             out.print("<select class='form-control' style='margin-top:12px' name='FormatName' required>");
             lst_format = FormatJpa.ConsultFormatActive(Type);
             if (lst_format != null) {
@@ -108,7 +108,7 @@ public class GenerateReport extends TagSupport {
 
             out.print("</div>");
             out.print("<div class='text-center mt-2'>");
-            out.print("<button class='btn btn-green' >Generar</button>");
+            out.print("<button class='btn btn-green' id='btnGenerar' disabled >Generar</button>");
             out.print("</div>");
 
             out.print("</form>");

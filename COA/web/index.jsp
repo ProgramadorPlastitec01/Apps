@@ -14,7 +14,7 @@
         <link rel="stylesheet" href="Interface/Content/Assets/modules/fontawesome/css/all.min.css">
         <link rel="stylesheet" href="Interface/Content/Assets/modules/izitoast/css/iziToast.min.css">
         <link rel="stylesheet" href="Interface/Content/Assets/css/resetpass.css">
-        <link rel="icon" type="image/png" href="Interface/Imagen/Icon.fw.png">
+        <link rel="icon" type="image/png" href="Interface/Imagen/LogoSWhite.png">
     </head>
 
     <body>

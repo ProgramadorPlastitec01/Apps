@@ -31,6 +31,13 @@
         <link rel="stylesheet" href="Interface/Content/Assets/modules/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="Interface/Content/Assets/modules/fontawesome/css/all.min.css">
         <link rel="stylesheet" href="Interface/Content/Assets/css/main.css">
+        <link rel="icon" type="image/png" href="Interface/Imagen/LogoSWhite.png">
+        <script type="text/javascript">
+            history.pushState(null, null, 'Certificado.jsp');
+            window.addEventListener('popstate', function (event) {
+                history.pushState(null, null, 'Certificado.jsp');
+            });
+        </script>
     </head>
     <body>
         <section class="section">

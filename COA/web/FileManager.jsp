@@ -15,6 +15,7 @@
 
         <link rel="stylesheet" href="Interface/Content/Assets/css/attach.css">
         <link rel="stylesheet" href="Interface/Content/Assets/modules/izitoast/css/iziToast.min.css">
+        <link rel="icon" type="image/png" href="Interface/Imagen/LogoSWhite.png">
         <style>
             .modal-backdrop{
                 position: relative !important;

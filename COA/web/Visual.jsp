@@ -9,7 +9,13 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
         <link rel="stylesheet" href="Interface/Content/Assets/modules/izitoast/css/iziToast.min.css">
-
+        <link rel="icon" type="image/png" href="Interface/Imagen/LogoSWhite.png">
+        <script type="text/javascript">
+            history.pushState(null, null, 'Visual.jsp');
+            window.addEventListener('popstate', function (event) {
+                history.pushState(null, null, 'Visual.jsp');
+            });
+        </script>
     </head>
     <body class="sidebar-mini">
         <jsp:include page="Menu.jsp"></jsp:include>
