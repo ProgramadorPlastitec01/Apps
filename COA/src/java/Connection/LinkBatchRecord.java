@@ -68,4 +68,68 @@ public class LinkBatchRecord {
         //</editor-fold>
     }
 
+    public List AttachmentBatchRecord(String DataBatch) throws Exception {
+        //<editor-fold defaultstate="collapsed" desc="LinkBatchRecord">
+        List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerGeneracionLotes");
+        if (lst_parameter != null) {
+            Object[] obj_data = (Object[]) lst_parameter.get(0);
+            String[] arr_data = obj_data[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+            login = arr_data[0];
+            password = arr_data[1];
+            url = "jdbc:mysql://" + arr_data[2];
+        } else {
+            return null;
+        }
+        List lst_link = SettingJpa.ConsultSettingCategorie("BatchRecordGeneracionLotes");
+        String Qry = "";
+        if (lst_link != null) {
+            Object[] obj_link = (Object[]) lst_link.get(0);
+            Qry = obj_link[2].toString();
+        } else {
+            Qry = "";
+            return null;
+        }
+        Connection conn = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            conn = DriverManager.getConnection(url, login, password);
+            if (conn != null && !Qry.equals("")) {
+                if (!DataBatch.equals("")) {
+                    String[] ArgBatch = DataBatch.split(",");
+                    String Batch = "";
+                    Batch = "(";
+                    for (int i = 0; i < ArgBatch.length; i++) {
+                        if (i == ArgBatch.length - 1) {
+                            Batch += "'" + ArgBatch[i] + "'";
+                        } else {
+                            Batch += "'" + ArgBatch[i] + "',";
+                        }
+                    }
+                    Batch += ")";
+                    Qry = Qry.replace("XDataBatchX", Batch);
+                    Statement sttm = conn.createStatement();
+                    ResultSet rs = sttm.executeQuery(Qry);
+                    List<String> lst_batch = new ArrayList<String>();
+                    int count = 0;
+                    while (rs.next()) {
+                        lst_batch.add(count, rs.getString("Id_anexos").trim() + " /// " + rs.getString("Registro").trim() + " /// " + rs.getString("Nombre").trim() + " /// " + rs.getString("Descripcion").trim() + "");
+                        count++;
+                    }
+                    conn.close();
+                    return lst_batch;
+                }
+            } else {
+                return null;
+            }
+        } catch (SQLException ex) {
+            return null;
+        } catch (ClassNotFoundException ex) {
+            return null;
+        } catch (Exception ex) {
+            return null;
+        }
+        //</editor-fold>
+        return null;
+    }
+
 }

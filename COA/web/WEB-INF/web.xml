@@ -36,6 +36,10 @@
         <servlet-name>Novelty</servlet-name>
         <servlet-class>Servlet.Novelty</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DownloadGL</servlet-name>
+        <servlet-class>Method.DownloadGL</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Session</servlet-name>
         <url-pattern>/Session</url-pattern>
@@ -72,9 +76,17 @@
         <servlet-name>Novelty</servlet-name>
         <url-pattern>/Novelty</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DownloadGL</servlet-name>
+        <url-pattern>/DownloadGL</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
-           250
+            250
         </session-timeout>
     </session-config>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error-404</location>
+    </error-page>
 </web-app>

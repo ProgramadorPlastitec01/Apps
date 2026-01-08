@@ -33,9 +33,9 @@ public class Tag_visor_plumat extends TagSupport {
         JspWriter out = pageContext.getOut();
         try {
             //PERMISOS POR ROL
-            String[] rol_usuario = pageContext.getSession().getAttribute("Rol/Nombres").toString().split("/");
-            String rol = rol_usuario[0];
-            String usuario = rol_usuario[1];
+//            String[] rol_usuario = pageContext.getSession().getAttribute("Rol/Nombres").toString().split("/");
+//            String rol = rol_usuario[0];
+//            String usuario = rol_usuario[1];
             //FIN PERMISOS
             //JPAS
             RegistroJpaController jpacrgt = new RegistroJpaController();

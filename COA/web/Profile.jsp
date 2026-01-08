@@ -10,7 +10,14 @@
         <link rel="icon" type="image/png" href="Interface/Imagen/Logo_app/IconW.fw.png">
         <link rel="stylesheet" href="Interface/Content/Validation/StyleSheetLiveValidation.css">
         <link rel="stylesheet" href="Interface/Content/Assets/modules/izitoast/css/iziToast.min.css">
+        <link rel="icon" type="image/png" href="Interface/Imagen/LogoSWhite.png">
         <title>Perfil</title>
+        <script type="text/javascript">
+            history.pushState(null, null, 'Perfil.jsp');
+            window.addEventListener('popstate', function (event) {
+                history.pushState(null, null, 'Perfil.jsp');
+            });
+        </script>
     </head>
     <body>
         <div id="app">

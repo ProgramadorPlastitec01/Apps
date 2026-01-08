@@ -9,7 +9,13 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
         <link rel="stylesheet" href="Interface/Content/Assets/modules/izitoast/css/iziToast.min.css">
-
+        <link rel="icon" type="image/png" href="Interface/Imagen/LogoSWhite.png">
+        <script type="text/javascript">
+            history.pushState(null, null, 'Visual.jsp');
+            window.addEventListener('popstate', function (event) {
+                history.pushState(null, null, 'Visual.jsp');
+            });
+        </script>
     </head>
     <body class="sidebar-mini">
         <jsp:include page="Menu.jsp"></jsp:include>
@@ -151,10 +157,30 @@
                     form.appendChild(input);
                 };
 
+
+                // Limpiar hidden inputs previos
+
+                let batchValues = [];
+
+                if (htmlContainer) {
+                    htmlContainer.querySelectorAll('[id^="IdBatchM"]').forEach(td => {
+                        const value = td.textContent.trim();
+                        if (value !== '') {
+                            batchValues.push(value);
+                        }
+                    });
+                }
+
+                // UNIFICAR (eliminar duplicados sin alertar)
+                const uniqueBatches = [...new Set(batchValues)];
+
                 addHidden('Html', encodedHtml);
                 addHidden('clientValue', clientText);
                 addHidden('AmountValue', amountNumber);
                 addHidden('DateDispatch', dateText);
+                addHidden('MaterialBatches', uniqueBatches.join(','));
+                addHidden('MaterialBatchCount', uniqueBatches.length);
+
 
                 if (consText)
                     addHidden('ConsValue', consText);

@@ -36,9 +36,17 @@ public class Tag_visor_registro extends TagSupport {
             } catch (Exception e) {
             }
 //            String[] rol_usuario = pageContext.getAttribute("Rol/Nombres").toString().split("/");
-            String[] rol_usuario = pageContext.getSession().getAttribute("Rol/Nombres").toString().split("/");
-            String rol = rol_usuario[0];
-            String usuario = rol_usuario[1];
+            String rol = "";
+            String usuario = "";
+            try {
+                String[] rol_usuario = pageContext.getSession().getAttribute("Rol/Nombres").toString().split("/");
+                rol = rol_usuario[0];
+                usuario = rol_usuario[1];
+
+            } catch (Exception e) {
+                rol = "Consulta";
+                usuario = "";
+            }
             //FIN PERMISOS
             //JPAS
             RegistroJpaController jpacrgt = new RegistroJpaController();

@@ -10,7 +10,14 @@
         <link rel="stylesheet" href="Interface/Content/Assets/modules/datatables/datatables.min.css">
         <link rel="stylesheet" href="Interface/Content/Assets/modules/izitoast/css/iziToast.min.css">
         <link rel="icon" type="image/png" href="Interface/Imagen/Icon.fw.png">
+        <link rel="icon" type="image/png" href="Interface/Imagen/LogoSWhite.png">
         <title>Reporte</title>
+        <script type="text/javascript">
+            history.pushState(null, null, 'Reporte.jsp');
+            window.addEventListener('popstate', function (event) {
+                history.pushState(null, null, 'Reporte.jsp');
+            });
+        </script>
     </head>
     <body>
         <jsp:include page="Menu.jsp"></jsp:include>

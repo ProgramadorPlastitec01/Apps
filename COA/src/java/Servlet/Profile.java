@@ -58,7 +58,7 @@ public class Profile extends HttpServlet {
             }
         } catch (Exception ex) {
             request.setAttribute("errorMessage", "Ha ocurrido un error procesando tu solicitud: " + ex.getMessage());
-            request.getRequestDispatcher("400.jsp").forward(request, response);
+            request.getRequestDispatcher("404.jsp").forward(request, response);
         }
     }
 

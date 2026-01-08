@@ -14,7 +14,7 @@
         <link rel="stylesheet" href="Interface/Content/Assets/modules/fontawesome/css/all.min.css">
         <link rel="stylesheet" href="Interface/Content/Assets/modules/izitoast/css/iziToast.min.css">
         <link rel="stylesheet" href="Interface/Content/Assets/css/resetpass.css">
-        <link rel="icon" type="image/png" href="Interface/Imagen/Icon.fw.png">
+        <link rel="icon" type="image/png" href="Interface/Imagen/LogoSWhite.png">
     </head>
 
     <body>
@@ -79,7 +79,7 @@
                             Ingresa los datos para recuperar tu acceso.
                         </p>
 
-                        <form action="Session?opt=2" method="post" autocomplete="off">
+                        <form action="Session?opt=3" method="post" autocomplete="off">
 
                             <div class="form-group">
                                 <div class="input-icon">

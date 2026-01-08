@@ -6,12 +6,12 @@
         <link type="image/png" href="Interfaz/Contenido/images/Registros_lab_new.ico" rel="icon" />
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
         <title>Visor_global</title>
-        <script type = "text/javascript" >
+<!--        <script type = "text/javascript" >
             history.pushState(null, null, 'Visor_global.jsp');
             window.addEventListener('popstate', function (event) {
                 history.pushState(null, null, 'Visor_global.jsp');
             });
-        </script>
+        </script>-->
         <jsp:include page='Contenedor_head.jsp'></jsp:include>
             <!--Eliminar y liberar despejes-->
             <script language="javascript">

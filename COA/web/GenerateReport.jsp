@@ -10,8 +10,14 @@
         <link rel="stylesheet" href="Interface/Content/Assets/modules/datatables/Select-1.2.4/css/select.bootstrap4.min.css">
         <link rel="stylesheet" href="Interface/Content/Assets/modules/datatables/datatables.min.css">
         <link rel="stylesheet" href="Interface/Content/Assets/modules/izitoast/css/iziToast.min.css">
-        <link rel="icon" type="image/png" href="Interface/Imagen/Icon.fw.png">
+        <link rel="icon" type="image/png" href="Interface/Imagen/LogoSWhite.png">
         <title>Generación</title>
+        <!--        <script type="text/javascript">
+                    history.pushState(null, null, 'Generacion.jsp');
+                    window.addEventListener('popstate', function (event) {
+                        history.pushState(null, null, 'Generacion.jsp');
+                    });
+                </script>-->
     </head>
     <body>
         <jsp:include page="Menu.jsp"></jsp:include>
@@ -26,62 +32,19 @@
             </div>
         </div>
         <script>
-            document.addEventListener("DOMContentLoaded", function () {
+            document.addEventListener("DOMContentLoaded", () => {
+
                 const orderInput = document.getElementById("orderInput");
                 const productoSection = document.getElementById("producto-section");
                 const loteSection = document.getElementById("lote-section");
                 const registroSection = document.getElementById("registro-section");
-                const loadingScreen = document.getElementById("loading-screen");
+
                 const productosSelect = document.getElementById("resultadoProductos");
                 const lotesSelect = document.getElementById("resultadoLotes");
 
-                // Paso 1: buscar orden
-                orderInput.addEventListener("change", function () {
-                    const orderValue = orderInput.value.trim();
-                    if (orderValue === "")
-                        return;
+                const loadingScreen = document.getElementById("loading-screen");
 
-                    mostrarCarga("Buscando orden");
-
-                    setTimeout(() => {
-                        ocultarCarga();
-                        productoSection.classList.remove("d-none");
-                        productoSection.classList.add("fade-in");
-                        productosSelect.disabled = false;
-                    }, 1500);
-                });
-
-                // Paso 2: buscar producto
-                productosSelect.addEventListener("change", function () {
-                    const productoValue = productosSelect.value.trim();
-                    if (productoValue === "")
-                        return;
-
-                    mostrarCarga("Consultando productos");
-
-                    setTimeout(() => {
-                        ocultarCarga();
-                        loteSection.classList.remove("d-none");
-                        loteSection.classList.add("fade-in");
-                        lotesSelect.disabled = false;
-                    }, 1500);
-                });
-
-                // Paso 3: buscar lote
-                lotesSelect.addEventListener("change", function () {
-                    const loteValue = lotesSelect.value.trim();
-                    if (loteValue === "")
-                        return;
-
-                    mostrarCarga("Cargando registros");
-
-                    setTimeout(() => {
-                        ocultarCarga();
-                        registroSection.classList.remove("d-none");
-                        registroSection.classList.add("fade-in");
-                    }, 1500);
-                });
-
+                /* ================== LOADER ================== */
                 function mostrarCarga(texto) {
                     document.getElementById("loading-text").innerText = texto;
                     loadingScreen.style.display = "flex";
@@ -90,43 +53,152 @@
                 function ocultarCarga() {
                     loadingScreen.style.display = "none";
                 }
-            });
 
+                /* ============ PASO 1: ORDEN ============ */
+                orderInput.addEventListener("blur", () => {
+                    const order = orderInput.value.trim();
+                    if (!order)
+                        return;
+
+                    mostrarCarga("Buscando productos...");
+                    productosSelect.innerHTML = "";
+                    lotesSelect.innerHTML = "";
+                    loteSection.classList.add("d-none");
+                    registroSection.classList.add("d-none");
+
+                    fetch("SearchProductsServlet?orden=" + order)
+                            .then(r => r.json())
+                            .then(data => {
+                                ocultarCarga();
+
+                                productoSection.classList.remove("d-none");
+                                productosSelect.innerHTML = "<option value=''>-- Seleccione un producto --</option>";
+
+                                if (data.length === 0) {
+                                    productosSelect.innerHTML = "<option>No hay productos</option>";
+                                    return;
+                                }
+
+                                data.forEach(item => {
+                                    const opt = document.createElement("option");
+                                    opt.value = item.codigo;
+                                    opt.text = item.codigo + " - " + item.producto;
+                                    opt.dataset.lotes = item.lote;
+                                    productosSelect.appendChild(opt);
+                                });
+                            })
+                            .catch(err => {
+                                ocultarCarga();
+                                console.error(err);
+                            });
+                });
+
+                /* ============ PASO 2: PRODUCTO ============ */
+                productosSelect.addEventListener("change", () => {
+                    const selected = productosSelect.options[productosSelect.selectedIndex];
+                    if (!selected || !selected.dataset.lotes)
+                        return;
+
+                    mostrarCarga("Cargando lotes...");
+                    lotesSelect.innerHTML = "";
+
+                    setTimeout(() => {
+                        ocultarCarga();
+                        loteSection.classList.remove("d-none");
+
+                        const lotes = selected.dataset.lotes.split(",");
+                        lotesSelect.innerHTML = "<option value=''>-- Seleccione un lote --</option>";
+
+                        lotes.forEach(l => {
+                            const opt = document.createElement("option");
+                            opt.value = l.trim();
+                            opt.text = l.trim();
+                            lotesSelect.appendChild(opt);
+                        });
+                    }, 800);
+                });
+
+                /* ============ PASO 3: LOTE ============ */
+                lotesSelect.addEventListener("change", () => {
+                    if (!lotesSelect.value)
+                        return;
+
+                    mostrarCarga("Cargando registros...");
+                    setTimeout(() => {
+                        ocultarCarga();
+                        registroSection.classList.remove("d-none");
+                        btnGenerar.disabled = false;
+                    }, 800);
+                });
+            });
+        </script>
+
+        <script>
+            function mostrarCarga(texto) {
+                document.getElementById("loading-text").innerText = texto;
+                loadingScreen.style.display = "flex";
+            }
+
+            function ocultarCarga() {
+                loadingScreen.style.display = "none";
+            }
+        </script>
+
+        <script>
             // Validación igual a tu versión funcional
             function FormGenerate(form) {
-                const order = document.getElementById("orderInput").value.trim();
-                const producto = document.getElementById("resultadoProductos").value.trim();
-                const lote = document.getElementById("resultadoLotes").value.trim();
+
+                const orderInput = document.getElementById("orderInput");
+                const productosSelect = document.getElementById("resultadoProductos");
+                const lotesSelect = document.getElementById("resultadoLotes");
+                const registroSelect = document.getElementById("registroSelect");
+                const btnGenerar = document.getElementById("btnGenerar");
 
                 let valido = true;
 
-                if (order === "") {
-                    document.getElementById("orderInput").classList.add("is-invalid");
+                // ===== ORDEN =====
+                if (orderInput.value.trim() === "") {
+                    orderInput.classList.add("is-invalid");
                     valido = false;
                 } else {
-                    document.getElementById("orderInput").classList.remove("is-invalid");
+                    orderInput.classList.remove("is-invalid");
                 }
 
-                if (producto === "") {
-                    document.getElementById("resultadoProductos").classList.add("is-invalid");
+                // ===== PRODUCTO =====
+                if (productosSelect.value === "") {
+                    productosSelect.classList.add("is-invalid");
                     valido = false;
                 } else {
-                    document.getElementById("resultadoProductos").classList.remove("is-invalid");
+                    productosSelect.classList.remove("is-invalid");
                 }
 
-                if (lote === "") {
-                    document.getElementById("resultadoLotes").classList.add("is-invalid");
+                // ===== LOTE =====
+                if (lotesSelect.value === "") {
+                    lotesSelect.classList.add("is-invalid");
                     valido = false;
                 } else {
-                    document.getElementById("resultadoLotes").classList.remove("is-invalid");
+                    lotesSelect.classList.remove("is-invalid");
                 }
 
-                if (valido) {
-                    form.submit();
+                // ===== REGISTRO =====
+                if (registroSelect.value === "") {
+                    registroSelect.classList.add("is-invalid");
+                    valido = false;
+                } else {
+                    registroSelect.classList.remove("is-invalid");
                 }
 
-                return false;
+                // ===== RESULTADO =====
+                if (!valido) {
+                    return false; // 🚫 NO ENVÍA
+                }
+
+                // Evitar doble submit
+                btnGenerar.disabled = true;
+
+                return true; // ✅ ENVÍA NORMAL
             }
+
             document.addEventListener("DOMContentLoaded", function () {
                 const checkAll = document.getElementById("checkbox-all");
                 const checkboxes = document.querySelectorAll('input[data-checkboxes="mygroup"]:not([data-checkbox-role="dad"])');

@@ -36,10 +36,19 @@ public class Registro extends HttpServlet {
         try {
             //Sesion
             HttpSession sesion = request.getSession();
-            String[] usuario_rol = request.getSession().getAttribute("Rol/Nombres").toString().split("/");
-            String rol = usuario_rol[0];
-            String usuario = usuario_rol[1];
-            int id_usuario = Integer.parseInt(request.getSession().getAttribute("Id_usuario").toString());
+            String rol = "";
+            String usuario = "";
+            int id_usuario = 0;
+            try {
+                String[] usuario_rol = request.getSession().getAttribute("Rol/Nombres").toString().split("/");
+                rol = usuario_rol[0];
+                usuario = usuario_rol[1];
+                id_usuario = Integer.parseInt(request.getSession().getAttribute("Id_usuario").toString());
+            } catch (Exception e) {
+                rol = "";
+                usuario = "";
+                id_usuario = 1;
+            }
             //JPA'S
             ParadaMaquinaJpaController jpacpmq = new ParadaMaquinaJpaController();
             RegistroJpaController jpacrgt = new RegistroJpaController();
@@ -245,7 +254,7 @@ public class Registro extends HttpServlet {
                                         jpacrpc.Registrar_verificacion_prueba_calidad(id_registro, (Integer) obj_parametros[0], (Integer) obj_parametros[4]);
                                     }
                                 }
-                                
+
                             } else {
                                 if ((Integer) obj_parametros[11] == 1) {
                                     if ((Integer) obj_parametros[6] == 1 || (Integer) obj_parametros[6] == (Integer) obj_registro[64]) {

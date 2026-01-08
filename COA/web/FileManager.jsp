@@ -1,6 +1,7 @@
 <%@page import="java.io.File"%>
 <%@page import="java.io.FileFilter"%>
 <%@page import="Connection.LinkBatchRecord"%>
+<%@page import="Controller.CertificatesJpaController"%>
 <%@page import="java.util.List"%>
 <%@page import="Method.Util"%>
 <%@taglib uri="/WEB-INF/tlds/alert" prefix="Alert" %>
@@ -10,10 +11,11 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Gestor de Archivos - COA</title>
+        <title>Batch Record</title>
 
         <link rel="stylesheet" href="Interface/Content/Assets/css/attach.css">
         <link rel="stylesheet" href="Interface/Content/Assets/modules/izitoast/css/iziToast.min.css">
+        <link rel="icon" type="image/png" href="Interface/Imagen/LogoSWhite.png">
         <style>
             .modal-backdrop{
                 position: relative !important;
@@ -48,7 +50,10 @@
                                         HttpSession sesion = request.getSession();
                                         String Permission = "";
                                         LinkBatchRecord LinkBatch = new LinkBatchRecord();
+                                        CertificatesJpaController CertificatesJpa = new CertificatesJpaController();
                                         List lst_link = null;
+                                        List lst_certificate = null;
+                                        List lst_material = null;
                                         try {
                                             Permission = sesion.getAttribute("Permisos").toString();
                                         } catch (Exception e) {
@@ -140,7 +145,7 @@
 
 
                                     <!-- ================== SUBIDA SOLO EN LOTE ================== -->
-                                    <%                                        if (Permission.contains("[2]")) {
+                                    <%                                        if (Permission.contains("[3]")) {
                                     %>
                                     <div class="d-flex justify-content-between align-content-center">
                                         <div>
@@ -249,7 +254,8 @@
                                                            title="Descargar archivo">
                                                             <i class="fas fa-download"></i>
                                                         </a>
-
+                                                        <%                                        if (Permission.contains("[4]")) {
+                                                        %>
                                                         <!-- ELIMINAR -->
                                                         <button type="button"
                                                                 class="btn btn-danger"
@@ -263,6 +269,8 @@
                                                                                 )">
                                                             <i class="fas fa-trash"></i>
                                                         </button>
+                                                        <%                                        }
+                                                        %>
 
                                                     </div>
                                                 </td>
@@ -271,11 +279,6 @@
                                                 }
                                             } else {
                                             %>
-                                            <tr>
-                                                <td colspan="3" class="text-center text-muted">
-                                                    No hay archivos subidos en este lote
-                                                </td>
-                                            </tr>
                                             <%
                                                 }
                                             %>
@@ -294,6 +297,60 @@
                                                         <!-- VER -->
                                                         <a class="btn btn-info mr-3"
                                                            href="<%= ArgLink[3]%>"
+                                                           target="_blank"
+                                                           title="Ver registro">
+                                                            <i class="fas fa-eye"></i>
+                                                        </a>
+
+                                                    </div>
+                                                </td>
+                                            </tr>    
+                                            <%                                                }
+                                                }
+                                            %>
+                                            <%
+                                                String MaterialBatch = "";
+                                                lst_certificate = CertificatesJpa.ConsultCertificatesBatchRecord(orden, lote);
+                                                if (lst_certificate != null) {
+                                                    for (int i = 0; i < lst_certificate.size(); i++) {
+                                                        Object[] ArgCertificate = (Object[]) lst_certificate.get(i);
+                                                        MaterialBatch += ArgCertificate[4];
+                                            %>
+                                            <tr class="file-row">
+                                                <td><%= ArgCertificate[1]%></td>
+                                                <td><%= ArgCertificate[2]%></td>
+                                                <td class="text-center">
+                                                    <div class="btn-group btn-group-sm">
+
+                                                        <!-- VER -->
+                                                        <a class="btn btn-info mr-3"
+                                                           href="<%= ArgCertificate[3]%>"
+                                                           target="_blank"
+                                                           title="Ver registro">
+                                                            <i class="fas fa-eye"></i>
+                                                        </a>
+
+                                                    </div>
+                                                </td>
+                                            </tr>    
+                                            <%                                                }
+                                                }
+                                            %>
+                                            <%
+                                                lst_material = LinkBatch.AttachmentBatchRecord(MaterialBatch);
+                                                if (lst_material != null) {
+                                                    for (int i = 0; i < lst_material.size(); i++) {
+                                                        String[] ArgBatch = Util.parseResult(lst_material.get(i));
+                                            %>
+                                            <tr class="file-row">
+                                                <td><%= ArgBatch[1]%></td>
+                                                <td><%= ArgBatch[3]%></td>
+                                                <td class="text-center">
+                                                    <div class="btn-group btn-group-sm">
+
+                                                        <!-- VER -->
+                                                        <a class="btn btn-info mr-3"
+                                                           href="DownloadGL?File_name=<%= ArgBatch[2].trim()%>"
                                                            target="_blank"
                                                            title="Ver registro">
                                                             <i class="fas fa-eye"></i>
