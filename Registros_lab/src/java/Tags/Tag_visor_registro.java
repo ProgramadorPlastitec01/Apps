@@ -125,7 +125,9 @@ public class Tag_visor_registro extends TagSupport {
 // </editor-fold>
                 // <editor-fold defaultstate="collapsed" desc="VERSIONES">
                 if (obj_registro[65].toString().equals("R-PRF-013")) {
-                    if (fecha_version_decimal >= 2024.0925) {
+                    if (fecha_version_decimal >= 2026.0106) {
+                        out.print("<td align='center' colspan='2'><h2 class='negro'>CODIGO <b>" + obj_registro[65] + "</b> VERSION <b>15</b></h2></td>");
+                    }else if (fecha_version_decimal >= 2024.0925) {
                         out.print("<td align='center' colspan='2'><h2 class='negro'>CODIGO <b>" + obj_registro[65] + "</b> VERSION <b>14</b></h2></td>");
                     } else if (fecha_version_decimal >= 2022.0908) {
                         out.print("<td align='center' colspan='2'><h2 class='negro'>CODIGO <b>" + obj_registro[65] + "</b> VERSION <b>13</b></h2></td>");
