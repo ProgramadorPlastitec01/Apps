@@ -170,7 +170,7 @@ public class CertificatesJpaController implements Serializable {
         }
     }
 
-    public boolean CertificatesRegister(String Tpe, String Cde, int Ord, String Pdt, String Btc, String Cql, String Ctm, String Amt, String Ddt, String Urg,String Mbt, String Fmt ) {
+    public boolean CertificatesRegister(String Tpe, String Cde, int Ord, String Pdt, String Btc, String Cql, String Ctm, String Amt, String Ddt, String Urg, String Mbt, String Fmt) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
@@ -189,11 +189,11 @@ public class CertificatesJpaController implements Serializable {
         }
     }
 
-    public boolean CertificatesUpdate(int IdC, String Cql, String Amt, String Ddt, String Fmt) {
+    public boolean CertificatesUpdate(int IdC, String Cql, String Amt, String Ddt, String Mbt, String Fmt) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
-            Query q = em.createNativeQuery("CALL `Sp_ctf_u_UpdateCertificates`('" + IdC + "','" + Cql + "','" + Amt + "','" + Ddt + "','" + Fmt + "')");
+            Query q = em.createNativeQuery("CALL `Sp_ctf_u_UpdateCertificates`('" + IdC + "','" + Cql + "','" + Amt + "','" + Ddt + "','" + Mbt + "','" + Fmt + "')");
             int resultado = q.executeUpdate();
             em.getTransaction().commit();
             em.clear();

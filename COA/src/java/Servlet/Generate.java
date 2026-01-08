@@ -161,7 +161,7 @@ public class Generate extends HttpServlet {
                     }
                     if (IdCertificates > 0) {
                         //<editor-fold defaultstate="collapsed" desc="UPDATE">
-                        result = CertificatesJpa.CertificatesUpdate(IdCertificates, Consecutive, Amount, DateDispatch, Html);
+                        result = CertificatesJpa.CertificatesUpdate(IdCertificates, Consecutive, Amount, DateDispatch, MaterialBatches, Html);
                         if (result) {
                             request.setAttribute("UpdateCertificate", result);
                         }
@@ -246,7 +246,7 @@ public class Generate extends HttpServlet {
                                     result = CertificatesJpa.CertificatesUpdateSignature(IdCertificates, Signature);
                                 }
                                 if (result) {
-                                    request.setAttribute("UpdateCertificate", result);
+                                    request.setAttribute("SigMasive", result);
                                 }
                                 request.getRequestDispatcher("Generate?opt=8").forward(request, response);
                                 //</editor-fold>
@@ -255,7 +255,7 @@ public class Generate extends HttpServlet {
                                 IdCertificates = Integer.parseInt(IdCertiMasive);
                                 result = CertificatesJpa.CertificatesUpdateSignature(IdCertificates, Signature);
                                 if (result) {
-                                    request.setAttribute("UpdateCertificate", result);
+                                    request.setAttribute("SigUnique", result);
                                 }
                                 request.getRequestDispatcher("Generate?opt=2&Type=" + Type + "&IdCertificates=" + IdCertificates + "&TempDelete=0&StateCerti=3").forward(request, response);
                                 //</editor-fold>
@@ -296,7 +296,7 @@ public class Generate extends HttpServlet {
                         if (Category.equals("Delete")) {
                             request.setAttribute("DeleteCertificates", result);
                         } else {
-                            request.setAttribute("DeleteCertificates", result);
+                            request.setAttribute("ReturnCertificates", result);
                         }
                     }
                     request.getRequestDispatcher("Generate?opt=1&Type=" + Type).forward(request, response);
@@ -324,7 +324,10 @@ public class Generate extends HttpServlet {
                     } catch (Exception e) {
                         Message = "";
                     }
-                    EventConn.RegisterEvents(IdCertificates, Message);
+                    result = EventConn.RegisterEvents(IdCertificates, Message);
+                    if (result) {
+                        request.setAttribute("RegisterNovetly", result);
+                    }
                     //</editor-fold>
                     break;
                 case 7:

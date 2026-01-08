@@ -140,7 +140,7 @@ public class UserControllerJpa implements Serializable {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
         try {
-            Query q = etm.createNativeQuery("CALL `Sp_User_c_ConsultUsuarRestarPass`('" + document + "','" + user + "')");
+            Query q = etm.createNativeQuery("CALL `Sp_usr_c_ConsultUsuarRestarPass`('" + document + "','" + user + "')");
             List consulta = q.getResultList();
             etm.getTransaction().commit();
             etm.clear();

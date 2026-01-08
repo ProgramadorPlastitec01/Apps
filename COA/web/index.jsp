@@ -79,7 +79,7 @@
                             Ingresa los datos para recuperar tu acceso.
                         </p>
 
-                        <form action="Session?opt=2" method="post" autocomplete="off">
+                        <form action="Session?opt=3" method="post" autocomplete="off">
 
                             <div class="form-group">
                                 <div class="input-icon">
