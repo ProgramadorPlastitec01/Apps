@@ -300,9 +300,86 @@
         </script>
 
         <script>
-            let contador = 1; // Contador para identificar cada grupo de campos de persona
+            let contador = 1;  // Contador para identificar cada grupo de campos de persona
+            function agregarPersona(count) {
+                if (count == 0) {
+                } else {
+                    contador = document.getElementById("CounterPersonAcc").value;
+                }
+                contador++; // Incrementa el contador
+                const formulario = document.getElementById('formulario');
+                const nuevaPersona = document.createElement('div');
+                nuevaPersona.id = 'persona' + contador;
+                nuevaPersona.className = 'd-flex person mt-2'; // Agregando la clase 'd-flex'
 
-            function agregarPersonarep(count) {
+                let contenidoHTML = `
+                        <div class="col-lg-4">
+                          <div class="">
+                            <input type="text" class="form-control" name="TxtNameXXXXAcc" placeholder="Nombre completo" data-toggle="tooltip" data-placement="top" title="Denominación Social o Nombre completo" required>
+                          </div>
+                        </div>
+                        <div class="col-lg-4">
+                          <div class="d-flex">
+                            <div class="col-lg-5" style="margin-left: -15px;" data-toggle="tooltip" data-placement="top" title="">
+                              <select class="form-control" name="CbxTypeDocXXXXAcc" required>
+                                <option value="">Tipo</option>
+                                <option value="PP">PP</option>
+                                <option value="CC">CC</option>
+                                <option value="CE">CE</option>
+                                <option value="TAX ID">TAX ID</option>
+                                <option value="NIT">NIT</option>
+                                <option value="Otro">Otro</option>
+                              </select>
+                            </div>
+                            <input type="number" class="form-control col-lg-9" name="NmbNroDocXXXXAcc" placeholder="Número de documento" data-toggle="tooltip" data-placement="top" title="" required>
+                          </div>
+                        </div>
+                        <div class="col-lg-2">
+                          <div class="d-flex mt-2 justify-content-center">
+                            <input type="radio" name="is_pepXXXXAcc" value="Si"> &nbsp; Si &nbsp;&nbsp;
+                            <input type="radio" name="is_pepXXXXAcc" value="No" checked> &nbsp; No &nbsp;&nbsp;
+                          </div>
+                        </div>
+                        <div class="col-lg-2">
+                          <div class="mt-2">
+                            <input type="number" class="form-control" name="TxtPartXXXXAcc" placeholder="% Participación" data-toggle="tooltip" data-placement="top" title="Porcentaje de participación" required>
+                          </div>
+                        </div>
+                      `;
+                contenidoHTML = contenidoHTML.replaceAll('XXXX', contador);
+                nuevaPersona.innerHTML = contenidoHTML;
+
+                // Agregar botón de eliminar si no es la primera persona
+                if (contador > 1) {
+                    const botonEliminarDiv = document.createElement('div');
+                    botonEliminarDiv.className = 'boton-eliminar';
+                    const botonEliminar = document.createElement('button');
+                    // Crea un elemento i para el icono de Font Awesome
+                    const iconoEliminar = document.createElement('i');
+                    iconoEliminar.className = 'fas fa-trash';
+                    botonEliminar.appendChild(iconoEliminar); // Adjunta el icono al botón
+                    botonEliminarDiv.appendChild(botonEliminar);
+                    nuevaPersona.appendChild(botonEliminarDiv);
+
+                    // Agrega la clase 'btn btn-danger' al botón
+                    botonEliminar.className = 'btn btn-danger';
+
+                    // Agrega el evento para eliminar la persona al hacer clic en el botón
+                    botonEliminar.onclick = function () {
+                        formulario.removeChild(nuevaPersona);
+                    };
+                    document.getElementById("CounterPersonAcc").value = contador;
+                }
+
+                formulario.appendChild(nuevaPersona);
+            }
+
+        </script>
+
+        <script>
+            contador = 1; // Contador para identificar cada grupo de campos de persona
+
+            function AgregarRep(count) {
                 if (count == 0) {
                 } else {
                     contador = document.getElementById("CounterPerson").value;
@@ -382,83 +459,7 @@
 
         </script>
 
-        <script>
-            let contador = 1; // Contador para identificar cada grupo de campos de persona
 
-            function agregarPersona(count) {
-                if (count == 0) {
-                } else {
-                    contador = document.getElementById("CounterPersonAcc").value;
-                }
-                contador++; // Incrementa el contador
-                const formulario = document.getElementById('formulario');
-                const nuevaPersona = document.createElement('div');
-                nuevaPersona.id = 'persona' + contador;
-                nuevaPersona.className = 'd-flex person mt-2'; // Agregando la clase 'd-flex'
-
-                let contenidoHTML = `
-                        <div class="col-lg-4">
-                          <div class="">
-                            <input type="text" class="form-control" name="TxtNameXXXXAcc" placeholder="Nombre completo" data-toggle="tooltip" data-placement="top" title="Denominación Social o Nombre completo" required>
-                          </div>
-                        </div>
-                        <div class="col-lg-4">
-                          <div class="d-flex">
-                            <div class="col-lg-5" style="margin-left: -15px;" data-toggle="tooltip" data-placement="top" title="">
-                              <select class="form-control" name="CbxTypeDocXXXXAcc" required>
-                                <option value="">Tipo</option>
-                                <option value="PP">PP</option>
-                                <option value="CC">CC</option>
-                                <option value="CE">CE</option>
-                                <option value="TAX ID">TAX ID</option>
-                                <option value="NIT">NIT</option>
-                                <option value="Otro">Otro</option>
-                              </select>
-                            </div>
-                            <input type="number" class="form-control col-lg-9" name="NmbNroDocXXXXAcc" placeholder="Número de documento" data-toggle="tooltip" data-placement="top" title="" required>
-                          </div>
-                        </div>
-                        <div class="col-lg-2">
-                          <div class="d-flex mt-2 justify-content-center">
-                            <input type="radio" name="is_pepXXXXAcc" value="Si"> &nbsp; Si &nbsp;&nbsp;
-                            <input type="radio" name="is_pepXXXXAcc" value="No" checked> &nbsp; No &nbsp;&nbsp;
-                          </div>
-                        </div>
-                        <div class="col-lg-2">
-                          <div class="mt-2">
-                            <input type="number" class="form-control" name="TxtPartXXXXAcc" placeholder="% Participación" data-toggle="tooltip" data-placement="top" title="Porcentaje de participación" required>
-                          </div>
-                        </div>
-                      `;
-                contenidoHTML = contenidoHTML.replaceAll('XXXX', contador);
-                nuevaPersona.innerHTML = contenidoHTML;
-
-                // Agregar botón de eliminar si no es la primera persona
-                if (contador > 1) {
-                    const botonEliminarDiv = document.createElement('div');
-                    botonEliminarDiv.className = 'boton-eliminar';
-                    const botonEliminar = document.createElement('button');
-                    // Crea un elemento i para el icono de Font Awesome
-                    const iconoEliminar = document.createElement('i');
-                    iconoEliminar.className = 'fas fa-trash';
-                    botonEliminar.appendChild(iconoEliminar); // Adjunta el icono al botón
-                    botonEliminarDiv.appendChild(botonEliminar);
-                    nuevaPersona.appendChild(botonEliminarDiv);
-
-                    // Agrega la clase 'btn btn-danger' al botón
-                    botonEliminar.className = 'btn btn-danger';
-
-                    // Agrega el evento para eliminar la persona al hacer clic en el botón
-                    botonEliminar.onclick = function () {
-                        formulario.removeChild(nuevaPersona);
-                    };
-                    document.getElementById("CounterPersonAcc").value = contador;
-                }
-
-                formulario.appendChild(nuevaPersona);
-            }
-
-        </script>
         <script>
             contador = 1; // Contador para identificar cada grupo de campos de persona
 
@@ -531,13 +532,167 @@
             }
 
         </script>
+        
+        <script>
+            contador = 1; // Contador para identificar cada grupo de campos de persona
+            function agregarPersonaComer(count) {
+                if (count == 0) {
+                } else {
+                    contador = document.getElementById("CounterPerson").value;
+                }
+                contador++; // Incrementa el contador
+                const formulario = document.getElementById('formulario');
+                const nuevaPersona = document.createElement('div');
+                nuevaPersona.id = 'persona' + contador;
+                nuevaPersona.className = 'd-flex person mt-4';
+                nuevaPersona.style.alignItems = 'center';
 
+                let contenidoHTML = `
+                        <div class="col-lg-3">
+                          <div class="mt-2">
+                            <input type="text" class="form-control" name="TxtComercialRefXXXX" placeholder='Ref. comercial' required>
+                          </div>
+                        </div>
+        
+                        <div class="col-lg-2">
+                          <div class="mt-2">
+                            <input type="text" class="form-control" name="TxtNitXXXX" placeholder='Tax id / nit' required>
+                          </div>
+                        </div>
+        
+                        <div class="col-lg-2">
+                          <div class="mt-2">
+                            <input type="text" class="form-control" name="TxtConctacXXXX" placeholder='Contact' required>
+                          </div>
+                        </div>
+                        
+                        <div class="col-lg-2">
+                          <div class="mt-2">
+                            <input type="text" class="form-control" name="TxtEmailXXXX" placeholder='Mail' required>
+                          </div>
+                        </div>
+        
+                        <div class="col-lg-2">
+                          <div class="mt-2">
+                            <input type="text" class="form-control" name="TxtPhoneXXXX" placeholder='Num. phone' required>
+                          </div>
+                        </div>
+                      `;
+                contenidoHTML = contenidoHTML.replaceAll('XXXX', contador);
+                nuevaPersona.innerHTML = contenidoHTML;
 
+                // Agregar botón de eliminar si no es la primera persona
+                if (contador > 1) {
+                    const botonEliminarDiv = document.createElement('div');
+                    botonEliminarDiv.className = 'boton-eliminar';
+                    const botonEliminar = document.createElement('button');
+                    // Crea un elemento i para el icono de Font Awesome
+                    const iconoEliminar = document.createElement('i');
+                    iconoEliminar.className = 'fas fa-trash';
+                    botonEliminar.appendChild(iconoEliminar); // Adjunta el icono al botón
+                    botonEliminarDiv.appendChild(botonEliminar);
+                    nuevaPersona.appendChild(botonEliminarDiv);
+
+                    // Agrega la clase 'btn btn-danger' al botón
+                    botonEliminar.className = 'btn btn-danger';
+
+                    // Agrega el evento para eliminar la persona al hacer clic en el botón
+                    botonEliminar.onclick = function () {
+                        formulario.removeChild(nuevaPersona);
+                    };
+                    document.getElementById("CounterPerson").value = contador;
+                }
+
+                formulario.appendChild(nuevaPersona);
+            }
+
+        </script>
+        
+        <script>
+            contador = 1; // Contador para identificar cada grupo de campos de persona
+            function agregarPersonaBank(count) {
+                if (count == 0) {
+                } else {
+                    contador = document.getElementById("CounterPersonBank").value;
+                }
+                contador++; // Incrementa el contador
+                const formulario = document.getElementById('formularioBank');
+                const nuevaPersona = document.createElement('div');
+                nuevaPersona.id = 'persona' + contador;
+                nuevaPersona.className = 'd-flex person mt-4';
+                nuevaPersona.style.alignItems = 'center';
+
+                let contenidoHTML = `
+                        <div class="col-lg-3">
+                          <div class="mt-2">
+                            <input type="text" class="form-control" name="TxtBankRefXXXX" placeholder='Ref. comercial' required>
+                          </div>
+                        </div>
+                        <div class="col-lg-4">
+                          <div class="d-flex">
+                            <div class="col-lg-4" style="margin-left: -15px;" >
+                              <select class="form-control" name="CbxTypeDocXXXX" required>
+                                <option value="">Type</option>
+                                <option value="AHORROS">AHORROS/SAVINGS</option>
+                                <option value="CORRIENTE">CORRIENTE/CURRENT</option>
+                                <option value="EMPRESARIAL">EMPRESARIAL/BUSINESS</option>
+                              </select>
+                            </div>
+                            <input type="number" class="form-control col-lg-9" name="NmbNroDocXXXX" placeholder='Num. Doc' required>
+                          </div>
+                        </div>
+                        <div class="col-lg-2">
+                          <div class="mt-2">
+                            <input type="text" class="form-control" name="TxtContBankXXXX" placeholder='Contact' required>
+                          </div>
+                        </div>
+                        <div class="col-lg-2">
+                          <div class="mt-2">
+                            <input type="text" class="form-control" name="TxtPhoneBankXXXX" placeholder='Num. phone' required>
+                          </div>
+                        </div>
+                      `;
+                contenidoHTML = contenidoHTML.replaceAll('XXXX', contador);
+                nuevaPersona.innerHTML = contenidoHTML;
+
+                // Agregar botón de eliminar si no es la primera persona
+                if (contador > 1) {
+                    const botonEliminarDiv = document.createElement('div');
+                    botonEliminarDiv.className = 'boton-eliminar';
+                    const botonEliminar = document.createElement('button');
+                    // Crea un elemento i para el icono de Font Awesome
+                    const iconoEliminar = document.createElement('i');
+                    iconoEliminar.className = 'fas fa-trash';
+                    botonEliminar.appendChild(iconoEliminar); // Adjunta el icono al botón
+                    botonEliminarDiv.appendChild(botonEliminar);
+                    nuevaPersona.appendChild(botonEliminarDiv);
+
+                    // Agrega la clase 'btn btn-danger' al botón
+                    botonEliminar.className = 'btn btn-danger';
+
+                    // Agrega el evento para eliminar la persona al hacer clic en el botón
+                    botonEliminar.onclick = function () {
+                        formulario.removeChild(nuevaPersona);
+                    };
+                    document.getElementById("CounterPersonBank").value = contador;
+                }
+
+                formulario.appendChild(nuevaPersona);
+            }
+
+        </script>
+        
         <script>
             function DeleteItem(id) {
                 const div = document.getElementById('DataForm' + id);
                 div.innerHTML = '';
-//                document.getElementById("CounterPerson").value = document.getElementById("CounterPerson").value - 1;
+            }
+        </script>
+
+        <script>
+            function DeleteItemBenf(id) {
+                const div = document.getElementById('Data' + id + 'Form' + id);
+                div.innerHTML = '';
             }
         </script>
 

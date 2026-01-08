@@ -617,17 +617,16 @@ public class Tag_Document extends TagSupport {
                     }
                     out.print("</div>");
 
-                    out.print("<div id='Imprimir1' style=\"max-width: 100%;\">");
-                    out.print("<div id='mi-tabla'>");
-                    out.print(Template);
-                    out.print("</div>");
-                    out.print("</div>");
-                    out.print("<script>");
-                    out.print(" document.addEventListener(\"DOMContentLoaded\", function() {\n"
-                            + "    document.body.classList.add(\"sidebar-mini\");\n"
-                            + " });");
-                    out.print("</script>");
-
+//                    out.print("<div id='Imprimir1' style=\"max-width: 100%;\">");
+//                    out.print("<div id='mi-tabla'>");
+//                    out.print(Template);
+//                    out.print("</div>");
+//                    out.print("</div>");
+//                    out.print("<script>");
+//                    out.print(" document.addEventListener(\"DOMContentLoaded\", function() {\n"
+//                            + "    document.body.classList.add(\"sidebar-mini\");\n"
+//                            + " });");
+//                    out.print("</script>");
                     //<editor-fold defaultstate="collapsed" desc="DOCUMENT OBSERVATIONS">
                     out.print("<div class='sweet-local' tabindex='-1' id='Ventana9' style='opacity: 1.03; display:none;'>");
                     out.print("<div class='cont_reg' style='width: 40%; margin-left: 55%;'>");
@@ -1350,64 +1349,85 @@ public class Tag_Document extends TagSupport {
                     String[] ModuleCliente = FormClient.toString().replace("]/[", "///").replace("[[", "[").replace("]]", "]").split("///");
                     String[] DataClient = {};
                     try {
-//                        //<editor-fold defaultstate="collapsed" desc="INITIAL MODULE">
-//                        try {
-//                            DataClient = ModuleCliente[0].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
-//                            if (!DataClient[1].equals("N/A")) {
-//                                if (DataClient[1].contains("Actuali")) {
-//                                    Template = Template.replace("id=\"XXXCHECKACTXXX\">", "id=\"XXXCHECKACTXXX\" checked disabled>");
-//                                } else if (DataClient[1].contains("Vincu")) {
-//                                    Template = Template.replace("id=\"XXXCHECKVINXXX\">", "id=\"XXXCHECKVINXXX\" checked disabled>");
-//                                }
-//                                Template = Template.replace("XXXFECHADILIXXX", DataClient[2]);
-//                                if (DataClient[3].contains("Client")) {
-//                                    Template = Template.replace("id=\"XXXCHECKCLIXXX\">", "id=\"XXXCHECKCLIXXX\" checked disabled>");
-//                                    Template = Template.replace("XXXOTROXXX", "");
-//
-//                                } else if (DataClient[3].contains("Prove") || DataClient[3].contains("prove")) {
-//                                    Template = Template.replace("id=\"XXXCHECKPROXXX\">", "id=\"XXXCHECKPROXXX\" checked disabled>");
-//                                    Template = Template.replace("XXXOTROXXX", "");
-//                                } else {
-//                                    Template = Template.replace("XXXOTROXXX", "<span>" + DataClient[3] + "</span>");
-//                                }
-//                            } else {
-//                                Template = Template.replace("XXXFECHADILIXXX", "").replace("XXXOTROXXX", "");
-//                            }
-//                        } catch (Exception e) {
-//                            Template = Template.replace("XXXFECHADILIXXX", "").replace("XXXOTROXXX", "");
-//
-//                        }
-//                        //</editor-fold>
-//
-//                        //<editor-fold defaultstate="collapsed" desc="GENERAL INFORMATION">
-//                        try {
-//                            DataClient = ModuleCliente[1].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
-//                            if (!DataClient[1].equals("N/A")) {
-//                                Template = Template.replace("XXXRAZONSOCIALXXX", DataClient[1]).
-//                                        replace("XXXNROIDENTIFICACIONXXX", DataClient[2]).replace("XXXDVXXX", DataClient[3]).
-//                                        replace("XXXPAISXXX", DataClient[4]).replace("XXXCIUDADXXX", DataClient[5]).
-//                                        replace("XXXDIRECCIONXXX", DataClient[6]).replace("XXXTELEFONOXXX", DataClient[7]).
-//                                        replace("XXXEMAILXXX", DataClient[8]).replace("XXXPAGINAWEBXXX", DataClient[9]).
-//                                        replace("XXXCODIGOPOSTALXXX", DataClient[10]).replace("XXXMATRICULAXXX", DataClient[13]);
-//
-//                                try {
-//                                    Template = Template.replace("XXXCIUU1XXX", DataClient[11].toString().split("/")[1]);
-//                                } catch (Exception e) {
-//                                    Template = Template.replace("XXXCIUU1XXX", "0");
-//                                }
+
+                    } catch (Exception e) {
+                    }
+                    try {
+                        //<editor-fold defaultstate="collapsed" desc="INITIAL MODULE">
+                        try {
+                            DataClient = ModuleCliente[0].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                            if (!DataClient[1].equals("N/A")) {
+                                if (DataClient[1].contains("Actuali")) {
+                                    Template = Template.replace("id=\"XXXCHECKACTXXX\">", "id=\"XXXCHECKACTXXX\" checked disabled>");
+                                } else if (DataClient[1].contains("Vincu")) {
+                                    Template = Template.replace("id=\"XXXCHECKVINXXX\">", "id=\"XXXCHECKVINXXX\" checked disabled>");
+                                }
+                                String[] dateArr = DataClient[2].toString().split("-");
+                                Template = Template.replace("XXXANIOXXX", dateArr[0]);
+                                Template = Template.replace("XXXMONTHXX", dateArr[1]);
+                                Template = Template.replace("XXXDAYXXX", dateArr[2]);
+                                if (DataClient[3].contains("Client")) {
+                                    Template = Template.replace("id=\"XXXCHECKCLIXXX\">", "id=\"XXXCHECKCLIXXX\" checked disabled>");
+                                    Template = Template.replace("XXXOTROXXX", "");
+
+                                } else if (DataClient[3].contains("Prove") || DataClient[3].contains("prove")) {
+                                    Template = Template.replace("id=\"XXXCHECKPROXXX\">", "id=\"XXXCHECKPROXXX\" checked disabled>");
+                                    Template = Template.replace("XXXOTROXXX", "");
+                                } else {
+                                    Template = Template.replace("XXXOTROXXX", "<span>" + DataClient[3] + "</span>");
+                                }
+                            } else {
+                                Template = Template.replace("XXXFECHADILIXXX", "").replace("XXXOTROXXX", "");
+                            }
+                        } catch (Exception e) {
+                            Template = Template.replace("XXXFECHADILIXXX", "").replace("XXXOTROXXX", "");
+
+                        }
+                        //</editor-fold>
+
+                        //<editor-fold defaultstate="collapsed" desc="GENERAL INFORMATION">
+                        try {
+                            DataClient = ModuleCliente[1].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                            if (!DataClient[1].equals("N/A")) {
+
+                                if (DataClient[2].toString().equals("CC")) {
+                                    Template = Template.replace("id=\"XXXTYPEDOC_CCXXX\">", "id=\"XXXTYPEDOC_CCXXX\" checked disabled>");
+                                } else if (DataClient[2].toString().equals("CE")) {
+                                    Template = Template.replace("id=\"XXXTYPEDOC_CEXXX\">", "id=\"XXXTYPEDOC_CEXXX\" checked disabled>");
+                                } else if (DataClient[2].toString().equals("NIT")) {
+                                    Template = Template.replace("id=\"XXXTYPEDOC_NITXXX\">", "id=\"XXXTYPEDOC_NITXXX\" checked disabled>");
+                                }
+
+                                Template = Template.replace("XXXRAZONSOCIALXXX", DataClient[1]).
+                                        replace("XXXNROIDENTIFICACIONXXX", DataClient[3]).replace("XXXDVXXX", DataClient[4]).
+                                        replace("XXXPAISXXX", DataClient[4]).replace("XXXCIUDADXXX", DataClient[5]).
+                                        replace("XXXDIRECCIONXXX", DataClient[6]).replace("XXXTELEFONOXXX", DataClient[7]).
+                                        replace("XXXEMAILXXX", DataClient[8]).replace("XXXPAGINAWEBXXX", DataClient[9]).
+                                        replace("XXXCODIGOPOSTALXXX", DataClient[10]).replace("XXXMATRICULAXXX", DataClient[13]);
+
+                                try {
+                                    Template = Template.replace("XXXCIUU1XXX", DataClient[10].toString().split("/")[1]);
+                                } catch (Exception e) {
+                                    Template = Template.replace("XXXCIUU1XXX", "0");
+                                }
+                                String[] dateArr = DataClient[12].toString().split("-");
+                                Template = Template.replace("XXXANIOMATXXX", dateArr[0]);
+                                Template = Template.replace("XXXMONTHMATXXX", dateArr[1]);
+                                Template = Template.replace("XXXDAYMATXXX", dateArr[2]);
 //                                try {
 //                                    Template = Template.replace("XXXCIUU2XXX", DataClient[12].toString().split("/")[1]);
 //                                } catch (Exception e) {
 //                                    Template = Template.replace("XXXCIUU2XXX", "0");
 //                                }
-//
-//                                if (DataClient[14].contains("Priv")) {
-//                                    Template = Template.replace("id=\"XXXPRIVADXXX\">", "id=\"XXXPRIVADXXX\" checked disabled>");
-//                                } else if (DataClient[14].contains("Public")) {
-//                                    Template = Template.replace("id=\"XXXPUBLICXXX\">", "id=\"XXXPUBLICXXX\" checked disabled>");
-//                                } else if (DataClient[14].contains("Mix")) {
-//                                    Template = Template.replace("id=\"XXXMIXTAXXX\">", "id=\"XXXMIXTAXXX\" checked disabled>");
-//                                }
+
+                                if (DataClient[13].contains("Priv")) {
+                                    Template = Template.replace("id=\"XXXPRIVADXXX\">", "id=\"XXXPRIVADXXX\" checked disabled>");
+                                } else if (DataClient[13].contains("Public")) {
+                                    Template = Template.replace("id=\"XXXPUBLICXXX\">", "id=\"XXXPUBLICXXX\" checked disabled>");
+                                } else if (DataClient[13].contains("Mix")) {
+                                    Template = Template.replace("id=\"XXXMIXTAXXX\">", "id=\"XXXMIXTAXXX\" checked disabled>");
+                                }
+                                Template = Template.replace("XXXACTIVIDADCOMERCIALXXX", DataClient[14]);
 //
 //                                if (DataClient[15].contains("Micr")) {
 //                                    Template = Template.replace("id=\"XXXMICROXXX\">", "id=\"XXXMICROXXX\" checked disabled>");
@@ -1418,824 +1438,880 @@ public class Tag_Document extends TagSupport {
 //                                } else if (DataClient[15].contains("Gran")) {
 //                                    Template = Template.replace("id=\"XXXGRANDXXX\">", "id=\"XXXGRANDXXX\" checked disabled>");
 //                                }
-//
-//                            } else {
-//                                Template = Template.replace("XXXRAZONSOCIALXXX", "").
-//                                        replace("XXXNROIDENTIFICACIONXXX", "").replace("XXXDVXXX", "").
-//                                        replace("XXXPAISXXX", "").replaceAll("XXXCIUDADXXX", "").
-//                                        replace("XXXDIRECCIONXXX", "").replaceAll("XXXTELEFONOXXX", "").
-//                                        replace("XXXEMAILXXX", "").replace("XXXPAGINAWEBXXX", "").
-//                                        replace("XXXCODIGOPOSTALXXX", "").replaceFirst("XXXCIUU1XXX", "").
-//                                        replace("XXXCIUU2XXX", "").replace("XXXMATRICULAXXX", "");
-//                            }
-//                        } catch (Exception e) {
-//                            Template = Template.replace("XXXRAZONSOCIALXXX", "").
-//                                    replace("XXXNROIDENTIFICACIONXXX", "").replace("XXXDVXXX", "").
-//                                    replace("XXXPAISXXX", "").replaceAll("XXXCIUDADXXX", "").
-//                                    replace("XXXDIRECCIONXXX", "").replaceAll("XXXTELEFONOXXX", "").
-//                                    replace("XXXEMAILXXX", "").replace("XXXPAGINAWEBXXX", "").
-//                                    replace("XXXCODIGOPOSTALXXX", "").replaceFirst("XXXCIUU1XXX", "").
-//                                    replace("XXXCIUU2XXX", "").replace("XXXMATRICULAXXX", "");
-//                        }
-//                        //</editor-fold>
-//
-//                        //<editor-fold defaultstate="collapsed" desc="CERTIFICATIONS">
-//                        try {
-//                            DataClient = ModuleCliente[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
-//                            if (!DataClient[1].equals("N/A")) {
-//                                String[] Other = {};
-//                                try {
-//                                    String[] datx = DataClient[1].toString().split("----");
-//                                    Other = datx[1].toString().replace("|||", "//").split("//");
-//                                    Template = Template.replace("XXXOTRO2XXX", Other[1]);
-//                                    Template = Template.replace("id=\"XXXOTRASXXX\">", "id=\"XXXOTRASXXX\" checked disabled>");
-//                                } catch (Exception e) {
-//                                    Template = Template.replace("XXXOTRO2XXX", "");
-//                                }
-//                                if (DataClient[1].contains("OEA")) {
-//                                    Template = Template.replace("id=\"XXXOEAXXX\">", "id=\"XXXOEAXXX\" checked disabled>");
-//                                } else if (DataClient[1].contains("CTPAT")) {
-//                                    Template = Template.replace("id=\"XXXCTPATXXX\">", "id=\"XXXCTPATXXX\" checked disabled>");
-//                                } else if (DataClient[1].contains("BASC")) {
-//                                    Template = Template.replace("id=\"XXXBASCXXX\">", "id=\"XXXBASCXXX\" checked disabled>");
-//                                } else if (DataClient[1].contains("ISO 28000")) {
-//                                    Template = Template.replace("id=\"XXXISO28000XXX\">", "id=\"XXXISO28000XXX\" checked disabled>");
-//                                } else if (DataClient[1].contains("ISO 9001")) {
-//                                    Template = Template.replace("id=\"XXXISO9001XXX\">", "id=\"XXXISO9001XXX\" checked disabled>");
-//                                }
-//                            } else {
-//                                Template = Template.replace("XXXOTRO2XXX", "");
-//                            }
-//                        } catch (Exception e) {
-//                            Template = Template.replace("XXXOTRO2XXX", "");
-//                        }
-//
-//                        //</editor-fold>
-//                        //<editor-fold defaultstate="collapsed" desc="TRIBUTARY INFORMATION">
-//                        try {
-//                            DataClient = ModuleCliente[3].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
-//                            if (!DataClient[1].equals("N/A")) {
-//                                if (DataClient[1].contains("Comu")) {
-//                                    Template = Template.replace("id=\"XXXCOMUNXXX\">", "id=\"XXXCOMUNXXX\" checked disabled>");
-//                                    Template = Template.replace("XXXOTRO3XXX", "");
-//                                } else if (DataClient[1].contains("Simpli")) {
-//                                    Template = Template.replace("id=\"XXXSIMPLIXXX\">", "id=\"XXXSIMPLIXXX\" checked disabled>");
-//                                    Template = Template.replace("XXXOTRO3XXX", "");
-//                                } else if (DataClient[1].contains("Contri")) {
-//                                    Template = Template.replace("id=\"XXXCONTRIBXXX\">", "id=\"XXXCONTRIBXXX\" checked disabled>");
-//                                    Template = Template.replace("XXXOTRO3XXX", "");
-//                                } else if (DataClient[1].contains("Gran_Contr")) {
-//                                    Template = Template.replace("id=\"XXXGRANCONTRIBXXX\">", "id=\"XXXGRANCONTRIBXXX\" checked disabled>");
-//                                    Template = Template.replace("XXXOTRO3XXX", "");
-//                                } else if (DataClient[1].contains("Simple")) {
-//                                    Template = Template.replace("id=\"XXXSIMPLEXXX\">", "id=\"XXXSIMPLEXXX\" checked disabled>");
-//                                    Template = Template.replace("XXXOTRO3XXX", "");
-//                                } else {
-//                                    Template = Template.replace("XXXOTRO3XXX", "");
-//                                }
-//                                if (DataClient[3].split("/")[0].contains("Si")) {
-//                                    Template = Template.replace("XXXRESOLUCIONXXX", DataClient[2]);
-//                                } else {
-//                                    Template = Template.replace("XXXRESOLUCIONXXX", "N/A");
-//                                }
-//
-//                                if (DataClient[3].split("/")[0].contains("No")) {
-//                                    Template = Template.replace("id=\"XXXAUTONOXXX\">", "id=\"XXXAUTONOXXX\" checked disabled>");
-//                                    Template = Template.replace("XXXOTRO3-1XXX", "");
-//                                    Template = Template.replace("XXXRETENCIONXXX", "");
-//                                } else if (DataClient[3].split("/")[0].contains("Si")) {
-//                                    Template = Template.replace("id=\"XXXAUTOSIXXX\">", "id=\"XXXAUTOSIXXX\" checked disabled>");
-//                                    if (DataClient[3].split("/")[1].contains("No")) {
-//                                        Template = Template.replace("id=\"XXXRETENOXXX\">", "id=\"XXXRETENOXXX\" checked disabled>");
-//                                        Template = Template.replace("XXXOTRO3-1XXX", "");
-//                                        Template = Template.replace("XXXRETENCIONXXX", "");
-//                                    } else if (DataClient[3].split("/")[1].contains("Si")) {
-//                                        Template = Template.replace("id=\"XXXRETESIXXX\">", "id=\"XXXRETESIXXX\" checked disabled>");
-//                                        Template = Template.replace("XXXRETENCIONXXX", DataClient[3].split("/")[2]);
-//                                        Template = Template.replace("XXXOTRO3-1XXX", "");
-//                                    }
-//                                } else if (DataClient[3].split("/")[0].contains("Otro")) {
-//                                    Template = Template.replace("XXXOTRO3-1XXX", DataClient[3].split("/")[1]);
-//                                    Template = Template.replace("id=\"XXXWHICHXXX\"", "id=\"XXXWHICHXXX\" checked disabled");
-//                                    Template = Template.replace("XXXRETENCIONXXX", "");
-//                                }
-//
-//                                if (DataClient[4].contains("CompraBienes")) {
-//                                    Template = Template.replace("id=\"XXXCOMBIENESXXX\">", "id=\"XXXCOMBIENESXXX\" checked disabled>");
-//                                    Template = Template.replace("XXXOTRO3-2XXX", "");
-//
-//                                } else if (DataClient[4].contains("CompraServ")) {
-//                                    Template = Template.replace("id=\"XXXCOMSERVIXXX\">", "id=\"XXXCOMSERVIXXX\" checked disabled>");
-//                                    Template = Template.replace("XXXOTRO3-2XXX", "");
-//
-//                                } else if (DataClient[4].contains("Consultoria")) {
-//                                    Template = Template.replace("id=\"XXXCONSULXXX\">", "id=\"XXXCONSULXXX\" checked disabled>");
-//                                    Template = Template.replace("XXXOTRO3-2XXX", "");
-//
-//                                } else if (DataClient[4].contains("SuminServic")) {
-//                                    Template = Template.replace("id=\"XXXSUMINSERVXXX\">", "id=\"XXXSUMINSERVXXX\" checked disabled>");
-//                                    Template = Template.replace("XXXOTRO3-2XXX", "");
-//
-//                                } else if (DataClient[4].contains("SuminBien")) {
-//                                    Template = Template.replace("id=\"XXXSUMINBIENESXXX\">", "id=\"XXXSUMINBIENESXXX\" checked disabled>");
-//                                    Template = Template.replace("XXXOTRO3-2XXX", "");
-//
-//                                } else if (DataClient[4].contains("Obras")) {
-//                                    Template = Template.replace("id=\"XXXOBRASXXX\">", "id=\"XXXOBRASXXX\" checked disabled>");
-//
-//                                } else if (DataClient[4].contains("Otro")) {
-//                                    Template = Template.replace("id=\"XXXOTRO3-3XXX\">", "id=\"XXXOTRO3-3XXX\" checked disabled>");
-//                                    Template = Template.replace("XXXOTRO3-2XXX", DataClient[4].split("/")[1]);
-//                                }
-//
-//                                Template = Template.replace("XXXICAXXX", DataClient[5]);
-//                                Template = Template.replace("XXXTRIBUTARIAXXX", DataClient[6]);
-//                                Template = Template.replace("XXXZONAFRANCAXXX", DataClient[7]);
-//
-//                            } else {
-//                                Template = Template.replace("XXXOTRO3XXX", "");
-//                                Template = Template.replace("XXXOTRO3-1XXX", "");
-//                                Template = Template.replace("XXXOTRO3-2XXX", "");
-//                                Template = Template.replace("XXXICAXXX", "");
-//                                Template = Template.replace("XXXRETENCIONXXX", "");
-//                                Template = Template.replace("XXXRESOLUCIONXXX", "");
-//                                Template = Template.replace("XXXZONAFRANCAXXX", "");
-//                                Template = Template.replace("XXXTRIBUTARIAXXX", "");
-//                            }
-//
-//                        } catch (Exception e) {
-//                            Template = Template.replace("XXXOTRO3XXX", "");
-//                            Template = Template.replace("XXXOTRO3-1XXX", "");
-//                            Template = Template.replace("XXXOTRO3-2XXX", "");
-//                            Template = Template.replace("XXXICAXXX", "");
-//                            Template = Template.replace("XXXRETENCIONXXX", "");
-//                            Template = Template.replace("XXXRESOLUCIONXXX", "");
-//                            Template = Template.replace("XXXZONAFRANCAXXX", "");
-//                            Template = Template.replace("XXXTRIBUTARIAXXX", "");
-//                        }
-//                        //</editor-fold>
-//
-//                        //<editor-fold defaultstate="collapsed" desc="PAYMENT CONDITIONS">
-//                        try {
-//                            DataClient = ModuleCliente[4].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
-//                            if (!DataClient[1].contains("N/A")) {
-//                                try {
-//                                    double aprove = Double.parseDouble(DataClient[1].toString());
-//
-//                                    Locale locale = new Locale("en", "US");
-//                                    NumberFormat Finalda = NumberFormat.getCurrencyInstance();
-//                                    String formattedAmount = Finalda.format(aprove);
-//                                    Template = Template.replace("XXXCUPOAPROBADOXXX", formattedAmount);
-//                                } catch (Exception e) {
-//                                    Template = Template.replace("XXXCUPOAPROBADOXXX", DataClient[1]);
-//                                }
-//
-//                                if (DataClient[2].contains("30")) {
-//                                    Template = Template.replace("id=\"XXXDIAS30\">", "id=\"XXXDIAS30\" checked disabled>");
-//                                    Template = Template.replace("XXXOTRO4XXX", "");
-//                                } else if (DataClient[2].contains("60")) {
-//                                    Template = Template.replace("id=\"XXXDIAS60\">", "id=\"XXXDIAS60\" checked disabled>");
-//                                    Template = Template.replace("XXXOTRO4XXX", "");
-//                                } else if (DataClient[2].contains("90")) {
-//                                    Template = Template.replace("id=\"XXXDIAS90\">", "id=\"XXXDIAS90\" checked disabled>");
-//                                    Template = Template.replace("XXXOTRO4XXX", "");
-//                                } else if (DataClient[2].contains("120")) {
-//                                    Template = Template.replace("id=\"XXXDIAS120\">", "id=\"XXXDIAS120\" checked disabled>");
-//                                    Template = Template.replace("XXXOTRO4XXX", "");
-//                                } else if (DataClient[2].contains("Otro")) {
-//                                    Template = Template.replace("id=\"XXXDIASOTROXXX\">", "id=\"XXXDIASOTROXXX\" checked disabled>");
-//                                    Template = Template.replace("XXXOTRO4XXX", DataClient[2].split("/")[1]);
-//                                } else {
-//                                    Template = Template.replace("XXXOTRO4XXX", "");
-//                                }
-//                                Template = Template.replace("XXXNOMBRESAPELLIDOS1XXX", DataClient[3]);
-//                                Template = Template.replace("XXXCARGOXXX", DataClient[4]);
-//                                Template = Template.replace("XXXNROTELEFNOXXX", DataClient[5]);
-//                                Template = Template.replace("XXXMAILFACTURAXXX", DataClient[6]);
-//                            } else {
-//                                Template = Template.replace("XXXOTRO4XXX", "");
-//                                Template = Template.replace("XXXNOMBRESAPELLIDOS1XXX", "");
-//                                Template = Template.replace("XXXCARGOXXX", "");
-//                                Template = Template.replace("XXXNROTELEFNOXXX", "");
-//                                Template = Template.replace("XXXMAILFACTURAXXX", "");
-//                                Template = Template.replace("XXXCUPOAPROBADOXXX", "");
-//                            }
-//                        } catch (Exception e) {
-//                            Template = Template.replace("XXXOTRO4XXX", "");
-//                            Template = Template.replace("XXXNOMBRESAPELLIDOS1XXX", "");
-//                            Template = Template.replace("XXXCARGOXXX", "");
-//                            Template = Template.replace("XXXNROTELEFNOXXX", "");
-//                            Template = Template.replace("XXXMAILFACTURAXXX", "");
-//                            Template = Template.replace("XXXCUPOAPROBADOXXX", "");
-//                        }
-//                        //</editor-fold>
-//
-//                        //<editor-fold defaultstate="collapsed" desc="LEGAL REPRESENTATIVE">
-//                        try {
-//                            DataClient = ModuleCliente[5].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
-//                            if (!DataClient[1].contains("N/A")) {
-//                                Template = Template.replace("XXXNOMBREREPRESENTANTEXXX", DataClient[1]);
-//                                Template = Template.replace("XXXAPELLIDOREPRESENTANTEXXX", DataClient[2]);
-//
-//                                if (DataClient[3].split("/")[0].contains("CC")) {
-//                                    Template = Template.replace("id=\"XXXTYPELEGALCCXXX\">", "id=\"XXXTYPELEGALCCXXX\" checked disabled>");
-//
-//                                } else if (DataClient[3].split("/")[0].contains("CE")) {
-//                                    Template = Template.replace("id=\"XXXTYPELEGALCEXXX\">", "id=\"XXXTYPELEGALCEXXX\" checked disabled>");
-//
-//                                } else if (DataClient[3].split("/")[0].contains("pp")) {
-//                                    Template = Template.replace("id=\"XXXTYPELEGALPPXXX\">", "id=\"XXXTYPELEGALPPXXX\" checked disabled>");
-//                                }
-//                                Template = Template.replace("XXXNRODOCREPRESNTANTEXXX", DataClient[3].split("/")[1]);
-//                                Template = Template.replace("XXXFECHAYLUGARXXX", DataClient[4].replace("/", " - "));
-//                                Template = Template.replace("XXXTELEFONOCELULARXXX", DataClient[5]);
-//                                Template = Template.replace("XXXMAILREPRESENTANTEXXX", DataClient[6]);
-//
-//                            } else {
-//                                Template = Template.replace("XXXNOMBREREPRESENTANTEXXX", "");
-//                                Template = Template.replace("XXXAPELLIDOREPRESENTANTEXXX", "");
-//                                Template = Template.replace("XXXNRODOCREPRESNTANTEXXX", "");
-//                                Template = Template.replace("XXXFECHAYLUGARXXX", "");
-//                                Template = Template.replace("XXXTELEFONOCELULARXXX", "");
-//                                Template = Template.replace("XXXMAILREPRESENTANTEXXX", "");
-//
-//                            }
-//                        } catch (Exception e) {
-//                            Template = Template.replace("XXXNOMBREREPRESENTANTEXXX", "");
-//                            Template = Template.replace("XXXAPELLIDOREPRESENTANTEXXX", "");
-//                            Template = Template.replace("XXXNRODOCREPRESNTANTEXXX", "");
-//                            Template = Template.replace("XXXFECHAYLUGARXXX", "");
-//                            Template = Template.replace("XXXTELEFONOCELULARXXX", "");
-//                            Template = Template.replace("XXXMAILREPRESENTANTEXXX", "");
-//                        }
-//
-//                        //</editor-fold>
-//                        //<editor-fold defaultstate="collapsed" desc="SHAREHOLDING STRUCTURE">
-//                        try {
-//                            DataClient = ModuleCliente[6].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
-//                            if (!DataClient[1].contains("N/A")) {
-//
-//                                Template = Template.replace("XXXNOMBREACCIONARIOXXX", DataClient[1].split("/")[0]);
-//                                if (DataClient[1].split("/")[1].contains("PP")) {
-//                                    Template = Template.replace("id=\"XXXACCIONTIPOPPXXX\">", "id=\"XXXACCIONTIPOPPXXX\" checked disabled>");
-//                                } else if (DataClient[1].split("/")[1].contains("CC")) {
-//                                    Template = Template.replace("id=\"XXXACCIONTIPOCCXXX\">", "id=\"XXXACCIONTIPOCCXXX\" checked disabled>");
-//                                } else if (DataClient[1].split("/")[1].contains("CE")) {
-//                                    Template = Template.replace("id=\"XXXACCIONTIPOCEXXX\">", "id=\"XXXACCIONTIPOCEXXX\" checked disabled>");
-//                                } else if (DataClient[1].split("/")[1].contains("NIT")) {
-//                                    Template = Template.replace("id=\"XXXACCIONTIPONITXXX\">", "id=\"XXXACCIONTIPONITXXX\" checked disabled>");
-//                                }
-//                                Template = Template.replace("XXXIDENTIFICACIONACCIONARIOXXX", DataClient[1].split("/")[2]);
-//                                if (DataClient[1].split("/")[3].contains("Si")) {
-//                                    Template = Template.replace("XXXPEPSIXXX", "X");
-//                                    Template = Template.replace("XXXPEPNOXXX", "");
-//                                } else if (DataClient[1].split("/")[3].contains("No")) {
-//                                    Template = Template.replace("XXXPEPSIXXX", "");
-//                                    Template = Template.replace("XXXPEPNOXXX", "X");
-//                                } else {
-//                                    Template = Template.replace("XXXPEPSIXXX", "");
-//                                    Template = Template.replace("XXXPEPNOXXX", "");
-//                                }
-//                                Template = Template.replace("XXXPARTICIAPACIONACCIONXXX", DataClient[1].split("/")[4] + "%");
-//
-//                                if (DataClient.length > 2) {
-//                                    for (int i = 2; i < DataClient.length; i++) {
-//                                        String[] Accionaries = DataClient[i].split("/");
-//                                        String NewContent = "</td></tr><td colspan=\"2\" > XXXNOMBREACCIONARIOXXX </td>\n"
-//                                                + "<td colspan=\"2\" > \n"
-//                                                + " PP  <input type=\"checkbox\" name=\"\" id=\"XXXACCIONTIPOPPXXX\">\n"
-//                                                + " CC  <input type=\"checkbox\" name=\"\" id=\"XXXACCIONTIPOCCXXX\">\n"
-//                                                + " CE  <input type=\"checkbox\" name=\"\" id=\"XXXACCIONTIPOCEXXX\">\n"
-//                                                + " NIT  <input type=\"checkbox\" name=\"\" id=\"XXXACCIONTIPONITXXX\">\n"
-//                                                + " </td>\n"
-//                                                + "<td colspan=\"2\" > XXXIDENTIFICACIONACCIONARIOXXX  </td>\n"
-//                                                + "<td colspan=\"1\" style=\"width: 90px;\"> XXXPEPSIXXX </td>\n"
-//                                                + "<td colspan=\"1\" style=\"width: 90px;\"> XXXPEPNOXXX </td>\n"
-//                                                + "<td colspan=\"1\" > XXXPARTICIAPACIONACCIONXXX </td>+</tr>";
-//
-//                                        NewContent = NewContent.replace("XXXNOMBREACCIONARIOXXX", Accionaries[0]);
-//                                        if (Accionaries[1].contains("PP")) {
-//                                            NewContent = NewContent.replace("id=\"XXXACCIONTIPOPPXXX\">", "id=\"XXXACCIONTIPOPPXXX\" checked disabled>");
-//                                        } else if (Accionaries[1].contains("CC")) {
-//                                            NewContent = NewContent.replace("id=\"XXXACCIONTIPOCCXXX\">", "id=\"XXXACCIONTIPOCCXXX\" checked disabled>");
-//                                        } else if (Accionaries[1].contains("CE")) {
-//                                            NewContent = NewContent.replace("id=\"XXXACCIONTIPOCEXXX\">", "id=\"XXXACCIONTIPOCEXXX\" checked disabled>");
-//                                        } else if (Accionaries[1].contains("NIT")) {
-//                                            NewContent = NewContent.replace("id=\"XXXACCIONTIPONITXXX\">", "id=\"XXXACCIONTIPONITXXX\" checked disabled>");
-//                                        }
-//                                        NewContent = NewContent.replace("XXXIDENTIFICACIONACCIONARIOXXX", Accionaries[2]);
-//                                        if (Accionaries[3].contains("Si")) {
-//                                            NewContent = NewContent.replace("XXXPEPSIXXX", "X");
-//                                            NewContent = NewContent.replace("XXXPEPNOXXX", "");
-//                                        } else if (Accionaries[3].contains("No")) {
-//                                            NewContent = NewContent.replace("XXXPEPSIXXX", "");
-//                                            NewContent = NewContent.replace("XXXPEPNOXXX", "X");
-//                                        } else {
-//                                            NewContent = NewContent.replace("XXXPEPSIXXX", "");
-//                                            NewContent = NewContent.replace("XXXPEPNOXXX", "");
-//                                        }
-//                                        NewContent = NewContent.replace("XXXPARTICIAPACIONACCIONXXX", Accionaries[4] + "%");
-//
-//                                        if (i == DataClient.length - 1) {
-//                                            NewContent = NewContent.replace("</td>+</tr>", "</td></tr>");
-//                                            Template = Template.replace("</td>+</tr>", NewContent);
-//                                        } else {
-//                                            Template = Template.replace("</td>+</tr>", NewContent);
-//                                        }
-//                                    }
-//                                } else {
-//                                    Template = Template.replace("</td>+</tr>", "</td></tr>");
-//                                }
-//                            } else {
-//                                Template = Template.replace("</td>+</tr>", "</td></tr>");
-//                                Template = Template.replace("XXXNOMBREACCIONARIOXXX", "");
-//                                Template = Template.replace("XXXIDENTIFICACIONACCIONARIOXXX", "");
-//                                Template = Template.replace("XXXPARTICIAPACIONACCIONXXX", "");
-//                                Template = Template.replace("XXXPEPSIXXX", "");
-//                                Template = Template.replace("XXXPEPNOXXX", "");
-//                            }
-//                        } catch (Exception e) {
-//                            Template = Template.replace("</td>+</tr>", "</td></tr>");
-//                            Template = Template.replace("XXXNOMBREACCIONARIOXXX", "");
-//                            Template = Template.replace("XXXIDENTIFICACIONACCIONARIOXXX", "");
-//                            Template = Template.replace("XXXPARTICIAPACIONACCIONXXX", "");
-//                            Template = Template.replace("XXXPEPSIXXX", "");
-//                            Template = Template.replace("XXXPEPNOXXX", "");
-//                        }
-////</editor-fold>
-//
-//                        //<editor-fold defaultstate="collapsed" desc="FINAL BENEFICIARIES">
-//                        try {
-//                            DataClient = ModuleCliente[7].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
-//                            if (!DataClient[1].contains("N/A")) {
-//                                Template = Template.replace("XXXNOMBREBENEFICIARIOXXX", DataClient[1].split("/")[0]);
-//                                if (DataClient[1].split("/")[1].contains("PP")) {
-//                                    Template = Template.replace("XXXTIPODOC1XXX", "X");
-//                                    Template = Template.replace("XXXTIPODOC2XXX", "");
-//                                    Template = Template.replace("XXXTIPODOC3XXX", "");
-//                                    Template = Template.replace("XXXTIPODOC4XXX", "");
-//                                } else if (DataClient[1].split("/")[1].contains("CC")) {
-//                                    Template = Template.replace("XXXTIPODOC1XXX", "");
-//                                    Template = Template.replace("XXXTIPODOC2XXX", "X");
-//                                    Template = Template.replace("XXXTIPODOC3XXX", "");
-//                                    Template = Template.replace("XXXTIPODOC4XXX", "");
-//                                } else if (DataClient[1].split("/")[1].contains("CE")) {
-//                                    Template = Template.replace("XXXTIPODOC1XXX", "");
-//                                    Template = Template.replace("XXXTIPODOC2XXX", "");
-//                                    Template = Template.replace("XXXTIPODOC3XXX", "X");
-//                                    Template = Template.replace("XXXTIPODOC4XXX", "");
-//                                } else if (DataClient[1].split("/")[1].contains("NIT")) {
-//                                    Template = Template.replace("XXXTIPODOC1XXX", "");
-//                                    Template = Template.replace("XXXTIPODOC2XXX", "");
-//                                    Template = Template.replace("XXXTIPODOC3XXX", "");
-//                                    Template = Template.replace("XXXTIPODOC4XXX", "X");
-//                                }
-//
-//                                if (DataClient[1].split("/")[3].contains("Si")) {
-//                                    Template = Template.replace("XXXPEPSI2XXX", "X");
-//                                    Template = Template.replace("XXXPEPNO2XXX", "");
-//                                } else if (DataClient[1].split("/")[3].contains("No")) {
-//                                    Template = Template.replace("XXXPEPSI2XXX", "");
-//                                    Template = Template.replace("XXXPEPNO2XXX", "X");
-//                                }
-//                                Template = Template.replace("XXXNRODOCFINALXXX", DataClient[1].split("/")[2]);
-//
-//                                if (DataClient.length > 2) {
-//                                    for (int i = 2; i < DataClient.length; i++) {
-//                                        String[] Accionaries = DataClient[i].split("/");
-//                                        String NewContent = "</td></tr><tr>\n"
-//                                                + "        <td colspan=\"2\"> XXXNOMBREBENEFICIARIOXXX </td>\n"
-//                                                + "        <td colspan=\"1\"> XXXTIPODOC1XXX </td>\n"
-//                                                + "        <td colspan=\"1\"> XXXTIPODOC2XXX </td>\n"
-//                                                + "        <td colspan=\"1\"> XXXTIPODOC3XXX </td>\n"
-//                                                + "        <td colspan=\"1\"> XXXTIPODOC4XXX </td>\n"
-//                                                + "        <td colspan=\"1\"> XXXPEPSI2XXX </td>\n"
-//                                                + "        <td colspan=\"1\"> XXXPEPNO2XXX </td>\n"
-//                                                + "        <td colspan=\"1\"> XXXNRODOCFINALXXX </td>*</tr>";
-//
-//                                        NewContent = NewContent.replace("XXXNOMBREBENEFICIARIOXXX", Accionaries[0]);
-//                                        if (Accionaries[1].contains("PP")) {
-//                                            NewContent = NewContent.replace("XXXTIPODOC1XXX", "X");
-//                                            NewContent = NewContent.replace("XXXTIPODOC2XXX", "");
-//                                            NewContent = NewContent.replace("XXXTIPODOC3XXX", "");
-//                                            NewContent = NewContent.replace("XXXTIPODOC4XXX", "");
-//                                        } else if (Accionaries[1].contains("CC")) {
-//                                            NewContent = NewContent.replace("XXXTIPODOC1XXX", "");
-//                                            NewContent = NewContent.replace("XXXTIPODOC2XXX", "X");
-//                                            NewContent = NewContent.replace("XXXTIPODOC3XXX", "");
-//                                            NewContent = NewContent.replace("XXXTIPODOC4XXX", "");
-//                                        } else if (Accionaries[1].contains("CE")) {
-//                                            NewContent = NewContent.replace("XXXTIPODOC1XXX", "");
-//                                            NewContent = NewContent.replace("XXXTIPODOC2XXX", "");
-//                                            NewContent = NewContent.replace("XXXTIPODOC3XXX", "X");
-//                                            NewContent = NewContent.replace("XXXTIPODOC4XXX", "");
-//                                        } else if (Accionaries[1].contains("NIT")) {
-//                                            NewContent = NewContent.replace("XXXTIPODOC1XXX", "");
-//                                            NewContent = NewContent.replace("XXXTIPODOC2XXX", "");
-//                                            NewContent = NewContent.replace("XXXTIPODOC3XXX", "");
-//                                            NewContent = NewContent.replace("XXXTIPODOC4XXX", "X");
-//                                        }
-//
-//                                        if (Accionaries[3].contains("Si")) {
-//                                            NewContent = NewContent.replace("XXXPEPSI2XXX", "X");
-//                                            NewContent = NewContent.replace("XXXPEPNO2XXX", "");
-//                                        } else if (Accionaries[3].contains("No")) {
-//                                            NewContent = NewContent.replace("XXXPEPSI2XXX", "");
-//                                            NewContent = NewContent.replace("XXXPEPNO2XXX", "X");
-//                                        }
-//                                        NewContent = NewContent.replace("XXXNRODOCFINALXXX", Accionaries[2]);
-//
-//                                        if (i == DataClient.length - 1) {
-//                                            NewContent = NewContent.replace("</td>*</tr>", "</td></tr>");
-//                                            Template = Template.replace("</td>*</tr>", NewContent);
-//                                        } else {
-//                                            Template = Template.replace("</td>*</tr>", NewContent);
-//                                        }
-//                                    }
-//                                } else {
-//                                    Template = Template.replace("</td>*</tr>", "</td></tr>");
-//                                }
-//                            } else {
-//                                Template = Template.replace("</td>*</tr>", "</td></tr>");
-//                                Template = Template.replace("XXXNOMBREBENEFICIARIOXXX", "");
-//                                Template = Template.replace("XXXTIPODOC1XXX", "");
-//                                Template = Template.replace("XXXTIPODOC2XXX", "");
-//                                Template = Template.replace("XXXTIPODOC3XXX", "");
-//                                Template = Template.replace("XXXTIPODOC4XXX", "");
-//                                Template = Template.replace("XXXPEPSI2XXX", "");
-//                                Template = Template.replace("XXXPEPNO2XXX", "");
-//                                Template = Template.replace("XXXNRODOCFINALXXX", "");
-//                            }
-//                        } catch (Exception e) {
-//                            Template = Template.replace("</td>*</tr>", "</td></tr>");
-//                            Template = Template.replace("XXXNOMBREBENEFICIARIOXXX", "");
-//                            Template = Template.replace("XXXTIPODOC1XXX", "");
-//                            Template = Template.replace("XXXTIPODOC2XXX", "");
-//                            Template = Template.replace("XXXTIPODOC3XXX", "");
-//                            Template = Template.replace("XXXTIPODOC4XXX", "");
-//                            Template = Template.replace("XXXPEPSI2XXX", "");
-//                            Template = Template.replace("XXXPEPNO2XXX", "");
-//                            Template = Template.replace("XXXNRODOCFINALXXX", "");
-//                        }
-//                        //</editor-fold>
-//
-//                        //<editor-fold defaultstate="collapsed" desc="FINANCIAL INFORMATION">
-//                        try {
-//                            DataClient = ModuleCliente[8].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
-//                            if (!DataClient[1].contains("N/A")) {
-//                                Template = Template.replace("XXXENTIDADFINANXXX", DataClient[1]);
-//                                if (DataClient[2].contains("Ahorr")) {
-//                                    Template = Template.replace("id=\"XXXCUENTAHORRXXX\">", "id=\"XXXCUENTAHORRXXX\" checked disabled>");
-//                                } else if (DataClient[2].contains("Corrien")) {
-//                                    Template = Template.replace("id=\"XXXCUENTACORRIEXXX\">", "id=\"XXXCUENTACORRIEXXX\" checked disabled>");
-//                                }
-//                                Template = Template.replace("XXXNROCUENTAFIANXXX", DataClient[3]);
-//                                Template = Template.replace("XXXORIGENRECURSOSXXX", DataClient[4]);
-//                                Template = Template.replace("XXXTIPOMONEDAXXX", DataClient[5]);
-//                                Template = Template.replace("XXXACTIVOSXXX", DataClient[6]);
-//                                Template = Template.replace("XXXPASIVOSXXX", DataClient[7]);
-//                                Template = Template.replace("XXXPATRIMONIOXXX", DataClient[8]);
-//                                Template = Template.replace("XXXINGRESOSXXX", DataClient[9]);
-//                                Template = Template.replace("XXXEGRESOSXXX", DataClient[10]);
-//                                Template = Template.replace("XXXOTROSINGRESOSXXX", DataClient[11]);
-//                                Template = Template.replace("XXXCONCEOTOSOTROSINGRESOSXXX", DataClient[12]);
-//                                Template = Template.replace("XXXANIOREPORTEXXX", DataClient[13]);
-//                                Template = Template.replace("XXXUNIDADREPORTEXXX", DataClient[14]);
-//
-//                            } else {
-//                                Template = Template.replace("XXXENTIDADFINANXXX", "");
-//                                Template = Template.replace("XXXNROCUENTAFIANXXX", "");
-//                                Template = Template.replace("XXXORIGENRECURSOSXXX", "");
-//                                Template = Template.replace("XXXTIPOMONEDAXXX", "");
-//                                Template = Template.replace("XXXACTIVOSXXX", "");
-//                                Template = Template.replace("XXXPASIVOSXXX", "");
-//                                Template = Template.replace("XXXPATRIMONIOXXX", "");
-//                                Template = Template.replace("XXXINGRESOSXXX", "");
-//                                Template = Template.replace("XXXEGRESOSXXX", "");
-//                                Template = Template.replace("XXXOTROSINGRESOSXXX", "");
-//                                Template = Template.replace("XXXANIOREPORTEXXX", "");
-//                                Template = Template.replace("XXXUNIDADREPORTEXXX", "");
-//                                Template = Template.replace("XXXCONCEOTOSOTROSINGRESOSXXX", "");
-//                            }
-//                        } catch (Exception e) {
-//                            Template = Template.replace("XXXENTIDADFINANXXX", "");
-//                            Template = Template.replace("XXXNROCUENTAFIANXXX", "");
-//                            Template = Template.replace("XXXORIGENRECURSOSXXX", "");
-//                            Template = Template.replace("XXXTIPOMONEDAXXX", "");
-//                            Template = Template.replace("XXXACTIVOSXXX", "");
-//                            Template = Template.replace("XXXPASIVOSXXX", "");
-//                            Template = Template.replace("XXXPATRIMONIOXXX", "");
-//                            Template = Template.replace("XXXINGRESOSXXX", "");
-//                            Template = Template.replace("XXXEGRESOSXXX", "");
-//                            Template = Template.replace("XXXOTROSINGRESOSXXX", "");
-//                            Template = Template.replace("XXXCONCEOTOSOTROSINGRESOSXXX", "");
-//                            Template = Template.replace("XXXANIOREPORTEXXX", "");
-//                            Template = Template.replace("XXXUNIDADREPORTEXXX", "");
-//                        }
-//                        //</editor-fold>
-//
-//                        //<editor-fold defaultstate="collapsed" desc="PEP">
-//                        try {
-//                            DataClient = ModuleCliente[9].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
-//                            if (!DataClient[1].contains("N/A")) {
-//                                if (DataClient[1].contains("Si")) {
-//                                    Template = Template.replace("id=\"XXXPERSONAPEPSIXXX\">", "id=\"XXXPERSONAPEPSIXXX\" checked disabled>");
-//                                    for (int i = 1; i <= 6; i++) {
-//                                        if (DataClient[i + 1].contains("Si")) {
-//                                            Template = Template.replace("XXXPREGUNTASI" + i + "XXX", "X");
-//                                            Template = Template.replace("XXXPREGUNTANO" + i + "XXX", "");
-//                                            Template = Template.replace("XXXOBS" + i + "XXX", DataClient[i + 1].split("/")[1]);
-//                                        } else {
-//                                            Template = Template.replace("XXXPREGUNTASI" + i + "XXX", "");
-//                                            Template = Template.replace("XXXPREGUNTANO" + i + "XXX", "X");
-//                                            Template = Template.replace("XXXOBS" + i + "XXX", DataClient[i + 1].split("/")[1]);
-//                                        }
-//                                    }
-//                                } else if (DataClient[1].contains("No")) {
-//                                    Template = Template.replace("id=\"XXXPERSONAPEPNOXXX\">", "id=\"XXXPERSONAPEPSIXXX\" checked disabled>");
-//                                    for (int i = 1; i <= 6; i++) {
-//                                        Template = Template.replace("XXXPREGUNTASI" + i + "XXX", "");
-//                                        Template = Template.replace("XXXPREGUNTANO" + i + "XXX", "");
-//                                        Template = Template.replace("XXXOBS" + i + "XXX", "");
-//                                    }
-//                                }
-//                            } else {
-//                                for (int i = 1; i <= 6; i++) {
-//                                    Template = Template.replace("XXXPREGUNTASI" + i + "XXX", "");
-//                                    Template = Template.replace("XXXPREGUNTANO" + i + "XXX", "");
-//                                    Template = Template.replace("XXXOBS" + i + "XXX", "");
-//                                }
-//                            }
-//                        } catch (Exception e) {
-//                            for (int i = 1; i <= 6; i++) {
-//                                Template = Template.replace("XXXPREGUNTASI" + i + "XXX", "");
-//                                Template = Template.replace("XXXPREGUNTANO" + i + "XXX", "");
-//                                Template = Template.replace("XXXOBS" + i + "XXX", "");
-//                            }
-//                        }
-//                        //</editor-fold>
-//
-//                        //<editor-fold defaultstate="collapsed" desc="INTERNATIONAL OPERATIONS">
-//                        try {
-//                            DataClient = ModuleCliente[10].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
-//                            if (!DataClient[1].contains("N/A")) {
-//                                if (DataClient[1].contains("Si")) {
-//                                    Template = Template.replace("id=\"XXXEXTRANJERASIXXX\">", "id=\"XXXEXTRANJERASIXXX\" checked disabled>");
-//                                    Template = Template.replace("XXXOTRO10XXX", DataClient[1].split("/")[1]);
-//                                } else if (DataClient[1].contains("No")) {
-//                                    Template = Template.replace("id=\"XXXEXTRANJERANOXXX\">", "id=\"XXXEXTRANJERANOXXX\" checked disabled>");
-//                                    Template = Template.replace("XXXOTRO10XXX", DataClient[1].split("/")[1]);
-//                                } else {
-//                                    Template = Template.replace("XXXOTRO10XXX", "");
-//                                }
-//
-//                                if (DataClient[2].contains("Si")) {
-//                                    Template = Template.replace("id=\"XXXMONEYEXTSIXXX\">", "id=\"XXXMONEYEXTSIXXX\" checked disabled>");
-//                                    Template = Template.replace("XXXOTRO10-1XXX", DataClient[2].split("/")[1]);
-//                                } else if (DataClient[2].contains("No")) {
-//                                    Template = Template.replace("id=\"XXXMONEYEXTNOXXX\">", "id=\"XXXMONEYEXTNOXXX\" checked disabled>");
-//                                    Template = Template.replace("XXXOTRO10-1XXX", DataClient[2].split("/")[1]);
-//                                } else {
-//                                    Template = Template.replace("XXXOTRO10-1XXX", "");
-//                                }
-//                            } else {
-//                                Template = Template.replace("XXXOTRO10-1XXX", "");
-//                                Template = Template.replace("XXXOTRO10XXX", "");
-//                            }
-//                        } catch (Exception e) {
-//                            Template = Template.replace("XXXOTRO10-1XXX", "");
-//                            Template = Template.replace("XXXOTRO10XXX", "");
-//                        }
-//                        //</editor-fold>
-//
-//                        //<editor-fold defaultstate="collapsed" desc="SIGNATURE CLIENT">
-//                        try {
-//                            DataClient = ModuleCliente[14].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
-//                            if (!DataClient[1].contains("N/A")) {
-//                                lst_document = DocumentJpa.ConsultDocumentSignatureId(IdDoc);
-//                                if (lst_document != null) {
-//                                    Object[] ObjSig = (Object[]) lst_document.get(0);
-//                                    int TypeSig = Integer.parseInt(ObjSig[2].toString());
-//                                    String Signature = ObjSig[3].toString();
-//                                    Template = Template.replace("XXXFIRMACLIENTEXXX", "<canvas id='signature-canvas' width='400' height='200'></canvas>");
-//                                    if (TypeSig == 1) {
-//                                        //<editor-fold defaultstate="collapsed" desc="SIGNATURE DRAW">
-//                                        out.print("<input type='hidden' id='coordenadas-hidden' value='" + Signature + "'>");
-//                                        out.print("<script>");
-//                                        out.print("function dibujarFirma() { "
-//                                                + "        const firmaGuardadaCanvas = document.getElementById('signature-canvas'); "
-//                                                + "        const firmaGuardadaContext = firmaGuardadaCanvas.getContext('2d'); "
-//                                                + "        const hiddenInput = document.getElementById('coordenadas-hidden'); "
-//                                                + "        const coordinatesJSON = hiddenInput.value;"
-//                                                + "        const coordinates = JSON.parse(coordinatesJSON); "
-//                                                + "        firmaGuardadaContext.clearRect(0, 0, firmaGuardadaCanvas.width, firmaGuardadaCanvas.height); "
-//                                                + "        firmaGuardadaContext.lineWidth = 2; "
-//                                                + "        firmaGuardadaContext.lineCap = 'round'; "
-//                                                + "        firmaGuardadaContext.beginPath(); "
-//                                                + "        firmaGuardadaContext.moveTo(coordinates[0].x, coordinates[0].y); "
-//                                                + "        for (let i = 1; i < coordinates.length; i++) { "
-//                                                + "            firmaGuardadaContext.lineTo(coordinates[i].x, coordinates[i].y); "
-//                                                + "        } "
-//                                                + "        firmaGuardadaContext.stroke(); "
-//                                                + "    } "
-//                                                + "    document.addEventListener('DOMContentLoaded', function() { "
-//                                                + "        dibujarFirma(); "
-//                                                + "    });");
-//                                        out.print("</script>");
-////</editor-fold>
-//                                    } else if (TypeSig == 2) {
-//                                        //<editor-fold defaultstate="collapsed" desc="SIGNATURE WRITE">
-//
-//                                        out.print("<div class='col-lg-12' data-toggle='tooltip' data-placemente='top' title=''>");
-//                                        out.print("<input type='hidden' class='form-control'  id='name-input' value='" + Signature.split("/")[0] + "'>");
-//                                        out.print("<input type='hidden' class='form-control'  id='font-style-select' value='" + Signature.split("/")[1] + "'>");
-//                                        out.print("</div>");
-//                                        out.print("<script>");
-//                                        out.print("document.addEventListener('DOMContentLoaded', function() { "
-//                                                + "        const textCanvas = document.getElementById('signature-canvas'); "
-//                                                + "        const nameInput = document.getElementById('name-input'); "
-//                                                + "        const fontStyleInput = document.getElementById('font-style-select'); "
-//                                                + "        const contextText = textCanvas.getContext('2d'); "
-//                                                + "    if (nameInput.value) { "
-//                                                + "        updateText(); "
-//                                                + "    } "
-//                                                + "    }); "
-//                                                + "    function updateText() { "
-//                                                + "        const name = nameInput.value; "
-//                                                + "        const fontStyle = fontStyleInput.value; "
-//                                                + "        contextText.clearRect(0, 0, textCanvas.width, textCanvas.height); "
-//                                                + "        contextText.font = `bold 60px ${fontStyle}`; "
-//                                                + "        contextText.fillText(name, 80, 100); "
-//                                                + "} "
-//                                                + "   ");
-//                                        out.print("</script>");
-//
-////</editor-fold>
-//                                    } else if (TypeSig == 3) {
-//                                        //<editor-fold defaultstate="collapsed" desc="SIGNATURE IMAGE">
-//                                        Template = Template.replace("<canvas id='signature-canvas' width='400' height='200'></canvas>", "<img src='Interfaz/Contenido/SagrilaftDocs/Signature/" + Signature + "' width='250px' style='margin-left: 25%;'>");
-////                                        out.print("<input type='hidden' class='form-control' id='image-path-input' value='Interfaz/Contenido/SagrilaftDocs/Signature/" + Signature + "' >");
-//                                        out.print("<script>");
-//                                        out.print("document.addEventListener('DOMContentLoaded', function() { "
-//                                                + "        const imagePathInput = document.getElementById('image-path-input'); "
-//                                                + "        const imageCanvas = document.getElementById('signature-canvas'); "
-//                                                + "        const contextImage = imageCanvas.getContext('2d'); "
-//                                                + "        const imagePath = imagePathInput.value; "
-//                                                + " "
-//                                                + "        const image = new Image(); "
-//                                                + "        image.onload = function() { "
-//                                                + "            contextImage.clearRect(0, 0, imageCanvas.width, imageCanvas.height); "
-//                                                + "            contextImage.drawImage(image, 0, 0, imageCanvas.width, imageCanvas.height); "
-//                                                + "        }; "
-//                                                + "        image.src = imagePath; "
-//                                                + "    });");
-//                                        out.print("</script>");
-////</editor-fold>
-//                                    }
-//                                    Template = Template.replace("XXXNOMBRECLIENTEXXX", DataClient[1]);
-//                                    Template = Template.replace("XXXIDENTIFICACIONCLIENTEXXX", DataClient[2]);
-//
-//                                }
-//                            } else {
-//                                Template = Template.replace("XXXFIRMACLIENTEXXX", "<i class='text-secondary'>Firma cliente</i>");
-//                                Template = Template.replace("XXXNOMBRECLIENTEXXX", "");
-//                                Template = Template.replace("XXXIDENTIFICACIONCLIENTEXXX", "");
-//
-//                            }
-//                        } catch (Exception e) {
-//                            Template = Template.replace("XXXFIRMACLIENTEXXX", "<i class='text-secondary'>Firma cliente</i>");
-//                            Template = Template.replace("XXXNOMBRECLIENTEXXX", "");
-//                            Template = Template.replace("XXXIDENTIFICACIONCLIENTEXXX", "");
-//                        }
-//
-//                        //</editor-fold>
-//                        //<editor-fold defaultstate="collapsed" desc="SIGNATURE BOSS">
-//                        try {
-//                            DataClient = ModuleCliente[15].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
-//                            if (!DataClient[1].contains("N/A")) {
-//                                Template = Template.replace("XXXFECHAPLASTXXX", DataClient[1]);
-//                                Template = Template.replace("XXXFUNCIONARIOPLASTXXX", DataClient[2]);
-//                                Template = Template.replace("XXXNROIDENTPLASTXXX", DataClient[3]);
-//                                Template = Template.replace("XXXFIRMAPLASTXXX", "<canvas id='signature-canvasBoss' width='400' height='200'></canvas>");
-//                                Template = Template.replace("XXXCARGOPLASTXXX", DataClient[4]);
-//                                Template = Template.replace("XXXCONSULTAXXX", DataClient[5]);
-//                                Template = Template.replace("XXXFIRMAGERENTEXXX", "N/A");
-//                                Template = Template.replace("XXXFECHAGERENTEXXX", "N/A");
-//
-//                                lst_document = DocumentJpa.ConsultDocumentSignatureIdBoss(IdDoc, idUser);
-//                                if (lst_document != null) {
-//                                    Object[] ObjSig = (Object[]) lst_document.get(0);
-//                                    int TypeSig = Integer.parseInt(ObjSig[2].toString());
-//                                    String Signature = ObjSig[3].toString();
-//                                    if (TypeSig == 1) {
-//                                        //<editor-fold defaultstate="collapsed" desc="SIGNATURE DRAW">
-//                                        out.print("<input type='hidden' id='coordenadas-hiddenx' value='" + Signature + "'>");
-//                                        out.print("<script>");
-//                                        out.print("function dibujarFirmav2() { "
-//                                                + "        const firmaGuardadaCanvas = document.getElementById('signature-canvasBoss'); "
-//                                                + "        const firmaGuardadaContext = firmaGuardadaCanvas.getContext('2d'); "
-//                                                + "        const hiddenInput = document.getElementById('coordenadas-hiddenx'); "
-//                                                + "        const coordinatesJSON = hiddenInput.value;"
-//                                                + "        const coordinates = JSON.parse(coordinatesJSON); "
-//                                                + "        firmaGuardadaContext.clearRect(0, 0, firmaGuardadaCanvas.width, firmaGuardadaCanvas.height); "
-//                                                + "        firmaGuardadaContext.lineWidth = 2; "
-//                                                + "        firmaGuardadaContext.lineCap = 'round'; "
-//                                                + "        firmaGuardadaContext.beginPath(); "
-//                                                + "        firmaGuardadaContext.moveTo(coordinates[0].x, coordinates[0].y); "
-//                                                + "        for (let i = 1; i < coordinates.length; i++) { "
-//                                                + "            firmaGuardadaContext.lineTo(coordinates[i].x, coordinates[i].y); "
-//                                                + "        } "
-//                                                + "        firmaGuardadaContext.stroke(); "
-//                                                + "    } "
-//                                                + "    document.addEventListener('DOMContentLoaded', function() { "
-//                                                + "        dibujarFirmav2(); "
-//                                                + "    });");
-//                                        out.print("</script>");
-////</editor-fold>
-//                                    } else if (TypeSig == 2) {
-//                                        //<editor-fold defaultstate="collapsed" desc="SIGNATURE WRITE">
-//                                        out.print("<div class='col-lg-12' data-toggle='tooltip' data-placemente='top' title=''>");
-//                                        out.print("<input type='hidden' class='form-control' id='name-inputx' value='" + Signature.split("/")[0] + "'>");
-//                                        out.print("<input type='hidden' class='form-control' id='font-style-selectx' value='" + Signature.split("/")[1] + "'>");
-//                                        out.print("</div>");
-//                                        out.print("<script>");
-//                                        out.print("document.addEventListener('DOMContentLoaded', function() { "
-//                                                + "        const textCanvasx = document.getElementById('signature-canvasBoss'); "
-//                                                + "        const nameInputx = document.getElementById('name-inputx'); "
-//                                                + "        const fontStyleInputx = document.getElementById('font-style-selectx'); "
-//                                                + "        const contextTextx = textCanvasx.getContext('2d'); "
-//                                                + "    if (nameInputx.value) { "
-//                                                + "        updateTextv2(); "
-//                                                + "    } "
-//                                                + "    }); "
-//                                                + "    function updateTextv2() { "
-//                                                + "        const namex = nameInputx.value; "
-//                                                + "        const fontStylex = fontStyleInputx.value; "
-//                                                + "        contextTextx.clearRect(0, 0, textCanvasx.width, textCanvasx.height); "
-//                                                + "        contextTextx.font = `bold 60px ${fontStylex}`; "
-//                                                + "        contextTextx.fillText(namex, 0, 100); "
-//                                                + "} "
-//                                                + "   ");
-//                                        out.print("</script>");
-//                                        //</editor-fold>
-//                                    } else if (TypeSig == 3) {
-//                                        //<editor-fold defaultstate="collapsed" desc="SIGNATURE IMAGE">
-//
-//                                        Template = Template.replace("<canvas id='signature-canvasBoss' width='400' height='200'></canvas>", "<img src='Interfaz/Contenido/SagrilaftDocs/Signature/" + Signature + "' width='250px' style='margin-left: 25%;'>");
-//
-//                                        out.print("<input type='hidden' class='form-control' id='image-path-inputx' value='Interfaz/Contenido/SagrilaftDocs/Signature/" + Signature + "' >");
-//                                        out.print("<script>");
-//                                        out.print("document.addEventListener('DOMContentLoaded', function() { "
-//                                                + "        const imagePathInputx = document.getElementById('image-path-inputx'); "
-//                                                + "        const imageCanvasx = document.getElementById('signature-canvasBoss'); "
-//                                                + "        const contextImagex = imageCanvasx.getContext('2d'); "
-//                                                + "        const imagePathx = imagePathInputx.value; "
-//                                                + " "
-//                                                + "        const image = new Image(); "
-//                                                + "        image.onload = function() { "
-//                                                + "            contextImagex.clearRect(0, 0, imageCanvasx.width, imageCanvasx.height); "
-//                                                + "            contextImagex.drawImage(image, 0, 0, imageCanvasx.width, imageCanvasx.height); "
-//                                                + "        }; "
-//                                                + "        image.src = imagePathx; "
-//                                                + "    });");
-//                                        out.print("</script>");
-////                                        //</editor-fold>
-//                                    }
-//
-//                                }
-//                                if (DataClient[7].toString().contains("Si")) {
-//                                    Template = Template.replace("id=\"XXXCERTSIXXX\">", "id=\"XXXCERTSIXXX\" checked disabled>");
-//                                } else if (DataClient[7].toString().contains("No")) {
-//                                    Template = Template.replace("id=\"XXXCERTNOXXX\">", "id=\"XXXCERTNOXXX\" checked disabled>");
-//                                }
-//
-//                            } else {
-//                                Template = Template.replace("XXXFECHAPLASTXXX", "- Pendiente -");
-//                                Template = Template.replace("XXXFUNCIONARIOPLASTXXX", "- Pendiente -");
-//                                Template = Template.replace("XXXNROIDENTPLASTXXX", "- Pendiente -");
-//                                Template = Template.replace("XXXFIRMAPLASTXXX", "<i class='text-secondary'>Firma jefe de seguridad</i>");
-//                                Template = Template.replace("XXXCARGOPLASTXXX", "- Pendiente -");
-//                                Template = Template.replace("XXXCONSULTAXXX", "- Pendiente -");
-//                                Template = Template.replace("XXXFIRMAGERENTEXXX", "N/A");
-//                                Template = Template.replace("XXXFECHAGERENTEXXX", "N/A");
-//                            }
-//                        } catch (Exception e) {
-//                            Template = Template.replace("XXXFECHAPLASTXXX", "- Pendiente -");
-//                            Template = Template.replace("XXXFUNCIONARIOPLASTXXX", "- Pendiente -");
-//                            Template = Template.replace("XXXNROIDENTPLASTXXX", "- Pendiente -");
-//                            Template = Template.replace("XXXFIRMAPLASTXXX", "<i class='text-secondary'>Firma jefe de seguridad</i>");
-//                            Template = Template.replace("XXXCARGOPLASTXXX", "- Pendiente -");
-//                            Template = Template.replace("XXXCONSULTAXXX", "- Pendiente -");
-//                            Template = Template.replace("XXXFIRMAGERENTEXXX", "N/A");
-//                            Template = Template.replace("XXXFECHAGERENTEXXX", "N/A");
-//                        }
-//                        //</editor-fold>
 
-//                        out.print("<div id='Imprimir1' style=\"max-width: 100%;\">");
-//                        out.print("<div id='mi-tabla'>");
-//                        out.print(Template);
-//                        out.print("</div>");
-//                        out.print("</div>");
+                            } else {
+                                Template = Template.replace("XXXRAZONSOCIALXXX", "").
+                                        replace("XXXNROIDENTIFICACIONXXX", "").replace("XXXDVXXX", "").
+                                        replace("XXXPAISXXX", "").replaceAll("XXXCIUDADXXX", "").
+                                        replace("XXXDIRECCIONXXX", "").replaceAll("XXXTELEFONOXXX", "").
+                                        replace("XXXEMAILXXX", "").replace("XXXPAGINAWEBXXX", "").
+                                        replace("XXXCODIGOPOSTALXXX", "").replaceFirst("XXXCIUU1XXX", "").
+                                        replace("XXXCIUU2XXX", "").replace("XXXMATRICULAXXX", "");
+                            }
+                        } catch (Exception e) {
+                            Template = Template.replace("XXXRAZONSOCIALXXX", "").
+                                    replace("XXXNROIDENTIFICACIONXXX", "").replace("XXXDVXXX", "").
+                                    replace("XXXPAISXXX", "").replaceAll("XXXCIUDADXXX", "").
+                                    replace("XXXDIRECCIONXXX", "").replaceAll("XXXTELEFONOXXX", "").
+                                    replace("XXXEMAILXXX", "").replace("XXXPAGINAWEBXXX", "").
+                                    replace("XXXCODIGOPOSTALXXX", "").replaceFirst("XXXCIUU1XXX", "").
+                                    replace("XXXCIUU2XXX", "").replace("XXXMATRICULAXXX", "");
+                        }
+                        //</editor-fold>
+
+                        //<editor-fold defaultstate="collapsed" desc="CERTIFICATIONS">
+                        try {
+                            DataClient = ModuleCliente[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                            if (!DataClient[1].equals("N/A")) {
+                                String[] Other = {};
+                                try {
+                                    String[] datx = DataClient[1].toString().split("--");
+                                    Other = datx[1].toString().replace("|||", "//").split("//");
+                                    Template = Template.replace("XXXOTRO1XXX", Other[1]);
+                                    Template = Template.replace("id=\"XXXOTRASXXX\">", "id=\"XXXOTRASXXX\" checked disabled>");
+                                } catch (Exception e) {
+                                    Template = Template.replace("XXXOTRO1XXX", "");
+                                }
+                                String[] arrCert = DataClient[1].toString().split("/");
+                                for (int i = 0; i < arrCert.length; i++) {
+                                    if (arrCert[i].contains("OEA")) {
+                                        Template = Template.replace("id=\"XXXOEAXXX\">", "id=\"XXXOEAXXX\" checked disabled>");
+                                    } else if (arrCert[i].contains("CTPAT")) {
+                                        Template = Template.replace("id=\"XXXCTPATXXX\">", "id=\"XXXCTPATXXX\" checked disabled>");
+                                    } else if (arrCert[i].contains("BASC")) {
+                                        Template = Template.replace("id=\"XXXBASCXXX\">", "id=\"XXXBASCXXX\" checked disabled>");
+                                    } else if (arrCert[i].contains("ISO 28000")) {
+                                        Template = Template.replace("id=\"XXXISO28000XXX\">", "id=\"XXXISO28000XXX\" checked disabled>");
+                                    } else if (arrCert[i].contains("ISO 9001")) {
+                                        Template = Template.replace("id=\"XXXISO9001XXX\">", "id=\"XXXISO9001XXX\" checked disabled>");
+                                    }
+                                }
+                            } else {
+                                Template = Template.replace("XXXOTRO1XXX", "");
+                            }
+                        } catch (Exception e) {
+                            Template = Template.replace("XXXOTRO1XXX", "");
+                        }
+
+                        //</editor-fold>
+                        //<editor-fold defaultstate="collapsed" desc="PEP">
+                        try {
+                            DataClient = ModuleCliente[3].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                            if (!DataClient[1].contains("N/A")) {
+                                if (DataClient[1].contains("Si")) {
+                                    Template = Template.replace("id=\"XXXPERSONAPEPSIXXX\">", "id=\"XXXPERSONAPEPSIXXX\" checked disabled>");
+                                    for (int i = 1; i <= 6; i++) {
+                                        if (DataClient[i + 1].contains("Si")) {
+                                            Template = Template.replace("XXXPREGUNTASI" + i + "XXX", "X");
+                                            Template = Template.replace("XXXPREGUNTANO" + i + "XXX", "");
+                                            Template = Template.replace("XXXOBS" + i + "XXX", DataClient[i + 1].split("/")[1]);
+                                        } else {
+                                            Template = Template.replace("XXXPREGUNTASI" + i + "XXX", "");
+                                            Template = Template.replace("XXXPREGUNTANO" + i + "XXX", "X");
+                                            Template = Template.replace("XXXOBS" + i + "XXX", DataClient[i + 1].split("/")[1]);
+                                        }
+                                    }
+                                } else if (DataClient[1].contains("No")) {
+                                    Template = Template.replace("id=\"XXXPERSONAPEPNOXXX\">", "id=\"XXXPERSONAPEPSIXXX\" checked disabled>");
+                                    for (int i = 1; i <= 6; i++) {
+                                        Template = Template.replace("XXXPREGUNTASI" + i + "XXX", "");
+                                        Template = Template.replace("XXXPREGUNTANO" + i + "XXX", "");
+                                        Template = Template.replace("XXXOBS" + i + "XXX", "");
+                                    }
+                                }
+                            } else {
+                                for (int i = 1; i <= 6; i++) {
+                                    Template = Template.replace("XXXPREGUNTASI" + i + "XXX", "");
+                                    Template = Template.replace("XXXPREGUNTANO" + i + "XXX", "");
+                                    Template = Template.replace("XXXOBS" + i + "XXX", "");
+                                }
+                            }
+                        } catch (Exception e) {
+                            for (int i = 1; i <= 6; i++) {
+                                Template = Template.replace("XXXPREGUNTASI" + i + "XXX", "");
+                                Template = Template.replace("XXXPREGUNTANO" + i + "XXX", "");
+                                Template = Template.replace("XXXOBS" + i + "XXX", "");
+                            }
+                        }
+                        //</editor-fold>
+
+                        //<editor-fold defaultstate="collapsed" desc="LEGAL REPRESENTATIVE">
+                        try {
+                            DataClient = ModuleCliente[4].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                            if (!DataClient[1].contains("N/A")) {
+                                Template = Template.replace("XXXNOMBREREPRESENTANTEXXX", DataClient[1].split("/")[0]);
+                                if (DataClient[1].split("/")[1].contains("PP")) {
+                                    Template = Template.replace("id=\"XXXREPRESENTANTEPPXXX\">", "id=\"XXXREPRESENTANTEPPXXX\" checked disabled>");
+                                } else if (DataClient[1].split("/")[1].contains("CC")) {
+                                    Template = Template.replace("id=\"XXXREPRESENTANTECCXXX\">", "id=\"XXXREPRESENTANTECCXXX\" checked disabled>");
+                                } else if (DataClient[1].split("/")[1].contains("CE")) {
+                                    Template = Template.replace("id=\"XXXREPRESENTANTECEXXX\">", "id=\"XXXREPRESENTANTECEXXX\" checked disabled>");
+                                } else if (DataClient[1].split("/")[1].contains("NIT")) {
+                                    Template = Template.replace("id=\"XXXREPRESENTANTENITXXX\">", "id=\"XXXREPRESENTANTENITXXX\" checked disabled>");
+                                }
+                                Template = Template.replace("XXXIDENTIFICACIONREPREXXX", DataClient[1].split("/")[2]);
+                                Template = Template.replace("XXXMAILREPREXXX", DataClient[1].split("/")[3]);
+                                Template = Template.replace("XXXTELEFONOREPREXXX", DataClient[1].split("/")[4]);
+
+                                if (DataClient[1].split("/")[5].contains("Si")) {
+                                    Template = Template.replace("XXXPEPSIXXX", "X");
+                                    Template = Template.replace("XXXPEPNOXXX", "");
+                                } else if (DataClient[1].split("/")[5].contains("No")) {
+                                    Template = Template.replace("XXXPEPSIXXX", "");
+                                    Template = Template.replace("XXXPEPNOXXX", "X");
+                                }
+                                int rw = DataClient.length + 1;
+                                Template = Template.replace("3_REP", rw + "");
+                                if (DataClient.length > 2) {
+                                    for (int i = 2; i < DataClient.length; i++) {
+                                        String[] Accionaries = DataClient[i].split("/");
+                                        String NewContent = "</td></tr><tr>\n"
+                                                + "		<td colspan=\"2\" > XXXNOMBREREPRESENTANTEXXX </td>\n"
+                                                + "		<td colspan=\"2\" > \n"
+                                                + "		  PP  <input type=\"checkbox\" name=\"\" id=\"XXXREPRESENTANTEPPXXX\">\n"
+                                                + "		  CC  <input type=\"checkbox\" name=\"\" id=\"XXXREPRESENTANTECCXXX\">\n"
+                                                + "		  CE  <input type=\"checkbox\" name=\"\" id=\"XXXREPRESENTANTECEXXX\">\n"
+                                                + "		  NIT  <input type=\"checkbox\" name=\"\" id=\"XXXREPRESENTANTENITXXX\">\n"
+                                                + "		 </td>\n"
+                                                + "		<td colspan=\"2\" > XXXIDENTIFICACIONREPREXXX  </td>\n"
+                                                + "		<td colspan=\"1\" > XXXMAILREPREXXX  </td>\n"
+                                                + "		<td colspan=\"1\" > XXXTELEFONOREPREXXX  </td>\n"
+                                                + "		<td colspan=\"1\" style=\"width: 90px;\"> XXXPEPSIXXX </td>\n"
+                                                + "		<td colspan=\"1\" style=\"width: 90px;\"> XXXPEPNOXXX </td>*</tr>";
+
+                                        NewContent = NewContent.replace("XXXNOMBREREPRESENTANTEXXX", Accionaries[0]);
+                                        if (Accionaries[1].contains("PP")) {
+                                            NewContent = NewContent.replace("id=\"XXXREPRESENTANTEPPXXX\">", "id=\"XXXREPRESENTANTEPPXXX\" checked disabled>");
+                                        } else if (Accionaries[1].contains("CC")) {
+                                            NewContent = NewContent.replace("id=\"XXXREPRESENTANTECCXXX\">", "id=\"XXXREPRESENTANTECCXXX\" checked disabled>");
+                                        } else if (Accionaries[1].contains("CE")) {
+                                            NewContent = NewContent.replace("id=\"XXXREPRESENTANTECEXXX\">", "id=\"XXXREPRESENTANTECEXXX\" checked disabled>");
+                                        } else if (Accionaries[1].contains("NIT")) {
+                                            NewContent = NewContent.replace("id=\"XXXREPRESENTANTENITXXX\">", "id=\"XXXREPRESENTANTENITXXX\" checked disabled>");
+                                        }
+                                        NewContent = NewContent.replace("XXXIDENTIFICACIONREPREXXX", Accionaries[2]);
+                                        NewContent = NewContent.replace("XXXMAILREPREXXX", Accionaries[3]);
+                                        NewContent = NewContent.replace("XXXTELEFONOREPREXXX", Accionaries[4]);
+                                        if (Accionaries[5].contains("Si")) {
+                                            NewContent = NewContent.replace("XXXPEPSIXXX", "X");
+                                            NewContent = NewContent.replace("XXXPEPNOXXX", "");
+                                        } else if (Accionaries[5].contains("No")) {
+                                            NewContent = NewContent.replace("XXXPEPSIXXX", "");
+                                            NewContent = NewContent.replace("XXXPEPNOXXX", "X");
+                                        }
+                                        if (i == DataClient.length - 1) {
+                                            NewContent = NewContent.replace("</td>*</tr>", "</td></tr>");
+                                            Template = Template.replace("</td>*</tr>", NewContent);
+                                        } else {
+                                            Template = Template.replace("</td>*</tr>", NewContent);
+                                        }
+                                    }
+                                } else {
+                                    Template = Template.replace("</td>*</tr>", "</td></tr>");
+                                }
+                            } else {
+                                Template = Template.replace("</td>*</tr>", "</td></tr>");
+                                Template = Template.replace("XXXNOMBREREPRESENTANTEXXX", "");
+                                Template = Template.replace("XXXIDENTIFICACIONREPREXXX", "");
+                                Template = Template.replace("XXXMAILREPREXXX", "");
+                                Template = Template.replace("XXXTELEFONOREPREXXX", "");
+                                Template = Template.replace("XXXPEPSI2XXX", "");
+                                Template = Template.replace("XXXPEPNO2XXX", "");
+                                Template = Template.replace("3_REP", "3");
+                            }
+                        } catch (Exception e) {
+                            Template = Template.replace("</td>*</tr>", "</td></tr>");
+                            Template = Template.replace("XXXNOMBREREPRESENTANTEXXX", "");
+                            Template = Template.replace("XXXIDENTIFICACIONREPREXXX", "");
+                            Template = Template.replace("XXXMAILREPREXXX", "");
+                            Template = Template.replace("XXXTELEFONOREPREXXX", "");
+                            Template = Template.replace("XXXPEPSI2XXX", "");
+                            Template = Template.replace("XXXPEPNO2XXX", "");
+                            Template = Template.replace("3_REP", "3");
+                        }
+                        //</editor-fold>
+
+                        //<editor-fold defaultstate="collapsed" desc="ACCIONARIES AND BENEFICIARIES">
+                        try {
+//                            DataClient = ModuleCliente[5].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                            DataClient = ModuleCliente[5].toString().replace("[5]", "").split("---");
+                            String[] AccData = {};
+                            String[] BenfData = {};
+                            try {
+                                AccData = DataClient[0].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                                BenfData = DataClient[1].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                            } catch (Exception e) {
+                            }
+
+                            //<editor-fold defaultstate="collapsed" desc="ACCIONARIES">
+                            if (AccData.length > 0) {
+                                Template = Template.replace("XXXNOMBREACCIONARIOXXX", AccData[0].split("/")[0]);
+                                if (AccData[0].split("/")[1].contains("PP")) {
+                                    Template = Template.replace("id=\"XXXACCIONTIPOPPXXX\">", "id=\"XXXACCIONTIPOPPXXX\" checked disabled>");
+                                } else if (AccData[0].split("/")[1].contains("CC")) {
+                                    Template = Template.replace("id=\"XXXACCIONTIPOCCXXX\">", "id=\"XXXACCIONTIPOCCXXX\" checked disabled>");
+                                } else if (AccData[0].split("/")[1].contains("CE")) {
+                                    Template = Template.replace("id=\"XXXACCIONTIPOCEXXX\">", "id=\"XXXACCIONTIPOCEXXX\" checked disabled>");
+                                } else if (AccData[0].split("/")[1].contains("NIT")) {
+                                    Template = Template.replace("id=\"XXXACCIONTIPONITXXX\">", "id=\"XXXACCIONTIPONITXXX\" checked disabled>");
+                                }
+                                Template = Template.replace("XXXIDENTIFICACIONACCXXX", AccData[0].split("/")[2]);
+                                Template = Template.replace("XXXPARTICIPACIONACCXXX", AccData[0].split("/")[4] + "%");
+                                if (AccData[0].split("/")[3].contains("Si")) {
+                                    Template = Template.replace("XXXPEPSIXXX", "X");
+                                    Template = Template.replace("XXXPEPNOXXX", "");
+                                } else if (AccData[0].split("/")[3].contains("No")) {
+                                    Template = Template.replace("XXXPEPSIXXX", "");
+                                    Template = Template.replace("XXXPEPNOXXX", "X");
+                                } else {
+                                    Template = Template.replace("XXXPEPSIXXX", "");
+                                    Template = Template.replace("XXXPEPNOXXX", "");
+                                }
+
+                                if (AccData.length > 1) {
+                                    for (int i = 1; i < AccData.length; i++) {
+                                        String[] Accionaries = AccData[i].split("/");
+                                        String NewContent = "</td></tr><td colspan=\"2\" > XXXNOMBREACCIONARIOXXX </td>\n"
+                                                + "<td colspan=\"2\" > \n"
+                                                + " PP  <input type=\"checkbox\" name=\"\" id=\"XXXACCIONTIPOPPXXX\">\n"
+                                                + " CC  <input type=\"checkbox\" name=\"\" id=\"XXXACCIONTIPOCCXXX\">\n"
+                                                + " CE  <input type=\"checkbox\" name=\"\" id=\"XXXACCIONTIPOCEXXX\">\n"
+                                                + " NIT  <input type=\"checkbox\" name=\"\" id=\"XXXACCIONTIPONITXXX\">\n"
+                                                + " </td>\n"
+                                                + "<td colspan=\"2\" > XXXIDENTIFICACIONACCXXX </td>\n"
+                                                + "<td colspan=\"1\" style=\"width: 90px;\"> XXXPEPSIXXX </td>\n"
+                                                + "<td colspan=\"1\" style=\"width: 90px;\"> XXXPEPNOXXX </td>\n"
+                                                + "<td colspan=\"1\" > XXXPARTICIPACIONACCXXX </td>+</tr>";
+
+                                        NewContent = NewContent.replace("XXXNOMBREACCIONARIOXXX", Accionaries[0]);
+                                        if (Accionaries[1].contains("PP")) {
+                                            NewContent = NewContent.replace("id=\"XXXACCIONTIPOPPXXX\">", "id=\"XXXACCIONTIPOPPXXX\" checked disabled>");
+                                        } else if (Accionaries[1].contains("CC")) {
+                                            NewContent = NewContent.replace("id=\"XXXACCIONTIPOCCXXX\">", "id=\"XXXACCIONTIPOCCXXX\" checked disabled>");
+                                        } else if (Accionaries[1].contains("CE")) {
+                                            NewContent = NewContent.replace("id=\"XXXACCIONTIPOCEXXX\">", "id=\"XXXACCIONTIPOCEXXX\" checked disabled>");
+                                        } else if (Accionaries[1].contains("NIT")) {
+                                            NewContent = NewContent.replace("id=\"XXXACCIONTIPONITXXX\">", "id=\"XXXACCIONTIPONITXXX\" checked disabled>");
+                                        }
+                                        NewContent = NewContent.replace("XXXIDENTIFICACIONACCXXX", Accionaries[2]);
+                                        if (Accionaries[3].contains("Si")) {
+                                            NewContent = NewContent.replace("XXXPEPSIXXX", "X");
+                                            NewContent = NewContent.replace("XXXPEPNOXXX", "");
+                                        } else if (Accionaries[3].contains("No")) {
+                                            NewContent = NewContent.replace("XXXPEPSIXXX", "");
+                                            NewContent = NewContent.replace("XXXPEPNOXXX", "X");
+                                        } else {
+                                            NewContent = NewContent.replace("XXXPEPSIXXX", "");
+                                            NewContent = NewContent.replace("XXXPEPNOXXX", "");
+                                        }
+                                        NewContent = NewContent.replace("XXXPARTICIPACIONACCXXX", Accionaries[4] + "%");
+
+                                        if (i == AccData.length - 1) {
+                                            NewContent = NewContent.replace("</td>+</tr>", "</td></tr>");
+                                            Template = Template.replace("</td>+</tr>", NewContent);
+                                        } else {
+                                            Template = Template.replace("</td>+</tr>", NewContent);
+                                        }
+                                    }
+                                } else {
+                                    Template = Template.replace("</td>+</tr>", "</td></tr>");
+                                }
+                            } else {
+                                Template = Template.replace("</td>+</tr>", "</td></tr>");
+                                Template = Template.replace("XXXNOMBREACCIONARIOXXX", "");
+                                Template = Template.replace("XXXIDENTIFICACIONACCXXX", "");
+                                Template = Template.replace("XXXPARTICIAPACIONACCIONXXX", "");
+                                Template = Template.replace("XXXPEPSIXXX", "");
+                                Template = Template.replace("XXXPEPNOXXX", "");
+                            }
+                            //</editor-fold>
+
+                            //<editor-fold defaultstate="collapsed" desc="BENEFICIARIES">
+                            if (BenfData.length > 0) {
+                                Template = Template.replace("XXXNOMBREBENEFEXXX", BenfData[0].split("/")[0]);
+                                if (BenfData[0].split("/")[1].contains("PP")) {
+                                    Template = Template.replace("id=\"XXXBENEFPPXXX\">", "id=\"XXXBENEFPPXXX\" checked disabled>");
+                                } else if (BenfData[0].split("/")[1].contains("CC")) {
+                                    Template = Template.replace("id=\"XXXBENEFCCXXX\">", "id=\"XXXBENEFCCXXX\" checked disabled>");
+                                } else if (BenfData[0].split("/")[1].contains("CE")) {
+                                    Template = Template.replace("id=\"XXXBENEFCEXXX\">", "id=\"XXXBENEFCEXXX\" checked disabled>");
+                                } else if (BenfData[0].split("/")[1].contains("NIT")) {
+                                    Template = Template.replace("id=\"XXXBENEFNITXXX\">", "id=\"XXXBENEFNITXXX\" checked disabled>");
+                                }
+                                Template = Template.replace("XXXIDENTIFICACIONBENEFEXXX", BenfData[0].split("/")[2]);
+                                if (BenfData[0].split("/")[3].contains("Si")) {
+                                    Template = Template.replace("XXXPEPSIBENEFEXXX", "X");
+                                    Template = Template.replace("XXXPEPNOBENEFEXXX", "");
+                                } else if (BenfData[0].split("/")[3].contains("No")) {
+                                    Template = Template.replace("XXXPEPSIBENEFEXXX", "");
+                                    Template = Template.replace("XXXPEPNOBENEFEXXX", "X");
+                                } else {
+                                    Template = Template.replace("XXXPEPSIBENEFEXXX", "");
+                                    Template = Template.replace("XXXPEPNOBENEFEXXX", "");
+                                }
+
+                                if (BenfData.length > 1) {
+                                    for (int i = 1; i < BenfData.length; i++) {
+                                        String[] Beneficiaries = BenfData[i].split("/");
+                                        String NewContent = "</td></tr><td colspan=\"2\" > XXXNOMBREACCIONARIOXXX </td>\n"
+                                                + "<td colspan=\"2\" > \n"
+                                                + " PP  <input type=\"checkbox\" name=\"\" id=\"XXXBENEFPPXXX\">\n"
+                                                + " CC  <input type=\"checkbox\" name=\"\" id=\"XXXBENEFCCXXX\">\n"
+                                                + " CE  <input type=\"checkbox\" name=\"\" id=\"XXXBENEFCEXXX\">\n"
+                                                + " NIT  <input type=\"checkbox\" name=\"\" id=\"XXXBENEFNITXXX\">\n"
+                                                + " </td>\n"
+                                                + "<td colspan=\"2\" > XXXIDENTIFICACIONBENEFEXXX </td>\n"
+                                                + "<td colspan=\"1\" style=\"width: 90px;\"> XXXPEPSIBENEFEXXX </td>\n"
+                                                + "<td colspan=\"1\" style=\"width: 90px;\"> XXXPEPNOBENEFEXXX </td>+*</tr>";
+
+                                        NewContent = NewContent.replace("XXXNOMBREBENEFEXXX", Beneficiaries[0]);
+                                        if (Beneficiaries[1].contains("PP")) {
+                                            NewContent = NewContent.replace("id=\"XXXBENEFPPXXX\">", "id=\"XXXBENEFPPXXX\" checked disabled>");
+                                        } else if (Beneficiaries[1].contains("CC")) {
+                                            NewContent = NewContent.replace("id=\"XXXBENEFCCXXX\">", "id=\"XXXBENEFCCXXX\" checked disabled>");
+                                        } else if (Beneficiaries[1].contains("CE")) {
+                                            NewContent = NewContent.replace("id=\"XXXBENEFCEXXX\">", "id=\"XXXBENEFCEXXX\" checked disabled>");
+                                        } else if (Beneficiaries[1].contains("NIT")) {
+                                            NewContent = NewContent.replace("id=\"XXXBENEFNITXXX\">", "id=\"XXXBENEFNITXXX\" checked disabled>");
+                                        }
+                                        NewContent = NewContent.replace("XXXIDENTIFICACIONBENEFEXXX", Beneficiaries[2]);
+                                        if (Beneficiaries[3].contains("Si")) {
+                                            NewContent = NewContent.replace("XXXPEPSIBENEFEXXX", "X");
+                                            NewContent = NewContent.replace("XXXPEPNOBENEFEXXX", "");
+                                        } else if (Beneficiaries[3].contains("No")) {
+                                            NewContent = NewContent.replace("XXXPEPSIBENEFEXXX", "");
+                                            NewContent = NewContent.replace("XXXPEPNOBENEFEXXX", "X");
+                                        } else {
+                                            NewContent = NewContent.replace("XXXPEPSIBENEFEXXX", "");
+                                            NewContent = NewContent.replace("XXXPEPNOBENEFEXXX", "");
+                                        }
+
+                                        if (i == AccData.length - 1) {
+                                            NewContent = NewContent.replace("</td>+*</tr>", "</td></tr>");
+                                            Template = Template.replace("</td>+*</tr>", NewContent);
+                                        } else {
+                                            Template = Template.replace("</td>+*</tr>", NewContent);
+                                        }
+                                    }
+                                } else {
+                                    Template = Template.replace("</td>+*</tr>", "</td></tr>");
+                                }
+                            } else {
+                                Template = Template.replace("</td>+*</tr>", "</td></tr>");
+                                Template = Template.replace("XXXNOMBREBENEFEXXX", "");
+                                Template = Template.replace("XXXIDENTIFICACIONBENEFEXXX", "");
+                                Template = Template.replace("XXXPEPSIBENEFEXXX", "");
+                                Template = Template.replace("XXXPEPNOBENEFEXXX", "");
+                            }
+                            //</editor-fold>
+
+                        } catch (Exception e) {
+                            Template = Template.replace("</td>+</tr>", "</td></tr>");
+                            Template = Template.replace("XXXNOMBREACCIONARIOXXX", "");
+                            Template = Template.replace("XXXIDENTIFICACIONACCIONARIOXXX", "");
+                            Template = Template.replace("XXXPARTICIAPACIONACCIONXXX", "");
+                            Template = Template.replace("XXXPEPSIXXX", "");
+                            Template = Template.replace("XXXPEPNOXXX", "");
+                        }
+                        //</editor-fold>
+
+                        //<editor-fold defaultstate="collapsed" desc="PAYMENT CONDITIONS">
+                        try {
+                            DataClient = ModuleCliente[6].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                            if (!DataClient[1].contains("N/A")) {
+                                try {
+                                    double aprove = Double.parseDouble(DataClient[1].toString());
+                                    Locale locale = new Locale("en", "US");
+                                    NumberFormat Finalda = NumberFormat.getCurrencyInstance();
+                                    String formattedAmount = Finalda.format(aprove);
+                                    Template = Template.replace("XXXCUPOAPROBADOXXX", formattedAmount);
+                                } catch (Exception e) {
+                                    Template = Template.replace("XXXCUPOAPROBADOXXX", DataClient[1]);
+                                }
+
+                                if (DataClient[2].contains("30")) {
+                                    Template = Template.replace("id=\"XXXDIAS30\">", "id=\"XXXDIAS30\" checked disabled>");
+                                    Template = Template.replace("XXXOTRO4XXX", "");
+                                } else if (DataClient[2].contains("60")) {
+                                    Template = Template.replace("id=\"XXXDIAS60\">", "id=\"XXXDIAS60\" checked disabled>");
+                                    Template = Template.replace("XXXOTRO4XXX", "");
+                                } else if (DataClient[2].contains("90")) {
+                                    Template = Template.replace("id=\"XXXDIAS90\">", "id=\"XXXDIAS90\" checked disabled>");
+                                    Template = Template.replace("XXXOTRO4XXX", "");
+                                } else if (DataClient[2].contains("120")) {
+                                    Template = Template.replace("id=\"XXXDIAS120\">", "id=\"XXXDIAS120\" checked disabled>");
+                                    Template = Template.replace("XXXOTRO4XXX", "");
+                                } else if (DataClient[2].contains("Otro")) {
+                                    Template = Template.replace("id=\"XXXDIASOTROXXX\">", "id=\"XXXDIASOTROXXX\" checked disabled>");
+                                    Template = Template.replace("XXXOTRO2XXX", DataClient[2].split("/")[1]);
+                                } else {
+                                    Template = Template.replace("XXXOTRO2XXX", "");
+                                }
+                                Template = Template.replace("XXXNOMBRESAPELLIDOS1XXX", DataClient[3]);
+                                Template = Template.replace("XXXCARGOXXX", DataClient[4]);
+                                Template = Template.replace("XXXNROTELEFNOXXX", DataClient[5]);
+                                Template = Template.replace("XXXMAILFACTURAXXX", DataClient[6]);
+                            } else {
+                                Template = Template.replace("XXXOTRO2XXX", "");
+                                Template = Template.replace("XXXNOMBRESAPELLIDOS1XXX", "");
+                                Template = Template.replace("XXXCARGOXXX", "");
+                                Template = Template.replace("XXXNROTELEFNOXXX", "");
+                                Template = Template.replace("XXXMAILFACTURAXXX", "");
+                                Template = Template.replace("XXXCUPOAPROBADOXXX", "");
+                            }
+                        } catch (Exception e) {
+                            Template = Template.replace("XXXOTRO2XXX", "");
+                            Template = Template.replace("XXXNOMBRESAPELLIDOS1XXX", "");
+                            Template = Template.replace("XXXCARGOXXX", "");
+                            Template = Template.replace("XXXNROTELEFNOXXX", "");
+                            Template = Template.replace("XXXMAILFACTURAXXX", "");
+                            Template = Template.replace("XXXCUPOAPROBADOXXX", "");
+                        }
+                        //</editor-fold>
+
+                        //<editor-fold defaultstate="collapsed" desc="TRIBUTARY INFORMATION">
+                        try {
+                            DataClient = ModuleCliente[7].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                            if (DataClient.length > 1) {
+                                if (DataClient[1].equals("Si")) {
+                                    Template = Template.replace("id=\"XXXRESPOIVASIXXX\">", "id=\"XXXRESPOIVASIXXX\" checked disabled>");
+                                } else if (DataClient[1].equals("No")) {
+                                    Template = Template.replace("id=\"XXXRESPOIVANOXXX\">", "id=\"XXXRESPOIVANOXXX\" checked disabled>");
+                                }
+                                if (DataClient[2].contains("/")) {
+                                    if (DataClient[2].split("/")[0].equals("Si")) {
+                                        Template = Template.replace("id=\"XXXAUTRESIXXX\">", "id=\"XXXAUTRESIXXX\" checked disabled>");
+                                        Template = Template.replace("XXXRESOLUTIONONEXXX", DataClient[2].split("/")[1]);
+                                    }
+                                } else {
+                                    Template = Template.replace("id=\"XXXAUTRESIXXX\">", "id=\"XXXAUTRESIXXX\" checked disabled>");
+                                    Template = Template.replace("XXXRESOLUTIONONEXXX", "N/a");
+                                }
+                                if (DataClient[3].contains("/")) {
+                                    if (DataClient[3].split("/")[0].equals("Si")) {
+                                        Template = Template.replace("id=\"XXXGRANCONSIXXX\">", "id=\"XXXGRANCONSIXXX\" checked disabled>");
+                                        Template = Template.replace("XXXRESOLUTIONTWOXXX", DataClient[3].split("/")[1]);
+                                    }
+                                } else {
+                                    Template = Template.replace("id=\"XXXGRANCONSIXXX\">", "id=\"XXXGRANCONSIXXX\" checked disabled>");
+                                    Template = Template.replace("XXXRESOLUTIONTWOXXX", "N/a");
+                                }
+                                if (DataClient[4].equals("Si")) {
+                                    Template = Template.replace("id=\"XXXREGSIMSIXXX\">", "id=\"XXXREGSIMSIXXX\" checked disabled>");
+                                } else if (DataClient[4].equals("No")) {
+                                    Template = Template.replace("id=\"XXXREGSIMNOXXX\">", "id=\"XXXREGSIMNOXXX\" checked disabled>");
+                                }
+                                if (DataClient[5].equals("Si")) {
+                                    Template = Template.replace("id=\"XXXRENTASIXXX\">", "id=\"XXXRENTASIXXX\" checked disabled>");
+                                } else if (DataClient[5].equals("No")) {
+                                    Template = Template.replace("id=\"XXXRENTANOXXX\">", "id=\"XXXRENTANOXXX\" checked disabled>");
+                                }
+                                if (DataClient[6].equals("Si")) {
+                                    Template = Template.replace("id=\"XXXIVASIXXX\">", "id=\"XXXIVASIXXX\" checked disabled>");
+                                } else if (DataClient[6].equals("No")) {
+                                    Template = Template.replace("id=\"XXXIVANOXXX\">", "id=\"XXXIVANOXXX\" checked disabled>");
+                                }
+                                if (DataClient[7].equals("Si")) {
+                                    Template = Template.replace("id=\"XXXICASIXXX\">", "id=\"XXXICASIXXX\" checked disabled>");
+                                } else if (DataClient[7].equals("No")) {
+                                    Template = Template.replace("id=\"XXXICANOXXX\">", "id=\"XXXICANOXXX\" checked disabled>");
+                                }
+                            } else {
+                                Template = Template.replace("XXXRESOLUTIONONEXXX", "");
+                                Template = Template.replace("XXXRESOLUTIONTWOXXX", "");
+                            }
+
+                        } catch (Exception e) {
+                            Template = Template.replace("XXXRESOLUTIONONEXXX", "");
+                            Template = Template.replace("XXXRESOLUTIONTWOXXX", "");
+                        }
+                        //</editor-fold>
+
+                        //<editor-fold defaultstate="collapsed" desc="COMERCIAL AND FINANCIAL">
+                        DataClient = ModuleCliente[8].toString().replace("[8]", "").split("---");
+                        String[] comerData = {};
+                        String[] finanData = {};
+                        try {
+                            comerData = DataClient[0].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                            finanData = DataClient[1].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                        } catch (Exception e) {
+                        }
+
+                        //<editor-fold defaultstate="collapsed" desc="COMERCIAL">
+                        if (comerData.length > 0) {
+                            Template = Template.replace("XXXNOMBRECOMERCIALXXX", comerData[0].split("/")[0]);
+                            Template = Template.replace("XXXIDENTIFICACIONCOMERCIALXXX", comerData[0].split("/")[1]);
+                            Template = Template.replace("XXXCONTACTOCOMERCIALXXX", comerData[0].split("/")[2]);
+                            Template = Template.replace("XXXMAILCOMERCIALXXX", comerData[0].split("/")[3]);
+                            Template = Template.replace("XXXTELEFONOCOMERCIALXXX", comerData[0].split("/")[4]);
+
+                            if (comerData.length > 1) {
+                                for (int i = 1; i < comerData.length; i++) {
+                                    String[] Comercial = comerData[i].split("/");
+                                    String NewContent = "</td></tr><td colspan=\"4\" > XXXNOMBRECOMERCIALXXX </td>\n"
+                                            + "	<td colspan=\"3\" > XXXIDENTIFICACIONCOMERCIALXXX  </td>\n"
+                                            + "	<td colspan=\"2\" > XXXCONTACTOCOMERCIALXXX </td>\n"
+                                            + "	<td colspan=\"2\" > XXXMAILCOMERCIALXXX </td>\n"
+                                            + "	<td colspan=\"1\" style=\"width: 90px;\"> XXXTELEFONOCOMERCIALXXX </td>++</tr>";
+
+                                    NewContent = NewContent.replace("XXXNOMBRECOMERCIALXXX", Comercial[0]);
+                                    NewContent = NewContent.replace("XXXIDENTIFICACIONCOMERCIALXXX", Comercial[1]);
+                                    NewContent = NewContent.replace("XXXCONTACTOCOMERCIALXXX", Comercial[2]);
+                                    NewContent = NewContent.replace("XXXMAILCOMERCIALXXX", Comercial[3]);
+                                    NewContent = NewContent.replace("XXXTELEFONOCOMERCIALXXX", Comercial[4]);
+                                    if (i == comerData.length - 1) {
+                                        NewContent = NewContent.replace("</td>++</tr>", "</td></tr>");
+                                        Template = Template.replace("</td>++</tr>", NewContent);
+                                    } else {
+                                        Template = Template.replace("</td>++</tr>", NewContent);
+                                    }
+                                }
+                            }
+                        } else {
+                            Template = Template.replace("XXXNOMBRECOMERCIALXXX", "");
+                            Template = Template.replace("XXXIDENTIFICACIONCOMERCIALXXX", "");
+                            Template = Template.replace("XXXCONTACTOCOMERCIALXXX", "");
+                            Template = Template.replace("XXXMAILCOMERCIALXXX", "");
+                            Template = Template.replace("XXXTELEFONOCOMERCIALXXX", "");
+                        }
+                        //</editor-fold>
+
+                        //<editor-fold defaultstate="collapsed" desc="FINANCIAL">
+                        if (finanData.length > 0) {
+                            Template = Template.replace("XXXNOMBREFINANCIALXXX", finanData[0].split("/")[0]);
+                            Template = Template.replace("XXXTIPOCUENTAFINANCIALXXX", finanData[0].split("/")[1]);
+                            Template = Template.replace("XXXNUMEROCUENTAFINACIALXXX", finanData[0].split("/")[2]);
+                            Template = Template.replace("XXXCONTACTOFINANCIALXXX", finanData[0].split("/")[3]);
+                            Template = Template.replace("XXXTELEFONOFINANCIALXXX", finanData[0].split("/")[4]);
+                            if (finanData.length > 1) {
+                                for (int i = 1; i < finanData.length; i++) {
+                                    String[] Financial = finanData[i].split("/");
+                                    String NewContent = "</td></tr><td colspan=\"4\" > XXXNOMBREFINANCIALXXX </td>\n"
+                                            + "	<td colspan=\"3\" > XXXTIPOCUENTAFINANCIALXXX  </td>\n"
+                                            + "	<td colspan=\"2\" > XXXNUMEROCUENTAFINACIALXXX  </td>\n"
+                                            + "	<td colspan=\"2\" > XXXCONTACTOFINANCIALXXX  </td>\n"
+                                            + "	<td colspan=\"1\" style=\"width: 90px;\"> XXXTELEFONOFINANCIALXXX </td>**</tr>";
+
+                                    NewContent = NewContent.replace("XXXNOMBREFINANCIALXXX", Financial[0]);
+                                    NewContent = NewContent.replace("XXXTIPOCUENTAFINANCIALXXX", Financial[1]);
+                                    NewContent = NewContent.replace("XXXNUMEROCUENTAFINACIALXXX", Financial[2]);
+                                    NewContent = NewContent.replace("XXXCONTACTOFINANCIALXXX", Financial[3]);
+                                    NewContent = NewContent.replace("XXXTELEFONOFINANCIALXXX", Financial[4]);
+                                    if (i == finanData.length - 1) {
+                                        NewContent = NewContent.replace("</td>**</tr>", "</td></tr>");
+                                        Template = Template.replace("</td>**</tr>", NewContent);
+                                    } else {
+                                        Template = Template.replace("</td>**</tr>", NewContent);
+                                    }
+                                }
+                            }
+                        } else {
+                            Template = Template.replace("XXXNOMBREFINANCIALXXX", "");
+                            Template = Template.replace("XXXTIPOCUENTAFINANCIALXXX", "");
+                            Template = Template.replace("XXXNUMEROCUENTAFINACIALXXX", "");
+                            Template = Template.replace("XXXCONTACTOFINANCIALXXX", "");
+                            Template = Template.replace("XXXTELEFONOFINANCIALXXX", "");
+                        }
+                        //</editor-fold>
+
+                        //</editor-fold>
+                        
+                        //<editor-fold defaultstate="collapsed" desc="RESOURCE">
+                        try {
+                            DataClient = ModuleCliente[9].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                            if (DataClient.length > 0) {
+                                Template = Template.replace("XXXORIGENRECURSOSXXX", DataClient[1]);
+                                Template = Template.replace("XXXTIPOMONEDAXXX", DataClient[2]);
+                                Template = Template.replace("XXXACTIVOSXXX", DataClient[3]);
+                                Template = Template.replace("XXXPASIVOSXXX", DataClient[4]);
+                                Template = Template.replace("XXXPATRIMONIOXXX", DataClient[5]);
+                                Template = Template.replace("XXXINGRESOSXXX", DataClient[6]);
+                                Template = Template.replace("XXXEGRESOSXXX", DataClient[7]);
+                                Template = Template.replace("XXXOTROSINGRESOSXXX", DataClient[8]);
+                                Template = Template.replace("XXXCONCEOTOSOTROSINGRESOSXXX", DataClient[9]);
+                            } else {
+                                Template = Template.replace("XXXORIGENRECURSOSXXX", "");
+                                Template = Template.replace("XXXTIPOMONEDAXXX", "");
+                                Template = Template.replace("XXXACTIVOSXXX", "");
+                                Template = Template.replace("XXXPASIVOSXXX", "");
+                                Template = Template.replace("XXXPATRIMONIOXXX", "");
+                                Template = Template.replace("XXXINGRESOSXXX", "");
+                                Template = Template.replace("XXXEGRESOSXXX", "");
+                                Template = Template.replace("XXXOTROSINGRESOSXXX", "");
+                                Template = Template.replace("XXXCONCEOTOSOTROSINGRESOSXXX", "");
+                            }
+                        } catch (Exception e) {
+                            Template = Template.replace("XXXORIGENRECURSOSXXX", " ");
+                            Template = Template.replace("XXXTIPOMONEDAXXX", " ");
+                            Template = Template.replace("XXXACTIVOSXXX", " ");
+                            Template = Template.replace("XXXPASIVOSXXX", " ");
+                            Template = Template.replace("XXXPATRIMONIOXXX", " ");
+                            Template = Template.replace("XXXINGRESOSXXX", " ");
+                            Template = Template.replace("XXXEGRESOSXXX", " ");
+                            Template = Template.replace("XXXOTROSINGRESOSXXX", " ");
+                            Template = Template.replace("XXXCONCEOTOSOTROSINGRESOSXXX", " ");
+                        }
+                        //</editor-fold>
+
+                        //<editor-fold defaultstate="collapsed" desc="INTERNATIONAL OPERATIONS">
+                        try {
+                            DataClient = ModuleCliente[10].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                            if (!DataClient[1].contains("N/A")) {
+                                if (DataClient[1].contains("Si")) {
+                                    Template = Template.replace("id=\"XXXEXTRANJERASIXXX\">", "id=\"XXXEXTRANJERASIXXX\" checked disabled>");
+                                    Template = Template.replace("XXXOTRO3XXX", DataClient[1].split("/")[1]);
+                                } else if (DataClient[1].contains("No")) {
+                                    Template = Template.replace("id=\"XXXEXTRANJERANOXXX\">", "id=\"XXXEXTRANJERANOXXX\" checked disabled>");
+                                    Template = Template.replace("XXXOTRO3XXX", DataClient[1].split("/")[1]);
+                                } else {
+                                    Template = Template.replace("XXXOTRO3XXX", "");
+                                }
+
+                                if (DataClient[2].contains("Si")) {
+                                    Template = Template.replace("id=\"XXXMONEYEXTSIXXX\">", "id=\"XXXMONEYEXTSIXXX\" checked disabled>");
+                                    Template = Template.replace("XXXOTRO4XXX", DataClient[2].split("/")[1]);
+                                } else if (DataClient[2].contains("No")) {
+                                    Template = Template.replace("id=\"XXXMONEYEXTNOXXX\">", "id=\"XXXMONEYEXTNOXXX\" checked disabled>");
+                                    Template = Template.replace("XXXOTRO4XXX", DataClient[2].split("/")[1]);
+                                } else {
+                                    Template = Template.replace("XXXOTRO4XXX", "");
+                                }
+                            } else {
+                                Template = Template.replace("XXXOTRO4XXX", "");
+                                Template = Template.replace("XXXOTRO3XXX", "");
+                            }
+                        } catch (Exception e) {
+                            Template = Template.replace("XXXOTRO4XXX", "");
+                            Template = Template.replace("XXXOTRO3XXX", "");
+                        }
+                        //</editor-fold>
+
+                        //<editor-fold defaultstate="collapsed" desc="SIGNATURE CLIENT">
+                        try {
+                            DataClient = ModuleCliente[14].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                            if (!DataClient[1].contains("N/A")) {
+                                lst_document = DocumentJpa.ConsultDocumentSignatureId(IdDoc);
+                                if (lst_document != null) {
+                                    Object[] ObjSig = (Object[]) lst_document.get(0);
+                                    int TypeSig = Integer.parseInt(ObjSig[2].toString());
+                                    String Signature = ObjSig[3].toString();
+                                    Template = Template.replace("XXXFIRMACLIENTEXXX", "<canvas id='signature-canvas' width='400' height='200'></canvas>");
+                                    if (TypeSig == 1) {
+                                        //<editor-fold defaultstate="collapsed" desc="SIGNATURE DRAW">
+                                        out.print("<input type='hidden' id='coordenadas-hidden' value='" + Signature + "'>");
+                                        out.print("<script>");
+                                        out.print("function dibujarFirma() { "
+                                                + "        const firmaGuardadaCanvas = document.getElementById('signature-canvas'); "
+                                                + "        const firmaGuardadaContext = firmaGuardadaCanvas.getContext('2d'); "
+                                                + "        const hiddenInput = document.getElementById('coordenadas-hidden'); "
+                                                + "        const coordinatesJSON = hiddenInput.value;"
+                                                + "        const coordinates = JSON.parse(coordinatesJSON); "
+                                                + "        firmaGuardadaContext.clearRect(0, 0, firmaGuardadaCanvas.width, firmaGuardadaCanvas.height); "
+                                                + "        firmaGuardadaContext.lineWidth = 2; "
+                                                + "        firmaGuardadaContext.lineCap = 'round'; "
+                                                + "        firmaGuardadaContext.beginPath(); "
+                                                + "        firmaGuardadaContext.moveTo(coordinates[0].x, coordinates[0].y); "
+                                                + "        for (let i = 1; i < coordinates.length; i++) { "
+                                                + "            firmaGuardadaContext.lineTo(coordinates[i].x, coordinates[i].y); "
+                                                + "        } "
+                                                + "        firmaGuardadaContext.stroke(); "
+                                                + "    } "
+                                                + "    document.addEventListener('DOMContentLoaded', function() { "
+                                                + "        dibujarFirma(); "
+                                                + "    });");
+                                        out.print("</script>");
+//</editor-fold>
+                                    } else if (TypeSig == 2) {
+                                        //<editor-fold defaultstate="collapsed" desc="SIGNATURE WRITE">
+
+                                        out.print("<div class='col-lg-12' data-toggle='tooltip' data-placemente='top' title=''>");
+                                        out.print("<input type='hidden' class='form-control'  id='name-input' value='" + Signature.split("/")[0] + "'>");
+                                        out.print("<input type='hidden' class='form-control'  id='font-style-select' value='" + Signature.split("/")[1] + "'>");
+                                        out.print("</div>");
+                                        out.print("<script>");
+                                        out.print("document.addEventListener('DOMContentLoaded', function() { "
+                                                + "        const textCanvas = document.getElementById('signature-canvas'); "
+                                                + "        const nameInput = document.getElementById('name-input'); "
+                                                + "        const fontStyleInput = document.getElementById('font-style-select'); "
+                                                + "        const contextText = textCanvas.getContext('2d'); "
+                                                + "    if (nameInput.value) { "
+                                                + "        updateText(); "
+                                                + "    } "
+                                                + "    }); "
+                                                + "    function updateText() { "
+                                                + "        const name = nameInput.value; "
+                                                + "        const fontStyle = fontStyleInput.value; "
+                                                + "        contextText.clearRect(0, 0, textCanvas.width, textCanvas.height); "
+                                                + "        contextText.font = `bold 60px ${fontStyle}`; "
+                                                + "        contextText.fillText(name, 80, 100); "
+                                                + "} "
+                                                + "   ");
+                                        out.print("</script>");
+
+//</editor-fold>
+                                    } else if (TypeSig == 3) {
+                                        //<editor-fold defaultstate="collapsed" desc="SIGNATURE IMAGE">
+                                        Template = Template.replace("<canvas id='signature-canvas' width='400' height='200'></canvas>", "<img src='Interfaz/Contenido/SagrilaftDocs/Signature/" + Signature + "' width='250px' style='margin-left: 25%;'>");
+//                                        out.print("<input type='hidden' class='form-control' id='image-path-input' value='Interfaz/Contenido/SagrilaftDocs/Signature/" + Signature + "' >");
+                                        out.print("<script>");
+                                        out.print("document.addEventListener('DOMContentLoaded', function() { "
+                                                + "        const imagePathInput = document.getElementById('image-path-input'); "
+                                                + "        const imageCanvas = document.getElementById('signature-canvas'); "
+                                                + "        const contextImage = imageCanvas.getContext('2d'); "
+                                                + "        const imagePath = imagePathInput.value; "
+                                                + " "
+                                                + "        const image = new Image(); "
+                                                + "        image.onload = function() { "
+                                                + "            contextImage.clearRect(0, 0, imageCanvas.width, imageCanvas.height); "
+                                                + "            contextImage.drawImage(image, 0, 0, imageCanvas.width, imageCanvas.height); "
+                                                + "        }; "
+                                                + "        image.src = imagePath; "
+                                                + "    });");
+                                        out.print("</script>");
+//</editor-fold>
+                                    }
+                                    Template = Template.replace("XXXCLIENTENOMBREXXX", DataClient[1]);
+                                    Template = Template.replace("XXXIDENTIFICACIONCLIENTEXXX", DataClient[2]);
+                                }
+                            } else {
+                                Template = Template.replace("XXXFIRMACLIENTEXXX", "<i class='text-secondary'>Firma cliente</i>");
+                                Template = Template.replace("XXXCLIENTENOMBREXXX", "");
+                                Template = Template.replace("XXXIDENTIFICACIONCLIENTEXXX", "");
+                            }
+                        } catch (Exception e) {
+                            Template = Template.replace("XXXFIRMACLIENTEXXX", "<i class='text-secondary'>Firma cliente</i>");
+                            Template = Template.replace("XXXNOMBRECLIENTEXXX", "");
+                            Template = Template.replace("XXXIDENTIFICACIONCLIENTEXXX", "");
+                        }
+////
+////                        //</editor-fold>
+                        //<editor-fold defaultstate="collapsed" desc="SIGNATURE BOSS">
+                        try {
+                            DataClient = ModuleCliente[15].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                            if (!DataClient[1].contains("N/A")) {
+                                Template = Template.replace("XXXFECHAPLASTXXX", DataClient[1]);
+                                Template = Template.replace("XXXFUNCIONARIOPLASTXXX", DataClient[2]);
+                                Template = Template.replace("XXXNROIDENTPLASTXXX", DataClient[3]);
+                                Template = Template.replace("XXXFIRMAPLASTXXX", "<canvas id='signature-canvasBoss' width='400' height='200'></canvas>");
+                                Template = Template.replace("XXXCARGOPLASTXXX", DataClient[4]);
+                                Template = Template.replace("XXXCONSULTAXXX", DataClient[5]);
+                                Template = Template.replace("XXXFIRMAGERENTEXXX", "N/A");
+                                Template = Template.replace("XXXFECHAGERENTEXXX", "N/A");
+
+                                lst_document = DocumentJpa.ConsultDocumentSignatureIdBoss(IdDoc, idUser);
+                                if (lst_document != null) {
+                                    Object[] ObjSig = (Object[]) lst_document.get(0);
+                                    int TypeSig = Integer.parseInt(ObjSig[2].toString());
+                                    String Signature = ObjSig[3].toString();
+                                    if (TypeSig == 1) {
+                                        //<editor-fold defaultstate="collapsed" desc="SIGNATURE DRAW">
+                                        out.print("<input type='hidden' id='coordenadas-hiddenx' value='" + Signature + "'>");
+                                        out.print("<script>");
+                                        out.print("function dibujarFirmav2() { "
+                                                + "        const firmaGuardadaCanvas = document.getElementById('signature-canvasBoss'); "
+                                                + "        const firmaGuardadaContext = firmaGuardadaCanvas.getContext('2d'); "
+                                                + "        const hiddenInput = document.getElementById('coordenadas-hiddenx'); "
+                                                + "        const coordinatesJSON = hiddenInput.value;"
+                                                + "        const coordinates = JSON.parse(coordinatesJSON); "
+                                                + "        firmaGuardadaContext.clearRect(0, 0, firmaGuardadaCanvas.width, firmaGuardadaCanvas.height); "
+                                                + "        firmaGuardadaContext.lineWidth = 2; "
+                                                + "        firmaGuardadaContext.lineCap = 'round'; "
+                                                + "        firmaGuardadaContext.beginPath(); "
+                                                + "        firmaGuardadaContext.moveTo(coordinates[0].x, coordinates[0].y); "
+                                                + "        for (let i = 1; i < coordinates.length; i++) { "
+                                                + "            firmaGuardadaContext.lineTo(coordinates[i].x, coordinates[i].y); "
+                                                + "        } "
+                                                + "        firmaGuardadaContext.stroke(); "
+                                                + "    } "
+                                                + "    document.addEventListener('DOMContentLoaded', function() { "
+                                                + "        dibujarFirmav2(); "
+                                                + "    });");
+                                        out.print("</script>");
+//</editor-fold>
+                                    } else if (TypeSig == 2) {
+                                        //<editor-fold defaultstate="collapsed" desc="SIGNATURE WRITE">
+                                        out.print("<div class='col-lg-12' data-toggle='tooltip' data-placemente='top' title=''>");
+                                        out.print("<input type='hidden' class='form-control' id='name-inputx' value='" + Signature.split("/")[0] + "'>");
+                                        out.print("<input type='hidden' class='form-control' id='font-style-selectx' value='" + Signature.split("/")[1] + "'>");
+                                        out.print("</div>");
+                                        out.print("<script>");
+                                        out.print("document.addEventListener('DOMContentLoaded', function() { "
+                                                + "        const textCanvasx = document.getElementById('signature-canvasBoss'); "
+                                                + "        const nameInputx = document.getElementById('name-inputx'); "
+                                                + "        const fontStyleInputx = document.getElementById('font-style-selectx'); "
+                                                + "        const contextTextx = textCanvasx.getContext('2d'); "
+                                                + "    if (nameInputx.value) { "
+                                                + "        updateTextv2(); "
+                                                + "    } "
+                                                + "    }); "
+                                                + "    function updateTextv2() { "
+                                                + "        const namex = nameInputx.value; "
+                                                + "        const fontStylex = fontStyleInputx.value; "
+                                                + "        contextTextx.clearRect(0, 0, textCanvasx.width, textCanvasx.height); "
+                                                + "        contextTextx.font = `bold 60px ${fontStylex}`; "
+                                                + "        contextTextx.fillText(namex, 0, 100); "
+                                                + "} "
+                                                + "   ");
+                                        out.print("</script>");
+                                        //</editor-fold>
+                                    } else if (TypeSig == 3) {
+                                        //<editor-fold defaultstate="collapsed" desc="SIGNATURE IMAGE">
+
+                                        Template = Template.replace("<canvas id='signature-canvasBoss' width='400' height='200'></canvas>", "<img src='Interfaz/Contenido/SagrilaftDocs/Signature/" + Signature + "' width='250px' style='margin-left: 25%;'>");
+
+                                        out.print("<input type='hidden' class='form-control' id='image-path-inputx' value='Interfaz/Contenido/SagrilaftDocs/Signature/" + Signature + "' >");
+                                        out.print("<script>");
+                                        out.print("document.addEventListener('DOMContentLoaded', function() { "
+                                                + "        const imagePathInputx = document.getElementById('image-path-inputx'); "
+                                                + "        const imageCanvasx = document.getElementById('signature-canvasBoss'); "
+                                                + "        const contextImagex = imageCanvasx.getContext('2d'); "
+                                                + "        const imagePathx = imagePathInputx.value; "
+                                                + " "
+                                                + "        const image = new Image(); "
+                                                + "        image.onload = function() { "
+                                                + "            contextImagex.clearRect(0, 0, imageCanvasx.width, imageCanvasx.height); "
+                                                + "            contextImagex.drawImage(image, 0, 0, imageCanvasx.width, imageCanvasx.height); "
+                                                + "        }; "
+                                                + "        image.src = imagePathx; "
+                                                + "    });");
+                                        out.print("</script>");
+//                                        //</editor-fold>
+                                    }
+
+                                }
+                                if (DataClient[7].toString().contains("Si")) {
+                                    Template = Template.replace("id=\"XXXCERTSIXXX\">", "id=\"XXXCERTSIXXX\" checked disabled>");
+                                } else if (DataClient[7].toString().contains("No")) {
+                                    Template = Template.replace("id=\"XXXCERTNOXXX\">", "id=\"XXXCERTNOXXX\" checked disabled>");
+                                }
+
+                            } else {
+                                Template = Template.replace("XXXFECHAPLASTXXX", "- Pendiente -");
+                                Template = Template.replace("XXXFUNCIONARIOPLASTXXX", "- Pendiente -");
+                                Template = Template.replace("XXXNROIDENTPLASTXXX", "- Pendiente -");
+                                Template = Template.replace("XXXFIRMAPLASTXXX", "<i class='text-secondary'>Firma jefe de seguridad</i>");
+                                Template = Template.replace("XXXCARGOPLASTXXX", "- Pendiente -");
+                                Template = Template.replace("XXXCONSULTAXXX", "- Pendiente -");
+                                Template = Template.replace("XXXFIRMAGERENTEXXX", "N/A");
+                                Template = Template.replace("XXXFECHAGERENTEXXX", "N/A");
+                            }
+                        } catch (Exception e) {
+                            Template = Template.replace("XXXFECHAPLASTXXX", "- Pendiente -");
+                            Template = Template.replace("XXXFUNCIONARIOPLASTXXX", "- Pendiente -");
+                            Template = Template.replace("XXXNROIDENTPLASTXXX", "- Pendiente -");
+                            Template = Template.replace("XXXFIRMAPLASTXXX", "<i class='text-secondary'>Firma jefe de seguridad</i>");
+                            Template = Template.replace("XXXCARGOPLASTXXX", "- Pendiente -");
+                            Template = Template.replace("XXXCONSULTAXXX", "- Pendiente -");
+                            Template = Template.replace("XXXFIRMAGERENTEXXX", "N/A");
+                            Template = Template.replace("XXXFECHAGERENTEXXX", "N/A");
+                        }
+////                        //</editor-fold>
+
+                        out.print("<div id='Imprimir1' style=\"max-width: 100%;\">");
+                        out.print("<div id='mi-tabla'>");
+                        out.print(Template);
+                        out.print("</div>");
+                        out.print("</div>");
                     } catch (Exception e) {
                         out.print("<div class=''>");
                         out.print(Template);
