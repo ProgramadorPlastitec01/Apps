@@ -28,6 +28,10 @@
         <servlet-name>Automatico</servlet-name>
         <servlet-class>Servlets.Automatico</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>VisorResumen</servlet-name>
+        <servlet-class>Servlets.VisorResumen</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Sesion</servlet-name>
         <url-pattern>/Sesion/*</url-pattern>
@@ -55,6 +59,10 @@
     <servlet-mapping>
         <servlet-name>Automatico</servlet-name>
         <url-pattern>/Automatico/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>VisorResumen</servlet-name>
+        <url-pattern>/VisorResumen</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>60</session-timeout>

@@ -3017,7 +3017,6 @@ public class Tag_reportes extends TagSupport {
                                 + "</div>");
                     }
 //</editor-fold>
-
                     //<editor-fold defaultstate="collapsed" desc="CONSULTAR LOTES COLA">
                     if (!loteCola.equals("")) {
                         lst_registrosCol = jpacrgt.ConsultarRegistroxLoteCola(loteCola);
@@ -3075,7 +3074,6 @@ public class Tag_reportes extends TagSupport {
 
                     }
                     //</editor-fold>
-
                     if (!lote.equals("N/A")) {
                         lst_orden_producto = jpacopd.Reporte_orden_producto(orden + "", id_producto);
                         if (lst_orden_producto != null) {
@@ -3345,8 +3343,8 @@ public class Tag_reportes extends TagSupport {
                                 }
                             }
                             // </editor-fold>
-                            // <editor-fold defaultstate="collapsed" desc="PRUEBAS FUNCIONALES">
                             if (lst_lote_registro != null) {
+                                // <editor-fold defaultstate="collapsed" desc="PRUEBAS FUNCIONALES">
                                 double[] arg_pdb = new double[lst_lote_registro.size()];
                                 double[] arg_psc = new double[lst_lote_registro.size()];
                                 double[] arg_ltt = new double[lst_lote_registro.size()];
