@@ -11,8 +11,8 @@ body{
 
 .navegacion{
     width: 98%;
-    border-radius: 20px;
-    margin: 5px auto;
+        border-radius: 0px 0px 20px 20px;
+    margin: 1px auto;
     text-align: center;
     border-bottom: 1px solid #14173b;
     height: 0px;
@@ -555,7 +555,7 @@ body{
 /*------------------------------------ NAVIDAD--------------------------------------------------------------------------*/
 .button-34 {
     border-radius: 20px;
-    box-shadow: rgb(17 133 10 / 40%) 0 -25px 18px -14px inset, rgb(30 101 36 / 74%) 0 1px 2px, rgb(147 0 0 / 25%) 0 2px 4px, rgb(15 159 28 / 12%) 0 4px 8px, rgb(211 211 211 / 25%) 0 8px 16px, rgb(0 185 33 / 25%) 0 16px 32px;
+   box-shadow: rgb(10 13 133 / 40%) 0 -25px 18px -14px inset, rgb(32 30 101 / 74%) 0 1px 2px, rgb(147 0 0 / 25%) 0 2px 4px, rgb(15 159 28 / 12%) 0 4px 8px, rgb(211 211 211 / 25%) 0 8px 16px, rgb(10 0 185 / 25%) 0 16px 32px;
     color: black;
     cursor: pointer;
     display: inline-block;
@@ -566,7 +566,7 @@ body{
     border: 0;
     font-size: 14px;
     touch-action: manipulation;
-    background: #c30202ed;
+    background: #000000;
     color: #ffffff;
     font-weight: 600;
 }
@@ -590,7 +590,7 @@ body{
 }*/
 
 .button-34:hover {
-    box-shadow: rgb(0 0 0 / 40%) 0 -25px 18px -14px inset, rgb(0 0 0 / 74%) 0 1px 2px, rgb(255 20 20 / 78%) 0 2px 4px, rgb(35 35 35 / 62%) 0 4px 8px, rgb(2 58 130 / 25%) 0 8px 16px, rgb(193 14 14 / 34%) 0 16px 32px;
+   box-shadow: rgb(0 0 0 / 40%) 0 -25px 18px -14px inset, rgb(0 0 0 / 74%) 0 1px 2px, rgb(24 20 255 / 78%) 0 2px 4px, rgb(35 35 35 / 62%) 0 4px 8px, rgb(2 58 130 / 25%) 0 8px 16px, rgb(17 14 193 / 34%) 0 16px 32px;
     transform: scale(1.04) rotate(-0.5deg);
 }
 /*.button-34:hover {
@@ -673,7 +673,7 @@ body{
     width: 100%;
     /*font-size:13.6px;*/
     bottom: 0;
-    background: #a30100;
+    background: #000000;
 }
 
 #footer a{

@@ -15,7 +15,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>APPS PT</title>
         <!-- Estilos de navidad para las apps "SNOW" -->
-        <link rel="stylesheet" href="Argo/Interfaz/css/styleSnow.css" type="text/css">
+         <!-- <link rel="stylesheet" href="Argo/Interfaz/css/styleSnow.css" type="text/css">-->
 
         <!-- Estilos para halloween -->
         <!--<link rel="stylesheet" href="Argo/Interfaz/css/styleHalloween.css" type="text/css">-->
@@ -51,60 +51,96 @@
                 cursor:pointer;
             }
 
-            input[type="radio"][id="blue"]:checked + label {
-                background: #04918d;
-            }
+			 /* ====== ESTADO BASE ====== */
+			.blue,
+			.red,
+			.green,
+			.orange,
+			.purple {
+				opacity: 1;
+				transition: all 0.3s ease;
+			}
 
-            input[type="radio"][id="blue"]:checked ~ .red, input[type="radio"][id="blue"]:checked ~ .green, input[type="radio"][id="blue"]:checked ~ .orange {
-                width:0;
-                height:0;
-                padding:0;
-                margin:0;
-                opacity:0;
-            }
+			/* ====== BLUE ====== */
+			input[type="radio"][id="blue"]:checked + label {
+				background: #04918d;
+			}
+			input[type="radio"][id="blue"]:checked ~ .red,
+			input[type="radio"][id="blue"]:checked ~ .green,
+			input[type="radio"][id="blue"]:checked ~ .orange,
+			input[type="radio"][id="blue"]:checked ~ .purple {
+				width: 0;
+				height: 0;
+				padding: 0;
+				margin: 0;
+				opacity: 0;
+				overflow: hidden;
+			}
 
-            input[type="radio"][id="red"]:checked + label {
-                background:#720cb3;
-            }
-            input[type="radio"][id="red"]:checked ~ .blue, input[type="radio"][id="red"]:checked ~ .green, input[type="radio"][id="red"]:checked ~ .orange {
-                width:0;
-                height:0;
-                padding:0;
-                margin:0;
-                opacity:0;
-            }
+			/* ====== RED ====== */
+			input[type="radio"][id="red"]:checked + label {
+				background: #720cb3;
+			}
+			input[type="radio"][id="red"]:checked ~ .blue,
+			input[type="radio"][id="red"]:checked ~ .green,
+			input[type="radio"][id="red"]:checked ~ .orange,
+			input[type="radio"][id="red"]:checked ~ .purple {
+				width: 0;
+				height: 0;
+				padding: 0;
+				margin: 0;
+				opacity: 0;
+				overflow: hidden;
+			}
 
-            input[type="radio"][id="green"]:checked + label {
-                background:#0da15c;
-            }
-            input[type="radio"][id="green"]:checked ~ .blue, input[type="radio"][id="green"]:checked ~ .red, input[type="radio"][id="green"]:checked ~ .orange {
-                width:0;
-                height:0;
-                padding:0;
-                margin:0;
-                opacity:0;
-            }
-            input[type="radio"][id="orange"]:checked + label {
-                background: #d67600;
-            }
-            input[type="radio"][id="orange"]:checked ~ .blue, input[type="radio"][id="orange"]:checked ~ .green, input[type="radio"][id="orange"]:checked ~ .red {
-                width:0;
-                height:0;
-                padding:0;
-                margin:0;
-                opacity:0;
-            }
+			/* ====== GREEN ====== */
+			input[type="radio"][id="green"]:checked + label {
+				background: #0da15c;
+			}
+			input[type="radio"][id="green"]:checked ~ .blue,
+			input[type="radio"][id="green"]:checked ~ .red,
+			input[type="radio"][id="green"]:checked ~ .orange,
+			input[type="radio"][id="green"]:checked ~ .purple {
+				width: 0;
+				height: 0;
+				padding: 0;
+				margin: 0;
+				opacity: 0;
+				overflow: hidden;
+			}
 
-            input[type="radio"][id="purple"]:checked + label {
-                background: #06b1ed;
-            }
-            input[type="radio"][id="purple"]:checked ~ .blue, input[type="radio"][id="purple"]:checked ~ .green, input[type="radio"][id="purple"]:checked ~ .red, input[type="radio"][id="purple"]:checked ~ .orange {
-                width:0;
-                height:0;
-                padding:0;
-                margin:0;
-                opacity:0;
-            }
+			/* ====== ORANGE ====== */
+			input[type="radio"][id="orange"]:checked + label {
+				background: #d67600;
+			}
+			input[type="radio"][id="orange"]:checked ~ .blue,
+			input[type="radio"][id="orange"]:checked ~ .green,
+			input[type="radio"][id="orange"]:checked ~ .red,
+			input[type="radio"][id="orange"]:checked ~ .purple {
+				width: 0;
+				height: 0;
+				padding: 0;
+				margin: 0;
+				opacity: 0;
+				overflow: hidden;
+			}
+
+			/* ====== PURPLE (CORREGIDO) ====== */
+			input[type="radio"][id="purple"]:checked + label {
+				background: #06b1ed;
+			}
+			input[type="radio"][id="purple"]:checked ~ .blue,
+			input[type="radio"][id="purple"]:checked ~ .green,
+			input[type="radio"][id="purple"]:checked ~ .red,
+			input[type="radio"][id="purple"]:checked ~ .orange {
+				width: 0;
+				height: 0;
+				padding: 0;
+				margin: 0;
+				opacity: 0;
+				overflow: hidden;
+			}
+
 
             .tile {
                 width: 190px;
@@ -199,20 +235,20 @@
             </div>
         </div>
 
-        <a><button id="boton" class="btn_dropDown" onclick="divLogin()"><img id="ico" src="Argo/Interfaz/images/baston.png" width="20"></button></a>
+         <!-- <a><button id="boton" class="btn_dropDown" onclick="divLogin()"><img id="ico" src="Argo/Interfaz/images/baston.png" width="20"></button></a>-->
         <!--<a><button id="boton" class="btn_dropDown" onclick="divLogin()"><img id="ico" src="Argo/Interfaz/images/bat.png"></button></a>-->
-        <!--<a><button id="boton" class="btn_dropDown" onclick="divLogin()"><i id="ico" class="fas fa-arrow-up"></i></button></a>-->
-        <div class="DivSmall">
+        <a><button id="boton" class="btn_dropDown" onclick="divLogin()"><i id="ico" class="fas fa-arrow-up"></i></button></a>
+        <!--<div class="DivSmall">
             <img src="Argo/Interfaz/images/newest.png" width="24" alt=""/>
-        </div>
+        </div>-->
         <div>
             <a class="phone">
-<!--                <button id="btn_dp" onclick="divLoginR()" class="phone2" style="background: #fff;
-                        border: 2px solid #19284b;"><i style="font-size: 20px;" class="fas fa-headset"></i></button>-->
+                <button id="btn_dp" onclick="divLoginR()" class="phone2" style="background: #fff;
+                        border: 2px solid #19284b;"><i style="font-size: 20px;" class="fas fa-headset"></i></button>
                 <!--<button id="btn_dp" onclick="divLoginR()" class="phone2" style="background: #eb5d27;
                         border: 1px solid black"><img src="Argo/Interfaz/images/terror_1.png" width="34"></button>-->
-                                                <button id="btn_dp" onclick="divLoginR()" class="phone2" style="background: #fff;
-                                                        border: 2px solid #bf1913; padding: 0%;"><i class="fas fa-gift"></i></button>
+                                                 <!-- <button id="btn_dp" onclick="divLoginR()" class="phone2" style="background: #fff;
+                                                        border: 2px solid #bf1913; padding: 0%;"><i class="fas fa-gift"></i></button>-->
                 <button id="btn_dp" onclick="divVideo()" class="phone3" style="background: #fff;
                         border: 2px solid #1c2b4d; padding: 0%;"><i class="fas fa-play"></i></button>
 
@@ -308,10 +344,10 @@
 
         <!--<section style="padding-bottom: 10px;">-->
         <div style="margin: 3%;">
-            <img style="background: white;border-radius: 17px" src="Argo/Interfaz/images/Navidad20242.fw.png" width="75%">
+             <!-- <img style="background: white;border-radius: 17px" src="Argo/Interfaz/images/Navidad20242.fw.png" width="75%">-->
             <!--<img style="background: white;border-radius: 17px" src="Argo/Interfaz/images/plast_gorro.png">-->
             <!--<img style="background: white;border-radius: 17px" src="Argo/Interfaz/images_24/">-->
-            <!--<img src="Argo/Interfaz/images/plastNT.png" alt=""/>-->
+            <img src="Argo/Interfaz/images/plastNT.png" alt=""/>
             <!--<img src="Argo/Interfaz/images/plast_halloween_hw4.fw.png">-->
             <!--</div>-->
             <!--</section>-->
@@ -319,10 +355,10 @@
             <!--<button onclick="switchbk()">cambiar</button>-->
         </div>
 
-        <div style="width: 105%;">
+        <div style="width: 103%;">
             <div class="container"> 
                 <input type="radio" id="reset" name="color"/>
-                <label for="reset" class="button-34"  style="margin-left: 15px;">Todas</label>
+                <label for="reset" class="button-34" >Todas</label>
 
                 <input type="radio" id="green" name="color"/>
                 <label for="green" class="button-34">Producción</label>
@@ -344,7 +380,7 @@
                         <div class="front">
                             <img src="Argo/Interfaz/images/Activos.png" alt="tec" width="200" style="">
                         </div>
-                        <div class="back Activos" style="background: #f94835eb;">
+                        <div class="back Activos" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">Activos</h1>
                             <button class="button-33 activos" role="button" 
                                     onclick="javascript:window.open('http://172.16.2.111:8084/Activos/', '', 'width=auto,height=auto,left=50,\n\
@@ -359,7 +395,7 @@
                         <div class="front">
                             <img src="Argo/Interfaz/images/Bitacora_calidad.png" alt="tec" width="200" style="">
                         </div>
-                        <div class="back BitacoraC" style="background: #f94835eb;"> 
+                        <div class="back BitacoraC" style="background: #ffffffeb;"> 
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">Bitacora Calidad</h1>
                             <button class="button-33 bc" role="button" 
                                     onclick="javascript:window.open('http://172.16.2.111:8084/Bitacora_calidad/', '', 'width=auto,height=auto,left=50,\n\
@@ -374,7 +410,7 @@
                         <div class="front">
                             <img src="Argo/Interfaz/images/Bitacora_general.png" alt="tec" width="200" style="">
                         </div>
-                        <div class="back BitacoraG" style="background: #f94835eb;">
+                        <div class="back BitacoraG" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">Bitacora General</h1>
                             <button class="button-33 bg" role="button" 
                                     onclick="javascript:window.open('http://172.16.2.111:8084/Bitacora/', '', 'width=auto,height=auto,left=50,\n\
@@ -389,7 +425,7 @@
                         <div class="front">
                             <img src="Argo/Interfaz/images/Bitacora_produccion.png" alt="tec" width="200" style="">
                         </div>
-                        <div class="back BitacoraP" style="background: #f94835eb;">
+                        <div class="back BitacoraP" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">Bitacora Produccion</h1>
                             <button class="button-33 bp" role="button" 
                                     onclick="javascript:window.open('http://172.16.2.117:8084/Bitacora_produccion/Ingreso.jsp', '', 'width=auto,height=auto,left=50,\n\
@@ -399,17 +435,17 @@
                     </div>
                 </div>
 
-                <div class="tile blue">
+               <!-- <div class="tile blue">
                     <div class="card">
                         <div class="front">
 <!--                            <img src="Argo/Interfaz/images/CopecNv.fw.png" alt="tec" width="200">-->
-                            <img src="Argo/Interfaz/images/CGBC.png" alt="tec" width="180">
-                            <div class="DivFront">
+                       <!--      <img src="Argo/Interfaz/images/CGBC.png" alt="tec" width="180">
+                            <!-- <div class="DivFront">
                                 <img src="Argo/Interfaz/images/newest.png" width="50" alt=""/>
                             </div>
                             <!--<img src="Argo/Interfaz/images/Copec_hw.fw.png" alt="tec" width="200">-->
-                        </div>
-                        <div class="back ControlM" style="background: #f94835eb;">
+                       <!--  </div>
+                        <div class="back ControlM" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">CBGC</h1>
                             <button  class="button-33 mcb" role="button" 
                                      onclick="javascript:window.open('http://172.16.5.99:8084/CBGC/', '', 'width=auto,height=auto,left=50,\n\
@@ -417,16 +453,17 @@
                                              void 0">Ingresar</button>
                         </div>
                     </div>	
-                </div>
+                </div>-->
+				
 
                 <div class="tile blue">
                     <div class="card">
                         <div class="front">
-                            <img src="Argo/Interfaz/images/CopecNv.fw.png" alt="tec" width="200">
-                            <!--<img src="Argo/Interfaz/images/Copec.png" alt="tec" width="200">-->
+                             <!-- <img src="Argo/Interfaz/images/CopecNv.fw.png" alt="tec" width="200">-->
+                            <img src="Argo/Interfaz/images/Copec.png" alt="tec" width="200">
                             <!--<img src="Argo/Interfaz/images/Copec_hw.fw.png" alt="tec" width="200">-->
                         </div>
-                        <div class="back copec" style="background: #f94835eb;">
+                        <div class="back copec" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">Copec</h1>
                             <button  class="button-33 cpec" role="button" 
                                      onclick="javascript:window.open('http://172.16.1.138:8084/Copec/Login.jsp', '', 'width=auto,height=auto,left=50,\n\
@@ -441,7 +478,7 @@
                         <div class="front">
                             <img src="Argo/Interfaz/images/Control_formulas_2.png" alt="tec" width="200">
                         </div>
-                        <div class="back controlF" style="background: #f94835eb;">
+                        <div class="back controlF" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">Control Formulas</h1>
                             <button  class="button-33 cF" role="button" 
                                      onclick="javascript:window.open('http://172.16.5.99:8084/ControlFormulas/', '', 'width=auto,height=auto,left=50,\n\
@@ -456,7 +493,7 @@
                         <div class="front">
                             <img src="Argo/Interfaz/images/Control_grafado.png" alt="tec" width="200">
                         </div>
-                        <div class="back controlG" style="background: #f94835eb;">
+                        <div class="back controlG" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">Control Grafado</h1>
                             <button  class="button-33 cG" role="button" 
                                      onclick="javascript:window.open('http://172.16.5.99:8084/ControlGrafado/', '', 'width=auto,height=auto,left=50,\n\
@@ -471,7 +508,7 @@
                         <div class="front">
                             <img src="Argo/Interfaz/images/Control_pruebas.png" alt="tec" width="200">
                         </div>
-                        <div class="back controlP" style="background: #f94835eb;">
+                        <div class="back controlP" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">Control Pruebas</h1>
                             <button  class="button-33 cP" role="button" 
                                      onclick="javascript:window.open('http://172.16.5.99:8084/Control_pruebas', '', 'width=auto,height=auto,left=50,\n\
@@ -486,7 +523,7 @@
                         <div class="front">
                             <img src="Argo/Interfaz/images/CVP.png" alt="tec" width="200">
                         </div>
-                        <div class="back cvp" style="background: #f94835eb;">
+                        <div class="back cvp" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">CVP</h1>
 <!--                            <button  class="button-33 cVp" role="button" 
                                      onclick="javascript:window.open('http://172.16.2.111:8084/CVP/', '', 'width=auto,height=auto,left=50,\n\
@@ -505,7 +542,7 @@
                         <div class="front">
                             <img src="Argo/Interfaz/images/Controles_microbiologicos.png" alt="tec" width="200">
                         </div>
-                        <div class="back ControlM" style="background: #f94835eb;">
+                        <div class="back ControlM" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">Controles Microbiologicos</h1>
 <!--                            <button  class="button-33 mcb" role="button" 
                                      onclick="javascript:window.open('http://172.16.2.111:8084/Controles_microbiologicos/', '', 'width=auto,height=auto,left=50,\n\
@@ -524,7 +561,7 @@
                         <div class="front">
                             <img src="Argo/Interfaz/imges_24/Daruma_produccion_Final.png" alt="tec" width="180">
                         </div>
-                        <div class="back Daruma" style="background: #f94835eb;">
+                        <div class="back Daruma" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">Daruma</h1>
                             <button  class="button-33 Drm" role="button" 
                                      onclick="javascript:window.open('http://172.16.2.99/app.php/staff/', '', 'width=auto,height=auto,left=50,\n\
@@ -538,7 +575,7 @@
                         <div class="front">
                             <img src="Argo/Interfaz/images/Diseno_desarrollo.png" alt="tec" width="200">
                         </div>
-                        <div class="back DyD" style="background: #f94835eb;">
+                        <div class="back DyD" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">D&D</h1>
                             <button  class="button-33 dyd" role="button" 
                                      onclick="javascript:window.open('http://172.16.1.247:8080/Diseno_desarrollo/index.jsp', '', 'width=auto,height=auto,left=50,\n\
@@ -557,7 +594,7 @@
                         <div class="front">
                             <img src="Argo/Interfaz/images/Factura1_NE.png" alt="tec" width="150">
                         </div>
-                        <div class="back F1" style="background: #f94835eb;">
+                        <div class="back F1" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">Factura NE</h1>
                             <button  class="button-33 fp" role="button" 
                                      onclick="javascript:window.open('https://app.factura1.com.co/EmisionNomina/login.jsp', '', 'width=auto,height=auto,left=50,\n\
@@ -572,7 +609,7 @@
                         <div class="front">
                             <img src="Argo/Interfaz/images/Factura1.png" alt="tec" width="150">
                         </div>
-                        <div class="back F1" style="background: #f94835eb;">
+                        <div class="back F1" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">Factura 1</h1>
                             <button  class="button-33 fp" role="button" 
                                      onclick="javascript:window.open('https://app.factura1.com.co/emisionColapiV2/login.jsp', '', 'width=auto,height=auto,left=50,\n\
@@ -586,7 +623,7 @@
                         <div class="front">
                             <img src="Argo/Interfaz/images/Generacion_lotes_2_1.png" alt="tec" width="190">
                         </div>
-                        <div class="back GLotes" style="background: #f94835eb;">
+                        <div class="back GLotes" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">Generacion De Lotes</h1>
                             <button  class="button-33 gl" role="button" 
                                      onclick="javascript:window.open('http://172.16.5.99:8084/Generacion_Lotes/index.jsp', '', 'width=auto,height=auto,left=50,\n\
@@ -601,7 +638,7 @@
                         <div class="front">
                             <img src="Argo/Interfaz/images/Herramental_proceso.png" alt="tec" width="200">
                         </div>
-                        <div class="back herramental" style="background: #f94835eb;">
+                        <div class="back herramental" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">Herramental <br/> Proceso </h1>
                             <button  class="button-33 hp" role="button" 
                                      onclick="javascript:window.open('http://172.16.2.117:8084/Herramental/index.jsp', '', 'width=auto,height=auto,left=50,\n\
@@ -616,7 +653,7 @@
                         <div class="front">
                             <img src="Argo/Interfaz/images/Infotrack.png" alt="tec" width="200">
                         </div>
-                        <div class="back Infotrack" style="background: #f94835eb;">
+                        <div class="back Infotrack" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">Infotrack</h1>
                             <button  class="button-33 inft" role="button" 
                                      onclick="javascript:window.open('http://172.16.2.115:8081/Login.aspx', '', 'width=auto,height=auto,left=50,\n\
@@ -631,7 +668,7 @@
                         <div class="front">
                             <img src="Argo/Interfaz/images/Inspeccion_manga.png" alt="tec" width="200">
                         </div>
-                        <div class="back Manga" style="background: #f94835eb;">
+                        <div class="back Manga" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">Inspeccion Manga</h1>
                             <button  class="button-33 im" role="button" 
                                      onclick="javascript:window.open('http://172.16.5.99:8084/Inspeccion_manga/', '', 'width=auto,height=auto,left=50,\n\
@@ -646,7 +683,7 @@
                         <div class="front">
                             <img src="Argo/Interfaz/images/Locativos.png" alt="tec" width="200">
                         </div>
-                        <div class="back Locativos" style="background: #f94835eb;">
+                        <div class="back Locativos" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">Locativos</h1>
                             <button  class="button-33 lct" role="button" 
                                      onclick="javascript:window.open('http://172.16.1.247:8080/Locativos/index.jsp', '', 'width=auto,height=auto,left=50,\n\
@@ -659,13 +696,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="tile blue">
+                <div class="tile red">
                     <div class="card">
                         <div class="front">
                             <img src="Argo/Interfaz/images/LogoUp.fw.png" alt="tec" width="180" style="margin-top: 0%">
                             <!--<img src="Argo/Interfaz/images/IconW.fw.png" alt="tec" width="140" style="margin-top: 14%">-->
                         </div>
-                        <div class="back Nexus" style="background: #f94835eb;">
+                        <div class="back Nexus" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">Nexus</h1>
                             <button  class="button-33 nx" role="button" 
                                      onclick="javascript:window.open('http://172.16.1.247:8080/AppTI/index.jsp', '', 'width=auto,height=auto,left=50,\n\
@@ -684,7 +721,7 @@
                             <img src="Argo/Interfaz/images/Plastitec_tags_2.png" alt="tec" width="200">
                             <!--<img src="Argo/Interfaz/images/Logo_F_3.png" alt="tec" width="200">-->
                         </div>
-                        <div class="back PV4" style="background: #f94835eb;">
+                        <div class="back PV4" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">Plastitec Tags</h1>
                             <button  class="button-33 plas" role="button" 
                                      onclick="javascript:window.open('http://172.16.2.119/TagsApp4/auth/signin', '', 'width=auto,height=auto,left=50,\n\
@@ -699,7 +736,7 @@
                         <div class="front">
                             <img src="Argo/Interfaz/images/PMP_MF.png" alt="tec" width="200">
                         </div>
-                        <div class="back PMPMF" style="background: #f94835eb;">
+                        <div class="back PMPMF" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;"> PMP MTF</h1>
                             <button  class="button-33 pmt" role="button" 
                                      onclick="javascript:window.open('http://172.16.2.111:8084/PMP_MF/', '', 'width=auto,height=auto,left=50,\n\
@@ -714,7 +751,7 @@
                         <div class="front">
                             <img src="Argo/Interfaz/images/PMP.png" alt="tec" width="200">
                         </div>
-                        <div class="back PMPMI" style="background: #f94835eb;">
+                        <div class="back PMPMI" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">PMP MI</h1>
                             <button  class="button-33 pmi" role="button" 
                                      onclick="javascript:window.open('http://172.16.2.111:8084/PMP/', '', 'width=auto,height=auto,left=50,\n\
@@ -729,7 +766,7 @@
                         <div class="front">
                             <img src="Argo/Interfaz/images/MetrologiaV2.png" alt="tec" width="170" style="margin-top: 11px;">
                         </div>
-                        <div class="back PVM" style="background: #f94835eb;">
+                        <div class="back PVM" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">PVM</h1>
                             <button  class="button-33 pvmm" role="button" 
                                      onclick="javascript:window.open('http://172.16.2.117:8084/PVM/', '', 'width=auto,height=auto,left=50,\n\
@@ -744,7 +781,7 @@
                         <div class="front">
                             <img src="Argo/Interfaz/images/Redeac_2.png" alt="tec" >
                         </div>
-                        <div class="back REDEAC" style="background: #f94835eb;">
+                        <div class="back REDEAC" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">REDEAC</h1>
                             <button  class="button-33 rdc" role="button"><a style="color:white; text-decoration: none" target="_blank" href="http://172.16.2.117:8084/REDEAC">Ingresar</a></button>
                         </div>
@@ -756,7 +793,7 @@
                         <div class="front">
                             <img src="Argo/Interfaz/images/Registros_lab.png" alt="tec" width="200">
                         </div>
-                        <div class="back LAB" style="background: #f94835eb;">
+                        <div class="back LAB" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">Registros Lab</h1>
                             <!--Anterior: http://172.16.2.117:8084/Registros_lab/index.jsp --> 
                             <button  class="button-33 rl" role="button" 
@@ -769,13 +806,13 @@
                 </div>
 
 
-                <div class="tile red">
+                <div class="tile green">
                     <div class="card">
                         <div class="front">
                             <img src="Argo/Interfaz/images/RegistroPesaje.png" alt="tec" width="150" style="margin-top: 13%">
                             <!--<img src="Argo/Interfaz/images/RegistroPesajeWeen.fw.png" alt="tec" width="150" style="margin-top: 13%">-->
                         </div>
-                        <div class="back Locativos" style="background: #f94835eb;">
+                        <div class="back Locativos" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">Registro Pesaje</h1>
                             <!--                            <button  class="button-33 lct" role="button" 
                                                                  onclick="javascript:window.open('http://172.16.2.117:8084/Aplicativos_Plastitec/Ventana_Matenimiento.jsp', '', 'width=auto,height=auto,left=50,\n\
@@ -794,7 +831,7 @@
                         <div class="front">
                             <img src="Argo/Interfaz/images/Reunion.png" alt="tec" width="200">
                         </div>
-                        <div class="back REUNION" style="background: #f94835eb;">
+                        <div class="back REUNION" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">Reunion PT</h1>
                             <button  class="button-33 rpt" role="button" 
                                      onclick="javascript:window.open('http://172.16.1.247:8080/Reunion/', '', 'width=auto,height=auto,left=50,\n\
@@ -813,7 +850,7 @@
                         <div class="front">
                             <img src="Argo/Interfaz/images/SIRH.png" alt="tec" width="200">
                         </div>
-                        <div class="back SIRH" style="background: #f94835eb;">
+                        <div class="back SIRH" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">SIRH</h1>
                             <button  class="button-33 srh" role="button" 
                                      onclick="javascript:window.open('http://172.16.2.111:8084/SIRH/', '', 'width=auto,height=auto,left=50,\n\
@@ -828,7 +865,7 @@
                         <div class="front">
                             <img src="Argo/Interfaz/images/LogoSP.png" alt="tec" width="150" style="margin-top: 9%;">
                         </div>
-                        <div class="back Proyectos" style="background: #f94835eb;">
+                        <div class="back Proyectos" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">Solicitudes Proyectos</h1>
                             <button  class="button-33 sp" role="button" 
                                      onclick="javascript:window.open('http://172.16.2.117:8084/SolicitudesProyectos/', '', 'width=auto,height=auto,left=50,\n\
@@ -838,12 +875,12 @@
                     </div>
                 </div>
 
-                <div class="tile blue">
+                <div class="tile green">
                     <div class="card">
                         <div class="front">
                             <img src="Argo/Interfaz/images/ST_Desc_2.png" alt="tec" width="150" style="margin-top: 23%">
                         </div>
-                        <div class="back SistemaT" style="background: #f94835eb;">
+                        <div class="back SistemaT" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">Sistema Tubo</h1>
                             <button  class="button-33 cVp" role="button" 
                                      onclick="javascript:window.open('http://172.16.2.117:8084/Sistema_Tubo/', '', 'width=auto,height=auto,left=50,\n\
@@ -861,7 +898,7 @@
                             <!--<img src="Argo/Interfaz/images/WP_SagWeen.fw.png" alt="tec" width="170" style="margin-top: 8%">-->
                             <img src="Argo/Interfaz/images/WP_Sag.png" alt="tec" width="170" style="margin-top: 8%">
                         </div>
-                        <div class="back LAB" style="background: #f94835eb;">
+                        <div class="back LAB" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">SAGRILAFT</h1>
                             <!--                            <button  class="button-33 rl" role="button" 
                                                                  onclick="javascript:window.open('https://sagrilaft.plastitec-sa.com/SAGRILAFT/', '', 'width=auto,height=auto,left=50,\n\top=50,toolbar=yes');
@@ -885,7 +922,7 @@
                             <img src="Argo/Interfaz/images/Zho2.png" alt="tec" width="170" style="margin-top: 4%">
                             <!--<img src="Argo/Interfaz/images/Zho_ween.png" alt="tec" width="170" style="margin-top: 24%">-->
                         </div>
-                        <div class="back " style="background: #f94835eb;">
+                        <div class="back " style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 3%;">Zoho Mail</h1>
                             <button style="margin-bottom: 10px;" class="button-33 rl" role="button" 
                                     onclick="javascript:window.open('https://accounts.zoho.com/signin?service_language=es&servicename=VirtualOffice&signupurl=https://www.zoho.com/es-xl/mail/zohomail-pricing.html&serviceurl=https://mail.zoho.com', '', 'width=auto,height=auto,left=50,\n\
@@ -911,7 +948,7 @@
                         <div class="front">
                             <img src="Argo/Interfaz/images/ZhoCliq.png" alt="tec" width="170" style="margin-top: 24%">
                         </div>
-                        <div class="back " style="background: #f94835eb;">
+                        <div class="back " style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">Zoho Cliq</h1>
                             <button  class="button-33 rl" role="button" 
                                      onclick="javascript:window.open('https://cliq.zoho.com/mpchat.do', '', 'width=auto,height=auto,left=50,\n\
@@ -927,7 +964,7 @@
                         <div class="front">
                             <img src="Argo/Interfaz/images/365.png" alt="tec" width="180" style="margin-top: 18%">
                         </div>
-                        <div class="back " style="background: #f94835eb;">
+                        <div class="back " style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">Email 365</h1>
                             <button  class="button-33 rl" role="button" 
                                      onclick="javascript:window.open('https://outlook.office.com/mail/', '', 'width=auto,height=auto,left=50,\n\
@@ -962,9 +999,9 @@
                 <div style="display: flex;justify-content: space-between;align-items: center;">
                     <span>     </span> 
 
-                   <img src="Argo/Interfaz/images/Navidad_2.png" />
+                   <!--<img src="Argo/Interfaz/images/Navidad_2.png" />-->
                     <div>
-                        <a href="" style="font-weight: bold;color: black; font-family: math;">  PLASTITEC &copy; 2025</a>
+                        <a href="" style="font-weight: bold;color: white; font-family: math;">  PLASTITEC &copy; 2026</a>
                     </div>
                     <!--                                        <div>
                                                                 <img src="Argo/Interfaz/images/Navidad.png" alt="" width="380px"/>
@@ -974,7 +1011,7 @@
                                    <div style="">
                                         <!--<img src="Argo/Interfaz/images/corona.png" style="margin: 0;" width="8%" />-->
                                     </div>
-            <div style="margin-right: 30px; width: 33%;text-align: end;">
+            <!--<div style="margin-right: 30px; width: 33%;text-align: end;">-->
             <!--<h2>Feliz Navidad</h2>-->
             <!--<img src="Argo/Interfaz/images/Feliz_amor_amistad.png">--> 
             <!--</div>-->
@@ -1031,7 +1068,7 @@
                     }
                 </script>-->
         <!--JULIO-->
-        <script src="Argo/Interfaz/js/snowjs.js" ></script>
+         <!-- <script src="Argo/Interfaz/js/snowjs.js" ></script>-->
         <!--SEPTIEMBRE-->
         <!--<script src="Argo/Interfaz/js/heart.js" ></script>-->
         <!--OCTUBRE-->
