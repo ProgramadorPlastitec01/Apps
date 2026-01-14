@@ -10,12 +10,13 @@
         <title>JSP Page</title>
         <link rel="stylesheet" href="Interface/Content/Assets/modules/izitoast/css/iziToast.min.css">
         <link rel="icon" type="image/png" href="Interface/Imagen/LogoSWhite.png">
-        <script type="text/javascript">
-            history.pushState(null, null, 'Visual.jsp');
-            window.addEventListener('popstate', function (event) {
-                history.pushState(null, null, 'Visual.jsp');
-            });
-        </script>
+        <link rel="stylesheet" href="Interface/Content/Assets/css/main.css">
+        <!--        <script type="text/javascript">
+                    history.pushState(null, null, 'Visual.jsp');
+                    window.addEventListener('popstate', function (event) {
+                        history.pushState(null, null, 'Visual.jsp');
+                    });
+                </script>-->
     </head>
     <body class="sidebar-mini">
         <jsp:include page="Menu.jsp"></jsp:include>
@@ -55,20 +56,35 @@
         </div>
         <script>
             document.querySelectorAll('.editable').forEach(el => {
-                el.addEventListener('blur', () => {
-                    // Si el usuario borra todo el contenido, lo reestablece con ****
-                    if (el.innerText.trim() === '') {
-                        el.innerText = '****';
+
+                // Al enfocar
+                el.addEventListener('focus', () => {
+                    if (el.innerText.trim() === '----' || el.innerText.trim() === '----') {
+                        el.innerText = '';
                     }
                 });
-                // Previene eliminar completamente el span
+
+                // Al salir
+                el.addEventListener('blur', () => {
+                    const text = el.innerText.trim();
+
+                    if (text === '') {
+                        el.innerText = '----';
+                        el.classList.add('pending');
+                        el.classList.remove('completed');
+                    } else {
+                        el.classList.remove('pending');
+                        el.classList.add('completed');
+                    }
+                });
+
+                // Previene borrar completamente
                 el.addEventListener('keydown', (e) => {
                     if ((e.key === 'Delete' || e.key === 'Backspace') && el.innerText.trim() === '') {
                         e.preventDefault();
                     }
                 });
-            }
-            );
+            });
         </script>
 
         <script>
@@ -85,6 +101,8 @@
                 });
 
             });
+        </script>
+        <script>
             function saveHtml() {
 
                 var form = document.getElementById('FormGenerate');
@@ -125,8 +143,9 @@
                 var amountClean = amountRaw.replace(/[^\d]/g, '');
                 var amountNumber = Number(amountClean);
 
-                var dateSpan = document.getElementById('DateDispatch');
-                        var dateText = dateSpan?.textContent.trim() || '';
+                var dateInput = document.querySelector('#DateDispatch input');
+                        var dateValue = dateInput?.value || '';
+                ;
 
                 var consText = document.getElementById('consValue')?.textContent.trim() || '';
                         var idRegisterText = document.getElementById('IdRegister')?.textContent.trim() || '';
@@ -143,8 +162,8 @@
                     return;
                 }
 
-                if (dateText === '' || dateText === '___________') {
-                    showWarning(dateSpan, 'Debe ingresar la fecha de despacho.');
+                if (dateValue === '') {
+                    showWarning(dateInput, 'Debe ingresar la fecha de despacho.');
                     return;
                 }
 
@@ -177,7 +196,7 @@
                 addHidden('Html', encodedHtml);
                 addHidden('clientValue', clientText);
                 addHidden('AmountValue', amountNumber);
-                addHidden('DateDispatch', dateText);
+                addHidden('DateDispatch', dateValue);
                 addHidden('MaterialBatches', uniqueBatches.join(','));
                 addHidden('MaterialBatchCount', uniqueBatches.length);
 
@@ -192,7 +211,8 @@
                 // ===== SUBMIT =====
                 form.submit();
             }
-
+        </script>
+        <script>
             /* ===================== ALERTA ===================== */
             function showWarning(element, message) {
                 iziToast.warning({

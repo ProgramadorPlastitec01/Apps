@@ -3248,3 +3248,87 @@ thead.sticky-top {
 .ClicButtom{
     cursor: pointer;
 }
+.DivArticle {
+    width: 22%;
+    position: relative;
+    background: #ffffff;
+    border-radius: 6px;
+    border-left: 6px solid var(--accent, #3abaf4);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    transition: transform .25s ease, box-shadow .25s ease;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+/* HOVER */
+.DivArticle:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+}
+
+/* INFO */
+.DivHG {
+    display: flex;
+    flex-direction: column;
+    gap: .15rem;
+}
+
+.DivHG div {
+    font-size: .85rem;
+    color: #343a40;
+    display: flex;
+    align-items: center;
+}
+
+.DivHG i {
+    margin-right: .45rem;
+    color: #28a745;
+}
+
+/* CTA */
+.BottomDown {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+}
+.section-card-title {
+    position: relative;
+    margin-bottom: 1rem;
+    padding-left: .7rem;
+    font-size: .78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: #495057;
+}
+
+.section-card-title::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 2px;
+    width: 3px;
+    height: 100%;
+    border-radius: 2px;
+    background-color: #28a745;
+}
+.editable {
+    padding: 2px 6px;
+    border-radius: 4px;
+    outline: none;
+    min-width: 40px;
+    transition: background-color 0.3s, border 0.3s;
+}
+
+/* Estado pendiente */
+.editable.pending {
+    background-color: #f8d7da; /* rosado suave */
+    border: 1px dashed #dc3545;
+    color: #000;
+}
+
+/* Estado completado */
+.editable.completed {
+    background-color: transparent;
+    border: none;
+}

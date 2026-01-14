@@ -65,7 +65,7 @@ public class Start extends TagSupport {
                 out.print("      <div class=\"card-header\">");
                 out.print("         <h4>Clientes líderes en certificados gestionados (Top 5)</h4>");
                 out.print("        <div class=\"card-header-action\">");
-                out.print("          <a href=\"#\" class=\"btn btn-danger\">Ver mas <i class=\"fas fa-chevron-right\"></i></a>");
+                out.print("          <a href='Client?opt=1&Client=' class=\"btn btn-danger\">Ver mas <i class=\"fas fa-chevron-right\"></i></a>");
                 out.print("        </div>");
                 out.print("      </div>");
 
@@ -84,11 +84,11 @@ public class Start extends TagSupport {
                 for (int i = 0; i < lst_ranking.size(); i++) {
                     Object[] ObjRanking = (Object[]) lst_ranking.get(i);
                     out.print("            <tr>");
-                    out.print("              <td><a href=\"#\">" + ObjRanking[0] + "</a></td>");
+                    out.print("              <td><b class='text-dark'>" + ObjRanking[0] + "</b></td>");
                     out.print("              <td class=\"font-weight-600\">" + ObjRanking[1] + "</td>");
                     out.print("              <td>" + ObjRanking[2] + "</td>");
                     out.print("              <td>" + ObjRanking[3] + "</td>");
-                    out.print("              <td><a href=\"#\" class=\"btn btn-primary\">Detalle</a></td>");
+                    out.print("              <td><a href='Client?opt=1&Client="+ObjRanking[0]+"' class=\"btn btn-primary\">Detalle</a></td>");
                     out.print("            </tr>");
                 }
 
