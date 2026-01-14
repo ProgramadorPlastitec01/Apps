@@ -10,6 +10,12 @@
         <link rel="stylesheet" href="Interface/Content/Assets/modules/datatables/datatables.min.css">
         <link rel="stylesheet" href="Interface/Content/Assets/css/main.css">
         <link rel="icon" type="image/png" href="Interface/Imagen/LogoSWhite.png">
+        <script type="text/javascript">
+            history.pushState(null, null, 'Client.jsp');
+            window.addEventListener('popstate', function (event) {
+                history.pushState(null, null, 'Client.jsp');
+            });
+        </script>
     </head>
     <body>
         <div id="app">

@@ -196,6 +196,15 @@ public class Visual extends TagSupport {
                                 + "</button></div>");
                     }
                 }
+                if (IdCertificates == 0) {
+                    out.print("<div>"
+                            + "<button class='btn btn-outline-primary btn-sm' "
+                            + "style='border-radius: 4px; padding: 2px 9px;' "
+                            + "onclick='location.reload();' data-toggle='tooltip' "
+                            + "data-placement='top' title='Recargar'>"
+                            + "<i class='fas fa-sync-alt'></i>"
+                            + "</button></div>");
+                }
                 out.print("</div>"); // Cierra contenedor principal
                 out.print("</div>");
                 //</editor-fold>
