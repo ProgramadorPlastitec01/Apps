@@ -29,7 +29,7 @@ public class Visual extends TagSupport {
         SettingJpaController SettingJpa = new SettingJpaController();
         CertificatesJpaController CertificatesJpa = new CertificatesJpaController();
         ConnectionGeneracionLotes GeneracionLotesJpa = new ConnectionGeneracionLotes();
-        String Type = "", Product = "", ProductFact = "", Batch = "", DataTechnicalSheet = "", Html = "", BatchLay = "", Record = "", FormatName = "", Message = "", IdSig = "", Permission = "";
+        String Type = "", Product = "", ProductFact = "", Batch = "", DataTechnicalSheet = "", Html = "", BatchLay = "", Record = "", FormatName = "", Message = "", IdSig = "", Permission = "", Client = "";
         int Order = 0, IdForm = 0, Count = 1, Count2 = 1, IdCertificates = 0, State = 0, TempDelete = 0, StateCerti = 0, TempM = 0;
         List lst_content = null;
         List lst_headFact = null;
@@ -100,6 +100,7 @@ public class Visual extends TagSupport {
             } catch (Exception e) {
                 Permission = "";
             }
+            Client = Optional.ofNullable(pageContext.getRequest().getParameter("Client")).orElse("");
             //</editor-fold>
             out.print("<section class='section'>");
             if (IdCertificates > 0) {
@@ -119,7 +120,13 @@ public class Visual extends TagSupport {
                 out.print("<div class='card-header' style='justify-content: space-between;'>");
                 out.print("<div class='d-flex justify-content-between' style='width:100%'>");
                 out.print("<div class='mr-2 d-flex align-items-baseline'>");
-                if (TempM == 0) {
+                if (!Client.equals("")) {
+                    out.print("<button class='btn btn-outline-primary btn-sm mr-2' "
+                            + "style='border-radius: 4px; padding: 2px 9px;' "
+                            + "onclick=\"javascript:location.href='Client?opt=1&Client=" + Client + "';cargarDatos()\">"
+                            + "<i class='fas fa-arrow-left'></i>"
+                            + "</button>");
+                } else if (TempM == 0) {
                     out.print("<button class='btn btn-outline-primary btn-sm mr-2' "
                             + "style='border-radius: 4px; padding: 2px 9px;' "
                             + "onclick=\"javascript:location.href='Generate?opt=1&Type="
@@ -189,6 +196,15 @@ public class Visual extends TagSupport {
                                 + "</button></div>");
                     }
                 }
+                if (IdCertificates == 0) {
+                    out.print("<div>"
+                            + "<button class='btn btn-outline-primary btn-sm' "
+                            + "style='border-radius: 4px; padding: 2px 9px;' "
+                            + "onclick='location.reload();' data-toggle='tooltip' "
+                            + "data-placement='top' title='Recargar'>"
+                            + "<i class='fas fa-sync-alt'></i>"
+                            + "</button></div>");
+                }
                 out.print("</div>"); // Cierra contenedor principal
                 out.print("</div>");
                 //</editor-fold>
@@ -223,38 +239,38 @@ public class Visual extends TagSupport {
                         //<editor-fold defaultstate="collapsed" desc="HEAD FACTORY">
                         String[] ArgHead = Util.parseResult(lst_headFact.get(1));
                         Html = Html.replace("XOrderX", (ArgHead[0].equals("NULL") || ArgHead[0] == null) ? "" + Order + "" : ArgHead[0]);
-                        Html = Html.replace("XClientX", (ArgHead[1].equals("NULL") || ArgHead[1] == null) ? "<span class='editable' contenteditable='true'>-----</span>" : ArgHead[1]);
-                        Html = Html.replace("XAddressX", (ArgHead[2].equals("NULL") || ArgHead[2] == null) ? "<span class='editable' contenteditable='true'>-----</span>" : ArgHead[2]);
-                        Html = Html.replace("XPhoneX", (ArgHead[3].equals("NULL") || ArgHead[3] == null) ? "<span class='editable' contenteditable='true'>-----</span>" : ArgHead[3]);
-                        Html = Html.replace("XCityX", (ArgHead[4].equals("NULL") || ArgHead[4] == null) ? "<span class='editable' contenteditable='true'>-----</span>" : ArgHead[4]);
-                        Html = Html.replace("XCountryX", (ArgHead[5].equals("NULL") || ArgHead[5] == null) ? "<span class='editable' contenteditable='true'>-----</span>" : ArgHead[5]);
-                        Html = Html.replace("XBillX", (ArgHead[6].equals("NULL") || ArgHead[6] == null) ? "<span class='editable' contenteditable='true'>-----</span>" : ArgHead[6]);
-                        Html = Html.replace("XReissue_listX", (ArgHead[7].equals("NULL") || ArgHead[7] == null) ? "<span class='editable' contenteditable='true'>-----</span>" : ArgHead[7]);
-                        Html = Html.replace("XProductX", (ArgHead[9].equals("NULL") || ArgHead[9] == null) ? "<span class='editable' contenteditable='true'>-----</span>" : ArgHead[9]);
-                        Html = Html.replace("XAbilityX", (ArgHead[10].equals("NULL") || ArgHead[10] == null) ? "<span class='editable' contenteditable='true'>-----</span>" : ArgHead[10]);
+                        Html = Html.replace("XClientX", (ArgHead[1].equals("NULL") || ArgHead[1] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : ArgHead[1]);
+                        Html = Html.replace("XAddressX", (ArgHead[2].equals("NULL") || ArgHead[2] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : ArgHead[2]);
+                        Html = Html.replace("XPhoneX", (ArgHead[3].equals("NULL") || ArgHead[3] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : ArgHead[3]);
+                        Html = Html.replace("XCityX", (ArgHead[4].equals("NULL") || ArgHead[4] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : ArgHead[4]);
+                        Html = Html.replace("XCountryX", (ArgHead[5].equals("NULL") || ArgHead[5] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : ArgHead[5]);
+                        Html = Html.replace("XBillX", (ArgHead[6].equals("NULL") || ArgHead[6] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : ArgHead[6]);
+                        Html = Html.replace("XReissue_listX", (ArgHead[7].equals("NULL") || ArgHead[7] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : ArgHead[7]);
+                        Html = Html.replace("XProductX", (ArgHead[9].equals("NULL") || ArgHead[9] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : ArgHead[9]);
+                        Html = Html.replace("XAbilityX", (ArgHead[10].equals("NULL") || ArgHead[10] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : ArgHead[10]);
                         Html = Html.replace("XBatchX", Batch);
                         Html = Html.replace("XQuatityGenX", ArgHead[11] + " UNIDADES");
-                        Html = Html.replace("XClient_OrderX", (ArgHead[12].equals("NULL") || ArgHead[12] == null) ? "<span class='editable' contenteditable='true'>-----</span>" : ArgHead[12]);
-                        Html = Html.replace("<h3 id=\"consValue\" class=\"mb-0\">XConsX</h3>", "<h3 id=\"consValue\" class=\"mb-0 editable\" contenteditable='true'>CC*****</h3>");
+                        Html = Html.replace("XClient_OrderX", (ArgHead[12].equals("NULL") || ArgHead[12] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : ArgHead[12]);
+                        Html = Html.replace("<h3 id=\"consValue\" class=\"mb-0\">XConsX</h3>", "<h3 id=\"consValue\" class=\"mb-0 editable\" contenteditable='true'>CC----</h3>");
 
-                        Html = Html.replace("XSampleX", "<span class='editable' contenteditable='true'>----</span>");
-                        Html = Html.replace("XNumberPartX", "<span class='editable' contenteditable='true'>----</span>");
+                        Html = Html.replace("XSampleX", "<span  class='editable pending' contenteditable='true'>----</span>");
+                        Html = Html.replace("XNumberPartX", "<span  class='editable pending' contenteditable='true'>----</span>");
                         //</editor-fold>
                     } else {
                         //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA">
                         Html = Html.replace("XOrderX", String.valueOf(Order));
-                        Html = Html.replace("XAddressX", "<span class='editable' contenteditable='true'>-----</span>");
-                        Html = Html.replace("XPhoneX", "<span class='editable' contenteditable='true'>-----</span>");
-                        Html = Html.replace("XCityX", "<span class='editable' contenteditable='true'>-----</span>");
-                        Html = Html.replace("XCountryX", "<span class='editable' contenteditable='true'>-----</span>");
-                        Html = Html.replace("XBillX", "<span class='editable' contenteditable='true'>-----</span>");
-                        Html = Html.replace("XReissue_listX", "<span class='editable' contenteditable='true'>-----</span>");
+                        Html = Html.replace("XAddressX", "<span  class='editable pending' contenteditable='true'>----</span>");
+                        Html = Html.replace("XPhoneX", "<span  class='editable pending' contenteditable='true'>----</span>");
+                        Html = Html.replace("XCityX", "<span  class='editable pending' contenteditable='true'>----</span>");
+                        Html = Html.replace("XCountryX", "<span  class='editable pending' contenteditable='true'>----</span>");
+                        Html = Html.replace("XBillX", "<span  class='editable pending' contenteditable='true'>----</span>");
+                        Html = Html.replace("XReissue_listX", "<span  class='editable pending' contenteditable='true'>----</span>");
                         Html = Html.replace("XProductX", ProductFact);
-                        Html = Html.replace("XAbilityX", "<span class='editable' contenteditable='true'>-----</span>");
+                        Html = Html.replace("XAbilityX", "<span  class='editable pending' contenteditable='true'>----</span>");
                         Html = Html.replace("XBatchX", Batch);
-                        Html = Html.replace("XQuatityGenX", "<span class='editable' contenteditable='true'>----- UNIDADES</span>");
-                        Html = Html.replace("<h3 id=\"consValue\" class=\"mb-0\">XConsX</h3>", "<h3 id=\"consValue\" class=\"mb-0 editable\" contenteditable='true'>CC*****</h3>");
-                        Html = Html.replace("XSampleX", "<span class='editable' contenteditable='true'>----</span>");
+                        Html = Html.replace("XQuatityGenX", "<span  class='editable pending' contenteditable='true'>---- UNIDADES</span>");
+                        Html = Html.replace("<h3 id=\"consValue\" class=\"mb-0\">XConsX</h3>", "<h3 id=\"consValue\" class=\"mb-0 editable\" contenteditable='true'>CC----</h3>");
+                        Html = Html.replace("XSampleX", "<span  class='editable pending' contenteditable='true'>----</span>");
 
                         Message = "No se encuentra información en Factory por orden, producto y lote, favor verifique";
 
@@ -276,9 +292,9 @@ public class Visual extends TagSupport {
                             Html = Html.replace("XMonthMANX", DateExpiración[1]);
                             Html = Html.replace("XDayMANX", DateExpiración[2]);
                         } else {
-                            Html = Html.replace("XYearMANX", "<span class='editable' contenteditable='true'>-----</span>");
-                            Html = Html.replace("XMonthMANX", "<span class='editable' contenteditable='true'>-----</span>");
-                            Html = Html.replace("XDayMANX", "<span class='editable' contenteditable='true'>-----</span>");
+                            Html = Html.replace("XYearMANX", "<span  class='editable pending' contenteditable='true'>----</span>");
+                            Html = Html.replace("XMonthMANX", "<span  class='editable pending' contenteditable='true'>----</span>");
+                            Html = Html.replace("XDayMANX", "<span  class='editable pending' contenteditable='true'>----</span>");
                         }
                         if (ArgTags[6].contains("-")) {
                             String[] DateExpiración = ArgTags[6].split("-");
@@ -286,9 +302,9 @@ public class Visual extends TagSupport {
                             Html = Html.replace("XMonthEXPX", DateExpiración[1]);
                             Html = Html.replace("XDayEXPX", DateExpiración[2]);
                         } else {
-                            Html = Html.replace("XYearEXPX", "<span class='editable' contenteditable='true'>-----</span>");
-                            Html = Html.replace("XMonthEXPX", "<span class='editable' contenteditable='true'>-----</span>");
-                            Html = Html.replace("XDayEXPX", "<span class='editable' contenteditable='true'>-----</span>");
+                            Html = Html.replace("XYearEXPX", "<span  class='editable pending' contenteditable='true'>----</span>");
+                            Html = Html.replace("XMonthEXPX", "<span  class='editable pending' contenteditable='true'>----</span>");
+                            Html = Html.replace("XDayEXPX", "<span  class='editable pending' contenteditable='true'>----</span>");
                         }
                         Html = Html.replace("XClientX", ArgTags[8]);
                         Html = Html.replace("XCodeX", ArgTags[9]);
@@ -296,16 +312,16 @@ public class Visual extends TagSupport {
                         //</editor-fold>
                     } else {
                         //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA">
-                        Html = Html.replace("XYearMANX", "<span class='editable' contenteditable='true'>-----</span>");
-                        Html = Html.replace("XMonthMANX", "<span class='editable' contenteditable='true'>-----</span>");
-                        Html = Html.replace("XDayMANX", "<span class='editable' contenteditable='true'>-----</span>");
-                        Html = Html.replace("XYearEXPX", "<span class='editable' contenteditable='true'>-----</span>");
-                        Html = Html.replace("XMonthEXPX", "<span class='editable' contenteditable='true'>-----</span>");
-                        Html = Html.replace("XDayEXPX", "<span class='editable' contenteditable='true'>-----</span>");
+                        Html = Html.replace("XYearMANX", "<span  class='editable pending' contenteditable='true'>----</span>");
+                        Html = Html.replace("XMonthMANX", "<span  class='editable pending' contenteditable='true'>----</span>");
+                        Html = Html.replace("XDayMANX", "<span  class='editable pending' contenteditable='true'>----</span>");
+                        Html = Html.replace("XYearEXPX", "<span  class='editable pending' contenteditable='true'>----</span>");
+                        Html = Html.replace("XMonthEXPX", "<span  class='editable pending' contenteditable='true'>----</span>");
+                        Html = Html.replace("XDayEXPX", "<span  class='editable pending' contenteditable='true'>----</span>");
 
-                        Html = Html.replace("XClientX", "<span class='editable' contenteditable='true'>-----</span>");
-                        Html = Html.replace("XCodeX", "<span class='editable' contenteditable='true'>-----</span>");
-                        Html = Html.replace("XClient_OrderX", "<span class='editable' contenteditable='true'>-----</span>");
+                        Html = Html.replace("XClientX", "<span  class='editable pending' contenteditable='true'>----</span>");
+                        Html = Html.replace("XCodeX", "<span  class='editable pending' contenteditable='true'>----</span>");
+                        Html = Html.replace("XClient_OrderX", "<span  class='editable pending' contenteditable='true'>----</span>");
 
                         Message = "No se encuentra información en Tags por orden, producto y lote, favor verifique";
 
@@ -335,7 +351,7 @@ public class Visual extends TagSupport {
                                     String etiqueta = etiquetas[i];
 
                                     if (valor.equals("N/A")) {
-                                        Html = Html.replace(etiqueta, "<span class='editable' contenteditable='true'>-----</span>");
+                                        Html = Html.replace(etiqueta, "<span  class='editable pending' contenteditable='true'>----</span>");
                                     } else {
                                         Html = Html.replace(etiqueta, valor);
                                     }
@@ -350,7 +366,7 @@ public class Visual extends TagSupport {
                                         String[] ArgLay = lst_Glotes1.get(0).toString().replace("]", "").replace("[", "").split("///");
                                         Html = Html.replace("COS" + Cnt + "", "CC" + ArgLay[0]);
                                     } else {
-                                        Html = Html.replace("COS" + Cnt, "<span class='editable' contenteditable='true'>-----</span>");
+                                        Html = Html.replace("COS" + Cnt, "<span  class='editable pending' contenteditable='true'>----</span>");
 
                                         Message = "No se encuentra información en Generacion de lotes en el módulo de Control consecutivos por el lote, favor verifique";
 
@@ -369,8 +385,8 @@ public class Visual extends TagSupport {
                                 for (int o = 0; o < ArgTnt.length; o++) {
                                     if (ArgTnt[o].equals("N/A")) {
                                         //<editor-fold defaultstate="collapsed" desc="VALIDATION">
-                                        Html = Html.replace("REF" + Cnt2, "<span class='editable' contenteditable='true'>-----</span>");
-                                        Html = Html.replace("COS" + Cnt2, "<span class='editable' contenteditable='true'>-----</span>");
+                                        Html = Html.replace("REF" + Cnt2, "<span  class='editable pending' contenteditable='true'>----</span>");
+                                        Html = Html.replace("COS" + Cnt2, "<span  class='editable pending' contenteditable='true'>----</span>");
                                         Message = "No se encuentra información en Generacion de lotes en el módulo de repcepción material por el lote, favor verifique";
 
                                         // ✅ Ejecutar automáticamente cuando todo esté cargado
@@ -390,8 +406,8 @@ public class Visual extends TagSupport {
                                             //</editor-fold>
                                         } else {
                                             //<editor-fold defaultstate="collapsed" desc="VALIDATION">
-                                            Html = Html.replace("REF" + Cnt2, "<span class='editable' contenteditable='true'>-----</span>");
-                                            Html = Html.replace("COS" + Cnt2, "<span class='editable' contenteditable='true'>-----</span>");
+                                            Html = Html.replace("REF" + Cnt2, "<span  class='editable pending' contenteditable='true'>----</span>");
+                                            Html = Html.replace("COS" + Cnt2, "<span  class='editable pending' contenteditable='true'>----</span>");
 
                                             Message = "No se encuentra información en Generacion de lotes en el módulo de repcepción material por el lote, favor verifique";
 
@@ -410,9 +426,9 @@ public class Visual extends TagSupport {
                             } else {
                                 //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA">
                                 for (int i = 1; i < 10; i++) {
-                                    Html = Html.replace("REF" + i + "", "<span class='editable' contenteditable='true'>----</span>");
-                                    Html = Html.replace("LBT" + i + "", "<span class='editable' contenteditable='true'>----</span>");
-                                    Html = Html.replace("COS" + i + "", "<span class='editable' contenteditable='true'>----</span>");
+                                    Html = Html.replace("REF" + i + "", "<span  class='editable pending' contenteditable='true'>----</span>");
+                                    Html = Html.replace("LBT" + i + "", "<span  class='editable pending' contenteditable='true'>----</span>");
+                                    Html = Html.replace("COS" + i + "", "<span  class='editable pending' contenteditable='true'>----</span>");
                                 }
                                 Message = "No se encuentra información materiales o ductos en Registros, favor verifique";
 
@@ -436,7 +452,7 @@ public class Visual extends TagSupport {
                                         int ForCant = Integer.parseInt(ArgPrm[0].trim());
                                         for (int i = 1; i < ForCant; i++) {
                                             if (ArgPrm[i].contains("0 +/- 0")) {
-                                                Html = Html.replaceFirst("PRM" + Count2 + "", "<span class='editable' contenteditable='true'>-----</span>");
+                                                Html = Html.replaceFirst("PRM" + Count2 + "", "<span  class='editable pending' contenteditable='true'>----</span>");
                                             } else {
                                                 Html = Html.replaceFirst("PRM" + Count2 + "", ArgPrm[i]);
                                             }
@@ -467,17 +483,17 @@ public class Visual extends TagSupport {
                                         for (int i = 0; i < lst_data.size(); i++) {
                                             String[] ArgData = Util.parseResult(lst_data.get(i));
                                             if (ArgData[1].trim().equals("0")) {
-                                                Html = Html.replaceFirst("MIN" + Count + "", "<span class='editable' contenteditable='true'>-----</span>");
+                                                Html = Html.replaceFirst("MIN" + Count + "", "<span  class='editable pending' contenteditable='true'>----</span>");
                                             } else {
                                                 Html = Html.replaceFirst("MIN" + Count + "", ArgData[1]);
                                             }
                                             if (ArgData[2].trim().equals("0")) {
-                                                Html = Html.replaceFirst("MAX" + Count + "", "<span class='editable' contenteditable='true'>-----</span>");
+                                                Html = Html.replaceFirst("MAX" + Count + "", "<span  class='editable pending' contenteditable='true'>----</span>");
                                             } else {
                                                 Html = Html.replaceFirst("MAX" + Count + "", ArgData[2]);
                                             }
                                             if (ArgData[3].trim().equals("0.00")) {
-                                                Html = Html.replaceFirst("MEAN" + Count + "", "<span class='editable' contenteditable='true'>-----</span>");
+                                                Html = Html.replaceFirst("MEAN" + Count + "", "<span  class='editable pending' contenteditable='true'>----</span>");
                                             } else {
                                                 Html = Html.replaceFirst("MEAN" + Count + "", ArgData[3]);
                                             }
@@ -517,7 +533,7 @@ public class Visual extends TagSupport {
                                     String etiqueta = etiquetas[i];
 
                                     if (valor.equals("N/A")) {
-                                        Html = Html.replace(etiqueta, "<span class='editable' contenteditable='true'>-----</span>");
+                                        Html = Html.replace(etiqueta, "<span  class='editable pending' contenteditable='true'>----</span>");
                                     } else {
                                         Html = Html.replace(etiqueta, valor);
                                     }
@@ -532,7 +548,7 @@ public class Visual extends TagSupport {
                                         String[] ArgLay = lst_Glotes1.get(0).toString().replace("]", "").replace("[", "").split("///");
                                         Html = Html.replace("COS" + Cnt + "", "CC" + ArgLay[0]);
                                     } else {
-                                        Html = Html.replace("COS" + Cnt, "<span class='editable' contenteditable='true'>-----</span>");
+                                        Html = Html.replace("COS" + Cnt, "<span  class='editable pending' contenteditable='true'>----</span>");
                                         Message = "No se encuentra información en Generacion de lotes en el módulo de Control consecutivos por el lote, favor verifique";
 
                                         // ✅ Ejecutar automáticamente cuando todo esté cargado
@@ -550,8 +566,8 @@ public class Visual extends TagSupport {
                                 for (int o = 0; o < ArgTnt.length; o++) {
                                     if (ArgTnt[o].equals("N/A")) {
                                         //<editor-fold defaultstate="collapsed" desc="VALIDATION">
-                                        Html = Html.replace("REF" + Cnt2, "<span class='editable' contenteditable='true'>-----</span>");
-                                        Html = Html.replace("COS" + Cnt2, "<span class='editable' contenteditable='true'>-----</span>");
+                                        Html = Html.replace("REF" + Cnt2, "<span  class='editable pending' contenteditable='true'>----</span>");
+                                        Html = Html.replace("COS" + Cnt2, "<span  class='editable pending' contenteditable='true'>----</span>");
                                         Message = "No se encuentra información en Generacion de lotes en el módulo de repcepción material por el lote, favor verifique";
 
                                         // ✅ Ejecutar automáticamente cuando todo esté cargado
@@ -567,12 +583,12 @@ public class Visual extends TagSupport {
                                             //<editor-fold defaultstate="collapsed" desc="CC RECECTION">
                                             String[] ArgInk = Util.parseResult(lst_GlotesRep.get(0));
                                             Html = Html.replace("REF" + Cnt2 + "", ArgInk[1].replace("M", ""));
-                                            Html = Html.replace("COS" + Cnt2 + "", "<span class='editable' contenteditable='true'>CC" + ArgInk[0] + "</span>");
+                                            Html = Html.replace("COS" + Cnt2 + "", "<span  class='editable pending' contenteditable='true'>CC" + ArgInk[0] + "</span>");
                                             //</editor-fold>
                                         } else {
                                             //<editor-fold defaultstate="collapsed" desc="VALIDATION">
-                                            Html = Html.replace("REF" + Cnt2, "<span class='editable' contenteditable='true'>-----</span>");
-                                            Html = Html.replace("COS" + Cnt2, "<span class='editable' contenteditable='true'>-----</span>");
+                                            Html = Html.replace("REF" + Cnt2, "<span  class='editable pending' contenteditable='true'>----</span>");
+                                            Html = Html.replace("COS" + Cnt2, "<span  class='editable pending' contenteditable='true'>----</span>");
                                             Message = "No se encuentra información en Generacion de lotes en el módulo de repcepción material por el lote, favor verifique";
 
                                             // ✅ Ejecutar automáticamente cuando todo esté cargado
@@ -590,9 +606,9 @@ public class Visual extends TagSupport {
                             } else {
                                 //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA">
                                 for (int i = 1; i < 10; i++) {
-                                    Html = Html.replace("REF" + i + "", "<span class='editable' contenteditable='true'>----</span>");
-                                    Html = Html.replace("LBT" + i + "", "<span class='editable' contenteditable='true'>----</span>");
-                                    Html = Html.replace("COS" + i + "", "<span class='editable' contenteditable='true'>----</span>");
+                                    Html = Html.replace("REF" + i + "", "<span  class='editable pending' contenteditable='true'>----</span>");
+                                    Html = Html.replace("LBT" + i + "", "<span  class='editable pending' contenteditable='true'>----</span>");
+                                    Html = Html.replace("COS" + i + "", "<span  class='editable pending' contenteditable='true'>----</span>");
                                 }
                                 Message = "No se encuentra información materiales o ductos en Registros, favor verifique";
 
@@ -616,7 +632,7 @@ public class Visual extends TagSupport {
                                         int ForCant = Integer.parseInt(ArgPrm[0].trim());
                                         for (int i = 1; i < ForCant; i++) {
                                             if (ArgPrm[i].contains("0 +/- 0")) {
-                                                Html = Html.replaceFirst("PRM" + Count2 + "", "<span class='editable' contenteditable='true'>-----</span>");
+                                                Html = Html.replaceFirst("PRM" + Count2 + "", "<span  class='editable pending' contenteditable='true'>----</span>");
                                             } else {
                                                 Html = Html.replaceFirst("PRM" + Count2 + "", ArgPrm[i]);
                                             }
@@ -647,17 +663,17 @@ public class Visual extends TagSupport {
                                         for (int i = 0; i < lst_data.size(); i++) {
                                             String[] ArgData = Util.parseResult(lst_data.get(i));
                                             if (ArgData[1].trim().equals("0")) {
-                                                Html = Html.replaceFirst("MIN" + Count + "", "<span class='editable' contenteditable='true'>-----</span>");
+                                                Html = Html.replaceFirst("MIN" + Count + "", "<span  class='editable pending' contenteditable='true'>----</span>");
                                             } else {
                                                 Html = Html.replaceFirst("MIN" + Count + "", ArgData[1]);
                                             }
                                             if (ArgData[2].trim().equals("0")) {
-                                                Html = Html.replaceFirst("MAX" + Count + "", "<span class='editable' contenteditable='true'>-----</span>");
+                                                Html = Html.replaceFirst("MAX" + Count + "", "<span  class='editable pending' contenteditable='true'>----</span>");
                                             } else {
                                                 Html = Html.replaceFirst("MAX" + Count + "", ArgData[2]);
                                             }
                                             if (ArgData[3].trim().equals("0.00")) {
-                                                Html = Html.replaceFirst("MEAN" + Count + "", "<span class='editable' contenteditable='true'>-----</span>");
+                                                Html = Html.replaceFirst("MEAN" + Count + "", "<span  class='editable pending' contenteditable='true'>----</span>");
                                             } else {
                                                 Html = Html.replaceFirst("MEAN" + Count + "", ArgData[3]);
                                             }
@@ -695,7 +711,7 @@ public class Visual extends TagSupport {
                                     String etiqueta = etiquetas[i];
 
                                     if (valor.equals("N/A")) {
-                                        Html = Html.replace(etiqueta, "<span class='editable' contenteditable='true'>-----</span>");
+                                        Html = Html.replace(etiqueta, "<span  class='editable pending' contenteditable='true'>----</span>");
                                     } else {
                                         Html = Html.replace(etiqueta, valor);
                                     }
@@ -710,7 +726,7 @@ public class Visual extends TagSupport {
                                         String[] ArgLay = lst_Glotes1.get(0).toString().replace("]", "").replace("[", "").split("///");
                                         Html = Html.replace("COS" + Cnt + "", "CC" + ArgLay[0]);
                                     } else {
-                                        Html = Html.replace("COS" + Cnt, "<span class='editable' contenteditable='true'>-----</span>");
+                                        Html = Html.replace("COS" + Cnt, "<span  class='editable pending' contenteditable='true'>----</span>");
 
                                         Message = "No se encuentra información en Generacion de lotes en el módulo de Control consecutivos por el lote, favor verifique";
 
@@ -730,8 +746,8 @@ public class Visual extends TagSupport {
                                     lst_GlotesRep = GeneracionLotesJpa.ConsultarCC_RepcecionMaterial(ArgTnt[o]);
                                     if (ArgTnt[o].equals("N/A")) {
                                         //<editor-fold defaultstate="collapsed" desc="VALIDATION">
-                                        Html = Html.replace("REF" + Cnt2, "<span class='editable' contenteditable='true'>-----</span>");
-                                        Html = Html.replace("COS" + Cnt2, "<span class='editable' contenteditable='true'>-----</span>");
+                                        Html = Html.replace("REF" + Cnt2, "<span  class='editable pending' contenteditable='true'>----</span>");
+                                        Html = Html.replace("COS" + Cnt2, "<span  class='editable pending' contenteditable='true'>----</span>");
 
                                         Message = "No se encuentra información en Generacion de lotes en el módulo de repcepción material por el lote, favor verifique";
 
@@ -751,8 +767,8 @@ public class Visual extends TagSupport {
                                             //</editor-fold>
                                         } else {
                                             //<editor-fold defaultstate="collapsed" desc="VALIDATION">
-                                            Html = Html.replace("REF" + Cnt2, "<span class='editable' contenteditable='true'>-----</span>");
-                                            Html = Html.replace("COS" + Cnt2, "<span class='editable' contenteditable='true'>-----</span>");
+                                            Html = Html.replace("REF" + Cnt2, "<span  class='editable pending' contenteditable='true'>----</span>");
+                                            Html = Html.replace("COS" + Cnt2, "<span  class='editable pending' contenteditable='true'>----</span>");
 
                                             Message = "No se encuentra información en Generacion de lotes en el módulo de repcepción material por el lote, favor verifique";
 
@@ -771,9 +787,9 @@ public class Visual extends TagSupport {
                             } else {
                                 //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA">
                                 for (int i = 1; i < 10; i++) {
-                                    Html = Html.replace("REF" + i + "", "<span class='editable' contenteditable='true'>----</span>");
-                                    Html = Html.replace("LBT" + i + "", "<span class='editable' contenteditable='true'>----</span>");
-                                    Html = Html.replace("COS" + i + "", "<span class='editable' contenteditable='true'>----</span>");
+                                    Html = Html.replace("REF" + i + "", "<span  class='editable pending' contenteditable='true'>----</span>");
+                                    Html = Html.replace("LBT" + i + "", "<span  class='editable pending' contenteditable='true'>----</span>");
+                                    Html = Html.replace("COS" + i + "", "<span  class='editable pending' contenteditable='true'>----</span>");
                                 }
                                 Message = "No se encuentra información materiales o ductos en Registros, favor verifique";
 
@@ -797,7 +813,7 @@ public class Visual extends TagSupport {
                                         int ForCant = Integer.parseInt(ArgPrm[0].trim());
                                         for (int i = 1; i < ForCant; i++) {
                                             if (ArgPrm[i].contains("0 +/- 0")) {
-                                                Html = Html.replaceFirst("PRM" + Count2 + "", "<span class='editable' contenteditable='true'>-----</span>");
+                                                Html = Html.replaceFirst("PRM" + Count2 + "", "<span  class='editable pending' contenteditable='true'>----</span>");
                                             } else {
                                                 Html = Html.replaceFirst("PRM" + Count2 + "", ArgPrm[i]);
                                             }
@@ -828,17 +844,17 @@ public class Visual extends TagSupport {
                                         for (int i = 0; i < lst_data.size(); i++) {
                                             String[] ArgData = Util.parseResult(lst_data.get(i));
                                             if (ArgData[1].trim().equals("0")) {
-                                                Html = Html.replaceFirst("MIN" + Count + "", "<span class='editable' contenteditable='true'>-----</span>");
+                                                Html = Html.replaceFirst("MIN" + Count + "", "<span  class='editable pending' contenteditable='true'>----</span>");
                                             } else {
                                                 Html = Html.replaceFirst("MIN" + Count + "", ArgData[1]);
                                             }
                                             if (ArgData[2].trim().equals("0")) {
-                                                Html = Html.replaceFirst("MAX" + Count + "", "<span class='editable' contenteditable='true'>-----</span>");
+                                                Html = Html.replaceFirst("MAX" + Count + "", "<span  class='editable pending' contenteditable='true'>----</span>");
                                             } else {
                                                 Html = Html.replaceFirst("MAX" + Count + "", ArgData[2]);
                                             }
                                             if (ArgData[3].trim().equals("0.00")) {
-                                                Html = Html.replaceFirst("MEAN" + Count + "", "<span class='editable' contenteditable='true'>-----</span>");
+                                                Html = Html.replaceFirst("MEAN" + Count + "", "<span  class='editable pending' contenteditable='true'>----</span>");
                                             } else {
                                                 Html = Html.replaceFirst("MEAN" + Count + "", ArgData[3]);
                                             }
@@ -872,9 +888,9 @@ public class Visual extends TagSupport {
                             Html = Html.replace("MAX" + Count + "", ArgWelds[1]);
                             Html = Html.replace("MEAN" + Count + "", ArgWelds[2]);
                         } else {
-                            Html = Html.replace("MIN" + Count + "", "<span class='editable' contenteditable='true'>-----</span>");
-                            Html = Html.replace("MAX" + Count + "", "<span class='editable' contenteditable='true'>-----</span>");
-                            Html = Html.replace("MEAN" + Count + "", "<span class='editable' contenteditable='true'>-----</span>");
+                            Html = Html.replace("MIN" + Count + "", "<span  class='editable pending' contenteditable='true'>----</span>");
+                            Html = Html.replace("MAX" + Count + "", "<span  class='editable pending' contenteditable='true'>----</span>");
+                            Html = Html.replace("MEAN" + Count + "", "<span  class='editable pending' contenteditable='true'>----</span>");
                             //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA">
                             Message = "No se encuentra información de soldadura Registros LAB, favor verifique";
 
@@ -942,6 +958,14 @@ public class Visual extends TagSupport {
                                 "<button class=\"btn btn-sm btn-danger me-2 mr-2\" title=\"Eliminar fila o grupo\"><i class=\"fas fa-times\"></i></button>",
                                 ""
                         );
+                        Html = Html.replaceAll(
+                                "<input type=\"date\" id=\"dispatchDate\" name=\"dispatchDate\" class=\"editable pending\" style=\"border:none; outline:none; background:transparent;\"",
+                                "<input type=\"text\" id=\"dispatchDate\" name=\"dispatchDate\" class=\"editable pending\" style=\"border:none; outline:none; background:transparent;text-align: center;;\""
+                        );
+                        Html = Html.replaceAll(
+                                "editable pending",
+                                ""
+                        );
 
                         out.print(Html);
                         out.print("</div>");
@@ -952,18 +976,20 @@ public class Visual extends TagSupport {
                         out.print("<div id='HtmlContent'>");
                         out.print(Html);
                         out.print("</div>");
-                        if (Permission.contains("[29]")) {
-                            out.print("<form id='FormGenerate' action='Generate?opt=3' method='post' class='needs-validation' novalidate='' onsubmit='return FormGenerate(this)'>");
-                            out.print("<input type='hidden' name='Type' value='" + Type + "'>");
-                            out.print("<input type='hidden' name='Order' value='" + Order + "'>");
-                            out.print("<input type='hidden' name='Product' value='" + Product + "'>");
-                            out.print("<input type='hidden' name='Batch' value='" + Batch + "'>");
-                            out.print("<input type='hidden' name='FormatName' value='" + FormatName + "'>");
-                            out.print("<input type='hidden' name='IdCertificates' value='" + IdCertificates + "'>");
-                            out.print("</form>");
-                            out.print("<div class='DivButtonPending'>");
-                            out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='saveHtml()' data-toggle='tooltip' data-placement='top' title='Guardar'><i class='fas fa-save'></i></button>");
-                            out.print("</div>");
+                        if (Client.equals("")) {
+                            if (Permission.contains("[29]")) {
+                                out.print("<form id='FormGenerate' action='Generate?opt=3' method='post' class='needs-validation' novalidate='' onsubmit='return FormGenerate(this)'>");
+                                out.print("<input type='hidden' name='Type' value='" + Type + "'>");
+                                out.print("<input type='hidden' name='Order' value='" + Order + "'>");
+                                out.print("<input type='hidden' name='Product' value='" + Product + "'>");
+                                out.print("<input type='hidden' name='Batch' value='" + Batch + "'>");
+                                out.print("<input type='hidden' name='FormatName' value='" + FormatName + "'>");
+                                out.print("<input type='hidden' name='IdCertificates' value='" + IdCertificates + "'>");
+                                out.print("</form>");
+                                out.print("<div class='DivButtonPending'>");
+                                out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='saveHtml()' data-toggle='tooltip' data-placement='top' title='Guardar'><i class='fas fa-save'></i></button>");
+                                out.print("</div>");
+                            }
                         }
                         out.print(" <script src=\"Interface/Content/Assets/js/DeleteRow.js\"></script>");
                         //</editor-fold>

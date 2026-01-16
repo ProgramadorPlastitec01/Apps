@@ -3,10 +3,16 @@
   <persistence-unit name="RegistrosLaboratorioPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/registro_laboratorio_va094705?zeroDateTimeBehavior=convertToNull"/>
+
+<!--      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/registro_laboratorio_va094705?zeroDateTimeBehavior=convertToNull"/>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
       <property name="javax.persistence.jdbc.user" value="app_plas"/>
-      <property name="javax.persistence.jdbc.password" value="94#qS0"/>
+      <property name="javax.persistence.jdbc.password" value="94#qS0"/>-->
+
+        <property name="javax.persistence.jdbc.url" value="jdbc:mysql://172.16.1.138:3306/registro_laboratorio_va094705"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.user" value="root"/>
+      <property name="javax.persistence.jdbc.password" value="muG1Bu"/>
       <property name="javax.persistence.schema-generation.database.action" value="create"/>
     </properties>
   </persistence-unit>

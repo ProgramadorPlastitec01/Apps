@@ -29,7 +29,7 @@ public class Generate extends HttpServlet {
             String Signature = session.getAttribute("Firma").toString();
             int Order = 0, IdCertificates = 0, TempDelete = 0, TempM = 0, Temp = 0, StateCerti = 0, State = 0, StateM = 0, IdCertificate = 0, Anio = 0;
             String Type = "", Product = "", Batch = "", Html = "", Code = "", Consecutive = "", Customer = "", IdCertiMasive = "", Category = "",
-                    Justification = "", Record = "", FormatName = "", Message = "", Amount = "", DateDispatch = "", MaterialBatches = "";
+                    Justification = "", Record = "", FormatName = "", Message = "", Amount = "", DateDispatch = "", MaterialBatches = "", Client = "";
             boolean result = false;
             List lst_id = null;
             switch (opt) {
@@ -109,6 +109,11 @@ public class Generate extends HttpServlet {
                     } catch (Exception e) {
                         TempM = 0;
                     }
+                    try {
+                        Client = request.getParameter("Client");
+                    } catch (Exception e) {
+                        Client = "";
+                    }
                     request.setAttribute("Type", Type);
                     request.setAttribute("Order", Order);
                     request.setAttribute("Product", Product);
@@ -119,6 +124,7 @@ public class Generate extends HttpServlet {
                     request.setAttribute("TempDelete", TempDelete);
                     request.setAttribute("StateCerti", StateCerti);
                     request.setAttribute("TempM", TempM);
+                    request.setAttribute("Client", Client);
                     request.getRequestDispatcher("Visual.jsp").forward(request, response);
                     //</editor-fold>
                     break;
@@ -162,9 +168,7 @@ public class Generate extends HttpServlet {
                     if (IdCertificates > 0) {
                         //<editor-fold defaultstate="collapsed" desc="UPDATE">
                         result = CertificatesJpa.CertificatesUpdate(IdCertificates, Consecutive, Amount, DateDispatch, MaterialBatches, Html);
-                        if (result) {
-                            request.setAttribute("UpdateCertificate", result);
-                        }
+                        request.setAttribute("UpdateCertificate", result);
                         request.getRequestDispatcher("Generate?opt=2&Type=" + Type + "&IdCertificates=" + IdCertificates)
                                 .forward(request, response);
                         //</editor-fold>

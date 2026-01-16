@@ -12,12 +12,12 @@
         <link rel="stylesheet" href="Interface/Content/Assets/modules/izitoast/css/iziToast.min.css">
         <link rel="icon" type="image/png" href="Interface/Imagen/LogoSWhite.png">
         <title>Generación</title>
-        <!--        <script type="text/javascript">
-                    history.pushState(null, null, 'Generacion.jsp');
-                    window.addEventListener('popstate', function (event) {
-                        history.pushState(null, null, 'Generacion.jsp');
-                    });
-                </script>-->
+        <script type="text/javascript">
+            history.pushState(null, null, 'GenerateReport.jsp');
+            window.addEventListener('popstate', function (event) {
+                history.pushState(null, null, 'GenerateReport.jsp');
+            });
+        </script>
     </head>
     <body>
         <jsp:include page="Menu.jsp"></jsp:include>

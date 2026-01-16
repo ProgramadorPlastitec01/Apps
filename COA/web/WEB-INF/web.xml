@@ -40,6 +40,10 @@
         <servlet-name>DownloadGL</servlet-name>
         <servlet-class>Method.DownloadGL</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Client</servlet-name>
+        <servlet-class>Servlet.Client</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Session</servlet-name>
         <url-pattern>/Session</url-pattern>
@@ -79,6 +83,10 @@
     <servlet-mapping>
         <servlet-name>DownloadGL</servlet-name>
         <url-pattern>/DownloadGL</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Client</servlet-name>
+        <url-pattern>/Client</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

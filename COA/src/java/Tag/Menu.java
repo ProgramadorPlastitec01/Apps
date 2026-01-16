@@ -109,14 +109,14 @@ public class Menu extends TagSupport {
 
             if (Permission.contains("[20]")) {
                 out.print("<li class=\"dropdown\">");
-                out.print("<a href='#' class=\"nav-link\" onclick='cargarDatos()'><i class=\"fas fa-user-tie\"></i><span>Clientes</span></a>");
+                out.print("<a href='Client?opt=1&Client=' class=\"nav-link\" onclick='cargarDatos()'><i class=\"fas fa-user-tie\"></i><span>Clientes</span></a>");
                 out.print("</li>");
             }
-            if (Permission.contains("[21]")) {
-                out.print("<li class=\"dropdown\">");
-                out.print("<a href='#' class=\"nav-link\" onclick='cargarDatos()'><i class=\"fas fa-file-alt\"></i><span>Reporte</span></a>");
-                out.print("</li>");
-            }
+//            if (Permission.contains("[21]")) {
+//                out.print("<li class=\"dropdown\">");
+//                out.print("<a href='#' class=\"nav-link\" onclick='cargarDatos()'><i class=\"fas fa-file-alt\"></i><span>Reporte</span></a>");
+//                out.print("</li>");
+//            }
 
             out.print("</ul>");
 

@@ -13,9 +13,9 @@
         <link rel="icon" type="image/png" href="Interface/Imagen/LogoSWhite.png">
         <title>Perfil</title>
         <script type="text/javascript">
-            history.pushState(null, null, 'Perfil.jsp');
+            history.pushState(null, null, 'Profile.jsp');
             window.addEventListener('popstate', function (event) {
-                history.pushState(null, null, 'Perfil.jsp');
+                history.pushState(null, null, 'Profile.jsp');
             });
         </script>
     </head>

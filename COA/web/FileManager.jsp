@@ -54,6 +54,7 @@
                                         List lst_link = null;
                                         List lst_certificate = null;
                                         List lst_material = null;
+                                        List lst_summary = null;
                                         try {
                                             Permission = sesion.getAttribute("Permisos").toString();
                                         } catch (Exception e) {
@@ -355,6 +356,54 @@
                                                            title="Ver registro">
                                                             <i class="fas fa-eye"></i>
                                                         </a>
+
+                                                    </div>
+                                                </td>
+                                            </tr>    
+                                            <%                                                }
+                                                }
+                                            %>
+                                            <%
+                                                lst_summary = LinkBatch.RGC17BatchRecord(orden, lote);
+                                                if (lst_summary != null) {
+                                                    for (int i = 0; i < lst_summary.size(); i++) {
+                                                        String[] ArgSummary = Util.parseResult(lst_summary.get(i));
+                                            %>
+                                            <tr class="file-row">
+                                                <td><%= ArgSummary[0]%></td>
+                                                <td><%= ArgSummary[13]%></td>
+                                                <td class="text-center">
+                                                    <div class="btn-group btn-group-sm">
+                                                        <form action="http://localhost:8084/Registros_lab/VisorResumen?opc=1"
+                                                              method="post"
+                                                              target="_blank"
+                                                              name="FormVer<%= i%>"
+                                                              id="FormVer<%= i%>"
+                                                              onsubmit="checkSubmit();"
+                                                              style="display:inline;">
+
+                                                            <input type="hidden" name="Txt_orden" value="<%= ArgSummary[1]%>" />
+                                                            <input type="hidden" name="Cbx_producto" value="<%= ArgSummary[2]%>" />
+                                                            <input type="hidden" name="Cbx_lote" value="<%= ArgSummary[3]%>" />
+                                                            <input type="hidden" name="Txt_fecha_inicio" value="<%= ArgSummary[4]%>" />
+                                                            <input type="hidden" name="Txt_fecha_fin" value="<%= ArgSummary[5]%>" />
+                                                            <input type="hidden" name="Txt_hora_inicio" value="<%= ArgSummary[6]%>" />
+                                                            <input type="hidden" name="Txt_hora_fin" value="<%= ArgSummary[7]%>" />
+                                                            <input type="hidden" name="Txt_numero_certificado" value="<%= ArgSummary[8]%>" />
+                                                            <input type="hidden" name="Txt_fecha_despacho" value="<%= ArgSummary[9]%>" />
+                                                            <input type="hidden" name="Txt_datos_totales" value="<%= ArgSummary[10]%>" />
+                                                            <input type="hidden" name="Txt_usuario_responsable" value="<%= ArgSummary[11]%>" />
+                                                            <input type="hidden" name="Id_resumen" value="<%= ArgSummary[12]%>" />
+                                                            <input type="hidden" name="loteCola" value="" />
+
+                                                            <button type="submit"
+                                                                    class="btn btn-info mr-3"
+                                                                    title="Ver resumen"
+                                                                    style="padding: .25rem .5rem;">
+                                                                <i class="fas fa-eye"></i>
+                                                            </button>
+
+                                                        </form>
 
                                                     </div>
                                                 </td>
