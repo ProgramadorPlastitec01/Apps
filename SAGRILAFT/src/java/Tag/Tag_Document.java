@@ -2279,10 +2279,12 @@ public class Tag_Document extends TagSupport {
                                     }
 
                                 }
-                                if (DataClient[7].toString().contains("Si")) {
+                                if (DataClient[8].toString().contains("Si")) {
                                     Template = Template.replace("id=\"XXXCERTSIXXX\">", "id=\"XXXCERTSIXXX\" checked disabled>");
-                                } else if (DataClient[7].toString().contains("No")) {
+                                    Template = Template.replace("id=\"XXXCERTNOXXX\">", "id=\"XXXCERTNOXXX\" disabled>");
+                                } else if (DataClient[8].toString().contains("No")) {
                                     Template = Template.replace("id=\"XXXCERTNOXXX\">", "id=\"XXXCERTNOXXX\" checked disabled>");
+                                    Template = Template.replace("id=\"XXXCERTSIXXX\">", "id=\"XXXCERTSIXXX\" disabled>");
                                 }
 
                             } else {
