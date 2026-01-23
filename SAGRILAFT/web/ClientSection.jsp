@@ -532,7 +532,7 @@
             }
 
         </script>
-        
+
         <script>
             contador = 1; // Contador para identificar cada grupo de campos de persona
             function agregarPersonaComer(count) {
@@ -607,7 +607,7 @@
             }
 
         </script>
-        
+
         <script>
             contador = 1; // Contador para identificar cada grupo de campos de persona
             function agregarPersonaBank(count) {
@@ -681,7 +681,7 @@
             }
 
         </script>
-        
+
         <script>
             function DeleteItem(id) {
                 const div = document.getElementById('DataForm' + id);
@@ -767,8 +767,25 @@
 //                    alert("Falta seleccionar las opciones: " + Whitout.join(", "));
                     }
                 }
+            }
+        </script>
+        <script>
+            function ReadDocCompletNew(lg) {
+                var validate = document.getElementById("idReadDoc").value;
+                var Whitout = [];
 
-
+                if (!validate.includes("[1]")) {
+                    Whitout.push("Statement");
+                }
+                if (Whitout.length === 0) {
+                } else {
+                    iziToast.warning({
+                        title: 'Attention!',
+                        message: 'The readding box needs to be checked for ' + Whitout.join(', '),
+                        position: 'bottomRight'
+                    });
+//                    alert("Falta seleccionar las opciones: " + Whitout.join(", "));
+                }
             }
         </script>
         <script>
