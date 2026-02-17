@@ -249,7 +249,7 @@ public class Visual extends TagSupport {
                         Html = Html.replace("XProductX", (ArgHead[9].equals("NULL") || ArgHead[9] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : ArgHead[9]);
                         Html = Html.replace("XAbilityX", (ArgHead[10].equals("NULL") || ArgHead[10] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : ArgHead[10]);
                         Html = Html.replace("XBatchX", Batch);
-                        Html = Html.replace("XQuatityGenX", ArgHead[11] + " UNIDADES");
+                        Html = Html.replace("XQuatityGenX", "<span  class='editable pending' contenteditable='true'>" + ((ArgHead[11].equals("NULL") || ArgHead[11] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : ArgHead[11]) + " UNIDADES </span>");
                         Html = Html.replace("XClient_OrderX", (ArgHead[12].equals("NULL") || ArgHead[12] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : ArgHead[12]);
                         Html = Html.replace("<h3 id=\"consValue\" class=\"mb-0\">XConsX</h3>", "<h3 id=\"consValue\" class=\"mb-0 editable\" contenteditable='true'>CC----</h3>");
 
