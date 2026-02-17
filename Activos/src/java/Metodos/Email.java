@@ -657,6 +657,7 @@ public class Email {
                     if (addresto.toString().contains("l.cely@plastitec-sa.com")) {
                     } else {
                         message.addRecipient(Message.RecipientType.TO, new InternetAddress("l.cely@plastitec-sa.com"));
+                        message.addRecipient(Message.RecipientType.TO, new InternetAddress("g.ceballos@plastitec-sa.com"));
                         message.addRecipient(Message.RecipientType.TO, new InternetAddress("p.ti@plastitec-sa.com"));
                     }
                     message.setRecipients(Message.RecipientType.TO, addresto);// correo destinatario
@@ -1196,6 +1197,7 @@ public class Email {
                 if (addresto.toString().contains("l.cely@plastitec-sa.com")) {
                 } else {
                     message.addRecipient(Message.RecipientType.TO, new InternetAddress("l.cely@plastitec-sa.com"));
+                    message.addRecipient(Message.RecipientType.TO, new InternetAddress("g.ceballos@plastitec-sa.com"));
                 }
 //            message.addRecipient(Message.RecipientType.TO, new InternetAddress("p.ti@plastitec-sa.com"));
                 message.setFrom(new InternetAddress(arrConf[4]));

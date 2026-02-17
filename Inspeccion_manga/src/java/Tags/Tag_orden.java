@@ -1523,18 +1523,38 @@ public class Tag_orden extends TagSupport {
                                     out.print("<option value='Turno 1' selected>Turno 1</option>");
                                     out.print("<option value='Turno 2' >Turno 2</option>");
                                     out.print("<option value='Turno 3' >Turno 3</option>");
+                                    out.print("<option value='Turno 1 12hr' >Turno 1 12hr</option>");
+                                    out.print("<option value='Turno 2 12hr' >Turno 2 12hr</option>");
                                 } else if (obj_registro[3].toString().equals("Turno 2")) {
                                     out.print("<option value='Turno 1' >Turno 1</option>");
                                     out.print("<option value='Turno 2' selected>Turno 2</option>");
                                     out.print("<option value='Turno 3' >Turno 3</option>");
+                                    out.print("<option value='Turno 1 12hr' >Turno 1 12hr</option>");
+                                    out.print("<option value='Turno 2 12hr' >Turno 2 12hr</option>");
                                 } else if (obj_registro[3].toString().equals("Turno 3")) {
                                     out.print("<option value='Turno 1' >Turno 1</option>");
                                     out.print("<option value='Turno 2' >Turno 2</option>");
                                     out.print("<option value='Turno 3' selected>Turno 3</option>");
+                                    out.print("<option value='Turno 1 12hr' >Turno 1 12hr</option>");
+                                    out.print("<option value='Turno 2 12hr' >Turno 2 12hr</option>");
+                                } else if (obj_registro[3].toString().equals("Turno 1 12hr")) {
+                                    out.print("<option value='Turno 1' >Turno 1</option>");
+                                    out.print("<option value='Turno 2' >Turno 2</option>");
+                                    out.print("<option value='Turno 3' >Turno 3</option>");
+                                    out.print("<option value='Turno 1 12hr' selected>Turno 1 12hr</option>");
+                                    out.print("<option value='Turno 2 12hr'>Turno 2 12hr</option>");
+                                } else if (obj_registro[3].toString().equals("Turno 2 12hr")) {
+                                    out.print("<option value='Turno 1' >Turno 1</option>");
+                                    out.print("<option value='Turno 2' >Turno 2</option>");
+                                    out.print("<option value='Turno 3' >Turno 3</option>");
+                                    out.print("<option value='Turno 1 12hr' >Turno 1 12hr</option>");
+                                    out.print("<option value='Turno 2 12hr' selected>Turno 2 12hr</option>");
                                 } else {
                                     out.print("<option value='Turno 1' >Turno 1</option>");
                                     out.print("<option value='Turno 2' >Turno 2</option>");
                                     out.print("<option value='Turno 3' >Turno 3</option>");
+                                    out.print("<option value='Turno 1 12hr' >Turno 1 12hr</option>");
+                                    out.print("<option value='Turno 2 12hr' >Turno 2 12hr</option>");
                                 }
                                 out.print("</select>"
                                         + "<script type='text/javascript'>var mySelect = new LiveValidation('Cbx_turno');"
@@ -1808,23 +1828,45 @@ public class Tag_orden extends TagSupport {
                                 out.print("<b>Turno :</b>");
                                 out.print("<select name='Cbx_turno' id='Cbx_turno' title='Turno'>");
                                 out.print("<option value='0' >Seleccionar Turno</option>");
+
                                 if (obj_registro[3].toString().equals("Turno 1")) {
                                     out.print("<option value='Turno 1' selected>Turno 1</option>");
                                     out.print("<option value='Turno 2' >Turno 2</option>");
                                     out.print("<option value='Turno 3' >Turno 3</option>");
+                                    out.print("<option value='Turno 1 12hr' >Turno 1 12hr</option>");
+                                    out.print("<option value='Turno 2 12hr' >Turno 2 12hr</option>");
                                 } else if (obj_registro[3].toString().equals("Turno 2")) {
                                     out.print("<option value='Turno 1' >Turno 1</option>");
                                     out.print("<option value='Turno 2' selected>Turno 2</option>");
                                     out.print("<option value='Turno 3' >Turno 3</option>");
+                                    out.print("<option value='Turno 1 12hr' >Turno 1 12hr</option>");
+                                    out.print("<option value='Turno 2 12hr' >Turno 2 12hr</option>");
                                 } else if (obj_registro[3].toString().equals("Turno 3")) {
                                     out.print("<option value='Turno 1' >Turno 1</option>");
                                     out.print("<option value='Turno 2' >Turno 2</option>");
                                     out.print("<option value='Turno 3' selected>Turno 3</option>");
+                                    out.print("<option value='Turno 1 12hr' >Turno 1 12hr</option>");
+                                    out.print("<option value='Turno 2 12hr' >Turno 2 12hr</option>");
+                                } else if (obj_registro[3].toString().equals("Turno 1 12hr")) {
+                                    out.print("<option value='Turno 1' >Turno 1</option>");
+                                    out.print("<option value='Turno 2' >Turno 2</option>");
+                                    out.print("<option value='Turno 3' >Turno 3</option>");
+                                    out.print("<option value='Turno 1 12hr' selected>Turno 1 12hr</option>");
+                                    out.print("<option value='Turno 2 12hr'>Turno 2 12hr</option>");
+                                } else if (obj_registro[3].toString().equals("Turno 2 12hr")) {
+                                    out.print("<option value='Turno 1' >Turno 1</option>");
+                                    out.print("<option value='Turno 2' >Turno 2</option>");
+                                    out.print("<option value='Turno 3' >Turno 3</option>");
+                                    out.print("<option value='Turno 1 12hr' >Turno 1 12hr</option>");
+                                    out.print("<option value='Turno 2 12hr' selected>Turno 2 12hr</option>");
                                 } else {
                                     out.print("<option value='Turno 1' >Turno 1</option>");
                                     out.print("<option value='Turno 2' >Turno 2</option>");
                                     out.print("<option value='Turno 3' >Turno 3</option>");
+                                    out.print("<option value='Turno 1 12hr' >Turno 1 12hr</option>");
+                                    out.print("<option value='Turno 2 12hr' >Turno 2 12hr</option>");
                                 }
+
                                 out.print("</select>"
                                         + "<script type='text/javascript'>var mySelect = new LiveValidation('Cbx_turno');"
                                         + "mySelect.add(Validate.Exclusion, { within: ['0'], failureMessage: \"\"});</script>");
@@ -2622,7 +2664,7 @@ public class Tag_orden extends TagSupport {
                         text_plantilla = text_plantilla.replace("_**PRODUCTO_", obj_registro[24].toString());
                         text_plantilla = text_plantilla.replace("_**CODIGO_FT_", obj_registro[26].toString().toString().replace("FT-EX-", ""));
                         text_plantilla = text_plantilla.replace("_**VERSION_FT_", " " + obj_registro[27].toString() + " ");
-                        text_plantilla = text_plantilla.replace("_**OPERARIO_","<b style=\"color:black\">_**OPERARIO_</b>" );
+                        text_plantilla = text_plantilla.replace("_**OPERARIO_", "<b style=\"color:black\">_**OPERARIO_</b>");
                         text_plantilla = text_plantilla.replace("_**COORDINADOR_", "<b style=\"color:black\">_**COORDINADOR_</b>");
                         text_plantilla = text_plantilla.replace("_**INSPECTORA_", "<b style=\"color:blue\">_**INSPECTORA_</b>");
                         out.print(text_plantilla);

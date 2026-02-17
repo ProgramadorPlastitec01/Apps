@@ -98,11 +98,12 @@
         String Name = hidden.get(0).toString();
         String NroDoc = hidden.get(1).toString();
         int IdDoc = Integer.parseInt(hidden.get(2).toString());
-        int TypeSign = Integer.parseInt(hidden.get(3).toString());
-        int IdSing = Integer.parseInt(hidden.get(4).toString());
+        String Title = hidden.get(3).toString();
+        int TypeSign = Integer.parseInt(hidden.get(4).toString());
+        int IdSing = Integer.parseInt(hidden.get(5).toString());
 //        String Format = hidden.get(5).toString();
-        String validation = hidden.get(5).toString();
+        String validation = hidden.get(6).toString();
 
-        request.getRequestDispatcher("ClientSection?opt=16&IdDoc=" + IdDoc + "&TxtValidAction=" + validation + "&TypeSig=" + TypeSign + "&TxtName=" + Name + "&NmbDocx=" + NroDoc + "&NbmIdSigna=" + IdSing + "&TxtSignatureImg=" + file_name + "").forward(request, response);
+        request.getRequestDispatcher("ClientSection?opt=16&IdDoc=" + IdDoc + "&TxtValidAction=" + validation + "&TypeSig=" + TypeSign + "&TxtName=" + Name + "&TxtTitle="+ Title +"&NmbDocx=" + NroDoc + "&NbmIdSigna=" + IdSing + "&TxtSignatureImg=" + file_name + "").forward(request, response);
     }
 %>

@@ -1717,6 +1717,14 @@ div:empty:not(:focus):before {
 }
 
 
+
+.divList{
+    margin-top: 16px;
+    border-bottom: 1px solid #dcdcdc;
+    padding-bottom: 16px;
+}
+
+
 /* Posiciones cuando el menú está abierto (orden correcto hacia la izquierda) */
 .menu-container.open .option:nth-child(2) { transform: translateY(-50%) translateX(-130px); }
 .menu-container.open .option:nth-child(3) { transform: translateY(-50%) translateX(-210px); }

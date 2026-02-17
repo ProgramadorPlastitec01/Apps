@@ -243,8 +243,8 @@
         </div>-->
         <div>
             <a class="phone">
-                <button id="btn_dp" onclick="divLoginR()" class="phone2" style="background: #fff;
-                        border: 2px solid #19284b;"><i style="font-size: 20px;" class="fas fa-headset"></i></button>
+                <!--<button id="btn_dp" onclick="divLoginR()" class="phone2" style="background: #fff;
+                        border: 2px solid #19284b;"><i style="font-size: 20px;" class="fas fa-headset"></i></button>-->
                 <!--<button id="btn_dp" onclick="divLoginR()" class="phone2" style="background: #eb5d27;
                         border: 1px solid black"><img src="Argo/Interfaz/images/terror_1.png" width="34"></button>-->
                                                  <!-- <button id="btn_dp" onclick="divLoginR()" class="phone2" style="background: #fff;
@@ -434,27 +434,23 @@
                         </div>
                     </div>
                 </div>
-
-               <!-- <div class="tile blue">
+                <div class="tile red">
                     <div class="card">
                         <div class="front">
-<!--                            <img src="Argo/Interfaz/images/CopecNv.fw.png" alt="tec" width="200">-->
-                       <!--      <img src="Argo/Interfaz/images/CGBC.png" alt="tec" width="180">
-                            <!-- <div class="DivFront">
+                            <img src="Argo/Interfaz/images/COA.png" alt="tec" width="200" style="">
+                            <div class="DivFront">
                                 <img src="Argo/Interfaz/images/newest.png" width="50" alt=""/>
                             </div>
-                            <!--<img src="Argo/Interfaz/images/Copec_hw.fw.png" alt="tec" width="200">-->
-                       <!--  </div>
-                        <div class="back ControlM" style="background: #ffffffeb;">
-                            <h1 style="color: black; padding: 5%; padding-top: 10%;">CBGC</h1>
-                            <button  class="button-33 mcb" role="button" 
-                                     onclick="javascript:window.open('http://172.16.5.99:8084/CBGC/', '', 'width=auto,height=auto,left=50,\n\
-										top=50,toolbar=yes');
-                                             void 0">Ingresar</button>
                         </div>
-                    </div>	
-                </div>-->
-				
+                        <div class="back BitacoraP" style="background: #ffffffeb;">
+                            <h1 style="color: black; padding: 5%; padding-top: 10%;">COA</h1>
+                            <button class="button-33 coa" role="button" 
+                                    onclick="javascript:window.open('http://localhost:8084/COA/', '', 'width=auto,height=auto,left=50,\n\
+										top=50,toolbar=yes');
+                                            void 0">Ingresar</button>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="tile blue">
                     <div class="card">
@@ -845,6 +841,24 @@
                     </div>
                 </div>
 
+                <div class="tile orange">
+                    <div class="card">
+                        <div class="front">
+                            <img src="Argo/Interfaz/images/SGSI.png" alt="tec" width="200">
+                            <div class="DivFront">
+                                <img src="Argo/Interfaz/images/newest.png" width="50" alt=""/>
+                            </div>
+                        </div>
+                        <div class="back SGSI" style="background: #ffffffeb;">
+                            <h1 style="color: black; padding: 5%; padding-top: 10%;">SGSI</h1>
+                            <button  class="button-33 sgsi" role="button" 
+                                     onclick="javascript:window.open('https://sgsi.plastitec-sa.com/', '', 'width=auto,height=auto,left=50,\n\
+										top=50,toolbar=yes');
+                                             void 0">Ingresar</button>
+                        </div>
+                    </div>
+                </div>
+                            
                 <div class="tile blue">
                     <div class="card">
                         <div class="front">

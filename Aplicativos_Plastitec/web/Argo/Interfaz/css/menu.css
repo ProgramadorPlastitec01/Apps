@@ -221,6 +221,9 @@ body{
 .BitacoraP{
     box-shadow: 2px 2px #6276c8;
 }
+.coa{
+    box-shadow: 2px 2px #a7148a;
+}
 .copec{
     box-shadow: 2px 2px #009a94;
 }
@@ -286,6 +289,9 @@ body{
 }
 .REUNION{
     box-shadow: 2px 2px #ad1457;
+}
+.SGSI{
+    box-shadow: 2px 2px #0d5090;
 }
 .SIRH{
     box-shadow: 2px 2px #15aabf;
@@ -764,6 +770,26 @@ body{
         rgba(82, 99, 168,.25) 0 16px 32px;
     transform: scale(1.05) rotate(-1deg);
 }
+.coa{
+    background-color: #7220a6;
+    border-radius: 100px;
+    box-shadow: rgba(165, 165, 165,.35) 0 -25px 18px -14px inset,
+        rgba(165, 165, 165,.25) 0 1px 2px,
+        rgba(165, 165, 165,.25) 0 2px 4px,
+        rgba(165, 165, 165,.25) 0 4px 8px,
+        rgba(165, 165, 165,.25) 0 8px 16px,
+        rgba(165, 165, 165,.25) 0 16px 32px;
+}
+
+.coa:hover {
+    box-shadow: rgba(82, 99, 168,.35) 0 -25px 18px -14px inset,
+        rgba(82, 99, 168,.25) 0 1px 2px,
+        rgba(82, 99, 168,.25) 0 2px 4px,
+        rgba(82, 99, 168,.25) 0 4px 8px,
+        rgba(82, 99, 168,.25) 0 8px 16px,
+        rgba(82, 99, 168,.25) 0 16px 32px;
+    transform: scale(1.05) rotate(-1deg);
+}
 .cpec{
     background-color: #009a94;
     border-radius: 100px;
@@ -1202,6 +1228,21 @@ body{
         rgba(217, 25, 109,.25) 0 4px 8px,
         rgba(217, 25, 109,.25) 0 8px 16px,
         rgba(217, 25, 109,.25) 0 16px 32px;
+    transform: scale(1.05) rotate(-1deg);
+}
+.sgsi{
+    background-color: #54cf3c;
+    border-radius: 100px;
+    box-shadow: rgba(165, 165, 165,.35) 0 -25px 18px -14px inset,
+        rgba(165, 165, 165,.25) 0 1px 2px,
+        rgba(165, 165, 165,.25) 0 2px 4px,
+        rgba(165, 165, 165,.25) 0 4px 8px,
+        rgba(165, 165, 165,.25) 0 8px 16px,
+        rgba(165, 165, 165,.25) 0 16px 32px;
+}
+
+.sgsi:hover {
+    box-shadow: rgb(25 217 59 / 35%) 0 -25px 18px -14px inset, rgb(25 217 52 / 25%) 0 1px 2px, rgb(25 217 49 / 25%) 0 2px 4px, rgb(37 217 25 / 25%) 0 4px 8px, rgb(25 217 31 / 25%) 0 8px 16px, rgb(25 217 47 / 25%) 0 16px 32px;
     transform: scale(1.05) rotate(-1deg);
 }
 .srh{
