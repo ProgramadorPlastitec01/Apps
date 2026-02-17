@@ -22,11 +22,11 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class Tag_Document extends TagSupport {
-    
+
     @Override
     public int doStartTag() throws JspException {
         JspWriter out = pageContext.getOut();
-        
+
         DocumentControllerJpa DocumentJpa = new DocumentControllerJpa();
         ConfigurationControllerJpa ConfigJpa = new ConfigurationControllerJpa();
         UserControllerJpa UserJpa = new UserControllerJpa();
@@ -50,7 +50,7 @@ public class Tag_Document extends TagSupport {
             idUser = 0;
             idRol = 0;
         }
-        
+
         String txtPermissions = "";
         try {
             idRol = Integer.parseInt(sesion.getAttribute("idRol").toString());
@@ -60,7 +60,7 @@ public class Tag_Document extends TagSupport {
         } catch (Exception e) {
             txtPermissions = "";
         }
-        
+
         try {
             IdDoc = Integer.parseInt(pageContext.getRequest().getAttribute("IdDoc").toString());
         } catch (Exception e) {
@@ -92,7 +92,7 @@ public class Tag_Document extends TagSupport {
         } catch (Exception e) {
             Info = "";
         }
-        
+
         try {
             idSegx = pageContext.getRequest().getAttribute("idSegx").toString();
             namex = pageContext.getRequest().getAttribute("namex").toString();
@@ -120,12 +120,12 @@ public class Tag_Document extends TagSupport {
                         out.print("</div>");
                         out.print("<div class='cont_form_user'>");
                         out.print("<form action='Document?opt=2&IdDoc=" + IdDoc + "' method='post' class='needs-validation' novalidate=''>");
-                        
+
                         out.print("<div class='d-flex'>");
                         out.print("<div class='col-lg-6' style='display: grid;'>");
                         out.print("<input type='text' class='form-control mr-3' name='TxtBusinessName' id='' placeholder='Razon Social' value='" + objDocID[1] + "'  data-toggle='tooltip' data-placement='top' title='Razon Social' required>");
                         out.print("<input type='text' class='form-control mr-3' name='TxtMail' id='' placeholder='Correo' value='" + objDocID[2] + "' data-toggle='tooltip' data-placement='top' title='Correo@correo.com' required>");
-                        
+
                         out.print("<div class='d-flex' style='align-items: center;'>");
                         out.print("<div class='col-lg-6'>");
                         out.print("<h6 class=''>Tipo de documento</h6>");
@@ -158,7 +158,7 @@ public class Tag_Document extends TagSupport {
                         out.print("<input type='hidden' name='txtValidSelector' id='idValidSelector' value='0'>");
                         out.print("</div>");
                         out.print("</div>");
-                        
+
                         out.print("<h6 class=''>Seleccionar Acuerdo de seguridad que aplica:</h6>");
                         lst_template = TemplateJpa.ConsultTemplateForm("AcuerdoSeguridad");
                         if (lst_template != null) {
@@ -172,18 +172,18 @@ public class Tag_Document extends TagSupport {
                                     out.print("<input type='radio' class='' name='TxtAgree' id='' value='" + ObjTemp[0] + "' checked> " + ObjTemp[2] + " &nbsp;&nbsp; ");
                                 } else {
                                     out.print("<input type='radio' class='' name='TxtAgree' id='' value='" + ObjTemp[0] + "'> " + ObjTemp[2] + " &nbsp;&nbsp; ");
-                                    
+
                                 }
                             }
                             out.print("</div>");
                         } else {
                             out.print("<p>Error al consultar los acuerdos</p>");
                         }
-                        
+
                         out.print("</div>");
-                        
+
                         out.print("<div class='col-lg-6'>");
-                        
+
                         out.print("<div id='accordion' class=''>");
                         out.print("<div class='accordion'>");
                         out.print("<div class='accordion-header' role=\"button\" data-toggle=\"collapse\" data-target=\"#panel-body-1\" aria-expanded=\"true\" style='padding: 4px 15px;border: 1px solid #0022376b;box-shadow: 1px 1px 3px 0px #002237ab;'>");
@@ -200,7 +200,7 @@ public class Tag_Document extends TagSupport {
                                     ListAttach += "[" + ObjAtch[0] + "]";
                                 } else {
                                     out.print("<input type='checkbox' id='Attach" + ObjAtch[0] + "' onclick='moving(" + ObjAtch[0] + ")' value='" + ObjAtch[0] + "'>&nbsp;&nbsp;");
-                                    
+
                                 }
                                 out.print("<span>" + ObjAtch[2].toString().split("/")[0] + "</span>");
                                 out.print("</div>");
@@ -212,9 +212,9 @@ public class Tag_Document extends TagSupport {
                         out.print("</div>");
                         out.print("</div>");
                         out.print("</div>");
-                        
+
                         out.print("</div>");
-                        
+
                         out.print("</div>");
                         out.print("<script>"
                                 + " document.addEventListener('DOMContentLoaded', function() {"
@@ -225,7 +225,7 @@ public class Tag_Document extends TagSupport {
                                 + "    toggleClass();"
                                 + " });"
                                 + "</script>");
-                        
+
                         out.print("<div class='text-center'>");
                         out.print("<button class='btn btn-blue'>Actualizar</button>");
                         out.print("</div>");
@@ -262,11 +262,11 @@ public class Tag_Document extends TagSupport {
                     out.print("<input type='hidden' name='IdDocx' value='" + IdDocx + "'>");
                     out.print("<input type='hidden' name='idSegx' value='" + idSegx + "'>");
                 }
-                
+
                 out.print("<div class='d-flex'>");
-                
+
                 out.print("<div class='col-lg-6' style='display: grid;'>");
-                
+
                 out.print("<div class='d-flex'>");
                 out.print("<div class='mr-2 mt-2 mb-2 wdtFixe' data-toggle='tooltip' data-placemente='top' title='Tipo de registro'>");
                 out.print("<select class='form-control' name='TxtTemplate' id='idtemplateshr' required onchange='searchDocs(this.value)'>");
@@ -287,45 +287,45 @@ public class Tag_Document extends TagSupport {
                 out.print("</select>");
                 out.print("</div>");
                 out.print("<input type='text' class='form-control col-lg-6 mt-2 mb-2' name='TxtMail' id='' placeholder='Correo' data-toggle='tooltip' data-placement='top' title='Correo@correo.com' required>");
-                
+
                 out.print("</div>");
-                
+
                 out.print("<input type='text' class='form-control mr-3' name='TxtBusinessName' id='' placeholder='Razon Social' value='" + (idSegx.equals("") ? "" : namex) + "'  data-toggle='tooltip' data-placement='top' title='Razon Social' required>");
-                
+
                 out.print("<div class='d-flex mt-2' style='align-items: center;'>");
-                
+
                 out.print("<div class='col-lg-6'>");
                 out.print("<h6 class=''>Tipo de documento</h6>");
-                
+
                 out.print("<label class='mr-2'>");
                 out.print("<input type='radio' class='selectgroup-input' name='radType' value='vin' checked>");
                 out.print("<span class='selectgroup-button selectgroup-button-icon'>Vinculación</span>");
                 out.print("</label>");
-                
+
                 out.print("<label>");
                 out.print("<input type='radio' class='selectgroup-input' name='radType' value='act'> ");
                 out.print("<span class='selectgroup-button selectgroup-button-icon'>Actualización</span>");
                 out.print("</label>");
-                
+
                 out.print("</div>");
-                
+
                 out.print("<div class='col-lg-6'>");
                 out.print("<h6 class=''>Tipo de contraparte</h6>");
-                
+
                 out.print("<label class='mr-2'>");
                 out.print("<input type='radio' class='selectgroup-input' name='ContraType' value='prv' checked>");
                 out.print("<span class='selectgroup-button selectgroup-button-icon'>Proveedor</span>");
                 out.print("</label>");
-                
+
                 out.print("<label class=''>");
                 out.print("<input type='radio' class='selectgroup-input' name='ContraType' value='cli'>");
                 out.print("<span class='selectgroup-button selectgroup-button-icon'>Cliente</span>");
                 out.print("</label>");
-                
+
                 out.print("</div>");
-                
+
                 out.print("</div>");
-                
+
                 out.print("<h6 class='mt-3' style='margin: 0;'>Seleccionar acuerdo de seguridad que aplica:</h6>");
                 lst_template = TemplateJpa.ConsultTemplateForm("AcuerdoSeguridad");
                 if (lst_template != null) {
@@ -345,11 +345,11 @@ public class Tag_Document extends TagSupport {
                 } else {
                     out.print("<p>Error al consultar los acuerdos</p>");
                 }
-                
+
                 out.print("</div>");
-                
+
                 out.print("<div class='col-lg-6' id='formatResults'>");
-                
+
                 if (cbxReg.equals("")) {
                     out.print("<h3>Seleccione un registro</h3>");
                 } else {
@@ -402,9 +402,9 @@ public class Tag_Document extends TagSupport {
 //                out.print("</div>");
 //</editor-fold>
                 out.print("</div>");
-                
+
                 out.print("</div>");
-                
+
                 if (idSegx.equals("")) {
                     out.print("<div class='text-center'>");
                     out.print("<button class='btn btn-blue' onclick='timer()'>Registrar</button>");
@@ -437,7 +437,7 @@ public class Tag_Document extends TagSupport {
                 out.print("<div class='card-header' style='justify-content: space-between;'>");
                 out.print("<h4>Documentos generados</h4>");
                 out.print("<div class='d-flex'>");
-                
+
                 out.print("<div class='menu-container' id='menu' style='margin-right: 10px;'>");
                 out.print("<button class='btn btn-info main-btn' style='border-radius: 4px;' onclick='toggleMenu()' data-toggle='tooltip' data-placement='top' title='Filtros'><i class='fas fa-search'></i></button>");
                 out.print("<button class='btn btn-info option' onclick='window.location.href=\"Document?opt=1&ste=1\";cargarDatos()'>Enviado</button>");
@@ -481,7 +481,7 @@ public class Tag_Document extends TagSupport {
                     Object[] ObjEs = (Object[]) lst_config.get(0);
                     modules = ObjEs[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
                 }
-                
+
                 if (lst_document != null) {
                     for (int i = 0; i < lst_document.size(); i++) {
                         Object[] objDoc = (Object[]) lst_document.get(i);
@@ -501,7 +501,7 @@ public class Tag_Document extends TagSupport {
                             Progress = 100;
                         }
                         out.print("<td><p class='text-center' style='margin: 0; font-size: 12px;'><b>" + modules[advance].toString().split("/")[1] + "</b></p><div class='progress'><div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: " + Progress + "%; " + ((Progress < 5) ? "color: black;" : "") + "' aria-valuenow='10' aria-valuemin='0' aria-valuemax='100'>" + Progress + "%</div></div></td>");
-                        
+
                         int State = Integer.parseInt(objDoc[8].toString());
                         lst_config = ConfigJpa.ConsultSettingsByCategorie("StatesIcons" + State + "");
                         if (lst_config != null) {
@@ -576,7 +576,7 @@ public class Tag_Document extends TagSupport {
                     int TypeSigtw = 0;
                     boolean validSign = false;
                     String PathImg = "";
-                    
+
                     out.print("<section class='section'>");
                     out.print("<div class='section-header' style='justify-content: space-between;'>");
                     out.print("<div class=''>");
@@ -588,12 +588,12 @@ public class Tag_Document extends TagSupport {
                     out.print("</div>");
                     out.print("</div>");
                     out.print("<div class='section-body'>");
-                    
+
                     out.print("<div class='row'>");
                     out.print("<div class='col-12'>");
                     out.print("<div class='card'>");
                     out.print("<div class=''>");
-                    
+
                     out.print("<div class='d-flex justify-content-between mb-4'>");
                     if (state == 3 && txtPermissions.contains("[26]")) {
                         out.print("<button class='btn btn-warning mr-2' onclick='mostrarConvencion(5)'><i class=\"fas fa-reply\"></i>&nbsp; Devolver</button>");
@@ -618,7 +618,7 @@ public class Tag_Document extends TagSupport {
                     out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(9)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
                     out.print("</div>");
                     out.print("<div class='cont_form_user'>");
-                    
+
                     lst_observation = DocumentJpa.ConsultDocumentObservationsxDoc(idDoc);
                     if (lst_observation != null) {
                         out.print("<table class='table table-sm' id='table-1'>");
@@ -660,18 +660,18 @@ public class Tag_Document extends TagSupport {
                     out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(8)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
                     out.print("</div>");
                     out.print("<div class='cont_form_user'>");
-                    
+
                     out.print("<div class='mt-2'>");
                     out.print("<span class=''>Justificación</span>");
                     out.print("</div>");
-                    
+
                     out.print("<form action='Document?opt=7&IdDoc=" + IdDoc + "' id='formConcluir' method='post' class='needs-validation' novalidate=''>");
                     out.print("<textarea class='form-control' name='txtJustify' placeholder='Ingrese justificación...' required></textarea>");
                     out.print("<div class='text-center mt-2'>");
                     out.print("<button type='submit' class='btn btn-blue'>Concluir</button>");
                     out.print("</div>");
                     out.print("</form>");
-                    
+
                     out.print("</div>");
                     out.print("</div>");
                     out.print("</div>");
@@ -688,7 +688,7 @@ public class Tag_Document extends TagSupport {
                     out.print("</div>");
                     out.print("</div>");
                     out.print("<div class='cont_form_user'>");
-                    
+
                     lst_document = DocumentJpa.sp_c_ConsultDocumentSignatureIdAgree(IdDoc);
                     Object[] objSign = {};
                     int TypeSigw = 0;
@@ -697,14 +697,14 @@ public class Tag_Document extends TagSupport {
                         objSign = (Object[]) lst_document.get(0);
                         TypeSigw = Integer.parseInt(objSign[3].toString());
                         Signature_v = objSign[4].toString();
-                        
+
                         String BuildDoc = "";
                         lst_template = TemplateJpa.ConsultTemplateId(idAgree);
                         if (lst_template != null) {
                             Object[] ObjAgree = (Object[]) lst_template.get(0);
                             BuildDoc = ObjAgree[1].toString();
                         } else {
-                            
+
                         }
                         String[] validData = {};
                         String[] FormData = {};
@@ -724,7 +724,7 @@ public class Tag_Document extends TagSupport {
                         out.print("<div class='mt-2' style='max-height: 500px; overflow-y: auto;padding: 50px;'>");
                         out.print("<div id='dataDocument'>");
                         out.print(BuildDoc);
-                        
+
                         out.print("<table class='table-bordered' style='margin: auto;'>");
                         out.print("<thead>");
                         out.print("<tr>");
@@ -734,7 +734,7 @@ public class Tag_Document extends TagSupport {
                         out.print("</thead>");
                         out.print("<tbody>");
                         out.print("<tr>");
-                        
+
                         out.print("<td>");
                         if (TypeSigw == 1) {
                             out.print("<canvas id='sigAgree' width='350' height='180'></canvas>");
@@ -806,11 +806,11 @@ public class Tag_Document extends TagSupport {
                             out.print("<b class='text-dark'>CC: </b>");
                         }
                         out.print("</td>");
-                        
+
                         out.print("<td>");
                         out.print("<img src='Interfaz/Contenido/Imagen/FirmaLFO.png' width='315'>");
                         out.print("</td>");
-                        
+
                         out.print("</td>");
                         out.print("</tr>");
                         out.print("</tbody>");
@@ -820,7 +820,7 @@ public class Tag_Document extends TagSupport {
                     } else {
                         out.print("<h4>No aplica acuerdo de seguridad</h4>");
                     }
-                    
+
                     out.print("</div>");
                     out.print("</div>");
                     out.print("</div>");
@@ -834,7 +834,7 @@ public class Tag_Document extends TagSupport {
                     out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(4)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
                     out.print("</div>");
                     out.print("<div class='cont_form_user' style='max-height: 465px;overflow-y: auto;'>");
-                    
+
                     idFiles = idFiles.replace("][", ",").replace("[", "").replace("]", "");
                     String[] DataFiles = Files.replace("][", "///").replace("[", "").replace("]", "").split("///");
                     String[] FilesId = {};
@@ -851,7 +851,7 @@ public class Tag_Document extends TagSupport {
                         }
                     }
                     FilesId = BuildFiles.replace("][", "///").replace("[", "").replace("]", "").split("///");
-                    
+
                     out.print("<table class='table table-striped' >");
                     out.print("<thead'>");
                     out.print("<tr>");
@@ -862,7 +862,7 @@ public class Tag_Document extends TagSupport {
                     out.print("<tbody>");
                     for (int i = 0; i < FilesId.length; i++) {
                         String[] Docs = FilesId[i].split("/");
-                        
+
                         out.print("<tr>");
                         out.print("<td><p>" + Docs[1] + "</p>");
                         if (!Docs[3].equals("NA") && !Docs[3].equals("Error")) {
@@ -884,9 +884,17 @@ public class Tag_Document extends TagSupport {
                         out.print("<td class='text-center'>N/A</td>");
                     }
                     out.print("</tr>");
-                    
+                    String[] Data = {};
                     String[] dataFiles = FormClient.replace("]/[", "///").replace("[[", "[").replace("]]", "]").split("///");
-                    String[] Data = dataFiles[15].replace("][", "///").replace("[", "").replace("]", "").split("///");
+                    try {
+                        Data = dataFiles[15].replace("][", "///").replace("[", "").replace("]", "").split("///");
+                    } catch (Exception e) {
+                        try {
+                            Data = dataFiles[8].replace("][", "///").replace("[", "").replace("]", "").split("///");
+                        } catch (Exception ex) {
+
+                        }
+                    }
                     String NameDoc = "";
                     out.print("<tr style='background: #dddddd7a;color: black;'>");
                     out.print("<td>Ver debida diligencia:</td>");
@@ -901,7 +909,7 @@ public class Tag_Document extends TagSupport {
                     }
                     out.print("<td class='text-center'><button class='btn btn-dark' onclick='window.location.href=\"Download?File_name=" + NameDoc + "\"' data-toggle='tooltip' data-placement='bottom' title='" + NameDoc + "'><i class=\"fas fa-file-download\"></i></button></td>");
                     out.print("</tr>");
-                    
+
                     out.print("<tr style='background: #dddddd7a;color: black;'>");
                     out.print("<td>Ver contrato de proteccion de datos:</td>");
                     try {
@@ -915,7 +923,7 @@ public class Tag_Document extends TagSupport {
                     }
                     out.print("<td class='text-center'><button class='btn btn-dark' onclick='window.location.href=\"Download?File_name=" + NameDoc + "\"' data-toggle='tooltip' data-placement='bottom' title='" + NameDoc + "'><i class=\"fas fa-file-download\"></i></button></td>");
                     out.print("</tr>");
-                    
+
                     out.print("</tbody>");
                     out.print("</table>");
                     out.print("</div>");
@@ -953,13 +961,13 @@ public class Tag_Document extends TagSupport {
                     out.print("<input type='text' class='form-control' name='TxtPosition' id='' data-toggle='tooltip' data-placement='top' title='Cargo' required>");
                     out.print("</div>");
                     out.print("</div>");
-                    
+
                     out.print("<div class='d-flex justify-content-around mt-4'>");
                     out.print("<div class='col-lg-3'>");
                     out.print("<span>Numero de consulta</span>");
                     out.print("<input type='text' class='form-control' name='TxtConsult' id='' data-toggle='tooltip' data-placement='top' title='Nro de consulta' required>");
                     out.print("</div>");
-                    
+
                     out.print("<div class='col-lg-4 d-flex'>");
                     out.print("<div class=''>");
                     out.print("<span>Adjuntar debida diligencia</span>");
@@ -975,7 +983,7 @@ public class Tag_Document extends TagSupport {
                             + "});");
                     out.print("</script>");
                     out.print("</div>");
-                    
+
                     out.print("<div class='col-lg-4 d-flex'>");
                     out.print("<div class=''>");
                     out.print("<span>Contrato proteccion de datos</span>");
@@ -992,33 +1000,33 @@ public class Tag_Document extends TagSupport {
                     out.print("</script>");
                     out.print("</div>");
                     out.print("</div>");
-                    
+
                     out.print("<div class='d-flex mt-4' style='width: 25%;margin: auto;justify-content: space-around;'>");
-                    
+
                     out.print("<div class=''>");
                     out.print("<span>Nacional </span>");
                     out.print("<input type='radio' name='txtTipeSeg' value='1' checked>");
                     out.print("</div>");
-                    
+
                     out.print("<div class=''>");
                     out.print("<span>Internacional </span>");
                     out.print("<input type='radio' name='txtTipeSeg' value='2'>");
                     out.print("</div>");
-                    
+
                     out.print("</div>");
-                    
+
                     out.print("<div class='col-lg-8 text-center mt-4' style='margin: auto;'>");
                     out.print("<p>Se certifica que se llevó a cabo la revisión de las listas vinculantes respecto de la(s) persona(s), naturales y jurídicas acá señaladas:</p>");
                     out.print("</div>");
-                    
+
                     out.print("<div class='col-lg-4 text-center mt-2' style='margin: auto;'>");
                     out.print("<input type='radio' value='Si' name='TxtSiNo'> Si &nbsp;&nbsp; <input type='radio' value='No' name='TxtSiNo'> No");
                     out.print("</div>");
-                    
+
                     out.print("<div class='text-center mt-4'>");
                     out.print("<button class='btn btn-blue' data-toggle='tooltip' data-placement='top' title='Guardar' onclick='cargarDatos()'><i class='fas fa-save'></i></button>");
                     out.print("</div>");
-                    
+
                     out.print("</form>");
                     out.print("</div>");
                     out.print("</div>");
@@ -1033,7 +1041,7 @@ public class Tag_Document extends TagSupport {
                     out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(3)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
                     out.print("</div>");
                     out.print("<div class='cont_form_user'>");
-                    
+
                     lst_user = UserJpa.ConsultUsersId(idUser);
                     if (lst_user != null) {
                         Object[] ObjUser = (Object[]) lst_user.get(0);
@@ -1079,7 +1087,7 @@ public class Tag_Document extends TagSupport {
                         out.print("</div>");
                         out.print("<input type='hidden' class='form-control' name='TxtSignatureDrawtw' id='coordenadas-hiddentw' value=''>");
                         out.print("</div>");
-                        
+
                         if (validSign && TypeSigtw == 1) {
                             out.print("<script>");
                             out.print("function dibujarFirma() { "
@@ -1114,7 +1122,7 @@ public class Tag_Document extends TagSupport {
                         out.print("</form>");
                         //</editor-fold>
                         out.print("</div>");
-                        
+
                         out.print("<div class='tab-pane fade " + ((TypeSigtw == 2) ? "show active" : "") + "' id='Write4' role='tabpanel' aria-labelledby='Write-tab4'>");
                         //<editor-fold defaultstate="collapsed" desc="SIGNATURE WRITE">
 
@@ -1138,7 +1146,7 @@ public class Tag_Document extends TagSupport {
                         out.print("</div>");
                         out.print("</div>");
                         out.print("</div>");
-                        
+
                         if (validSign && TypeSigtw == 2) {
                             out.print("<script>");
                             out.print("document.addEventListener('DOMContentLoaded', function() { "
@@ -1163,11 +1171,11 @@ public class Tag_Document extends TagSupport {
                         out.print("<div class='d-flex align-items-center' style='bottom: 18px;width: 94%;justify-content: center;'>");
                         out.print("<button class='btn btn-blue mr-2' data-toggle='tooltip' data-placement='top' title='Guardar'>Firmar y aprobar <i class=\"fas fa-signature\"></i></button>");
                         out.print("</div>");
-                        
+
                         out.print("</form>");
                         //</editor-fold>
                         out.print("</div>");
-                        
+
                         out.print("<div class='tab-pane fade show active' id='Img4' role='tabpanel' aria-labelledby='Img-tab4'>");
                         //<editor-fold defaultstate="collapsed" desc="SIGNATURE IMAGE">
                         out.print("<form action='Document?opt=3&IdDoc=" + IdDoc + "&IdUser=" + idUser + "&TypeSig=3' method='post' class='needs-validation' novalidate=''>");
@@ -1184,18 +1192,18 @@ public class Tag_Document extends TagSupport {
                             Object[] ObjBossS = (Object[]) lst_config.get(0);
                             out.print("<input type='hidden' id='image-path-input' value='Interfaz/Contenido/SagrilaftDocs/Signature/" + ObjBossS[2] + "' >");
                             out.print("<input type='hidden' name='TxtSignatureImg' value='" + ObjBossS[2] + "' >");
-                            
+
                         }
-                        
+
                         out.print("</div>");
-                        
+
                         out.print("<div class='d-flex align-items-center' style='bottom: 18px;width: 94%;justify-content: center;'>");
                         out.print("<button class='btn btn-blue mr-2' data-toggle='tooltip' data-placement='top' title='Guardar' onclick='cargarDatos()'>Firmar y aprobar <i class=\"fas fa-signature\"></i></button>");
                         out.print("</div>");
                         out.print("</form>");
                         //</editor-fold>
                         out.print("</div>");
-                        
+
                         out.print("<script>");
                         out.print("document.addEventListener('DOMContentLoaded', function() { "
                                 + "        const imagePathInput = document.getElementById('image-path-input'); "
@@ -1211,14 +1219,14 @@ public class Tag_Document extends TagSupport {
                                 + "        image.src = imagePath; "
                                 + "    });");
                         out.print("</script>");
-                        
+
                         out.print("</div>");
                         out.print("</div>");
                         out.print("</div>");
                         out.print("</div>");
                         //</editor-fold>
                     }
-                    
+
                     out.print("</div>");
                     out.print("</div>");
                     out.print("</div>");
@@ -1237,32 +1245,32 @@ public class Tag_Document extends TagSupport {
                     out.print("<div class='col-lg-12' data-toggle='tooltip' data-placemente='top' title=''>");
                     out.print("<select class='form-control' name='CbxState' style='margin-top: 12px;margin-bottom: 12px;'>");
                     out.print("<option disabled selected value=''>Seleccione modulo</option>");
-                    
+
                     lst_config = ConfigJpa.ConsultSettingsByCategorie("ListModulesES");
                     String[] DataModules = {};
                     if (lst_config != null) {
                         Object[] ObjList = (Object[]) lst_config.get(0);
                         DataModules = ObjList[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
                     }
-                    
+
                     for (int i = 0; i < DataModules.length; i++) {
                         if (BasicForm == 1 && (i == 3 || i == 8 || i == 10 || i == 11)) {
-                            
+
                         } else {
                             out.print("<option value='" + DataModules[i].split("/")[0] + "'>" + DataModules[i].split("/")[1] + "</option>");
                         }
                     }
-                    
+
                     out.print("</select>");
                     out.print("</div>");
-                    
+
                     out.print("<div class=''>");
                     out.print("<textarea class='form-control' placeholder='Nota...' name='TxtNote' required></textarea>");
                     out.print("</div>");
                     out.print("<div class='mt-2 text-center'>");
                     out.print("<button class='btn btn-primary' onclick='timer()'>Devolver</button>");
                     out.print("</div>");
-                    
+
                     out.print("</form>");
                     out.print("</div>");
                     out.print("</div>");
@@ -1275,12 +1283,12 @@ public class Tag_Document extends TagSupport {
                     out.print("<h6>Razon Social</h6>");
                     out.print("<h5 class='text-dark ml-4'>" + Name + "</h5>");
                     out.print("</div>");
-                    
+
                     out.print("<div class='col-lg-4'>");
                     out.print("<h6>Correo</h6>");
                     out.print("<h5 class='text-dark ml-4'>" + Mail + "</h5>");
                     out.print("</div>");
-                    
+
                     out.print("<div class='col-lg-4'>");
                     out.print("<h6>Tipo de documento</h6>");
                     out.print("<h5 class='text-dark ml-4'>" + TypeDoc + "</h5>");
@@ -1291,11 +1299,11 @@ public class Tag_Document extends TagSupport {
                     out.print("<h6>Documentos solicitados</h6>");
                     out.print("<h5 class='text-dark ml-4'><button class='btn btn-info' style='margin-left: 10%;' onclick='mostrarConvencion(4)'><i class='fas fa-search'></i></button></h5>");
                     out.print("</div>");
-                    
+
                     out.print("<div class='col-lg-4'>");
                     out.print("<h6>Estado</h6>");
                     out.print("<h5 class='text-dark ml-4'>");
-                    
+
                     lst_config = ConfigJpa.ConsultSettingsByCategorie("StatesIcons" + state);
                     if (lst_config != null) {
                         Object[] ObjConfig = (Object[]) lst_config.get(0);
@@ -1304,10 +1312,10 @@ public class Tag_Document extends TagSupport {
                     } else {
                         out.print("Error");
                     }
-                    
+
                     out.print("</h5>");
                     out.print("</div>");
-                    
+
                     out.print("<div class='col-lg-4'>");
                     out.print("<h6>Fecha de registro</h6>");
                     out.print("<h5 class='text-dark ml-4'>" + DateRegister + "</h5>");
@@ -1317,7 +1325,7 @@ public class Tag_Document extends TagSupport {
 
                     out.print("</div>");
                     out.print("<div class='card-body'>");
-                    
+
                     out.print("<div class='d-flex justify-content-between mb-4'>");
                     out.print("<div class=''>");
                     out.print("<h6>Ultima fecha modificación cliente: &nbsp;<b class='text-dark'>" + ModifyClient + "</b></h6>");
@@ -1332,7 +1340,7 @@ public class Tag_Document extends TagSupport {
                     String[] ModuleCliente = FormClient.toString().replace("]/[", "///").replace("[[", "[").replace("]]", "]").split("///");
                     String[] DataClient = {};
                     try {
-                        
+
                     } catch (Exception e) {
                     }
                     try {
@@ -1355,7 +1363,7 @@ public class Tag_Document extends TagSupport {
                                     if (DataClient[3].contains("Client")) {
                                         Template = Template.replace("id=\"XXXCHECKCLIXXX\">", "id=\"XXXCHECKCLIXXX\" checked disabled>");
                                         Template = Template.replace("XXXOTROXXX", "");
-                                        
+
                                     } else if (DataClient[3].contains("Prove") || DataClient[3].contains("prove")) {
                                         Template = Template.replace("id=\"XXXCHECKPROXXX\">", "id=\"XXXCHECKPROXXX\" checked disabled>");
                                         Template = Template.replace("XXXOTROXXX", "");
@@ -1367,7 +1375,7 @@ public class Tag_Document extends TagSupport {
                                 }
                             } catch (Exception e) {
                                 Template = Template.replace("XXXFECHADILIXXX", "").replace("XXXOTROXXX", "");
-                                
+
                             }
                             //</editor-fold>
 
@@ -1375,7 +1383,7 @@ public class Tag_Document extends TagSupport {
                             try {
                                 DataClient = ModuleCliente[1].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
                                 if (!DataClient[1].equals("N/A")) {
-                                    
+
                                     if (DataClient[2].toString().equals("CC")) {
                                         Template = Template.replace("id=\"XXXTYPEDOC_CCXXX\">", "id=\"XXXTYPEDOC_CCXXX\" checked disabled>");
                                     } else if (DataClient[2].toString().equals("CE")) {
@@ -1383,14 +1391,14 @@ public class Tag_Document extends TagSupport {
                                     } else if (DataClient[2].toString().equals("NIT")) {
                                         Template = Template.replace("id=\"XXXTYPEDOC_NITXXX\">", "id=\"XXXTYPEDOC_NITXXX\" checked disabled>");
                                     }
-                                    
+
                                     Template = Template.replace("XXXRAZONSOCIALXXX", DataClient[1]).
                                             replace("XXXNROIDENTIFICACIONXXX", DataClient[3]).replace("XXXDVXXX", DataClient[4]).
                                             replace("XXXPAISXXX", DataClient[4]).replace("XXXCIUDADXXX", DataClient[5]).
                                             replace("XXXDIRECCIONXXX", DataClient[6]).replace("XXXTELEFONOXXX", DataClient[7]).
                                             replace("XXXEMAILXXX", DataClient[8]).replace("XXXPAGINAWEBXXX", DataClient[9]).
                                             replace("XXXCODIGOPOSTALXXX", DataClient[10]).replace("XXXMATRICULAXXX", DataClient[13]);
-                                    
+
                                     try {
                                         Template = Template.replace("XXXCIUU1XXX", DataClient[10].toString().split("/")[1]);
                                     } catch (Exception e) {
@@ -1538,7 +1546,7 @@ public class Tag_Document extends TagSupport {
                                     Template = Template.replace("XXXIDENTIFICACIONREPREXXX", DataClient[1].split("/")[2]);
                                     Template = Template.replace("XXXMAILREPREXXX", DataClient[1].split("/")[3]);
                                     Template = Template.replace("XXXTELEFONOREPREXXX", DataClient[1].split("/")[4]);
-                                    
+
                                     if (DataClient[1].split("/")[5].contains("Si")) {
                                         Template = Template.replace("XXXPEPSIXXX", "X");
                                         Template = Template.replace("XXXPEPNOXXX", "");
@@ -1564,7 +1572,7 @@ public class Tag_Document extends TagSupport {
                                                     + "		<td colspan=\"1\" > XXXTELEFONOREPREXXX  </td>\n"
                                                     + "		<td colspan=\"1\" style=\"width: 90px;\"> XXXPEPSIXXX </td>\n"
                                                     + "		<td colspan=\"1\" style=\"width: 90px;\"> XXXPEPNOXXX </td>*</tr>";
-                                            
+
                                             NewContent = NewContent.replace("XXXNOMBREREPRESENTANTEXXX", Accionaries[0]);
                                             if (Accionaries[1].contains("PP")) {
                                                 NewContent = NewContent.replace("id=\"XXXREPRESENTANTEPPXXX\">", "id=\"XXXREPRESENTANTEPPXXX\" checked disabled>");
@@ -1653,7 +1661,7 @@ public class Tag_Document extends TagSupport {
                                         Template = Template.replace("XXXPEPSIXXX", "");
                                         Template = Template.replace("XXXPEPNOXXX", "");
                                     }
-                                    
+
                                     if (AccData.length > 1) {
                                         for (int i = 1; i < AccData.length; i++) {
                                             String[] Accionaries = AccData[i].split("/");
@@ -1668,7 +1676,7 @@ public class Tag_Document extends TagSupport {
                                                     + "<td colspan=\"1\" style=\"width: 90px;\"> XXXPEPSIXXX </td>\n"
                                                     + "<td colspan=\"1\" style=\"width: 90px;\"> XXXPEPNOXXX </td>\n"
                                                     + "<td colspan=\"1\" > XXXPARTICIPACIONACCXXX </td>+</tr>";
-                                            
+
                                             NewContent = NewContent.replace("XXXNOMBREACCIONARIOXXX", Accionaries[0]);
                                             if (Accionaries[1].contains("PP")) {
                                                 NewContent = NewContent.replace("id=\"XXXACCIONTIPOPPXXX\">", "id=\"XXXACCIONTIPOPPXXX\" checked disabled>");
@@ -1691,7 +1699,7 @@ public class Tag_Document extends TagSupport {
                                                 NewContent = NewContent.replace("XXXPEPNOXXX", "");
                                             }
                                             NewContent = NewContent.replace("XXXPARTICIPACIONACCXXX", Accionaries[4] + "%");
-                                            
+
                                             if (i == AccData.length - 1) {
                                                 NewContent = NewContent.replace("</td>+</tr>", "</td></tr>");
                                                 Template = Template.replace("</td>+</tr>", NewContent);
@@ -1735,7 +1743,7 @@ public class Tag_Document extends TagSupport {
                                         Template = Template.replace("XXXPEPSIBENEFEXXX", "");
                                         Template = Template.replace("XXXPEPNOBENEFEXXX", "");
                                     }
-                                    
+
                                     if (BenfData.length > 1) {
                                         for (int i = 1; i < BenfData.length; i++) {
                                             String[] Beneficiaries = BenfData[i].split("/");
@@ -1749,7 +1757,7 @@ public class Tag_Document extends TagSupport {
                                                     + "<td colspan=\"2\" > XXXIDENTIFICACIONBENEFEXXX </td>\n"
                                                     + "<td colspan=\"1\" style=\"width: 90px;\"> XXXPEPSIBENEFEXXX </td>\n"
                                                     + "<td colspan=\"1\" style=\"width: 90px;\"> XXXPEPNOBENEFEXXX </td>+*</tr>";
-                                            
+
                                             NewContent = NewContent.replace("XXXNOMBREBENEFEXXX", Beneficiaries[0]);
                                             if (Beneficiaries[1].contains("PP")) {
                                                 NewContent = NewContent.replace("id=\"XXXBENEFPPXXX\">", "id=\"XXXBENEFPPXXX\" checked disabled>");
@@ -1771,7 +1779,7 @@ public class Tag_Document extends TagSupport {
                                                 NewContent = NewContent.replace("XXXPEPSIBENEFEXXX", "");
                                                 NewContent = NewContent.replace("XXXPEPNOBENEFEXXX", "");
                                             }
-                                            
+
                                             if (i == AccData.length - 1) {
                                                 NewContent = NewContent.replace("</td>+*</tr>", "</td></tr>");
                                                 Template = Template.replace("</td>+*</tr>", NewContent);
@@ -1814,7 +1822,7 @@ public class Tag_Document extends TagSupport {
                                     } catch (Exception e) {
                                         Template = Template.replace("XXXCUPOAPROBADOXXX", DataClient[1]);
                                     }
-                                    
+
                                     if (DataClient[2].contains("30")) {
                                         Template = Template.replace("id=\"XXXDIAS30\">", "id=\"XXXDIAS30\" checked disabled>");
                                         Template = Template.replace("XXXOTRO4XXX", "");
@@ -1906,7 +1914,7 @@ public class Tag_Document extends TagSupport {
                                     Template = Template.replace("XXXRESOLUTIONONEXXX", "");
                                     Template = Template.replace("XXXRESOLUTIONTWOXXX", "");
                                 }
-                                
+
                             } catch (Exception e) {
                                 Template = Template.replace("XXXRESOLUTIONONEXXX", "");
                                 Template = Template.replace("XXXRESOLUTIONTWOXXX", "");
@@ -1930,7 +1938,7 @@ public class Tag_Document extends TagSupport {
                                 Template = Template.replace("XXXCONTACTOCOMERCIALXXX", comerData[0].split("/")[2]);
                                 Template = Template.replace("XXXMAILCOMERCIALXXX", comerData[0].split("/")[3]);
                                 Template = Template.replace("XXXTELEFONOCOMERCIALXXX", comerData[0].split("/")[4]);
-                                
+
                                 if (comerData.length > 1) {
                                     for (int i = 1; i < comerData.length; i++) {
                                         String[] Comercial = comerData[i].split("/");
@@ -1939,7 +1947,7 @@ public class Tag_Document extends TagSupport {
                                                 + "	<td colspan=\"2\" > XXXCONTACTOCOMERCIALXXX </td>\n"
                                                 + "	<td colspan=\"2\" > XXXMAILCOMERCIALXXX </td>\n"
                                                 + "	<td colspan=\"1\" style=\"width: 90px;\"> XXXTELEFONOCOMERCIALXXX </td>++</tr>";
-                                        
+
                                         NewContent = NewContent.replace("XXXNOMBRECOMERCIALXXX", Comercial[0]);
                                         NewContent = NewContent.replace("XXXIDENTIFICACIONCOMERCIALXXX", Comercial[1]);
                                         NewContent = NewContent.replace("XXXCONTACTOCOMERCIALXXX", Comercial[2]);
@@ -1977,7 +1985,7 @@ public class Tag_Document extends TagSupport {
                                                 + "	<td colspan=\"2\" > XXXNUMEROCUENTAFINACIALXXX  </td>\n"
                                                 + "	<td colspan=\"2\" > XXXCONTACTOFINANCIALXXX  </td>\n"
                                                 + "	<td colspan=\"1\" style=\"width: 90px;\"> XXXTELEFONOFINANCIALXXX </td>**</tr>";
-                                        
+
                                         NewContent = NewContent.replace("XXXNOMBREFINANCIALXXX", Financial[0]);
                                         NewContent = NewContent.replace("XXXTIPOCUENTAFINANCIALXXX", Financial[1]);
                                         NewContent = NewContent.replace("XXXNUMEROCUENTAFINACIALXXX", Financial[2]);
@@ -2051,7 +2059,7 @@ public class Tag_Document extends TagSupport {
                                     } else {
                                         Template = Template.replace("XXXOTRO3XXX", "");
                                     }
-                                    
+
                                     if (DataClient[2].contains("Si")) {
                                         Template = Template.replace("id=\"XXXMONEYEXTSIXXX\">", "id=\"XXXMONEYEXTSIXXX\" checked disabled>");
                                         Template = Template.replace("XXXOTRO4XXX", DataClient[2].split("/")[1]);
@@ -2182,7 +2190,7 @@ public class Tag_Document extends TagSupport {
                                     Template = Template.replace("XXXCONSULTAXXX", DataClient[5]);
                                     Template = Template.replace("XXXFIRMAGERENTEXXX", "N/A");
                                     Template = Template.replace("XXXFECHAGERENTEXXX", "N/A");
-                                    
+
                                     lst_document = DocumentJpa.ConsultDocumentSignatureIdBoss(IdDoc, idUser);
                                     if (lst_document != null) {
                                         Object[] ObjSig = (Object[]) lst_document.get(0);
@@ -2243,7 +2251,7 @@ public class Tag_Document extends TagSupport {
                                             //<editor-fold defaultstate="collapsed" desc="SIGNATURE IMAGE">
 
                                             Template = Template.replace("<canvas id='signature-canvasBoss' width='400' height='200'></canvas>", "<img src='Interfaz/Contenido/SagrilaftDocs/Signature/" + Signature + "' width='250px' style='margin-left: 25%;'>");
-                                            
+
                                             out.print("<input type='hidden' class='form-control' id='image-path-inputx' value='Interfaz/Contenido/SagrilaftDocs/Signature/" + Signature + "' >");
                                             out.print("<script>");
                                             out.print("document.addEventListener('DOMContentLoaded', function() { "
@@ -2262,7 +2270,7 @@ public class Tag_Document extends TagSupport {
                                             out.print("</script>");
 //                                        //</editor-fold>
                                         }
-                                        
+
                                     }
                                     if (DataClient[8].toString().contains("Si")) {
                                         Template = Template.replace("id=\"XXXCERTSIXXX\">", "id=\"XXXCERTSIXXX\" checked disabled>");
@@ -2271,7 +2279,7 @@ public class Tag_Document extends TagSupport {
                                         Template = Template.replace("id=\"XXXCERTNOXXX\">", "id=\"XXXCERTNOXXX\" checked disabled>");
                                         Template = Template.replace("id=\"XXXCERTSIXXX\">", "id=\"XXXCERTSIXXX\" disabled>");
                                     }
-                                    
+
                                 } else {
                                     Template = Template.replace("XXXFECHAPLASTXXX", "- Pendiente -");
                                     Template = Template.replace("XXXFUNCIONARIOPLASTXXX", "- Pendiente -");
@@ -2293,12 +2301,205 @@ public class Tag_Document extends TagSupport {
                                 Template = Template.replace("XXXFECHAGERENTEXXX", "N/A");
                             }
 ////                        //</editor-fold>
-                        
+
                             //</editor-fold>
-                        } else if (TypeDoc.contains("Due Diligence")) {
-                            
+                        } else if (TypeDoc.contains("Due diligence")) {
+                            //<editor-fold defaultstate="collapsed" desc="DUE DILIGENCE">
+
+                            //<editor-fold defaultstate="collapsed" desc="INITIAL MODULE">
+                            try {
+                                DataClient = ModuleCliente[0].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                                if (!DataClient[1].equals("N/A")) {
+                                    if (DataClient[1].contains("Actuali")) {
+                                        Template = Template.replace("id=\"XXXCHECKACTXXX\">", "id=\"XXXCHECKACTXXX\" checked disabled>");
+                                    } else if (DataClient[1].contains("Vincu")) {
+                                        Template = Template.replace("id=\"XXXCHECKVINXXX\">", "id=\"XXXCHECKVINXXX\" checked disabled>");
+                                    }
+                                    String[] dateArr = DataClient[2].toString().split("-");
+                                    Template = Template.replace("XXXANIOXXX", dateArr[0]);
+                                    Template = Template.replace("XXXMONTHXX", dateArr[1]);
+                                    Template = Template.replace("XXXDAYXXX", dateArr[2]);
+                                    if (DataClient[3].contains("Client")) {
+                                        Template = Template.replace("id=\"XXXCHECKCLIXXX\">", "id=\"XXXCHECKCLIXXX\" checked disabled>");
+                                        Template = Template.replace("XXXOTROXXX", "");
+
+                                    } else if (DataClient[3].contains("Prove") || DataClient[3].contains("prove")) {
+                                        Template = Template.replace("id=\"XXXCHECKPROXXX\">", "id=\"XXXCHECKPROXXX\" checked disabled>");
+                                        Template = Template.replace("XXXOTROXXX", "");
+                                    } else {
+                                        Template = Template.replace("XXXOTROXXX", "<span>" + DataClient[3] + "</span>");
+                                    }
+                                } else {
+                                    Template = Template.replace("XXXFECHADILIXXX", "").replace("XXXOTROXXX", "");
+                                }
+                            } catch (Exception e) {
+                                Template = Template.replace("XXXFECHADILIXXX", "").replace("XXXOTROXXX", "");
+
+                            }
+                            //</editor-fold>
+
+                            //<editor-fold defaultstate="collapsed" desc="COMPANY INFORMATION">
+                            try {
+                                DataClient = ModuleCliente[1].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                                if (!DataClient[1].equals("N/A")) {
+                                    Template = Template.replace("XXXRAZONSOCIALXXX", "<b>" + DataClient[1] + "</b>").
+                                            replace("XXXTAXIDXXX", DataClient[2]).replace("XXXMAIN_ADDRESSXXX", DataClient[3]).
+                                            replace("XXXCOUNTRYXXX", DataClient[4]).replace("XXXCITYXXX", DataClient[5]).
+                                            replace("XXXPOSTAL_CODEXXX", DataClient[6]).replace("XXXPHONEXXX", DataClient[7]).
+                                            replace("XXXWEB_SITEXXX", DataClient[8]).replace("XXXCLASIFICATIONXXX", DataClient[9]).
+                                            replace("XXXPRIM_ECONOMYXXX", DataClient[10]);
+
+                                    String[] dateArr = DataClient[12].toString().split("-");
+                                    Template = Template.replace("XXXANIOMATXXX", dateArr[0]);
+                                    Template = Template.replace("XXXMONTHMATXXX", dateArr[1]);
+                                    Template = Template.replace("XXXDAYMATXXX", dateArr[2]);
+                                }
+                            } catch (Exception e) {
+                                Template = Template.replace("XXXRAZONSOCIALXXX", "").
+                                        replace("XXXTAXIDXXX", "").replace("XXXMAIN_ADDRESSXXX", "").
+                                        replace("XXXCOUNTRYXXX", "").replace("XXXCITYXXX", "").
+                                        replace("XXXPOSTAL_CODEXXX", "").replace("XXXPHONEXXX", "").
+                                        replace("XXXWEB_SITEXXX", "").replace("XXXCLASIFICATIONXXX", "").
+                                        replace("XXXPRIM_ECONOMYXXX", "");
+                                Template = Template.replace("XXXANIOMATXXX", "");
+                                Template = Template.replace("XXXMONTHMATXXX", "");
+                                Template = Template.replace("XXXDAYMATXXX", "");
+                            }
+                            //</editor-fold>
+
+                            //<editor-fold defaultstate="collapsed" desc="SUPPLEMENTARY INFORMATION">
+                            try {
+                                DataClient = ModuleCliente[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                                if (!DataClient[1].equals("N/A")) {
+                                    Template = Template.replace("XXXQUEST_ONEXXX", DataClient[1]).
+                                            replace("XXXQUEST_TWOXXX", DataClient[2]).replace("XXXCOUNTRIESEXXX", DataClient[3]).
+                                            replace("XXXCURRENCYXXX", DataClient[4]).replace("XXXOFFERXXX", DataClient[5]).
+                                            replace("XXXQUEST_FOURXXX", DataClient[6]).replace("XXXQUEST_FIVEXXX", DataClient[7]).
+                                            replace("XXXQUEST_SIXXXX", DataClient[8]).replace("XXXQUEST_SEVENXXX", DataClient[9]).
+                                            replace("XXXQUEST_EIGHTXXX", DataClient[10]).replace("XXXQUEST_NINEXXX", DataClient[11]);
+                                }
+                            } catch (Exception e) {
+                                Template = Template.replace("XXXQUEST_ONEXXX", "").
+                                        replace("XXXQUEST_TWOXXX", "").replace("XXXCOUNTRIESEXXX", "").
+                                        replace("XXXCURRENCYXXX", "").replace("XXXOFFERXXX", "").
+                                        replace("XXXQUEST_FOURXXX", "").replace("XXXQUEST_FIVEXXX", "").
+                                        replace("XXXQUEST_SIXXXX", "").replace("XXXQUEST_SEVENXXX", "").
+                                        replace("XXXQUEST_EIGHTXXX", "").replace("XXXQUEST_NINEXXX", "");
+                            }
+
+                            //</editor-fold>
+                            //<editor-fold defaultstate="collapsed" desc="CONTACT">
+                            try {
+                                DataClient = ModuleCliente[3].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                                if (!DataClient[1].equals("N/A")) {
+                                    Template = Template.replace("XXXMANAGERXXX", DataClient[1]).
+                                            replace("XXXID_MANAGERXXX", DataClient[2]).replace("XXXEMAIL_MANAGERXXX", DataClient[3]).
+                                            replace("XXXCOMERCIALXXX", DataClient[4]).replace("XXXID_COMERCIALXXX", DataClient[5]).
+                                            replace("XXXEMAIL_COMERCIALXXX", DataClient[6]).replace("XXXCONTACT_ORDERXXX", DataClient[7]).
+                                            replace("XXXID_CONTACT_ORDERXXX", DataClient[8]).replace("XXXEMAIL_CONTACT_ORDERXXX", DataClient[9]).
+                                            replace("XXXCONTACT_PAYMENTXXX", DataClient[10]).replace("XXXID_CONTACT_PAYMENTXXX", DataClient[11])
+                                            .replace("XXXEMAIL_CONTACT_PAYMENTXXX", DataClient[12]);
+                                }
+                            } catch (Exception e) {
+                                Template = Template.replace("XXXMANAGERXXX", "").
+                                        replace("XXXID_MANAGERXXX", "").replace("XXXEMAIL_MANAGERXXX", "").
+                                        replace("XXXCOMERCIALXXX", "").replace("XXXID_COMERCIALXXX", "").
+                                        replace("XXXEMAIL_COMERCIALXXX", "").replace("XXXCONTACT_ORDERXXX", "").
+                                        replace("XXXID_CONTACT_ORDERXXX", "").replace("XXXEMAIL_CONTACT_ORDERXXX", "").
+                                        replace("XXXCONTACT_PAYMENTXXX", "").replace("XXXID_CONTACT_PAYMENTXXX", "").
+                                        replace("XXXEMAIL_CONTACT_PAYMENTXXX", "");
+                            }
+                            //</editor-fold>
+
+                            //<editor-fold defaultstate="collapsed" desc="FINANCIAL INFORMATION">
+                            try {
+                                DataClient = ModuleCliente[4].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                                if (!DataClient[1].equals("N/A")) {
+                                    Template = Template.replace("XXXFINANCIAL_INSTITUTIONXXX", DataClient[1]).
+                                            replace("XXXACCOUNT_NUMBERXXX", DataClient[3]).replace("XXXLIMIT_CREDITXXX", DataClient[4]).
+                                            replace("XXXTERMS_PAYMENTXXX", DataClient[5]);
+                                    if (DataClient[2].equals("Savings")) {
+                                        Template = Template.replace("id=\"XXXSAVINGSXXX\">", "id=\"XXXSAVINGSXXX\" checked disabled>");
+                                        Template = Template.replace("id=\"XXXCURRENTXXX\">", "id=\"XXXCURRENTXXX\" disabled>");
+                                        Template = Template.replace("id=\"XXXOTHERXXX\">", "id=\"XXXOTHERXXX\" disabled> ");
+                                    } else if (DataClient[2].equals("Current")) {
+                                        Template = Template.replace("id=\"XXXSAVINGSXXX\">", "id=\"XXXSAVINGSXXX\" disabled>");
+                                        Template = Template.replace("id=\"XXXCURRENTXXX\">", "id=\"XXXCURRENTXXX\" checked disabled>");
+                                        Template = Template.replace("id=\"XXXOTHERXXX\">", "id=\"XXXOTHERXXX\" disabled> ");
+                                    } else {
+                                        Template = Template.replace("id=\"XXXSAVINGSXXX\">", "id=\"XXXSAVINGSXXX\" disabled>");
+                                        Template = Template.replace("id=\"XXXCURRENTXXX\">", "id=\"XXXCURRENTXXX\" disabled>");
+                                        Template = Template.replace("id=\"XXXOTHERXXX\">", "id=\"XXXOTHERXXX\" checked disabled> " + DataClient[2] + "");
+                                    }
+
+                                }
+                            } catch (Exception e) {
+                                Template = Template.replace("XXXFINANCIAL_INSTITUTIONXXX", "").
+                                        replace("XXXACCOUNT_NUMBERXXX", "").replace("XXXLIMIT_CREDITXXX", "").
+                                        replace("XXXTERMS_PAYMENTXXX", "");
+                            }
+                            //</editor-fold>
+
+                            //<editor-fold defaultstate="collapsed" desc="STATEMENTS">
+                            try {
+                                DataClient = ModuleCliente[5].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                                if (!DataClient[1].equals("N/A")) {
+                                    Template = Template.replace("XXXDESC_FOUNDSXXX", DataClient[2]);
+                                }
+                            } catch (Exception e) {
+                                Template = Template.replace("XXXDESC_FOUNDSXXX", "");
+                            }
+                            //</editor-fold>
+
+                            //<editor-fold defaultstate="collapsed" desc="SIGNATURE CLIENT">
+                            try {
+                                DataClient = ModuleCliente[7].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                                if (!DataClient[1].contains("N/A")) {
+                                    lst_document = DocumentJpa.ConsultDocumentSignatureId(IdDoc);
+                                    if (lst_document != null) {
+                                        Object[] ObjSig = (Object[]) lst_document.get(0);
+                                        String Signature = ObjSig[3].toString();
+                                        Template = Template.replace("XXXFIRMACLIENTEXXX", "<canvas id='signature-canvas' width='400' height='200'></canvas>");
+
+                                        //<editor-fold defaultstate="collapsed" desc="SIGNATURE IMAGE">
+                                        Template = Template.replace("<canvas id='signature-canvas' width='400' height='200'></canvas>", "<img src='Interfaz/Contenido/SagrilaftDocs/Signature/" + Signature + "' width='250px' style='margin-left: 25%;'>");
+                                        out.print("<script>");
+                                        out.print("document.addEventListener('DOMContentLoaded', function() { "
+                                                + "        const imagePathInput = document.getElementById('image-path-input'); "
+                                                + "        const imageCanvas = document.getElementById('signature-canvas'); "
+                                                + "        const contextImage = imageCanvas.getContext('2d'); "
+                                                + "        const imagePath = imagePathInput.value; "
+                                                + "        const image = new Image(); "
+                                                + "        image.onload = function() { "
+                                                + "            contextImage.clearRect(0, 0, imageCanvas.width, imageCanvas.height); "
+                                                + "            contextImage.drawImage(image, 0, 0, imageCanvas.width, imageCanvas.height); "
+                                                + "        }; "
+                                                + "        image.src = imagePath; "
+                                                + "    });");
+                                        out.print("</script>");
+                                        //</editor-fold>
+
+                                        Template = Template.replace("XXXNAME_SIGNAXXX", DataClient[1]);
+                                        Template = Template.replace("XXXID_SIGNATUREXXX", DataClient[2]);
+                                        Template = Template.replace("XXXTITLE_SIGNAXXX", DataClient[3]);
+                                    }
+                                } else {
+                                    Template = Template.replace("XXXFIRMACLIENTEXXX", "<i class='text-secondary'>Firma cliente</i>");
+                                    Template = Template.replace("XXXNAME_SIGNAXXX", "");
+                                    Template = Template.replace("XXXID_SIGNATUREXXX", "");
+                                    Template = Template.replace("XXXTITLE_SIGNAXXX", "");
+                                }
+                            } catch (Exception e) {
+                                Template = Template.replace("XXXFIRMACLIENTEXXX", "<i class='text-secondary'>Firma cliente</i>");
+                                Template = Template.replace("XXXNAME_SIGNAXXX", "");
+                                Template = Template.replace("XXXID_SIGNATUREXXX", "");
+                                Template = Template.replace("XXXTITLE_SIGNAXXX", "");
+                            }
+                            //</editor-fold>
+
+                            //</editor-fold>
                         }
-                        
+
                         out.print("<div id='Imprimir1' style=\"max-width: 100%;\">");
                         out.print("<div id='mi-tabla'>");
                         out.print(Template);

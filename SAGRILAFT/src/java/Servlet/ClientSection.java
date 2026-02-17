@@ -47,7 +47,7 @@ public class ClientSection extends HttpServlet {
                 AccountNumb = "", ResourceOrigin = "", CoinType = "", Assets = "", Passives = "", Heritage = "", Income = "", Expenses = "",
                 OtherIncome = "", ConceptIncome = "", AnioReport = "", UndReport = "", Quest = "", Obs = "", MoneyOne = "", MoneyTwo = "", DetailOne = "",
                 DetailTwo = "", ReadDoc = "", FilesDocs = "", IdFiles = "", FileToAttch = "", FilesChange = "", Signature = "", TypeLtter = "", NroIdentix = "",
-                TypeDocGeneral = "", DateComerc = "", ActivityComercial = "", ParcialForm = "", Phone = "", Contact = "", Nit = "", TypeFormat = "";
+                TypeDocGeneral = "", DateComerc = "", ActivityComercial = "", ParcialForm = "", Phone = "", Contact = "", Nit = "", TypeFormat = "", DescSource = "";
         boolean result = false;
         List lst_DocumentJpa = null;
         String[] DtaFormat = {};
@@ -1014,8 +1014,8 @@ public class ClientSection extends HttpServlet {
                 //<editor-fold defaultstate="collapsed" desc="DATA DUE DILIGENCE">
                 String PostCode = "", ApliCode = "", Economy = "", oneQuest = "", twoQuest = "", threeQuest = "",
                         fourQuest = "", fiveQuest = "", sixQuest = "", Countries = "", Currency = "", Service = "", Subsidiaries = "",
-                        CitiesSub = "", manager = "", EmailManager = "", Comercial = "", EmailComercial = "", TxtContac = "", EmailContac = "", 
-                        Payment = "", EmailPayment = "", Financial = "", TypeAccount = "", TxtPayment = "";
+                        CitiesSub = "", manager = "", EmailManager = "", Comercial = "", EmailComercial = "", TxtContac = "", EmailContac = "",
+                        Payment = "", EmailPayment = "", Financial = "", TypeAccount = "", TxtPayment = "", Title = "";
                 int IdManager = 0, IdComercial = 0, IdContac = 0, IdPayment = 0, Account = 0, Limit = 0;
                 switch (opt) {
                     case 1:
@@ -1190,13 +1190,16 @@ public class ClientSection extends HttpServlet {
                     case 6:
                         //<editor-fold defaultstate="collapsed" desc="MODULE 4 - FINANCIAL INFORMATION">
                         module = 4;
-                                                
+
                         Financial = request.getParameter("TxtFinancial");
                         TypeAccount = request.getParameter("TxtTypeAccount");
+                        if (TypeAccount.equals("Other")) {
+                            TypeAccount = request.getParameter("txtOtherOne");
+                        }
                         Account = Integer.parseInt(request.getParameter("NmbAccount"));
                         Limit = Integer.parseInt(request.getParameter("NmbLimit"));
                         TxtPayment = request.getParameter("TxtPayment");
-                        
+
                         ValidAction = parseOrDefault(request.getParameter("TxtValidAction"));
                         Forms = "[[" + module + "][" + Financial + "][" + TypeAccount + "][" + Account + "][" + Limit + "][" + TxtPayment + "]]";
 
@@ -1228,11 +1231,12 @@ public class ClientSection extends HttpServlet {
                         module = 5;
                         IdDoc = Integer.parseInt(request.getParameter("IdDoc"));
                         ReadDoc = request.getParameter("Txt_ReadDoc");
+                        DescSource = request.getParameter("txtDescSource");
                         ValidAction = request.getParameter("TxtValidAction");
                         if (!ReadDoc.equals("")) {
                             ReadDoc = "1";
                         }
-                        Forms = "[[" + module + "][" + ReadDoc + "]]";
+                        Forms = "[[" + module + "][" + ReadDoc + "][" + DescSource + "]]";
                         for (int i = 0; i < DtaFormat.length; i++) {
                             if (i == DtaFormat.length - 1) {
                                 if (i != module) {
@@ -1364,6 +1368,7 @@ public class ClientSection extends HttpServlet {
                         ValidAction = request.getParameter("TxtValidAction");
                         TypeSig = Integer.parseInt(request.getParameter("TypeSig"));
                         Names = request.getParameter("TxtName");
+                        Title = request.getParameter("TxtTitle");
                         NroIdenti = Integer.parseInt(request.getParameter("NmbDocx").toString());
                         try {
                             IdSig = Integer.parseInt(request.getParameter("NbmIdSigna"));
@@ -1392,7 +1397,7 @@ public class ClientSection extends HttpServlet {
                             Signature = "";
                         }
 
-                        Forms = "[[" + module + "][" + Names + "][" + NroIdenti + "]]";
+                        Forms = "[[" + module + "][" + Names + "][" + NroIdenti + "]["+ Title +"]]";
                         for (int i = 0; i < DtaFormat.length; i++) {
                             if (i == DtaFormat.length - 1) {
                                 if (i != module) {
@@ -1415,7 +1420,7 @@ public class ClientSection extends HttpServlet {
                         request.setAttribute("UpdateFormClient", result);
                         request.getRequestDispatcher("ClientSection?opt=1").forward(request, response);
                         //</editor-fold>
-                        break;    
+                        break;
                     case 17:
                         //<editor-fold defaultstate="collapsed" desc="MODULE RETURN">
                         IdDoc = Integer.parseInt(request.getParameter("IdDoc"));

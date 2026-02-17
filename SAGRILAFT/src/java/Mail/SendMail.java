@@ -35,20 +35,10 @@ public class SendMail {
                 propiedades.setProperty("mail.smtp.port", datMail[2]);
                 propiedades.setProperty("mail.smtp.auth", datMail[3]);
                 propiedades.setProperty("mail.smtp.user", datMail[4]);
-                propiedades.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-                propiedades.setProperty("mail.smtp.socketFactory.fallback", "true");
+                propiedades.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
+                propiedades.setProperty("mail.debug", "true");
                 mail = datMail[4].toString();
                 Password = datMail[5].toString();
-            } else {
-                propiedades.setProperty("mail.smtp.host", "mail3.plastitec-sa.com");
-                propiedades.setProperty("mail.smtp.starttls.enable", "true");
-                propiedades.setProperty("mail.smtp.port", "587");//465...25
-                propiedades.setProperty("mail.smtp.auth", "true");
-                propiedades.setProperty("mail.smtp.user", "aplicativo@plastitec-sa.com");
-                propiedades.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-                propiedades.setProperty("mail.smtp.socketFactory.fallback", "true");
-                mail = "aplicativo@plastitec-sa.com";
-                Password = "Notificaciones2022+";
             }
             Session session = Session.getDefaultInstance(propiedades);
             try {
@@ -85,7 +75,7 @@ public class SendMail {
                     texto_mail = texto_mail.replace("XXXUSERCLIENTXXX", UserClient);
                     texto_mail = texto_mail.replace("XXXPASSWORDCLIENTXXX", "" + CurrentYear + "");
                     texto_mail = texto_mail.replace("XXXLINKXXX", link);
-                    texto_mail = texto_mail.replace("- - Boton Access - -", "<a href='" + link + "'>" + link + "</a>");
+//                    texto_mail = texto_mail.replace("- - Boton Access - -", "<a href='" + link + "'>" + link + "</a>");
                 }
 
                 message.setContent(texto_mail, "text/html; charset=UTF-8");//Mensaje
@@ -116,8 +106,7 @@ public class SendMail {
                 propiedades.setProperty("mail.smtp.port", datMail[2]);
                 propiedades.setProperty("mail.smtp.auth", datMail[3]);
                 propiedades.setProperty("mail.smtp.user", datMail[4]);
-                propiedades.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-                propiedades.setProperty("mail.smtp.socketFactory.fallback", "true");
+                propiedades.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
                 mail = datMail[4].toString();
                 Password = datMail[5].toString();
             } else {
@@ -195,8 +184,7 @@ public class SendMail {
                 propiedades.setProperty("mail.smtp.port", datMail[2]);//465...25
                 propiedades.setProperty("mail.smtp.auth", datMail[3]);
                 propiedades.setProperty("mail.smtp.user", datMail[4]);
-                propiedades.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-                propiedades.setProperty("mail.smtp.socketFactory.fallback", "true");
+                propiedades.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
                 mail = datMail[4].toString();
                 Password = datMail[5].toString();
             } else {
@@ -267,8 +255,7 @@ public class SendMail {
                 propiedades.setProperty("mail.smtp.port", datMail[2]);//465...25
                 propiedades.setProperty("mail.smtp.auth", datMail[3]);
                 propiedades.setProperty("mail.smtp.user", datMail[4]);
-                propiedades.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-                propiedades.setProperty("mail.smtp.socketFactory.fallback", "true");
+                propiedades.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
                 mail = datMail[4].toString();
                 Password = datMail[5].toString();
             } else {
@@ -352,8 +339,7 @@ public class SendMail {
                 propiedades.setProperty("mail.smtp.port", datMail[2]);//465...25
                 propiedades.setProperty("mail.smtp.auth", datMail[3]);
                 propiedades.setProperty("mail.smtp.user", datMail[4]);
-                propiedades.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-                propiedades.setProperty("mail.smtp.socketFactory.fallback", "true");
+                propiedades.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
                 mail = datMail[4].toString();
                 Password = datMail[5].toString();
             } else {
@@ -422,7 +408,7 @@ public class SendMail {
         }
         //</editor-fold>
     }
-    
+
     public void SendingNotifyAdd_reNew(String Client, String UserClient) throws javax.mail.MessagingException {
         //<editor-fold defaultstate="collapsed" desc="MAIL NOTIFY RE NEW DOCUMENT USER">
         LocalDate currentDate = LocalDate.now();
@@ -438,12 +424,11 @@ public class SendMail {
                 propiedades.setProperty("mail.smtp.port", datMail[2]);//465...25
                 propiedades.setProperty("mail.smtp.auth", datMail[3]);
                 propiedades.setProperty("mail.smtp.user", datMail[4]);
-                propiedades.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-                propiedades.setProperty("mail.smtp.socketFactory.fallback", "true");
+                propiedades.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
                 mail = datMail[4].toString();
                 Password = datMail[5].toString();
             } else {
-                
+
             }
             Session session = Session.getDefaultInstance(propiedades);
             try {
@@ -514,8 +499,7 @@ public class SendMail {
                 propiedades.setProperty("mail.smtp.port", datMail[2]);//465...25
                 propiedades.setProperty("mail.smtp.auth", datMail[3]);
                 propiedades.setProperty("mail.smtp.user", datMail[4]);
-                propiedades.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-                propiedades.setProperty("mail.smtp.socketFactory.fallback", "true");
+                propiedades.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
                 mail = datMail[4].toString();
                 Password = datMail[5].toString();
             } else {
@@ -593,8 +577,7 @@ public class SendMail {
                 propiedades.setProperty("mail.smtp.port", datMail[2]);//465...25
                 propiedades.setProperty("mail.smtp.auth", datMail[3]);
                 propiedades.setProperty("mail.smtp.user", datMail[4]);
-                propiedades.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-                propiedades.setProperty("mail.smtp.socketFactory.fallback", "true");
+                propiedades.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
                 mail = datMail[4].toString();
                 Password = datMail[5].toString();
             } else {
@@ -663,8 +646,7 @@ public class SendMail {
                 propiedades.setProperty("mail.smtp.port", datMail[2]);//465...25
                 propiedades.setProperty("mail.smtp.auth", datMail[3]);
                 propiedades.setProperty("mail.smtp.user", datMail[4]);
-                propiedades.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-                propiedades.setProperty("mail.smtp.socketFactory.fallback", "true");
+                propiedades.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
                 mail = datMail[4].toString();
                 Password = datMail[5].toString();
             } else {
@@ -710,8 +692,8 @@ public class SendMail {
         }
 //</editor-fold>
     }
-    
-    public void NotifyPlastitecDocumentEnd(String Client) throws javax.mail.MessagingException{
+
+    public void NotifyPlastitecDocumentEnd(String Client) throws javax.mail.MessagingException {
         //<editor-fold defaultstate="collapsed" desc="MAIL TO NOTIFY END OF PROCESS">
         LocalDate currentDate = LocalDate.now();
         int CurrentYear = currentDate.getYear();
@@ -726,8 +708,7 @@ public class SendMail {
                 propiedades.setProperty("mail.smtp.port", datMail[2]);//465...25
                 propiedades.setProperty("mail.smtp.auth", datMail[3]);
                 propiedades.setProperty("mail.smtp.user", datMail[4]);
-                propiedades.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-                propiedades.setProperty("mail.smtp.socketFactory.fallback", "true");
+                propiedades.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
                 mail = datMail[4].toString();
                 Password = datMail[5].toString();
             } else {
@@ -790,10 +771,10 @@ public class SendMail {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    //</editor-fold>
+        //</editor-fold>
     }
-    
-     public void NotifyMailClient(String user, String Client, String MailCl) throws javax.mail.MessagingException {
+
+    public void NotifyMailClient(String user, String Client, String MailCl) throws javax.mail.MessagingException {
         //<editor-fold defaultstate="collapsed" desc="MAIL TO NOTIFY CLIENT">
         try {
             Properties propiedades = new Properties();
@@ -806,8 +787,7 @@ public class SendMail {
                 propiedades.setProperty("mail.smtp.port", datMail[2]);//465...25
                 propiedades.setProperty("mail.smtp.auth", datMail[3]);
                 propiedades.setProperty("mail.smtp.user", datMail[4]);
-                propiedades.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-                propiedades.setProperty("mail.smtp.socketFactory.fallback", "true");
+                propiedades.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
                 mail = datMail[4].toString();
                 Password = datMail[5].toString();
             } else {
@@ -853,5 +833,5 @@ public class SendMail {
         }
 //</editor-fold>
     }
-    
+
 }

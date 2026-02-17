@@ -119,7 +119,7 @@ public class Tag_ClientSection extends TagSupport {
                     out.print("<h6>Seleccione modulo: </h6>");
                     out.print("</div>");
 
-                    if (TypeDocument.contains("Due Diligence")) {
+                    if (TypeDocument.contains("Due diligence")) {
                         lst_config = ConfigJpa.ConsultSettingsByCategorie("ListModules15");
                     } else {
                         if (TypeDocument.contains("Ingles")) {
@@ -5804,7 +5804,7 @@ public class Tag_ClientSection extends TagSupport {
                                 //<editor-fold defaultstate="collapsed" desc="SIGNATURE IMAGEN">
                                 out.print("<form action='AttachSignature.jsp' method='post' enctype='multipart/form-data' class='needs-validation' novalidate=''>");
 
-                                out.print("<div class='d-flex mb-5'>");
+                                out.print("<div class='d-flex'>");
                                 out.print("<div class='col-lg-4'>");
                                 out.print("<div class='mt-4'>");
                                 out.print("<h6>" + SectionTwo + "<span class='text-danger'>*</span></h6>");
@@ -5820,14 +5820,24 @@ public class Tag_ClientSection extends TagSupport {
                                 out.print("<div class='mt-2'>");
                                 out.print("<input type='number' class='form-control' name='NmbDocx' id='NmbDocument' placeholder='Numero de documento' value='" + (information ? ((form[2].toString().equals("N/A")) ? "" : form[2].toString()) : "") + "' required>");
                                 out.print("</div>");
-
+                                out.print("</div>");
                                 out.print("</div>");
 
-                                out.print("<div class='signature-input col-lg-4 mt-3' id='sigChange'>");
-                                out.print("<label for='file-input'><b>" + OptFour + ":</b></label> <span class='text-danger'>*</span><br>");
+                                out.print("<div class='d-flex mb-5'>");
+                                
+                                out.print("<div class='col-lg-6'>");
+                                out.print("<div class=''>");
+                                out.print("<h6>Title<span class='text-danger'>*</span></h6>");
+                                out.print("</div>");
+                                out.print("<div class=''>");
+                                out.print("<input type='text' class='form-control' name='TxtTitle' id='TxtTitle' placeholder='Title' value='" + (information ? ((form[3] == null) ? "" : form[3].toString()) : "") + "' required>");
+                                out.print("</div>");
+                                out.print("</div>");
+
+                                out.print("<div class='signature-input col-lg-6' id='sigChange'>");
+                                out.print("<label for='file-input'><b>Upload signature image:</b></label> <span class='text-danger'>*</span><br>");
                                 out.print("<input type='file' class='form-control' name='TxtImageSigna' id='file-input' accept='image/*' onchange='cargarImagen(event)' required>");
                                 out.print("</div>");
-
                                 out.print("</div>");
 
                                 out.print("<div class='canvas-container'>");
@@ -6383,7 +6393,7 @@ public class Tag_ClientSection extends TagSupport {
                                 out.print("</div>");
                                 //</editor-fold>
                             } else if (estTl == 4) {
-                                //<editor-fold defaultstate="collapsed" desc="PAYMENT CONDITIONS">
+                                //<editor-fold defaultstate="collapsed" desc="FINANCIAL INFORMATION">
                                 out.print("<div class='section-body' style='color: black'>");
                                 out.print("<h2 class='' style='position: absolute;font-size: 20px; color: black; font-weight: 700; margin: 30px 0 25px 0;'><i class=\"fas fa-caret-right\"></i> &nbsp; financial Information</h2>");
                                 out.print("<div class='row' style='background: #e7e7e7; padding-top: 47px;'>");
@@ -6404,7 +6414,14 @@ public class Tag_ClientSection extends TagSupport {
 
                                 out.print("<div class='col-lg-6'>");
                                 out.print("<span class='font-weight-bold'>Type of Account <span class=\"text-danger\">*</span></span>");
-                                out.print("<input type='text' class='form-control' name='TxtTypeAccount' id='' value='" + (information ? form[2] : "") + "'>");
+                                out.print("<div class='d-flex'>");
+                                out.print("Savings &nbsp; <input type='radio' name='TxtTypeAccount' id='' value='Savings' onclick='ToActiveShield(\"idTypeAccount\", \"idOtherOne\")' " + (information ? (form[2].equals("Savings") ? "checked" : "") : "checked") + "> &nbsp;&nbsp;");
+                                out.print("Current &nbsp; <input type='radio' name='TxtTypeAccount' id='' value='Current' onclick='ToActiveShield(\"idTypeAccount\", \"idOtherOne\")' " + (information ? (form[2].equals("Current") ? "checked" : "") : "") + "> &nbsp;&nbsp;");
+                                out.print("Other &nbsp; <input type='radio' name='TxtTypeAccount' id='idTypeAccount' value='Other' onclick='ToActiveShield(\"idTypeAccount\", \"idOtherOne\")' " + (information ? ((!form[2].equals("Savings") && !form[2].equals("Current")) ? "checked" : "") : "") + "> &nbsp;&nbsp;");
+                                out.print("</div>");
+
+                                out.print("<input type='" + (!form[2].equals("Savings") && !form[2].equals("Current") ? "text" : "hidden") + "' class='form-control' name='txtOtherOne' id='idOtherOne' placholder='Response' value='" + (!form[2].equals("Savings") && !form[2].equals("Current") ? form[2] : "") + "'>");
+
                                 out.print("</div>");
                                 out.print("</div>");
 
@@ -6450,7 +6467,7 @@ public class Tag_ClientSection extends TagSupport {
                                 out.print("<div class='col-12 col-md-10 col-sm-12' style='margin: auto; margin-top: 15px;'>");
                                 out.print("<div class='card' style='border-radius: 5px;'>");
                                 out.print("<div class='card-body'>");
-                                out.print("<div class='' style='height: 790px;'>");
+                                out.print("<div class='' style='height: 910px;'>");
                                 out.print("<div class='empty-state-icon'>");
                                 out.print("All fields marked with an asterisk (<span class='text-danger'>*</span>) are required.");
                                 out.print("</div>");
@@ -6468,7 +6485,20 @@ public class Tag_ClientSection extends TagSupport {
                                         textData = textData.replace("XXXWEB_SITEXXX", "<b>" + Website + "</b>");
                                         out.print("<h4 class='text-center'><strong>" + ObjFunds[3].toString() + "</strong></h4>");
                                         out.print("<p>" + textData + "</p>");
+                                        if (i == 0) {
+                                            out.print("<div class='mb-4'>");
+                                            out.print("<textarea type='text' class='form-control' name='txtDescSource' id='' placeholder='Description of the source of the funds' required>");
+                                            if (information) {
+                                                try {
+                                                    out.print(form[2].toString());
+                                                } catch (Exception e) {
+                                                }
+                                            }
+                                            out.print("</textarea>");
+                                            out.print("</div>");
+                                        }
                                         out.print("</div>");
+
                                     }
                                 }
                                 out.print("</div>");
@@ -6914,7 +6944,8 @@ public class Tag_ClientSection extends TagSupport {
                                 out.print("<form action='AttachSignature.jsp' method='post' enctype='multipart/form-data' class='needs-validation' novalidate=''>");
 
                                 out.print("<div class='d-flex mb-5'>");
-                                out.print("<div class='col-lg-4'>");
+                                
+                                out.print("<div class='col-lg-6'>");
                                 out.print("<div class='mt-4'>");
                                 out.print("<h6>Complete Name<span class='text-danger'>*</span></h6>");
                                 out.print("</div>");
@@ -6922,22 +6953,35 @@ public class Tag_ClientSection extends TagSupport {
                                 out.print("<input type='text' class='form-control' name='TxtName' id='TxtName' placeholder='Complete Name' value='" + (information ? ((form[1].toString().equals("N/A")) ? "" : form[1].toString()) : "") + "' required>");
                                 out.print("</div>");
                                 out.print("</div>");
-                                out.print("<div class='col-lg-4'>");
+                                
+                                out.print("<div class='col-lg-6'>");
                                 out.print("<div class='mt-4'>");
                                 out.print("<h6>Identification Number<span class='text-danger'>*</span></h6>");
                                 out.print("</div>");
                                 out.print("<div class='mt-2'>");
                                 out.print("<input type='number' class='form-control' name='NmbDocx' id='NmbDocument' placeholder='Identification Number' value='" + (information ? ((form[2].toString().equals("N/A")) ? "" : form[2].toString()) : "") + "' required>");
                                 out.print("</div>");
-
+                                out.print("</div>");
+                                
+                                out.print("</div>");
+                                
+                                out.print("<div class='d-flex mb-5'>");
+                                
+                                out.print("<div class='col-lg-6'>");
+                                out.print("<div class='mt-4'>");
+                                out.print("<h6>Title<span class='text-danger'>*</span></h6>");
+                                out.print("</div>");
+                                out.print("<div class='mt-2'>");
+                                out.print("<input type='text' class='form-control' name='TxtTitle' id='TxtTitle' placeholder='Title Number' value='" + (information ? ((form[3] == null ) ? "" : form[3].toString()) : "") + "' required>");
+                                out.print("</div>");
                                 out.print("</div>");
 
-                                out.print("<div class='signature-input col-lg-4 mt-3' id='sigChange'>");
+                                out.print("<div class='signature-input col-lg-6 mt-3' id='sigChange'>");
                                 out.print("<label for='file-input'><b>Upload signature image:</b></label> <span class='text-danger'>*</span><br>");
                                 out.print("<input type='file' class='form-control' name='TxtImageSigna' id='file-input' accept='image/*' onchange='cargarImagen(event)' required>");
                                 out.print("</div>");
-
                                 out.print("</div>");
+
 
                                 out.print("<div class='canvas-container'>");
 

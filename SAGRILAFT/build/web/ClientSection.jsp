@@ -910,9 +910,7 @@
         <script src="Interfaz/Contenido/assets/js/page/modules-toastr.js"></script>
         <script src="Interfaz/Contenido/assets/js/page/forms-advanced-forms.js"></script>
         <script src="Interfaz/Contenido/assets/modules/select2/dist/js/select2.full.min.js"></script>
-
         <script type="text/javascript" src="Interfaz/Alertas/dist/sweetalert.min.js"></script>
         <link href="Interfaz/Alertas/dist/sweetalert.css" rel="stylesheet" type="text/css"/>
-        <link href="Interfaz/Contenido/assets/js/DinamicShareholding.js" rel="stylesheet" type="text/css"/>
     </body>
 </html>
