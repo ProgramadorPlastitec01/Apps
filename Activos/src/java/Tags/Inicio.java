@@ -10,7 +10,6 @@ import javax.servlet.jsp.tagext.TagSupport;
 import Controladores.RequisicionJpaController;
 import Controladores.AreaJpaController;
 import Factory.ReferenciasMANT;
-import java.util.Arrays;
 
 public class Inicio extends TagSupport {
 
@@ -30,31 +29,79 @@ public class Inicio extends TagSupport {
                 out.print("<h3>¡ Bienvenido <b>" + nombre + "</b>! </h3>");
             }
             //<editor-fold defaultstate="collapsed" desc="INICIÓ">
-            out.print("<div style='display:flex;justify-content:space-between;'>");
-            out.print("<div style='width:55%;overflow:auto;max-height: 500px;'>");
-            out.print("<h2><b>Stock VS Minimo</b></h2>");
-            out.print("<table class='table2' style='width:100%;'>");
-            out.print("<tr>");
-            out.print("<th class='sticky'>ESTADO</th>");
-            out.print("<th class='sticky'>CODIGO</th>");
-            out.print("<th class='sticky'>REFERENCIA</th>");
-            out.print("<th class='sticky'>MINIMO</th>");
-            out.print("<th class='sticky'>EXISTENCIA</th>");
-            out.print("</tr>");
-            List lst_factory = FactoryJpa.StockMinimo();
-            if (lst_factory != null) {
-                for (int i = 0; i < lst_factory.size(); i++) {
-                    out.print("<tr>");
-                    out.print("" + lst_factory.get(i).toString()
-                            .replace("<td>Stock</td>", "<td style='text-align:center;border-left:1px solid #b5b5b5;'><i style='font-size:20px;color:#169a2c;' class=\"fas fa-flag\"></i></td>")
-                            .replace("<td>Alerta</td>", "<td style='text-align:center;border-left:1px solid #b5b5b5;'><i style='font-size:20px;color:#f17e18;' class=\"fas fa-flag\"></i></td>"));
-                    out.print("</tr>");
-                }
-            }
-            out.print("</table>");
+
+            out.print("<div style='display:flex'>");
+            out.print("<div style='width:60%;'>");  
+            out.print("<div style='overflow:auto;max-height:500px;'>");
+
+            out.print("<div style='display:flex;align-items:center;justify-content: space-between;'>");
+            out.print("<div><h2><b>Stock VS Minimo</b></h2></div>");
+            out.print("<div>");
+            out.print("<input type='text' id='buscador' "
+                    + "placeholder='Buscar producto...' "
+                    + "style='    width: 210px;\n"
+                    + "    padding: 6px;\n"
+                    + "    float: right;' "
+                    + "onkeyup='buscarProducto()'>");
+            out.print("</div>");
             out.print("</div>");
 
-            out.print("<div style='width:55%;align='center'>");
+            out.print("<table class='table2' style='width:100%;'>");
+
+            out.print("<thead>");
+            out.print("<tr>");
+            out.print("<th>ESTADO</th>");
+            out.print("<th>CODIGO</th>");
+            out.print("<th>REFERENCIA</th>");
+            out.print("<th>MINIMO</th>");
+            out.print("<th>EXISTENCIA</th>");
+            out.print("</tr>");
+            out.print("</thead>");
+
+            out.print("<tbody id='tablaStock'>");
+            out.print("</tbody>");
+
+            out.print("</table>");
+            out.print("</div>");
+            out.print("<div style='margin-top:10px;text-align:center;'>");
+            out.print("<input type='submit' style='width:11%' value='Anterior' onclick='cambiarPagina(-1)'>");
+            out.print("<span id='paginaActual' style='margin:0 15px;font-weight:bold;'>Pag. 1</span>");
+            out.print("<input type='submit' style='width:11%' value='Siguiente' onclick='cambiarPagina(1)'>");
+            out.print("</div>");
+            out.print("</div>");
+
+            //<editor-fold defaultstate="collapsed" desc="SCRIPTS">
+            out.print("<script>");
+
+            out.print("let pagina = 1;");
+            out.print("let textoBusqueda = '';");
+
+            out.print("function cargarPagina(p){");
+            out.print("fetch('stockMinimo?pagina=' + p + '&buscar=' + encodeURIComponent(textoBusqueda))");
+            out.print(".then(r => r.text())");
+            out.print(".then(data => {");
+            out.print("document.getElementById('tablaStock').innerHTML = data;");
+            out.print("document.getElementById('paginaActual').innerText = p;");
+            out.print("pagina = p;");
+            out.print("});");
+            out.print("}");
+
+            out.print("function cambiarPagina(v){");
+            out.print("if(pagina + v < 1) return;");
+            out.print("cargarPagina(pagina + v);");
+            out.print("}");
+
+            out.print("function buscarProducto(){");
+            out.print("textoBusqueda = document.getElementById('buscador').value;");
+            out.print("cargarPagina(1);");
+            out.print("}");
+
+            out.print("cargarPagina(1);");
+
+            out.print("</script>");
+            //</editor-fold>
+
+            out.print("<div style='width:40%;align='center'>");
             out.print("<h2><b>Requisiciones</b></h2>");
             out.print("<table class='table2' style='width:100%;'>");
             out.print("<tr>");
@@ -81,6 +128,8 @@ public class Inicio extends TagSupport {
                 out.print("</tr>");
             }
             out.print("</table>");
+            
+            out.print("</div>");
             out.print("</div>");
             //</editor-fold>
         } catch (Exception e) {

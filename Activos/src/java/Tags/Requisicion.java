@@ -15,6 +15,8 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
+import java.util.Map;
+import Metodos.Producto;
 
 public class Requisicion extends TagSupport {
 
@@ -33,6 +35,7 @@ public class Requisicion extends TagSupport {
             UnidadJpaController jpa_unidades = new UnidadJpaController();
             AreaJpaController jpa_area = new AreaJpaController();
             ReferenciasMANT mtddtm = new ReferenciasMANT();
+            Map<String, Producto> inventario = mtddtm.ExistenciaFactory();
             List lst_requisicion = null;
             List lst_unidades = null;
             List lst_log_requisicion = null;
@@ -1261,8 +1264,28 @@ public class Requisicion extends TagSupport {
                                 + "<b>ESTIMADA: </b>" + obj_requisicion[8] + "</td>");
                         out.print("<td valign='top' style='width:11%'>" + ((obj_requisicion[11] == "" ? "" : ""
                                 + "<b>COTIZACION: </b>" + obj_requisicion[11] + "<br>")) + "");
-                        out.print("<b>CTO COSTO: </b>" + obj_requisicion[35] + ((obj_requisicion[35].toString().equals("GASTO")) ? "<br><b>R. GASTO: </b>" + obj_requisicion[34] : "<br><b>R. ACTIVO: </b>" + obj_requisicion[32]) + "</td>"
-                                + "<td valign='top'><b>DESTINO: </b>" + obj_requisicion[7] + "<br><b>CLASIFICACION: </b>" + obj_requisicion[4] + "<br>"
+                        out.print("<b>CTO COSTO: </b>" + obj_requisicion[35] + ((obj_requisicion[35].toString().equals("GASTO")) ? "<br><b>R. GASTO: </b>" + obj_requisicion[34] : "<br><b>R. ACTIVO: </b>" + obj_requisicion[32]) + "");
+
+                        String codProducto = "";
+
+                        if (obj_requisicion[34] != null) {
+                            codProducto = obj_requisicion[34].toString().trim();
+                            int pos = codProducto.indexOf("_");
+                            if (pos > 0) {
+                                codProducto = codProducto.substring(0, pos);
+                            }
+                            codProducto = codProducto
+                                    .trim()
+                                    .toUpperCase()
+                                    .replaceAll("[^A-Z0-9]", ""); // elimina caracteres raros
+                        }
+
+                        Producto prod = inventario.get(codProducto);
+                        String exist = (prod != null) ? prod.getExist() : "NO ENCONTRADO";
+                        String unidad = (prod != null) ? prod.getUnidad() : "";
+                        out.print("<br/><b>EXIST. FACTORY: </b> " + ((exist.equals("0")) ? "<b style='color:red'> 0" : exist.equals("NO ENCONTRADO") ? "<b style='color:black'>NO ENCONTRADO" : "<b style='color:#169a2c'> " + exist + " " + unidad) + "</b></td>");
+
+                        out.print("<td valign='top'><b>DESTINO: </b>" + obj_requisicion[7] + "<br><b>CLASIFICACION: </b>" + obj_requisicion[4] + "<br>"
                                 + "<b>CANTIDAD S: </b>" + obj_requisicion[3] + "&nbsp;<b> - </b>" + obj_requisicion[5] + "</td>");
                         out.print("<td valign='top'>");
                         out.print("<b>SOLICITANTE: </b>" + obj_requisicion[22] + "<br><b>DESCRIPCION: </b>");
@@ -2022,7 +2045,26 @@ public class Requisicion extends TagSupport {
                         if (estado != 2 && estado != 3 && estado != 8) {
                             out.print("<td valign='top'>" + ((obj_requisicion[30] == null) ? "" : obj_requisicion[30]) + "<hr>" + ((obj_requisicion[17] == null) ? "" : obj_requisicion[17]) + "</td>");
                         }
-                        out.print("<td valign='top'>" + obj_requisicion[3] + "&nbsp;<b> - </b>" + obj_requisicion[5] + "</td>");
+                        out.print("<td valign='top'>" + obj_requisicion[3] + "&nbsp;<b> - </b>" + obj_requisicion[5] + "");
+                        if (estado == 2) {
+                            String codProducto = "";
+                            if (obj_requisicion[34] != null) {
+                                codProducto = obj_requisicion[34].toString().trim();
+                                int pos = codProducto.indexOf("_");
+                                if (pos > 0) {
+                                    codProducto = codProducto.substring(0, pos);
+                                }
+                                codProducto = codProducto
+                                        .trim()
+                                        .toUpperCase()
+                                        .replaceAll("[^A-Z0-9]", ""); // elimina caracteres raros
+                            }
+                            Producto prod = inventario.get(codProducto);
+                            String exist = (prod != null) ? prod.getExist() : "NO ENCONTRADO";
+                            String unidad = (prod != null) ? prod.getUnidad() : "";
+                            out.print("<br/><b>EXIST. FACTORY: </b> " + ((exist.equals("0")) ? "<b style='color:red'> 0" : exist.equals("NO ENCONTRADO") ? "<b style='color:black'>NO ENCONTRADO" : "<b style='color:#169a2c'> " + exist + " " + unidad) + "</b>");
+                        }
+                        out.print("</td>");
                         if (estado != 2 && estado != 3 && estado != 4 && estado != 8) {
                             out.print("<td valign='top'>"
                                     + ((Double.parseDouble(obj_requisicion[32].toString()) == 0 ? "<b class='rojo'>0.0</b>"
@@ -2030,7 +2072,8 @@ public class Requisicion extends TagSupport {
                                     ? "<b class='verde'>" + obj_requisicion[32] + "</b>&nbsp;<b> - </b>" + obj_requisicion[5]
                                     : ((Double.parseDouble(obj_requisicion[3].toString()) < Double.parseDouble(obj_requisicion[32].toString())
                                     ? "<b class='naranja'>" + obj_requisicion[32] + "</b>&nbsp;<b> - </b>" + obj_requisicion[5]
-                                    : "<b class='rojo'>" + obj_requisicion[32] + "</b>&nbsp;<b> - </b>" + obj_requisicion[5])))))) + "</td>");
+                                    : "<b class='rojo'>" + obj_requisicion[32] + "</b>&nbsp;<b> - </b>" + obj_requisicion[5])))))) + "");
+                            out.print("</td>");
                             out.print("<td valign='top'>" + ((obj_requisicion[39] == null) ? "" : obj_requisicion[39]) + "</td>");
                         }
                         out.print("<td valign='top'>" + obj_requisicion[6] + " <hr/> " + obj_requisicion[7] + " </td>");
@@ -2268,15 +2311,15 @@ public class Requisicion extends TagSupport {
                         }
                         //</editor-fold>
                         out.print("</tr>");
-                        out.print("<script type='text/javascript'>");
+                        out.print("</div> <!-- END of content -->");
+                        out.print("</form>");
+                    }
+                     out.print("<script type='text/javascript'>");
                         out.print("var pager0 = new Pager0('resultados', 100);");
                         out.print("pager0.init();");
                         out.print("pager0.showPageNav('pager0','NavPosicion0');");
                         out.print("pager0.showPage(1);");
                         out.print("</script>");
-                        out.print("</div> <!-- END of content -->");
-                        out.print("</form>");
-                    }
                 } else {
                     out.print("<table id='resultados' class='table' style='width:100%'>");
                     out.print("<tr>");

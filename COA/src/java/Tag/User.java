@@ -62,11 +62,13 @@ public class User extends TagSupport {
                     out.print("<div class='col-lg-4' data-toggle='tooltip' data-placemente='top' title='Rol usuario'>");
                     lst_role = RoleJpa.ConsultRole();
                     out.print("<select class='form-control' name='cbxRol' style='margin-top: 12px;margin-left: -3px;'>");
-                    out.print("<option value='" + ObjUser[7] + "'>" + ObjUser[8] + " </option>");
+                    out.print("<option value='" + ObjUser[12] + "'>" + ObjUser[13] + " </option>");
                     if (lst_role != null) {
                         for (int i = 0; i < lst_role.size(); i++) {
                             Object[] ObjRole = (Object[]) lst_role.get(i);
-                            out.print("<option value='" + ObjRole[0] + "'>" + ObjRole[1] + "</option>");
+                            if (!ObjUser[13].equals(ObjRole[1])) {
+                                out.print("<option value='" + ObjRole[0] + "'>" + ObjRole[1] + "</option>");
+                            }
                         }
                     } else {
                         out.print("<option>Ha ocurrido un error!</option>");
@@ -150,7 +152,7 @@ public class User extends TagSupport {
                     + "</div>"
                     + "<h4>Listado de usuarios</h4>"
                     + "</div>");
-            if (txtPermissions.contains("[2]")) {
+            if (txtPermissions.contains("[30]")) {
                 out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1)'><i class='fas fa-plus'></i></button>");
             } else {
                 out.print("<button class='btn btn-green' style='border-radius: 4px; opacity: 0.7;' disabled data-toggle='tooltip' data-placement='top' title='No tiene permisos'><i class='fas fa-plus'></i></button>");
@@ -186,24 +188,24 @@ public class User extends TagSupport {
                     out.print("<td class='text-center'>");
                     out.print("<div class='d-flex justify-content-around'>");
                     if (state == 1) {
-                        if (txtPermissions.contains("[4]")) {
+                        if (txtPermissions.contains("[32]")) {
                             out.print("<a class='btn btn-success btn-sm' href='User?opt=3&idUser=" + ObjUser[0] + "&state=0' onclick='cargarDatos()'><i class='fas fa-check'></i></a>");
                         } else {
                             out.print("<button class='btn btn-success btn-sm' style='border-radius: 4px; opacity: 0.6;' disabled data-toggle='tooltip' data-placement='top' title='No tiene permisos'><i class='fas fa-check'></i></button>");
                         }
                     } else {
-                        if (txtPermissions.contains("[4]")) {
+                        if (txtPermissions.contains("[32]")) {
                             out.print("<a class='btn btn-danger btn-sm' href='User?opt=3&idUser=" + ObjUser[0] + "&state=1' onclick='cargarDatos()'><i class='fas fa-times'></i></a>");
                         } else {
                             out.print("<button class='btn btn-danger' style='border-radius: 4px; opacity: 0.6;' disabled data-toggle='tooltip' data-placement='top' title='No tiene permisos'><i class='fas fa-times'></i></button>");
                         }
                     }
-                    if (txtPermissions.contains("[5]")) {
+                    if (txtPermissions.contains("[31]")) {
                         out.print("<button class='btn btn-warning btn-sm' onclick='window.location.href=\"User?opt=1&idUser=" + ObjUser[0] + "\";cargarDatos()'><i class='fas fa-user-edit'></i></button>");
                     } else {
                         out.print("<button class='btn btn-warinig btn-sm' style='border-radius: 4px; opacity: 0.6;' disabled data-toggle='tooltip' data-placement='top' title='No tiene permisos'><i class='fas fa-edit'></i></button>");
                     }
-                    if (txtPermissions.contains("[3]")) {
+                    if (txtPermissions.contains("[33]")) {
                         out.print("<button class='btn btn-info btn-sm' onclick='window.location.href=\"User?opt=4&idUser=" + ObjUser[0] + "\";cargarDatos()'><i class=\"fas fa-key\"></i></button>");
                     } else {
                         out.print("<button class='btn btn-info btn-sm' style='border-radius: 4px; opacity: 0.6;' disabled data-toggle='tooltip' data-placement='top' title='No tiene permisos'><i class='fas fa-key'></i></button>");

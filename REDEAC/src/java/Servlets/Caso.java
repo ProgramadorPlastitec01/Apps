@@ -38,8 +38,8 @@ public class Caso extends HttpServlet {
             List lst_usuario = null;
             List lst_reportante = null;
             List lst_area = null;
-//            List lst_usuario_p = jpa_usuario.consultaUsuarioDoc(documento, codigo);
-//            List lst_reportante_p = jpa_caso.consultaReportante(documento, codigo);
+            List lst_usuario_p = jpa_usuario.consultaUsuarioDoc(documento, codigo);
+            List lst_reportante_p = jpa_caso.consultaReportante(documento, codigo);
 
             switch (opc) {
                 case 1:
@@ -127,128 +127,129 @@ public class Caso extends HttpServlet {
                     }
                     //</editor-fold>
                     break;
-                case 2:
-                    //<editor-fold defaultstate="collapsed" desc="REGISTRAR CASO">
-                    id_tecnicos = request.getParameter("idU");
-                    documento = request.getParameter("dcm");
-                    codigo = request.getParameter("cdg");
-                    id_tecnicos = request.getParameter("idU");
-                    id_reportante = Integer.parseInt(request.getParameter("idR"));
-                    prioridad = request.getParameter("rdo_prioridad");
-                    descripcion = request.getParameter("txt_descripcion");
-                    area = Integer.parseInt(request.getParameter("idA"));
-                    lst_area = jpa_area.consultarAreaNombre(area);
-                    if (lst_area != null) {
-                        Object[] obj_area = (Object[]) lst_area.get(0);
-                        id_area = Integer.parseInt(obj_area[0].toString());
-                    } else {
-                        id_area = 23;
-                    }
-                    resultado = jpa_caso.registroCaso(id_area, id_tecnicos, id_reportante, descripcion, prioridad);
-                    if (resultado) {
-                        List lst_caso = jpa_caso.consultaCasoCorreo(id_area, id_reportante);
-                        Object[] obj_caso = (Object[]) lst_caso.get(0);
-                        mail.SolicitudSoporte(obj_caso[1].toString(), obj_caso[3].toString(), obj_caso[4].toString(),
-                                obj_caso[5].toString().replace("<img src=\"UserFiles/", "<img src=\"http://172.16.2.117:8084/REDEAC/UserFiles/")
-                                        .replace("<a href=\"UserFiles/", "<a href=\"http://172.16.2.117:8084/REDEAC/UserFiles/"), obj_caso[6].toString(),
-                                obj_caso[7].toString(), "SOLICITUD SOPORTE", Integer.parseInt(obj_caso[0].toString()));
-                    }
-                    request.setAttribute("Registro_Caso", resultado);
-                    request.getRequestDispatcher("Caso?opc=6&mod=Sp&mod2=&txt_bus=&txt_documento=" + documento + "&txt_codigo=" + codigo).forward(request, response);
-                    //</editor-fold>
-                    break;
-                case 3:
-                    //<editor-fold defaultstate="collapsed" desc="REGISTRO REPORTANTE">
-                    reportante_nombre = request.getParameter("Txt_reportante");
-                    ddocumento = Integer.parseInt(request.getParameter("Txt_documento"));
-                    ccodigo = Integer.parseInt(request.getParameter("Txt_codigo"));
-                    correo = request.getParameter("Txt_correo");
-                    id_area = Integer.parseInt(request.getParameter("Cbx_area"));
-                    resultado = jpa_caso.registroTablaReportante(reportante_nombre, correo, id_area, ddocumento, ccodigo);
-                    if (resultado == true) {
-                        request.setAttribute("Registro_reportante", resultado);
-                        request.getRequestDispatcher("Caso?opc=1&mod=Sp&mod2=&txt_bus=&txt_documento=" + ddocumento + "&txt_codigo=" + ccodigo).forward(request, response);
-                    } else {
-                        request.setAttribute("LoginCaso", resultado);
-                        request.getRequestDispatcher("index.jsp").forward(request, response);
-                    }
-                    //</editor-fold>
-                    break;
-                case 4:
-                    //<editor-fold defaultstate="collapsed" desc="SOLUCIONAR CASO">
-                    id_caso = Integer.parseInt(request.getParameter("idC"));
-                    id_equipo = Integer.parseInt(request.getParameter("slc_equipo"));
-                    id_l_equipo = Integer.parseInt(request.getParameter("slc_l_equipo"));
-                    id_tipoS = Integer.parseInt(request.getParameter("slc_tipoS"));
-                    fechaI = request.getParameter("txt_fechaI");
-                    fechaF = request.getParameter("txt_fechaF");
-                    horaI = request.getParameter("txt_horaI");
-                    horaF = request.getParameter("txt_horaF");
-                    descripcion = request.getParameter("txt_descripcion");
-                    HttpSession sesion2 = request.getSession();
-                    id_usuario = Integer.parseInt(sesion2.getAttribute("Id_usuario").toString());
-                    resultado = jpa_caso.solucionaCaso(id_caso, id_equipo, id_l_equipo, id_usuario, id_tipoS, fechaI + " " + horaI + ":00", fechaF + " " + horaF + ":00", descripcion);
-                    if (resultado == true) {
-                        List lst_caso = jpa_caso.consultaCasoSolucionCorreo(id_caso);
-                        Object[] obj_caso = (Object[]) lst_caso.get(0);
-                        mail.SolucionSoporte(obj_caso[7].toString(), obj_caso[1].toString(), obj_caso[6].toString(),
-                                obj_caso[9].toString(), obj_caso[8].toString().replace("<img src=\"UserFiles/",
-                                "<img src=\"http://172.16.2.117:8084/REDEAC/UserFiles/")
-                                .replace("<a href=\"UserFiles/", "<a href=\"http://172.16.2.117:8084/REDEAC/UserFiles/" + ""),
-                                obj_caso[5].toString(), obj_caso[4].toString(), obj_caso[3].toString(), "SOLUCION SOPORTE", Integer.parseInt(obj_caso[0].toString()));
-                    }
-                    request.setAttribute("Solucion_Caso", resultado);
-                    request.getRequestDispatcher("Caso?opc=1&mod=CA&idC=0&txt_bus=").forward(request, response);
-                    //</editor-fold>
-                    break;
-                case 5:
-                    //<editor-fold defaultstate="collapsed" desc="REGISTRAR ENCUESTA">
-                    id_equipo = Integer.parseInt(request.getParameter("idE"));
-                    id_usuario = Integer.parseInt(request.getParameter("idU"));
-                    id_programacion = Integer.parseInt(request.getParameter("idP"));
-                    copia = Integer.parseInt(request.getParameter("copias"));
-                    preguntas = request.getParameter("txt_preguntas");
-                    pregunta_1 = Integer.parseInt(request.getParameter("Rdb_pregunta_1"));
-                    pregunta_2 = Integer.parseInt(request.getParameter("Rdb_pregunta_2"));
-                    pregunta_3 = Integer.parseInt(request.getParameter("Rdb_pregunta_3"));
-                    pregunta_4 = Integer.parseInt(request.getParameter("Rdb_pregunta_4"));
-                    pregunta_5 = Integer.parseInt(request.getParameter("Rdb_pregunta_5"));
-                    observaciones = request.getParameter("txt_observaciones");
-                    reportante = request.getParameter("txt_responsable");
-                    resultado = jpa_calificacion.registrarCalificacion(id_equipo, id_usuario, id_programacion, preguntas, pregunta_1, pregunta_2, pregunta_3, pregunta_4, pregunta_5, observaciones, reportante, copia);
-                    request.setAttribute("Calificar_encuestas", resultado);
-                    request.getRequestDispatcher("Caso?opc=1&mod=CE&idE" + id_equipo + "&idU=" + id_usuario + "&idP=" + id_programacion + "&cop=" + copia + "&txt_bus=").forward(request, response);
-                    //</editor-fold>
-                    break;
-                case 6:
-                    //<editor-fold defaultstate="collapsed" desc="MODULO REPORTANTE">
-                    HttpSession sesion1 = request.getSession();
-                    documento = request.getParameter("txt_documento");
-                    codigo = request.getParameter("txt_codigo");
-                    modulo = request.getParameter("mod");
-                    modulo2 = request.getParameter("mod2");
-                    filtro = request.getParameter("txt_bus");
-                    lst_usuario = jpa_usuario.consultaUsuarioDoc(documento, codigo);
-                    lst_reportante = jpa_caso.consultaReportante(documento, codigo);
-                    request.setAttribute("lst_reportante", lst_reportante);
-                    request.setAttribute("lst_usuario", lst_usuario);
-                    request.setAttribute("modulo2", modulo2);
-                    request.setAttribute("filtro", filtro);
-                    request.setAttribute("modulo", modulo);
-                    sesion1.setAttribute("documento", documento);
-                    sesion1.setAttribute("codigo", codigo);
-                    request.getRequestDispatcher("Caso_Consulta.jsp").forward(request, response);
-                    //</editor-fold>
-                    break;
-                case 7:
-                    //<editor-fold defaultstate="collapsed" desc="MODULO CALIFICAR CASO">
-                    id_solucion = Integer.parseInt(request.getParameter("id_solucion"));
-                    request.getRequestDispatcher("Caso?opc=1&mod=CLC&id_solucion=" + id_caso + "").forward(request, response);
-                    //</editor-fold>
-                    break;
+//                case 2:
+//                    //<editor-fold defaultstate="collapsed" desc="REGISTRAR CASO">
+//                    id_tecnicos = request.getParameter("idU");
+//                    documento = request.getParameter("dcm");
+//                    codigo = request.getParameter("cdg");
+//                    id_tecnicos = request.getParameter("idU");
+//                    id_reportante = Integer.parseInt(request.getParameter("idR"));
+//                    prioridad = request.getParameter("rdo_prioridad");
+//                    descripcion = request.getParameter("txt_descripcion");
+//                    area = Integer.parseInt(request.getParameter("idA"));
+//                    lst_area = jpa_area.consultarAreaNombre(area);
+//                    if (lst_area != null) {
+//                        Object[] obj_area = (Object[]) lst_area.get(0);
+//                        id_area = Integer.parseInt(obj_area[0].toString());
+//                    } else {
+//                        id_area = 23;
+//                    }
+//                    resultado = jpa_caso.registroCaso(id_area, id_tecnicos, id_reportante, descripcion, prioridad);
+//                    if (resultado) {
+//                        List lst_caso = jpa_caso.consultaCasoCorreo(id_area, id_reportante);
+//                        Object[] obj_caso = (Object[]) lst_caso.get(0);
+//                        mail.SolicitudSoporte(obj_caso[1].toString(), obj_caso[3].toString(), obj_caso[4].toString(),
+//                                obj_caso[5].toString().replace("<img src=\"UserFiles/", "<img src=\"http://172.16.2.117:8084/REDEAC/UserFiles/")
+//                                        .replace("<a href=\"UserFiles/", "<a href=\"http://172.16.2.117:8084/REDEAC/UserFiles/"), obj_caso[6].toString(),
+//                                obj_caso[7].toString(), "SOLICITUD SOPORTE", Integer.parseInt(obj_caso[0].toString()));
+//                    }
+//                    request.setAttribute("Registro_Caso", resultado);
+//                    request.getRequestDispatcher("Caso?opc=6&mod=Sp&mod2=&txt_bus=&txt_documento=" + documento + "&txt_codigo=" + codigo).forward(request, response);
+//                    //</editor-fold>
+//                    break;
+//                case 3:
+//                    //<editor-fold defaultstate="collapsed" desc="REGISTRO REPORTANTE">
+//                    reportante_nombre = request.getParameter("Txt_reportante");
+//                    ddocumento = Integer.parseInt(request.getParameter("Txt_documento"));
+//                    ccodigo = Integer.parseInt(request.getParameter("Txt_codigo"));
+//                    correo = request.getParameter("Txt_correo");
+//                    id_area = Integer.parseInt(request.getParameter("Cbx_area"));
+//                    resultado = jpa_caso.registroTablaReportante(reportante_nombre, correo, id_area, ddocumento, ccodigo);
+//                    if (resultado == true) {
+//                        request.setAttribute("Registro_reportante", resultado);
+//                        request.getRequestDispatcher("Caso?opc=1&mod=Sp&mod2=&txt_bus=&txt_documento=" + ddocumento + "&txt_codigo=" + ccodigo).forward(request, response);
+//                    } else {
+//                        request.setAttribute("LoginCaso", resultado);
+//                        request.getRequestDispatcher("index.jsp").forward(request, response);
+//                    }
+//                    //</editor-fold>
+//                    break;
+//                case 4:
+//                    //<editor-fold defaultstate="collapsed" desc="SOLUCIONAR CASO">
+//                    id_caso = Integer.parseInt(request.getParameter("idC"));
+//                    id_equipo = Integer.parseInt(request.getParameter("slc_equipo"));
+//                    id_l_equipo = Integer.parseInt(request.getParameter("slc_l_equipo"));
+//                    id_tipoS = Integer.parseInt(request.getParameter("slc_tipoS"));
+//                    fechaI = request.getParameter("txt_fechaI");
+//                    fechaF = request.getParameter("txt_fechaF");
+//                    horaI = request.getParameter("txt_horaI");
+//                    horaF = request.getParameter("txt_horaF");
+//                    descripcion = request.getParameter("txt_descripcion");
+//                    HttpSession sesion2 = request.getSession();
+//                    id_usuario = Integer.parseInt(sesion2.getAttribute("Id_usuario").toString());
+//                    resultado = jpa_caso.solucionaCaso(id_caso, id_equipo, id_l_equipo, id_usuario, id_tipoS, fechaI + " " + horaI + ":00", fechaF + " " + horaF + ":00", descripcion);
+//                    if (resultado == true) {
+//                        List lst_caso = jpa_caso.consultaCasoSolucionCorreo(id_caso);
+//                        Object[] obj_caso = (Object[]) lst_caso.get(0);
+//                        mail.SolucionSoporte(obj_caso[7].toString(), obj_caso[1].toString(), obj_caso[6].toString(),
+//                                obj_caso[9].toString(), obj_caso[8].toString().replace("<img src=\"UserFiles/",
+//                                "<img src=\"http://172.16.2.117:8084/REDEAC/UserFiles/")
+//                                .replace("<a href=\"UserFiles/", "<a href=\"http://172.16.2.117:8084/REDEAC/UserFiles/" + ""),
+//                                obj_caso[5].toString(), obj_caso[4].toString(), obj_caso[3].toString(), "SOLUCION SOPORTE", Integer.parseInt(obj_caso[0].toString()));
+//                    }
+//                    request.setAttribute("Solucion_Caso", resultado);
+//                    request.getRequestDispatcher("Caso?opc=1&mod=CA&idC=0&txt_bus=").forward(request, response);
+//                    //</editor-fold>
+//                    break;
+//                case 5:
+//                    //<editor-fold defaultstate="collapsed" desc="REGISTRAR ENCUESTA">
+//                    id_equipo = Integer.parseInt(request.getParameter("idE"));
+//                    id_usuario = Integer.parseInt(request.getParameter("idU"));
+//                    id_programacion = Integer.parseInt(request.getParameter("idP"));
+//                    copia = Integer.parseInt(request.getParameter("copias"));
+//                    preguntas = request.getParameter("txt_preguntas");
+//                    pregunta_1 = Integer.parseInt(request.getParameter("Rdb_pregunta_1"));
+//                    pregunta_2 = Integer.parseInt(request.getParameter("Rdb_pregunta_2"));
+//                    pregunta_3 = Integer.parseInt(request.getParameter("Rdb_pregunta_3"));
+//                    pregunta_4 = Integer.parseInt(request.getParameter("Rdb_pregunta_4"));
+//                    pregunta_5 = Integer.parseInt(request.getParameter("Rdb_pregunta_5"));
+//                    observaciones = request.getParameter("txt_observaciones");
+//                    reportante = request.getParameter("txt_responsable");
+//                    resultado = jpa_calificacion.registrarCalificacion(id_equipo, id_usuario, id_programacion, preguntas, pregunta_1, pregunta_2, pregunta_3, pregunta_4, pregunta_5, observaciones, reportante, copia);
+//                    request.setAttribute("Calificar_encuestas", resultado);
+//                    request.getRequestDispatcher("Caso?opc=1&mod=CE&idE" + id_equipo + "&idU=" + id_usuario + "&idP=" + id_programacion + "&cop=" + copia + "&txt_bus=").forward(request, response);
+//                    //</editor-fold>
+//                    break;
+//                case 6:
+//                    //<editor-fold defaultstate="collapsed" desc="MODULO REPORTANTE">
+//                    HttpSession sesion1 = request.getSession();
+//                    documento = request.getParameter("txt_documento");
+//                    codigo = request.getParameter("txt_codigo");
+//                    modulo = request.getParameter("mod");
+//                    modulo2 = request.getParameter("mod2");
+//                    filtro = request.getParameter("txt_bus");
+//                    lst_usuario = jpa_usuario.consultaUsuarioDoc(documento, codigo);
+//                    lst_reportante = jpa_caso.consultaReportante(documento, codigo);
+//                    request.setAttribute("lst_reportante", lst_reportante);
+//                    request.setAttribute("lst_usuario", lst_usuario);
+//                    request.setAttribute("modulo2", modulo2);
+//                    request.setAttribute("filtro", filtro);
+//                    request.setAttribute("modulo", modulo);
+//                    sesion1.setAttribute("documento", documento);
+//                    sesion1.setAttribute("codigo", codigo);
+//                    request.getRequestDispatcher("Caso_Consulta.jsp").forward(request, response);
+//                    //</editor-fold>
+//                    break;
+//                case 7:
+//                    //<editor-fold defaultstate="collapsed" desc="MODULO CALIFICAR CASO">
+//                    id_solucion = Integer.parseInt(request.getParameter("id_solucion"));
+//                    request.getRequestDispatcher("Caso?opc=1&mod=CLC&id_solucion=" + id_caso + "").forward(request, response);
+//                    //</editor-fold>
+//                    break;
             }
         } catch (Exception ex) {
-            request.getRequestDispatcher("index.jsp").forward(request, response);
+                 request.getRequestDispatcher("Caso.jsp").forward(request, response);
+//                 request.getRequestDispatcher("http://172.16.2.117:8084/Aplicativos_Plastitec/index.jsp").forward(request, response);
         }
     }
 

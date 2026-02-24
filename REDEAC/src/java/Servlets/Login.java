@@ -113,18 +113,19 @@ public class Login extends HttpServlet {
                     request.getRequestDispatcher("Inicio.jsp").forward(request, response);
                     break;
                 case 5:
-                    documento = request.getParameter("txt_documento");
-                    codigo = request.getParameter("txt_codigo");
-                    List lst_usuario = jpa_usuario.consultaUsuarioDoc(documento, codigo);
-                    if (lst_usuario != null) {
-                        sesion.setAttribute("Documento", documento);
-                        sesion.setAttribute("Codigo", codigo);
-                        request.getRequestDispatcher("Caso?opc=6&mod=Sp&mod2=&txt_bus=").forward(request, response);
-                    } else {
-                        request.setAttribute("LoginCaso", "");
-                        request.getRequestDispatcher("index.jsp").forward(request, response);
-                    }
-//                        request.getRequestDispatcher("Caso?opc=6&mod=Sp&mod2=&txt_bus=&txt_documento=" + documento + "&txt_codigo=" + codigo + "").forward(request, response);
+//                    documento = request.getParameter("txt_documento");
+//                    codigo = request.getParameter("txt_codigo");
+//                    List lst_usuario = jpa_usuario.consultaUsuarioDoc(documento, codigo);
+//                    if (lst_usuario != null) {
+//                        sesion.setAttribute("Documento", documento);
+//                        sesion.setAttribute("Codigo", codigo);
+//                        request.getRequestDispatcher("Caso?opc=6&mod=Sp&mod2=&txt_bus=").forward(request, response);
+//                    } else {
+//                        request.setAttribute("LoginCaso", "");
+//                        request.getRequestDispatcher("index.jsp").forward(request, response);
+//                    }
+////                        request.getRequestDispatcher("Caso?opc=6&mod=Sp&mod2=&txt_bus=&txt_documento=" + documento + "&txt_codigo=" + codigo + "").forward(request, response);
+                     request.getRequestDispatcher("http://172.16.2.117:8084/Aplicativos_Plastitec/index.jsp").forward(request, response);
                     break;
             }
         } catch (Exception ex) {

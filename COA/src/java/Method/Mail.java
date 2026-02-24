@@ -39,7 +39,7 @@ public class Mail {
                 MimeMessage message = new MimeMessage(session);
                 message.setFrom(new InternetAddress(ArrMail[4]));
                 message.addRecipient(Message.RecipientType.TO, new InternetAddress(Mail));
-                message.setSubject("Aplicativo CGBC - Restablecer Contraseña");
+                message.setSubject("Aplicativo COA - Restablecer Contraseña");
 
                 // HTML content
                 MimeBodyPart htmlPart = new MimeBodyPart();
@@ -65,10 +65,10 @@ public class Mail {
                         + "            </div>"
                         + "            <p style='color:#555; font-size:14px; text-align:center; line-height:1.6; margin:10px 0;'>Por seguridad, te recomendamos iniciar sesión y cambiarla de inmediato.</p>"
                         + "            <div style='text-align:center; padding:20px 0;'>"
-                        + "              <a href='http://localhost:8084/CBGC/' style='background-color:#4D4AE8; color:#ffffff; text-decoration:none; padding:12px 28px; border-radius:4px; font-size:15px; display:inline-block;'>Ir a GBGC</a>"
+                        + "              <a href='http://localhost:8084/COA/' style='background-color:#4D4AE8; color:#ffffff; text-decoration:none; padding:12px 28px; border-radius:4px; font-size:15px; display:inline-block;'>Ir a GBGC</a>"
                         + "            </div>"
                         + "            <p style='margin-top:30px; color:#777; font-size:13px; text-align:center;'>Si no solicitaste este cambio, puedes ignorar este correo.</p>"
-                        + "            <p style='margin-top:20px; font-size:14px; color:#444; text-align:center;'>Atentamente,<br><b>Equipo GBGC</b></p>"
+                        + "            <p style='margin-top:20px; font-size:14px; color:#444; text-align:center;'>Atentamente,<br><b>Equipo COA</b></p>"
                         + "          </td>"
                         + "        </tr>"
                         + "        <!-- Pie -->"
