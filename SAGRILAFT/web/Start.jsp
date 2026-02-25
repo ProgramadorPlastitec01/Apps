@@ -17,6 +17,7 @@
         <link rel="shortcut icon" href="Interfaz/Contenido/Imagen/WP_Sag2.png" />
     </head>
     <body>
+        
         <div id="app">
             <div class="main-wrapper main-wrapper-1">
                 <jsp:include page="Base.jsp"></jsp:include>

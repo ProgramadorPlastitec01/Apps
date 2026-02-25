@@ -38,6 +38,25 @@ public class DocumentControllerJpa implements Serializable {
             return null;
         }
     }
+    
+    public List SagrilaftCounter() {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_sag_counters`()");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
 
     public List ConsultDocuments_ste(int ste) {
         EntityManager etm = getEntityManager();

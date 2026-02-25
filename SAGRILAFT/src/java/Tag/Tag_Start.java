@@ -32,9 +32,90 @@ public class Tag_Start extends TagSupport {
         JspWriter out = pageContext.getOut();
         try {
             out.print("<section class='section'>");
+
             out.print("<div class='section-header'>");
             out.print("<h1>Bienvenid@, " + nameSession + "</h1>");
             out.print("</div>");
+
+            //<editor-fold defaultstate="collapsed" desc="CONTADORES">
+            Lst_document = DocumentJpa.SagrilaftCounter();
+            if (Lst_document != null) {
+                Object[] count = (Object[]) Lst_document.get(0);
+                out.print("<div class='row'>");
+
+                out.print("<div class='col-lg-12'>");
+                out.print("<h6>Documentos</h6>");
+                out.print("</div>");
+
+                out.print("<div class='card col-lg-4'>");
+                out.print("<div class=' d-flex'>");
+                out.print("<div class='col-lg-4' style='padding: 16px;text-align: center;'>");
+                out.print("<i class=\"fas fa-sync-alt\" style='color: #ffb42c; font-size: 47px;'></i>");
+                out.print("</div>");
+                out.print("<div class='col-lg-8' style='padding: 10px;'>");
+                out.print("<span style='font-size: 16px;'>Documentos en proceso</span>");
+                out.print("<h2 class='text-dark'>" + count[2] + "</h2>");
+                out.print("</div>");
+                out.print("</div>");
+                out.print("</div>");
+
+                out.print("<div class='card col-lg-4'>");
+                out.print("<div class=' d-flex'>");
+                out.print("<div class='col-lg-4' style='padding: 16px;text-align: center;'>");
+                out.print("<i class=\"fas fa-exchange-alt\" style='color: #ec5c27; font-size: 47px;'></i>");
+                out.print("</div>");
+                out.print("<div class='col-lg-8' style='padding: 10px;'>");
+                out.print("<span style='font-size: 16px;'>Pendiente revisar</span>");
+                out.print("<h2 class='text-dark'>" + count[3] + "</h2>");
+                out.print("</div>");
+                out.print("</div>");
+                out.print("</div>");
+
+                out.print("<div class='card col-lg-4'>");
+                out.print("<div class=' d-flex'>");
+                out.print("<div class='col-lg-4' style='padding: 16px;text-align: center;'>");
+                out.print("<i class=\"fas fa-tasks\" style='color: #3772af; font-size: 47px;'></i>");
+                out.print("</div>");
+                out.print("<div class='col-lg-8' style='padding: 10px;'>");
+                out.print("<span style='font-size: 16px;'>Pendiente aprobar</span>");
+                out.print("<h2 class='text-dark'>" + count[4] + "</h2>");
+                out.print("</div>");
+                out.print("</div>");
+                out.print("</div>");
+
+                out.print("<div class='col-lg-12'>");
+                out.print("<h6>Segmentaciones</h6>");
+                out.print("</div>");
+
+                out.print("<div class='card col-lg-4'>");
+                out.print("<div class=' d-flex'>");
+                out.print("<div class='col-lg-4' style='padding: 16px;text-align: center;'>");
+                out.print("<i class=\"fas fa-clipboard-check\" style='color: #49a93d; font-size: 47px;'></i>");
+                out.print("</div>");
+                out.print("<div class='col-lg-8' style='padding: 10px;'>");
+                out.print("<span style='font-size: 16px;'>Pendiente revisar</span>");
+                out.print("<h2 class='text-dark'>" + count[5] + "</h2>");
+                out.print("</div>");
+                out.print("</div>");
+                out.print("</div>");
+
+                out.print("<div class='card col-lg-4'>");
+                out.print("<div class=' d-flex'>");
+                out.print("<div class='col-lg-4' style='padding: 16px;text-align: center;'>");
+                out.print("<i class=\"fas fa-stopwatch\" style='color: #c8302f; font-size: 47px;'></i>");
+                out.print("</div>");
+                out.print("<div class='col-lg-8' style='padding: 10px;'>");
+                out.print("<span style='font-size: 16px;'>Vencidas</span>");
+                out.print("<h2 class='text-dark'>" + count[6] + "</h2>");
+                out.print("</div>");
+                out.print("</div>");
+                out.print("</div>");
+
+                out.print("</div>");
+            }
+
+            //</editor-fold>
+            //<editor-fold defaultstate="collapsed" desc="DOUCMENTOS EN PROCESO">
             out.print("<div class='section-body'>");
             out.print("<div class='row'>");
             out.print("<div class='col-12'>");
@@ -94,7 +175,8 @@ public class Tag_Start extends TagSupport {
             }
             out.print("</div>");
             out.print("</div>");
-
+            //</editor-fold>
+            //<editor-fold defaultstate="collapsed" desc="PROXIMOS A VENCER">
             out.print("<div class='col lg-6 ContStart'>");
             out.print("<div class='mb-4'>");
             out.print("<h6>Proximos a vencer</h6>");
@@ -120,12 +202,12 @@ public class Tag_Start extends TagSupport {
                     out.print("<td>");
                     if (ObjSeg[3] != null) {
                         int days = Integer.parseInt(ObjSeg[3].toString());
-                        if (days < 300) {
-                            out.print("<b style='color:green;'>Vigente</b>");
-                        } else if (days < 365) {
+                        if (days > 730) {
+                            out.print("<b style='color:red;'>Vencido</b>");
+                        } else if (days > 700) {
                             out.print("<b style='color:orange;'>Proximo a vencer</b>");
                         } else {
-                            out.print("<b style='color:red;'>Vencido</b>");
+                            out.print("<b style='color:green;'>Vigente</b>");
                         }
                     } else {
                         out.print("<b>Sin datos registrados</b>");
@@ -140,6 +222,8 @@ public class Tag_Start extends TagSupport {
             out.print("</table>");
             out.print("</div>");
             out.print("</div>");
+            //</editor-fold>
+
             out.print("</div>");
             out.print("</div>");
             out.print("</div>");
