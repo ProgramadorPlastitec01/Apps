@@ -750,7 +750,7 @@ html::-webkit-scrollbar-thumb:active {
 .menuDropdow{
     box-shadow: 1px 2px 7px -1px black !important;
     min-width: 0px !important;
-    width: 123px !important;
+    width: 140px !important;
     margin-right: 12px !important;
 
 }

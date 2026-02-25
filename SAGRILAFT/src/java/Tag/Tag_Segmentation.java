@@ -1394,6 +1394,9 @@ public class Tag_Segmentation extends TagSupport {
                         out.print("<a class='dropdown-item has-icon' onclick=\"window.location.href='Segmentation?opt=1&IdSegmentation=" + obj_segmentation[0] + "&Temp=1&Format=" + Format + "'\" class='btn btn-outline-info btn-sm mr-2' data-toggle='tooltip' data-placement='top' title='Aplica visita'><i class=\"fas fa-portrait\"></i>Visita</a>");
                         //</editor-fold>
                         out.print("<a class='dropdown-item has-icon' onclick=\"window.location.href='Segmentation?opt=3&IdSegmentation=" + obj_segmentation[0] + "&State=2&Format=" + Format + "'\" class='btn btn-outline-info btn-sm mr-2' data-toggle='tooltip' data-placement='top' title='Pausar temporalmente'><i class=\"far fa-pause-circle\"></i>Pausar</a>");
+                        if (Temp != 5) {
+                            out.print("<a class='dropdown-item has-icon' onclick=\"window.location.href='Segmentation?opt=5&Temp=" + 5 + "&State=3&Format=" + Format + "&TextFilter=" + obj_segmentation[7] + "&TypeConsult=H'\" class='btn btn-outline-info btn-sm mr-2' data-toggle='tooltip' data-placement='top' title='Consultar documentos anteriores'><i class=\"fas fa-history\"></i>Historial (" + obj_segmentation[37] + ")</a>");
+                        }
                     } else {
                         out.print("<a class='dropdown-item has-icon' onclick=\"window.location.href='Segmentation?opt=3&IdSegmentation=" + obj_segmentation[0] + "&State=1&Format=" + Format + "'\" class='btn btn-outline-info btn-sm mr-2' data-toggle='tooltip' data-placement='top' title='Activar'><i class=\"fas fa-play\"></i>Activar</a>");
                     }

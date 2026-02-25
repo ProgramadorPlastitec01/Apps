@@ -24,7 +24,7 @@ public class Segmentation extends HttpServlet {
                 AnnualFrequecy = 0, Antiquity = 0, Report = 0, idDoc = 0, idUserCli = 0;
         String Format = "", Observation = "", Date = "", PEP = "", Affair = "", Description = "", FileDocs = "", Area = "",
                 TextFilter = "", InitialDate = "", EndDate = "", ConsultMysql = "", ContacPerson = "", PerformsPost = "",
-                SupplyChain = "", BeneficiaryFinal = "", TypeServiceOffered = "", BusinessAssociate = "", TypePerson = "", nameCompany = "";
+                SupplyChain = "", BeneficiaryFinal = "", TypeServiceOffered = "", BusinessAssociate = "", TypePerson = "", nameCompany = "", TypeConsult = "";
         boolean Result = false;
         long ValueSalesPurchases = 0;
         List lst_filter = null, lst_query = null;
@@ -104,7 +104,7 @@ public class Segmentation extends HttpServlet {
                                 CorruptionIndex, BiberyIndex, ContacPerson, PerformsPost, AnnualFrequecy, ValueSalesPurchases, Antiquity, SupplyChain, BeneficiaryFinal, TypeServiceOffered, Observation, idDoc, nameCompany);
                         request.setAttribute("SegmentationRegisterINT", Result);
                     } else {
-                        Result = SegmentationJpa.UpdateControlSegmentation(IdSegmentation, Code, Area, TypePerson, Date, PEP, Qualification, Experience, Relationship, Burden, ContacPerson, PerformsPost, 
+                        Result = SegmentationJpa.UpdateControlSegmentation(IdSegmentation, Code, Area, TypePerson, Date, PEP, Qualification, Experience, Relationship, Burden, ContacPerson, PerformsPost,
                                 AnnualFrequecy, ValueSalesPurchases, Antiquity, SupplyChain, BeneficiaryFinal, TypeServiceOffered, Observation, idDoc, nameCompany);
                         request.setAttribute("SegmentationRegister", Result);
                     }
@@ -184,7 +184,7 @@ public class Segmentation extends HttpServlet {
                         EndDate = "";
                     }
                     try {
-                        TextFilter = request.getParameter("TextFilter");
+                        TextFilter = request.getParameter("TextFilter").trim();
                     } catch (Exception e) {
                         TextFilter = "";
                     }
@@ -197,6 +197,14 @@ public class Segmentation extends HttpServlet {
                         Temp = Integer.parseInt(request.getParameter("Temp"));
                     } catch (NumberFormatException e) {
                         Temp = 0;
+                    }
+                    try {
+                        TypeConsult = request.getParameter("TypeConsult");
+                        if (TypeConsult == null) {
+                            TypeConsult = "";
+                        }
+                    } catch (Exception e) {
+                        TypeConsult = "";
                     }
                     try {
                         IdVisit = Integer.parseInt(request.getParameter("IdVisit"));
@@ -230,10 +238,16 @@ public class Segmentation extends HttpServlet {
                                     break;
                             }
                         }
-                        if (!InitialDate.equals("") && !EndDate.equals("")) {
-                            ConsultMysql = ConsultMysql + " AND s.DateAssessment BETWEEN '" + InitialDate.replace("/", "-") + "' AND '" + EndDate.replace("/", "-") + "'";
+                        try {
+                            if (!InitialDate.equals("") && !EndDate.equals("")) {
+                                ConsultMysql = ConsultMysql + " AND s.DateAssessment BETWEEN '" + InitialDate.replace("/", "-") + "' AND '" + EndDate.replace("/", "-") + "'";
+                            }
+                        } catch (Exception e) {
                         }
-                        if (!TextFilter.equals("")) {
+
+                        if (!TextFilter.equals("") && TypeConsult.equals("H")) {
+                            ConsultMysql = ConsultMysql + " AND s.BusinessAssociate LIKE CONCAT('%','" + TextFilter + "','%')";
+                        } else if (!TextFilter.equals("")) {
                             ConsultMysql = ConsultMysql + " AND s.PlastitecCode LIKE CONCAT('%','" + TextFilter + "','%') OR "
                                     + "		s.Area LIKE CONCAT('%','" + TextFilter + "','%') OR "
                                     + "		s.NitTax LIKE CONCAT('%','" + TextFilter + "','%') OR "
