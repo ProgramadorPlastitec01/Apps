@@ -494,12 +494,19 @@ public class Tag_Document extends TagSupport {
 //                        out.print("<td style='vertical-align: middle;'>" + objDoc[2] + "</td>");
 //                        out.print("<td>" + objDoc[3] + "</td>");
                         out.print("<td style='vertical-align: middle;text-align:center;'>" + ((objDoc[10] == null) ? "Sin gestión" : objDoc[10]) + "</td>");
+                        double cantModules = 0;
+                        try {
+                            cantModules = objDoc[4].toString().replace("]/[", "///").replace("[[", "[").replace("]]", "]").split("///").length;
+                        } catch (Exception e) {
+                            cantModules = 0;
+                        }
                         int advance = Integer.parseInt(objDoc[9].toString());
-                        double DataCalc = (advance / 14.0) * 100;
+                        double DataCalc = (advance / cantModules) * 100;
                         int Progress = (int) Math.ceil(DataCalc);
                         if (Progress > 100) {
                             Progress = 100;
                         }
+//                        "+ advance +" / "+ cantModules +" 
                         out.print("<td><p class='text-center' style='margin: 0; font-size: 12px;'><b>" + modules[advance].toString().split("/")[1] + "</b></p><div class='progress'><div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: " + Progress + "%; " + ((Progress < 5) ? "color: black;" : "") + "' aria-valuenow='10' aria-valuemin='0' aria-valuemax='100'>" + Progress + "%</div></div></td>");
 
                         int State = Integer.parseInt(objDoc[8].toString());
@@ -2494,6 +2501,123 @@ public class Tag_Document extends TagSupport {
                                 Template = Template.replace("XXXNAME_SIGNAXXX", "");
                                 Template = Template.replace("XXXID_SIGNATUREXXX", "");
                                 Template = Template.replace("XXXTITLE_SIGNAXXX", "");
+                            }
+                            //</editor-fold>
+
+                            //<editor-fold defaultstate="collapsed" desc="SIGNATURE PLASTITEC">
+                            try {
+                                DataClient = ModuleCliente[8].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                                if (!DataClient[1].contains("N/A")) {
+                                    Template = Template.replace("XXXFECHAPLASTXXX", DataClient[1]);
+                                    Template = Template.replace("XXXFUNCIONARIOPLASTXXX", DataClient[2]);
+                                    Template = Template.replace("XXXNROIDENTPLASTXXX", DataClient[3]);
+                                    Template = Template.replace("XXXFIRMAPLASTXXX", "<canvas id='signature-canvasBoss' width='400' height='200'></canvas>");
+                                    Template = Template.replace("XXXCARGOPLASTXXX", DataClient[4]);
+                                    Template = Template.replace("XXXCONSULTAXXX", DataClient[5]);
+                                    Template = Template.replace("XXXQUEST_TENXXX", DataClient[8]);
+
+                                    lst_document = DocumentJpa.ConsultDocumentSignatureIdBoss(IdDoc, idUser);
+                                    if (lst_document != null) {
+                                        Object[] ObjSig = (Object[]) lst_document.get(0);
+                                        int TypeSig = Integer.parseInt(ObjSig[2].toString());
+                                        String Signature = ObjSig[3].toString();
+                                        if (TypeSig == 1) {
+                                            //<editor-fold defaultstate="collapsed" desc="SIGNATURE DRAW">
+                                            out.print("<input type='hidden' id='coordenadas-hiddenx' value='" + Signature + "'>");
+                                            out.print("<script>");
+                                            out.print("function dibujarFirmav2() { "
+                                                    + "        const firmaGuardadaCanvas = document.getElementById('signature-canvasBoss'); "
+                                                    + "        const firmaGuardadaContext = firmaGuardadaCanvas.getContext('2d'); "
+                                                    + "        const hiddenInput = document.getElementById('coordenadas-hiddenx'); "
+                                                    + "        const coordinatesJSON = hiddenInput.value;"
+                                                    + "        const coordinates = JSON.parse(coordinatesJSON); "
+                                                    + "        firmaGuardadaContext.clearRect(0, 0, firmaGuardadaCanvas.width, firmaGuardadaCanvas.height); "
+                                                    + "        firmaGuardadaContext.lineWidth = 2; "
+                                                    + "        firmaGuardadaContext.lineCap = 'round'; "
+                                                    + "        firmaGuardadaContext.beginPath(); "
+                                                    + "        firmaGuardadaContext.moveTo(coordinates[0].x, coordinates[0].y); "
+                                                    + "        for (let i = 1; i < coordinates.length; i++) { "
+                                                    + "            firmaGuardadaContext.lineTo(coordinates[i].x, coordinates[i].y); "
+                                                    + "        } "
+                                                    + "        firmaGuardadaContext.stroke(); "
+                                                    + "    } "
+                                                    + "    document.addEventListener('DOMContentLoaded', function() { "
+                                                    + "        dibujarFirmav2(); "
+                                                    + "    });");
+                                            out.print("</script>");
+//</editor-fold>
+                                        } else if (TypeSig == 2) {
+                                            //<editor-fold defaultstate="collapsed" desc="SIGNATURE WRITE">
+                                            out.print("<div class='col-lg-12' data-toggle='tooltip' data-placemente='top' title=''>");
+                                            out.print("<input type='hidden' class='form-control' id='name-inputx' value='" + Signature.split("/")[0] + "'>");
+                                            out.print("<input type='hidden' class='form-control' id='font-style-selectx' value='" + Signature.split("/")[1] + "'>");
+                                            out.print("</div>");
+                                            out.print("<script>");
+                                            out.print("document.addEventListener('DOMContentLoaded', function() { "
+                                                    + "        const textCanvasx = document.getElementById('signature-canvasBoss'); "
+                                                    + "        const nameInputx = document.getElementById('name-inputx'); "
+                                                    + "        const fontStyleInputx = document.getElementById('font-style-selectx'); "
+                                                    + "        const contextTextx = textCanvasx.getContext('2d'); "
+                                                    + "    if (nameInputx.value) { "
+                                                    + "        updateTextv2(); "
+                                                    + "    } "
+                                                    + "    }); "
+                                                    + "    function updateTextv2() { "
+                                                    + "        const namex = nameInputx.value; "
+                                                    + "        const fontStylex = fontStyleInputx.value; "
+                                                    + "        contextTextx.clearRect(0, 0, textCanvasx.width, textCanvasx.height); "
+                                                    + "        contextTextx.font = `bold 60px ${fontStylex}`; "
+                                                    + "        contextTextx.fillText(namex, 0, 100); "
+                                                    + "} "
+                                                    + "   ");
+                                            out.print("</script>");
+                                            //</editor-fold>
+                                        } else if (TypeSig == 3) {
+                                            //<editor-fold defaultstate="collapsed" desc="SIGNATURE IMAGE">
+
+                                            Template = Template.replace("<canvas id='signature-canvasBoss' width='400' height='200'></canvas>", "<img src='Interfaz/Contenido/SagrilaftDocs/Signature/" + Signature + "' width='250px' style='margin-left: 25%;'>");
+
+                                            out.print("<input type='hidden' class='form-control' id='image-path-inputx' value='Interfaz/Contenido/SagrilaftDocs/Signature/" + Signature + "' >");
+                                            out.print("<script>");
+                                            out.print("document.addEventListener('DOMContentLoaded', function() { "
+                                                    + "        const imagePathInputx = document.getElementById('image-path-inputx'); "
+                                                    + "        const imageCanvasx = document.getElementById('signature-canvasBoss'); "
+                                                    + "        const contextImagex = imageCanvasx.getContext('2d'); "
+                                                    + "        const imagePathx = imagePathInputx.value; "
+                                                    + " "
+                                                    + "        const image = new Image(); "
+                                                    + "        image.onload = function() { "
+                                                    + "            contextImagex.clearRect(0, 0, imageCanvasx.width, imageCanvasx.height); "
+                                                    + "            contextImagex.drawImage(image, 0, 0, imageCanvasx.width, imageCanvasx.height); "
+                                                    + "        }; "
+                                                    + "        image.src = imagePathx; "
+                                                    + "    });");
+                                            out.print("</script>");
+//                                        //</editor-fold>
+                                        }
+
+                                    }
+                                    if (DataClient[8].toString().contains("Si")) {
+                                        Template = Template.replace("id=\"XXXCERTSIXXX\">", "id=\"XXXCERTSIXXX\" checked disabled>");
+                                        Template = Template.replace("id=\"XXXCERTNOXXX\">", "id=\"XXXCERTNOXXX\" disabled>");
+                                    } else if (DataClient[8].toString().contains("No")) {
+                                        Template = Template.replace("id=\"XXXCERTNOXXX\">", "id=\"XXXCERTNOXXX\" checked disabled>");
+                                        Template = Template.replace("id=\"XXXCERTSIXXX\">", "id=\"XXXCERTSIXXX\" disabled>");
+                                    }
+
+                                } else {
+                                    Template = Template.replace("XXXFUNCIONARIOPLASTXXX", "- Pendiente -");
+                                    Template = Template.replace("XXXNROIDENTPLASTXXX", "- Pendiente -");
+                                    Template = Template.replace("XXXCARGOPLASTXXX", "- Pendiente -");
+                                    Template = Template.replace("XXXFIRMAPLASTXXX", "<i class='text-secondary'>Firma jefe de seguridad - PENDIENTE</i>");
+                                    Template = Template.replace("XXXQUEST_TENXXX", "- Pendiente -");
+                                }
+                            } catch (Exception e) {
+                                Template = Template.replace("XXXFUNCIONARIOPLASTXXX", "- Pendiente -");
+                                Template = Template.replace("XXXNROIDENTPLASTXXX", "- Pendiente -");
+                                Template = Template.replace("XXXCARGOPLASTXXX", "- Pendiente -");
+                                Template = Template.replace("XXXFIRMAPLASTXXX", "<i class='text-secondary'>Firma jefe de seguridad - PENDIENTE</i>");
+                                Template = Template.replace("XXXQUEST_TENXXX", "- Pendiente -");
                             }
                             //</editor-fold>
 

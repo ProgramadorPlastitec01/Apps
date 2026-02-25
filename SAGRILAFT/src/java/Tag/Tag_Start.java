@@ -71,8 +71,14 @@ public class Tag_Start extends TagSupport {
                     } else {
                         out.print("<td class='text-center'>Error</td>");
                     }
+                    double cantModules = 0;
+                    try {
+                        cantModules = ObjDoc[8].toString().replace("]/[", "///").replace("[[", "[").replace("]]", "]").split("///").length;
+                    } catch (Exception e) {
+                        cantModules = 0;
+                    }
                     int Temp = Integer.parseInt(ObjDoc[4].toString());
-                    double DataCalc = (Temp / 14.0) * 100;
+                    double DataCalc = (Temp / cantModules) * 100;
                     int Progress = (int) Math.ceil(DataCalc);
                     if (Progress > 100) {
                         Progress = 100;

@@ -46,7 +46,7 @@ public class Document extends HttpServlet {
         HttpSession sesion = request.getSession();
         String UserName = sesion.getAttribute("Nombres").toString();
         String[] DtaFormat = {};
-        String idSegx = "", namex = "", formatx = "", tempx = "", justify = "", cbxReg = "";
+        String idSegx = "", namex = "", formatx = "", tempx = "", justify = "", cbxReg = "", typeDoc = "";
         try {
             try {
                 Format = request.getParameter("TxtFormat");
@@ -58,6 +58,7 @@ public class Document extends HttpServlet {
                     if (lst_DocumentJpa != null) {
                         Object[] ObjDoc = (Object[]) lst_DocumentJpa.get(0);
                         Format = ObjDoc[3].toString();
+                        typeDoc = ObjDoc[4].toString();
                         DtaFormat = Format.toString().replace("]/[", "///").replace("[[", "[").replace("]]", "]").split("///");
                     }
                 } catch (Exception ex) {
@@ -346,7 +347,7 @@ public class Document extends HttpServlet {
                             if (CiuuTwo == 0) {
                                 CiuuTwo = 1;
                             }
-  
+
                             String City = DataFinal[3];
                             String LegalR = DataFinal[6];
                             String IsPep = DataFinal[8];
@@ -374,7 +375,11 @@ public class Document extends HttpServlet {
                     break;
                 case 4:
                     //<editor-fold defaultstate="collapsed" desc="APROVE DOCUMENT">
-                    module = 15;
+                    if (typeDoc.contains("Due ")) {
+                        module = 8;
+                    } else {
+                        module = 15;
+                    }
                     IdDoc = Integer.parseInt(request.getParameter("IdDoc"));
                     try {
                         Event = request.getParameter("Event");

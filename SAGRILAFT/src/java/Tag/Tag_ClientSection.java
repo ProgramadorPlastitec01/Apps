@@ -81,9 +81,15 @@ public class Tag_ClientSection extends TagSupport {
                     }
                     int LstModules = 0;
                     String[] ListModules = {};
+                    int tempCount = 0;
                     try {
-                        ListModules = ObjDoc[2].toString().split("/");
-                        LstModules = ListModules.length - 1;
+                        ListModules = ObjDoc[2].toString().replace("]/[", "]////[").split("////");
+                        tempCount = ListModules.length;
+                        if (TypeDocument.contains("Due ")) {
+                            LstModules = tempCount - 4;
+                        } else {
+                            LstModules = tempCount - 1;
+                        }
                     } catch (Exception e) {
                         LstModules = 0;
                     }
@@ -5805,7 +5811,7 @@ public class Tag_ClientSection extends TagSupport {
                                 out.print("<form action='AttachSignature.jsp' method='post' enctype='multipart/form-data' class='needs-validation' novalidate=''>");
 
                                 out.print("<div class='d-flex'>");
-                                out.print("<div class='col-lg-4'>");
+                                out.print("<div class='col-lg-6 mb-4'>");
                                 out.print("<div class='mt-4'>");
                                 out.print("<h6>" + SectionTwo + "<span class='text-danger'>*</span></h6>");
                                 out.print("</div>");
@@ -5813,7 +5819,7 @@ public class Tag_ClientSection extends TagSupport {
                                 out.print("<input type='text' class='form-control' name='TxtName' id='TxtName' placeholder='Nombre completo' value='" + (information ? ((form[1].toString().equals("N/A")) ? "" : form[1].toString()) : "") + "' required>");
                                 out.print("</div>");
                                 out.print("</div>");
-                                out.print("<div class='col-lg-4'>");
+                                out.print("<div class='col-lg-6'>");
                                 out.print("<div class='mt-4'>");
                                 out.print("<h6>" + SectionThree + " <span class='text-danger'>*</span></h6>");
                                 out.print("</div>");
@@ -6463,6 +6469,422 @@ public class Tag_ClientSection extends TagSupport {
                                 out.print("</div>");
                                 //</editor-fold>
                             } else if (estTl == 5) {
+                                //<editor-fold defaultstate="collapsed" desc="SUPPLY CHAIN ​​SECURITY AGREEMENT">
+                                String title = bundle.getString("formK.title");
+//                            String SectionOne = bundle.getString("formK.SectionOne");
+                                String SectionTwo = bundle.getString("formK.SectionTwo");
+                                String SectionThree = bundle.getString("formK.SectionThree");
+                                String SectionFour = bundle.getString("formK.SectionFour");
+                                String SectionFive = bundle.getString("formK.SectionFive");
+                                String SectionSix = bundle.getString("formK.SectionSix");
+                                String SectionSeven = bundle.getString("formK.SectionSeven");
+                                String SectionEight = bundle.getString("formK.SectionEight");
+//                                String[] form = TemplForm[estTl].replace("][", "///").replace("[", "").replace("]", "").split("///");
+
+                                String nameClient = "";
+                                try {
+                                    String[] infoclien = TemplForm[1].replace("][", "///").replace("[", "").replace("]", "").split("///");
+                                    nameClient = infoclien[1].toString();
+                                } catch (Exception e) {
+                                    nameClient = "Agente de carga";
+                                }
+
+                                out.print("<div class='section-body' style='color: black'>");
+                                out.print("<h2 class='' style='position: absolute;font-size: 20px; color: black; font-weight: 700; margin: 30px 0 25px 0;'><i class=\"fas fa-caret-right\"></i> &nbsp; " + title + "</h2>");
+                                out.print("<div class='row' style='background: #e7e7e7; padding-top: 47px;'>");
+                                out.print("<div class='col-12 col-md-10 col-sm-12' style='margin: auto; margin-top: 15px;'>");
+                                out.print("<div class='card' style='border-radius: 5px;'>");
+                                out.print("<div class='card-body'>");
+                                out.print("<div class='' data-height='auto'>");
+                                out.print("<div class='empty-state-icon'>");
+                                out.print("" + SectionFour + " (<span class='text-danger'>*</span>)");
+                                out.print("</div>");
+                                if (IdAgree == 0) {
+                                    out.print("<form action='ClientSection?opt=7&IdDoc=" + IdDOc + "' method='post' class='needs-validation' novalidate=''>");
+                                }
+                                out.print("<div class='d-flex'>");
+                                out.print("<div class='col-lg-12'>");
+                                out.print("<div class='card-body'>");
+
+                                out.print("<ul class='nav nav-tabs' id='myTab2' role='tablist'>");
+                                out.print("<li class='nav-item'>");
+                                out.print("<a class='nav-link active' id='home-tab2' data-toggle='tab' href='#home2' role='tab' aria-controls='home' aria-selected='true'>" + SectionFive + "</a>");
+                                out.print("</li>");
+                                if (IdAgree > 0) {
+                                    out.print("<li class='nav-item'>");
+                                    out.print("<a class='nav-link' id='profile-tab2' data-toggle='tab' href='#profile2' role='tab' aria-controls='profile' aria-selected='false'>" + SectionSix + "</a>");
+                                    out.print("</li>");
+                                }
+                                out.print("</ul>");
+
+                                out.print("<div class='tab-content tab-bordered' id='myTab3Content'>");
+                                //<editor-fold defaultstate="collapsed" desc="SECURITY AGREEMENT">
+                                out.print("<div class='tab-pane fade show active' id='home2' role='tabpanel' aria-labelledby='home-tab2'>");
+                                out.print("<h6 class='text-center mb-4'>" + SectionTwo + "</h6>");
+                                if (TypeDocument.contains("Ingles")) {
+                                    out.print("The Business Associate must comply with the minimum security requirements outlined here:<br>");
+                                    out.print("1. Carry out adequate and thorough selection, hiring, and familiarization of its business associates (Customers and suppliers).<br>");
+                                    out.print("2. Have documented processes for the selection, hiring, and familiarization of employees.<br>");
+                                    out.print("3. Have policies and methodologies for the prevention, control, and identification of the following risks, among others: money laundering, smuggling, drug trafficking, trafficking of substances for narcotic processing, terrorism, financing of terrorism, and arms trafficking.<br>");
+                                    out.print("4. Have implemented security measures and access controls in the facilities to prevent unauthorized access by individuals.<br>");
+                                    out.print("5. Have measures, controls, systems, and documented processes to ensure the confidentiality and custody of physical or magnetic information, especially information handled or custodied by Plastitec.<br>");
+                                    out.print("6. Have implemented tools and procedures for reporting any illicit or suspicious acts in its operations and those related to Plastitec's international supply chain.<br>");
+                                    out.print("7. When applicable, inspect containers and other cargo units, have security measures in the loading or unloading process of containers or cargo units.<br>");
+                                    out.print("8. When applicable, install high-security seals complying with ISO 17712 current standard, on sealable containers and cargo units, and send evidence.<br>");
+                                } else {
+                                    out.print("El Asociado de Negocio debe dar cumplimiento a los requisitos mínimos de seguridad que aquí se suscriben:<br>");
+                                    out.print("1. Realizar una adecuada y completa selección, contratación y conocimiento de sus asociados de negocio (Clientes y proveedores).<br>");
+                                    out.print("2. Tener procesos documentados para la selección, contratación y conocimiento de empleados.<br>");
+                                    out.print("3. Tener Políticas y metodologías de prevención, control e identificación de los siguientes riesgos, entre otros: lavado de activos, contrabando, tráfico de estupefacientes, tráfico de sustancias para el procesamiento de narcóticos, terrorismo, financiación del terrorismo y tráfico de armas.<br>");
+                                    out.print("4. Tener implementadas medidas de seguridad y controles de acceso en las instalaciones que eviten y prevengan el acceso no autorizado de personas.<br>");
+                                    out.print("5. Contar con medidas, controles, sistemas y procesos documentados que aseguren la confidencialidad y custodia de la información física o magnética, especialmente de la información que maneje o custodie de Plastitec.<br>");
+                                    out.print("6. Tener implementadas herramientas y procedimientos para el reporte de cualquier acto ilícito o sospechoso en sus operaciones y las que tengan que ver con la cadena de suministro internacional de Plastitec.<br>");
+                                    out.print("7. Cuando aplique, realizar inspección de los contenedores y demás unidades de carga, contar con medidas de seguridad en el proceso de llenado o descargue de los contenedores o unidades de carga.<br>");
+                                    out.print("8. Cuando aplique, instalarsellos de alta seguridad que cumplan con la norma vigente ISO 17712, en los contenedores y unidades de carga precintables y enviar las evidencias.<br>");
+                                }
+                                out.print("<div class='ml-4'>");
+                                out.print("<input type='checkbox' name='Txt_ReadDoc' value='1' id='Doc_security' " + (information ? ((form[1].toString().equals("1")) ? "checked" : "") : "") + " required> &nbsp; " + SectionThree + "");
+                                out.print("</div>");
+                                //</editor-fold>
+                                out.print("</div>");
+                                if (IdAgree > 0) {
+                                    out.print("<div class='tab-pane fade' id='profile2' role='tabpanel' aria-labelledby='profile-tab2'>");
+                                    //<editor-fold defaultstate="collapsed" desc="ATTACHED DOCUMENT">
+                                    String BuildDoc = "";
+                                    int TypeSig = 0;
+                                    int IdSigna = 0;
+                                    boolean validSign = false;
+                                    String PathImg = "";
+
+                                    lst_document = DocumentJpa.sp_c_ConsultDocumentSignatureIdAgree(IdDOc);
+                                    Object[] objSign = {};
+                                    if (lst_document != null) {
+                                        objSign = (Object[]) lst_document.get(0);
+                                        IdSigna = Integer.parseInt(objSign[0].toString());
+                                        TypeSig = Integer.parseInt(objSign[3].toString());
+                                        validSign = true;
+                                        PathImg = objSign[4].toString();
+                                    }
+
+                                    try {
+                                        if (TypeDocument.contains("Ingles")) {
+                                            if (IdAgree == 4) {
+                                                IdAgree = 8;
+                                            } else if (IdAgree == 5) {
+                                                IdAgree = 9;
+                                            } else if (IdAgree == 6) {
+                                                IdAgree = 10;
+                                            } else if (IdAgree == 7) {
+                                                IdAgree = 11;
+                                            }
+                                            lst_template = TemplateJpa.ConsultTemplateId(IdAgree);
+                                        } else {
+                                            lst_template = TemplateJpa.ConsultTemplateId(IdAgree);
+                                        }
+                                        if (lst_template != null) {
+                                            Object[] ObjTempl = (Object[]) lst_template.get(0);
+                                            BuildDoc = ObjTempl[1].toString();
+                                        }
+                                    } catch (Exception e) {
+                                    }
+                                    BuildDoc = BuildDoc.replace("XXDIAXX", dia).replace("XXMESXX", mes).replace("XXANIOXX", anio);
+                                    BuildDoc = BuildDoc.replace("XXXRAZONSOCIALXXX", nameClient);
+
+                                    out.print(BuildDoc);
+
+                                    out.print("<table class='table-bordered' style='text-align: center;width: 88%;margin: auto;'>");
+                                    out.print("<thead>");
+                                    out.print("<tr>");
+                                    out.print("<th>" + SectionSeven + "</th>");
+                                    out.print("<th>PLASTITEC</th>");
+                                    out.print("</tr>");
+                                    out.print("</thead>");
+                                    out.print("<tbody>");
+                                    out.print("<tr>");
+                                    out.print("<td>");
+
+                                    //<editor-fold defaultstate="collapsed" desc="BUTTONS">
+                                    out.print("<div class=''>");
+                                    out.print("<div class='col-12 col-sm-12 col-md-2 mb-3' style='display: flex; margin-top: 43px;'>");
+                                    out.print("<ul class='nav nav-pills flex-column' id='myTab4' role='tablist' style='display: contents;'>");
+//                                out.print("<li class='nav-item btn btn-sm' data-toggle='tooltip' data-placement='top' title='Dibujar' onclick='DataReplaceV2(1)'>");
+//                                out.print("<a class='nav-link " + ((TypeSig == 1) ? "active" : (TypeSig == 0) ? "active" : "") + "' id='Draw-tab4' data-toggle='tab' href='#Draw4' role='tab' aria-controls='Draw' aria-selected='true'><i class=\"fas fa-signature\" style='font-size: 18px;'></i></a>");
+//                                out.print("</li>");
+//                                out.print("<li class='nav-item btn btn-sm' data-toggle='tooltip' data-placement='top' title='Texto' onclick='DataReplaceV2(2)'>");
+//                                out.print("<a class='nav-link " + ((TypeSig == 2) ? "active" : "") + "' id='Write-tab4' data-toggle='tab' href='#Write4' role='tab' aria-controls='Write' aria-selected='false'><i class=\"fas fa-keyboard\" style='font-size: 18px;'></i></a>");
+//                                out.print("</li>");
+                                    out.print("<li class='nav-item btn btn-sm' data-toggle='tooltip' data-placement='top' title='Imagen' onclick='DataReplaceV2(3)'>");
+                                    out.print("<a class='nav-link active' id='Img-tab4' data-toggle='tab' href='#Img4' role='tab' aria-controls='Img' aria-selected='false'><i class=\"fas fa-image\" style='font-size: 18px;'></i></a>");
+                                    out.print("</li>");
+                                    out.print("</ul>");
+                                    out.print("</div>");
+                                    //</editor-fold>
+
+                                    out.print("<div class='tab-content no-padding' id='myTab2Content'>");
+                                    out.print("<div class='tab-pane fade " + ((TypeSig == 1) ? "show active" : (TypeSig == 10) ? "show active" : "") + "' id='Draw4' role='tabpanel' aria-labelledby='Draw-tab4' style='border: 1px solid transparent;'>");
+                                    //<editor-fold defaultstate="collapsed" desc="SIGANTURE DRAWING">
+                                    out.print("<form action='ClientSection?opt=13&IdDoc=" + IdDOc + "' method='post' class='needs-validation' novalidate='' id='SignForm1'>");
+                                    out.print("<div class='canvas-container'>");
+                                    out.print("<div class='signature-pad mt-2 d-flex' style='justify-content: center;'>");
+                                    out.print("<canvas id='signature-canvas' width='400' height='200'></canvas>");
+                                    out.print("<div class=''>");
+                                    out.print("<button type='button' class='btn btn-info ml-2' onclick=\"limpiarCanvas('signature-canvas')\"><i class='fas fa-sync-alt'></i></button>");
+                                    out.print("</div>");
+                                    out.print("</div>");
+                                    out.print("<input type='hidden' class='form-control' name='TxtSignatureDraw' id='coordenadas-hidden' value='" + ((validSign && TypeSig == 1) ? objSign[4].toString() : "") + "'>");
+                                    out.print("</div>");
+
+                                    if (validSign && TypeSig == 1) {
+                                        out.print("<script>");
+                                        out.print("function dibujarFirma() { "
+                                                + "        const firmaGuardadaCanvas = document.getElementById('signature-canvas'); "
+                                                + "        const firmaGuardadaContext = firmaGuardadaCanvas.getContext('2d'); "
+                                                + "        const hiddenInput = document.getElementById('coordenadas-hidden'); "
+                                                + "        const coordinatesJSON = hiddenInput.value;"
+                                                + "        const coordinates = JSON.parse(coordinatesJSON); "
+                                                + "        firmaGuardadaContext.clearRect(0, 0, firmaGuardadaCanvas.width, firmaGuardadaCanvas.height); "
+                                                + "        firmaGuardadaContext.lineWidth = 2; "
+                                                + "        firmaGuardadaContext.lineCap = 'round'; "
+                                                + "        firmaGuardadaContext.beginPath(); "
+                                                + "        firmaGuardadaContext.moveTo(coordinates[0].x, coordinates[0].y); "
+                                                + "        for (let i = 1; i < coordinates.length; i++) { "
+                                                + "            firmaGuardadaContext.lineTo(coordinates[i].x, coordinates[i].y); "
+                                                + "        } "
+                                                + "        firmaGuardadaContext.stroke(); "
+                                                + "    } "
+                                                + "    document.addEventListener('DOMContentLoaded', function() { "
+                                                + "        dibujarFirma(); "
+                                                + "    });");
+                                        out.print("</script>");
+                                    }
+                                    out.print("<div class='mb-3'>");
+                                    out.print("<div class='col-lg-12'>");
+                                    out.print("<div class='mt-4'>");
+                                    out.print("<h6> " + SectionEight + " <span class='text-danger'>*</span></h6>");
+                                    out.print("</div>");
+                                    out.print("<div class='mt-2'>");
+                                    try {
+                                        out.print("<input type='number' class='form-control' name='NmbDocx' id='NmbDocument' placeholder='Numero de documento' value='" + form[2].toString() + "' required>");
+                                    } catch (Exception e) {
+                                        out.print("<input type='number' class='form-control' name='NmbDocx' id='NmbDocument' placeholder='Numero de documento' value='' required>");
+                                    }
+                                    out.print("</div>");
+                                    out.print("</div>");
+                                    out.print("</div>");
+                                    out.print("<input type='hidden' class='form-control' name='TypeSig' id='IdTypeSig' value='1'>");
+                                    out.print("<input type='hidden' class='form-control' name='TxtValidAction' id='TxtValidAction1'>");
+                                    out.print("<input type='hidden' class='form-control' name='Txt_ReadDoc' value='1'>");
+                                    out.print("<input type='hidden' class='form-control' name='NbmIdSigna' id='NbmIdSigna' value='" + IdSigna + "'>");
+                                    out.print("</form>");
+                                    //</editor-fold>
+                                    out.print("</div>");
+
+                                    out.print("<div class='tab-pane fade " + ((TypeSig == 2) ? "show active" : "") + "' id='Write4' role='tabpanel' aria-labelledby='Write-tab4' style='border: 1px solid transparent;'>");
+                                    //<editor-fold defaultstate="collapsed" desc="SIGNATURE WRITING">
+                                    out.print("<form action='ClientSection?opt=13&IdDoc=" + IdDOc + "' method='post' class='needs-validation' novalidate='' id='SignForm2'>");
+                                    if (validSign && TypeSig == 2) {
+                                        String[] DataSig = objSign[4].toString().split("/");
+                                        out.print("<div class='signature-input d-flex'>");
+                                        out.print("<input type='text' class='form-control col-lg-7' name='TxtSignatureWrite' id='name-input' value='" + DataSig[0] + "' placeholder='Escribe tu nombre...'>");
+                                        out.print("<select class='form-control col-lg-4 ml-2' id='font-style-select' name='TxtSigLetter'>");
+                                        out.print("<option  value='" + DataSig[1] + "' class='" + DataSig[1] + "'>" + DataSig[1] + "</option>");
+                                    } else {
+                                        out.print("<div class='signature-input d-flex'>");
+                                        out.print("<input type='text' class='form-control col-lg-7' name='TxtSignatureWrite' id='name-input' placeholder='Escribe tu nombre...'>");
+                                        out.print("<select class='form-control col-lg-5 ml-2' id='font-style-select' name='TxtSigLetter'>");
+                                        out.print("<option selected disabled value=''>Tipo de letra</option>");
+                                    }
+                                    out.print("<option value='GreatVibes' class='GreatVibes'>GreatVibes</option>");
+                                    out.print("<option value='Allura' class='Allura'>Allura</option>");
+                                    out.print("<option value='Coockie' class='Coockie'>Coockie</option>");
+                                    out.print("<option value='Whisper' class='Whisper'>Whisper</option>");
+                                    out.print("<option value='Tangerine' class='Tangerine'>Tangerine</option>");
+                                    out.print("</select>");
+                                    out.print("</div>");
+                                    out.print("<div class='canvas-container'>");
+                                    out.print("<div class='signature-pad mt-2 d-flex' style='justify-content: center;'>");
+                                    out.print("<canvas id='text-canvas' width='400' height='80'></canvas>");
+                                    out.print("<div class=''>");
+                                    out.print("<button type='button' class='btn btn-info ml-2' onclick=\"limpiarCanvas('text-canvas')\"><i class='fas fa-sync-alt'></i></button>");
+                                    out.print("</div>");
+                                    out.print("</div>");
+                                    out.print("</div>");
+                                    if (validSign && TypeSig == 2) {
+                                        out.print("<script>");
+                                        out.print("document.addEventListener('DOMContentLoaded', function() { "
+                                                + "    if (nameInput.value) { "
+                                                + "        updateText(); "
+                                                + "    } "
+                                                + "    }); "
+                                                + "    function updateText() { "
+                                                + "        const name = nameInput.value; "
+                                                + "        contextText.clearRect(0, 0, textCanvas.width, textCanvas.height); "
+                                                + "        contextText.font = `bold 60px ${fontStyleSelect.options[fontStyleSelect.selectedIndex].text}`; "
+                                                + "        contextText.fillText(name, 10, 50); "
+                                                + "    } "
+                                                + "   ");
+                                        out.print("</script>");
+                                    }
+                                    out.print("<div class='d-flex mb-3'>");
+                                    out.print("<div class='col-lg-12'>");
+                                    out.print("<div class='mt-4'>");
+                                    out.print("<h6>" + SectionEight + "<span class='text-danger'>*</span></h6>");
+                                    out.print("</div>");
+                                    out.print("<div class='mt-2'>");
+                                    try {
+                                        out.print("<input type='number' class='form-control' name='NmbDocx' id='NmbDocument' placeholder='Numero de documento' value='" + form[2].toString() + "' required>");
+                                    } catch (Exception e) {
+                                        out.print("<input type='number' class='form-control' name='NmbDocx' id='NmbDocument' placeholder='Numero de documento' value='' required>");
+                                    }
+                                    out.print("</div>");
+                                    out.print("</div>");
+                                    out.print("</div>");
+                                    out.print("<input type='hidden' class='form-control' name='TypeSig' id='IdTypeSig' value='2'>");
+                                    out.print("<input type='hidden' class='form-control' name='NbmIdSigna' id='NbmIdSigna' value='" + IdSigna + "'>");
+                                    out.print("<input type='hidden' class='form-control' name='Txt_ReadDoc' value='1'>");
+                                    out.print("<input type='hidden' class='form-control' name='TxtValidAction' id='TxtValidAction2'>");
+                                    out.print("</form>");
+
+                                    //</editor-fold>
+                                    out.print("</div>");
+
+                                    out.print("<div class='tab-pane fade show active' id='Img4' role='tabpanel' aria-labelledby='Img-tab4' style='border: 1px solid transparent;'>");
+                                    //<editor-fold defaultstate="collapsed" desc="SIGNATURE IMAGEN">
+                                    out.print("<form action='SignatureAgree.jsp' method='post' enctype='multipart/form-data' class='needs-validation' novalidate='' id='SignForm3'>");
+                                    out.print("<input type='hidden' class='form-control' name='IdDOc' id='' value='" + IdDOc + "' >");
+                                    out.print("<div class='canvas-container'>");
+                                    out.print("<div class='signature-pad mt-2 d-flex' style='justify-content: center;'>");
+                                    out.print("<canvas id='image-canvas' width='400' height='200'></canvas>");
+                                    out.print("<div class=''>");
+                                    out.print("<button type='button' class='btn btn-info ml-2' onclick=\"limpiarCanvas('image-canvas');sigChange()\"><i class='fas fa-sync-alt'></i></button>");
+                                    out.print("</div>");
+                                    out.print("</div>");
+
+                                    if (validSign) {
+                                        out.print("<input type='hidden' class='form-control' id='image-path-input' value='Interfaz/Contenido/SagrilaftDocs/Signature/" + PathImg + "' >");
+                                    }
+                                    out.print("<div class='signature-input' id='sigChange' style='display: " + ((validSign) ? "none" : "block") + "'>");
+                                    out.print("<label for='file-input'><b>Subir imagen de firma:</b></label><br>");
+                                    out.print("<input type='file' name='TxtImageSigna' id='file-input' accept='image/png, image/jpeg' onchange='cargarImagen(event)'>");
+//                                out.print("<input type='text' name='' id='idSignUpload' data-toggle='tooltip' value='"+ PathImg +"'>");
+                                    out.print("</div>");
+
+                                    out.print("</div>");
+
+                                    out.print("<div class='d-flex mb-3'>");
+                                    out.print("<div class='col-lg-12'>");
+                                    out.print("<div class='mt-4'>");
+                                    out.print("<h6>" + SectionEight + "<span class='text-danger'>*</span></h6>");
+                                    out.print("</div>");
+                                    out.print("<div class='mt-2'>");
+                                    try {
+                                        out.print("<input type='number' class='form-control' name='NmbDocx' id='NmbDocumentx' placeholder='Numero de documento' value='" + form[2] + "' required>");
+                                    } catch (Exception e) {
+                                        out.print("<input type='number' class='form-control' name='NmbDocx' id='NmbDocumentx' placeholder='Numero de documento' value='' required>");
+                                    }
+                                    out.print("</div>");
+                                    out.print("</div>");
+                                    out.print("</div>");
+                                    out.print("<input type='hidden' class='form-control' name='TypeSig' id='IdTypeSig' value='3'>");
+                                    out.print("<input type='hidden' class='form-control' name='NbmIdSigna' id='NbmIdSigna' value='" + IdSigna + "'>");
+//                                out.print("<input type='hidden' class='form-control' name='TxtFormat' value='" + Format + "'>");
+                                    out.print("<input type='hidden' class='form-control' name='Txt_ReadDoc' value='1'>");
+                                    out.print("<input type='hidden' class='form-control' name='TxtValidAction' id='TxtValidAction3'>");
+                                    out.print("</form>");
+                                    if (validSign && TypeSig == 3) {
+                                        out.print("<script>");
+                                        out.print("document.addEventListener('DOMContentLoaded', function() { "
+                                                + "        const imagePathInput = document.getElementById('image-path-input'); "
+                                                + "        const imageCanvas = document.getElementById('image-canvas'); "
+                                                + "        const contextImage = imageCanvas.getContext('2d'); "
+                                                + "        const imagePath = imagePathInput.value; "
+                                                + " "
+                                                + "        const image = new Image(); "
+                                                + "        image.onload = function() { "
+                                                + "            contextImage.clearRect(0, 0, imageCanvas.width, imageCanvas.height); "
+                                                + "            contextImage.drawImage(image, 0, 0, imageCanvas.width, imageCanvas.height); "
+                                                + "        }; "
+                                                + "        image.src = imagePath; "
+                                                + "    });");
+                                        out.print("</script>");
+                                    }
+
+                                    //</editor-fold>
+                                    out.print("</div>");
+
+                                    out.print("</div>");
+                                    out.print("<b>Firma representante legal: </b><br>");
+                                    out.print("<b>CC: </b>");
+                                    out.print("</td>");
+                                    out.print("<td>");
+                                    out.print("<input type='hidden' class='form-control' name='' id='image-pathLfo' value='Interfaz/Contenido/Imagen/FirmaLFO.png' >");
+                                    out.print("<canvas id='lfo-canvas' width='350' height='180' style='border: 1px solid transparent;'></canvas>");
+                                    out.print("</td>");
+                                    out.print("<script>");
+                                    out.print("document.addEventListener('DOMContentLoaded', function() { "
+                                            + "        const imagePathInput = document.getElementById('image-pathLfo'); "
+                                            + "        const imageCanvas = document.getElementById('lfo-canvas'); "
+                                            + "        const contextImage = imageCanvas.getContext('2d'); "
+                                            + "        const imagePath = imagePathInput.value; "
+                                            + " "
+                                            + "        const image = new Image(); "
+                                            + "        image.onload = function() { "
+                                            + "            contextImage.clearRect(0, 0, imageCanvas.width, imageCanvas.height); "
+                                            + "            contextImage.drawImage(image, 0, 0, imageCanvas.width, imageCanvas.height); "
+                                            + "        }; "
+                                            + "        image.src = imagePath; "
+                                            + "    });");
+                                    out.print("</script>");
+
+                                    out.print("</tr>");
+                                    out.print("</tbody>");
+                                    out.print("</table>");
+                                    //</editor-fold>
+                                    out.print("</div>");
+                                    out.print("</div>");
+                                    out.print("</div>");
+                                    out.print("</div>");
+
+                                    out.print("<div class='d-flex align-items-center' style='position: absolute;bottom: 18px;width: 94%;justify-content: center;'>");
+                                    out.print("<input type='hidden' class='form-control' name='' id='IdTypeSigna' value='3'>");
+//                                out.print("<input type='hidden' class='form-control' name='' id='IdTypeSigna' value='" + ((TypeSig == 0) ? "1" : TypeSig) + "'>");
+
+                                    //<editor-fold defaultstate="collapsed" desc="VALIDAICON DE BOTONES POR ENVIO DE IMAGENES">
+                                    if (validSign) {
+                                        out.print("<button class='btn btn-blue mr-2' id='buttonSvve' style='display: none;' data-toggle='tooltip' data-placement='top' title='" + ButtonSave + "' onclick='ValidActionNew(\"TxtValidAction\",1);ExcuteForm(\"" + ((TypeDocument.contains("Ingles")) ? "en" : "es") + "\");'><i class='fas fa-save'></i></button>");
+                                        out.print("<button class='btn btn-blue mr-2 disabled' id='buttonNsvve' style='display: block;' data-toggle='tooltip' data-placement='top' title='" + ButtonSaveDisabled + "' ><i class='fas fa-save'></i></button>");
+                                    } else {
+                                        out.print("<button class='btn btn-blue mr-2' id='buttonSvve' style='display: block;' data-toggle='tooltip' data-placement='top' title='" + ButtonSave + "' onclick='validEmpyData(\"NmbDocumentx\", \"No se ha ingresado el numero de documento.\", \"" + ((TypeDocument.contains("Ingles")) ? "en" : "es") + "\");'><i class='fas fa-save'></i></button>");
+                                    }
+                                    //</editor-fold>
+                                    if (validSign) {
+                                        out.print("<button class='btn btn-blue' data-toggle='tooltip' data-placement='top' title='" + ButtonAd + "' onclick='window.location.href=\"ClientSection?opt=17&IdDoc=" + IdDOc + "&Sttate=6\"'><i class=\"fas fa-share-square\"></i></button>");
+                                    }
+                                    if (bntFinal) {
+//                                    out.print("<button class='btn btn-success' type='button' onclick='window.location.href=\"ClientSection?opt=18&IdDoc=" + IdDOc + "\"' style='top: 50px; right: 8px;' data-toggle='tooltip' data-placement='left' title='Finalizar'><i class=\"fas fa-check-circle\"></i></button>");
+                                        out.print("<button class='btn btn-success' type='button' onclick='window.location.href=\"ClientSection?opt=18&IdDoc=" + IdDOc + "\"' style='top: 50px; right: 8px;' data-toggle='tooltip' data-placement='left' title='Finalizar'><i class=\"fas fa-check-circle\"></i></button>");
+                                    }
+                                    out.print("</div>");
+                                } else {
+                                    out.print("<input type='hidden' class='form-control' name='TxtValidAction' id='TxtValidAction' >");
+//                                    out.print("<input type='hidden' class='form-control' name='TxtFormat' value='" + Format + "'>");
+                                    out.print("<div class='d-flex align-items-center' style='position: absolute;bottom: 18px;width: 94%;justify-content: center;'>");
+                                    out.print("<button class='btn btn-blue mr-2' data-toggle='tooltip' data-placement='top' title='" + ButtonSave + "' onclick='ValidAction(\"TxtValidAction\",1);ReadDoc(\"" + ((TypeDocument.contains("Ingles")) ? "en" : "es") + "\");'><i class='fas fa-save'></i></button>");
+                                    out.print("<button class='btn btn-blue' data-toggle='tooltip' data-placement='top' title='" + ButtonAd + "' onclick='ValidAction(\"TxtValidAction\",2);ReadDoc(\"" + ((TypeDocument.contains("Ingles")) ? "en" : "es") + "\");'><i class=\"fas fa-share-square\"></i></button>");
+                                    if (bntFinal) {
+                                        out.print("<button class='btn btn-success' type='button' onclick='window.location.href=\"ClientSection?opt=18&IdDoc=" + IdDOc + "\"' style='top: 50px; right: 8px;' data-toggle='tooltip' data-placement='left' title='Finalizar'><i class=\"fas fa-check-circle\"></i></button>");
+                                    }
+                                    out.print("</div>");
+                                    out.print("</form>");
+                                }
+                                out.print("</div>");
+                                out.print("</div>");
+                                out.print("</div>");
+                                out.print("</div>");
+                                out.print("</div>");
+                                out.print("</div>");
+                                //</editor-fold>
+                            } else if (estTl == 6) {
                                 //<editor-fold defaultstate="collapsed" desc="STATEMENTS">
 
                                 out.print("<div class='section-body' style='color: black'>");
@@ -6476,7 +6898,7 @@ public class Tag_ClientSection extends TagSupport {
                                 out.print("All fields marked with an asterisk (<span class='text-danger'>*</span>) are required.");
                                 out.print("</div>");
 
-                                out.print("<form action='ClientSection?opt=7&IdDoc=" + IdDOc + "' method='post' class='needs-validation' novalidate=''>");
+                                out.print("<form action='ClientSection?opt=8&IdDoc=" + IdDOc + "' method='post' class='needs-validation' novalidate=''>");
                                 out.print("<div class='card-body'>");
 
                                 out.print("<div class=''>");
@@ -6539,7 +6961,7 @@ public class Tag_ClientSection extends TagSupport {
                                 out.print("</div>");
                                 out.print("</div>");
                                 //</editor-fold>
-                            } else if (estTl == 6) {
+                            } else if (estTl == 7) {
                                 //<editor-fold defaultstate="collapsed" desc="DOCUMENTS TO ATTACH">
                                 String title = bundle.getString("formO.title");
                                 String SectionOne = bundle.getString("formO.SectionOne");
@@ -6756,7 +7178,7 @@ public class Tag_ClientSection extends TagSupport {
                                 out.print("</div>");
                                 out.print("</div>");
                                 //</editor-fold>
-                            } else if (estTl == 7) {
+                            } else if (estTl == 8) {
                                 //<editor-fold defaultstate="collapsed" desc="SIGNATURE">
                                 String SectionTwo = bundle.getString("formP.SectionTwo");
                                 String SectionThree = bundle.getString("formP.SectionThree");
@@ -7071,7 +7493,7 @@ public class Tag_ClientSection extends TagSupport {
                                 out.print("</div>");
                                 out.print("</div>");
                                 //</editor-fold>
-                            } else if (estTl == 8) {
+                            } else if (estTl == 9) {
                                 //<editor-fold defaultstate="collapsed" desc="FINAL FORM">
                                 String infoOne = bundle.getString("formQ.infoOne");
                                 String infoTwo = bundle.getString("formQ.infoTwo");

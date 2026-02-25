@@ -931,11 +931,13 @@ public class ClientSection extends HttpServlet {
                         break;
                     case 16:
                         //<editor-fold defaultstate="collapsed" desc="SIGNATURE CLIENT">
+                        String Title = "";
                         module = 14;
                         IdDoc = Integer.parseInt(request.getParameter("IdDoc"));
                         ValidAction = request.getParameter("TxtValidAction");
                         TypeSig = Integer.parseInt(request.getParameter("TypeSig"));
                         Names = request.getParameter("TxtName");
+                        Title = request.getParameter("TxtTitle");
                         NroIdenti = Integer.parseInt(request.getParameter("NmbDocx").toString());
                         try {
                             IdSig = Integer.parseInt(request.getParameter("NbmIdSigna"));
@@ -964,7 +966,7 @@ public class ClientSection extends HttpServlet {
                             Signature = "";
                         }
 
-                        Forms = "[[" + module + "][" + Names + "][" + NroIdenti + "]]";
+                        Forms = "[[" + module + "][" + Names + "][" + NroIdenti + "]["+ Title +"]]";
                         for (int i = 0; i < DtaFormat.length; i++) {
                             if (i == DtaFormat.length - 1) {
                                 if (i != module) {
@@ -1226,9 +1228,71 @@ public class ClientSection extends HttpServlet {
                         request.getRequestDispatcher("ClientSection?opt=1").forward(request, response);
                         //</editor-fold>
                         break;
-                    case 7:
-                        //<editor-fold defaultstate="collapsed" desc="MODULE 5 - STATEMENTS">
+                    case 13:
+                        //<editor-fold defaultstate="collapsed" desc="SUPPLY CHAIN ​​SECURITY AGREEMENT">
                         module = 5;
+                        IdDoc = Integer.parseInt(request.getParameter("IdDoc"));
+                        ValidAction = request.getParameter("TxtValidAction");
+                        ReadDoc = request.getParameter("Txt_ReadDoc");
+                        try {
+                            TypeSig = Integer.parseInt(request.getParameter("TypeSig"));
+                            NroIdenti = Integer.parseInt(request.getParameter("NmbDocx").toString());
+                            try {
+                                IdSig = Integer.parseInt(request.getParameter("NbmIdSigna"));
+                            } catch (Exception e) {
+                                IdSig = 0;
+                            }
+                            try {
+                                if (TypeSig == 1) {
+                                    Signature = request.getParameter("TxtSignatureDraw");
+                                } else if (TypeSig == 2) {
+                                    Signature = request.getParameter("TxtSignatureWrite");
+                                    TypeLtter = request.getParameter("TxtSigLetter");
+                                    Signature = Signature + "/" + TypeLtter;
+                                } else if (TypeSig == 3) {
+                                    Signature = request.getParameter("TxtSignatureImg");
+                                }
+                                if (!Signature.equals("")) {
+                                    if (IdSig <= 0) {
+                                        result = DocumentJpa.DocumentSignatureRegisterAgree(IdDoc, TypeSig, Signature);
+                                    } else {
+                                        result = DocumentJpa.DocumentSignatureUpdate(IdSig, TypeSig, Signature);
+                                    }
+                                }
+                            } catch (Exception e) {
+                                Signature = "";
+                            }
+                            Forms = "[[" + module + "][" + ReadDoc + "][" + NroIdenti + "][" + dia + "][" + mes + "][" + anio + "]]";
+                        } catch (Exception e) {
+                            Forms = "[[" + module + "][" + ReadDoc + "]]";
+                        }
+
+                        for (int i = 0; i < DtaFormat.length; i++) {
+                            if (i == DtaFormat.length - 1) {
+                                if (i != module) {
+                                    FinalForm += "[" + DtaFormat[i] + "]";
+                                } else {
+                                    FinalForm += Forms;
+                                }
+                            } else {
+                                if (i != module) {
+                                    FinalForm += "[" + DtaFormat[i] + "]/";
+                                } else {
+                                    FinalForm += Forms + "/";
+                                }
+                            }
+                        }
+                        if (ValidAction.equals("2")) {
+                            module++;
+                        }
+                        result = DocumentJpa.UpdateDocumentFormClient(IdDoc, FinalForm, module);
+                        request.setAttribute("UpdateFormClient", result);
+                        request.getRequestDispatcher("ClientSection?opt=1&IdDoc=" + IdDoc + "").forward(request, response);
+//</editor-fold>
+                        break; 
+                    case 8:
+                        //<editor-fold defaultstate="collapsed" desc="MODULE 6 - STATEMENTS">
+                        module = 6;
                         IdDoc = Integer.parseInt(request.getParameter("IdDoc"));
                         ReadDoc = request.getParameter("Txt_ReadDoc");
                         DescSource = request.getParameter("txtDescSource");
@@ -1261,8 +1325,8 @@ public class ClientSection extends HttpServlet {
 //</editor-fold>
                         break;
                     case 15:
-                        //<editor-fold defaultstate="collapsed" desc="MODULE 6 - ATTACH">
-                        module = 6;
+                        //<editor-fold defaultstate="collapsed" desc="MODULE 7 - ATTACH">
+                        module = 7;
                         IdDoc = Integer.parseInt(request.getParameter("IdDoc"));
                         ValidAction = request.getParameter("TxtValidAction");
                         IdFiles = request.getParameter("txtIdFiles");
@@ -1362,8 +1426,8 @@ public class ClientSection extends HttpServlet {
 //</editor-fold>
                         break;
                     case 16:
-                        //<editor-fold defaultstate="collapsed" desc="MODULE 7 - SIGNATURE CLIENT">
-                        module = 7;
+                        //<editor-fold defaultstate="collapsed" desc="MODULE 8 - SIGNATURE CLIENT">
+                        module = 8;
                         IdDoc = Integer.parseInt(request.getParameter("IdDoc"));
                         ValidAction = request.getParameter("TxtValidAction");
                         TypeSig = Integer.parseInt(request.getParameter("TypeSig"));
@@ -1434,7 +1498,7 @@ public class ClientSection extends HttpServlet {
                     case 18:
                         //<editor-fold defaultstate="collapsed" desc="CLOSE DOCUMENT">
                         IdDoc = Integer.parseInt(request.getParameter("IdDoc"));
-                        result = DocumentJpa.UpdateDocumentStateFinal(IdDoc, 8, 3);
+                        result = DocumentJpa.UpdateDocumentStateFinal(IdDoc, 9, 3);
                         if (result) {
                             MailData.NotifyPlastitecDocumentEnd(NameSession);
                         }
