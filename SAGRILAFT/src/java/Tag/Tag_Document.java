@@ -475,12 +475,6 @@ public class Tag_Document extends TagSupport {
                 } else {
                     lst_document = DocumentJpa.ConsultDocuments();
                 }
-                String[] modules = {};
-                lst_config = ConfigJpa.ConsultSettingsByCategorie("ListModulesES");
-                if (lst_config != null) {
-                    Object[] ObjEs = (Object[]) lst_config.get(0);
-                    modules = ObjEs[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
-                }
 
                 if (lst_document != null) {
                     for (int i = 0; i < lst_document.size(); i++) {
@@ -494,9 +488,25 @@ public class Tag_Document extends TagSupport {
 //                        out.print("<td style='vertical-align: middle;'>" + objDoc[2] + "</td>");
 //                        out.print("<td>" + objDoc[3] + "</td>");
                         out.print("<td style='vertical-align: middle;text-align:center;'>" + ((objDoc[10] == null) ? "Sin gestión" : objDoc[10]) + "</td>");
+                        String[] modules = {};
+                        String listModule = "";
+                        if (objDoc[3].toString().contains("Due ")) {
+                            listModule = "ListModules15ES";
+                        }else{
+                            listModule = "ListModules14ES";
+                        }
+                        lst_config = ConfigJpa.ConsultSettingsByCategorie(listModule);
+                        if (lst_config != null) {
+                            Object[] ObjEs = (Object[]) lst_config.get(0);
+                            modules = ObjEs[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                        }
                         double cantModules = 0;
                         try {
-                            cantModules = objDoc[4].toString().replace("]/[", "///").replace("[[", "[").replace("]]", "]").split("///").length;
+                            if (objDoc[3].toString().contains("Due ")) {
+                                cantModules = objDoc[4].toString().replace("]/[", "///").replace("[[", "[").replace("]]", "]").split("///").length - 4;
+                            } else {
+                                cantModules = objDoc[4].toString().replace("]/[", "///").replace("[[", "[").replace("]]", "]").split("///").length - 1;
+                            }
                         } catch (Exception e) {
                             cantModules = 0;
                         }

@@ -3337,7 +3337,7 @@ public class Tag_ClientSection extends TagSupport {
                                             + ((form[1].toString().equals("No")) ? "checked" : (form[1].toString().equals("N/A")) ? "checked" : "") + " >&nbsp;"
                                             + OptTwo + " &nbsp;&nbsp;<br><br>");
                                 } else {
-                                    out.print("<i class='fas fa-caret-right'></i> &nbsp; " + infoOne + " &nbsp; <br><input type='radio' name='IsPep' value='Si' onclick='ActiveCont(\"Si\", \"PepCont\")'> &nbsp;" + OptOne + " &nbsp;&nbsp; <input type='radio' name='IsPep' value='No' onclick='ActiveCont(\"No\", \"PepCont\")' >"
+                                    out.print("<i class='fas fa-caret-right'></i> &nbsp; " + infoOne + " &nbsp; <br><input type='radio' name='IsPep' value='Si' onclick='ActiveCont(\"Si\", \"PepCont\")'> &nbsp;" + OptOne + " &nbsp;&nbsp; <input type='radio' name='IsPep' value='No' onclick='ActiveCont(\"No\", \"PepCont\")' checked>"
                                             + OptTwo + " &nbsp;&nbsp;<br><br>");
                                 }
 
@@ -4728,7 +4728,7 @@ public class Tag_ClientSection extends TagSupport {
                                 out.print("<h6> " + SectionEleven + " <span class='text-danger'>*</span></h6>");
                                 out.print("</div>");
                                 out.print("<div class='mt-2'>");
-                                out.print("<input type='text' class='form-control moneyVal' name='TxtOtherIncome' id='TxtOtherIncome' value='" + ((information) ? ((form[8].equals("N/A")) ? "" : form[8].toString()) : "") + "'  required>");
+                                out.print("<input type='text' class='form-control moneyVal' name='TxtOtherIncome' id='TxtOtherIncome' value='" + ((information) ? ((form[8].equals("N/A")) ? "" : form[8].toString()) : "") + "' onblur='ValidarIncome()' required>");
                                 out.print("</div>");
                                 out.print("</div>");
 

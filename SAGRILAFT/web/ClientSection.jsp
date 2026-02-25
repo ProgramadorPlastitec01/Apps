@@ -193,6 +193,15 @@
         </script>
 
         <script>
+            function ValidarIncome() {
+                var valueIncome = document.getElementById("TxtOtherIncome").value;
+                if (valueIncome == 0) {
+                    document.getElementById("TxtConceptIncome").value = "Na";
+                }
+            }
+        </script>
+
+        <script>
             function validImg(lg, nm) {
                 var signat = document.getElementById("file-input").value;
                 if (signat === "") {

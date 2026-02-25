@@ -154,7 +154,11 @@ public class Tag_Start extends TagSupport {
                     }
                     double cantModules = 0;
                     try {
-                        cantModules = ObjDoc[8].toString().replace("]/[", "///").replace("[[", "[").replace("]]", "]").split("///").length;
+                        if (ObjDoc[3].toString().contains("Due ")) {
+                            cantModules = ObjDoc[8].toString().replace("]/[", "///").replace("[[", "[").replace("]]", "]").split("///").length - 4;
+                        } else {
+                            cantModules = ObjDoc[8].toString().replace("]/[", "///").replace("[[", "[").replace("]]", "]").split("///").length - 1;
+                        }
                     } catch (Exception e) {
                         cantModules = 0;
                     }
