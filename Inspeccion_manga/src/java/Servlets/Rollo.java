@@ -102,6 +102,7 @@ public class Rollo extends HttpServlet {
             String cantidad_proceso = "";
             String cantidad_entrante = "";
             String color_entrante = "";
+            String borde_lateral_rollo = "";
             List lst_rollo_siguiente = null;
             List lst_registro = null;
             List lst_control_espesor = null;
@@ -208,6 +209,7 @@ public class Rollo extends HttpServlet {
                     particulas = request.getParameter("Cbx_particula");
                     perimetro_extrusion_1 = Double.parseDouble(request.getParameter("Txt_perimetro_1"));
                     perimetro_extrusion_2 = Double.parseDouble(request.getParameter("Txt_perimetro_2"));
+                    borde_lateral_rollo = request.getParameter("Bdr_ltr_rollo");
                     lst_registro = jpacrgt.Traer_registro_id_registro(id_registro);
                     Object[] obj_registro = (Object[]) lst_registro.get(0);
                     lst_rollo_siguiente = jpacrlo.Traer_ultimo_rollo(id_producto, id_registro);
@@ -217,7 +219,7 @@ public class Rollo extends HttpServlet {
                             id_rollo = (Integer) obj_rollo_siguiente[2];
                             rollo_siguiente = (Integer) obj_rollo_siguiente[0];
                             mtdetd.Asignar_estado_calidad(id_registro, id_rollo);
-                            proceso = jpacrlo.Modificar_rollo(id_registro, rollo_siguiente, primer_extremo, centro, segundo_extremo, pared_sencilla_min, pared_sencilla_max, ancho_manga, ancho_bobina, peso, particulas, sesion.getAttribute("Rol/Nombres").toString(), perimetro_extrusion_1, perimetro_extrusion_2, numero_refilado);
+                            proceso = jpacrlo.Modificar_rollo(id_registro, rollo_siguiente, primer_extremo, centro, segundo_extremo, pared_sencilla_min, pared_sencilla_max, ancho_manga, ancho_bobina, peso, particulas, sesion.getAttribute("Rol/Nombres").toString(), perimetro_extrusion_1, perimetro_extrusion_2, numero_refilado, borde_lateral_rollo);
                         } else {
                             if (obj_registro[69] != null) {
                                 rollo_siguiente = ((Integer) obj_rollo_siguiente[0] + 1);
@@ -234,8 +236,7 @@ public class Rollo extends HttpServlet {
                             } else {
                                 rollo_siguiente = ((Integer) obj_rollo_siguiente[0] + 1);
                             }
-                            proceso = jpacrlo.Registrar_rollo(id_registro, rollo_siguiente, primer_extremo, centro, segundo_extremo, pared_sencilla_min, pared_sencilla_max, ancho_manga, ancho_bobina, peso, particulas, sesion.getAttribute("Rol/Nombres").toString(), perimetro_extrusion_1, perimetro_extrusion_2, numero_refilado);
-
+                            proceso = jpacrlo.Registrar_rollo(id_registro, rollo_siguiente, primer_extremo, centro, segundo_extremo, pared_sencilla_min, pared_sencilla_max, ancho_manga, ancho_bobina, peso, particulas, sesion.getAttribute("Rol/Nombres").toString(), perimetro_extrusion_1, perimetro_extrusion_2, numero_refilado, borde_lateral_rollo);
                             //<editor-fold defaultstate="collapsed" desc="VALIDACION">
 //                            ESTE BLOQUE DE CODIGO ES PARA VALIDAR CUANDO UN ROLLO HA LLEGADO AL LIMITE MAXIMO ASIGNADO
 //                            DE SER NECESARIO CUANDO LLEGUE AL LIMITE REALIZA UNA VALDIAICON PARA VER SI ES NECESARIO CAMBIAR AL SIGUIENTE RANGO O YA QUEDA 
@@ -291,7 +292,7 @@ public class Rollo extends HttpServlet {
                         } catch (Exception e) {
                             rollo_siguiente = 1;
                         }
-                        proceso = jpacrlo.Registrar_rollo(id_registro, rollo_siguiente, primer_extremo, centro, segundo_extremo, pared_sencilla_min, pared_sencilla_max, ancho_manga, ancho_bobina, peso, particulas, sesion.getAttribute("Rol/Nombres").toString(), perimetro_extrusion_1, perimetro_extrusion_2, numero_refilado);
+                        proceso = jpacrlo.Registrar_rollo(id_registro, rollo_siguiente, primer_extremo, centro, segundo_extremo, pared_sencilla_min, pared_sencilla_max, ancho_manga, ancho_bobina, peso, particulas, sesion.getAttribute("Rol/Nombres").toString(), perimetro_extrusion_1, perimetro_extrusion_2, numero_refilado, borde_lateral_rollo);
                     }
                     if (proceso) {
                         request.setAttribute("Alerta", "Registro_rollo");
@@ -516,13 +517,14 @@ public class Rollo extends HttpServlet {
                     particulas = request.getParameter("Cbx_particula");
                     perimetro_extrusion_1 = Double.parseDouble(request.getParameter("Txt_perimetro_1"));
                     perimetro_extrusion_2 = Double.parseDouble(request.getParameter("Txt_perimetro_2"));
+                    borde_lateral_rollo = request.getParameter("Bdr_ltr_rollo");
                     estado_calidad = request.getParameter("Estado_calidad");
                     if (estado_calidad.equals("P")) {
                         estado_calidad = "S";
                     }
                     id_rollo = Integer.parseInt(request.getParameter("Id_rollo"));
                     rollo_siguiente = Integer.parseInt(request.getParameter("Rollo"));
-                    proceso = jpacrlo.Modificar_rollo(id_registro, rollo_siguiente, primer_extremo, centro, segundo_extremo, pared_sencilla_min, pared_sencilla_max, ancho_manga, ancho_bobina, peso, particulas, sesion.getAttribute("Rol/Nombres").toString(), perimetro_extrusion_1, perimetro_extrusion_2, numero_refilado);
+                    proceso = jpacrlo.Modificar_rollo(id_registro, rollo_siguiente, primer_extremo, centro, segundo_extremo, pared_sencilla_min, pared_sencilla_max, ancho_manga, ancho_bobina, peso, particulas, sesion.getAttribute("Rol/Nombres").toString(), perimetro_extrusion_1, perimetro_extrusion_2, numero_refilado, borde_lateral_rollo);
                     if (!(Double.parseDouble(peso) >= (Double.parseDouble(obj_registro_mod[46].toString()) - Double.parseDouble(obj_registro_mod[48].toString())) && Double.parseDouble(peso) <= (Double.parseDouble(obj_registro_mod[46].toString()) + Double.parseDouble(obj_registro_mod[47].toString())))) {
                         jpacrlo.Cambiar_estado_calidad(id_rollo, "C");
                         jpacevt.Registrar_evento(id_rollo, "NORMAL", "C", "ROLLO CUARENTENA POR PESO", "PROCESO AUTOMATICO");

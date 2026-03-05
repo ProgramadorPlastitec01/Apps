@@ -21,7 +21,7 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 import Controladores.ParametroJpaController;
 import java.text.DecimalFormat;
-
+import Metodos.Consulta_formulas;
 
 public class Tag_reporte extends TagSupport {
 
@@ -47,8 +47,8 @@ public class Tag_reporte extends TagSupport {
             ResumenJpaController jpacrsm = new ResumenJpaController();
             ProductoJpaController jpacpdt = new ProductoJpaController();
             ParametroJpaController ParametroJpa = new ParametroJpaController();
+            Consulta_formulas formulasJpa = new Consulta_formulas();
 
-           
             //VARIABLE GLOBALES
             List lst_registros_dia = null;
             String filtro = "";
@@ -1359,7 +1359,7 @@ public class Tag_reporte extends TagSupport {
                     if (!(lote_producto.equals("0")) && id_linea != 0) {
                         try {
                             if (id_producto != 0) {
-                                lst_rollos = jpacrlo.Generacion_estadistica_resumido(orden, id_producto, lote_producto, id_linea, fecha_inicio + " " + hora_inicio + ":00", fecha_fin + " " + hora_fin + ":00", Integer.parseInt(rollos.split("-")[0]), Integer.parseInt(rollos.split("-")[1]), id_resumen);
+                                lst_rollos = jpacrlo.Generacion_estadistica_resumido(orden, id_producto, lote_producto, id_linea, fecha_inicio + " " + hora_inicio + ":00", fecha_fin + " " + hora_fin + ":00", Integer.parseInt(rollos.split("-")[0]), Integer.parseInt(rollos.split("-")[1]), id_resumen, lote_c);
                                 lst_resultados = jpacrlo.Generacion_estadistica_resultado_resumido(orden, id_producto, lote_producto, id_linea, fecha_inicio + " " + hora_inicio + ":00", fecha_fin + " " + hora_fin + ":00", Integer.parseInt(rollos.split("-")[0]), Integer.parseInt(rollos.split("-")[1]), id_resumen);
                                 if (lst_rollos != null) {
                                     int fechaActv2 = 0;
@@ -1385,8 +1385,8 @@ public class Tag_reporte extends TagSupport {
                                     out.print("</tr>");
                                     out.print("<tr>");
                                     out.print("<td colspan='6' align='center'><b class='negro'>RESUMEN<br />INSPECCIÓN MANGA</b></td>");
-                                    
-                                     if (fechaActv2 < fechaVig) {
+
+                                    if (fechaActv2 < fechaVig) {
                                         out.print("<td colspan='3' align='center'><b class='negro'>VERSION 1</b></td>");
                                     } else {
                                         out.print("<td colspan='3' align='center'><b class='negro'>VERSION 2</b></td>");
@@ -2772,9 +2772,10 @@ public class Tag_reporte extends TagSupport {
                                 out.print("</tr>");
                                 out.print("<tr>");
                                 out.print("<td style='width:10%'><b>Dureza " + lote_producto + " S</b><b style='text-transform: lowercase;'>h</b><b>.A</b></td>");
-                                List lst_dureza = jpacrgt.Traer_lote_control_durezas(lote_producto);
+                                List lst_dureza = formulasJpa.Traer_lote_control_durezas(lote_producto);
                                 if (lst_dureza != null) {
-                                    Object[] obj_dureza = (Object[]) lst_dureza.get(0);
+                                    String[] Arg_dureza = lst_dureza.toString().replace("]", "").replace("[", "").replace(",", "").split("////");
+                                    String[] obj_dureza = Arg_dureza[0].split("---");
                                     out.print("<td align='center'>" + ((obj_dureza[3] == null) ? "N/A" : obj_dureza[3]) + "</td>");
                                     out.print("<td align='center'>" + ((obj_dureza[2] == null) ? "N/A" : obj_dureza[2]) + "</td>");
                                     out.print("<td align='center'>" + ((obj_dureza[1] == null) ? "N/A" : obj_dureza[1]) + "</td>");
@@ -2791,9 +2792,10 @@ public class Tag_reporte extends TagSupport {
                                 out.print("<tr>");
                                 out.print("<td style='width:10%'><b>Dureza " + lote_c + " S</b><b style='text-transform: lowercase;'>h</b><b>.A</b></td>");
                                 lst_dureza = null;
-                                lst_dureza = jpacrgt.Traer_lote_control_durezas(lote_c);
+                                lst_dureza = formulasJpa.Traer_lote_control_durezas(lote_c);
                                 if (lst_dureza != null) {
-                                    Object[] obj_dureza = (Object[]) lst_dureza.get(0);
+                                    String[] Arg_dureza = lst_dureza.toString().replace("]", "").replace("[", "").replace(",", "").split("////");
+                                    String[] obj_dureza = Arg_dureza[0].split("---");
                                     out.print("<td align='center'>" + ((obj_dureza[3] == null) ? "N/A" : obj_dureza[3]) + "</td>");
                                     out.print("<td align='center'>" + ((obj_dureza[2] == null) ? "N/A" : obj_dureza[2]) + "</td>");
                                     out.print("<td align='center'>" + ((obj_dureza[1] == null) ? "N/A" : obj_dureza[1]) + "</td>");

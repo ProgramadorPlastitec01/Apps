@@ -5,6 +5,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import Metodos.Consulta_formulas;
 
 public class RolloJpaController {
 
@@ -264,11 +265,11 @@ public class RolloJpaController {
         }
     }
 
-    public boolean Registrar_rollo(int irg, int nmr, double pdi, double pdc, double pdf, double pscmin, double pscmax, double amg, double abb, String pbt, String ptc, String upr, double prm1, double prm2, String nrf) {
+    public boolean Registrar_rollo(int irg, int nmr, double pdi, double pdc, double pdf, double pscmin, double pscmax, double amg, double abb, String pbt, String ptc, String upr, double prm1, double prm2, String nrf, String blr) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
         try {
-            Query q = etm.createNativeQuery("CALL `sp_rlo_r_rollo`('" + irg + "','" + nmr + "','" + pdi + "','" + pdc + "','" + pdf + "','" + pscmin + "','" + pscmax + "','" + amg + "','" + abb + "','" + pbt + "','" + ptc + "','" + upr + "','" + prm1 + "','" + prm2 + "','" + nrf + "')");
+            Query q = etm.createNativeQuery("CALL `sp_rlo_r_rollo`('" + irg + "','" + nmr + "','" + pdi + "','" + pdc + "','" + pdf + "','" + pscmin + "','" + pscmax + "','" + amg + "','" + abb + "','" + pbt + "','" + ptc + "','" + upr + "','" + prm1 + "','" + prm2 + "','" + nrf + "','" + blr + "')");
             int exitoso = q.executeUpdate();
             etm.getTransaction().commit();
             etm.clear();
@@ -283,11 +284,11 @@ public class RolloJpaController {
         }
     }
 
-    public boolean Modificar_rollo(int irg, int nmr, double pdi, double pdc, double pdf, double pscmin, double pscmax, double amg, double abb, String pbt, String ptc, String upr, double prm1, double prm2, String nrf) {
+    public boolean Modificar_rollo(int irg, int nmr, double pdi, double pdc, double pdf, double pscmin, double pscmax, double amg, double abb, String pbt, String ptc, String upr, double prm1, double prm2, String nrf, String blr) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
         try {
-            Query q = etm.createNativeQuery("CALL `sp_rlo_m_rollo`('" + irg + "','" + nmr + "','" + pdi + "','" + pdc + "','" + pdf + "','" + pscmin + "','" + pscmax + "','" + amg + "','" + abb + "','" + pbt + "','" + ptc + "','" + upr + "','" + prm1 + "','" + prm2 + "','" + nrf + "')");
+            Query q = etm.createNativeQuery("CALL `sp_rlo_m_rollo`('" + irg + "','" + nmr + "','" + pdi + "','" + pdc + "','" + pdf + "','" + pscmin + "','" + pscmax + "','" + amg + "','" + abb + "','" + pbt + "','" + ptc + "','" + upr + "','" + prm1 + "','" + prm2 + "','" + nrf + "','" + blr + "')");
             int exitoso = q.executeUpdate();
             etm.getTransaction().commit();
             etm.clear();
@@ -436,11 +437,23 @@ public class RolloJpaController {
         }
     }
 
-    public List Generacion_estadistica_resumido(String nod, int ipd, String lpd, int iln, String fin, String ffn, int rin, int rfn, int rsm) {
+    public List Generacion_estadistica_resumido(String nod, int ipd, String lpd, int iln, String fin, String ffn, int rin, int rfn, int rsm, String ltc) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
         try {
-            Query q = etm.createNativeQuery("CALL `sp_rlo_generacion_estadistico_resumido`('" + nod + "'," + ipd + ",'" + lpd + "'," + iln + ",'" + fin.replace("/", "-") + "','" + ffn.replace("/", "-") + "'," + rin + "," + rfn + "," + rsm + ")");
+            double drz = 0;
+            try {
+                Consulta_formulas formulasJpa = new Consulta_formulas();
+                List lst_dureza = null;
+                lst_dureza = formulasJpa.Traer_lote_control_formulas("" + ltc);
+                if (lst_dureza != null) {
+                    String[] Arg_dureza = lst_dureza.toString().replace("]", "").replace("[", "").replace(",", "").split("////");
+                    drz = Double.parseDouble(Arg_dureza[0]);
+                }
+            } catch (Exception e) {
+                drz = 0;
+            }
+            Query q = etm.createNativeQuery("CALL `sp_rlo_generacion_estadistico_resumido`('" + nod + "'," + ipd + ",'" + lpd + "'," + iln + ",'" + fin.replace("/", "-") + "','" + ffn.replace("/", "-") + "'," + rin + "," + rfn + "," + rsm + ",'" + drz + "')");
             List consulta = q.getResultList();
             etm.getTransaction().commit();
             etm.clear();

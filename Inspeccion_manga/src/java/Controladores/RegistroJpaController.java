@@ -682,62 +682,62 @@ public class RegistroJpaController {
     }
 
     ///DUREZAS
-    public List Traer_control_durezas_lote(String ltc) {
-        EntityManager etm = getEntityManager();
-        etm.getTransaction().begin();
-        try {
-            Query q = etm.createNativeQuery("CALL `sp_drz_t_durezas_lote`('" + ltc + "')");
-            List consulta = q.getResultList();
-            etm.getTransaction().commit();
-            etm.clear();
-            etm.close();
-            if (consulta.isEmpty()) {
-                return null;
-            } else {
-                return consulta;
-            }
-        } catch (Exception ex) {
-            return null;
-        }
-    }
+//    public List Traer_control_durezas_lote(String ltc) {
+//        EntityManager etm = getEntityManager();
+//        etm.getTransaction().begin();
+//        try {
+//            Query q = etm.createNativeQuery("CALL `sp_drz_t_durezas_lote`('" + ltc + "')");
+//            List consulta = q.getResultList();
+//            etm.getTransaction().commit();
+//            etm.clear();
+//            etm.close();
+//            if (consulta.isEmpty()) {
+//                return null;
+//            } else {
+//                return consulta;
+//            }
+//        } catch (Exception ex) {
+//            return null;
+//        }
+//    }
 
-    public List Traer_lote_control_formulas(String ltc) {
-        EntityManager etm = getEntityManager();
-        etm.getTransaction().begin();
-        try {
-            Query q = etm.createNativeQuery("CALL `sp_fml_t_lote_formula`('" + ltc + "')");
-            List consulta = q.getResultList();
-            etm.getTransaction().commit();
-            etm.clear();
-            etm.close();
-            if (consulta.isEmpty()) {
-                return null;
-            } else {
-                return consulta;
-            }
-        } catch (Exception ex) {
-            return null;
-        }
-    }
+//    public List Traer_lote_control_formulas(String ltc) {
+//        EntityManager etm = getEntityManager();
+//        etm.getTransaction().begin();
+//        try {
+//            Query q = etm.createNativeQuery("CALL `sp_fml_t_lote_formula`('" + ltc + "')");
+//            List consulta = q.getResultList();
+//            etm.getTransaction().commit();
+//            etm.clear();
+//            etm.close();
+//            if (consulta.isEmpty()) {
+//                return null;
+//            } else {
+//                return consulta;
+//            }
+//        } catch (Exception ex) {
+//            return null;
+//        }
+//    }
 
-    public List Traer_lote_control_durezas(String ltc) {
-        EntityManager etm = getEntityManager();
-        etm.getTransaction().begin();
-        try {
-            Query q = etm.createNativeQuery("CALL `sp_fml_t_lote_dureza`('" + ltc + "')");
-            List consulta = q.getResultList();
-            etm.getTransaction().commit();
-            etm.clear();
-            etm.close();
-            if (consulta.isEmpty()) {
-                return null;
-            } else {
-                return consulta;
-            }
-        } catch (Exception ex) {
-            return null;
-        }
-    }
+//    public List Traer_lote_control_durezas(String ltc) {
+//        EntityManager etm = getEntityManager();
+//        etm.getTransaction().begin();
+//        try {
+//            Query q = etm.createNativeQuery("CALL `sp_fml_t_lote_dureza`('" + ltc + "')");
+//            List consulta = q.getResultList();
+//            etm.getTransaction().commit();
+//            etm.clear();
+//            etm.close();
+//            if (consulta.isEmpty()) {
+//                return null;
+//            } else {
+//                return consulta;
+//            }
+//        } catch (Exception ex) {
+//            return null;
+//        }
+//    }
 
     public List ConsultarRollosxRegistro(int idR) {
         EntityManager etm = getEntityManager();

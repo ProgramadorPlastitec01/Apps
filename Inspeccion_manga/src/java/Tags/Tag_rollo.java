@@ -349,7 +349,13 @@ public class Tag_rollo extends TagSupport {
                                 + "val1.add(Validate.Parametros_minimos, { match: 'Txt_ancho_bobina_min'} );"
                                 + "val1.add(Validate.Parametros_maximos, { match: 'Txt_ancho_bobina_max'} );"
                                 + "</script>");
-//</editor-fold>
+                        //</editor-fold>
+                        //<editor-fold defaultstate="collapsed" desc="BORDER LATERALES ROLLO">
+                        out.print("<b>Bordes Lateral Rollo :</b><br />");
+                        out.print("<input type='radio' name='Bdr_ltr_rollo' id='Bdr_ltr_rollo_si' value='SI' />SI");
+                        out.print("<input type='radio' name='Bdr_ltr_rollo' id='Bdr_ltr_rollo_no' value='NO' checked/>NO<br />");
+                        //</editor-fold>
+                        out.print("</td>");
                         out.print("</td>");
                         out.print("<td valign='top'><h3>Peso</h3>");
                         //<editor-fold defaultstate="collapsed" desc="PESO">
@@ -424,6 +430,9 @@ public class Tag_rollo extends TagSupport {
                         }
 //</editor-fold>
                         out.print("</td>");
+                        out.print("</tr>");
+                        out.print("<tr>");
+
                         out.print("</tr>");
                         out.print("</table>");
                         if (allowed) {
@@ -560,11 +569,13 @@ public class Tag_rollo extends TagSupport {
                         } else {
                             out.print("<td colspan='7' align='center'><b class='negro'>MANUAL DE REGISTROS</b></td>");
                         }
-                        out.print("<td colspan='3' align='center'><b class='negro'>CODIGO<br />R-PI-011 V</b></td>");
+                        out.print("<td colspan='3' align='center'><b class='negro'>CODIGO<br />R-PI-011</b></td>");
                         out.print("</tr>");
                         out.print("<tr>");
                         out.print("<td " + ((fecha_convert >= 20160317) ? "colspan='9'" : "colspan='7'") + " align='center'><b class='negro'>INSPECCION CALIDAD<br />EXTRUSION MANGA</b></td>");
-                        if (fecha_convert >= 20160317) {
+                        if (fecha_convert >= 20260305) {
+                            out.print("<td colspan='3' align='center'><b class='negro'>VERSION 7</b></td>");
+                        } else if (fecha_convert >= 20160317) {
                             out.print("<td colspan='3' align='center'><b class='negro'>VERSION 6</b></td>");
                         } else {
                             out.print("<td colspan='3' align='center'><b class='negro'>VERSION 5</b></td>");
@@ -613,6 +624,9 @@ public class Tag_rollo extends TagSupport {
                         }
                         out.print("<th rowspan='2'>Particulas</th>");
 //                        out.print("<th rowspan='2'>Curvatura</th>");
+                        if (fecha_convert >= 20260305) {
+                            out.print("<th rowspan='2'>Bordes Laterales Rollo</th>");
+                        }
                         out.print("<th rowspan='2' colspan='2'>Registros Calidad</th>");
                         out.print("</tr>");
                         out.print("<tr>");
@@ -724,6 +738,12 @@ public class Tag_rollo extends TagSupport {
                                 }
                                 out.print("<td align='center'>" + obj_rollos[13] + "</td>");
                             }
+                            //<editor-fold defaultstate="collapsed" desc="BORDES LATERAL ROLLO">
+                            if (fecha_convert >= 20260305) {
+                                out.print("<td align='center'>" + (obj_rollos[30] == null ? "<span style='color:orange'>- Sin datos - </span>" : obj_rollos[30]) + "</td>");
+                            }
+                            //</editor-fold>
+
                             // CURVATURA
 //                            int curva = 0;
 //                            double dtax = 0;
@@ -746,7 +766,6 @@ public class Tag_rollo extends TagSupport {
 //                            } else {
 //                                out.print("<td align='center'> - </td>");
 //                            }
-
                             out.print("<td align='center' style='display: flex;justify-content: space-evenly;'>");
                             if ((Integer) obj_registro[15] == 1) {
                                 if (obj_registro[56].toString().equals("1")) {
@@ -1300,7 +1319,7 @@ public class Tag_rollo extends TagSupport {
                     if (Integer.parseInt(obj_registro[55].toString()) > 0) {
                         if (fecha_convert >= 20251019) {
                             out.print("<td colspan='5' align='center'><b class='negro'>VERSION 2</b></td>");
-                        }else if (fecha_convert >= 20161221) {
+                        } else if (fecha_convert >= 20161221) {
                             out.print("<td colspan='4' align='center'><b class='negro'>VERSION 1</b></td>");
                         } else {
                             out.print("<td colspan='4' align='center'><b class='negro'>VERSION 0</b></td>");

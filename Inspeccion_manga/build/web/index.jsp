@@ -31,7 +31,6 @@
         </style>
     </head>
     <body id="subpage" style="background: linear-gradient(to left,#f5f5f6 50%, #28794B 50%);">
-        <!--<div style='background-color:#c10937;color:#FFF;' align='center'><MARQUEE>............VERSION DE PRUEBA  CAMILO YO VERE ...........</MARQUEE></div>-->
         <Alertas:Alertas />
     <center>
         <br /><br />
@@ -49,7 +48,8 @@
                     <br /><br /><input type="submit" class='Iniciar_sesion' value="Iniciar" style='background-color: #f5f5f6;color:#28794B'/><br/><br/>
                     <!--<b style='color: #f5f5f6'>Va 07.26.05</b>-->
                     <!--<b style='color: #f5f5f6'>Va 10.28.06</b>-->
-                    <b style='color: #f5f5f6'>Va 10.28.06</b>
+                    <!--<b style='color: #f5f5f6'>Va 10.28.06</b>-->
+                    <b style='color: #f5f5f6'>Va 11.28.07</b>
                 </form>
             </div>
             <div style="float: left;width: 300px;height: 300px;color: #f5f5f6;">
@@ -58,7 +58,7 @@
             </div>
             <div style="float: left;width: 600px;height: 180px;background: linear-gradient(to left,#f5f5f6 50% ,#f5f5f6 50% );color: grey;font-weight: bold;">
                 <div style="width: 500px;margin-top: 20px;text-align: justify" align="left">
-                    <p align="justify"><b>InspecciónCalidad </b>Este sistema de información es el encargado de facilitar el manejo de datos de los registros <b>R-PI-011</b> , <b>R-GC-078 / 122 / 159 </b> y <b> R-GC-097</b>.<br />El sistema como ayuda virtual permite al usuario acceder a la información de manera
+                    <p align="justify"><b>Inspección Manga </b>Este sistema de información es el encargado de facilitar el manejo de datos de los registros <b>R-PI-011</b> , <b>R-GC-078 / 122 / 159 </b> y <b> R-GC-097</b>.<br />El sistema como ayuda virtual permite al usuario acceder a la información de manera
                         <b>segura, rapida </b>y<b> confiable</b> para poder realizar en cada uno de los procesos del registro una adecuada manipulación.</p>
                 </div>
             </div>

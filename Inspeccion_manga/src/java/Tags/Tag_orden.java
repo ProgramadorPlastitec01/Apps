@@ -17,6 +17,7 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 import Controladores.ParametroJpaController;
 import Metodos.Consultas_metrologia;
+import Metodos.Consulta_formulas;
 
 public class Tag_orden extends TagSupport {
 
@@ -40,6 +41,7 @@ public class Tag_orden extends TagSupport {
             EntradaMaterialJpaController jpacemt = new EntradaMaterialJpaController();
             ParametroJpaController ParametroJpa = new ParametroJpaController();
             Consultas_metrologia metrologiaJpa = new Consultas_metrologia();
+            Consulta_formulas formulasJpa = new Consulta_formulas();
             int contador = 0;
             int equipos = 0;
             int tipo_consulta = 0;
@@ -2060,13 +2062,13 @@ public class Tag_orden extends TagSupport {
                             out.print("<tr>");
                             out.print("<th rowspan='2'>" + obj_registros[2] + "</th>");
                             out.print("<td rowspan='3' align='center'><div class='girar'><b class='extrusion'>Producción<br />" + obj_registros[3] + "</b></div></td>");
-                            lst_lote = jpacrgt.Traer_lote_control_formulas("" + obj_registros[5]);
+                            lst_lote = formulasJpa.Traer_lote_control_formulas("" + obj_registros[6]);
                             if (lst_lote != null) {
-                                enlace = "<a style='text-decoration:none;color:black;decoration: underline;' href='http://" + global_ip + ":" + global_port + "/" + global_app + "/Formula?opc=18&Txt_lote=" + obj_registros[5] + "' target='_blank'>" + obj_registros[5] + "</a>";
+                                enlace = "<a style='text-decoration:none;color:black;decoration: underline;' href='http://" + global_ip + ":" + global_port + "/" + global_app + "/Formula?opc=18&Txt_lote=" + obj_registros[6] + "' target='_blank'>" + obj_registros[6] + "</a>";
                             } else {
-                                enlace = "" + obj_registros[5];
+                                enlace = "" + obj_registros[6];
                             }
-                            out.print("<td><b>Lote " + ((estria_ventana > 0) ? "C.:</b><br />" + enlace : "prod.:</b><br />" + obj_registros[5] + "") + "</td>");
+                            out.print("<td><b>Lote " + ((estria_ventana > 0) ? "C:</b><br />" + enlace : "prod:</b><br />" + obj_registros[5] + "") + "</td>");
                             if (material == 1 || estria_ventana <= 1) {
                                 out.print("<td><b>Factor de medida:</b><br /><b class='negro'>N/A</b></td>");
                             } else if (estria_ventana == 2) {
@@ -2225,7 +2227,7 @@ public class Tag_orden extends TagSupport {
                             out.print("</td>");
                             out.print("</tr>");
                             out.print("<tr>");
-                            lst_lote = jpacrgt.Traer_lote_control_formulas("" + obj_registros[6]);
+                            lst_lote = formulasJpa.Traer_lote_control_formulas("" + obj_registros[6]);
                             if (lst_lote != null) {
                                 enlace = "<a style='text-decoration:none;color:black;decoration: underline;' href='http://" + global_ip + ":" + global_port + "/" + global_app + "/Formula?opc=18&Txt_lote=" + obj_registros[6] + "' target='_blank'>" + obj_registros[6] + "</a>";
                             } else {
@@ -2251,30 +2253,33 @@ public class Tag_orden extends TagSupport {
                             //<editor-fold defaultstate="collapsed" desc="ENLACE DUREZAS">
                             if (estria_ventana > 0) {
                                 try {
-                                    lst_durezas = jpacrgt.Traer_control_durezas_lote("" + obj_registros[5]);
-                                    Object[] obj_dureza = (Object[]) lst_durezas.get(0);
-                                    dureza = "<b class='" + ((Integer.parseInt(obj_dureza[9].toString()) == 0) ? "rojo" : "verde") + "'>" + obj_dureza[11] + "</b>";
+                                    lst_durezas = formulasJpa.Traer_control_durezas_lote("" + obj_registros[6]);
+                                    String[] Arg_dureza = lst_durezas.toString().replace("]", "").replace("[", "").replace(",", "").split("////");
+                                    String[] obj_dureza = Arg_dureza[0].split("---");
+                                    dureza = "<b class='" + ((Integer.parseInt(obj_dureza[9]) == 0) ? "rojo" : "verde") + "'>" + obj_dureza[11] + "</b>";
                                 } catch (Exception e) {
                                     dureza = "N/A";
                                 }
                                 try {
-                                    lst_durezas = jpacrgt.Traer_control_durezas_lote("" + obj_registros[6]);
-                                    Object[] obj_dureza_alt = (Object[]) lst_durezas.get(0);
-                                    dureza = dureza + " / <b class='" + ((Integer.parseInt(obj_dureza_alt[9].toString()) == 0) ? "rojo" : "verde") + "'>" + obj_dureza_alt[11] + "</b>";
+                                    lst_durezas = formulasJpa.Traer_control_durezas_lote("" + obj_registros[6]);
+                                    String[] Arg_dureza = lst_durezas.toString().replace("]", "").replace("[", "").replace(",", "").split("////");
+                                    String[] obj_dureza_alt = Arg_dureza[0].split("---");
+                                    dureza = dureza + " / <b class='" + ((Integer.parseInt(obj_dureza_alt[9]) == 0) ? "rojo" : "verde") + "'>" + obj_dureza_alt[11] + "</b>";
                                 } catch (Exception e) {
                                     dureza = "N/A";
                                 }
                             } else {
                                 try {
-                                    lst_durezas = jpacrgt.Traer_control_durezas_lote("" + obj_registros[6]);
-                                    Object[] obj_dureza = (Object[]) lst_durezas.get(0);
-                                    dureza = "<b class='" + ((Integer.parseInt(obj_dureza[9].toString()) == 0) ? "rojo" : "verde") + "'>" + obj_dureza[11] + "</b>";
+                                    lst_durezas = formulasJpa.Traer_control_durezas_lote("" + obj_registros[6]);
+                                    String[] Arg_dureza = lst_durezas.toString().replace("]", "").replace("[", "").replace(",", "").split("////");
+                                    String[] obj_dureza = Arg_dureza[0].split("---");
+                                    dureza = "<b class='" + ((Integer.parseInt(obj_dureza[9]) == 0) ? "rojo" : "verde") + "'>" + obj_dureza[11] + "</b>";
                                 } catch (Exception e) {
                                     dureza = "N/A";
                                 }
                             }
                             out.print("<td><b>Dureza: </b><br />" + ((Double.parseDouble(obj_registros[18].toString()) > 0) ? obj_registros[18] + "" : dureza) + "</td>");
-//</editor-fold>
+                            //</editor-fold>
                             out.print("<td>");
                             String[] reportantes_gc = null;
                             reportantes_gc = obj_registros[12].toString().split(",");

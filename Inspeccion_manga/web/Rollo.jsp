@@ -234,17 +234,17 @@
             <Menu:Menu />
             <Rollo:Rollo/>
             <script type="text/javascript" language="javascript">
-                function mostrarConvencion(id) {
+                    function mostrarConvencion(id) {
                     if (document.getElementById("Ventana" + id).style.display === "none") {
-                        document.getElementById("Ventana" + id).style.display = "block";
+                    document.getElementById("Ventana" + id).style.display = "block";
                     } else if (document.getElementById("Ventana" + id).style.display === "block") {
-                        document.getElementById("Ventana" + id).style.display = "none";
+                    document.getElementById("Ventana" + id).style.display = "none";
                     }
-                }
-            </script>
-        </div>
-        <Alertas:Alertas />
-    </body>
-</html>
-
-
+                    }
+                    </scri                    pt>
+                </div>
+                <Alertas:Alertas />
+                    </body>
+                    </html>
+                        
+                        
