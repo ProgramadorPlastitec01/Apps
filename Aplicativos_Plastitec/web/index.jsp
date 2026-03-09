@@ -313,7 +313,7 @@
             }
         </script>
 
-        <div class="cont_case" id="cont_case">
+        <!--<div class="cont_case" id="cont_case">
             <i class="fas fa-caret-right" style="font-size: 39px;position: absolute;right: -14px;top: -5px;color: #101010; "></i>
             <div class="cont_numbs">
                 <h5>Contacto con TI!</h5>
@@ -334,7 +334,7 @@
                     <button type="submit" class="button-35" role="button">Subir</button>
                 </form>
             </div>
-        </div>
+        </div>-->
         <!--<div style="height: 160px; align-items: center;">-->
         <!--<img src="Argo/Interfaz/images/Wise_men.png" alt="alt" style="width: 10%;"/>-->
         <!--</div>-->
@@ -383,7 +383,7 @@
                         <div class="back Activos" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">Activos</h1>
                             <button class="button-33 activos" role="button" 
-                                    onclick="javascript:window.open('http://172.16.2.111:8084/Activos/', '', 'width=auto,height=auto,left=50,\n\
+                                    onclick="javascript:window.open('http://172.16.2.111:8080/Activos/', '', 'width=auto,height=auto,left=50,\n\
 										top=50,toolbar=yes');
                                             void 0">Ingresar</button>
                         </div>
@@ -398,7 +398,7 @@
                         <div class="back BitacoraC" style="background: #ffffffeb;"> 
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">Bitacora Calidad</h1>
                             <button class="button-33 bc" role="button" 
-                                    onclick="javascript:window.open('http://172.16.2.111:8084/Bitacora_calidad/', '', 'width=auto,height=auto,left=50,\n\
+                                    onclick="javascript:window.open('http://172.16.2.111:8080/Bitacora_calidad/', '', 'width=auto,height=auto,left=50,\n\
 										top=50,toolbar=yes');
                                             void 0">Ingresar</button>
                         </div>
@@ -413,7 +413,7 @@
                         <div class="back BitacoraG" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">Bitacora General</h1>
                             <button class="button-33 bg" role="button" 
-                                    onclick="javascript:window.open('http://172.16.2.111:8084/Bitacora/', '', 'width=auto,height=auto,left=50,\n\
+                                    onclick="javascript:window.open('http://172.16.2.111:8080/Bitacora/', '', 'width=auto,height=auto,left=50,\n\
 										top=50,toolbar=yes');
                                             void 0">Ingresar</button>
                         </div>
@@ -445,7 +445,7 @@
                         <div class="back BitacoraP" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">COA</h1>
                             <button class="button-33 coa" role="button" 
-                                    onclick="javascript:window.open('http://localhost:8084/COA/', '', 'width=auto,height=auto,left=50,\n\
+                                    onclick="javascript:window.open('http://172.16.2.117:8084/COA/index.jsp', '', 'width=auto,height=auto,left=50,\n\
 										top=50,toolbar=yes');
                                             void 0">Ingresar</button>
                         </div>
@@ -525,10 +525,14 @@
                                      onclick="javascript:window.open('http://172.16.2.111:8084/CVP/', '', 'width=auto,height=auto,left=50,\n\
 										top=50,toolbar=yes');
                                              void 0">Ingresar</button>-->
-                            <button  class="button-33 cVp" role="button" 
+                            <!--<button  class="button-33 cVp" role="button" 
                                      onclick="javascript:window.open('http://172.16.1.247:8080/CVP/', '', 'width=auto,height=auto,left=50,\n\
 										top=50,toolbar=yes');
-                                             void 0">Ingresar</button>
+                                             void 0">Ingresar</button>-->
+							<button  class="button-33 cVp" role="button" 
+                                     onclick="javascript:window.open('http://172.16.2.111:8080/CVP/', '', 'width=auto,height=auto,left=50,\n\
+										top=50,toolbar=yes');
+                                             void 0">Ingresar</button>				 
                         </div>
                     </div>
                 </div>
@@ -544,10 +548,14 @@
                                      onclick="javascript:window.open('http://172.16.2.111:8084/Controles_microbiologicos/', '', 'width=auto,height=auto,left=50,\n\
 										top=50,toolbar=yes');
                                              void 0">Ingresar</button>-->
-                            <button  class="button-33 mcb" role="button" 
+                            <!--<button  class="button-33 mcb" role="button" 
                                      onclick="javascript:window.open('http://172.16.1.247:8080/Controles_microbiologicos/', '', 'width=auto,height=auto,left=50,\n\
 										top=50,toolbar=yes');
-                                             void 0">Ingresar</button>
+                                             void 0">Ingresar</button>-->
+							<button  class="button-33 mcb" role="button" 
+                                     onclick="javascript:window.open('http://172.16.2.111:8080/Controles_microbiologicos/', '', 'width=auto,height=auto,left=50,\n\
+										top=50,toolbar=yes');
+                                             void 0">Ingresar</button>			 
                         </div>
                     </div>
                 </div>
@@ -573,14 +581,18 @@
                         </div>
                         <div class="back DyD" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">D&D</h1>
-                            <button  class="button-33 dyd" role="button" 
+                           <!-- <button  class="button-33 dyd" role="button" 
                                      onclick="javascript:window.open('http://172.16.1.247:8080/Diseno_desarrollo/index.jsp', '', 'width=auto,height=auto,left=50,\n\
 										top=50,toolbar=yes');
-                                             void 0">Ingresar</button>
+                                             void 0">Ingresar</button>-->
 <!--                            <button  class="button-33 dyd" role="button" 
                                      onclick="javascript:window.open('http://172.16.2.111:8084/Diseno_desarrollo/index.jsp', '', 'width=auto,height=auto,left=50,\n\
 										top=50,toolbar=yes');
                                              void 0">Ingresar</button>-->
+								<button  class="button-33 dyd" role="button" 
+                                     onclick="javascript:window.open('http://172.16.2.111:8080/Diseno_desarrollo/index.jsp', '', 'width=auto,height=auto,left=50,\n\
+										top=50,toolbar=yes');
+                                             void 0">Ingresar</button>			 
                         </div>
                     </div>
                 </div>
@@ -681,14 +693,18 @@
                         </div>
                         <div class="back Locativos" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">Locativos</h1>
-                            <button  class="button-33 lct" role="button" 
+                            <!--<button  class="button-33 lct" role="button" 
                                      onclick="javascript:window.open('http://172.16.1.247:8080/Locativos/index.jsp', '', 'width=auto,height=auto,left=50,\n\
 										top=50,toolbar=yes');
-                                             void 0">Ingresar</button>
+                                             void 0">Ingresar</button>-->
 <!--                            <button  class="button-33 lct" role="button" 
                                      onclick="javascript:window.open('http://172.16.2.111:8084/Locativos/index.jsp', '', 'width=auto,height=auto,left=50,\n\
 										top=50,toolbar=yes');
                                              void 0">Ingresar</button>-->
+								<button  class="button-33 lct" role="button" 
+                                     onclick="javascript:window.open('http://172.16.2.111:8080/Locativos/index.jsp', '', 'width=auto,height=auto,left=50,\n\
+										top=50,toolbar=yes');
+                                             void 0">Ingresar</button>			 
                         </div>
                     </div>
                 </div>
@@ -700,14 +716,18 @@
                         </div>
                         <div class="back Nexus" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">Nexus</h1>
-                            <button  class="button-33 nx" role="button" 
+                            <!--<button  class="button-33 nx" role="button" 
                                      onclick="javascript:window.open('http://172.16.1.247:8080/AppTI/index.jsp', '', 'width=auto,height=auto,left=50,\n\
 										top=50,toolbar=yes');
-                                             void 0">Ingresar</button>
+                                             void 0">Ingresar</button>-->
 <!--                            <button  class="button-33 nx" role="button" 
                                      onclick="javascript:window.open('http://172.16.1.247:8080/AppTI/index.jsp', '', 'width=auto,height=auto,left=50,\n\
 										top=50,toolbar=yes');
                                              void 0">Ingresar</button>-->
+								<button  class="button-33 nx" role="button" 
+                                     onclick="javascript:window.open('http://172.16.2.111:8080/AppTI/index.jsp', '', 'width=auto,height=auto,left=50,\n\
+										top=50,toolbar=yes');
+                                             void 0">Ingresar</button>			 
                         </div>
                     </div>
                 </div>
@@ -722,7 +742,7 @@
                             <button  class="button-33 plas" role="button" 
                                      onclick="javascript:window.open('http://172.16.2.119/TagsApp4/auth/signin', '', 'width=auto,height=auto,left=50,\n\
 										top=50,toolbar=yes');
-                                             void 0">Ingresar</button>
+                                             void 0">Ingresar</button>											 
                         </div>
                     </div>
                 </div>
@@ -735,7 +755,7 @@
                         <div class="back PMPMF" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;"> PMP MTF</h1>
                             <button  class="button-33 pmt" role="button" 
-                                     onclick="javascript:window.open('http://172.16.2.111:8084/PMP_MF/', '', 'width=auto,height=auto,left=50,\n\
+                                     onclick="javascript:window.open('http://172.16.2.111:8080/PMP_MF/', '', 'width=auto,height=auto,left=50,\n\
 										top=50,toolbar=yes');
                                              void 0">Ingresar</button>
                         </div>
@@ -750,7 +770,7 @@
                         <div class="back PMPMI" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">PMP MI</h1>
                             <button  class="button-33 pmi" role="button" 
-                                     onclick="javascript:window.open('http://172.16.2.111:8084/PMP/', '', 'width=auto,height=auto,left=50,\n\
+                                     onclick="javascript:window.open('http://172.16.2.111:8080/PMP/', '', 'width=auto,height=auto,left=50,\n\
 										top=50,toolbar=yes');
                                              void 0">Ingresar</button>
                         </div>
@@ -772,7 +792,7 @@
                     </div>
                 </div>
 
-                <div class="tile red">
+               <!-- <div class="tile red">
                     <div class="card">
                         <div class="front">
                             <img src="Argo/Interfaz/images/Redeac_2.png" alt="tec" >
@@ -782,7 +802,7 @@
                             <button  class="button-33 rdc" role="button"><a style="color:white; text-decoration: none" target="_blank" href="http://172.16.2.117:8084/REDEAC">Ingresar</a></button>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <div class="tile green">
                     <div class="card">
@@ -829,14 +849,18 @@
                         </div>
                         <div class="back REUNION" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">Reunion PT</h1>
-                            <button  class="button-33 rpt" role="button" 
+                            <!--<button  class="button-33 rpt" role="button" 
                                      onclick="javascript:window.open('http://172.16.1.247:8080/Reunion/', '', 'width=auto,height=auto,left=50,\n\
 										top=50,toolbar=yes');
-                                             void 0">Ingresar</button>
+                                             void 0">Ingresar</button>-->
 <!--                            <button  class="button-33 rpt" role="button" 
                                      onclick="javascript:window.open('http://172.16.2.111:8084/Reunion/', '', 'width=auto,height=auto,left=50,\n\
 										top=50,toolbar=yes');
                                              void 0">Ingresar</button>-->
+								<button  class="button-33 rpt" role="button" 
+                                     onclick="javascript:window.open('http://172.16.2.111:8080/Reunion/', '', 'width=auto,height=auto,left=50,\n\
+										top=50,toolbar=yes');
+                                             void 0">Ingresar</button>			 
                         </div>
                     </div>
                 </div>
@@ -867,7 +891,7 @@
                         <div class="back SIRH" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">SIRH</h1>
                             <button  class="button-33 srh" role="button" 
-                                     onclick="javascript:window.open('http://172.16.2.111:8084/SIRH/', '', 'width=auto,height=auto,left=50,\n\
+                                     onclick="javascript:window.open('http://172.16.2.111:8080/SIRH/', '', 'width=auto,height=auto,left=50,\n\
 										top=50,toolbar=yes');
                                              void 0">Ingresar</button>
                         </div>
@@ -918,7 +942,7 @@
                                                                  onclick="javascript:window.open('https://sagrilaft.plastitec-sa.com/SAGRILAFT/', '', 'width=auto,height=auto,left=50,\n\top=50,toolbar=yes');
                                                                          void 0">Ingresar</button>-->
                             <button  class="button-33 rl" role="button" 
-                                     onclick="javascript:window.open('http://172.16.2.98:8084/SAGRILAFT/', '', 'width=auto,height=auto,left=50,\n\top=50,toolbar=yes');
+                                     onclick="javascript:window.open('https://sagrilaft.plastitec-sa.com/SAGRILAFT/', '', 'width=auto,height=auto,left=50,\n\top=50,toolbar=yes');
                                              void 0">Ingresar</button>
                             <!--<button  class="button-33 rl" role="button" 
                                      onclick="javascript:window.open('http://172.16.2.117:8084/Aplicativos_Plastitec/Ventana_Mantenimiento.jsp', '', 'width=auto,height=auto,left=50,\n\
