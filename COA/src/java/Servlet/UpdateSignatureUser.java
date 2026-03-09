@@ -2,7 +2,6 @@ package Servlet;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -20,34 +19,71 @@ public class UpdateSignatureUser extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Obtener archivo subido
         UserControllerJpa UserJpa = new UserControllerJpa();
-        Part filePart = request.getPart("File");
-
-        String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
         String nuevaFirma = null;
 
-        if (fileName != null && !fileName.isEmpty()) {
+        try {
 
-            // Ruta dentro del proyecto
-            String uploadPath = getServletContext().getRealPath("") + "Interface/Uploads/Signature/";
+            Part filePart = request.getPart("File");
+            String fileName = getFileName(filePart);
 
-            File uploadDir = new File(uploadPath);
-            if (!uploadDir.exists()) {
-                uploadDir.mkdirs();
+            if (fileName != null && !fileName.isEmpty()) {
+
+                // Ruta real dentro del proyecto
+                String uploadPath = getServletContext().getRealPath("/Interface/Uploads/Signature/");
+
+                File uploadDir = new File(uploadPath);
+
+                if (!uploadDir.exists()) {
+                    uploadDir.mkdirs();
+                }
+
+                // Guardar archivo
+                filePart.write(uploadPath + File.separator + fileName);
+
+                nuevaFirma = fileName;
             }
 
-            // Guardar el archivo en la carpeta
-            filePart.write(uploadPath + fileName);
+            int idUser = Integer.parseInt(request.getParameter("idUser"));
 
-            // Guardar el nombre de archivo en la BD
-            nuevaFirma = fileName;
+            if (nuevaFirma != null) {
+                UserJpa.UpdateSignature(idUser, nuevaFirma);
+            }
+
+            response.sendRedirect("Profile?opt=1&msg=FirmaActualizada");
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            response.sendRedirect("Profile?opt=1&msg=ErrorFirma");
+
+        }
+    }
+
+    // Método compatible con Tomcat 7
+    private String getFileName(Part part) {
+
+        String contentDisp = part.getHeader("content-disposition");
+
+        if (contentDisp == null) {
+            return null;
         }
 
-        // Ejemplo: actualizar firma en BD
-         int idUser = Integer.parseInt(request.getParameter("idUser"));
-         UserJpa.UpdateSignature(idUser, nuevaFirma);
+        String[] tokens = contentDisp.split(";");
 
-        response.sendRedirect("Profile?opt=1&msg=FirmaActualizada");
+        for (String token : tokens) {
+
+            if (token.trim().startsWith("filename")) {
+
+                String fileName = token.substring(token.indexOf("=") + 2, token.length() - 1);
+
+                // Elimina ruta completa de Windows
+                fileName = fileName.substring(fileName.lastIndexOf("\\") + 1);
+
+                return fileName;
+            }
+        }
+
+        return null;
     }
 }
