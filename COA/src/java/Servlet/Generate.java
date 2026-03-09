@@ -26,7 +26,12 @@ public class Generate extends HttpServlet {
             String RolName = session.getAttribute("Rol/Nombres").toString();
             int IdRol = Integer.parseInt(session.getAttribute("idRol").toString());
             int opt = Integer.parseInt(request.getParameter("opt"));
-            String Signature = session.getAttribute("Firma").toString();
+            String Signature = "";
+            try {
+                Signature = session.getAttribute("Firma").toString();
+            } catch (Exception e) {
+                Signature = "";
+            }
             int Order = 0, IdCertificates = 0, TempDelete = 0, TempM = 0, Temp = 0, StateCerti = 0, State = 0, StateM = 0, IdCertificate = 0, Anio = 0;
             String Type = "", Product = "", Batch = "", Html = "", Code = "", Consecutive = "", Customer = "", IdCertiMasive = "", Category = "",
                     Justification = "", Record = "", FormatName = "", Message = "", Amount = "", DateDispatch = "", MaterialBatches = "", Client = "";

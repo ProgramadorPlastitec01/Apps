@@ -374,7 +374,7 @@
                                                 <td><%= ArgSummary[13]%></td>
                                                 <td class="text-center">
                                                     <div class="btn-group btn-group-sm">
-                                                        <form action="http://localhost:8084/Registros_lab/VisorResumen?opc=1"
+                                                        <form action="http://172.16.1.138/Registros_lab/VisorResumen?opc=1"
                                                               method="post"
                                                               target="_blank"
                                                               name="FormVer<%= i%>"
