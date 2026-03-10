@@ -20,7 +20,7 @@ var startDate,
         }),
         endPicker = new Pikaday({
             field: document.getElementById('end'),
-            maxDate: new Date(2025, 12, 31),
+            maxDate: new Date(2050, 12, 31),
             onSelect: function() {
                 endDate = this.getDate();
                 updateEndDate();
