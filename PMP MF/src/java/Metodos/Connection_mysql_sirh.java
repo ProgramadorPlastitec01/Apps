@@ -10,9 +10,9 @@ import java.util.List;
 
 public class Connection_mysql_sirh {
 
-    static String login = "APPS";
-    static String password = "Sirh";
-    static String url = "jdbc:mysql://172.16.2.111:3307/sirh";
+    static String login = "app_plas";
+    static String password = "94#qS0";
+    static String url = "jdbc:mysql://172.16.2.111:3306/sirh";
 
     public List Empleado_sirh(String doc) throws Exception {
         Connection conn = null;

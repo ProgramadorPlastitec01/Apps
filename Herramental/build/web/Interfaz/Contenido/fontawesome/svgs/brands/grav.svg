@@ -1,0 +1,22 @@
+urce(MultipartDataSource)</a></span> - Method in class javax.mail.<a href="../javax/mail/Multipart.html" title="class in javax.mail">Multipart</a></dt>
+<dd>
+<div class="block">Setup this Multipart object from the given MultipartDataSource.</div>
+</dd>
+<dt><span class="strong"><a href="../javax/mail/util/ByteArrayDataSource.html#setName(java.lang.String)">setName(String)</a></span> - Method in class javax.mail.util.<a href="../javax/mail/util/ByteArrayDataSource.html" title="class in javax.mail.util">ByteArrayDataSource</a></dt>
+<dd>
+<div class="block">Set the name of the data.</div>
+</dd>
+<dt><span class="strong"><a href="../javax/mail/internet/NewsAddress.html#setNewsgroup(java.lang.String)">setNewsgroup(String)</a></span> - Method in class javax.mail.internet.<a href="../javax/mail/internet/NewsAddress.html" title="class in javax.mail.internet">NewsAddress</a></dt>
+<dd>
+<div class="block">Set the newsgroup.</div>
+</dd>
+<dt><span class="strong"><a href="../javax/mail/MessagingException.html#setNextException(java.lang.Exception)">setNextException(Exception)</a></span> - Method in exception javax.mail.<a href="../javax/mail/MessagingException.html" title="class in javax.mail">MessagingException</a></dt>
+<dd>
+<div class="block">Add an exception to the end of the chain.</div>
+</dd>
+<dt><span class="strong"><a href="../com/sun/mail/smtp/SMTPTransport.html#setNoopStrict(boolean)">setNoopStrict(boolean)</a></span> - Method in class com.sun.mail.smtp.<a href="../com/sun/mail/smtp/SMTPTransport.html" title="class in com.sun.mail.smtp">SMTPTransport</a></dt>
+<dd>
+<div class="block">Set whether the NOOP command is required to return a response code
+ of 250 to indicate success.</div>
+</dd>
+<dt><span class="strong"><a href="../com/sun/mail/dsn/DispositionNotification.html#setNotifications(

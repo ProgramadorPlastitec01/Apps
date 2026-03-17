@@ -245,7 +245,11 @@ public class Tag_moveItem extends TagSupport {
                         out.print("<td>" + ObjItem[1] + "</td>");
                         out.print("<td>" + ObjItem[3] + "</td>");
                         out.print("<td>" + ObjItem[4] + "</td>");
-                        out.print("<td>" + ObjItem[8] + "</td>");
+                        try {
+                            out.print("<td>" + ObjItem[8] + "</td>");
+                        } catch (Exception e) {
+                            out.print("<td> - </td>");
+                        }
                         out.print("</tr>");
                     }
                     out.print("</tbody>");

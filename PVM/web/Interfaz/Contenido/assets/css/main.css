@@ -1,0 +1,358 @@
+html::-webkit-scrollbar {
+    width: 10px;     /* Tamaño del scroll en vertical */
+    height: 8px;    /* Tamaño del scroll en horizontal */
+    /*display: none;   Ocultar scroll */
+}
+
+html::-webkit-scrollbar-thumb {
+    background: #A4D574;
+    border-radius: 4px;
+    border: 1px solid white;
+}
+
+/* Cambiamos el fondo y agregamos una sombra cuando esté en hover */
+html::-webkit-scrollbar-thumb:hover {
+    background: #A0BA87;
+    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+/* Cambiamos el fondo cuando esté en active */
+html::-webkit-scrollbar-thumb:active {
+    background-color: #A4D574;
+}
+
+.sweet-local {
+    background-color: black;
+    /* IE8 *
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=40)";
+    /* IE8 */
+    background-color: rgba(0, 0, 0, 0.4);
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: none;
+    z-index: 200; 
+    transition: 1s;
+}
+
+.cont_reg{
+    transition: 1s;
+    margin: auto;
+    width: 55%;
+    background: white;
+    margin-top: 5%;
+    height: auto;
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid black;
+    margin-left: 30%;
+}
+.cont_role{
+    transition: 1s;
+    margin: auto;
+    width: 29%;
+    background: white;
+    margin-top: 5%;
+    height: auto;
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid black;
+    margin-left: 30%;
+}
+.cont_role_update{
+    transition: 1s;
+    margin: auto;
+    width: 39%;
+    background: white;
+    margin-top: 5%;
+    height: auto;
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid black;
+    margin-left: 30%;
+}
+.cont_role_permission{
+    transition: 1s;
+    margin: auto;
+    width: 58%;
+    background: white;
+    margin-top: 5%;
+    height: auto;
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid black;
+    margin-left: 30%;
+}
+.cont_line{
+    transition: 1s;
+    margin: auto;
+    width: 40%;
+    background: white;
+    margin-top: 5%;
+    height: auto;
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid black;
+    margin-left: 30%;
+}
+
+.cont_form_user input{
+    margin: 12px;
+}
+.cont_form_user select{
+    margin: 0px 12px 12px 12px;
+}
+
+.btn_close{
+    height: 30px;
+    padding: 3px;
+    width: 30px;
+}
+
+
+.cont_templ{
+    transition: 1s;
+    margin: auto;
+    width: 40%;
+    background: white;
+    margin-top: 5%;
+    height: auto;
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid black;
+    margin-left: 38%;
+}
+
+.cont_form_temp input{
+    margin-bottom: 12px;
+}
+
+
+.cont_form_templete{
+    transition: 1s;
+    margin: auto;
+    width: 70%;
+    background: white;
+    margin-top: 5%;
+    height: auto;
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid black;
+    margin-left: 23%;
+}
+
+.cont_form_permi{
+    transition: 1s;
+    margin: auto;
+    width: 50%;
+    background: white;
+    margin-top: 5%;
+    height: auto;
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid black;
+    margin-left: 33%;
+}
+
+.cont_form_param{
+    transition: 1s;
+    margin: auto;
+    width: 50%;
+    background: white;
+    margin-top: 5%;
+    height: auto;
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid black;
+    margin-left: 33%;
+}
+
+.cont_form_param input{
+    margin: 12px 0px 12px 12px;
+}
+
+.cm-s-duotone-dark{
+    height: 400px !important; 
+}
+
+
+.scrollbar{
+    height: 100%;
+    overflow-y: scroll;
+    margin-bottom: 10px;
+
+}
+
+.scrollbar::-webkit-scrollbar-thumb{
+    border-radius: 20px;
+    border: 1px solid white;
+    background: #00281b;
+    width: 5px;
+}
+
+.scrollbar::-webkit-scrollbar{
+    background: lightgray;
+    height: 10px;
+    width: 8px;
+    border-radius: 20px;
+    border-right: none;
+    margin-right: 1px;
+}
+.styledata{
+    box-shadow: 0 2px 6px #acb5f6;
+    background-color: #00281b;
+    color: #fff;
+    padding: 5px 15px;
+    border-radius: 3px;
+    transition: all .5s;
+    font-size: 14px !important;
+}
+
+.centrar_fila{
+    text-align: center;
+}
+
+.select2 .select2-container{
+    width: 327px !important;
+}
+
+#Cbx_area{
+    width: 327px !important;
+}
+
+#Cbx_plantilla{
+    width: 327px !important;
+}
+
+.select2{
+    min-width: 100%;
+}
+
+.btn-white{
+    box-shadow: 0 1px 3px #728394;
+    background-color: #fff;
+    color: #000;
+}
+
+.btn-white:hover{
+    background-color: black !important;
+    color: #fff !important;
+}
+
+.subTitle{
+    color: #68bb18;
+}
+
+.subTitle2{
+    font-size: 20px;
+    color: #68bb18;
+}
+
+.filaLimited{
+    max-width: 170px;
+}
+.puntos {
+    background: #FFF url("../img/divider.png") repeat;    
+    background-color: #FFF;
+    border-bottom: 1px solid #c9c9c9;
+    border-top: 1px solid #c9c9c9;
+}
+
+.divContainer{
+    display: flex;
+    justify-content: space-around;
+}
+
+.contInstru{
+    transition: 1s;
+    margin: auto;
+    width: 75%;
+    background: white;
+    margin-top: 5%;
+    height: auto;
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid black;
+    margin-left: 21%;
+}
+
+.cont_select{
+    width: 100%;
+    margin-left: 12px;
+    margin-right: 12px;
+}
+
+.cont_datepicker{
+    width: 100%;
+    margin-left: 12px;
+    margin-right: 12px;
+}
+.cont_datepicker input{
+    margin: 12px 0px 0px 0px !important;
+    width: 235px !important;
+}
+
+.cont_select select{
+    margin: 12px 0px 0px 0px !important;
+    width: 235px !important;
+}
+
+/*.cont_select .select2-dropdown--below{
+    width: 400px !important;
+}*/
+
+.divEditor{
+    transition: 1s;
+}
+
+
+.subcontainer{
+    width: 30%;
+}
+
+.titleSide{
+    /*margin-left: 20%;*/
+}
+
+.note-toolbar-wrapper{
+    display: none;
+}
+
+
+.tableHTMLEditor th {
+    padding: 5px 10px 5px 10px;
+    border: none;
+    font-size: 12px;
+    font-weight: bold;
+    color: #FFF;
+    background-color: #68BB18;
+}
+
+.CancelAdd{
+    pointer-events: none;
+    display: none;
+}
+
+.btnFecha{
+
+}
+
+.tabHead{
+    background: #68bb18;
+    color: #34395e;
+    text-align: center; 
+}
+
+.Buttons{
+    
+}
+
+.initialButton{
+    display: flex;
+}
+
+.jqte_editor{
+    font-size: 12px;
+}

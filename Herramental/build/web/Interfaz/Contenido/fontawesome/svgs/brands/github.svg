@@ -1,0 +1,36 @@
+lf.cursorh && self.bind(self.cursorh, "mouseup", self.onmouseup);
+          } else {
+            self.bind(self.rail, "mousedown", function (e) { e.preventDefault(); });  // prevent text selection             
+            self.railh && self.bind(self.railh, "mousedown", function (e) { e.preventDefault(); });
+          }
+
+        }
+
+
+        if (opt.enablemousewheel) {
+          if (!self.isiframe) self.mousewheel((cap.isie && self.ispage) ? _doc : self.win, self.onmousewheel);
+          self.mousewheel(self.rail, self.onmousewheel);
+          if (self.railh) self.mousewheel(self.railh, self.onmousewheelhr);
+        }
+
+        if (!self.ispage && !cap.cantouch && !(/HTML|^BODY/.test(self.win[0].nodeName))) {
+          if (!self.win.attr("tabindex")) self.win.attr({
+            "tabindex": ++tabindexcounter
+          });
+
+          self.bind(self.win, "focus", function (e) {  // better using native events
+            domfocus = (self.getTarget(e)).id || self.getTarget(e) || false;
+            self.hasfocus = true;
+            if (self.canshowonmouseevent) self.noticeCursor();
+          });
+          self.bind(self.win, "blur", function (e) {  // *
+            domfocus = false;
+            self.hasfocus = false;
+          });
+
+          self.bind(self.win, "mouseenter", function (e) {   // *
+            mousefocus = (self.getTarget(e)).id || self.getTarget(e) || false;
+            self.hasmousefocus = true;
+            if (self.canshowonmouseevent) self.noticeCursor();
+          });
+          self.bind(self.win, "mouseleave", function (e) { 

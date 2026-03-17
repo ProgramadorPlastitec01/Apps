@@ -10,7 +10,7 @@ import Controladores.RegistroJpaController;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import Controladores.UsuarioJpaController;
-import Entidad.Usuario_;
+import Entidad.Usuario;
 import Mail.Control_encriptacion;
 
 public class Registro extends HttpServlet {

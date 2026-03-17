@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>jQuery TE | Downloaded Demo | v.1.4.0</title>
+        <link type="text/css" rel="stylesheet" href="../demo.css">
+        <link type="text/css" rel="stylesheet" href="../../jquery-te-1.4.0.css">
+        <script type="text/javascript" src="http://code.jquery.com/jquery.min.js" charset="utf-8"></script>
+        <script type="text/javascript" src="../../jquery-te-1.4.0.min.js" charset="utf-8"></script>
+        <script type="text/javascript">
+            function marcar(check,id){
+                var element = document.getElementById(id);
+                if (check.checked) {
+                    element.setAttribute("checked", "");
+                }else{
+                    element.removeAttribute("checked");
+                }
+            }
+            function agregar(){
+                var table = document.getElementById("table1");
+                var rowCount = table.rows.length;
+                var row = table.insertRow(rowCount);
+                var TdFecha = row.insertCell(0);
+                TdFecha.setAttribute("contenteditable","true")
+                TdFecha.innerHTML = "&nbsp;";
+                var TdEjecuto = row.insertCell(1);
+                TdEjecuto.setAttribute("contenteditable","true")
+                TdEjecuto.innerHTML = "&nbsp;";
+                var TdDescripcion = row.insertCell(2);
+                TdDescripcion.setAttribute("contenteditable","true")
+                TdDescripcion.setAttribute("onclick","agregar()")
+                TdDescripcion.setAttribute("colspan","3")
+                TdDescripcion.setAttribute("valign","top")
+                TdDescripcion.innerHTML = "&nbsp;";
+            }
+        </script>
+    </head>
+    <body>
+        <!------------------------------------------------------------ jQUERY TEXT EDITOR ------------------------------------------------------------>
+        <textarea name="textarea" class="jqte-test">
+            <table style="width: 100%" class="tableHTMLEditor" id="table1" contenteditable="false">
+                <tr>
+                    <td colspan="11" style="background-color:#CCC;" align="center"><b style="color:white;">COPIA NO CONTROLADA</b></td>
+                </tr>
+                <tr>
+                    <td style="width:20%" align="center" >
+                   <img src="../../../Contenido/images/Logo.png" alt="Logo" style="width:200px;height:70px" /></td>
+                <td align="center" style="width:60%" colspan="3"><b style="color:#292929">INSPECCION CINTAS METRICAS FLEXOMETROS</td>
+                <td align="center" style="width:40%" contenteditable="false" ><b style="color:#292929">CODIGO : R-MT-044     <hr /> VERSION : 02</b></td>
+                </tr>
+                <tr>
+                <td><b style="color:#292929">MAGNITUD: </b><u contenteditable="true">&nbsp;Longitud&nbsp;</u></td>
+                <td><b style="color:#292929">B - R: </b><u contenteditable="true">&nbsp;Bloque de referencia&nbsp;</u></td>
+                <td colspan="2"><b style="color:#292929">A: </b><u contenteditable="true">&nbsp;Estado fisico del instrumento&nbsp;</u></td>
+                <td><b style="color:#292929">1: </b><u contenteditable="true">&nbsp;Mala&nbsp;</u></td>
+                </tr>
+                <tr>
+                <td><b style="color:#292929">INSTRUMENTO: </b><u contenteditable="true">&nbsp;Cintas metricas flexometros&nbsp;</u></td>
+                <td><b style="color:#292929">P - I: </b><u contenteditable="true">&nbsp;Punto de inspeccion&nbsp;</u></td>
+                <td colspan="2"><b style="color:#292929">B: </b><u contenteditable="true">&nbsp;Condicion visual resolución&nbsp;</u></td>
+                <td><b style="color:#292929">2: </b><u contenteditable="true">&nbsp;Desgaste&nbsp;</u></td>
+                </tr>
+                <tr>
+                <td><b style="color:#292929">MÉTODO: </b><u contenteditable="true">&nbsp;Comparacion&nbsp;</u></td>
+                <td><b style="color:#292929">CF: </b><u contenteditable="true">&nbsp;Conforme (SI/NO)&nbsp;</u></td>
+                <td colspan="2"><b style="color:#292929">C: </b><u contenteditable="true">&nbsp;Condicion visual en todo el rango&nbsp;</u></td>
+                <td><b style="color:#292929">3: </b><u contenteditable="true">&nbsp;Buena&nbsp;</u></td>
+                </tr>
+                <tr>
+                    <td align="center" style="width: 20%"><b style="color:#292929;">FECHA: </b><u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                    <td align="center" rowspan="8" style="width: 50%"><img src="../../../Contenido/images/R-MT-044_regla.png" alt="Logo" /></td>
+                    <td align="center" style="width: 10%"><b style="color:#292929;">A</b></td>
+                    <td align="center" style="width: 10%"><b style="color:#292929;">B</b></td>
+                    <td align="center" style="width: 10%"><b style="color:#292929;">C</b></td>
+                </tr>
+                <tr>
+                    <td align="center"><b style="color:#292929;">No SERIAL: </b><u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;Serie_R&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                    <td contenteditable="true">&nbsp;</td>
+                    <td contenteditable="true">&nbsp;</td>
+                    <td contenteditable="true">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td align="center"><b style="color:#292929;">ASIGNACION: </b><u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                    <td align="center" colspan="3"><b style="color:#292929;">CF </b><b>SI </b><input type="checkbox" id="1" onclick="marcar(this,1)"/><b>NO </b><input type="checkbox" id="2" onclick="marcar(this,2)"/></td>
+                </tr>
+                <tr>
+                    <td align="center"><b style="color:#292929;">RANGO: </b><u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                    <td align="center"><b style="color:#292929;">B - R</b></td>
+                    <td align="center"><b style="color:#292929;">P - I</b></td>
+                    <td align="center"><b style="color:#292929;">CF </b><b>SI </b><input type="checkbox" id="3" onclick="marcar(this,3)"/><b>NO </b><input type="checkbox" id="4" onclick="marcar(this,4)"/></td>
+                </tr>
+                <tr>
+                    <td align="center" rowspan="4"><b style="color:#292929;">RESOLUCION: </b><u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                    <td contenteditable="true" rowspan="4">&nbsp;</td>
+                    <td contenteditable="true">&nbsp;</td>
+                    <td contenteditable="true">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td contenteditable="true">&nbsp;</td>
+                    <td contenteditable="true">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td contenteditable="true">&nbsp;</td>
+                    <td contenteditable="true">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td contenteditable="true">&nbsp;</td>
+                    <td contenteditable="true">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td  colspan="2"><b style="color:#292929">INSTRUMENTO APROBO INSPECCION: </b><b>SI </b><input type="checkbox" id="5" onclick="marcar(this,5)"/><b>NO </b><input type="checkbox" id="6" onclick="marcar(this,6)"/></td>
+                    <td  colspan="3"><b style="color:#292929">INSPECCION EFECTUADA POR: </b><u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                </tr>
+                <tr>
+                    <td colspan="5"><b style="color:#292929">OBSERVACIONES: </b><u contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                </tr>
+                </table>
+        </textarea>
+        <script>
+            $('.jqte-test').jqte();
+
+            // settings of status
+            var jqteStatus = true;
+            $(".status").click(function()
+            {
+                jqteStatus = jqteStatus ? false : true;
+                $('.jqte-test').jqte({"status" : jqteStatus})
+            });
+        </script>
+    </body>
+</html>

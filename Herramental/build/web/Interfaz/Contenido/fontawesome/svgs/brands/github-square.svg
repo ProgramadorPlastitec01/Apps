@@ -1,0 +1,45 @@
+ientX, e.clientY, 0, 0, 0);
+                self.hasmoving = true;
+              }
+
+              if (self.preventclick && !self.preventclick.click) {
+                self.preventclick.click = self.preventclick.tg.onclick || false;
+                self.preventclick.tg.onclick = self.onpreventclick;
+              }
+
+              if (self.rail.drag.dl) {
+                if (self.rail.drag.dl == "v") nx = self.rail.drag.sl;
+                else if (self.rail.drag.dl == "h") ny = self.rail.drag.st;
+              }
+
+              self.synched("touchmove", function () {
+                if (self.rail.drag && (self.rail.drag.pt == 2)) {
+                  if (self.prepareTransition) self.resetTransition();
+                  if (self.rail.scrollable) self.setScrollTop(ny);
+                  self.scrollmom.update(fx, fy);
+                  if (self.railh && self.railh.scrollable) {
+                    self.setScrollLeft(nx);
+                    self.showCursor(ny, nx);
+                  } else {
+                    self.showCursor(ny);
+                  }
+                  if (cap.isie10) _doc.selection.clear();
+                }
+              });
+
+              return self.cancelEvent(e);
+
+            }
+            else if (self.rail.drag.pt == 1) { // drag on cursor
+              return self.onmousemove(e);
+            }
+
+          };
+
+          self.ontouchstartCursor = function (e, hronly) {
+            if (self.rail.drag && self.rail.drag.pt != 3) return;
+            if (self.locked) return self.cancelEvent(e);
+            self.cancelScroll();
+            self.rail.drag = {
+              x: e.touches[0].clientX,
+              y: e.touches[0].clientY,

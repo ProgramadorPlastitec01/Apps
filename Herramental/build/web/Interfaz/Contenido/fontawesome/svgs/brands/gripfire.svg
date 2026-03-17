@@ -1,0 +1,10 @@
+>setSASLEnabled(boolean)</a></span> - Method in class com.sun.mail.smtp.<a href="../com/sun/mail/smtp/SMTPTransport.html" title="class in com.sun.mail.smtp">SMTPTransport</a></dt>
+<dd>
+<div class="block">Set whether SASL authentication is enabled.</div>
+</dd>
+<dt><span class="strong"><a href="../com/sun/mail/smtp/SMTPTransport.html#setSASLMechanisms(java.lang.String[])">setSASLMechanisms(String[])</a></span> - Method in class com.sun.mail.smtp.<a href="../com/sun/mail/smtp/SMTPTransport.html" title="class in com.sun.mail.smtp">SMTPTransport</a></dt>
+<dd>
+<div class="block">Set the list of SASL mechanisms to consider if SASL authentication
+ is enabled.</div>
+</dd>
+<dt><span class="strong"><a href="../com/sun/mail/smtp/SMTPTransport.html#setSASLRealm(java.lang.String)">setSASLRealm(String)</a></span> - Method in class com.sun.mail.smtp.<a href="../c

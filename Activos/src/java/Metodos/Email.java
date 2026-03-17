@@ -51,6 +51,8 @@ public class Email {
             propiedades.setProperty("mail.smtp.port", arrConf[2]);
             propiedades.setProperty("mail.smtp.auth", arrConf[3]);
             propiedades.setProperty("mail.smtp.user", arrConf[4]);
+            propiedades.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
+            propiedades.setProperty("mail.debug", "true");
             Session session = Session.getDefaultInstance(propiedades);
             try {
                 MimeMessage message = new MimeMessage(session);
@@ -151,6 +153,8 @@ public class Email {
             propiedades.setProperty("mail.smtp.port", arrConf[2]);
             propiedades.setProperty("mail.smtp.auth", arrConf[3]);
             propiedades.setProperty("mail.smtp.user", arrConf[4]);
+            propiedades.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
+            propiedades.setProperty("mail.debug", "true");
             Session session = Session.getDefaultInstance(propiedades);
             try {
                 MimeMessage message = new MimeMessage(session);
@@ -246,6 +250,8 @@ public class Email {
             propiedades.setProperty("mail.smtp.port", arrConf[2]);
             propiedades.setProperty("mail.smtp.auth", arrConf[3]);
             propiedades.setProperty("mail.smtp.user", arrConf[4]);
+            propiedades.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
+            propiedades.setProperty("mail.debug", "true");
             Session session = Session.getDefaultInstance(propiedades);
             try {
                 MimeMessage message = new MimeMessage(session);
@@ -353,6 +359,8 @@ public class Email {
             propiedades.setProperty("mail.smtp.port", arrConf[2]);
             propiedades.setProperty("mail.smtp.auth", arrConf[3]);
             propiedades.setProperty("mail.smtp.user", arrConf[4]);
+            propiedades.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
+            propiedades.setProperty("mail.debug", "true");
             Session session = Session.getDefaultInstance(propiedades);
             try {
                 MimeMessage message = new MimeMessage(session);
@@ -442,6 +450,8 @@ public class Email {
             propiedades.setProperty("mail.smtp.port", arrConf[2]);
             propiedades.setProperty("mail.smtp.auth", arrConf[3]);
             propiedades.setProperty("mail.smtp.user", arrConf[4]);
+            propiedades.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
+            propiedades.setProperty("mail.debug", "true");
             Session session = Session.getDefaultInstance(propiedades);
             try {
                 MimeMessage message = new MimeMessage(session);
@@ -551,6 +561,8 @@ public class Email {
             propiedades.setProperty("mail.smtp.port", arrConf[2]);
             propiedades.setProperty("mail.smtp.auth", arrConf[3]);
             propiedades.setProperty("mail.smtp.user", arrConf[4]);
+            propiedades.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
+            propiedades.setProperty("mail.debug", "true");
             Session session = Session.getDefaultInstance(propiedades);
             try {
                 MimeMessage message = new MimeMessage(session);
@@ -646,6 +658,8 @@ public class Email {
                 propiedades.setProperty("mail.smtp.port", arrConf[2]);
                 propiedades.setProperty("mail.smtp.auth", arrConf[3]);
                 propiedades.setProperty("mail.smtp.user", arrConf[4]);
+                propiedades.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
+                propiedades.setProperty("mail.debug", "true");
                 Session session = Session.getDefaultInstance(propiedades);
                 try {
                     MimeMessage message = new MimeMessage(session);
@@ -792,6 +806,8 @@ public class Email {
             propiedades.setProperty("mail.smtp.port", arrConf[2]);
             propiedades.setProperty("mail.smtp.auth", arrConf[3]);
             propiedades.setProperty("mail.smtp.user", arrConf[4]);
+            propiedades.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
+            propiedades.setProperty("mail.debug", "true");
             Session session = Session.getDefaultInstance(propiedades);
             try {
                 MimeMessage message = new MimeMessage(session);
@@ -889,6 +905,8 @@ public class Email {
             propiedades.setProperty("mail.smtp.port", arrConf[2]);
             propiedades.setProperty("mail.smtp.auth", arrConf[3]);
             propiedades.setProperty("mail.smtp.user", arrConf[4]);
+            propiedades.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
+            propiedades.setProperty("mail.debug", "true");
             Session session = Session.getDefaultInstance(propiedades);
             try {
                 MimeMessage message = new MimeMessage(session);
@@ -984,6 +1002,8 @@ public class Email {
                     propiedades.setProperty("mail.smtp.port", arrConf[2]);
                     propiedades.setProperty("mail.smtp.auth", arrConf[3]);
                     propiedades.setProperty("mail.smtp.user", arrConf[4]);
+                    propiedades.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
+                    propiedades.setProperty("mail.debug", "true");
                     Session session = Session.getDefaultInstance(propiedades);
                     Object[] obj_areas = (Object[]) lst_area.get(i);
                     lst_req_mail = jpa_requisicion.consultaCorreo(Integer.parseInt(obj_areas[0].toString()));
@@ -1088,6 +1108,8 @@ public class Email {
             propiedades.setProperty("mail.smtp.port", arrConf[2]);
             propiedades.setProperty("mail.smtp.auth", arrConf[3]);
             propiedades.setProperty("mail.smtp.user", arrConf[4]);
+            propiedades.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
+            propiedades.setProperty("mail.debug", "true");
             Session session = Session.getDefaultInstance(propiedades);
             try {
                 MimeMessage message = new MimeMessage(session);
@@ -1184,6 +1206,8 @@ public class Email {
             propiedades.setProperty("mail.smtp.port", arrConf[2]);
             propiedades.setProperty("mail.smtp.auth", arrConf[3]);
             propiedades.setProperty("mail.smtp.user", arrConf[4]);
+            propiedades.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
+            propiedades.setProperty("mail.debug", "true");
             Session session = Session.getDefaultInstance(propiedades);
             try {
                 MimeMessage message = new MimeMessage(session);

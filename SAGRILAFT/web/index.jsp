@@ -84,8 +84,10 @@
                     </form>
                 </div>
                 <div class="FootData">
-                    <p style="color: #5ecbeb;">VP 00.00.00</p>
-                    <p>PLASTITEC 2024 &#169 copyright</p>
+                    <!--<p style="color: #5ecbeb;">VP 00.00.00</p>-->
+                    <!--<p style="color: #5ecbeb;">VA00.00.00</p>-->
+                    <p style="color: #5ecbeb;">VA00.00.00</p>
+                    <p>PLASTITEC 2026 &#169 copyright</p>
                 </div>
             </div>
         </div>
