@@ -82,7 +82,7 @@
                                     .replace(")", "_");
                         }
                         extension = adjunto[(adjunto.length - 1)].toString();
-                        file_name = file_name + "_" + ano + mes + dia + "_" + hora + minuto + "." + extension;
+                        file_name = Integer.parseInt(hidden.get(0).toString()) + "_" + file_name + "_" + ano + mes + dia + "_" + hora + minuto + "." + extension;
 //                        FileDocs += "[" + file_name + "]";
                     }
 

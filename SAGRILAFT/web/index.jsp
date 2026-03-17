@@ -13,7 +13,7 @@
 
         <!--<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
         <script src="Interfaz/Contenido/assets/js/page/Jquery360.js"></script>
-
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <title>Login | SGLT</title>
     </head>
     <body>
@@ -42,9 +42,9 @@
                         <div class="col-lg-4">
                             <img src="Interfaz/Contenido/Imagen/WP_Sag2.png" alt="" width="200"/>
                         </div>
-<!--                        <div class="col-lg-4">
-                            <img src="Interfaz/Contenido/Imagen/WP_OEA.fw.png" alt="" width="250"/>
-                        </div>-->
+                        <!--                        <div class="col-lg-4">
+                                                    <img src="Interfaz/Contenido/Imagen/WP_OEA.fw.png" alt="" width="250"/>
+                                                </div>-->
                     </div>
                 </div>
             </div>
@@ -78,15 +78,17 @@
                                 <div class="input-group-text" onclick="mostrarPass()" id="show_password" style="cursor: pointer;"><i id="icon" class="fas fa-eye"></i></div>
                             </div>
                         </div>
+                        <div class="g-recaptcha" data-sitekey="6Lchq40sAAAAAPKp0iaEUyJnMmfG1i-46iEsEP_9" data-callback="habilitarBoton"></div>
                         <div class="ContenBtn">
-                            <button class="btn btnLogin"><i class="fas fa-angle-right"></i></button>
+                            <button type="submit" class="btn btnLogin"  id="btnEnviar" disabled><i class="fas fa-angle-right"></i></button>
+                            <!--<button type="submit" class="btn btnLogin"  id="btnEnviar" ><i class="fas fa-angle-right"></i></button>-->
                         </div>
                     </form>
                 </div>
                 <div class="FootData">
                     <!--<p style="color: #5ecbeb;">VP 00.00.00</p>-->
-                    <!--<p style="color: #5ecbeb;">VA00.00.00</p>-->
-                    <p style="color: #5ecbeb;">VA00.00.00</p>
+                    <!--<p style="color: #5ecbeb;">VA 04.09.05</p>-->
+                    <p style="color: #5ecbeb;">VA 00.00.00</p>
                     <p>PLASTITEC 2026 &#169 copyright</p>
                 </div>
             </div>
@@ -103,6 +105,11 @@
                     password.type = "password";
                     eye.className = "fas fa-eye";
                 }
+            }
+        </script>
+        <script>
+            function habilitarBoton() {
+                document.getElementById("btnEnviar").disabled = false;
             }
         </script>
         <script src="Interfaz/Contenido/assets/modules/izitoast/js/iziToast.min.js"></script>

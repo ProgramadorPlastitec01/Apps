@@ -76,6 +76,25 @@ public class UserControllerJpa implements Serializable {
         }
     }
 
+    public List ConsultAttempt(String UserName) {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_c_att_ConsultAttempts`('" + UserName + "')");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
     public List LoginUser(String User, String password) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
@@ -235,6 +254,63 @@ public class UserControllerJpa implements Serializable {
         em.getTransaction().begin();
         try {
             Query q = em.createNativeQuery("CALL `Sp_usr_u_UpdateRenewDocumentUser`(" + newDoc + ", " + idDoc + ")");
+            int resultado = q.executeUpdate();
+            em.getTransaction().commit();
+            em.clear();
+            em.close();
+            if (resultado == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean Attempts(int idUsr, int att) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        try {
+            Query q = em.createNativeQuery("CALL `sp_u_UpdateAttempts`(" + idUsr + ", " + att + ")");
+            int resultado = q.executeUpdate();
+            em.getTransaction().commit();
+            em.clear();
+            em.close();
+            if (resultado == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean BlockAttempts(int idUsr, String expiration) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        try {
+            Query q = em.createNativeQuery("CALL `sp_u_UpdateBlockAttempts`(" + idUsr + ", '" + expiration + "')");
+            int resultado = q.executeUpdate();
+            em.getTransaction().commit();
+            em.clear();
+            em.close();
+            if (resultado == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean ResetAttempts(int idUs) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        try {
+            Query q = em.createNativeQuery("CALL `sp_u_UpdateResetAttempts`(" + idUs + ")");
             int resultado = q.executeUpdate();
             em.getTransaction().commit();
             em.clear();

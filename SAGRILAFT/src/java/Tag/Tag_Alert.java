@@ -66,6 +66,27 @@ public class Tag_Alert extends TagSupport {
                     out.print("</script>");
                 }
             }
+
+            if (pageContext.getRequest().getAttribute("Usuario_bloqueado") != null) {
+                boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("Usuario_bloqueado").toString());
+                String expired = "";
+                try {
+                    expired = pageContext.getRequest().getAttribute("Tiempo_bloqueo").toString();
+                } catch (Exception e) {
+                    expired = "";
+                }
+                if (result) {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-4\").ready(function() {\n"
+                            + "  iziToast.error({\n"
+                            + "    title: 'Error',\n"
+                            + "    message: 'Usuario bloqueado temporalmente. Intenta más tarde. " + expired + "',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                }
+            }
             if (pageContext.getRequest().getAttribute("password_update") != null) {
                 boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("password_update").toString());
                 if (result) {

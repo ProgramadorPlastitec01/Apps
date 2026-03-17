@@ -62,7 +62,7 @@
                             if (i == 0) {
                                 file_name = adjunto[0].toString();
                             } else {
-                                file_name = file_name + "_" + adjunto[i].toString();
+                                file_name = Integer.parseInt(hidden.get(3).toString()) + "_" + file_name + "_" + adjunto[i].toString();
                             }
                             file_name = file_name.replace("Á", "A")
                                                   .replace("É", "E")
