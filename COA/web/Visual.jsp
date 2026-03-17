@@ -55,43 +55,77 @@
 
         </div>
         <script>
-            document.querySelectorAll('.editable').forEach(el => {
+            document.addEventListener('DOMContentLoaded', () => {
 
-                // Al enfocar
-                el.addEventListener('focus', () => {
-                    if (el.innerText.trim() === '----' || el.innerText.trim() === '----') {
-                        el.innerText = '';
+                const isEmpty = t => !t || t.trim() === '' || t.trim() === '-' || t.trim() === '----';
+
+                // =========================
+                // 📞 TELÉFONO → pintar TD
+                // =========================
+                document.querySelectorAll('td').forEach(td => {
+                    const label = td.innerText.trim().toUpperCase();
+
+                    if (label === 'PHONE:' || label === 'TELÉFONO:') {
+                        const valueTd = td.nextElementSibling;
+                        if (!valueTd)
+                            return;
+
+                        const text = valueTd.innerText.trim();
+
+                        if (isEmpty(text))
+                            valueTd.classList.add('pending');
+                        else
+                            valueTd.classList.remove('pending');
                     }
                 });
 
-                // Al salir
-                el.addEventListener('blur', () => {
-                    const text = el.innerText.trim();
+                // ==================================
+                // 🧾 CAMPOS EDITABLES
+                // ==================================
+                document.querySelectorAll('.editable').forEach(el => {
 
-                    if (text === '') {
+                    const getText = () => el.innerText.trim();
+
+                    // Estado inicial
+                    if (getText() === '' || getText() === '----') {
                         el.innerText = '----';
                         el.classList.add('pending');
-                        el.classList.remove('completed');
-                    } else {
-                        el.classList.remove('pending');
-                        el.classList.add('completed');
                     }
+
+                    // Focus
+                    el.addEventListener('focus', () => {
+                        if (getText() === '----')
+                            el.innerText = '';
+                    });
+
+                    // Blur
+                    el.addEventListener('blur', () => {
+                        if (getText() === '') {
+                            el.innerText = '----';
+                            el.classList.add('pending');
+                        } else {
+                            el.classList.remove('pending');
+                        }
+                    });
+
+                    // Mientras escribe
+                    el.addEventListener('input', () => {
+                        const t = getText();
+                        if (t !== '' && t !== '----') {
+                            el.classList.remove('pending');
+                        }
+                    });
+
                 });
 
-                // Previene borrar completamente
-                el.addEventListener('keydown', (e) => {
-                    if ((e.key === 'Delete' || e.key === 'Backspace') && el.innerText.trim() === '') {
-                        e.preventDefault();
-                    }
-                });
             });
         </script>
 
         <script>
             document.addEventListener('DOMContentLoaded', function () {
 
-                // Quitar borde rojo al editar
-                ['clientValue', 'AmountValue', 'DateDispatch'].forEach(id => {
+                // Quitar borde rojo al editar textos
+                ['clientValue', 'AmountValue'].forEach(id => {
                     const el = document.getElementById(id);
                     if (el) {
                         el.addEventListener('input', function () {
@@ -99,6 +133,14 @@
                         });
                     }
                 });
+
+                // ✅ Quitar borde rojo cuando se seleccione fecha
+                const dateInput = document.querySelector('#DateDispatch input');
+                if (dateInput) {
+                    dateInput.addEventListener('change', function () {
+                        this.style.border = '';
+                    });
+                }
 
             });
         </script>

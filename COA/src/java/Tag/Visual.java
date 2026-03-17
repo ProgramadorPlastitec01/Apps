@@ -239,19 +239,19 @@ public class Visual extends TagSupport {
                         //<editor-fold defaultstate="collapsed" desc="HEAD FACTORY">
                         String[] ArgHead = Util.parseResult(lst_headFact.get(1));
                         Html = Html.replace("XOrderX", (ArgHead[0].equals("NULL") || ArgHead[0] == null) ? "" + Order + "" : ArgHead[0]);
-                        Html = Html.replace("XClientX", (ArgHead[1].equals("NULL") || ArgHead[1] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : ArgHead[1]);
-                        Html = Html.replace("XAddressX", (ArgHead[2].equals("NULL") || ArgHead[2] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : ArgHead[2]);
-                        Html = Html.replace("XPhoneX", (ArgHead[3].equals("NULL") || ArgHead[3] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : ArgHead[3]);
-                        Html = Html.replace("XCityX", (ArgHead[4].equals("NULL") || ArgHead[4] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : ArgHead[4]);
-                        Html = Html.replace("XCountryX", (ArgHead[5].equals("NULL") || ArgHead[5] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : ArgHead[5]);
-                        Html = Html.replace("XBillX", (ArgHead[6].equals("NULL") || ArgHead[6] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : ArgHead[6]);
-                        Html = Html.replace("XReissue_listX", (ArgHead[7].equals("NULL") || ArgHead[7] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : ArgHead[7]);
-                        Html = Html.replace("XProductX", (ArgHead[9].equals("NULL") || ArgHead[9] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : ArgHead[9]);
-                        Html = Html.replace("XAbilityX", (ArgHead[10].equals("NULL") || ArgHead[10] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : ArgHead[10]);
+                        Html = Html.replace("XClientX", (ArgHead[1].equals("NULL") || ArgHead[1] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" +  ArgHead[1] + "</span>");
+                        Html = Html.replace("XAddressX", (ArgHead[2].equals("NULL") || ArgHead[2] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" +  ArgHead[2] + "</span>");
+                        Html = Html.replace("XPhoneX", (ArgHead[3].equals("NULL") || ArgHead[3] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" + ArgHead[3] + "</span>" );
+                        Html = Html.replace("XCityX", (ArgHead[4].equals("NULL") || ArgHead[4] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" + ArgHead[4] + "</span>");
+                        Html = Html.replace("XCountryX", (ArgHead[5].equals("NULL") || ArgHead[5] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" + ArgHead[5] + "</span>");
+                        Html = Html.replace("XBillX", (ArgHead[6].equals("NULL") || ArgHead[6] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" + ArgHead[6] + "</span>");
+                        Html = Html.replace("XReissue_listX", (ArgHead[7].equals("NULL") || ArgHead[7] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable ' contenteditable='true'>" + ArgHead[7] + "</span>");
+                        Html = Html.replace("XProductX", (ArgHead[9].equals("NULL") || ArgHead[9] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable ' contenteditable='true'>" + ArgHead[9] + "</span>");
+                        Html = Html.replace("XAbilityX", (ArgHead[10].equals("NULL") || ArgHead[10] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" + ArgHead[10] + "</span>");
                         Html = Html.replace("XBatchX", Batch);
                         Html = Html.replace("XQuatityGenX", "<span  class='editable pending' contenteditable='true'>" + ((ArgHead[11].equals("NULL") || ArgHead[11] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : ArgHead[11]) + " UNIDADES </span>");
-                        Html = Html.replace("XClient_OrderX", (ArgHead[12].equals("NULL") || ArgHead[12] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : ArgHead[12]);
-                        Html = Html.replace("<h3 id=\"consValue\" class=\"mb-0\">XConsX</h3>", "<h3 id=\"consValue\" class=\"mb-0 editable\" contenteditable='true'>CC----</h3>");
+                        Html = Html.replace("XClient_OrderX", (ArgHead[12].equals("NULL") || ArgHead[12] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" + ArgHead[12] + "</span>");
+                        Html = Html.replace("<h3 id=\"consValue\" class=\"mb-0\">XConsX</h3>", "<h3 id=\"consValue\" class=\"mb-0 editable\" contenteditable='true' pending>CC----</h3>");
 
                         Html = Html.replace("XSampleX", "<span  class='editable pending' contenteditable='true'>----</span>");
                         Html = Html.replace("XNumberPartX", "<span  class='editable pending' contenteditable='true'>----</span>");

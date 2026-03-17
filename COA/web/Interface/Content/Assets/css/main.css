@@ -3332,3 +3332,12 @@ thead.sticky-top {
     background-color: transparent;
     border: none;
 }
+.td-pending {
+    background-color: #d6d8db;
+}
+
+.field-pending {
+    background-color: #f8d7da;
+    border: 1px dashed #dc3545;
+    color: #000;
+}
