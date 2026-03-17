@@ -10,8 +10,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import GLPI.GLPIClient;
 
 import Metodos.ConnectionSignature;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Personal extends HttpServlet {
 
@@ -28,6 +31,7 @@ public class Personal extends HttpServlet {
             PersonalJpaController jpacpsn = new PersonalJpaController();
             MenuJpaController jpacmnu = new MenuJpaController();
             ConnectionSignature ConnSigna = new ConnectionSignature();
+            GLPIClient Glpi_Opc = new GLPIClient();
             String usuario_registro = "";
             try {
                 usuario_registro = sesion.getAttribute("Nombre_apellido").toString();
@@ -120,7 +124,24 @@ public class Personal extends HttpServlet {
                         if (proceso) {
                             request.setAttribute("Alerta", "Registro_empleado");
                             request.setAttribute("var1", nombres + " " + apellidos);
+                            String res = Glpi_Opc.crearUsuario(codigo, nombres, apellidos, "2026");
+
+                            //<editor-fold defaultstate="collapsed" desc="REGISTER USER GLPI">
+                            int idGLPI = 0;
+                            try {
+                                Pattern pattern = Pattern.compile("\"id\":(\\d+)");
+                                Matcher matcher = pattern.matcher(res);
+                                if (matcher.find()) {
+                                    idGLPI = Integer.parseInt(matcher.group(1));
+                                }
+                                jpacpsn.Registrar_id_glpi(Integer.parseInt(documento), idGLPI);
+                            } catch (Exception e) {
+                            }
+                            System.out.print(res);
+                            //</editor-fold>
+                            
                             request.getRequestDispatcher("Personal?opc=4&mnu=22&abc=" + apellidos.charAt(0) + "&Txt_documento=").forward(request, response);
+
                         } else {
                             request.setAttribute("Alerta", "Error_empleado");
                             request.setAttribute("var1", nombres + " " + apellidos);
@@ -165,6 +186,22 @@ public class Personal extends HttpServlet {
                         if (proceso) {
                             request.setAttribute("Alerta", "Modificar_empleado");
                             request.setAttribute("var1", nombres + " " + apellidos);
+
+                            //<editor-fold defaultstate="collapsed" desc="EDITAR GLPI">
+                            int idGLPI = 0;
+                            try {
+                                List personaldata = jpacpsn.ConsultarIdGLPI(documento);
+                                if (personaldata != null) {
+                                    Object[] ObjPersonal = (Object[]) personaldata.get(0);
+                                    idGLPI = Integer.parseInt(ObjPersonal[1].toString());
+                                    String res = Glpi_Opc.editarUsuario(idGLPI, nombres, apellidos);
+                                    res = res.replaceAll("\\D+", "");
+                                    System.out.print(res);
+                                }
+                            } catch (Exception e) {
+                            }
+                            //</editor-fold>
+
                         } else {
                             request.setAttribute("Alerta", "Error_modificar_empleado");
                             request.setAttribute("var1", nombres + " " + apellidos);

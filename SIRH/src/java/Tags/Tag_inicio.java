@@ -11,6 +11,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 import Controladores_BD.ParametrosJpa;
+import GLPI.GLPISession;
 
 import Metodos.Control_correo;
 
@@ -233,8 +234,16 @@ public class Tag_inicio extends TagSupport {
                     }
                 }
                 //</editor-fold>
+
+                //<editor-fold defaultstate="collapsed" desc="TEST CONECCTION GLPI">
+                GLPISession session = new GLPISession();
+                String token = session.initSession();
+                System.out.println("Session token: " + token);
+//</editor-fold>
             }
         } catch (IOException ex) {
+            Logger.getLogger(Tag_inicio.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
             Logger.getLogger(Tag_inicio.class.getName()).log(Level.SEVERE, null, ex);
         }
         return super.doStartTag();

@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import GLPI.GLPIClient;
 
 public class Seguimiento extends HttpServlet {
 
@@ -49,6 +50,7 @@ public class Seguimiento extends HttpServlet {
             RetiroJpaController jpacrtr = new RetiroJpaController();
             ExamenJpaController jpacexm = new ExamenJpaController();
             EppJpaController jpacepp = new EppJpaController();
+            GLPIClient Glpi_Opc = new GLPIClient();
             //VARIABLES OBLIGATORIAS
             int opc = Integer.parseInt(request.getParameter("opc").toString());
             int mnu = 0;
@@ -474,6 +476,19 @@ public class Seguimiento extends HttpServlet {
                         proceso = jpacrtr.Registrar_retiro(documento + "", fecha, tipo, observacion, usuario_registro);
                         if (proceso) {
                             request.setAttribute("Alerta", "Registro_retiro");
+                            int idGLPI = 0;
+                            try {
+                                List lst_glpi_Id = jpacpsn.ConsultarIdGLPI(documento + "");
+                                if (lst_glpi_Id != null) {
+                                    Object[] ObjPersonal = (Object[]) lst_glpi_Id.get(0);
+                                    idGLPI = Integer.parseInt(ObjPersonal[1].toString());
+                                    String res = Glpi_Opc.inactivarUsuario(idGLPI);
+                                    res = res.replaceAll("\\D+", "");
+                                    System.out.print(res);
+                                }
+
+                            } catch (Exception e) {
+                            }
                         } else {
                             request.setAttribute("Alerta", "Error_retiro");
                         }
@@ -486,6 +501,7 @@ public class Seguimiento extends HttpServlet {
                     if (tipo_estado == 1) {
                         jpacrtr.Activar_retiro(id_retiro);
                         jpacrtr.Inactivar_empleado_retiro(id_retiro);
+
                     } else if (tipo_estado == 0) {
                         jpacrtr.Desactivar_retiro(id_retiro);
                     } else {
