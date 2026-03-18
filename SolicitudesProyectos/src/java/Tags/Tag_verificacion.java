@@ -4,9 +4,7 @@ import Controladores.CabeceraEtdJpaController;
 import Controladores.ElectrodoJpaController;
 import Controladores.MovimientosJpaController;
 import Controladores.SolicitudJpaController;
-import Controladores.VerificarEtdJpaController;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,7 +12,6 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
-import java.time.format.DateTimeFormatter;
 
 public class Tag_verificacion extends TagSupport {
 
@@ -27,7 +24,6 @@ public class Tag_verificacion extends TagSupport {
         ElectrodoJpaController jpa_electrodo = new ElectrodoJpaController();
         SolicitudJpaController jpa_solicitud = new SolicitudJpaController();
         MovimientosJpaController jpa_movimientos = new MovimientosJpaController();
-        VerificarEtdJpaController jpa_verificacionEsd = new VerificarEtdJpaController();
         List lst_verificaciones = null;
         List lst_verificacion = null;
         List lst_itemsVfc = null;
@@ -36,20 +32,13 @@ public class Tag_verificacion extends TagSupport {
         List lst_movimientos = null;
         List lst_electrodo = null;
         List lst_verAnio = null;
-        List lst_verificacionEtd = null;
-
-        int id_pieza = 0, id_verificacion = 0, id_plano = 0, anio = 0, val = 0, IdEstandar = 0;
+        int id_pieza = 0, id_verificacion = 0, id_plano = 0, anio = 0, val = 0;
         String numSolicitud = "";
         try {
             try {
                 id_pieza = Integer.parseInt(pageContext.getRequest().getAttribute("id_pieza").toString());
             } catch (NumberFormatException e) {
                 id_pieza = 0;
-            }
-            try {
-                IdEstandar = Integer.parseInt(pageContext.getRequest().getAttribute("IdEstandar").toString());
-            } catch (NumberFormatException e) {
-                IdEstandar = 0;
             }
             if (id_pieza == 0) {
                 try {
@@ -154,7 +143,7 @@ public class Tag_verificacion extends TagSupport {
                     out.print("</div>");
                     out.print("</div>");
                     out.print("</section>");
-                    //</editor-fold>
+                    //</editor-fold>    
                 } else {
                     //<editor-fold defaultstate="collapsed" desc="R-MTF-013 VERIFICACIONES">
                     lst_calificacion = jpa_verificacion.consultarCalificacionVerificacionId(id_verificacion);
@@ -183,16 +172,7 @@ public class Tag_verificacion extends TagSupport {
                         out.print("<td style='width:28%' align='center' colspan='2'><img src='Interfaz/Contenido/Imagen/Logo.png' style='width: 211px; height: 72px' alt=''></td>");
                         out.print("<td colspan='2' style='width:40%;'><h6 style='text-align: center;'>REGISTRO DE VERIFICACIÓN ELECTRODO</h6></td>");
                         out.print("<td style='width:13%' align='center'><b>CODIGO</b><br /><b style='color:black'>R-MTF-013</b></td>");
-                        LocalDate fecha = LocalDate.parse(obj_verificacion[2].toString());
-                        LocalDate fechaV1 = LocalDate.of(2026, 03, 04);
-                        LocalDate fechaV2 = LocalDate.of(2025, 05, 14);
-                        if (fecha.isBefore(fechaV2)) {
-                            out.print("<td style='width:13%' colspan='2' align='center'><b>VERSION</b><br /><b style='color:black'>4</b></td>");
-                        } else if (fecha.isBefore(fechaV1)) {
-                            out.print("<td style='width:13%' colspan='2' align='center'><b>VERSION</b><br /><b style='color:black'>5</b></td>");
-                        } else {
-                            out.print("<td style='width:13%' colspan='2' align='center'><b>VERSION</b><br /><b style='color:black'>6</b></td>");
-                        }
+                        out.print("<td style='width:13%' colspan='2' align='center'><b>VERSION</b><br /><b style='color:black'>4</b></td>");
                         out.print("</tr>");
                         out.print("<tr>");
                         out.print("<td><b class='clssB PdgTd'>Fecha: </b></td>");
@@ -245,16 +225,9 @@ public class Tag_verificacion extends TagSupport {
                         }
                         out.print("</tr>");
                         out.print("</tbody>");
-                        if (fecha.isBefore(fechaV2)) {
-                        } else if (fecha.isBefore(fechaV1)) {
-                            out.print("<tr><td colspan='5'><span style='    font-size: 12px;\n"
-                                    + "    font-style: italic;\n"
-                                    + "    margin-left: 8px;'>La informacion personal en este documento sera tratada y protegida de acuerdo con nuestras politicas de proteccion de datos personales. </span></td></tr>");
-                        } else {
-                            out.print("<tr><td colspan='5'><span style='    font-size: 12px;\n"
-                                    + "    font-style: italic;\n"
-                                    + "    margin-left: 8px;'>La informacion personal en este documento sera tratada y protegida de acuerdo con nuestras politicas de proteccion de datos personales. </span></td></tr>");
-                        }
+                        out.print("<tr><td colspan='13'><span style='    font-size: 12px;\n"
+                            + "    font-style: italic;\n"
+                            + "    margin-left: 8px;'>La informacion personal en este documento sera tratada y protegida de acuerdo con nuestras politicas de proteccion de datos personales. </span></td></tr>");
                         out.print("</table>");
                         out.print("</div>");
                     }
@@ -279,47 +252,28 @@ public class Tag_verificacion extends TagSupport {
                     numSolicitud = "";
                 }
                 lst_electrodo = jpa_electrodo.consultaElectrodoId(id_pieza);
+                out.print("<section class='section'>");
+                out.print("<div class='section-header'>");
+                out.print("<h1>Modulo Verificación</h1>");
+                out.print("</div>");
+                out.print("<div class='section-body'>");
+                out.print("<div class='row'>");
+                out.print("<div class='col-12'>");
+                out.print("<div class='card'>");
+                out.print("<table style='width:100%'>");
+                out.print("<thead>");
+                out.print("<tr>");
+                out.print("<tr><td colspan='12' style='background-color:#979595;height:22px !important;' align='center'><b style='color:white;'>COPIA NO CONTROLADA</b></td>");
+                out.print("</tr>");
+                out.print("<tr>");
+                out.print("<td style='width:28%' align='center' colspan='2'><img src='Interfaz/Contenido/Imagen/Logo.png' style='width: 211px; height: 72px' alt=''></td>");
+                out.print("<td colspan='2' style='width:40%;'><h6 style='text-align: center;'>REGISTRO DE VERIFICACIÓN ELECTRODO</h6></td>");
+                out.print("<td style='width:13%' align='center'><b>CODIGO</b><br /><b style='color:black'>R-MTF-013</b></td>");
+                out.print("<td style='width:13%' colspan='2' align='center'><b>VERSION</b><br /><b style='color:black'>4</b></td>");
+                out.print("</tr>");
                 if (lst_electrodo != null) {
                     Object[] obj_pieza = (Object[]) lst_electrodo.get(0);
-                    LocalDate fecha = LocalDate.parse("2026-03-04");
-                    LocalDate fechaV1 = LocalDate.of(2026, 03, 04);
-                    LocalDate fechaV2 = LocalDate.of(2025, 05, 14);
-                    out.print("<section class='section'>");
-                    out.print("<div class='section-header justify-content-between'>");
-                    out.print("<h1>Modulo Verificación</h1>");
-                    out.print("<div>");
-                    out.print("<button class=\"btn btn-red\" style=\"border-radius: 4px;\" "
-                            + "data-toggle=\"tooltip\" data-placement=\"top\" "
-                            + "onclick=\"location.href='Verificacion?opc=4&idP=" + id_plano
-                            + "&numS=" + numSolicitud
-                            + "&id_pieza=" + id_pieza + "&IdEstandar=1'\" "
-                            + "title=\"Verificación Estandar\">"
-                            + "<i class=\"fas fa-sync-alt\"></i></button>");
-                    out.print("</div>");
-                    out.print("</div>");
-
-                    out.print("<div class='section-body'>");
-                    out.print("<div class='row'>");
-                    out.print("<div class='col-12'>");
-                    out.print("<div class='card'>");
-                    out.print("<table style='width:100%'>");
-                    out.print("<thead>");
-                    out.print("<tr>");
-                    out.print("<tr><td colspan='12' style='background-color:#979595;height:22px !important;' align='center'><b style='color:white;'>COPIA NO CONTROLADA</b></td>");
-                    out.print("</tr>");
-                    out.print("<tr>");
-                    out.print("<td style='width:28%' align='center' colspan='2'><img src='Interfaz/Contenido/Imagen/Logo.png' style='width: 211px; height: 72px' alt=''></td>");
-                    out.print("<td colspan='2' style='width:40%;'><h6 style='text-align: center;'>REGISTRO DE VERIFICACIÓN ELECTRODO</h6></td>");
-                    out.print("<td style='width:13%' align='center'><b>CODIGO</b><br /><b style='color:black'>R-MTF-013</b></td>");
-                    if (fecha.isBefore(fechaV2)) {
-                        out.print("<td style='width:13%' colspan='2' align='center'><b>VERSION</b><br /><b style='color:black'>4</b></td>");
-                    } else if (fecha.isBefore(fechaV1)) {
-                        out.print("<td style='width:13%' colspan='2' align='center'><b>VERSION</b><br /><b style='color:black'>5</b></td>");
-                    } else {
-                        out.print("<td style='width:13%' colspan='2' align='center'><b>VERSION</b><br /><b style='color:black'>6</b></td>");
-                    }
-                    out.print("</tr>");
-                    out.print("<form action='Verificacion?opc=3' method='post' onsubmit='document.forms['form1']['guardar'].disabled = true;' name='form1' id='form1'>");
+                out.print("<form action='Verificacion?opc=3' method='post' onsubmit='document.forms['form1']['guardar'].disabled = true;' name='form1' id='form1'>");
                     out.print("<input type='hidden' name='txt_numS' value='" + numSolicitud + "'>");
                     out.print("<input type='hidden' name='pieza' value='" + obj_pieza[2] + "'>");
                     out.print("<input type='hidden' name='idPz' value='" + id_pieza + "'>");
@@ -345,77 +299,43 @@ public class Tag_verificacion extends TagSupport {
                     out.print("<th class='th1Verificacion'>Observaciones</th>");
                     out.print("</tr>");
                     out.print("</thead>");
-                    if (IdEstandar == 0) {
-                        //<editor-fold defaultstate="collapsed" desc="CONSULTA BASE HISTORICA POR ELECTRODO">
-                        lst_itemsVfc = jpa_verificacion.consultarItemsVerificacionIdPlano(id_plano);
-                        if (lst_itemsVfc != null) {
-                            out.print("<tbody>");
-                            for (int i = 0; i < lst_itemsVfc.size(); i++) {
-                                Object[] obj_items = (Object[]) lst_itemsVfc.get(i);
-                                out.print("<tr>");
-                                out.print("<td class='PdgTd' colspan='2'>" + obj_items[3] + "</td>");
-                                out.print("<td class='PdgTd'>" + obj_items[4] + "</td>");
-                                out.print("<td>"
-                                        + "<select class='form-control' name='txtcumple_" + i + "'  id='select-id' required>");
-                                if (obj_items[5].toString().toUpperCase().equals("SI")) {
-                                    out.print("<option value='SI'>SI</option>");
-                                    out.print("<option value='NO'>NO</option>");
-                                } else {
-                                    out.print("<option value='NO'>NO</option>");
-                                    out.print("<option value='SIR'>SI</option>");
-
-                                }
-                                out.print("</select>");
-                                out.print("<td>"
-                                        + "<select class='form-control' name='txtaplica_" + i + "'  id='select-id' required>");
-                                if (obj_items[6].toString().toUpperCase().equals("SI")) {
-                                    out.print("<option value='SI'>SI</option>");
-                                    out.print("<option value='NO'>NO</option>");
-                                } else {
-                                    out.print("<option value='NO'>NO</option>");
-                                    out.print("<option value='SIR'>SI</option>");
-
-                                }
-                                out.print("</select>");
-                                out.print("<td><textarea  style='height:44px!important' class='form-control' name='txtobservaciones_" + i + "' placeholder='Observaciones' onchange='javascript:this.value=this.value.toUpperCase();'></textarea></td>");
-                                out.print("</tr>");
-                            }
-                            if (fecha.isBefore(fechaV2)) {
-                            } else if (fecha.isBefore(fechaV1)) {
-                                out.print("<tr><td colspan='5'><span style='    font-size: 12px;\n"
-                                        + "    font-style: italic;\n"
-                                        + "    margin-left: 8px;'>La informacion personal en este documento sera tratada y protegida de acuerdo con nuestras politicas de proteccion de datos personales. </span></td></tr>");
+                    lst_itemsVfc = jpa_verificacion.consultarItemsVerificacionIdPlano(id_plano);
+                    if (lst_itemsVfc != null) {
+                        out.print("<tbody>");
+                        for (int i = 0; i < lst_itemsVfc.size(); i++) {
+                            Object[] obj_items = (Object[]) lst_itemsVfc.get(i);
+                            out.print("<tr>");
+                            out.print("<td class='PdgTd' colspan='2'>" + obj_items[3] + "</td>");
+                            out.print("<td class='PdgTd'>" + obj_items[4] + "</td>");
+                            out.print("<td>"
+                                    + "<select class='form-control' name='txtcumple_" + i + "'  id='select-id' required>");
+                            if (obj_items[5].toString().toUpperCase().equals("SI")) {
+                                out.print("<option value='SI'>SI</option>");
+                                out.print("<option value='NO'>NO</option>");
                             } else {
-                                out.print("<tr><td colspan='5'><span style='    font-size: 12px;\n"
-                                        + "    font-style: italic;\n"
-                                        + "    margin-left: 8px;'>La informacion personal en este documento sera tratada y protegida de acuerdo con nuestras politicas de proteccion de datos personales. </span></td></tr>");
-                            }
-                            out.print("</tbody>");
-                        }
-                        //</editor-fold>
-                    } else {
-                        lst_verificacionEtd = jpa_verificacionEsd.consultaItemsVerificacion();
-                        if (lst_verificacionEtd != null) {
-                            out.print("<tbody>");
-                            for (int i = 0; i < lst_verificacionEtd.size(); i++) {
-                                Object[] obj_items = (Object[]) lst_verificacionEtd.get(i);
-                                out.print("<tr>");
-                                out.print("<td class='PdgTd' colspan='2'>" + obj_items[1] + "</td>");
-                                out.print("<td class='PdgTd'>" + obj_items[2] + "</td>");
-                                out.print("<td>"
-                                        + "<select class='form-control' name='txtcumple_" + i + "'  id='select-id' required>");
                                 out.print("<option value='NO'>NO</option>");
                                 out.print("<option value='SIR'>SI</option>");
-                                out.print("</select>");
-                                out.print("<td>"
-                                        + "<select class='form-control' name='txtaplica_" + i + "'  id='select-id' required>");
+
+                            }
+                            out.print("</select>");
+                            out.print("<td>"
+                                    + "<select class='form-control' name='txtaplica_" + i + "'  id='select-id' required>");
+                            if (obj_items[6].toString().toUpperCase().equals("SI")) {
+                                out.print("<option value='SI'>SI</option>");
+                                out.print("<option value='NO'>NO</option>");
+                            } else {
                                 out.print("<option value='NO'>NO</option>");
                                 out.print("<option value='SIR'>SI</option>");
-                                out.print("</select>");
-                                out.print("<td><textarea  style='height:44px!important' class='form-control' name='txtobservaciones_" + i + "' placeholder='Observaciones' onchange='javascript:this.value=this.value.toUpperCase();'></textarea></td>");
-                                out.print("</tr>");
+
                             }
+                            out.print("</select>");
+                            out.print("<td><textarea  style='height:44px!important' class='form-control' name='txtobservaciones_" + i + "' placeholder='Observaciones' onchange='javascript:this.value=this.value.toUpperCase();'></textarea></td>");
+                            out.print("</tr>");
                         }
+                        out.print("<tr><td colspan='5'><span style='    font-size: 12px;\n"
+                            + "    font-style: italic;\n"
+                            + "    margin-left: 8px;'>La informacion personal en este documento sera tratada y protegida de acuerdo con nuestras politicas de proteccion de datos personales. </span></td></tr>");
+                        out.print("</tbody>");
                     }
                     out.print("</table>");
                     out.print("<div class='mt-2' style='width: 100%; text-align:center;'>");

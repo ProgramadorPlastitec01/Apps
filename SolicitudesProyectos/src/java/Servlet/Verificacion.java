@@ -30,7 +30,7 @@ public class Verificacion extends HttpServlet {
             Calendar calendario = Calendar.getInstance();
             int anioC = calendario.get(Calendar.YEAR);
             boolean resultado = false;
-            int id_verificacion = 0, id_plano = 0, id_electrodo = 0, id_pieza = 0, anio = 0, val = 0, IdEstandar = 0;
+            int id_verificacion = 0, id_plano = 0, id_electrodo = 0, id_pieza = 0, anio = 0, val = 0;
             String numeroS = "", pieza = "", fecha = "", cumple = "", aplica = "", observacion = "";
             List lst_verificacion = null;
             List lst_electrodo = null;
@@ -64,7 +64,6 @@ public class Verificacion extends HttpServlet {
                     request.setAttribute("id_verificacion", id_verificacion);
                     request.setAttribute("anio", anio);
                     request.setAttribute("val", val);
-                                        request.setAttribute("IdEstandar", IdEstandar);
                     request.getRequestDispatcher("Verificacion.jsp").forward(request, response);
                     break;
                 case 2:
@@ -123,53 +122,6 @@ public class Verificacion extends HttpServlet {
                     } else {
                         request.getRequestDispatcher("Verificacion?opc=1").forward(request, response);
                     }
-                    break;
-                case 4:
-                    try {
-                        id_pieza = Integer.parseInt(request.getParameter("id_pieza"));
-                    } catch (NumberFormatException e) {
-                        id_pieza = 0;
-                    }
-                    try {
-                        id_plano = Integer.parseInt(request.getParameter("idP"));
-                    } catch (NumberFormatException e) {
-                        id_plano = 0;
-                    }
-                    try {
-                        id_verificacion = Integer.parseInt(request.getParameter("idV"));
-                    } catch (NumberFormatException e) {
-                        id_verificacion = 0;
-                    }
-                    try {
-                        IdEstandar = Integer.parseInt(request.getParameter("IdEstandar"));
-                    } catch (NumberFormatException e) {
-                        IdEstandar = 0;
-                    }
-                    try {
-                        numeroS = request.getParameter("numS");
-                    } catch (Exception e) {
-                        numeroS = "";
-                    }
-                    try {
-                        anio = Integer.parseInt(request.getParameter("anio"));
-                        if (anio == 0) {
-                            val = 0;
-                            anio = anioC;
-                        } else {
-                            val = 1;
-                        }
-                    } catch (NumberFormatException e) {
-                        anio = anioC;
-                        val = 1;
-                    }
-                    request.setAttribute("id_pieza", id_pieza);
-                    request.setAttribute("id_plano", id_plano);
-                    request.setAttribute("numero_solicitud", numeroS);
-                    request.setAttribute("IdEstandar", IdEstandar);
-                    request.setAttribute("id_verificacion", id_verificacion);
-                    request.setAttribute("anio", anio);
-                    request.setAttribute("val", val);
-                    request.getRequestDispatcher("Verificacion.jsp").forward(request, response);
                     break;
             }
         } catch (RuntimeException e) {
