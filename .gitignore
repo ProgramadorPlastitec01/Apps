@@ -98,10 +98,6 @@
 /Sistema_Tubo/build/
 /Sistema_Tubo/dist/
 
-/Archivo_D&D/DisenoDesarrollo/nbproject/private/
-/Archivo_D&D/DisenoDesarrollo/dist/
-/Archivo_D&D/DisenoDesarrollo/build/
-
 /SolicitudesProyectos/nbproject/private/
 /SolicitudesProyectos/build/
 /SolicitudesProyectos/dist/
@@ -109,3 +105,11 @@
 /Copec/nbproject/private/
 /Copec/build/
 /Copec/dist/
+
+/ControlGrafado/nbproject/private/
+/ControlGrafado/build/
+/ControlGrafado/dist/
+
+/DisenoDesarrollo/nbproject/private/
+/ControlGrafado/build/
+/DisenoDesarrollo/dist/
