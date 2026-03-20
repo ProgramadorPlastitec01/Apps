@@ -241,7 +241,7 @@ public class Visual extends TagSupport {
                         Html = Html.replace("XOrderX", (ArgHead[0].equals("NULL") || ArgHead[0] == null) ? "" + Order + "" : ArgHead[0]);
                         Html = Html.replace("XClientX", (ArgHead[1].equals("NULL") || ArgHead[1] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" +  ArgHead[1] + "</span>");
                         Html = Html.replace("XAddressX", (ArgHead[2].equals("NULL") || ArgHead[2] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" +  ArgHead[2] + "</span>");
-                        Html = Html.replace("XPhoneX", (ArgHead[3].equals("NULL") || ArgHead[3] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" + ArgHead[3] + "</span>" );
+                        Html = Html.replace("XPhoneX", (ArgHead[3].equals("NULL") || ArgHead[3] == null) ? "<span  class='editable' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" + ArgHead[3] + "</span>" );
                         Html = Html.replace("XCityX", (ArgHead[4].equals("NULL") || ArgHead[4] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" + ArgHead[4] + "</span>");
                         Html = Html.replace("XCountryX", (ArgHead[5].equals("NULL") || ArgHead[5] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" + ArgHead[5] + "</span>");
                         Html = Html.replace("XBillX", (ArgHead[6].equals("NULL") || ArgHead[6] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" + ArgHead[6] + "</span>");
@@ -260,7 +260,7 @@ public class Visual extends TagSupport {
                         //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA">
                         Html = Html.replace("XOrderX", String.valueOf(Order));
                         Html = Html.replace("XAddressX", "<span  class='editable pending' contenteditable='true'>----</span>");
-                        Html = Html.replace("XPhoneX", "<span  class='editable pending' contenteditable='true'>----</span>");
+                        Html = Html.replace("XPhoneX", "<span  class='editable' contenteditable='true'>----</span>");
                         Html = Html.replace("XCityX", "<span  class='editable pending' contenteditable='true'>----</span>");
                         Html = Html.replace("XCountryX", "<span  class='editable pending' contenteditable='true'>----</span>");
                         Html = Html.replace("XBillX", "<span  class='editable pending' contenteditable='true'>----</span>");
@@ -947,6 +947,7 @@ public class Visual extends TagSupport {
                         Html = Html.replace("contenteditable=\"true\"", "contenteditable=\"false\"");
                         Html = Html.replaceAll("<input type=\"checkbox\"", "<input type=\"checkbox\" class=\"disabled\" ");
                         Html = Html.replaceAll("<input name=\"result\" type=\"radio\"", "<input name=\"result\" type=\"radio\" class=\"disabled\"");
+                        Html = Html.replaceAll("<input type=\"date\" id=\"dispatchDate\" name=\"dispatchDate\" class=\"\" style=\"outline: none; background: transparent;\"", "<input id=\"dispatchDate\" name=\"dispatchDate\" class=\"\" style=\"outline: none; background: transparent; border:none\"");
                         if (StateCerti == 3) {
                             if (IdSig != null && !IdSig.equals("")) {
                                 Html = Html.replaceAll("<div id=\"SignatureImage\"></div>", "<div id=\"SignatureImage\"><img src=\"Interface/Uploads/Signature/" + IdSig + "\" height=\"58px\" alt=\"Logo\" class=\"ImgSig\"></div>");
@@ -960,7 +961,7 @@ public class Visual extends TagSupport {
                         );
                         Html = Html.replaceAll(
                                 "<input type=\"date\" id=\"dispatchDate\" name=\"dispatchDate\" class=\"editable pending\" style=\"border:none; outline:none; background:transparent;\"",
-                                "<input type=\"text\" id=\"dispatchDate\" name=\"dispatchDate\" class=\"editable pending\" style=\"border:none; outline:none; background:transparent;text-align: center;;\""
+                                "<input type=\"text\" id=\"dispatchDate\" name=\"dispatchDate\" class=\"editable pending\" style=\"border:none; outline:none; background:transparent;text-align: center;\""
                         );
                         Html = Html.replaceAll(
                                 "editable pending",
