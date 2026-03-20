@@ -28,7 +28,7 @@ public class Error404Servlet extends HttpServlet {
             String ip = request.getRemoteAddr();
 
             Mail mail = new Mail();
-            mail.SendError404Mail(usuario, url, ip, getServletContext());
+//            mail.SendError404Mail(usuario, url, ip, getServletContext());
 
         } catch (Exception e) {
             // ⚠ Nunca rompas el flujo por el correo

@@ -3341,3 +3341,7 @@ thead.sticky-top {
     border: 1px dashed #dc3545;
     color: #000;
 }
+#TelefonoValue.pending {
+    background-color: #e9ecef;   /* gris suave */
+    border: none;                /* sin líneas */
+}

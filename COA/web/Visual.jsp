@@ -54,35 +54,46 @@
             <Alert:Alert/>
 
         </div>
+
         <script>
             document.addEventListener('DOMContentLoaded', () => {
 
                 const isEmpty = t => !t || t.trim() === '' || t.trim() === '-' || t.trim() === '----';
 
-                // =========================
-                // 📞 TELÉFONO → pintar TD
-                // =========================
-                document.querySelectorAll('td').forEach(td => {
-                    const label = td.innerText.trim().toUpperCase();
+                const phoneTd = document.getElementById('TelefonoValue');
 
-                    if (label === 'PHONE:' || label === 'TELÉFONO:') {
-                        const valueTd = td.nextElementSibling;
-                        if (!valueTd)
-                            return;
+                if (phoneTd) {
+                    const phoneEditable = phoneTd.querySelector('.editable');
 
-                        const text = valueTd.innerText.trim();
+                    if (phoneEditable) {
 
-                        if (isEmpty(text))
-                            valueTd.classList.add('pending');
-                        else
-                            valueTd.classList.remove('pending');
+                        const getText = () => phoneEditable.innerText.trim();
+
+                        const updatePhoneState = () => {
+                            if (isEmpty(getText())) {
+                                phoneTd.classList.add('pending');   // gris en TD
+                                phoneEditable.innerText = '';       // ✅ nunca mostrar ----
+                            } else {
+                                phoneTd.classList.remove('pending');
+                            }
+                        };
+
+                        // Estado inicial
+                        updatePhoneState();
+
+                        // Mientras escribe
+                        phoneEditable.addEventListener('input', updatePhoneState);
+
+                        // Al salir
+                        phoneEditable.addEventListener('blur', updatePhoneState);
                     }
-                });
+                }
 
-                // ==================================
-                // 🧾 CAMPOS EDITABLES
-                // ==================================
                 document.querySelectorAll('.editable').forEach(el => {
+
+                    // 🚫 excluir teléfono
+                    if (el.closest('#TelefonoValue'))
+                        return;
 
                     const getText = () => el.innerText.trim();
 

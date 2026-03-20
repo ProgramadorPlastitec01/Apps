@@ -1,0 +1,29 @@
+/* 
+    Document   : flotante
+    Created on : 25/04/2016, 10:41:53 AM
+    Author     : aprendiz.sena1
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+.ventana_flotante{
+    background: none repeat scroll 0 0 #048B86;
+    border: 1px solid #DDDDDD;
+   bottom:50px;
+   left: auto;
+   margin-left: -250px;
+   padding: 10px 0 0;
+   position: fixed;
+   text-align: center;
+   width:auto;
+   height: auto;
+   z-index: 15;
+
+
+}
+

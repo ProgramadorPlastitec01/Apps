@@ -116,90 +116,90 @@ public class Mail {
         }
     }
 
-    public void SendError404Mail(String usuario, String url, String ip, ServletContext context) throws MessagingException {
-        if (lst_mail != null) {
-            Object[] obj_mail = (Object[]) lst_mail.get(0);
-            String[] ArrMail = obj_mail[2].toString()
-                    .replace("][", "///")
-                    .replace("[", "")
-                    .replace("]", "")
-                    .split("///");
-
-            Properties propiedades = new Properties();
-            propiedades.setProperty("mail.smtp.host", ArrMail[0]);
-            propiedades.setProperty("mail.smtp.starttls.enable", ArrMail[1]);
-            propiedades.setProperty("mail.smtp.port", ArrMail[2]);
-            propiedades.setProperty("mail.smtp.auth", "true");
-            propiedades.setProperty("mail.smtp.user", ArrMail[4]);
-            propiedades.put("mail.smtp.connectiontimeout", "10000");
-            propiedades.put("mail.smtp.timeout", "10000");
-            propiedades.put("mail.smtp.writetimeout", "10000");
-
-            Session session = Session.getDefaultInstance(propiedades);
-
-            MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(ArrMail[4]));
-
-            // 📩 Correo de soporte / sistemas
-            message.addRecipient(
-                    Message.RecipientType.TO,
-                    new InternetAddress("p.ti@plastitec-sa.com")
-            );
-
-            message.setSubject("Error 404 detectado en COA");
-
-            MimeBodyPart htmlPart = new MimeBodyPart();
-
-            String htmlContent = ""
-                    + "<table width='100%' style='background:#f4f6fb; padding:40px;'>"
-                    + "<tr><td align='center'>"
-                    + "<table width='600' style='background:#ffffff; border:1px solid #ddd;'>"
-                    + "<tr>"
-                    + "<td style='background:#DCCBFF; padding:15px; text-align:center;'>"
-                    + "<img src='cid:logo' width='150'>"
-                    + "</td>"
-                    + "</tr>"
-                    + "<tr><td style='padding:30px;'>"
-                    + "<h2 style='color:#120031;'>Error 404 detectado</h2>"
-                    + "<p>Se ha detectado un acceso a un recurso inexistente en <b>COA</b>.</p>"
-                    + "<table style='width:100%; font-size:14px;'>"
-                    + "<tr><td><b>Usuario:</b></td><td>" + usuario + "</td></tr>"
-                    + "<tr><td><b>URL:</b></td><td>" + url + "</td></tr>"
-                    + "<tr><td><b>IP:</b></td><td>" + ip + "</td></tr>"
-                    + "<tr><td><b>Fecha:</b></td><td>" + new java.util.Date() + "</td></tr>"
-                    + "</table>"
-                    + "<p style='margin-top:20px; font-size:13px; color:#666;'>"
-                    + "Este correo fue generado automáticamente por el sistema COA."
-                    + "</p>"
-                    + "</td></tr></table></td></tr></table>";
-
-            htmlPart.setContent(htmlContent, "text/html; charset=UTF-8");
-
-            MimeBodyPart imagePart = new MimeBodyPart();
-            String imagePath = context.getRealPath("/Interface/Imagen/Logo1.fw.png");
-            FileDataSource fds = new FileDataSource(imagePath);
-            imagePart.setDataHandler(new DataHandler(fds));
-            imagePart.setHeader("Content-ID", "<logo>");
-            imagePart.setDisposition(MimeBodyPart.INLINE);
-
-            MimeMultipart multipart = new MimeMultipart("related");
-            multipart.addBodyPart(htmlPart);
-            multipart.addBodyPart(imagePart);
-
-            message.setContent(multipart);
-
-            Transport transport = session.getTransport("smtp");
-            transport.connect(ArrMail[0], ArrMail[4], ArrMail[5]);
-            if (message.getAllRecipients() == null) {
-                System.out.println("❌ NO HAY DESTINATARIOS DEFINIDOS");
-            } else {
-                for (Address a : message.getAllRecipients()) {
-                    System.out.println("📧 Destinatario: " + a.toString());
-                }
-            }
-
-            transport.sendMessage(message, message.getAllRecipients());
-            transport.close();
-        }
-    }
+//    public void SendError404Mail(String usuario, String url, String ip, ServletContext context) throws MessagingException {
+//        if (lst_mail != null) {
+//            Object[] obj_mail = (Object[]) lst_mail.get(0);
+//            String[] ArrMail = obj_mail[2].toString()
+//                    .replace("][", "///")
+//                    .replace("[", "")
+//                    .replace("]", "")
+//                    .split("///");
+//
+//            Properties propiedades = new Properties();
+//            propiedades.setProperty("mail.smtp.host", ArrMail[0]);
+//            propiedades.setProperty("mail.smtp.starttls.enable", ArrMail[1]);
+//            propiedades.setProperty("mail.smtp.port", ArrMail[2]);
+//            propiedades.setProperty("mail.smtp.auth", "true");
+//            propiedades.setProperty("mail.smtp.user", ArrMail[4]);
+//            propiedades.put("mail.smtp.connectiontimeout", "10000");
+//            propiedades.put("mail.smtp.timeout", "10000");
+//            propiedades.put("mail.smtp.writetimeout", "10000");
+//
+//            Session session = Session.getDefaultInstance(propiedades);
+//
+//            MimeMessage message = new MimeMessage(session);
+//            message.setFrom(new InternetAddress(ArrMail[4]));
+//
+//            // 📩 Correo de soporte / sistemas
+//            message.addRecipient(
+//                    Message.RecipientType.TO,
+//                    new InternetAddress("p.ti@plastitec-sa.com")
+//            );
+//
+//            message.setSubject("Error 404 detectado en COA");
+//
+//            MimeBodyPart htmlPart = new MimeBodyPart();
+//
+//            String htmlContent = ""
+//                    + "<table width='100%' style='background:#f4f6fb; padding:40px;'>"
+//                    + "<tr><td align='center'>"
+//                    + "<table width='600' style='background:#ffffff; border:1px solid #ddd;'>"
+//                    + "<tr>"
+//                    + "<td style='background:#DCCBFF; padding:15px; text-align:center;'>"
+//                    + "<img src='cid:logo' width='150'>"
+//                    + "</td>"
+//                    + "</tr>"
+//                    + "<tr><td style='padding:30px;'>"
+//                    + "<h2 style='color:#120031;'>Error 404 detectado</h2>"
+//                    + "<p>Se ha detectado un acceso a un recurso inexistente en <b>COA</b>.</p>"
+//                    + "<table style='width:100%; font-size:14px;'>"
+//                    + "<tr><td><b>Usuario:</b></td><td>" + usuario + "</td></tr>"
+//                    + "<tr><td><b>URL:</b></td><td>" + url + "</td></tr>"
+//                    + "<tr><td><b>IP:</b></td><td>" + ip + "</td></tr>"
+//                    + "<tr><td><b>Fecha:</b></td><td>" + new java.util.Date() + "</td></tr>"
+//                    + "</table>"
+//                    + "<p style='margin-top:20px; font-size:13px; color:#666;'>"
+//                    + "Este correo fue generado automáticamente por el sistema COA."
+//                    + "</p>"
+//                    + "</td></tr></table></td></tr></table>";
+//
+//            htmlPart.setContent(htmlContent, "text/html; charset=UTF-8");
+//
+//            MimeBodyPart imagePart = new MimeBodyPart();
+//            String imagePath = context.getRealPath("/Interface/Imagen/Logo1.fw.png");
+//            FileDataSource fds = new FileDataSource(imagePath);
+//            imagePart.setDataHandler(new DataHandler(fds));
+//            imagePart.setHeader("Content-ID", "<logo>");
+//            imagePart.setDisposition(MimeBodyPart.INLINE);
+//
+//            MimeMultipart multipart = new MimeMultipart("related");
+//            multipart.addBodyPart(htmlPart);
+//            multipart.addBodyPart(imagePart);
+//
+//            message.setContent(multipart);
+//
+//            Transport transport = session.getTransport("smtp");
+//            transport.connect(ArrMail[0], ArrMail[4], ArrMail[5]);
+//            if (message.getAllRecipients() == null) {
+//                System.out.println("❌ NO HAY DESTINATARIOS DEFINIDOS");
+//            } else {
+//                for (Address a : message.getAllRecipients()) {
+//                    System.out.println("📧 Destinatario: " + a.toString());
+//                }
+//            }
+//
+//            transport.sendMessage(message, message.getAllRecipients());
+//            transport.close();
+//        }
+//    }
 }
