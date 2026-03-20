@@ -95,7 +95,8 @@ public class GLPIClient {
                 + "\"realname\":\"" + apellido + "\","
                 + "\"firstname\":\"" + nombre + "\","
                 + "\"password\":\"" + password + "\","
-                + "\"password2\":\"" + password + "\""
+                + "\"password2\":\"" + password + "\","
+                + "\"password_forced_update\": 1"
                 + "} }";
 
         OutputStream os = conn.getOutputStream();

@@ -88,7 +88,7 @@
                 <div class="FootData">
                     <!--<p style="color: #5ecbeb;">VP 00.00.00</p>-->
                     <!--<p style="color: #5ecbeb;">VA 04.09.05</p>-->
-                    <p style="color: #5ecbeb;">VA 00.00.00</p>
+                    <p style="color: #5ecbeb;">VA 08.18.10</p>
                     <p>PLASTITEC 2026 &#169 copyright</p>
                 </div>
             </div>

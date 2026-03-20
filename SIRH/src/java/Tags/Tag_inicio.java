@@ -236,9 +236,9 @@ public class Tag_inicio extends TagSupport {
                 //</editor-fold>
 
                 //<editor-fold defaultstate="collapsed" desc="TEST CONECCTION GLPI">
-                GLPISession session = new GLPISession();
-                String token = session.initSession();
-                System.out.println("Session token: " + token);
+//                GLPISession session = new GLPISession();
+//                String token = session.initSession();
+//                System.out.println("Session token: " + token);
 //</editor-fold>
             }
         } catch (IOException ex) {

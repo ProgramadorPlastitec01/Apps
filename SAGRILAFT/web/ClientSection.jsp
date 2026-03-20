@@ -848,57 +848,58 @@
         </script>
 
         <script>
-            function validarNombreArchivo(input, lng) {
+            function validarNombreArchivo(input, lang) {
                 const file = input.files[0];
-                if (file) {
-                    const nombreArchivo = file.name;
-                    // 1. Validar longitud
-                    if (lng == "en  ") {
-                        if (nombreArchivo.length > 50) {
-                            iziToast.warning({
-                                title: 'Attention!',
-                                message: 'The file name must not exceed 50 characters.',
-                                position: 'bottomRight'
-                            });
-                            input.value = "";
-                            return;
-                        }
+                if (!file)
+                    return false;
 
-                        // 2. Validar caracteres especiales y ñ/Ñ
-                        const caracteresInvalidos = /[ñÑ<>:"\/\\|?*\x00-\x1F]/g;
-                        if (caracteresInvalidos.test(nombreArchivo)) {
-                            iziToast.warning({
-                                title: 'Attention!',
-                                message: 'The file name contains illegal characters: ñ Ñ <> : \" / \\ | ? *',
-                                position: 'bottomRight'
-                            });
-                            input.value = "";
-                            return;
-                        }
-                    } else {
-                        if (nombreArchivo.length > 50) {
-                            iziToast.warning({
-                                title: 'Atención!',
-                                message: 'El nombre del archivo no debe superar los 50 caracteres.',
-                                position: 'bottomRight'
-                            });
-                            input.value = "";
-                            return;
-                        }
-                        const caracteresInvalidos = /[ñÑ<>:"\/\\|?*\x00-\x1F]/g;
-                        if (caracteresInvalidos.test(nombreArchivo)) {
-                            iziToast.warning({
-                                title: 'Atención!',
-                                message: 'El nombre del archivo contiene caracteres no permitidos: ñ Ñ <> : \" / \\ | ? *',
-                                position: 'bottomRight'
-                            });
-                            input.value = "";
-                            return;
-                        }
-                    }
+                const nombreArchivo = file.name.trim();
 
+                // 1️⃣ Validar longitud máxima 50 caracteres
+                if (nombreArchivo.length > 50) {
+                    iziToast.warning({
+                        title: lang === "en" ? 'Attention!' : 'Atención!',
+                        message: lang === "en"
+                                ? 'The file name must not exceed 50 characters.'
+                                : 'El nombre del archivo no debe superar los 50 caracteres.',
+                        position: 'bottomRight'
+                    });
+                    input.value = "";
+                    return false;
                 }
+
+                // 2️⃣ Validar caracteres permitidos: solo letras inglesas, números, punto, guion y guion bajo
+                const caracteresInvalidos = /[^a-zA-Z0-9._-]/;
+
+                if (caracteresInvalidos.test(nombreArchivo)) {
+                    iziToast.warning({
+                        title: lang === "en" ? 'Attention!' : 'Atención!',
+                        message: lang === "en"
+                                ? 'The file name contains illegal characters or accents.'
+                                : 'El nombre del archivo contiene caracteres no permitidos o tildes.',
+                        position: 'bottomRight'
+                    });
+                    input.value = "";
+                    return false;
+                }
+
+                return true;
             }
+
+// 3️⃣ Asignar listener a todos los inputs con la clase TypeFile
+            document.querySelectorAll('.TypeFile').forEach(input => {
+                input.addEventListener('change', function () {
+                    const lang = this.dataset.lang; // obtiene el idioma
+                    if (!validarNombreArchivo(this, lang))
+                        return; // si falla, no generar enlace
+
+                    // Si pasa la validación, generar el enlace de descarga
+                    const NameFile = this.files[0].name;
+                    const DownloadFile = document.getElementById(this.id.replace('IdFile', 'DownloadFile'));
+                    DownloadFile.innerHTML = '<a class="btn btn-info" href="' + URL.createObjectURL(this.files[0]) + '" download="' + NameFile + '">'
+                            + (lang === "en" ? 'Download' : 'Descargar') + ' <i class="fas fa-download"></i></a>';
+                });
+            });
         </script>
 
 
