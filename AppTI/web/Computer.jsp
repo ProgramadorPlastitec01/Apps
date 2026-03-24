@@ -197,8 +197,8 @@
         <script>
             function validData003() {
                 const form = document.getElementById("formR03");
-                var infoField = document.getElementById("infoField").value;
-                var infoHide = document.getElementById("infoOculta").value;
+                const infoField = document.getElementById("infoField").value.trim();
+                const infoHide = document.getElementById("infoOculta").value.trim();
 
                 const showWarning = (msg) => {
                     iziToast.warning({
@@ -208,24 +208,24 @@
                     });
                 };
 
+                // ❌ Validaciones propias
                 if (!infoField) {
                     showWarning('No se ha seleccionado items.');
-                    if (form.checkValidity()) {
-                        form.submit();  // solo se envía si pasa validaciones
-                    } else {
-                        form.reportValidity(); // muestra mensajes nativos de HTML5
-                    }
-                } else if (!infoHide) {
+                    return;
+                }
+
+                if (!infoHide) {
                     showWarning('No se ha ingresado software instalado.');
-                    if (form.checkValidity()) {
-                        form.submit();  // solo se envía si pasa validaciones
-                    } else {
-                        form.reportValidity(); // muestra mensajes nativos de HTML5
-                    }
+                    return;
+                }
+
+                // ✅ Si todo está bien, ahora sí envía
+                if (form.checkValidity()) {
+                    form.submit();
                 } else {
+                    form.reportValidity();
                 }
             }
-
         </script>
 
         <Alerts:Alert/>        
