@@ -546,10 +546,13 @@
                 }
             });
         }
+        
     </script>
 
     <script src="Interface/Content/Assets/js/eventLogger.js"></script>
     <script src="Interface/Content/Assets/js/Print.js"></script>
+    <script src="Interface/Content/Assets/js/html2canvas.min.js"></script>
+    <script src="Interface/Content/Assets/js/jspdf.umd.min.js"></script>
     <script src="Interface/Content/Assets/modules/izitoast/js/iziToast.min.js"></script>
     <script src="Interface/Content/Assets/js/page/modules-toastr.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>

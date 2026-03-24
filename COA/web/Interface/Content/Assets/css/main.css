@@ -3345,3 +3345,118 @@ thead.sticky-top {
     background-color: #e9ecef;   /* gris suave */
     border: none;                /* sin líneas */
 }
+
+
+
+
+
+
+
+.pdf-mode {
+    background: #ffffff !important;
+}
+
+ /*🔹 Reset general*/ 
+.pdf-mode * {
+    color: #000000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    outline: none !important;
+}
+
+ /*🔹 Fondo blanco base*/ 
+.pdf-mode {
+    background-color: #ffffff !important;
+}
+
+ /*❌ NO borrar fondos globalmente*/ 
+
+ /*✅ Mantener colores Bootstrap importantes*/ 
+.pdf-mode .bg-secondary {
+    background-color: #6c757d !important;
+    color: #ffffff !important;
+}
+
+.pdf-mode .table-secondary,
+.pdf-mode .table-secondary > th,
+.pdf-mode .table-secondary > td,
+.pdf-mode .table-secondary thead th {
+    background-color: #d6d8db !important;
+    color: #000000 !important;
+}
+
+ /*🔹 Tablas estilo Excel*/ 
+.pdf-mode table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+}
+
+.pdf-mode th,
+.pdf-mode td {
+    padding: 3px 5px !important;
+    font-size: 12px !important;
+    line-height: 1.2 !important;
+}
+
+/* 🔹 Bordes más finos para PDF */
+.pdf-mode table,
+.pdf-mode th,
+.pdf-mode td {
+    border: 0.5px solid #dee2e6 !important;
+}
+
+ /*🔹 Firma limpia*/ 
+.pdf-mode .firma-img {
+    border: none !important;
+    background: transparent !important;
+}
+
+ /*🔹 Evitar cortes feos*/ 
+.pdf-mode table,
+.pdf-mode tr,
+.pdf-mode td,
+.pdf-mode th {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+}
+ /*🔥 Forzar layout de tabla real*/ 
+.pdf-mode table {
+    border-collapse: collapse !important;
+    border-spacing: 0 !important;
+    table-layout: fixed !important;
+    width: 100% !important;
+}
+
+ /*🔥 MUY IMPORTANTE para rowspan*/ 
+.pdf-mode tr {
+    display: table-row !important;
+}
+
+.pdf-mode td,
+.pdf-mode th {
+    display: table-cell !important;
+    vertical-align: middle !important;
+}
+
+ /*🔥 Evita que html2canvas parta filas*/ 
+.pdf-mode table,
+.pdf-mode tr {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+}
+.pdf-mode td[rowspan],
+.pdf-mode th[rowspan] {
+    height: auto !important;
+}
+
+
+
+
+/* 🔥 Forzar anchos reales por columna */
+.pdf-mode col.col-num {
+    width: 5% !important;
+}
+
+.pdf-mode col.col-text {
+    width: 50% !important;
+}

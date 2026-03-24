@@ -1,49 +1,69 @@
+/* =====================================================
+ ✍️ FIRMA → CANVAS A IMAGEN (ROBUSTO)
+ ===================================================== */
 function renderSignatureToImage(canvasId = 'signature-canvas', inputId = 'coordenadas-hidden') {
     const canvas = document.getElementById(canvasId);
     const input = document.getElementById(inputId);
+
     if (!canvas || !input || !input.value.trim())
         return null;
 
-    // Parsear coordenadas
-    // --- Parsear coordenadas de forma segura ---
-    let raw = input.value.replace(/&quot;/g, '"').replace(/&#39;/g, "'").trim();
+    // 🔹 Limpiar string corrupto
+    let raw = input.value
+            .replace(/&quot;/g, '"')
+            .replace(/&#39;/g, "'")
+            .replace(/}\s*{/g, '},{')
+            .trim();
 
-// Intentar limpiar cadenas concatenadas o con basura
-    raw = raw.replace(/}\s*{/g, '},{');         // une objetos sueltos
     if (!raw.startsWith('['))
-        raw = '[' + raw;  // asegura corchetes
+        raw = '[' + raw;
     if (!raw.endsWith(']'))
-        raw = raw + ']';    // asegura cierre
+        raw = raw + ']';
 
-    let coordenadas = [];
+    let coordenadas;
     try {
         coordenadas = JSON.parse(raw);
     } catch (err) {
-        console.error("❌ Error al parsear coordenadas:", err);
-        console.warn("🧾 Valor que causó error:", raw);
-        return null; // salir para no romper impresión
+        console.error("❌ Error parseando firma:", err);
+        return null;
     }
+
     if (!Array.isArray(coordenadas))
         coordenadas = [coordenadas];
+    if (!coordenadas.length)
+        return null;
 
-    // Dibujar en canvas temporal
+    // 🔹 Canvas temporal
     const temp = document.createElement('canvas');
     temp.width = canvas.width;
     temp.height = canvas.height;
     const ctx = temp.getContext('2d');
 
-    const maxX = Math.max(...coordenadas.map(c => Math.max(c.lx, c.mx)));
-    const maxY = Math.max(...coordenadas.map(c => Math.max(c.ly, c.my)));
-    const minX = Math.min(...coordenadas.map(c => Math.min(c.lx, c.mx)));
-    const minY = Math.min(...coordenadas.map(c => Math.min(c.ly, c.my)));
-    const originalWidth = maxX - minX;
-    const originalHeight = maxY - minY;
-    const scale = Math.min(temp.width / originalWidth, temp.height / originalHeight);
+    // 🔹 Calcular límites reales
+    const xs = coordenadas.flatMap(c => [c.lx, c.mx]);
+    const ys = coordenadas.flatMap(c => [c.ly, c.my]);
+
+    const minX = Math.min(...xs);
+    const maxX = Math.max(...xs);
+    const minY = Math.min(...ys);
+    const maxY = Math.max(...ys);
+
+    const originalWidth = maxX - minX || 1;
+    const originalHeight = maxY - minY || 1;
+
+    const scale = Math.min(
+            temp.width / originalWidth,
+            temp.height / originalHeight
+            ) * 0.9;
+
     const offsetX = (temp.width - originalWidth * scale) / 2 - minX * scale;
     const offsetY = (temp.height - originalHeight * scale) / 2 - minY * scale;
 
-    ctx.strokeStyle = 'black';
-    ctx.lineWidth = 1.5;
+    // 🔹 Dibujar firma
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 1.6;
+    ctx.lineCap = 'round';
+
     coordenadas.forEach(c => {
         ctx.beginPath();
         ctx.moveTo(c.lx * scale + offsetX, c.ly * scale + offsetY);
@@ -51,157 +71,94 @@ function renderSignatureToImage(canvasId = 'signature-canvas', inputId = 'coorde
         ctx.stroke();
     });
 
-    // Crear imagen Base64
+    // 🔹 Convertir a imagen
     const img = document.createElement('img');
     img.src = temp.toDataURL('image/png');
-    img.alt = 'Firma digital';
     img.className = 'firma-img';
     img.style.maxWidth = '100%';
-    img.style.border = '1px solid #ccc';
-    img.style.borderRadius = '6px';
-    img.style.marginTop = '5px';
+    img.style.display = 'block';
     return img;
 }
 
+
+/* =====================================================
+ 🖨️ IMPRESIÓN LIMPIA (OPCIONAL)
+ ===================================================== */
 function PrintHtml() {
-    const objeto = document.getElementById('HtmlContent');
-    if (!objeto) {
-        alert('No se encontró el contenido para imprimir.');
-        return;
-    }
+    const contenido = document.getElementById('HtmlContent');
+    if (!contenido)
+        return alert('No se encontró el contenido.');
 
-    // Reemplazar el canvas por imagen
+    // 🔹 Reemplazar firma
     const canvas = document.getElementById('signature-canvas');
-    const imgFirma = renderSignatureToImage('signature-canvas', 'coordenadas-hidden');
+    const imgFirma = renderSignatureToImage();
     if (canvas && imgFirma)
-        canvas.parentNode.replaceChild(imgFirma, canvas);
+        canvas.replaceWith(imgFirma);
 
-    const htmlContent = objeto.innerHTML;
-
-    // Base para rutas
     const basePath = window.location.origin + window.location.pathname.replace(/\/[^\/]*$/, '/');
-
     const ventana = window.open('', '_blank');
-    ventana.document.open();
+
     ventana.document.write(`
         <html>
         <head>
             <base href="${basePath}">
-            <title>Vista para imprimir</title>
+            <title>Imprimir</title>
 
             <link rel="stylesheet" href="Interface/Content/Assets/modules/bootstrap/css/bootstrap.min.css">
-            <link rel="stylesheet" href="Interface/Content/Assets/css/style.min.css" type="text/css">
-            <link rel="stylesheet" href="Interface/Content/Assets/css/main.css">
-            <link rel="stylesheet" href="Interface/Content/Assets/css/style.css">
-            <link rel="stylesheet" href="Interface/Content/Assets/modules/fontawesome/css/all.min.css">
 
             <style>
-                /* 🔹 RESET GLOBAL (reduce márgenes y paddings al mínimo) */
-                html, body {
-                    margin: 0 !important;
-                    padding: 0 !important;
-                    width: 100%;
-                    font-size: 13px;
-                }
+                @page { size: Letter portrait; margin: 12mm; }
 
-                body.container {
-                    padding: 5px !important;  /* Puedes bajarlo a 0 si quieres CERO márgenes */
+                html, body {
+                    margin: 0;
+                    padding: 0;
+                    background: #fff;
+                    color: #000;
+                    font-size: 12px;
                 }
 
                 * {
-                    box-sizing: border-box;
+                    box-shadow: none !important;
+                    text-shadow: none !important;
                 }
 
-                /* 🔹 Eliminar paddings de Bootstrap */
-                .container, .container-fluid, .row, [class*="col-"] {
-                    padding-left: 2px !important;
-                    padding-right: 2px !important;
-                }
-                /* 🔹 Comprimir todos los td/th */
-                table td, 
-                table th {
-                    padding: 1px 2px !important;
-                    line-height: 1.05 !important;
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
                 }
 
-                /* 🔹 Quitar padding y márgenes de las celdas con textos largos o multilínea */
-                table td p,
-                table th p {
-                    margin: 0 !important;
-                    padding: 0 !important;
+                td, th {
+                    padding: 2px 4px !important;
+                    line-height: 1.15 !important;
                 }
 
-                /* 🔹 Comprimir títulos multilínea */
-                table td.fw-bold,
-                table th.fw-bold {
-                    padding-top: 0 !important;
-                    padding-bottom: 0 !important;
-                    line-height: 1.05 !important;
-                }
-
-                /* 🔹 Comprimir celdas que tienen texto bilingüe (ESP / ENG) */
-                table td.text-start,
-                table td.text-end,
-                table td.text-center {
-                    padding-top: 1px !important;
-                    padding-bottom: 1px !important;
-                }
-
-                /* 🔹 Quitar padding del contenedor de secciones (1.1 / 2.1 etc) */
-                td[colspan] {
-                    padding-top: 1px !important;
-                    padding-bottom: 1px !important;
-                }
-
-                /* 🔹 Evitar saltos de línea innecesarios */
                 tr, td, th {
                     page-break-inside: avoid !important;
                 }
-            }
 
-                /* 🔹 Imagen de firma sin borde */
-                .firma-img {
+                img {
+                    max-width: 100%;
+                    height: auto;
+                }
+
+                #TelefonoValue.pending {
+                    background-color: #e9ecef !important;
                     border: none !important;
-                    background: transparent !important;
                 }
 
-                /* 🔹 Ajustar colores */
-                body .bg-secondary {
-                    background-color: #6c757d !important;
-                    color: #fff !important;
+                * {
+                    -webkit-print-color-adjust: exact !important;
+                    print-color-adjust: exact !important;
                 }
-                body .table-secondary,
-                body .table-secondary > th,
-                body .table-secondary > td,
-                body .table-secondary thead th {
-                    background-color: #d6d8db !important;
-                    color: #000 !important;
-                }
-
-                @media print {
-
-                body {
-                    border: 1px solid #f6f6f6 !important;
-                    margin: 5mm !important;   /* espacio entre borde y el borde de la hoja */
-                    padding: 5mm !important;  /* espacio interno */
-                    box-sizing: border-box !important;
-                }
-
-                html {
-                    border: none !important;
-                    padding: 0 !important;
-                    margin: 0 !important;
-                }
-            }
             </style>
         </head>
-        <body class="container">
-            ${htmlContent}
+        <body>
+            ${contenido.innerHTML}
         </body>
         </html>
     `);
-    ventana.document.close();
 
+    ventana.document.close();
     ventana.onload = () => {
         ventana.print();
         ventana.close();
@@ -209,3 +166,111 @@ function PrintHtml() {
 }
 
 
+/* =====================================================
+ 📄 PDF CARTA PERFECTO (RECOMENDADO)
+ ===================================================== */
+async function descargarPDFCarta() {
+    if (!window.jspdf || !window.html2canvas) {
+        alert("Error: Librerías PDF no cargaron.");
+        return;
+    }
+
+    const {jsPDF} = window.jspdf;
+    const contenido = document.getElementById('Imprimir');
+
+    if (!contenido)
+        return alert('No se encontró el contenido.');
+
+    // 🔹 Reemplazar firma canvas → imagen
+    const canvasFirma = document.getElementById('signature-canvas');
+    const imgFirma = renderSignatureToImage();
+    if (canvasFirma && imgFirma)
+        canvasFirma.replaceWith(imgFirma);
+
+    // 🔹 Modo limpio PDF
+    contenido.classList.add('pdf-mode');
+
+    const canvas = await html2canvas(contenido, {
+        scale: 3,
+        useCORS: true,
+        backgroundColor: '#FFFFFF',
+        removeContainer: true,
+        imageTimeout: 0,
+        logging: false,
+        onclone: (doc) => {
+            const root = doc.getElementById('Imprimir');
+            if (root)
+                root.classList.add('pdf-mode');
+
+            // 🔥 FIX VISUAL ROWSPAN
+            doc.querySelectorAll('td[rowspan], th[rowspan]').forEach(cell => {
+                cell.style.position = 'relative';
+                cell.style.zIndex = '1';
+                cell.style.backgroundClip = 'padding-box';
+            });
+
+            // 🔥 Forzar que la tabla se recalcule completa
+            doc.querySelectorAll('table').forEach(table => {
+                table.style.borderCollapse = 'collapse';
+                table.style.borderSpacing = '0';
+                table.style.tableLayout = 'fixed';
+
+                // Truco: reflow real
+                table.style.display = 'none';
+                table.offsetHeight;
+                table.style.display = 'table';
+            });
+
+            document.querySelectorAll('table').forEach(table => {
+                const colgroup = document.createElement('colgroup');
+
+                const col1 = document.createElement('col');
+                col1.className = 'col-num';
+
+                const col2 = document.createElement('col');
+                col2.className = 'col-text';
+
+                colgroup.appendChild(col1);
+                colgroup.appendChild(col2);
+
+                table.insertBefore(colgroup, table.firstChild);
+            });
+
+        }
+    });
+
+    contenido.classList.remove('pdf-mode');
+
+    const imgData = canvas.toDataURL('image/jpeg', 1.0);
+
+    // 📄 Carta real
+    const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'pt',
+        format: 'letter'
+    });
+
+    const pageWidth = 612;
+    const pageHeight = 792;
+    const margin = 5; // 0.5 inch
+
+    const usableWidth = pageWidth - margin * 2;
+    const usableHeight = pageHeight - margin * 2;
+
+    const ratio = Math.min(
+            usableWidth / canvas.width,
+            usableHeight / canvas.height
+            );
+
+    const newWidth = canvas.width * ratio;
+    const newHeight = canvas.height * ratio;
+
+    const x = (pageWidth - newWidth) / 2;
+    const y = margin;
+
+
+    pdf.addImage(imgData, 'JPEG', x, y, newWidth, newHeight);
+
+    const fecha = new Date().toISOString().slice(0, 10);
+    pdf.save(`Certificado_Calidad_${fecha}.pdf`);
+}

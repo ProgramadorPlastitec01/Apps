@@ -190,7 +190,7 @@ public class Visual extends TagSupport {
                         out.print("<div>"
                                 + "<button class='btn btn-outline-primary btn-sm' "
                                 + "style='border-radius: 4px; padding: 2px 9px;' "
-                                + "onclick='PrintHtml()' data-toggle='tooltip' "
+                                + "onclick='descargarPDFCarta()' data-toggle='tooltip' "
                                 + "data-placement='top' title='Imprimir'>"
                                 + "<i class='fas fa-print'></i>"
                                 + "</button></div>");
@@ -943,11 +943,11 @@ public class Visual extends TagSupport {
                     //<editor-fold defaultstate="collapsed" desc="VIEW CERTIFICATE UPDATE - CLOSE">
                     if (StateCerti == 2 || StateCerti == 3) {
                         //<editor-fold defaultstate="collapsed" desc="CLOSE">
-                        out.print("<div id='Imprimir'><div id='HtmlContent'>");
+                        out.print("<div id='Imprimir'  class=\"print-scale-wrapper\" ><div id='HtmlContent'>");
                         Html = Html.replace("contenteditable=\"true\"", "contenteditable=\"false\"");
                         Html = Html.replaceAll("<input type=\"checkbox\"", "<input type=\"checkbox\" class=\"disabled\" ");
                         Html = Html.replaceAll("<input name=\"result\" type=\"radio\"", "<input name=\"result\" type=\"radio\" class=\"disabled\"");
-                        Html = Html.replaceAll("<input type=\"date\" id=\"dispatchDate\" name=\"dispatchDate\" class=\"\" style=\"outline: none; background: transparent;\"", "<input id=\"dispatchDate\" name=\"dispatchDate\" class=\"\" style=\"outline: none; background: transparent; border:none\"");
+                        Html = Html.replaceAll("<input type=\"date\" ", "<input type=\"\"");
                         if (StateCerti == 3) {
                             if (IdSig != null && !IdSig.equals("")) {
                                 Html = Html.replaceAll("<div id=\"SignatureImage\"></div>", "<div id=\"SignatureImage\"><img src=\"Interface/Uploads/Signature/" + IdSig + "\" height=\"58px\" alt=\"Logo\" class=\"ImgSig\"></div>");
