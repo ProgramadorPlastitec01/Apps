@@ -350,10 +350,15 @@ public class Tag_rollo extends TagSupport {
                                 + "val1.add(Validate.Parametros_maximos, { match: 'Txt_ancho_bobina_max'} );"
                                 + "</script>");
                         //</editor-fold>
-                        //<editor-fold defaultstate="collapsed" desc="BORDER LATERALES ROLLO">
-                        out.print("<b>Bordes Lateral Rollo :</b><br />");
-                        out.print("<input type='radio' name='Bdr_ltr_rollo' id='Bdr_ltr_rollo_si' value='SI' />SI");
-                        out.print("<input type='radio' name='Bdr_ltr_rollo' id='Bdr_ltr_rollo_no' value='NO' checked/>NO<br />");
+                        //<editor-fold defaultstate="collapsed" desc="BORDER CORTADOS O MALTRATADOS">
+                        out.print("<b>Bordes Cortados o Maltratados :</b><br />");
+                        if (id_rollo == 0) {
+                            out.print("<input type='radio' name='Bdr_ltr_rollo' id='Bdr_ltr_rollo_si' value='SI'  />SI");
+                            out.print("<input type='radio' name='Bdr_ltr_rollo' id='Bdr_ltr_rollo_no' value='NO' checked />NO<br />");
+                        } else {
+                            out.print("<input type='radio' name='Bdr_ltr_rollo' id='Bdr_ltr_rollo_si' value='SI' " + ((obj_rollo[29].equals("SI")) ? "checked" : "") + " />SI");
+                            out.print("<input type='radio' name='Bdr_ltr_rollo' id='Bdr_ltr_rollo_no' value='NO' " + ((obj_rollo[29] == null ? "checked" : (obj_rollo[29].equals("NO") ? "checked" : ""))) + "/>NO<br />");
+                        }
                         //</editor-fold>
                         out.print("</td>");
                         out.print("</td>");
@@ -573,7 +578,7 @@ public class Tag_rollo extends TagSupport {
                         out.print("</tr>");
                         out.print("<tr>");
                         out.print("<td " + ((fecha_convert >= 20160317) ? "colspan='9'" : "colspan='7'") + " align='center'><b class='negro'>INSPECCION CALIDAD<br />EXTRUSION MANGA</b></td>");
-                        if (fecha_convert >= 20260305) {
+                        if (fecha_convert >= 20260324) {
                             out.print("<td colspan='3' align='center'><b class='negro'>VERSION 7</b></td>");
                         } else if (fecha_convert >= 20160317) {
                             out.print("<td colspan='3' align='center'><b class='negro'>VERSION 6</b></td>");
@@ -624,8 +629,8 @@ public class Tag_rollo extends TagSupport {
                         }
                         out.print("<th rowspan='2'>Particulas</th>");
 //                        out.print("<th rowspan='2'>Curvatura</th>");
-                        if (fecha_convert >= 20260305) {
-                            out.print("<th rowspan='2'>Bordes Laterales Rollo</th>");
+                        if (fecha_convert >= 20260324) {
+                            out.print("<th rowspan='2'>Bordes Cortados o Maltratados</th>");
                         }
                         out.print("<th rowspan='2' colspan='2'>Registros Calidad</th>");
                         out.print("</tr>");
