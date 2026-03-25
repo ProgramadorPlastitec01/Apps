@@ -172,81 +172,81 @@ public class MenuJpaController {
 //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="FIRMAS">
 
-    public List Traer_firma(long dcm, int cdg) {
-        EntityManager etm = getEntityManager();
-        etm.getTransaction().begin();
-        try {
-            Query q = etm.createNativeQuery("CALL `sp_signature_documento_codigo`('" + dcm + "','" + cdg + "')");
-            List consulta = q.getResultList();
-            etm.getTransaction().commit();
-            etm.clear();
-            etm.close();
-            if (consulta.isEmpty()) {
-                return null;
-            } else {
-                return consulta;
-            }
-        } catch (Exception ex) {
-            return null;
-        }
-    }
-
-    public boolean Registrar_firma(long dcm, int cdg, String fma) {
-        EntityManager etm = getEntityManager();
-        etm.getTransaction().begin();
-        try {
-            Query q = etm.createNativeQuery("CALL `sp_signature_registrar_firma`('" + dcm + "','" + cdg + "','" + fma + "')");
-            int exitoso = q.executeUpdate();
-            etm.getTransaction().commit();
-            etm.clear();
-            etm.close();
-            if (exitoso == 0) {
-                return false;
-            } else {
-                return true;
-            }
-        } catch (Exception ex) {
-            return false;
-        }
-    }
-
-    public boolean Actualizar_firma(long dcm, int cdg, String fma) {
-        EntityManager etm = getEntityManager();
-        etm.getTransaction().begin();
-        try {
-            Query q = etm.createNativeQuery("CALL `sp_signature_actualizar_firma`('" + dcm + "','" + cdg + "','" + fma + "')");
-            int exitoso = q.executeUpdate();
-            etm.getTransaction().commit();
-            etm.clear();
-            etm.close();
-            if (exitoso == 0) {
-                return false;
-            } else {
-                return true;
-            }
-        } catch (Exception ex) {
-            return false;
-        }
-    }
-
-    public boolean Cambiar_estados_firma(long dcm, long cdg) {
-        EntityManager etm = getEntityManager();
-        etm.getTransaction().begin();
-        try {
-            Query q = etm.createNativeQuery("CALL `sp_signature_actualizar_estados`('" + dcm + "','" + cdg + "')");
-            int exitoso = q.executeUpdate();
-            etm.getTransaction().commit();
-            etm.clear();
-            etm.close();
-            if (exitoso == 0) {
-                return false;
-            } else {
-                return true;
-            }
-        } catch (Exception ex) {
-            return false;
-        }
-    }
+//    public List Traer_firma(long dcm, int cdg) {
+//        EntityManager etm = getEntityManager();
+//        etm.getTransaction().begin();
+//        try {
+//            Query q = etm.createNativeQuery("CALL `sp_signature_documento_codigo`('" + dcm + "','" + cdg + "')");
+//            List consulta = q.getResultList();
+//            etm.getTransaction().commit();
+//            etm.clear();
+//            etm.close();
+//            if (consulta.isEmpty()) {
+//                return null;
+//            } else {
+//                return consulta;
+//            }
+//        } catch (Exception ex) {
+//            return null;
+//        }
+//    }
+//
+//    public boolean Registrar_firma(long dcm, int cdg, String fma) {
+//        EntityManager etm = getEntityManager();
+//        etm.getTransaction().begin();
+//        try {
+//            Query q = etm.createNativeQuery("CALL `sp_signature_registrar_firma`('" + dcm + "','" + cdg + "','" + fma + "')");
+//            int exitoso = q.executeUpdate();
+//            etm.getTransaction().commit();
+//            etm.clear();
+//            etm.close();
+//            if (exitoso == 0) {
+//                return false;
+//            } else {
+//                return true;
+//            }
+//        } catch (Exception ex) {
+//            return false;
+//        }
+//    }
+//
+//    public boolean Actualizar_firma(long dcm, int cdg, String fma) {
+//        EntityManager etm = getEntityManager();
+//        etm.getTransaction().begin();
+//        try {
+//            Query q = etm.createNativeQuery("CALL `sp_signature_actualizar_firma`('" + dcm + "','" + cdg + "','" + fma + "')");
+//            int exitoso = q.executeUpdate();
+//            etm.getTransaction().commit();
+//            etm.clear();
+//            etm.close();
+//            if (exitoso == 0) {
+//                return false;
+//            } else {
+//                return true;
+//            }
+//        } catch (Exception ex) {
+//            return false;
+//        }
+//    }
+//
+//    public boolean Cambiar_estados_firma(long dcm, long cdg) {
+//        EntityManager etm = getEntityManager();
+//        etm.getTransaction().begin();
+//        try {
+//            Query q = etm.createNativeQuery("CALL `sp_signature_actualizar_estados`('" + dcm + "','" + cdg + "')");
+//            int exitoso = q.executeUpdate();
+//            etm.getTransaction().commit();
+//            etm.clear();
+//            etm.close();
+//            if (exitoso == 0) {
+//                return false;
+//            } else {
+//                return true;
+//            }
+//        } catch (Exception ex) {
+//            return false;
+//        }
+//    }
 //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="REPORTES GENERALES">
 

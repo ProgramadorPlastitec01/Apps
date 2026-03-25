@@ -187,6 +187,25 @@ public class PersonalJpaController {
             return false;
         }
     }
+    
+    public boolean Registrar_id_glpi_codigo(int cod, int idgl) {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_r_glpi_RegistrarIdGLPI_codigo`(" + cod + ", " + idgl + ")");
+            int exitoso = q.executeUpdate();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (exitoso == 0) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch (Exception ex) {
+            return false;
+        }
+    }
     public boolean Registrar_empleado(String dcm, String nbs, String apl, String gnr, String fnc, String cfm, String epc) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();

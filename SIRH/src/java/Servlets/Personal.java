@@ -16,6 +16,7 @@ import Metodos.ConnectionSignature;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 public class Personal extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -341,7 +342,8 @@ public class Personal extends HttpServlet {
                         event = 0;
                     }
                     if (tipo_firma == 0) {
-                        jpacmnu.Cambiar_estados_firma(Long.parseLong(documento), Long.parseLong(codigo));
+//                        ConnSigna.ActualizarFirmas(Long.parseLong(documento), Long.parseLong(codigo));
+//                        jpacmnu.Cambiar_estados_firma(Long.parseLong(documento), Long.parseLong(codigo));
 //                        jpacmnu.Registrar_firma(Long.parseLong(documento), Integer.parseInt(codigo), firma);
                         ConnSigna.RegistrarFirmas(Long.parseLong(documento), Long.parseLong(codigo), firma);
                         request.setAttribute("Alerta", "Registro_firmas");

@@ -3,18 +3,19 @@ package GLPI;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
+import GLPI.GetData;
+import java.util.List;
+
 public class GLPIClient {
 
-    private ConfigLoader config = new ConfigLoader();
+    private GetData config = new GetData();
 
-    String urlBase = config.get("glpi.url");
-    String appToken = config.get("glpi.app.token");
-    String userToken = config.get("glpi.user.token");
+    String urlBase = "";
+    String appToken = "";
+    String userToken = "";
 
     GLPISession session = new GLPISession();
     String sessionToken;
@@ -24,6 +25,15 @@ public class GLPIClient {
     }
 
     private HttpURLConnection createConnection(String endpoint, String method) throws Exception {
+        List lst_conf = config.Consultar_Configuracion_glpi("GlpiData");
+        
+        if (lst_conf != null) {
+            Object[] confData = (Object[]) lst_conf.get(0);
+            String[] DataGlpi = confData[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+            urlBase = "http://172.16.1.245/apirest.php";
+            appToken = DataGlpi[1].toString();
+            userToken = DataGlpi[2].toString();
+        }
 
         URL url = new URL(urlBase + endpoint);
 
@@ -96,7 +106,7 @@ public class GLPIClient {
                 + "\"firstname\":\"" + nombre + "\","
                 + "\"password\":\"" + password + "\","
                 + "\"password2\":\"" + password + "\","
-                + "\"password_forced_update\": 1"
+                + "\"password_forced\": 1"
                 + "} }";
 
         OutputStream os = conn.getOutputStream();

@@ -5,22 +5,30 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import GLPI.ConfigLoader;
+
+import GLPI.GetData;
+import java.util.List;
 
 public class GLPISession {
 
-    private ConfigLoader config = new ConfigLoader();
+    private GetData config = new GetData();
 
-    String urlBase = config.get("glpi.url");
-    String appToken = config.get("glpi.app.token");
-    String userToken = config.get("glpi.user.token");
-//    String urlBase ="http://172.16.1.242/apirest.php";
-//    String appToken = "FruJ43VPMncRHyMFBPmNLvaMAMRfjaFpAU4xxEng";
-//    String userToken = "sa8M1ocr7PNE4AFKfvcKD5C3pLbnjO5ChwHkYw9C";
+    String urlBase = "";
+    String appToken = "";
+    String userToken = "";
 
     private String sessionToken;
 
     public String initSession() throws Exception {
+        List lst_conf = config.Consultar_Configuracion_glpi("GlpiData");
+
+        if (lst_conf != null) {
+            Object[] confData = (Object[]) lst_conf.get(0);
+            String[] DataGlpi = confData[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+            urlBase = "http://172.16.1.245/apirest.php";
+            appToken = DataGlpi[1].toString();
+            userToken = DataGlpi[2].toString();
+        }
 
         URL url = new URL(urlBase + "/initSession");
 

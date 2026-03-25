@@ -153,7 +153,7 @@ public class Sesion extends HttpServlet {
                     tipo_firma = Integer.parseInt(request.getParameter("Rdb_tipo_firma"));
                     firma = request.getParameter("Txt_firma");
                     if (tipo_firma == 0) {
-                        jpamenu.Cambiar_estados_firma(documento, codigo);
+//                        jpamenu.Cambiar_estados_firma(documento, codigo);
                         ConnSigna.RegistrarFirmas(documento, codigo, firma);
                         request.setAttribute("Alerta", "Registro_firmas");
                         request.setAttribute("var1", documento);
