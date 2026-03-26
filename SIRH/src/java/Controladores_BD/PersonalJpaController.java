@@ -169,11 +169,11 @@ public class PersonalJpaController {
         }
     }
 
-    public boolean Registrar_id_glpi(int doc, int idgl) {
+    public boolean Registrar_id_glpi(String doc, int idgl) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
         try {
-            Query q = etm.createNativeQuery("CALL `Sp_r_glpi_RegistrarIdGLPI`(" + doc + ", " + idgl + ")");
+            Query q = etm.createNativeQuery("CALL `Sp_r_glpi_RegistrarIdGLPI`('" + doc + "', " + idgl + ")");
             int exitoso = q.executeUpdate();
             etm.getTransaction().commit();
             etm.clear();

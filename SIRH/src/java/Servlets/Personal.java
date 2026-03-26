@@ -135,7 +135,7 @@ public class Personal extends HttpServlet {
                                 if (matcher.find()) {
                                     idGLPI = Integer.parseInt(matcher.group(1));
                                 }
-                                jpacpsn.Registrar_id_glpi(Integer.parseInt(documento), idGLPI);
+                                jpacpsn.Registrar_id_glpi(documento, idGLPI);
                             } catch (Exception e) {
                             }
                             System.out.print(res);

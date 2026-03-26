@@ -26,7 +26,7 @@ public class GLPIClient {
 
     private HttpURLConnection createConnection(String endpoint, String method) throws Exception {
         List lst_conf = config.Consultar_Configuracion_glpi("GlpiData");
-        
+
         if (lst_conf != null) {
             Object[] confData = (Object[]) lst_conf.get(0);
             String[] DataGlpi = confData[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
@@ -83,75 +83,48 @@ public class GLPIClient {
 
     //<editor-fold defaultstate="collapsed" desc="CREATE USER">
     public String crearUsuario(String login, String nombre, String apellido, String password) throws Exception {
-
-        // 1. Verificar si el usuario ya existe
         String busqueda = buscarUsuario(login);
-
         if (!busqueda.contains("\"totalcount\":0")) {
             return "El usuario ya existe en GLPI";
         }
-
-        // 2. Endpoint para crear usuario
         String endpoint = "/User";
-
         HttpURLConnection conn = createConnection(endpoint, "POST");
-
         conn.setDoOutput(true);
         conn.setDoInput(true);
-
-        // 3. JSON de creación
         String json = "{ \"input\": {"
                 + "\"name\":\"" + login + "\","
                 + "\"realname\":\"" + apellido + "\","
                 + "\"firstname\":\"" + nombre + "\","
                 + "\"password\":\"" + password + "\","
-                + "\"password2\":\"" + password + "\","
-                + "\"password_forced\": 1"
+                + "\"password2\":\"" + password + "\""
                 + "} }";
-
         OutputStream os = conn.getOutputStream();
         os.write(json.getBytes("UTF-8"));
         os.close();
-
         int responseCode = conn.getResponseCode();
-
         InputStream is;
-
         if (responseCode == 200 || responseCode == 201) {
             is = conn.getInputStream();
         } else {
             is = conn.getErrorStream();
         }
-
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
-
         String line;
         StringBuilder response = new StringBuilder();
-
         while ((line = br.readLine()) != null) {
             response.append(line);
         }
-
         br.close();
-
         String resultado = response.toString();
-
-        // 4. Si se creó correctamente, obtener ID y asignar perfil
         if (responseCode == 200 || responseCode == 201) {
-
-            // Extraer ID del JSON de respuesta
-//            int idUsuario = Integer.parseInt(resultado.replaceAll("\\D+", ""));
             Pattern pattern = Pattern.compile("\"id\":(\\d+)");
             Matcher matcher = pattern.matcher(resultado);
-
             int idUsuario = 0;
-
             if (matcher.find()) {
                 idUsuario = Integer.parseInt(matcher.group(1));
             }
-
-            // Asignar perfil (ejemplo: perfil 2 = Self-Service, entidad 0)
             asignarPerfilUsuario(idUsuario, 1, 0);
+            forzarCambioPassword(idUsuario);
         }
 
         return resultado;
@@ -249,16 +222,44 @@ public class GLPIClient {
 
     //<editor-fold defaultstate="collapsed" desc="INACTIVE USER">
     public String inactivarUsuario(int id) throws Exception {
+        String endpoint = "/User/" + id;
+        HttpURLConnection conn = createConnection(endpoint, "PUT");
+        conn.setDoOutput(true);
+        String json = "{ \"input\": {"
+                + "\"id\":" + id + ","
+                + "\"is_active\":0"
+                + "} }";
+        OutputStream os = conn.getOutputStream();
+        os.write(json.getBytes("UTF-8"));
+        os.close();
+        int responseCode = conn.getResponseCode();
+        InputStream is;
+        if (responseCode == 200 || responseCode == 201) {
+            is = conn.getInputStream();
+        } else {
+            is = conn.getErrorStream();
+        }
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        String line;
+        StringBuilder response = new StringBuilder();
+        while ((line = br.readLine()) != null) {
+            response.append(line);
+        }
+        br.close();
+        return response.toString();
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="FORCE PASSWORD">
+    public String forzarCambioPassword(int id) throws Exception {
 
         String endpoint = "/User/" + id;
-
         HttpURLConnection conn = createConnection(endpoint, "PUT");
-
         conn.setDoOutput(true);
 
         String json = "{ \"input\": {"
                 + "\"id\":" + id + ","
-                + "\"is_active\":0"
+                + "\"password_last_update\":\"2000-01-01 01:02:03\""
                 + "} }";
 
         OutputStream os = conn.getOutputStream();
@@ -268,7 +269,6 @@ public class GLPIClient {
         int responseCode = conn.getResponseCode();
 
         InputStream is;
-
         if (responseCode == 200 || responseCode == 201) {
             is = conn.getInputStream();
         } else {
@@ -276,7 +276,6 @@ public class GLPIClient {
         }
 
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
-
         String line;
         StringBuilder response = new StringBuilder();
 
@@ -289,5 +288,4 @@ public class GLPIClient {
         return response.toString();
     }
     //</editor-fold>
-
 }
