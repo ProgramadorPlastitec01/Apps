@@ -31,7 +31,6 @@ public class Document extends HttpServlet {
         SegmentationControllerJpa SegmentationJpa = new SegmentationControllerJpa();
         Random MixedJpa = new Random();
         SendMail MailJpa = new SendMail();
-        StringBuilder nombreUsuarioBuilder = new StringBuilder(10);
         List lst_document = null;
         List lst_template = null;
         List lst_segmentation = null;
@@ -210,16 +209,22 @@ public class Document extends HttpServlet {
                             result = DocumentJpa.DocumentRegister(BusinessName, Mail, baseTempl[1].toString(), Template, formClient, Files, IdAgree);
                             if (result) {
                                 String caracteres = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-                                for (int i = 0; i < 10; i++) {
-                                    int indice = MixedJpa.nextInt(caracteres.length());
-                                    char caracter = caracteres.charAt(indice);
-                                    nombreUsuarioBuilder.append(caracter);
-                                }
-                                nombreUsuario = nombreUsuarioBuilder.toString();
-                                int numeroAleatorio = 0;
-                                for (int i = 0; i < 10; i++) {
-                                    numeroAleatorio = MixedJpa.nextInt(Integer.MAX_VALUE);
-                                }
+                                nombreUsuario = "";
+                                List lst_validUser;
+
+                                do {
+                                    StringBuilder nombreUsuarioBuilder = new StringBuilder();
+                                    for (int i = 0; i < 10; i++) {
+                                        int indice = MixedJpa.nextInt(caracteres.length());
+                                        char caracter = caracteres.charAt(indice);
+                                        nombreUsuarioBuilder.append(caracter);
+                                    }
+                                    nombreUsuario = nombreUsuarioBuilder.toString();
+                                    lst_validUser = DocumentJpa.ConsultUserxUsername(nombreUsuario);
+                                } while (lst_validUser != null && lst_validUser.size() > 0);
+
+                                int numeroAleatorio = 10000000 + MixedJpa.nextInt(90000000);
+
                                 lst_document = DocumentJpa.ConsultDocumentsClient(Mail);
                                 if (lst_document != null) {
                                     Object[] Obj_doc = (Object[]) lst_document.get(0);

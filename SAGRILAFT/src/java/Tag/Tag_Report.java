@@ -58,7 +58,7 @@ public class Tag_Report extends TagSupport {
                 }
                 try {
                     idUserCli = Integer.parseInt(pageContext.getRequest().getAttribute("idUserCli").toString());
-                } catch (NumberFormatException e) {
+                } catch (Exception e) {
                     idUserCli = 0;
                 }
                 out.print("<section class='section'>");
