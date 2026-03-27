@@ -19,7 +19,7 @@
             });
         </script>
     </head>
-    <body>
+    <body class="sidebar-mini">
         <jsp:include page="Menu.jsp"></jsp:include>
             <div class="main-content" style="min-height: 694px;">
             <Generate:GenerateReport/>

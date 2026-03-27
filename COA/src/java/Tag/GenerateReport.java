@@ -189,6 +189,7 @@ public class GenerateReport extends TagSupport {
             }
             out.print("<th>Cantidades</th>");
             out.print("<th>Fecha </br> Despacho</th>");
+            out.print("<th>Responsable</th>");
             out.print("<th>Estado</th>");
             out.print("<th>Opc</th>");
             out.print("</tr>");
@@ -225,6 +226,7 @@ public class GenerateReport extends TagSupport {
                     }
                     out.print("<td>" + ((ObjCerti[10] == null) ? "" : ObjCerti[10]) + "</td>");
                     out.print("<td>" + ((ObjCerti[11] == null) ? "" : ObjCerti[11].toString().trim()) + "</td>");
+                    out.print("<td>" + ((ObjCerti[13] == null) ? "" : (ObjCerti[13].toString().trim()).contains("/")?ObjCerti[13].toString().split("/")[1]:ObjCerti[13].toString().trim()) + "</td>");
                     try {
                         switch (State) {
                             case 0:
