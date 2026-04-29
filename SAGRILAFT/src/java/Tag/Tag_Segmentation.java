@@ -1316,7 +1316,7 @@ public class Tag_Segmentation extends TagSupport {
                     }
                     //</editor-fold>
                     //<editor-fold defaultstate="collapsed" desc="DATE MONITORING">
-                    out.print("<td>" + ((obj_segmentation[19] == null) ? "" : obj_segmentation[19]) + "</td>");
+                    out.print("<td>" + ((obj_segmentation[19] == null) ? "" : obj_segmentation[19].toString().split(" ")[0]) + "</td>");
                     //</editor-fold>
                     //<editor-fold defaultstate="collapsed" desc="DAYS">
                     String[] validObs = {};

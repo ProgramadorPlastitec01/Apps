@@ -101,9 +101,8 @@ public class Tag_ClientSection extends TagSupport {
                     ButtonSaveDisabled = bundle.getString("form.ButtonSaveDisabled");
                     ButtonSaveDisDoc = bundle.getString("form.ButtonSaveDisDoc");
                     ButtonAd = bundle.getString("form.ButtonSaveAd");
-                    //</editor-fold>
-
                     String lang = ((TypeDocument.contains("Ingles")) ? "en" : "es");
+                    //</editor-fold>
 
                     try {
                         TemplForm = ObjDoc[2].toString().replace("]/[", "///").replace("[[", "[").replace("]]", "]").split("///");
@@ -126,7 +125,11 @@ public class Tag_ClientSection extends TagSupport {
                     out.print("</div>");
 
                     if (TypeDocument.contains("Due diligence")) {
-                        lst_config = ConfigJpa.ConsultSettingsByCategorie("ListModules15");
+                        if (TypeDocument.contains("Ingles")) {
+                            lst_config = ConfigJpa.ConsultSettingsByCategorie("ListModules15");
+                        } else {
+                            lst_config = ConfigJpa.ConsultSettingsByCategorie("ListModules15ES");
+                        }
                     } else {
                         if (TypeDocument.contains("Ingles")) {
                             lst_config = ConfigJpa.ConsultSettingsByCategorie("ListModules14EN");
@@ -5951,7 +5954,14 @@ public class Tag_ClientSection extends TagSupport {
 //</editor-fold>
                             }
                             //</editor-fold>
-                        } else if (TypeDocument.equals("Due diligence")) {
+                        } else if (TypeDocument.contains("Due diligence")) {
+
+                            ResourceBundle bundle_due = ResourceBundle.getBundle("Language.formulario_due_" + ((TypeDocument.contains("Ingles")) ? "EN" : "ES") + "");
+                            ButtonSave = bundle_due.getString("form.ButtonSave");
+                            ButtonSaveDisabled = bundle_due.getString("form.ButtonSaveDisabled");
+                            ButtonSaveDisDoc = bundle_due.getString("form.ButtonSaveDisDoc");
+                            ButtonAd = bundle_due.getString("form.ButtonSaveAd");
+
                             //<editor-fold defaultstate="collapsed" desc="FORMS TO 'DUE DILIGENCE'">
                             String[] form = TemplForm[estTl].replace("][", "///").replace("[", "").replace("]", "").split("///");
                             boolean information = false;
@@ -5960,16 +5970,16 @@ public class Tag_ClientSection extends TagSupport {
                             }
                             if (estTl == 0) {
                                 //<editor-fold defaultstate="collapsed" desc="START STATE">
-                                String title = bundle.getString("formOne.title");
-                                String infoOne = bundle.getString("formOne.infoOne");
-                                String SectionOne = bundle.getString("formOne.SectionOne");
-                                String OptOne = bundle.getString("formOne.OptOne");
-                                String OptTwo = bundle.getString("formOne.OptTwo");
-                                String SectionTwo = bundle.getString("formOne.SectionTwo");
-                                String SectionThree = bundle.getString("formOne.SectionThree");
-                                String OptThree = bundle.getString("formOne.OptThree");
-                                String OptFourth = bundle.getString("formOne.OptFourth");
-                                String Optfifth = bundle.getString("formOne.Optfifth");
+                                String title = bundle_due.getString("formOne.title");
+                                String infoOne = bundle_due.getString("formOne.infoOne");
+                                String SectionOne = bundle_due.getString("formOne.SectionOne");
+                                String OptOne = bundle_due.getString("formOne.OptOne");
+                                String OptTwo = bundle_due.getString("formOne.OptTwo");
+                                String SectionTwo = bundle_due.getString("formOne.SectionTwo");
+                                String SectionThree = bundle_due.getString("formOne.SectionThree");
+                                String OptThree = bundle_due.getString("formOne.OptThree");
+                                String OptFourth = bundle_due.getString("formOne.OptFourth");
+                                String Optfifth = bundle_due.getString("formOne.Optfifth");
 
                                 out.print("<div class='section-body' style='color: black'>");
                                 out.print("<h2 class='' style='position: absolute;font-size: 20px; color: black; font-weight: 700; margin: 30px 0 25px 0;'><i class=\"fas fa-caret-right\"></i> &nbsp;" + title + "</h2>");
@@ -6043,28 +6053,21 @@ public class Tag_ClientSection extends TagSupport {
                                 //</editor-fold>
                             } else if (estTl == 1) {
                                 //<editor-fold defaultstate="collapsed" desc="COMPANY INFORMATION">
-//                                String title = bundle.getString("formA.title");
-//                                String SectionOne = bundle.getString("formA.SectionOne");
-//                                String SectionTwo = bundle.getString("formA.SectionTwo");
-//                                String SectionThree = bundle.getString("formA.SectionThree");
-//                                String SectionFour = bundle.getString("formA.SectionFour");
-//                                String SectionFive = bundle.getString("formA.SectionFive");
-//                                String SectionSix = bundle.getString("formA.SectionSix");
-//                                String SectionSeven = bundle.getString("formA.SectionSeven");
-//                                String SectionEight = bundle.getString("formA.SectionEight");
-//                                String SectionNine = bundle.getString("formA.SectionNine");
-//                                String SectionTen = bundle.getString("formA.SectionTen");
-//                                String SectionEleven = bundle.getString("formA.SectionEleven");
-//                                String SectionTwelve = bundle.getString("formA.SectionTwelve");
-//                                String SectionThirteen = bundle.getString("formA.SectionThirteen");
-//                                String SectionFourteen = bundle.getString("formA.Sectionfourteen");
-//                                String OptOne = bundle.getString("formA.OptOne");
-//                                String OptTwo = bundle.getString("formA.OptTwo");
-//                                String OptThree = bundle.getString("formA.OptThree");
+                                String title = bundle_due.getString("formA.title");
+                                String SectionOne = bundle_due.getString("formA.SectionOne");
+                                String SectionThree = bundle_due.getString("formA.SectionThree");
+                                String SectionFour = bundle_due.getString("formA.SectionFour");
+                                String SectionFive = bundle_due.getString("formA.SectionFive");
+                                String SectionSix = bundle_due.getString("formA.SectionSix");
+                                String SectionSeven = bundle_due.getString("formA.SectionSeven");
+                                String SectionEight = bundle_due.getString("formA.SectionEight");
+                                String SectionNine = bundle_due.getString("formA.SectionNine");
+                                String SectionTen = bundle_due.getString("formA.SectionTen");
+                                String SectionEleven = bundle_due.getString("formA.SectionEleven");
 
 //                                String[] form = TemplForm[estTl].replace("][", "///").replace("[", "").replace("]", "").split("///");
                                 out.print("<div class='section-body' style='color: black'>");
-                                out.print("<h2 class='' style='position: absolute;font-size: 20px; color: black; font-weight: 700; margin: 30px 0 25px 0;'><i class=\"fas fa-caret-right\"></i> &nbsp; Company Information</h2>");
+                                out.print("<h2 class='' style='position: absolute;font-size: 20px; color: black; font-weight: 700; margin: 30px 0 25px 0;'><i class=\"fas fa-caret-right\"></i> &nbsp; " + title + "</h2>");
                                 out.print("<div class='row' style='background: #e7e7e7; padding-top: 47px;'>");
                                 out.print("<div class='col-12 col-md-10 col-sm-12' style='margin: auto; margin-top: 15px;'>");
                                 out.print("<div class='card' style='border-radius: 5px;'>");
@@ -6078,7 +6081,7 @@ public class Tag_ClientSection extends TagSupport {
 
                                 out.print("<div class='col-lg-3'>");
                                 out.print("<div class='mt-4'>");
-                                out.print("<h6> Company Name <span class='text-danger'>*</span></h6>");
+                                out.print("<h6> " + SectionOne + " <span class='text-danger'>*</span></h6>");
                                 out.print("</div>");
                                 out.print("<div class='mt-2'>");
                                 out.print("<input type='text' class='form-control' name='TxtNameBusi' id='TxtNameBusi' value='" + ((information) ? form[1].toString() : "") + "'  required>");
@@ -6087,7 +6090,7 @@ public class Tag_ClientSection extends TagSupport {
 
                                 out.print("<div class='col-lg-3'>");
                                 out.print("<div class='mt-4'>");
-                                out.print("<h6> TAX ID/Identification Number <span class='text-danger'>*</span></h6>");
+                                out.print("<h6> " + SectionThree + " <span class='text-danger'>*</span></h6>");
                                 out.print("</div>");
                                 out.print("<div class='mt-2'>");
                                 out.print("<input type='text' class='form-control' name='NmbIndeti' id='NmbIndeti' value='" + ((information) ? form[2].toString() : "") + "'  required>");
@@ -6096,7 +6099,7 @@ public class Tag_ClientSection extends TagSupport {
 
                                 out.print("<div class='col-lg-3'>");
                                 out.print("<div class='mt-4'>");
-                                out.print("<h6>Main Address <span class='text-danger'>*</span></h6>");
+                                out.print("<h6> " + SectionFour + " <span class='text-danger'>*</span></h6>");
                                 out.print("</div>");
                                 out.print("<div class='mt-2'>");
                                 out.print("<input type='text' class='form-control' name='TxtAddress' id='TxtAddress' value='" + ((information) ? form[3].toString() : "") + "' >");
@@ -6105,7 +6108,7 @@ public class Tag_ClientSection extends TagSupport {
 
                                 out.print("<div class='col-lg-3'>");
                                 out.print("<div class='mt-4'>");
-                                out.print("<h6> Postal Code <span class='text-danger'>*</span></h6>");
+                                out.print("<h6> " + SectionFive + " <span class='text-danger'>*</span></h6>");
                                 out.print("</div>");
                                 out.print("<div class='mt-2'>");
                                 out.print("<input type='number' class='form-control' name='TxtPostCode' id='TxtPostCode' value='" + ((information) ? form[4].toString() : "") + "'  required>");
@@ -6118,7 +6121,7 @@ public class Tag_ClientSection extends TagSupport {
 
                                 out.print("<div class='col-lg-3'>");
                                 out.print("<div class='mt-4'>");
-                                out.print("<h6>Country <span class='text-danger'>*</span></h6>");
+                                out.print("<h6>" + SectionSix + " <span class='text-danger'>*</span></h6>");
                                 out.print("</div>");
                                 out.print("<div class='mt-2'>");
                                 out.print("<input type='text' class='form-control' name='TxtCountry' id='TxtCountry' value='" + ((information) ? form[5].toString() : "") + "'  required>");
@@ -6127,7 +6130,7 @@ public class Tag_ClientSection extends TagSupport {
 
                                 out.print("<div class='col-lg-3'>");
                                 out.print("<div class='mt-4'>");
-                                out.print("<h6>City <span class='text-danger'>*</span></h6>");
+                                out.print("<h6>" + SectionSeven + " <span class='text-danger'>*</span></h6>");
                                 out.print("</div>");
 
                                 out.print("<div class='mt-2'>");
@@ -6137,7 +6140,7 @@ public class Tag_ClientSection extends TagSupport {
 
                                 out.print("<div class='col-lg-3'>");
                                 out.print("<div class='mt-4'>");
-                                out.print("<h6>Phone Number <span class='text-danger'>*</span></h6>");
+                                out.print("<h6>" + SectionEight + " <span class='text-danger'>*</span></h6>");
                                 out.print("</div>");
                                 out.print("<div class='mt-2'>");
                                 out.print("<input type='number' class='form-control' name='TxtPhones' id='TxtPhones' value='" + ((information) ? form[7].toString() : "") + "'  required>");
@@ -6146,7 +6149,7 @@ public class Tag_ClientSection extends TagSupport {
 
                                 out.print("<div class='col-lg-3'>");
                                 out.print("<div class='mt-4'>");
-                                out.print("<h6> Website <span class='text-danger'>*</span></h6>");
+                                out.print("<h6> " + SectionNine + " <span class='text-danger'>*</span></h6>");
                                 out.print("</div>");
                                 out.print("<div class='mt-2'>");
                                 out.print("<input type='text' class='form-control' name='TxtWebPage' id='TxtWebPage' value='" + ((information) ? form[8].toString() : "") + "'  required>");
@@ -6159,7 +6162,7 @@ public class Tag_ClientSection extends TagSupport {
 
                                 out.print("<div class='col-lg-6'>");
                                 out.print("<div class='mt-4'>");
-                                out.print("<h6>Please provide the industry classification codes applicable to your country (e.g., CIIU, NAICS, NACE, ISIC).</h6>");
+                                out.print("<h6>" + SectionTen + "</h6>");
                                 out.print("</div>");
                                 out.print("<div class='mt-2'>");
                                 out.print("<input type='text' class='form-control' name='TxtApplicableCode' id='TxtApplicableCode' value='" + ((information) ? form[9].toString() : "") + "' required>");
@@ -6168,7 +6171,7 @@ public class Tag_ClientSection extends TagSupport {
 
                                 out.print("<div class='col-lg-6'>");
                                 out.print("<div class='mt-4'>");
-                                out.print("<h6>Please describe your primary economic activity <span class='text-danger'>*</span></h6>");
+                                out.print("<h6>" + SectionEleven + " <span class='text-danger'>*</span></h6>");
                                 out.print("</div>");
                                 out.print("<div class='mt-2'>");
                                 out.print("<input type='text' class='form-control' name='TxtEconomy' id='TxtEconomy' value='" + ((information) ? form[10].toString() : "") + "' required>");
@@ -6201,8 +6204,25 @@ public class Tag_ClientSection extends TagSupport {
                                 //</editor-fold>
                             } else if (estTl == 2) {
                                 //<editor-fold defaultstate="collapsed" desc="SUPPLEMENTARY INFORMATION">
+
+                                String title = bundle_due.getString("formB.title");
+                                String SectionOne = bundle_due.getString("formB.SectionOne");
+                                String SectionTwo = bundle_due.getString("formB.SectionThree");
+                                String SectionThree = bundle_due.getString("formB.SectionThree");
+                                String SectionFour = bundle_due.getString("formB.SectionFour");
+                                String SectionFive = bundle_due.getString("formB.SectionFive");
+                                String SectionSix = bundle_due.getString("formB.SectionSix");
+                                String SectionSeven = bundle_due.getString("formB.SectionSeven");
+                                String SectionEight = bundle_due.getString("formB.SectionEight");
+                                String SectionNine = bundle_due.getString("formB.SectionNine");
+                                String SectionTen = bundle_due.getString("formB.SectionTen");
+                                String SectionEleven = bundle_due.getString("formB.SectionEleven");
+                                String SectionTwelve = bundle_due.getString("formB.SectionTwelve");
+                                String SectionYes = bundle_due.getString("formB.Yes");
+                                String SectionNo = bundle_due.getString("formB.No");
+
                                 out.print("<div class='section-body' style='color: black'>");
-                                out.print("<h2 class='' style='position: absolute;font-size: 20px; color: black; font-weight: 700; margin: 30px 0 25px 0;'><i class=\"fas fa-caret-right\"></i> &nbsp; Supplementary Information</h2>");
+                                out.print("<h2 class='' style='position: absolute;font-size: 20px; color: black; font-weight: 700; margin: 30px 0 25px 0;'><i class=\"fas fa-caret-right\"></i> &nbsp; " + title + "</h2>");
                                 out.print("<div class='row' style='background: #e7e7e7; padding-top: 47px;'>");
                                 out.print("<div class='col-12 col-md-10 col-sm-12' style='margin: auto; margin-top: 15px;'>");
                                 out.print("<div class='card' style='border-radius: 5px;'>");
@@ -6217,62 +6237,62 @@ public class Tag_ClientSection extends TagSupport {
                                 out.print("<div class=''>");
 
                                 out.print("<div class='col-lg-12 d-flex divList'>");
-                                out.print("<div class='col-lg-10'><i class=\"fas fa-angle-right\"></i> Are any of the administrators (legal representatives, Chief Executive Officer (CEO), or board members) considered a Politically Exposed Person (PEP)? A PEP is defined as an individual who holds or has held a prominent public position or role.</div>");
-                                out.print("<div class='col-lg-2'><div class='d-flex'><div class='d-flex'> Yes  <input type='radio' class='ml-1' name='oneQuest' value='si' " + (information ? (form[1].equals("si") ? "checked" : "") : "") + "></div><div class='d-flex ml-2'> No  <input type='radio' class='ml-1' name='oneQuest' value='no' " + (information ? (form[1].equals("no") ? "checked" : "") : "checked") + "></div> </div></div>");
+                                out.print("<div class='col-lg-10'><i class=\"fas fa-angle-right\"></i> " + SectionOne + "</div>");
+                                out.print("<div class='col-lg-2'><div class='d-flex'><div class='d-flex'> " + SectionYes + "  <input type='radio' class='ml-1' name='oneQuest' value='si' " + (information ? (form[1].equals("si") ? "checked" : "") : "") + "></div><div class='d-flex ml-2'> " + SectionNo + "  <input type='radio' class='ml-1' name='oneQuest' value='no' " + (information ? (form[1].equals("no") ? "checked" : "") : "checked") + "></div> </div></div>");
                                 out.print("</div>");
 
                                 out.print("<div class='col-lg-12 d-flex divList'>");
-                                out.print("<div class='col-lg-10'><i class=\"fas fa-angle-right\"></i> Are you subject to tax obligations in another country or group of countries?</div>");
-                                out.print("<div class='col-lg-2'><div class='d-flex'><div class='d-flex'> Yes  <input type='radio' class='ml-1' name='twoQuest' value='si' " + (information ? (form[2].equals("si") ? "checked" : "") : "") + "></div><div class='d-flex ml-2'> No  <input type='radio' class='ml-1' name='twoQuest' value='no' " + (information ? (form[2].equals("no") ? "checked" : "") : "checked") + "></div> </div></div>");
+                                out.print("<div class='col-lg-10'><i class=\"fas fa-angle-right\"></i> " + SectionTwo + " </div>");
+                                out.print("<div class='col-lg-2'><div class='d-flex'><div class='d-flex'> " + SectionYes + "  <input type='radio' class='ml-1' name='twoQuest' value='si' " + (information ? (form[2].equals("si") ? "checked" : "") : "") + "></div><div class='d-flex ml-2'> " + SectionNo + "  <input type='radio' class='ml-1' name='twoQuest' value='no' " + (information ? (form[2].equals("no") ? "checked" : "") : "checked") + "></div> </div></div>");
                                 out.print("</div>");
 
                                 out.print("<div class='col-lg-12 d-flex divList'>");
-                                out.print("<div class='col-lg-5'><i class=\"fas fa-angle-right\"></i> If your answer is 'yes,' please specify the countries.</div>");
+                                out.print("<div class='col-lg-5'><i class=\"fas fa-angle-right\"></i> " + SectionThree + "</div>");
                                 out.print("<div class='col-lg-7'><input type='text' class='form-control' name='TxtCountries' placeholder='Response...' value='" + (information ? form[3] : "") + "'></div>");
                                 out.print("</div>");
 
                                 out.print("<div class='col-lg-12 d-flex divList'>");
-                                out.print("<div class='col-lg-5'><i class=\"fas fa-angle-right\"></i> Currency used for international operations.</div>");
+                                out.print("<div class='col-lg-5'><i class=\"fas fa-angle-right\"></i> " + SectionFour + "</div>");
                                 out.print("<div class='col-lg-7'><input type='text' class='form-control' name='TxtCurrency' placeholder='Response...' value='" + (information ? form[4] : "") + "'></div>");
                                 out.print("</div>");
 
                                 out.print("<div class='col-lg-12 d-flex divList'>");
-                                out.print("<div class='col-lg-5'><i class=\"fas fa-angle-right\"></i> Description of the products and/or services you offer</div>");
+                                out.print("<div class='col-lg-5'><i class=\"fas fa-angle-right\"></i> " + SectionFive + " </div>");
                                 out.print("<div class='col-lg-7'><input type='text' class='form-control' name='TxtService' placeholder='Response...' value='" + (information ? form[5] : "") + "'></div>");
                                 out.print("</div>");
 
                                 out.print("<div class='col-lg-12 d-flex divList'>");
-                                out.print("<div class='col-lg-10'><i class=\"fas fa-angle-right\"></i> Do you have any subsidiaries or representatives abroad?</div>");
-                                out.print("<div class='col-lg-2'><div class='d-flex'><div class='d-flex'> Yes  <input type='radio' class='ml-1' name='TxtSubsidiaries' value='si' " + (information ? (form[6].equals("si") ? "checked" : "") : "") + "></div><div class='d-flex ml-2'> No  <input type='radio' class='ml-1' name='TxtSubsidiaries' value='no' " + (information ? (form[6].equals("no") ? "checked" : "") : "checked") + "></div> </div></div>");
+                                out.print("<div class='col-lg-10'><i class=\"fas fa-angle-right\"></i> " + SectionSix + "</div>");
+                                out.print("<div class='col-lg-2'><div class='d-flex'><div class='d-flex'> " + SectionYes + "  <input type='radio' class='ml-1' name='TxtSubsidiaries' value='si' " + (information ? (form[6].equals("si") ? "checked" : "") : "") + "></div><div class='d-flex ml-2'> " + SectionNo + "  <input type='radio' class='ml-1' name='TxtSubsidiaries' value='no' " + (information ? (form[6].equals("no") ? "checked" : "") : "checked") + "></div> </div></div>");
                                 out.print("</div>");
 
                                 out.print("<div class='col-lg-12 d-flex divList'>");
-                                out.print("<div class='col-lg-5'><i class=\"fas fa-angle-right\"></i> Please specify the cities or countries where you have subsidiaries, branches, or representatives.</div>");
+                                out.print("<div class='col-lg-5'><i class=\"fas fa-angle-right\"></i> " + SectionSeven + "</div>");
                                 out.print("<div class='col-lg-7'><input type='text' class='form-control' name='TxtCitiesSub' placeholder='Response...' value='" + (information ? form[7] : "") + "'></div>");
                                 out.print("</div>");
 
                                 out.print("<div class='col-lg-12 d-flex divList'>");
-                                out.print("<div ><i class=\"fas fa-angle-right\"></i> Please provide any relevant documentation or certifications that demonstrate your company’s financial stability and compliance with applicable regulations.</div>");
+                                out.print("<div ><i class=\"fas fa-angle-right\"></i> " + SectionEight + " </div>");
                                 out.print("</div>");
 
                                 out.print("<div class='col-lg-12 d-flex divList'>");
-                                out.print("<div class='col-lg-10'><i class=\"fas fa-angle-right\"></i> Are you required to implement a risk management system for Anti-Money Laundering, Counter-Terrorism Financing, and Proliferation Financing?</div>");
-                                out.print("<div class='col-lg-2'><div class='d-flex'><div class='d-flex'> Yes  <input type='radio' class='ml-1' name='threeQuest' value='si' " + (information ? (form[8].equals("si") ? "checked" : "") : "") + "></div><div class='d-flex ml-2'> No  <input type='radio' class='ml-1' name='threeQuest' value='no' " + (information ? (form[8].equals("no") ? "checked" : "") : "checked") + "></div> </div></div>");
+                                out.print("<div class='col-lg-10'><i class=\"fas fa-angle-right\"></i> " + SectionNine + " </div>");
+                                out.print("<div class='col-lg-2'><div class='d-flex'><div class='d-flex'> " + SectionYes + "  <input type='radio' class='ml-1' name='threeQuest' value='si' " + (information ? (form[8].equals("si") ? "checked" : "") : "") + "></div><div class='d-flex ml-2'> " + SectionNo + "  <input type='radio' class='ml-1' name='threeQuest' value='no' " + (information ? (form[8].equals("no") ? "checked" : "") : "checked") + "></div> </div></div>");
                                 out.print("</div>");
 
                                 out.print("<div class='col-lg-12 d-flex divList'>");
-                                out.print("<div class='col-lg-10'><i class=\"fas fa-angle-right\"></i> Do you have mechanisms in place for the prevention and control of risks related to Anti-Money Laundering, Counter-Terrorism Financing, and Proliferation Financing?</div>");
-                                out.print("<div class='col-lg-2'><div class='d-flex'><div class='d-flex'> Yes  <input type='radio' class='ml-1' name='fourQuest' value='si' " + (information ? (form[9].equals("si") ? "checked" : "") : "") + "></div><div class='d-flex ml-2'> No  <input type='radio' class='ml-1' name='fourQuest' value='no' " + (information ? (form[9].equals("no") ? "checked" : "") : "checked") + "></div> </div></div>");
+                                out.print("<div class='col-lg-10'><i class=\"fas fa-angle-right\"></i> " + SectionTen + " </div>");
+                                out.print("<div class='col-lg-2'><div class='d-flex'><div class='d-flex'> " + SectionYes + "  <input type='radio' class='ml-1' name='fourQuest' value='si' " + (information ? (form[9].equals("si") ? "checked" : "") : "") + "></div><div class='d-flex ml-2'> " + SectionNo + "  <input type='radio' class='ml-1' name='fourQuest' value='no' " + (information ? (form[9].equals("no") ? "checked" : "") : "checked") + "></div> </div></div>");
                                 out.print("</div>");
 
                                 out.print("<div class='col-lg-12 d-flex divList'>");
-                                out.print("<div class='col-lg-10'><i class=\"fas fa-angle-right\"></i> Are you required to implement an Anti-Corruption Program in accordance with international standards?</div>");
-                                out.print("<div class='col-lg-2'><div class='d-flex'><div class='d-flex'> Yes  <input type='radio' class='ml-1' name='fiveQuest' value='si' " + (information ? (form[10].equals("si") ? "checked" : "") : "") + "></div><div class='d-flex ml-2'> No  <input type='radio' class='ml-1' name='fiveQuest' value='no' " + (information ? (form[10].equals("no") ? "checked" : "") : "checked") + "></div> </div></div>");
+                                out.print("<div class='col-lg-10'><i class=\"fas fa-angle-right\"></i> " + SectionEleven + " </div>");
+                                out.print("<div class='col-lg-2'><div class='d-flex'><div class='d-flex'> " + SectionYes + "  <input type='radio' class='ml-1' name='fiveQuest' value='si' " + (information ? (form[10].equals("si") ? "checked" : "") : "") + "></div><div class='d-flex ml-2'> " + SectionNo + "  <input type='radio' class='ml-1' name='fiveQuest' value='no' " + (information ? (form[10].equals("no") ? "checked" : "") : "checked") + "></div> </div></div>");
                                 out.print("</div>");
 
                                 out.print("<div class='col-lg-12 d-flex divList'>");
-                                out.print("<div class='col-lg-10'><i class=\"fas fa-angle-right\"></i> Do you have Anti-Corruption and Anti-Bribery Policies in place?</div>");
-                                out.print("<div class='col-lg-2'><div class='d-flex'><div class='d-flex'> Yes  <input type='radio' class='ml-1' name='sixQuest' value='si' " + (information ? (form[11].equals("si") ? "checked" : "") : "") + "></div><div class='d-flex ml-2'> No  <input type='radio' class='ml-1' name='sixQuest' value='no' " + (information ? (form[11].equals("no") ? "checked" : "") : "checked") + "></div> </div></div>");
+                                out.print("<div class='col-lg-10'><i class=\"fas fa-angle-right\"></i> " + SectionTwelve + " </div>");
+                                out.print("<div class='col-lg-2'><div class='d-flex'><div class='d-flex'> " + SectionYes + "  <input type='radio' class='ml-1' name='sixQuest' value='si' " + (information ? (form[11].equals("si") ? "checked" : "") : "") + "></div><div class='d-flex ml-2'> " + SectionNo + "  <input type='radio' class='ml-1' name='sixQuest' value='no' " + (information ? (form[11].equals("no") ? "checked" : "") : "checked") + "></div> </div></div>");
                                 out.print("</div>");
 
                                 out.print("</div>");
@@ -6295,8 +6315,16 @@ public class Tag_ClientSection extends TagSupport {
                                 //</editor-fold>
                             } else if (estTl == 3) {
                                 //<editor-fold defaultstate="collapsed" desc="CONTACT">
+
+                                String title = bundle_due.getString("formC.title");
+                                String SectionOne = bundle_due.getString("formC.SectionOne");
+                                String SectionTwo = bundle_due.getString("formC.SectionTwo");
+                                String SectionThree = bundle_due.getString("formC.SectionThree");
+                                String SectionFour = bundle_due.getString("formC.SectionFour");
+                                String SectionFive = bundle_due.getString("formC.SectionFive");
+
                                 out.print("<div class='section-body' style='color: black'>");
-                                out.print("<h2 class='' style='position: absolute;font-size: 20px; color: black; font-weight: 700; margin: 30px 0 25px 0;'><i class=\"fas fa-caret-right\"></i> &nbsp; Contact</h2>");
+                                out.print("<h2 class='' style='position: absolute;font-size: 20px; color: black; font-weight: 700; margin: 30px 0 25px 0;'><i class=\"fas fa-caret-right\"></i> &nbsp; " + title + "</h2>");
                                 out.print("<div class='row' style='background: #e7e7e7; padding-top: 47px;'>");
                                 out.print("<div class='col-12 col-md-9 col-sm-12' style='margin: auto; margin-top: 15px;'>");
                                 out.print("<div class='card' style='border-radius: 5px;'>");
@@ -6312,7 +6340,7 @@ public class Tag_ClientSection extends TagSupport {
 
                                 out.print("<div class='col-lg-12 d-flex mt-4'>");
                                 out.print("<div class='col-lg-6'>");
-                                out.print("<span class=''>Manager (CEO)</span>");
+                                out.print("<span class=''>" + SectionOne + "</span>");
                                 out.print("<input type='text' class='form-control' name='TxtManager' id='' placeholder='Manager (CEO)' value='" + (information ? form[1] : "") + "' required>");
                                 out.print("</div>");
 
@@ -6322,14 +6350,14 @@ public class Tag_ClientSection extends TagSupport {
                                 out.print("</div>");
 
                                 out.print("<div class='col-lg-3'>");
-                                out.print("<span class=''>Email Address</span>");
+                                out.print("<span class=''>" + SectionTwo + "</span>");
                                 out.print("<input type='email' class='form-control' name='TxtEmailManager' id='' placeholder='email@address' value='" + (information ? form[3] : "") + "' required>");
                                 out.print("</div>");
                                 out.print("</div>");
 
                                 out.print("<div class='col-lg-12 d-flex mt-4'>");
                                 out.print("<div class='col-lg-6'>");
-                                out.print("<span class=''>Commercial Representative Name</span>");
+                                out.print("<span class=''>" + SectionThree + "</span>");
                                 out.print("<input type='text' class='form-control' name='TxtComercial' id='' placeholder='Commercial Representative Name' value='" + (information ? form[4] : "") + "' required>");
                                 out.print("</div>");
 
@@ -6339,14 +6367,14 @@ public class Tag_ClientSection extends TagSupport {
                                 out.print("</div>");
 
                                 out.print("<div class='col-lg-3'>");
-                                out.print("<span class=''>Email Address</span>");
+                                out.print("<span class=''>" + SectionTwo + "</span>");
                                 out.print("<input type='email' class='form-control' name='TxtEmailComercial' id='' placeholder='email@address' value='" + (information ? form[6] : "") + "' required>");
                                 out.print("</div>");
                                 out.print("</div>");
 
                                 out.print("<div class='col-lg-12 d-flex mt-4'>");
                                 out.print("<div class='col-lg-6'>");
-                                out.print("<span class=''>Contac for ordering, complaints and returns</span>");
+                                out.print("<span class=''>" + SectionFour + "</span>");
                                 out.print("<input type='text' class='form-control' name='TxtContac' id='' placeholder='Contac for ordering, complaints and returns' value='" + (information ? form[7] : "") + "' required>");
                                 out.print("</div>");
 
@@ -6356,14 +6384,14 @@ public class Tag_ClientSection extends TagSupport {
                                 out.print("</div>");
 
                                 out.print("<div class='col-lg-3'>");
-                                out.print("<span class=''>Email Address</span>");
+                                out.print("<span class=''>" + SectionTwo + "</span>");
                                 out.print("<input type='email' class='form-control' name='TxtEmailContac' id='' placeholder='email@address' value='" + (information ? form[9] : "") + "' required>");
                                 out.print("</div>");
                                 out.print("</div>");
 
                                 out.print("<div class='col-lg-12 d-flex mt-4'>");
                                 out.print("<div class='col-lg-6'>");
-                                out.print("<span class=''>Contact for payment updates</span>");
+                                out.print("<span class=''>" + SectionFive + "</span>");
                                 out.print("<input type='text' class='form-control' name='TxtPayment' id='' placeholder='Contact for payment updates' value='" + (information ? form[10] : "") + "' required>");
                                 out.print("</div>");
 
@@ -6373,7 +6401,7 @@ public class Tag_ClientSection extends TagSupport {
                                 out.print("</div>");
 
                                 out.print("<div class='col-lg-3'>");
-                                out.print("<span class=''>Email Address</span>");
+                                out.print("<span class=''>" + SectionTwo + "</span>");
                                 out.print("<input type='email' class='form-control' name='TxtEmailPayment' id='' placeholder='email@address' value='" + (information ? form[12] : "") + "' required>");
                                 out.print("</div>");
                                 out.print("</div>");
@@ -6398,8 +6426,19 @@ public class Tag_ClientSection extends TagSupport {
                                 //</editor-fold>
                             } else if (estTl == 4) {
                                 //<editor-fold defaultstate="collapsed" desc="FINANCIAL INFORMATION">
+
+                                String title = bundle_due.getString("formD.title");
+                                String SectionOne = bundle_due.getString("formD.SectionOne");
+                                String SectionTwo = bundle_due.getString("formD.SectionTwo");
+                                String SectionThree = bundle_due.getString("formD.SectionThree");
+                                String SectionFour = bundle_due.getString("formD.SectionFour");
+                                String SectionFive = bundle_due.getString("formD.SectionFive");
+                                String SectionSix = bundle_due.getString("formD.SectionSix");
+                                String SectionSeven = bundle_due.getString("formD.SectionSeven");
+                                String SectionEight = bundle_due.getString("formD.SectionEight");
+
                                 out.print("<div class='section-body' style='color: black'>");
-                                out.print("<h2 class='' style='position: absolute;font-size: 20px; color: black; font-weight: 700; margin: 30px 0 25px 0;'><i class=\"fas fa-caret-right\"></i> &nbsp; financial Information</h2>");
+                                out.print("<h2 class='' style='position: absolute;font-size: 20px; color: black; font-weight: 700; margin: 30px 0 25px 0;'><i class=\"fas fa-caret-right\"></i> &nbsp; " + title + "</h2>");
                                 out.print("<div class='row' style='background: #e7e7e7; padding-top: 47px;'>");
                                 out.print("<div class='col-12 col-md-6 col-sm-12' style='margin: auto; margin-top: 15px;'>");
                                 out.print("<div class='card' style='border-radius: 5px;'>");
@@ -6412,16 +6451,16 @@ public class Tag_ClientSection extends TagSupport {
 
                                 out.print("<div class='d-flex mt-4'>");
                                 out.print("<div class='col-lg-6'>");
-                                out.print("<span class='font-weight-bold'>Financial Institution <span class=\"text-danger\">*</span></span>");
+                                out.print("<span class='font-weight-bold'>" + SectionOne + "<span class=\"text-danger\">*</span></span>");
                                 out.print("<input type='text' class='form-control' name='TxtFinancial' id='' value='" + (information ? form[1] : "") + "'>");
                                 out.print("</div>");
 
                                 out.print("<div class='col-lg-6'>");
-                                out.print("<span class='font-weight-bold'>Type of Account <span class=\"text-danger\">*</span></span>");
+                                out.print("<span class='font-weight-bold'> " + SectionTwo + "<span class=\"text-danger\">*</span></span>");
                                 out.print("<div class='d-flex'>");
-                                out.print("Savings &nbsp; <input type='radio' name='TxtTypeAccount' id='' value='Savings' onclick='ToActiveShield(\"idTypeAccount\", \"idOtherOne\")' " + (information ? (form[2].equals("Savings") ? "checked" : "") : "checked") + "> &nbsp;&nbsp;");
-                                out.print("Current &nbsp; <input type='radio' name='TxtTypeAccount' id='' value='Current' onclick='ToActiveShield(\"idTypeAccount\", \"idOtherOne\")' " + (information ? (form[2].equals("Current") ? "checked" : "") : "") + "> &nbsp;&nbsp;");
-                                out.print("Other &nbsp; <input type='radio' name='TxtTypeAccount' id='idTypeAccount' value='Other' onclick='ToActiveShield(\"idTypeAccount\", \"idOtherOne\")' " + (information ? ((!form[2].equals("Savings") && !form[2].equals("Current")) ? "checked" : "") : "") + "> &nbsp;&nbsp;");
+                                out.print("" + SectionThree + " &nbsp; <input type='radio' name='TxtTypeAccount' id='' value='Savings' onclick='ToActiveShield(\"idTypeAccount\", \"idOtherOne\")' " + (information ? (form[2].equals("Savings") ? "checked" : "") : "checked") + "> &nbsp;&nbsp;");
+                                out.print("" + SectionFour + " &nbsp; <input type='radio' name='TxtTypeAccount' id='' value='Current' onclick='ToActiveShield(\"idTypeAccount\", \"idOtherOne\")' " + (information ? (form[2].equals("Current") ? "checked" : "") : "") + "> &nbsp;&nbsp;");
+                                out.print("" + SectionFive + " &nbsp; <input type='radio' name='TxtTypeAccount' id='idTypeAccount' value='Other' onclick='ToActiveShield(\"idTypeAccount\", \"idOtherOne\")' " + (information ? ((!form[2].equals("Savings") && !form[2].equals("Current")) ? "checked" : "") : "") + "> &nbsp;&nbsp;");
                                 out.print("</div>");
 
                                 if (information) {
@@ -6437,18 +6476,18 @@ public class Tag_ClientSection extends TagSupport {
 
                                 out.print("<div class='d-flex mt-2'>");
                                 out.print("<div class='col-lg-6'>");
-                                out.print("<span class='font-weight-bold'>Account Number <span class=\"text-danger\">*</span></span>");
+                                out.print("<span class='font-weight-bold'>" + SectionSix + " <span class=\"text-danger\">*</span></span>");
                                 out.print("<input type='number' class='form-control' name='NmbAccount' id='' value='" + (information ? form[3] : "") + "'>");
                                 out.print("</div>");
 
                                 out.print("<div class='col-lg-6'>");
-                                out.print("<span class='font-weight-bold'>Limit Credit <span class=\"text-danger\">*</span></span>");
+                                out.print("<span class='font-weight-bold'>" + SectionSeven + " <span class=\"text-danger\">*</span></span>");
                                 out.print("<input type='number' class='form-control' name='NmbLimit' id='' value='" + (information ? form[4] : "") + "'>");
                                 out.print("</div>");
                                 out.print("</div>");
 
                                 out.print("<div class='mt-2'>");
-                                out.print("<span class='font-weight-bold'>Terms of Payment <span class=\"text-danger\">*</span></span>");
+                                out.print("<span class='font-weight-bold'>" + SectionEight + " <span class=\"text-danger\">*</span></span>");
                                 out.print("<input type='text' class='form-control' name='TxtPayment' id='' value='" + (information ? form[5] : "") + "'>");
                                 out.print("</div>");
 
@@ -6470,16 +6509,16 @@ public class Tag_ClientSection extends TagSupport {
                                 //</editor-fold>
                             } else if (estTl == 5) {
                                 //<editor-fold defaultstate="collapsed" desc="SUPPLY CHAIN ​​SECURITY AGREEMENT">
-                                String title = bundle.getString("formK.title");
-//                            String SectionOne = bundle.getString("formK.SectionOne");
-                                String SectionTwo = bundle.getString("formK.SectionTwo");
-                                String SectionThree = bundle.getString("formK.SectionThree");
-                                String SectionFour = bundle.getString("formK.SectionFour");
-                                String SectionFive = bundle.getString("formK.SectionFive");
-                                String SectionSix = bundle.getString("formK.SectionSix");
-                                String SectionSeven = bundle.getString("formK.SectionSeven");
-                                String SectionEight = bundle.getString("formK.SectionEight");
-//                                String[] form = TemplForm[estTl].replace("][", "///").replace("[", "").replace("]", "").split("///");
+
+                                String title = bundle_due.getString("formE.title");
+                                String SectionOne = bundle_due.getString("formE.SectionOne");
+                                String SectionTwo = bundle_due.getString("formE.SectionTwo");
+                                String SectionThree = bundle_due.getString("formE.SectionThree");
+                                String SectionFour = bundle_due.getString("formE.SectionFour");
+                                String SectionFive = bundle_due.getString("formE.SectionFive");
+                                String SectionSix = bundle_due.getString("formE.SectionSix");
+                                String SectionSeven = bundle_due.getString("formE.SectionSeven");
+                                String SectionEight = bundle_due.getString("formE.SectionEight");
 
                                 String nameClient = "";
                                 try {
@@ -6887,8 +6926,11 @@ public class Tag_ClientSection extends TagSupport {
                             } else if (estTl == 6) {
                                 //<editor-fold defaultstate="collapsed" desc="STATEMENTS">
 
+                                String title = bundle_due.getString("formF.title");
+                                String SectionOne = bundle_due.getString("formF.SectionOne");
+
                                 out.print("<div class='section-body' style='color: black'>");
-                                out.print("<h2 class='' style='position: absolute;font-size: 20px; color: black; font-weight: 700; margin: 30px 0 25px 0;'><i class=\"fas fa-caret-right\"></i> &nbsp; Statements</h2>");
+                                out.print("<h2 class='' style='position: absolute;font-size: 20px; color: black; font-weight: 700; margin: 30px 0 25px 0;'><i class=\"fas fa-caret-right\"></i> &nbsp; " + title + "</h2>");
                                 out.print("<div class='row' style='background: #e7e7e7; padding-top: 47px;'>");
                                 out.print("<div class='col-12 col-md-10 col-sm-12' style='margin: auto; margin-top: 15px;'>");
                                 out.print("<div class='card' style='border-radius: 5px;'>");
@@ -6914,7 +6956,11 @@ public class Tag_ClientSection extends TagSupport {
                                     Website = "Sin diligenciar";
                                 }
 
-                                lst_config = ConfigJpa.ConsultSettingsByCategorie("Statements");
+                                if (TypeDocument.contains("Ingles")) {
+                                    lst_config = ConfigJpa.ConsultSettingsByCategorie("StatementsEN");
+                                } else {
+                                    lst_config = ConfigJpa.ConsultSettingsByCategorie("StatementsES");
+                                }
                                 if (lst_config != null) {
                                     for (int i = 0; i < lst_config.size(); i++) {
                                         Object[] ObjFunds = (Object[]) lst_config.get(i);
@@ -6941,7 +6987,7 @@ public class Tag_ClientSection extends TagSupport {
                                 }
                                 out.print("</div>");
 
-                                out.print("<input type='checkbox' value='1' onclick='MoveDataSelected(1, \"idReadDoc\")' " + (information ? ((form[1].toString().equals("1")) ? "checked" : "") : "") + " required> I confirm that I read the statements. <span class='text-danger'>*</span>");
+                                out.print("<input type='checkbox' value='1' onclick='MoveDataSelected(1, \"idReadDoc\")' " + (information ? ((form[1].toString().equals("1")) ? "checked" : "") : "") + " required> " + SectionOne + "<span class='text-danger'>*</span>");
                                 out.print("</div>");
 
                                 out.print("<input type='hidden' class='form-control' name='Txt_ReadDoc' id='idReadDoc' value='" + (information ? ((form[1].toString().equals("1")) ? "[1][2][3]" : "") : "") + "'>");
@@ -6990,7 +7036,13 @@ public class Tag_ClientSection extends TagSupport {
 //                                String[] form = TemplForm[estTl].replace("][", "///").replace("[", "").replace("]", "").split("///");
                                 lst_document = DocumentJpa.ConsultDocumentFiles(IdDOc);
                                 Object[] Objdoc = (Object[]) lst_document.get(0);
-                                lst_config = ConfigJpa.ConsultSettingsByCategorie("Attach15");
+                                boolean langs = false;
+                                if (TypeDocument.contains("Ingles")) {
+                                    lst_config = ConfigJpa.ConsultSettingsByCategorie("Attach15");
+                                } else {
+                                    lst_config = ConfigJpa.ConsultSettingsByCategorie("Attach16");
+                                    langs = true;
+                                }
                                 boolean validDocs = false;
                                 if (information) {
                                     if (!form[1].toString().equals("N/A")) {
@@ -7032,10 +7084,18 @@ public class Tag_ClientSection extends TagSupport {
                                         if (Objdoc[2].toString().contains("[" + obj_config[0].toString() + "]")) {
                                             if (validDocs) {
                                                 String[] NameFilex = form[validator].toString().split("/");
-                                                FilesNames += "[" + obj_config[0] + "/" + obj_config[2].toString().split("/")[1] + "/" + NameFilex[1] + "]";
+                                                if (langs) {
+                                                    FilesNames += "[" + obj_config[0] + "/" + obj_config[2].toString().split("/")[0] + "/" + NameFilex[1] + "]";
+                                                } else {
+                                                    FilesNames += "[" + obj_config[0] + "/" + obj_config[2].toString().split("/")[1] + "/" + NameFilex[1] + "]";
+                                                }
                                                 validator++;
                                             } else {
-                                                FilesNames += "[" + obj_config[0] + "/" + obj_config[2].toString().split("/")[1] + "]";
+                                                if (langs) {
+                                                    FilesNames += "[" + obj_config[0] + "/" + obj_config[2].toString().split("/")[0] + "]";
+                                                } else {
+                                                    FilesNames += "[" + obj_config[0] + "/" + obj_config[2].toString().split("/")[1] + "]";
+                                                }
                                             }
                                             idFiles += "[" + obj_config[0] + "]";
                                         }
@@ -7180,8 +7240,13 @@ public class Tag_ClientSection extends TagSupport {
                                 //</editor-fold>
                             } else if (estTl == 8) {
                                 //<editor-fold defaultstate="collapsed" desc="SIGNATURE">
-                                String SectionTwo = bundle.getString("formP.SectionTwo");
-                                String SectionThree = bundle.getString("formP.SectionThree");
+                                String title = bundle_due.getString("formG.title");
+                                String SectionOne = bundle_due.getString("formG.SectionOne");
+                                String SectionTwo = bundle_due.getString("formG.SectionTwo");
+                                String SectionThree = bundle_due.getString("formG.SectionThree");
+                                String SectionFour = bundle_due.getString("formG.SectionFour");
+                                String SectionFive = bundle_due.getString("formG.SectionFive");
+                                String SectionSix = bundle_due.getString("formG.SectionSix");
 
 //                                String[] form = TemplForm[estTl].replace("][", "///").replace("[", "").replace("]", "").split("///");
                                 int IdSigna = 0;
@@ -7206,7 +7271,7 @@ public class Tag_ClientSection extends TagSupport {
 
                                 }
                                 out.print("<div class='section-body' style='color: black'>");
-                                out.print("<h2 class='' style='position: absolute;font-size: 20px; color: black; font-weight: 700; margin: 30px 0 25px 0;'><i class=\"fas fa-caret-right\"></i> &nbsp; Authorization</h2>");
+                                out.print("<h2 class='' style='position: absolute;font-size: 20px; color: black; font-weight: 700; margin: 30px 0 25px 0;'><i class=\"fas fa-caret-right\"></i> &nbsp; " + title + "</h2>");
                                 out.print("<div class='row' style='background: #e7e7e7; padding-top: 47px;'>");
                                 out.print("<div class='col-12 col-md-8 col-sm-12' style='margin: auto; margin-top: 15px;'>");
                                 out.print("<div class='card' style='border-radius: 5px;'>");
@@ -7216,16 +7281,13 @@ public class Tag_ClientSection extends TagSupport {
                                 out.print("All fields marked with an asterisk (<span class='text-danger'>*</span>) are required.");
                                 out.print("</div>");
                                 out.print("<div class='empty-state-icon mt-2'>");
-                                out.print("<i class='fas fa-caret-right'></i> &nbsp; By signing this document, I declare that all the information provided is true,"
-                                        + " that the attached information is truthful and verifiable, and that I authorize its verification by any natural or legal"
-                                        + " person, public or private, without any limitation, obligating myself to update the information and/or confirm it "
-                                        + "whenever requested. (If a legal entity, the legal representative signs).");
+                                out.print("<i class='fas fa-caret-right'></i> &nbsp; " + SectionOne + "");
                                 out.print("</div>");
 
                                 //<editor-fold defaultstate="collapsed" desc="SIGNATURE USER">                            
                                 out.print("<div class='col-lg-12'>");
                                 out.print("<div class='mt-4'>");
-                                out.print("<h6>Signature <span class='text-danger'>*</span></h6>");
+                                out.print("<h6>" + SectionTwo + " <span class='text-danger'>*</span></h6>");
                                 out.print("</div>");
 
                                 out.print("<div class='col-12 col-sm-12 col-md-12'>");
@@ -7385,7 +7447,7 @@ public class Tag_ClientSection extends TagSupport {
 
                                 out.print("<div class='col-lg-6'>");
                                 out.print("<div class='mt-4'>");
-                                out.print("<h6>Complete Name<span class='text-danger'>*</span></h6>");
+                                out.print("<h6>" + SectionThree + "<span class='text-danger'>*</span></h6>");
                                 out.print("</div>");
                                 out.print("<div class='mt-2'>");
                                 out.print("<input type='text' class='form-control' name='TxtName' id='TxtName' placeholder='Complete Name' value='" + (information ? ((form[1].toString().equals("N/A")) ? "" : form[1].toString()) : "") + "' required>");
@@ -7394,7 +7456,7 @@ public class Tag_ClientSection extends TagSupport {
 
                                 out.print("<div class='col-lg-6'>");
                                 out.print("<div class='mt-4'>");
-                                out.print("<h6>Identification Number<span class='text-danger'>*</span></h6>");
+                                out.print("<h6>" + SectionFour + "<span class='text-danger'>*</span></h6>");
                                 out.print("</div>");
                                 out.print("<div class='mt-2'>");
                                 out.print("<input type='number' class='form-control' name='NmbDocx' id='NmbDocument' placeholder='Identification Number' value='" + (information ? ((form[2].toString().equals("N/A")) ? "" : form[2].toString()) : "") + "' required>");
@@ -7407,7 +7469,7 @@ public class Tag_ClientSection extends TagSupport {
 
                                 out.print("<div class='col-lg-6'>");
                                 out.print("<div class='mt-4'>");
-                                out.print("<h6>Title<span class='text-danger'>*</span></h6>");
+                                out.print("<h6>" + SectionFive + "<span class='text-danger'>*</span></h6>");
                                 out.print("</div>");
                                 out.print("<div class='mt-2'>");
                                 out.print("<input type='text' class='form-control' name='TxtTitle' id='TxtTitle' placeholder='Title/position' value='" + (information ? ((form[3] == null) ? "" : form[3].toString()) : "") + "' required>");
@@ -7415,7 +7477,7 @@ public class Tag_ClientSection extends TagSupport {
                                 out.print("</div>");
 
                                 out.print("<div class='signature-input col-lg-6 mt-3' id='sigChange'>");
-                                out.print("<label for='file-input'><b>Upload signature image:</b></label> <span class='text-danger'>*</span><br>");
+                                out.print("<label for='file-input'><b>" + SectionSix + ":</b></label> <span class='text-danger'>*</span><br>");
                                 out.print("<input type='file' class='form-control' name='TxtImageSigna' id='file-input' accept='image/*' onchange='cargarImagen(event)' required>");
                                 out.print("</div>");
                                 out.print("</div>");

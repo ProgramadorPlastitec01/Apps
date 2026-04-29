@@ -69,12 +69,24 @@ public class SendMail {
                 String texto_mail = "";
                 if (lst_Config != null) {
                     Object[] objParam = (Object[]) lst_Config.get(0);
-                    String link = "http://" + objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[0] + objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[1] + "SAGRILAFT/";
-//                    String link = "http://localhost:8089/SAGRILAFT/";
+                    String lk_host = "";
+                    String lk_port = "";
+                    String link = "";
+                    try {
+                        lk_host = objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[0];
+                        try {
+                            lk_port = objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[1];
+                        } catch (Exception e) {
+                            lk_port = "";
+                        }
+                    } catch (Exception e) {
+
+                    }
+                    link = "http://" + lk_host + ":" + lk_port + "/SAGRILAFT/";
                     texto_mail = objParam[2].toString();
+                    texto_mail = texto_mail.replace("XXXLINKXXX", link);
                     texto_mail = texto_mail.replace("XXXUSERCLIENTXXX", UserClient);
                     texto_mail = texto_mail.replace("XXXPASSWORDCLIENTXXX", "" + CurrentYear + "");
-                    texto_mail = texto_mail.replace("XXXLINKXXX", link);
 //                    texto_mail = texto_mail.replace("- - Boton Access - -", "<a href='" + link + "'>" + link + "</a>");
                 }
 
@@ -149,8 +161,20 @@ public class SendMail {
                 String texto_mail = "";
                 if (lst_Config != null) {
                     Object[] objParam = (Object[]) lst_Config.get(0);
-                    String link = "http://" + objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[0] + ":" + objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[1] + "/SAGRILAFT/";
-//                    String link = "http://localhost:8089/SAGRILAFT/";
+                    String lk_host = "";
+                    String lk_port = "";
+                    String link = "";
+                    try {
+                        lk_host = objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[0];
+                        try {
+                            lk_port = objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[1];
+                        } catch (Exception e) {
+                            lk_port = "";
+                        }
+                    } catch (Exception e) {
+
+                    }
+                    link = "http://" + lk_host + ":" + lk_port + "/SAGRILAFT/";
                     texto_mail = objParam[2].toString();
                     texto_mail = texto_mail.replace("XXXUSERCLIENTXXX", UserClient);
                     texto_mail = texto_mail.replace("XXXLINKXXX", link);
@@ -222,8 +246,20 @@ public class SendMail {
                 String texto_mail = "";
                 if (lst_Config != null) {
                     Object[] objParam = (Object[]) lst_Config.get(0);
-                    String link = "http://" + objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[0] + ":" + objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[1] + "/SAGRILAFT/";
-//                    String link = "http://" + hostport + "/SAGRILAFT/";
+                    String lk_host = "";
+                    String lk_port = "";
+                    String link = "";
+                    try {
+                        lk_host = objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[0];
+                        try {
+                            lk_port = objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[1];
+                        } catch (Exception e) {
+                            lk_port = "";
+                        }
+                    } catch (Exception e) {
+
+                    }
+                    link = "http://" + lk_host + ":" + lk_port + "/SAGRILAFT/";
                     texto_mail = objParam[2].toString();
                     texto_mail = texto_mail.replace("XXXUSERCLIENTXXX", UserClient);
                     texto_mail = texto_mail.replace("XXXLINKXXX", link);
@@ -301,9 +337,20 @@ public class SendMail {
                 String texto_mail = "";
                 if (lst_Config != null) {
                     Object[] objParam = (Object[]) lst_Config.get(0);
-//                    String hostport = objParam[3].toString().replace("/", ":");
-                    String link = "http://" + objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[0] + ":" + objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[1] + "/SAGRILAFT/";
-//                    String link = "http://" + hostport + "/SAGRILAFT/";
+                    String lk_host = "";
+                    String lk_port = "";
+                    String link = "";
+                    try {
+                        lk_host = objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[0];
+                        try {
+                            lk_port = objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[1];
+                        } catch (Exception e) {
+                            lk_port = "";
+                        }
+                    } catch (Exception e) {
+
+                    }
+                    link = "http://" + lk_host + ":" + lk_port + "/SAGRILAFT/";
                     texto_mail = objParam[2].toString();
                     texto_mail = texto_mail.replace("XXXCLIENTEXXX", Client);
                     texto_mail = texto_mail.replace("XXXLINKXXX", link);
@@ -385,7 +432,20 @@ public class SendMail {
                 String texto_mail = "";
                 if (lst_Config != null) {
                     Object[] objParam = (Object[]) lst_Config.get(0);
-                    String link = "http://" + objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[0] + ":" + objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[1] + "/SAGRILAFT/";
+                    String lk_host = "";
+                    String lk_port = "";
+                    String link = "";
+                    try {
+                        lk_host = objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[0];
+                        try {
+                            lk_port = objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[1];
+                        } catch (Exception e) {
+                            lk_port = "";
+                        }
+                    } catch (Exception e) {
+
+                    }
+                    link = "http://" + lk_host + ":" + lk_port + "/SAGRILAFT/";
                     texto_mail = objParam[2].toString();
                     texto_mail = texto_mail.replace("XXXCLIENTEXXX", Client);
 
@@ -462,7 +522,20 @@ public class SendMail {
                 String texto_mail = "";
                 if (lst_Config != null) {
                     Object[] objParam = (Object[]) lst_Config.get(0);
-                    String link = "http://" + objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[0] + ":" + objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[1] + "/SAGRILAFT/";
+                    String lk_host = "";
+                    String lk_port = "";
+                    String link = "";
+                    try {
+                        lk_host = objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[0];
+                        try {
+                            lk_port = objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[1];
+                        } catch (Exception e) {
+                            lk_port = "";
+                        }
+                    } catch (Exception e) {
+
+                    }
+                    link = "http://" + lk_host + ":" + lk_port + "/SAGRILAFT/";
                     texto_mail = objParam[2].toString();
                     texto_mail = texto_mail.replace("XXXCLIENTEXXX", Client);
 
@@ -545,7 +618,20 @@ public class SendMail {
                 String texto_mail = "";
                 if (lst_Config != null) {
                     Object[] objParam = (Object[]) lst_Config.get(0);
-                    String link = "http://" + objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[0] + ":" + objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[1] + "/SAGRILAFT/";
+                    String lk_host = "";
+                    String lk_port = "";
+                    String link = "";
+                    try {
+                        lk_host = objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[0];
+                        try {
+                            lk_port = objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[1];
+                        } catch (Exception e) {
+                            lk_port = "";
+                        }
+                    } catch (Exception e) {
+
+                    }
+                    link = "http://" + lk_host + ":" + lk_port + "/SAGRILAFT/";
                     texto_mail = objParam[2].toString();
                     texto_mail = texto_mail.replace("XXXCLIENTEXXX", Client);
                     texto_mail = texto_mail.replace("XXXLINKXXX", link);
@@ -614,7 +700,20 @@ public class SendMail {
                 String texto_mail = "";
                 if (lst_Config != null) {
                     Object[] objParam = (Object[]) lst_Config.get(0);
-                    String link = "http://" + objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[0] + ":" + objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[1] + "/SAGRILAFT/";
+                    String lk_host = "";
+                    String lk_port = "";
+                    String link = "";
+                    try {
+                        lk_host = objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[0];
+                        try {
+                            lk_port = objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[1];
+                        } catch (Exception e) {
+                            lk_port = "";
+                        }
+                    } catch (Exception e) {
+
+                    }
+                    link = "http://" + lk_host + ":" + lk_port + "/SAGRILAFT/";
                     texto_mail = objParam[2].toString();
                     texto_mail = texto_mail.replace("XXXCLIENTEXXX", Client);
                     texto_mail = texto_mail.replace("XXXLINKXXX", link);
@@ -669,7 +768,20 @@ public class SendMail {
                     String texto_mail = "";
                     if (lst_Config != null) {
                         Object[] objParam = (Object[]) lst_Config.get(0);
-                        String link = "http://" + objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[0] + ":" + objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[1] + "/SAGRILAFT/";
+                        String lk_host = "";
+                        String lk_port = "";
+                        String link = "";
+                        try {
+                            lk_host = objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[0];
+                            try {
+                                lk_port = objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[1];
+                            } catch (Exception e) {
+                                lk_port = "";
+                            }
+                        } catch (Exception e) {
+
+                        }
+                        link = "http://" + lk_host + ":" + lk_port + "/SAGRILAFT/";
                         texto_mail = objParam[2].toString();
                         texto_mail = texto_mail.replace("XXXCLIENTEXXX", Client);
                         texto_mail = texto_mail.replace("XXXUSERXXX", user);
@@ -754,7 +866,20 @@ public class SendMail {
                 String texto_mail = "";
                 if (lst_Config != null) {
                     Object[] objParam = (Object[]) lst_Config.get(0);
-                    String link = "http://" + objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[0] + ":" + objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[1] + "/SAGRILAFT/";
+                    String lk_host = "";
+                    String lk_port = "";
+                    String link = "";
+                    try {
+                        lk_host = objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[0];
+                        try {
+                            lk_port = objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[1];
+                        } catch (Exception e) {
+                            lk_port = "";
+                        }
+                    } catch (Exception e) {
+
+                    }
+                    link = "http://" + lk_host + ":" + lk_port + "/SAGRILAFT/";
                     texto_mail = objParam[2].toString();
                     texto_mail = texto_mail.replace("XXXCLIENTEXXX", Client);
                     texto_mail = texto_mail.replace("XXXLINKXXX", link);
@@ -794,23 +919,52 @@ public class SendMail {
             }
             Session session = Session.getDefaultInstance(propiedades);
             try {
+                String[] MailFinal = {};
                 String MailClient = "";
-//                lst_Config = ConfigJpa.ConsultSettingsByCategorie("MailCopy");
-//                if (lst_Config != null) {
-//                    Object[] ObjCopy = (Object[]) lst_Config.get(0);
-//                    MailClient = ObjCopy[2].toString() + ", " + MailCl;
-//                }
+                lst_Config = ConfigJpa.ConsultSettingsByCategorie("MailCopy");
+                if (lst_Config != null) {
+                    Object[] ObjCopy = (Object[]) lst_Config.get(0);
+                    MailClient = ObjCopy[2].toString() + ", " + MailCl;
+                }
+                try {
+                    MailFinal = MailClient.toString().split(";");
+                    if (MailFinal.length == 1) {
+                    } else {
+                        for (int i = 0; i < MailFinal.length; i++) {
+                            if (i == MailFinal.length - 1) {
+                                MailClient += MailFinal[i].toString();
+                            } else {
+                                MailClient += MailFinal[i].toString() + ",";
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    MailClient = MailClient.toString();
+                }
                 try {
                     MimeMessage message = new MimeMessage(session);
                     message.setRecipients(Message.RecipientType.TO, MailClient);
-                    message.setSubject("PT Recordatorio - Credenciales");
+                    message.setSubject("PT Recordatorio - Continuar proceso");
                     message.setFrom(new InternetAddress(mail));
                     lst_Config = ConfigJpa.ConsultSettingsByCategorie("MailNotifyClient");
                     int anio = LocalDate.now().getYear();
                     String texto_mail = "";
                     if (lst_Config != null) {
                         Object[] objParam = (Object[]) lst_Config.get(0);
-                        String link = "http://" + objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[0] + ":" + objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[1] + "/SAGRILAFT/";
+                        String lk_host = "";
+                        String lk_port = "";
+                        String link = "";
+                        try {
+                            lk_host = objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[0];
+                            try {
+                                lk_port = objParam[3].toString().replace("][", "///").replace("]", "").replace("[", "").split("///")[1];
+                            } catch (Exception e) {
+                                lk_port = "";
+                            }
+                        } catch (Exception e) {
+
+                        }
+                        link = "http://" + lk_host + ":" + lk_port + "/SAGRILAFT/";
                         texto_mail = objParam[2].toString();
                         texto_mail = texto_mail.replace("XXXCLIENTEXXX", Client);
                         texto_mail = texto_mail.replace("XXXUSERXXX", user);
@@ -833,5 +987,4 @@ public class SendMail {
         }
 //</editor-fold>
     }
-
 }

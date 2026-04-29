@@ -96,9 +96,28 @@ public class ConfigurationControllerJpa implements Serializable {
             return null;
         }
     }
+
+    public List ConsultCounters() {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_count_data`()");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
 //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="PROCCESS">
-
     public boolean SettingRegister(String Category, String Value, String Description) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();

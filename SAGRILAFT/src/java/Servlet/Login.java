@@ -148,7 +148,7 @@ public class Login extends HttpServlet {
                                 }
 
                                 // Mensaje genérico de login fallido
-                                request.setAttribute("Usuario_no_existe", true);
+                                request.setAttribute("Usuario_no_existe", false);
                                 request.getRequestDispatcher("index.jsp").forward(request, response);
                                 return;
 
@@ -165,7 +165,7 @@ public class Login extends HttpServlet {
 
                         if ((Integer) obj_sesion[11] == 0) {
                             // Usuario desactivado
-                            request.setAttribute("Usuario_desactivado", true);
+                            request.setAttribute("Usuario_no_existe", false);
                             request.setAttribute("var1", obj_sesion[1]);
                             request.getRequestDispatcher("index.jsp").forward(request, response);
                             return;

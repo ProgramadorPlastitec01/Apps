@@ -17,11 +17,13 @@
         <link rel="shortcut icon" href="Interfaz/Contenido/Imagen/WP_Sag2.png" />
     </head>
     <body>
-        
+
         <div id="app">
             <div class="main-wrapper main-wrapper-1">
+                <script src="Interfaz/Contenido/Scripts/charts.js"></script>
+                <script src="Interfaz/Contenido/Scripts/charts_label.js"></script>
                 <jsp:include page="Base.jsp"></jsp:include>
-                <div class="main-content" style="min-height: 694px;">
+                    <div class="main-content" style="min-height: 694px;">
                     <Starting:Initial/>
                 </div>
             </div>
