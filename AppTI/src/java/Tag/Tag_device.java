@@ -40,7 +40,6 @@ public class Tag_device extends TagSupport {
 //        LocalDate fecha = LocalDate.now();
 //        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 //        String CurrentDate = fecha.format(formato);
-        
         LocalDate fecha = LocalDate.now();
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         String CurrentDate = fecha.format(formato);
@@ -100,15 +99,27 @@ public class Tag_device extends TagSupport {
 
         //<editor-fold defaultstate="collapsed" desc="CONSULT ASIGMENT INFO">
         lst_DeviceDetail = DeviceDetailJpa.ConsultDeviceLastAsigment(idDevice);
-        if (lst_DeviceDetail != null) {
-            Object[] ObjDetail = (Object[]) lst_DeviceDetail.get(0);
-            String[] strc = ObjDetail[3].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
-            cargouser = strc[2].toString();
-            area = strc[3].toString();;
-            nameUser = strc[6].toString();
-            usuario = strc[9].toString();
-            hvInfo = true;
-        } else {
+        try {
+            if (lst_DeviceDetail != null) {
+                Object[] ObjDetail = (Object[]) lst_DeviceDetail.get(0);
+                String[] strc = ObjDetail[3].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                cargouser = strc[2].toString();
+                area = strc[3].toString();;
+                nameUser = strc[6].toString();
+                usuario = strc[9].toString();
+                hvInfo = true;
+            } else {
+                cargouser = "<span contenteditable='true' id='CargoUser' data-placeholder='** Cargo usuario **'></span>";
+                area = "<span contenteditable='true' id='CargoUser' data-placeholder='** Area **'></span>";
+                nameUser = "<span contenteditable='true' id='CargoUser' data-placeholder='** Nombre usuario **'></span>";
+                usuario = "<span contenteditable='true' id='CargoUser' data-placeholder='** Usuario ** '></span>";
+                hvInfo = false;
+            }
+        } catch (Exception e) {
+            cargouser = "<span contenteditable='true' id='CargoUser' data-placeholder='** Cargo usuario **'></span>";
+            area = "<span contenteditable='true' id='CargoUser' data-placeholder='** Area **'></span>";
+            nameUser = "<span contenteditable='true' id='CargoUser' data-placeholder='** Nombre usuario **'></span>";
+            usuario = "<span contenteditable='true' id='CargoUser' data-placeholder='** Usuario ** '></span>";
             hvInfo = false;
         }
         //</editor-fold 
@@ -197,7 +208,7 @@ public class Tag_device extends TagSupport {
                     } catch (Exception e) {
                         singExits = "";
                     }
-                    if (code.contains("-004") || code.contains("-013") || code.contains("-029") || code.contains("-031") || code.contains("-032")) {
+                    if ((code.contains("-003") && idDeviceHead > 379) || code.contains("-004") || code.contains("-013") || code.contains("-029") || code.contains("-031") || code.contains("-032")) {
                         format = ObjDetail[4].toString();
                     }
                     try {
@@ -213,7 +224,8 @@ public class Tag_device extends TagSupport {
                                 List lst_signa = ConnectJpa.Consultar_firmas(idSigx);
                                 if (lst_signa != null) {
                                     String[] ObjSi = lst_signa.toString().split("///");
-                                    if (code.contains("-004") || code.contains("-013") || code.contains("-029") || code.contains("-031") || code.contains("-032")) {
+                                    String codeUser = ObjSi[2].toString().trim();
+                                    if ((code.contains("-003") && idDeviceHead > 379) || code.contains("-004") || code.contains("-013") || code.contains("-029") || code.contains("-031") || code.contains("-032")) {
 //                                      
                                         format = format.replace("Firma " + usrx[0] + "", "<canvas id='signaCanvas" + i + "' width='120' height='60' style='border: 1px solid #fff;'></canvas>");
                                         format = format.replace("XXX" + usrx[0] + "XXX", "<canvas id='signaCanvas" + i + "' width='200' height='100' style='border: 1px solid #fff;'></canvas>");
@@ -239,7 +251,15 @@ public class Tag_device extends TagSupport {
                                             + "                ctx.strokeStyle = 'black'; "
                                             + "                ctx.lineWidth = 2; "
                                             + "                ctx.stroke(); "
-                                            + "            }); "
+                                            + "            });"
+                                            + "            ctx.font = 'italic 14px arial'; "
+                                            + "            ctx.fillStyle = 'black'; "
+                                            + "            const texto = '" + codeUser + "'; "
+                                            + "            const margen = 10; "
+                                            + "            const anchoTexto = ctx.measureText(texto).width; "
+                                            + "            const x = canvas.width - anchoTexto - margen; "
+                                            + "            const y = canvas.height - margen; "
+                                            + "            ctx.fillText(texto, x, y); "
                                             + "        } "
                                             + " "
                                             + " window.addEventListener('load', dibujarCoordenadas" + i + "); "
@@ -259,7 +279,6 @@ public class Tag_device extends TagSupport {
                 }
 
                 //</editor-fold>
-                
                 //<editor-fold defaultstate="collapsed" desc="FORM SIGNATURES">
                 String[] Signatures = {};
                 boolean useSign = false;
@@ -325,7 +344,7 @@ public class Tag_device extends TagSupport {
                     try {
                         if (docx > 0) {
                             //<editor-fold defaultstate="collapsed" desc="LOAD SIGNATURE">
-                            out.print("<form action='Device?opt=1&act=4&idTypeDv=" + idTypeDv + "&type=" + type + "&idDeviceHead=" + idDeviceHead + "&idDevice=" + idDevice + "' method='post' class='needs-validation' novalidate='' onsubmit='return cargarDatosForm(this)'>");
+                            out.print("<form action='Device?opt=1&act=4&idTypeDv=" + idTypeDv + "&type=" + type + "&idDeviceHead=" + idDeviceHead + "&idDevice=" + idDevice + "&txtSigMode=" + SigMode + "' method='post' class='needs-validation' novalidate='' onsubmit='return cargarDatosForm(this)'>");
                             out.print("<div class='d-flex'>");
                             out.print("<div class='col-lg-5 mr-2'>");
                             out.print("<span class=''>Documento: </span>");
@@ -401,6 +420,14 @@ public class Tag_device extends TagSupport {
                                         + "                ctx.lineWidth = 2; "
                                         + "                ctx.stroke(); "
                                         + "            }); "
+                                        + "            ctx.font = 'bold italic 24px arial'; "
+                                        + "            ctx.fillStyle = 'black'; "
+                                        + "            const texto = '" + codx + "'; "
+                                        + "            const margen = 10; "
+                                        + "            const anchoTexto = ctx.measureText(texto).width; "
+                                        + "            const x = canvas.width - anchoTexto - margen; "
+                                        + "            const y = canvas.height - margen; "
+                                        + "            ctx.fillText(texto, x, y); "
                                         + "        } "
                                         + " "
                                         + " window.onload = dibujarCoordenadas; ");
@@ -424,7 +451,7 @@ public class Tag_device extends TagSupport {
                                     + "</script>");
                             //</editor-fold>
                         } else {
-                            //<editor-fold defaultstate="collapsed" desc="CONSULT SIGNATURE">
+                            //<editor-fold defaultstate="collapsed" desc="FORM CONSULT SIGNATURE">
                             out.print("<form action='Device?opt=1&act=4&idTypeDv=" + idTypeDv + "&type=" + type + "&idDeviceHead=" + idDeviceHead + "&idDevice=" + idDevice + "' method='post' class='needs-validation' novalidate='' onsubmit='return cargarDatosForm(this)'>");
                             out.print("<span class=''>Firma seleccionada:</span> <input type='text' class='form-control inpMode' name='txtSigMode' id='idSigMode' value='" + SigMode + "'>");
                             out.print("<div class='text-center'>");
@@ -827,7 +854,7 @@ public class Tag_device extends TagSupport {
                         //</editor-fold>
                     }
                     //</editor-fold>
-                } else if (code.contains("-003")) {
+                } else if (code.contains("-003") && idDeviceHead <= 379) {
                     //<editor-fold defaultstate="collapsed" desc="ASSIGN PC">
                     lst_device = DeviceJpa.ConsultDevicexId(idDevice);
                     if (lst_DeviceDetail != null) {
@@ -843,7 +870,7 @@ public class Tag_device extends TagSupport {
                                 .replace("XXXSERIALXXX", ObInfo[6].toString())
                                 .replace("XXXITEMXXX", ObInfo[5].toString());
                         format = format.replace("XXXNROPCXXX", nameDevice);
-                        format = format.replace("XXXCARGOXXX", "<b>" + DtaFormat[2].toString() + "</b>")                                
+                        format = format.replace("XXXCARGOXXX", "<b>" + DtaFormat[2].toString() + "</b>")
                                 .replace("XXXUBICACIONXXX", "<b>" + DtaFormat[4].toString() + "</b>")
                                 .replace("XXXBOSSNAMEXXX", "<b>" + DtaFormat[5].toString() + "</b>")
                                 .replace("XXXNAMEXXX", "<b>" + DtaFormat[6].toString() + "</b>")
@@ -858,13 +885,12 @@ public class Tag_device extends TagSupport {
                                 .replace("XXXCOLUMM3XXX", "<b>" + DtaFormat[15].toString() + "</b>")
                                 .replace("XXXCOLUMM4XXX", "<b>" + DtaFormat[16].toString() + "</b>")
                                 .replace("XXXCOLUMM5XXX", "<b>" + DtaFormat[17].toString()) + "</b>";
-                        
+
                         try {
                             format = format.replace("XXXAREAXXX", "<b>" + DtaFormat[3].toString().split("/")[1] + "</b>");
                         } catch (Exception e) {
                             format = format.replace("XXXAREAXXX", "<b>" + DtaFormat[3].toString() + "</b>");
                         }
-                        
 
                         format = format.replace("XXXElaboradorXXX", "<b class='text-warning'>Pendiente Firma</b>");
                         format = format.replace("XXXUsuarioXXX", "<b class='text-warning'>Pendiente Firma</b>");
@@ -916,7 +942,6 @@ public class Tag_device extends TagSupport {
 //                        format = format.replace("name=\"textcal\"", "name=\"textcal\" disabled");
 //                        format = format.replace("name=\"textFll\"", "name=\"textFll\" disabled");
                         //</editor-fold>
-
                         out.print(format);
                         out.print(post_script);
                         //</editor-fold>
@@ -1014,9 +1039,9 @@ public class Tag_device extends TagSupport {
 
                             out.print("</div>");
                             out.print("</div>");
-                            out.print("</div>");   
+                            out.print("</div>");
                             //</editor-fold>
-                            
+
                             String optArea = "";
                             lst_area = AreaJpa.ConsultAreaActive();
                             if (lst_area != null) {
@@ -1027,7 +1052,7 @@ public class Tag_device extends TagSupport {
                             }
                             String areaList = "<div class='col-lg-6'><select class='form-control select2' name='cbxArea' style='margin-12px;'>"
                                     + "<option selected disabled>Seleccionar </option> " + optArea + " </select></div>";
-                            
+
                             //<editor-fold defaultstate="collapsed" desc="REPLACE DATA">
                             format = format.replace("XXXCARGOXXX", "<input type='text' class='form-control' name='txt_post' id='' data-toggle='tooltip' data-placement='top' title='' value='' required>")
                                     .replace("XXXAREAXXX", areaList)
@@ -1037,11 +1062,9 @@ public class Tag_device extends TagSupport {
                                     .replace("XXXCEDULAXXX", "<input type='text' class='form-control col-lg-2' name='txt_indentity' id='' data-toggle='tooltip' data-placement='top' title='' value='' required>")
                                     .replace("XXXLOCATIONXXX", "<input type='text' class='form-control col-lg-2' name='txt_place' id='' data-toggle='tooltip' data-placement='top' title='' value='' required>")
                                     .replace("XXXUSERPCXXX", "<input type='text' class='form-control col-lg-2' name='txt_user' id='' data-toggle='tooltip' data-placement='top' title='' value='' required>")
-                                    
                                     .replace("XXXDIAXXX", "<input type='number' class='form-control col-lg-2' name='txt_day' id='' value='" + currentDay + "' required>")
                                     .replace("XXXMESXXX", "<input type='number' class='form-control col-lg-2' name='txt_month' id='' value='" + currentMonth + "' required>")
                                     .replace("XXXANIOXXX", "<input type='number' class='form-control col-lg-2' name='txt_anio' id='' value='" + currentYear + "' required>")
-                                    
                                     .replace("XXXCOLUMM1XXX", "<input type='text' class='form-control' name='txt_comm1' id='' data-toggle='tooltip' data-placement='top' title=''  value=''  required >")
                                     .replace("XXXCOLUMM2XXX", "<input type='text' class='form-control' name='txt_comm2' id='' data-toggle='tooltip' data-placement='top' title=''  value=''  required >")
                                     .replace("XXXCOLUMM3XXX", "<input type='text' class='form-control' name='txt_comm3' id='' data-toggle='tooltip' data-placement='top' title=''  value=''  required >")
@@ -1108,21 +1131,40 @@ public class Tag_device extends TagSupport {
                         //</editor-fold>
                     }
                     //</editor-fold>
-                } else if (code.contains("-004") || code.contains("-013") || code.contains("-029") || code.contains("-031") || code.contains("-032")) {
+                } else if (code.contains("-003") || code.contains("-004") || code.contains("-013") || code.contains("-029") || code.contains("-031") || code.contains("-032")) {
                     //<editor-fold defaultstate="collapsed" desc="OTHER DOCUMENTS">
                     format = format.replace("XXXDATEXXX", CurrentDate);
                     format = format.replace("XXXAREAXXX", area);
                     format = format.replace("XXXUSUARIOXXX", usuario);
                     format = format.replace("XXXEQUIPOXXX", nameDevice);
+                    format = format.replace("XXXNROPCXXX", nameDevice);
                     format = format.replace("XXXUSERXXX", usuario);
                     format = format.replace("XXXPOSITIONXXX", cargouser);
                     format = format.replace("XXXUSERNAMEXXX", nameUser);
+                    format = format.replace("XXXTurno1XXX", "<b class='text-warning'>Pendiente Firma Turno1</b>");
+                    format = format.replace("XXXTurno2XXX", "<b class='text-warning'>Pendiente Firma Turno2</b>");
+                    format = format.replace("XXXTurno3XXX", "<b class='text-warning'>Pendiente Firma Turno3</b>");
+                    format = format.replace("XXXJefeXXX", "<b class='text-warning'>Pendiente Firma Jefe</b>");
+
+                    if (code.contains("-003")) {
+                        format = format.replace("XXXPLUS1XXX", "<button type='button' class='btn btn-info btn-sm' onclick='AddItem()'>Agregar items <i class='fas fa-plus'></i></button>");
+                        format = format.replace("XXXPLUS2XXX", "<button type='button' class='btn btn-info btn-sm' onclick='AddSoftware()'>Ingresar Software <i class='fas fa-plus'></i></button>");
+                        format = format.replace("XXXElaboradorXXX", "<b class='text-warning'>Firma Elaborador</b>");
+                        format = format.replace("XXXUsuarioXXX", "<b class='text-warning'>Firma Usuario</b>");
+                        format = format.replace("XXXJefe o DirectorXXX", "<b class='text-warning'>Firma Jefe o Director</b>");
+                    }
 
                     if (stetx == 2) {
                         format = format.replace("id=\"idtabla\"", "id=\"idtabla\" class='inactive004'");
+                        format = format.replace("<td><button class=\"btn btn-danger\" onclick=\"eliminarFila(this)\"><i class=\"fas fa-trash\"></i></button></td>", "");
+                        format = format.replace("<tr><td colspan=\"5\" class=\"text-center\" style=\"padding: 15px;\"><button type=\"button\" class=\"btn btn-info btn-sm\" onclick=\"AddItem()\">Agregar items <i class=\"fas fa-plus\"></i></button></td></tr>", "");
+                        format = format.replace("<tr><td colspan=\"5\" class=\"text-center\" style=\"padding: 15px;\"><button type=\"button\" class=\"btn btn-info btn-sm\" onclick=\"AddSoftware()\">Ingresar Software <i class=\"fas fa-plus\"></i></button></td></tr>", "");
+                        format = format.replace("<td> <input type=\"text\" class=\"form-control\" value=\"\"> </td>", "<td> - </td>");
+                        format = format.replace("<td><input type=\"text\" class=\"form-control\" value=\"\"></td>", "<td> - </td>");
+                    } else if (stetx == 1) {
+                        format = format.replace("contenteditable='true'", "contenteditable='false'");
                     }
                     out.print(format);
-                    out.print(post_script);
 
                     if (stetx == 1 || stetx == 99) {
                         out.print("<form action='Device?opt=9&idDevice=" + idDevice + "&idDeviceDetail=" + idDeviceDetail + "&idDeviceHead=" + idDeviceHead + "&idTypeDv=" + idTypeDv + "&type=" + type + "' method='post' id='Form04'>");
@@ -1133,6 +1175,13 @@ public class Tag_device extends TagSupport {
                         out.print("</div>");
                         out.print("</form>");
                     }
+
+                    format = format.replace("<b class='text-warning'>Pendiente Firma Turno1</b>", "XXXTurno1XXX");
+                    format = format.replace("<b class='text-warning'>Pendiente Firma Turno2</b>", "XXXTurno2XXX");
+                    format = format.replace("<b class='text-warning'>Pendiente Firma Turno3</b>", "XXXTurno3XXX");
+                    format = format.replace("<b class='text-warning'>Pendiente Firma Jefe</b>", "XXXJefeXXX");
+
+                    out.print(post_script);
                     //</editor-fold>
                 }
                 //</editor-fold>
@@ -1143,8 +1192,7 @@ public class Tag_device extends TagSupport {
                 out.print("</div>");
                 out.print("</div>");
                 out.print("</section>");
-                
-                
+
                 //</editor-fold>
             } else if (action == 3) {
                 //<editor-fold defaultstate="collapsed" desc="DEVICE DETAIL">

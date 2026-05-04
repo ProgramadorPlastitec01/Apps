@@ -32,20 +32,26 @@ public class CheckerMail extends HttpServlet {
                         Mail = request.getParameter("txtMail").toString().trim();
                         Passw = request.getParameter("txtfakePsw").toString().trim();
                         Receptor = request.getParameter("txtReceptor").toString().trim();
-                        
                         resultMail = mailCheck.MailChecker(Host, Port, Mail, Passw, Receptor);
-                        
                         request.setAttribute("Host", Host);
                         request.setAttribute("Port", Port);
                         request.setAttribute("Mail", Mail);
                         request.setAttribute("Passw", Passw);
                         request.setAttribute("Receptor", Receptor);
                         request.setAttribute("resultMail", resultMail);
-                    } catch (Exception e) {
                         request.getRequestDispatcher("CheckMail.jsp").forward(request, response);
+                    } catch (Exception e) {
+                        request.setAttribute("Host", Host);
+                        request.setAttribute("Port", Port);
+                        request.setAttribute("Mail", Mail);
+                        request.setAttribute("Passw", Passw);
+                        request.setAttribute("Receptor", Receptor);
+                        request.setAttribute("resultMail", resultMail);
+                        request.getRequestDispatcher("CheckMail.jsp").forward(request, response);
+
                     }
-                    request.getRequestDispatcher("CheckMail.jsp").forward(request, response);
                     break;
+
             }
         } catch (Exception ex) {
             request.setAttribute("errorMessage", "Ha ocurrido un error procesando tu solicitud: " + ex.getMessage());

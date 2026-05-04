@@ -228,6 +228,61 @@
             }
         </script>
 
+        <script>
+            function AddItem() {
+                let tbody = document.getElementById("tbodyEquipos");
+                let filaBoton = document.getElementById("filaBoton");
+                let nuevaFila = document.createElement("tr");
+                nuevaFila.innerHTML = `
+                                    <td><input type="text" class="form-control"></td>
+                                    <td><input type="text" class="form-control"></td>
+                                    <td><input type="text" class="form-control"></td>
+                                    <td><input type="text" class="form-control"></td>
+                                    <td><input type="text" class="form-control"></td>
+                                    <td><button class="btn btn-danger" onclick="eliminarFila(this)"><i class="fas fa-trash"></i></button></td>
+                                `;
+                tbody.insertBefore(nuevaFila, filaBoton);
+            }
+
+            function eliminarFila(boton) {
+                let fila = boton.closest("tr");
+                fila.remove();
+            }
+
+        </script>
+
+
+        <script>
+
+            function AddSoftware() {
+
+                let tbody = document.getElementById("tbodySoftware");
+                let filaBoton = document.getElementById("filaBotonSoftware");
+
+                let nuevaFila = document.createElement("tr");
+
+                nuevaFila.innerHTML = `
+                            <td><input type="text" class="form-control"></td>
+                            <td><input type="text" class="form-control"></td>
+                            <td><input type="text" class="form-control"></td>
+                            <td><button class="btn btn-danger" onclick="eliminarFila(this)"><i class="fas fa-trash"></i></button></td>
+                        `;
+
+                tbody.insertBefore(nuevaFila, filaBoton);
+            }
+
+
+            function eliminarFila(boton) {
+
+                let fila = boton.closest("tr");
+
+                fila.remove();
+
+            }
+
+        </script>
+
+
         <Alerts:Alert/>        
         <script src="Interface/Content/Assets/modules/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js"></script>
         <script src="Interface/Content/Assets/modules/datatables/Select-1.2.4/js/dataTables.select.min.js"></script>

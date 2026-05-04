@@ -93,15 +93,23 @@ public class Tag_computer extends TagSupport {
 
             //<editor-fold defaultstate="collapsed" desc="CONSULT ASIGNMENT INFO">
             lst_compDetail = ComDetail.ConsultLastAsignmentbyPc(IdComputer);
-            if (lst_compDetail != null) {
-                Object[] ObjDetail = (Object[]) lst_compDetail.get(0);
-                String[] strc = ObjDetail[3].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
-                cargouser = strc[2].toString();
-                area = strc[3].toString();;
-                nameUser = strc[6].toString();
-                usuario = strc[9].toString();
-                hvInfo = true;
-            } else {
+            try {
+                if (lst_compDetail != null) {
+                    Object[] ObjDetail = (Object[]) lst_compDetail.get(0);
+                    String[] strc = ObjDetail[3].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                    cargouser = strc[2].toString();
+                    area = strc[3].toString();
+                    nameUser = strc[6].toString();
+                    usuario = strc[9].toString();
+                    hvInfo = true;
+                } else {
+                    cargouser = "<span contenteditable='true' id='CargoUser' data-placeholder='** Cargo usuario **'></span>";
+                    area = "<span contenteditable='true' id='CargoUser' data-placeholder='** Area **'></span>";
+                    nameUser = "<span contenteditable='true' id='CargoUser' data-placeholder='** Nombre usuario **'></span>";
+                    usuario = "<span contenteditable='true' id='CargoUser' data-placeholder='** Usuario ** '></span>";
+                    hvInfo = false;
+                }
+            } catch (Exception e) {
                 cargouser = "<span contenteditable='true' id='CargoUser' data-placeholder='** Cargo usuario **'></span>";
                 area = "<span contenteditable='true' id='CargoUser' data-placeholder='** Area **'></span>";
                 nameUser = "<span contenteditable='true' id='CargoUser' data-placeholder='** Nombre usuario **'></span>";
@@ -193,7 +201,7 @@ public class Tag_computer extends TagSupport {
                         singExits = "";
                     }
 
-                    if (code.contains("-004") || code.contains("-013") || code.contains("-029") || code.contains("-031") || code.contains("-032")) {
+                    if ((code.contains("-003") && idPcHead > 385) || code.contains("-004") || code.contains("-013") || code.contains("-029") || code.contains("-031") || code.contains("-032")) {
                         format = ObjDetail[4].toString();
                     }
                     try {
@@ -209,7 +217,8 @@ public class Tag_computer extends TagSupport {
                                 List lst_signa = ConnectJpa.Consultar_firmas(idSigx);
                                 if (lst_signa != null) {
                                     String[] ObjSi = lst_signa.toString().split("///");
-                                    if (code.contains("-004") || code.contains("-013") || code.contains("-029") || code.contains("-031") || code.contains("-032")) {
+                                    String codeUser = ObjSi[2].toString().trim();
+                                    if ((code.contains("-003") && idPcHead > 385) || code.contains("-004") || code.contains("-013") || code.contains("-029") || code.contains("-031") || code.contains("-032")) {
 //                                      
                                         format = format.replace("XXX" + usrx[0] + "XXX", "<canvas id='signaCanvas" + i + "' width='120' height='60' style='border: 1px solid #fff;'></canvas>");
                                         format = format.replace("Firma " + usrx[0] + "", "<canvas id='signaCanvas" + i + "' width='120' height='60' style='border: 1px solid #fff;'></canvas>");
@@ -234,7 +243,15 @@ public class Tag_computer extends TagSupport {
                                             + "                ctx.strokeStyle = 'black'; "
                                             + "                ctx.lineWidth = 2; "
                                             + "                ctx.stroke(); "
-                                            + "            }); "
+                                            + "            });"
+                                            + "            ctx.font = 'bold italic 14px arial'; "
+                                            + "            ctx.fillStyle = 'black'; "
+                                            + "            const texto = '" + codeUser + "'; "
+                                            + "            const margen = 10; "
+                                            + "            const anchoTexto = ctx.measureText(texto).width; "
+                                            + "            const x = canvas.width - anchoTexto - margen; "
+                                            + "            const y = canvas.height - margen; "
+                                            + "            ctx.fillText(texto, x, y); "
                                             + "        } "
                                             + " "
                                             + " window.addEventListener('load', dibujarCoordenadas" + i + "); "
@@ -323,7 +340,7 @@ public class Tag_computer extends TagSupport {
                     try {
                         if (docx > 0) {
                             //<editor-fold defaultstate="collapsed" desc="LOAD SIGNATURE">
-                            out.print("<form action='Computer?opt=1&mod=3&type=" + type + "&idpcHead=" + idPcHead + "&IdComputer=" + IdComputer + "' method='post' class='needs-validation' novalidate=''>");
+                            out.print("<form action='Computer?opt=1&mod=3&type=" + type + "&idpcHead=" + idPcHead + "&IdComputer=" + IdComputer + "&txtSigMode=" + SigMode + "' method='post' class='needs-validation' novalidate=''>");
                             out.print("<div class='d-flex'>");
                             out.print("<div class='col-lg-5 mr-2'>");
                             out.print("<span class=''>Documento: </span>");
@@ -694,7 +711,7 @@ public class Tag_computer extends TagSupport {
                         //</editor-fold>
                     }
                     //</editor-fold>
-                } else if (code.contains("-003")) {
+                } else if (code.contains("-003") && idPcHead <= 385) {
                     //<editor-fold defaultstate="collapsed" desc="ASSIGN PC">
                     lst_computer = ComputerJpa.ConsultInfoComputerId(IdComputer);
                     if (lst_compDetail != null) {
@@ -913,7 +930,7 @@ public class Tag_computer extends TagSupport {
                                     .replace("XXXCOLUMM5XXX", "<input type='text' class='form-control' name='txt_comm5' id='' value=''  required >");
                             format = format.replace("XXXNROPCXXX", NroPC);
                             try {
-                                format = format.replace("XXXTIPOOXXX", ObInfo[2].toString());
+                                format = format.replace("XXXTIPOOXXX", "");
                             } catch (Exception e) {
                                 format = format.replace("XXXTIPOOXXX", "Sin Tipo definido");
                             }
@@ -976,7 +993,7 @@ public class Tag_computer extends TagSupport {
                         //</editor-fold>
                     }
                     //</editor-fold>
-                } else if (code.contains("-004") || code.contains("-013") || code.contains("-029") || code.contains("-031") || code.contains("-032")) {
+                } else if (code.contains("-003") || code.contains("-004") || code.contains("-013") || code.contains("-029") || code.contains("-031") || code.contains("-032")) {
                     //<editor-fold defaultstate="collapsed" desc="ALL REGISTERS">
                     int item = 0;
                     lst_computer = ComputerJpa.ConsultInfoComputerId(IdComputer);
@@ -988,6 +1005,7 @@ public class Tag_computer extends TagSupport {
                     format = format.replace("XXXAREAXXX", area);
                     format = format.replace("XXXUSUARIOXXX", usuario);
                     format = format.replace("XXXEQUIPOXXX", NroPC);
+                    format = format.replace("XXXNROPCXXX", NroPC);
                     format = format.replace("XXXUSERXXX", usuario);
                     format = format.replace("XXXPOSITIONXXX", cargouser);
                     format = format.replace("XXXUSERNAMEXXX", nameUser);
@@ -997,8 +1015,21 @@ public class Tag_computer extends TagSupport {
                     format = format.replace("XXXTurno3XXX", "<b class='text-warning'>Pendiente Firma Turno3</b>");
                     format = format.replace("XXXJefeXXX", "<b class='text-warning'>Pendiente Firma Jefe</b>");
 
+                    if (code.contains("-003")) {
+                        format = format.replace("XXXPLUS1XXX", "<button type='button' class='btn btn-info btn-sm' onclick='AddItem()'>Agregar items <i class='fas fa-plus'></i></button>");
+                        format = format.replace("XXXPLUS2XXX", "<button type='button' class='btn btn-info btn-sm' onclick='AddSoftware()'>Ingresar Software <i class='fas fa-plus'></i></button>");
+                        format = format.replace("XXXElaboradorXXX", "<b class='text-warning'>Firma Elaborador</b>");
+                        format = format.replace("XXXUsuarioXXX", "<b class='text-warning'>Firma Usuario</b>");
+                        format = format.replace("XXXJefe o DirectorXXX", "<b class='text-warning'>Firma Jefe o Director</b>");
+                    }
+
                     if (stetx == 2) {
                         format = format.replace("id=\"idtabla\"", "id=\"idtabla\" class='inactive004'");
+                        format = format.replace("<td><button class=\"btn btn-danger\" onclick=\"eliminarFila(this)\"><i class=\"fas fa-trash\"></i></button></td>", "");
+                        format = format.replace("<tr><td colspan=\"5\" class=\"text-center\" style=\"padding: 15px;\"><button type=\"button\" class=\"btn btn-info btn-sm\" onclick=\"AddItem()\">Agregar items <i class=\"fas fa-plus\"></i></button></td></tr>", "");
+                        format = format.replace("<tr><td colspan=\"5\" class=\"text-center\" style=\"padding: 15px;\"><button type=\"button\" class=\"btn btn-info btn-sm\" onclick=\"AddSoftware()\">Ingresar Software <i class=\"fas fa-plus\"></i></button></td></tr>", "");
+                        format = format.replace("<td> <input type=\"text\" class=\"form-control\" value=\"\"> </td>", "<td> - </td>");
+                        format = format.replace("<td><input type=\"text\" class=\"form-control\" value=\"\"></td>", "<td> - </td>");
                     } else if (stetx == 1) {
                         format = format.replace("contenteditable='true'", "contenteditable='false'");
                     }
@@ -1555,29 +1586,7 @@ public class Tag_computer extends TagSupport {
                 out.print("</div>");
                 out.print("</div>");
                 out.print("</section>");
-                //</editor-fold>
-//            } else if (module == 99) {
-//                //<editor-fold defaultstate="collapsed" desc="PORTADA DE DATOS">
-//                out.print("<section class='section'>");
-//                out.print("<div class='section-body'>");
-//                out.print("<div class='row'>");
-//                out.print("<div class='col-12'>");
-//                out.print("<div class='card'>");
-//                out.print("<div class='card-header' style='justify-content: space-between;'>");
-//                out.print("<h4>PC</h4>");
-//                out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1)'><i class='fas fa-plus'></i></button>");
-//                out.print("</div>");
-//                out.print("<div class='card-body'>");
-//                
-//                
-//                
-//                out.print("</div>");
-//                out.print("</div>");
-//                out.print("</div>");
-//                out.print("</div>");
-//                out.print("</div>");
-//                out.print("</section>");
-//                //</editor-fold>
+                //</editor-fold>       
             }
         } catch (IOException ex) {
             Logger.getLogger(Tag_computer.class.getName()).log(Level.SEVERE, null, ex);

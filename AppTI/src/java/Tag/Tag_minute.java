@@ -240,6 +240,14 @@ public class Tag_minute extends TagSupport {
                                     + "                ctx.lineWidth = 2;  "
                                     + "                ctx.stroke(); "
                                     + "            }); "
+                                    + "            ctx.font = 'bold italic 24px arial'; "
+                                    + "            ctx.fillStyle = 'black'; "
+                                    + "            const texto = '" + codx + "'; "
+                                    + "            const margen = 5; "
+                                    + "            const anchoTexto = ctx.measureText(texto).width; "
+                                    + "            const x = canvas.width - anchoTexto - margen; "
+                                    + "            const y = canvas.height - margen; "
+                                    + "            ctx.fillText(texto, x, y); "
                                     + "        } "
                                     + " "
                                     + "        window.onload = dibujarCoordenadas;");
@@ -354,6 +362,7 @@ public class Tag_minute extends TagSupport {
                                 String[] ObjSig = lst_sirh.toString().split("///");
                                 Gson gson = new Gson();
                                 signt = gson.toJson(ObjSig[3]);
+                                String temSig = ObjSig[2].toString().trim();
 
                                 int canvasWidth = 130; // ancho del nuevo canvas
                                 int canvasHeight = 45;  // alto del nuevo canvas
@@ -386,6 +395,14 @@ public class Tag_minute extends TagSupport {
                                         + "       ctx.lineWidth = 0.6; "
                                         + "       ctx.stroke(); "
                                         + "   }); "
+                                        + "            ctx.font = 'bold italic 14px arial'; "
+                                        + "            ctx.fillStyle = 'black'; "
+                                        + "            const texto = '" + temSig + "'; "
+                                        + "            const margen = 1; "
+                                        + "            const anchoTexto = ctx.measureText(texto).width; "
+                                        + "            const x = canvas.width - anchoTexto - margen; "
+                                        + "            const y = canvas.height - margen; "
+                                        + "            ctx.fillText(texto, x, y); "
                                         + "} "
                                         + "dibujarCoordenadas_" + iterator2 + i + "();"
                                         + "</script>";
