@@ -18,6 +18,25 @@ public class CapacitacionJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
+    public List Consultar_capacitaciones_v2(String fpi, String fpf, String docCapt) {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `sp_cpc_c_capacitaciones_v2`('" + fpi + "','" + fpf + "', '" + docCapt + "')");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (consulta.isEmpty()) {
+                return null;
+            } else {
+                return consulta;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
     public List Consultar_capacitaciones(String fpi, String fpf) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
@@ -37,11 +56,49 @@ public class CapacitacionJpaController implements Serializable {
         }
     }
 
+    public List Consultar_capacitador(int doc, int cod) {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_consultar_capacitador`(" + doc + "," + cod + ")");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (consulta.isEmpty()) {
+                return null;
+            } else {
+                return consulta;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
     public boolean Registrar_capacitacion(String etd, String fch, String ttl, double drc, String cpc, String osv, String urg) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
         try {
             Query q = etm.createNativeQuery("CALL `sp_cpc_r_capacitacion`('" + etd + "','" + fch + "','" + ttl + "','" + drc + "','" + cpc + "','" + osv + "','" + urg + "')");
+            int exitoso = q.executeUpdate();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (exitoso == 0) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
+    public boolean Registrar_capacitacion_v2(String etd, String fch, String ttl, double drc, String cpc, String osv, String urg, String docCapt) {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `sp_cpc_r_capacitacion_v2`('" + etd + "','" + fch + "','" + ttl + "','" + drc + "','" + cpc + "','" + osv + "','" + urg + "', '" + docCapt + "')");
             int exitoso = q.executeUpdate();
             etm.getTransaction().commit();
             etm.clear();
@@ -155,7 +212,7 @@ public class CapacitacionJpaController implements Serializable {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
         try {
-            Query q = etm.createNativeQuery("CALL `Sp_cll_r_RegisterUserExternal`(" + icp + ", " + doc + ", '" + name + "', '" + cargo + "', '"+ userReg +"')");
+            Query q = etm.createNativeQuery("CALL `Sp_cll_r_RegisterUserExternal`(" + icp + ", " + doc + ", '" + name + "', '" + cargo + "', '" + userReg + "')");
             int exitoso = q.executeUpdate();
             etm.getTransaction().commit();
             etm.clear();

@@ -3,9 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Apps/PVM/web/Interfaz/Contenido/Scripts/JS_Instrumentos.js</file>
-            <file>file:/C:/Apps/PVM/src/java/Tags/Tag_instrumento_medicion.java</file>
+            <file>file:/C:/Apps/PVM/src/java/Metodos/Server_redeac.java</file>
+            <file>file:/C:/Apps/PVM/src/java/Metodos/Email.java</file>
             <file>file:/C:/Apps/PVM/src/conf/persistence.xml</file>
+            <file>file:/C:/Apps/PVM/src/java/Tags/Tag_instrumento_medicion.java</file>
+            <file>file:/C:/Apps/PVM/web/Interfaz/Contenido/Scripts/JS_Instrumentos.js</file>
         </group>
     </open-files>
 </project-private>

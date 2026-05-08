@@ -65,6 +65,18 @@ public class Tag_capacitaciones extends TagSupport {
                 doc = 0;
                 cod = 0;
             }
+            int docCapt = 0;
+            int codCapt = 0;
+            try {
+                docCapt = Integer.parseInt(pageContext.getRequest().getAttribute("docCapt").toString());
+            } catch (Exception e) {
+                docCapt = 0;
+            }
+            try {
+                codCapt = Integer.parseInt(pageContext.getRequest().getAttribute("codCapt").toString());
+            } catch (Exception e) {
+                codCapt = 0;
+            }
 
             int dia = DateLocal.getDayOfMonth();
             int mes = DateLocal.getMonthValue();
@@ -83,12 +95,13 @@ public class Tag_capacitaciones extends TagSupport {
                 //<editor-fold defaultstate="collapsed" desc="REGISTRAR">
                 out.print("<div class='sweet-local' tabindex='-1' id='Control_pet' style='opacity: 1.03; display: block;'>");
                 out.print("<fieldset class='popup_local' id='Fiel_informe' style='width:70%;position: absolute;top: 10%;left:15%;'>");
-                out.print("<div style='float:right;'><a href='Capacitacion?opc=22&mnu=23&fml=0'><span class='fa fa-times fa-size_super_small'></span></a></div>");
+                out.print("<div style='float:right;'><a href='Capacitacion?opc=22&mnu=23&fml=0&docCapt=" + docCapt + "'><span class='fa fa-times fa-size_super_small'></span></a></div>");
                 out.print("<h3>Nueva Capacitacion</h3>");
                 out.print("<form method='post' action='Capacitacion?opc=23'>");
                 out.print("<table>");
                 out.print("<tr>");
                 out.print("<td valign='top'rowspan='2' style='width:50%'>");
+                out.print("<input type='text' name='docCapt' value='" + docCapt + "'>");
                 out.print("Fecha de capacitación :<br /><input type='text' id='datepicker' name='Txt_fecha' autocomplete='off' style='width:80%' placeholder='Fecha' onchange='javascript:this.value=this.value.toUpperCase();' value='" + anio + "-" + month + "-" + day + "'/>"
                         + "<script type='text/javascript'>var val1 = new LiveValidation('datepicker');val1.add(Validate.Presence);</script>");
                 out.print("<br />Titulo :<br /><input type='text' name='Txt_titulo' id='Txt_titulo' style='width:80%' placeholder='Titulo de la capacitación'/>"
@@ -120,6 +133,7 @@ public class Tag_capacitaciones extends TagSupport {
                 out.print("<div style='float:right;'><a href='Capacitacion?opc=22&mnu=23&fml=0'><span class='fa fa-times fa-size_super_small'></span></a></div>");
                 out.print("<h3>Modificar Capacitacion</h3>");
                 out.print("<form method='post' action='Capacitacion?opc=23&icp=" + id_capacitacion + "'>");
+                out.print("<input type='hidden' name='docCapt' value='" + docCapt + "'>");
                 out.print("<table>");
                 out.print("<tr>");
                 out.print("<td valign='top'rowspan='2' style='width:50%'>");
@@ -156,7 +170,7 @@ public class Tag_capacitaciones extends TagSupport {
                 out.print("<fieldset class='popup_local' id='Fiel_informe' style='width:80%;padding:10px;height:85%;position: absolute;top: 2%;left:10%;overflow-y:auto;'>");
 
                 //<editor-fold defaultstate="collapsed" desc="CABECERA REGISTRO">
-                out.print("<div style='float:right;margin-top: 5px;margin-right: 5px;margin-bottom: 5px;'><a href='Capacitacion?opc=22&mnu=23&fml=0'><span class='fa fa-times fa-size_super_small'></span></a></div>");
+                out.print("<div style='float:right;margin-top: 5px;margin-right: 5px;margin-bottom: 5px;'><a href='Capacitacion?opc=22&mnu=23&fml=0&docCapt=" + docCapt + "'><span class='fa fa-times fa-size_super_small'></span></a></div>");
                 out.print("<div style='float:left;margin-top: 5px;margin-left: 5px;margin-bottom: 5px;'><span class='far fa-file-excel fa-size_super_small' onclick=\"tableToExcel('Excel', 'DETALLE_CAPACITACION')\" title='Generar EXCEL'></span></div>");
                 out.print("<div class='headCap'>");
                 out.print("<table class='table' id='Excel'>");
@@ -226,6 +240,7 @@ public class Tag_capacitaciones extends TagSupport {
                     }
                 }
                 out.print("<form action='Capacitacion?opc=38&icp=" + id_capacitacion + "&temp=1' method='post'>");
+                out.print("<input type='hidden' name='docCapt' value='" + docCapt + "'>");
                 out.print("<div class='' style='display: flex; justify-content: center; margin-bottom: 15px;margin-top: 10px;'>");
                 out.print("<div class='' style='width: 18%;'>");
                 out.print("<b>TIPO DE ACTIVIDAD:</b>");
@@ -290,6 +305,7 @@ public class Tag_capacitaciones extends TagSupport {
                 out.print("</div>");
                 out.print("<div class='cont_form_user'>");
                 out.print("<form action='Capacitacion?opc=24&icp=" + id_capacitacion + "&txtResponsable=" + obj_capacitacion_cabecera[5] + "' method='post' class=''>");
+                out.print("<input type='hidden' name='docCapt' value='" + docCapt + "'>");
                 out.print("<input type='hidden' name='Txt_manual' id='Txt_manual' value='External'>");
                 out.print("<div style='text-align: center;'>");
                 out.print("<span>Numero de documento</span><br>");
@@ -322,6 +338,7 @@ public class Tag_capacitaciones extends TagSupport {
                     out.print("</div>");
                     out.print("<div class='' id='contReg' style='transition: 1s;display: none;margin-left: 13px;'>");
                     out.print("<form action='Capacitacion?opc=24&icp=" + id_capacitacion + "' method='post'>");
+                    out.print("<input type='hidden' name='docCapt' value='" + docCapt + "'>");
                     out.print("<a style='font-size: 22px; color: #df3e3e; cursor: pointer;' onclick='activeShield(2,\"contReg\")' title='Cancelar'><i class='fas fa-times-circle'></i></a>&nbsp;<input type='text' class='form-control' style='width: 290px;' name='Txt_manual' id='Txt_manual' placeholder='Datos del empleado' list='Personal'>&nbsp;");
                     out.print("<datalist id='Personal'><label><select name='Personal'>");
                     lst_personal = jpacpsn.Consultar_empleados(1, 7, consulta_personal_s);
@@ -352,7 +369,7 @@ public class Tag_capacitaciones extends TagSupport {
                 out.print("<div class='sweet-local' tabindex='-1' id='Ventana1' style='opacity: 1.03; display: " + ((doc == 0 && cod == 0) ? "none" : "block") + ";'>");
                 out.print("<div class='cont_reg' style='margin-left: 22%;'>");
                 out.print("<div style='display: flex; justify-content: end'>");
-                out.print("<a href='Capacitacion?opc=22&mnu=23&fml=3&icp=" + id_capacitacion + "' style='height: 30px;padding: 3px;width: 30px;' placeholder='Numero'><i class='fas fa-times'></i></a>");
+                out.print("<a href='Capacitacion?opc=22&mnu=23&fml=3&icp=" + id_capacitacion + "&docCapt=" + docCapt + "' style='height: 30px;padding: 3px;width: 30px;' placeholder='Numero'><i class='fas fa-times'></i></a>");
                 out.print("</div>");
 
                 out.print("<div class='' style='display: flex;'>");
@@ -365,10 +382,12 @@ public class Tag_capacitaciones extends TagSupport {
                     out.print("<input type='hidden' class='form-control' name='idCapDetalle' id='Id_valId'>");
                     out.print("<input type='hidden' class='form-control' name='' id='Id_valdDoc'>");
                     out.print("<input type='hidden' class='form-control' name='' id='Id_valdCod'>");
+                    out.print("<input type='hidden' name='docCapt' value='" + docCapt + "'>");
                 } else {
                     out.print("<input type='hidden' class='form-control' name='idCapDetalle' value='" + idCapacDetalil + "'>");
                     out.print("<input type='hidden' class='form-control' name='' id='Id_valdDoc' value='" + doc + "'>");
                     out.print("<input type='hidden' class='form-control' name='' id='Id_valdCod' value='" + cod + "'>");
+                    out.print("<input type='hidden' name='docCapt' value='" + docCapt + "'>");
                 }
                 out.print("<input type='text' name='txtDocument' value='" + ((doc == 0 && cod == 0) ? "" : doc) + "' id='IdDocument' placeholder='Documento' data-toggle='tooltip' data-placement='top' title='' onkeyup='CompareData(\"Id_valdDoc\",\"IdDocument\")' autocomplete='off' required><br>");
                 out.print("<span style='color: red; display: none; margin-bottom: 16px;' id='NonCoin'>El documento no coincide con <br>el usuario seleccionado!</span>");
@@ -444,6 +463,7 @@ public class Tag_capacitaciones extends TagSupport {
                     out.print("<input type='hidden' name='dcm' value='" + doc + "'>");
                     out.print("<input type='hidden' name='cdg' value='" + cod + "'>");
                     out.print("<input type='hidden' name='abc' value='" + init + "'>");
+                    out.print("<input type='hidden' name='docCapt' value='" + docCapt + "'>");
                     out.print("<table class='table' style='width:50%'>");
                     out.print("<tr>");
                     out.print("<td>");
@@ -489,6 +509,7 @@ public class Tag_capacitaciones extends TagSupport {
                         out.print("<form action='Capacitacion?opc=36&icp=" + id_capacitacion + "' method='post' name='formSave'>");
                         out.print("<input type='hidden' class='form-control' name='idCapDetalle' value='" + idCapacDetalil + "' >");
                         out.print("<input type='hidden' class='form-control' name='idSignature' id='' value='" + idFirma + "' >");
+                        out.print("<input type='hidden' name='docCapt' value='" + docCapt + "'>");
                         out.print("</form>");
                     }
 
@@ -506,7 +527,6 @@ public class Tag_capacitaciones extends TagSupport {
                 out.print("</div>");
 
                 //</editor-fold>
-                
                 //<editor-fold defaultstate="collapsed" desc="LISTA DE PERSONAL">
                 out.print("<table class='table table-bordered' id='resultados'>");
                 out.print("<thead>");
@@ -536,7 +556,7 @@ public class Tag_capacitaciones extends TagSupport {
                             signa = 0;
                             countSig++;
                         }
-                        out.print("<td style='text-align:center;'>" + ((signa > 0) ? "<b style='color: green;'>Firmado</b>" : "<a href='#' onclick='mostrarConvencion(1);PassData(" + obj_capacitacion[0] + "," + obj_capacitacion[9] + "," + obj_capacitacion[2] + ",\"Id_valdDoc\");'><b style='color: red;'>Sin firma</b></a>") + "</td>");
+                        out.print("<td style='text-align:center;'>" + ((signa > 0) ? "<b style='color: green;'>Firmado</b>" : "<a href='#' onclick='mostrarConvencion(1);PassData(" + obj_capacitacion[0] + "," + obj_capacitacion[9] + "," + obj_capacitacion[2] + ",\"Id_valdDoc\", " + docCapt + ");'><b style='color: red;'>Sin firma</b></a>") + "</td>");
 
                         out.print("<td style='text-align: center;'>");
                         if (obj_capacitacion[10] != null) {
@@ -555,7 +575,7 @@ public class Tag_capacitaciones extends TagSupport {
                             if (signa > 0) {
                                 out.print("<td align='center'><a href='#' disabled style='color: #d9d9d9;'><span class='fa fa-times-circle fa-size_small'></span></a></td>");
                             } else {
-                                out.print("<td align='center'><a href='Capacitacion?opc=26&icp=" + id_capacitacion + "&icd=" + obj_capacitacion[0] + "'><span class='fa fa-times-circle fa-size_small'></span></a></td>");
+                                out.print("<td align='center'><a href='Capacitacion?opc=26&icp=" + id_capacitacion + "&icd=" + obj_capacitacion[0] + "&docCapt=" + docCapt + "'><span class='fa fa-times-circle fa-size_small'></span></a></td>");
                             }
 
                         } else {
@@ -575,6 +595,7 @@ public class Tag_capacitaciones extends TagSupport {
 
                 out.print("<div style='bottom: 13px;position: absolute;right: 16px;display: flex;'>");
                 out.print("<form action='Capacitacion?opc=37&icp=" + id_capacitacion + "' method='post' id='FormEvalu'>");
+                out.print("<input type='hidden' name='docCapt' value='" + docCapt + "'>");
                 out.print("<input type='hidden' id='selectedIds' name='selectedIds' value=''>");
                 out.print("<input type='hidden' id='validac' name='validac' value='" + idCapacDetalil + "'>");
                 out.print("<div class='' style='display: flex;'>");
@@ -595,16 +616,16 @@ public class Tag_capacitaciones extends TagSupport {
 //            out.print("<a style='text-decoration:none' href='Capacitacion?opc=5&mnu=23&fpi=" + (anio + "-" + mes + "-01") + "&fpf=" + (anio + "-" + mes + "-" + dia) + "&fml=4&icp=0'>Fecha de proceso&nbsp; <span class='fa fa-calendar'></span></a>");
             out.print("</div>");
             out.print("<h3>");
-            out.print("<a style='text-decoration:none' href='Capacitacion?opc=22&mnu=23&fml=1'><span class='fa fa-money-check fa-size_super_small'></span></a>");
+            out.print("<a style='text-decoration:none' href='Capacitacion?opc=22&mnu=23&fml=1&docCapt=" + docCapt + "'><span class='fa fa-money-check fa-size_super_small'></span></a>");
             out.print("&nbsp;Listado Maestro de capacitaciones<div style='float:right'><input id='Txt_filtro' type='text' onkeyup='Filtrar()' placeholder='Buscar' onchange='javascript:this.value=this.value.toUpperCase();' /></div></h3>");
             if (fecha_inicio.equals("")) {
                 String f_fn = anio + "-" + mes + "-" + dia;
                 lst_parametro = ParametroJpa.ConsultarParametrosxCategoria("FechaConsulta");
                 Object[] ObjDat = (Object[]) lst_parametro.get(0);
                 fecha_inicio = ObjDat[2].toString();
-                lst_capacitaciones = jpaccpc.Consultar_capacitaciones(fecha_inicio, f_fn);
+                lst_capacitaciones = jpaccpc.Consultar_capacitaciones_v2(fecha_inicio, f_fn, docCapt + "");
             } else {
-                lst_capacitaciones = jpaccpc.Consultar_capacitaciones(fecha_inicio, fecha_fin);
+                lst_capacitaciones = jpaccpc.Consultar_capacitaciones_v2(fecha_inicio, fecha_fin, docCapt + "");
             }
             if (lst_capacitaciones == null) {
                 out.print("<center><img src='Interfaz/MasterPage/images/No_data.png' style='width:394px;height:257px' /><br />Sin datos en el mes de proceso ajustado.</center>");
@@ -642,12 +663,12 @@ public class Tag_capacitaciones extends TagSupport {
 //                            out.print("<td align='center'>0</td>");
 //                        }
                     out.print("<td align='center' style='width:10%'>");
-                    out.print("<a href='Capacitacion?opc=22&mnu=23&fml=3&icp=" + obj_capacitaciones[0] + "'><span class='fa " + ((Integer.parseInt(obj_capacitaciones[9].toString()) == 0) ? "fa-plus" : "fa-eye") + " fa-size_small'></span></a>");
+                    out.print("<a href='Capacitacion?opc=22&mnu=23&fml=3&icp=" + obj_capacitaciones[0] + "&docCapt=" + docCapt + "'><span class='fa " + ((Integer.parseInt(obj_capacitaciones[9].toString()) == 0) ? "fa-plus" : "fa-eye") + " fa-size_small'></span></a>");
                     out.print("</td>");
                     out.print("<td align='center' style='width:10%;'>");
                     if (Integer.parseInt(obj_capacitaciones[9].toString()) == 0) {
-                        out.print("<span class='fa fa-unlock-alt fa-size_small' style='opacity: 0.8;' title='No tiene permisos'></span>");
-                        out.print("&nbsp;&nbsp;&nbsp;<a href='Capacitacion?opc=22&mnu=23&fml=2&icp=" + obj_capacitaciones[0] + "'><span class='fa fa-pencil-alt fa-size_small'></span></a>");
+//                        out.print("<span class='fa fa-unlock-alt fa-size_small' style='opacity: 0.8;' title='No tiene permisos'></span>");
+                        out.print("&nbsp;&nbsp;&nbsp;<a href='Capacitacion?opc=22&mnu=23&fml=2&icp=" + obj_capacitaciones[0] + "&docCapt=" + docCapt + "'><span class='fa fa-pencil-alt fa-size_small'></span></a>");
                     } else {
                         out.print("<span class='fa fa-lock fa-size_small' style='opacity: 0.8;' title='No tiene permisos'></span>");
 

@@ -53,11 +53,11 @@ public class Bitacora extends HttpServlet {
                     request.getRequestDispatcher("Bitacora?opc=3").forward(request, response);
                     break;
                 case 3:
-                    response.sendRedirect("http://172.16.2.117:8084/Aplicativos_Plastitec/Automatic_servlets.jsp");
+                    response.sendRedirect("http://172.16.2.117:8080/Aplicativos_Plastitec/Automatic_servlets.jsp");
                     break;
             }
         } catch (NumberFormatException ex) {
-            response.sendRedirect("http://172.16.2.117:8084/Aplicativos_Plastitec/Automatic_servlets.jsp");
+            response.sendRedirect("http://172.16.2.117:8080/Aplicativos_Plastitec/Automatic_servlets.jsp");
         }
     }
 

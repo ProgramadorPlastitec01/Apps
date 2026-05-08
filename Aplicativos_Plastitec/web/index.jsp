@@ -731,6 +731,31 @@
                         </div>
                     </div>
                 </div>
+                
+                <div class="tile red">
+                    <div class="card">
+                        <div class="front">
+                            <img src="Argo/Interfaz/images/cait.png" alt="tec" width="180" style="margin-top: 25%">
+                            <div class="DivFront">
+                                <img src="Argo/Interfaz/images/newest.png" width="50" alt=""/>
+                            </div>
+                        </div>
+                        <div class="back Nexus" style="background: #ffffffeb;">
+                            <h1 style="color: black; padding: 5%; padding-top: 6%;">CAIT</h1>
+                            <button  class="button-33 nx" role="button" 
+                                     onclick="javascript:window.open('http://cait.plastitec-sa.com', '', 'width=auto,height=auto,left=50,\n\
+										top=50,toolbar=yes');
+                                             void 0">Ingresar</button>
+                            <button style="font-size: 14px;
+                                    padding: 4px 14px 4px 14px;
+                                    border-radius: 6px; margin-top: 8px;"  class="button-33 zho" role="button" 
+                                    onclick="javascript:window.open('Argo/Interfaz/video/Cait.mp4', '', 'width=auto,height=auto,left=50,\n\
+										top=50,toolbar=yes');
+                                            void 0">¿Como usar?</button>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="tile orange">
                     <div class="card">
                         <div class="front">
@@ -868,10 +893,7 @@
                 <div class="tile orange">
                     <div class="card">
                         <div class="front">
-                            <img src="Argo/Interfaz/images/SGSI.png" alt="tec" width="200">
-                            <div class="DivFront">
-                                <img src="Argo/Interfaz/images/newest.png" width="50" alt=""/>
-                            </div>
+                            <img src="Argo/Interfaz/images/SGSI.png" alt="tec" width="200">                            
                         </div>
                         <div class="back SGSI" style="background: #ffffffeb;">
                             <h1 style="color: black; padding: 5%; padding-top: 10%;">SGSI</h1>

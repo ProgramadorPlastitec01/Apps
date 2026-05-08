@@ -444,6 +444,11 @@ public class Tag_alertas extends TagSupport {
                     out.print("swal('Error','No se ha podido registrar la capacitacion','error');");
                     out.print("</script>");
                 }
+                if (pageContext.getRequest().getAttribute("Alerta").toString().equals("EConsultarCapacitador")) {
+                    out.print("<script language='javascript' type='text/javascript'>");
+                    out.print("swal('Error','No se ha encontrado al capacitador','error');");
+                    out.print("</script>");
+                }
                 if (pageContext.getRequest().getAttribute("Alerta").toString().equals("Modificar_capacitacion")) {
                     out.print("<script language='javascript' type='text/javascript'>");
                     out.print("swal('Correcto','Capacitacion modificarda','success');");

@@ -20,9 +20,15 @@
         <div style="display: flex; height: 100vh;">
             <div class="ContenInfo">
                 <div class="subInfo">
-                    <h1 class="text-center mb-4">PLASTITEC</h1>
+                    <h1 class="text-center mb-4" style="color: #FF6B00">APLICATIVO PRUEBAS</h1>
+                    <h3 class="text-center mb-4">PLASTITEC</h3>
                     <div class="">
                         <div class="col-lg-12">
+                            <h3  class="text-center mb-2" style="color: #FF6B00">Pruebas</h3>
+                            <p>Este sistema se encuentra en versión de prubeas, recuerde que lo que se realiza en esta version del aplicativo no afecta nada en el ambiente real, favor realizar las diferentes pruebas, con el fin de entregar un aplicativo que cumpla con sus requerimientos.
+                            </p>
+                        </div>
+<!--                        <div class="col-lg-12">
                             <h3  class="text-center mb-2">OEA</h3>
                             <p>Este sistema de información permite a Plastitec garantizar unos niveles mínimos de seguridad y facilitar el flujo del comercio internacional, forjando 
                                 alianzas sólidas entre nuestros clientes y proveedores que permitan garantizar la seguridad de toda la 
@@ -36,7 +42,7 @@
                                 • Identificación, análisis, evaluación y tratamiento de los riesgos de LA/FT/FPADM.<br>
                                 • Implementación de procedimientos de debida diligencia para el conocimiento de las contrapartes o asociados de negocio (Clientes, proveedores, contratistas, empleados y socios).
                             </p>
-                        </div>
+                        </div>-->
                     </div>
                     <div class="text-center mt-5 d-flex justify-content-around">
                         <div class="col-lg-4">
@@ -88,7 +94,8 @@
                 <div class="FootData">
                     <!--<p style="color: #5ecbeb;">VP 00.00.00</p>-->
                     <!--<p style="color: #5ecbeb;">VA 04.09.05</p>-->
-                    <p style="color: #5ecbeb;">VA 08.18.10</p>
+                    <!--<p style="color: #5ecbeb;">VA 08.18.10</p>-->
+                    <p style="color: #FF6B00;">Versión Pruebas</p>
                     <p>PLASTITEC 2026 &#169 copyright</p>
                 </div>
             </div>

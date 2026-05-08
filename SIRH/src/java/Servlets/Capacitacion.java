@@ -86,9 +86,35 @@ public class Capacitacion extends HttpServlet {
             long docu = 0;
             long docx = 0, codx = 0;
             String fecha_inicio = "", fecha_fin = "";
-
+            int docCapt = 0, codCapt = 0;
+            try {
+                docCapt = Integer.parseInt(request.getParameter("docCapt"));
+            } catch (Exception e) {
+                docCapt = 0;
+            }
             switch (opc) {
                 //<editor-fold defaultstate="collapsed" desc="CAPACITACION"> 
+                case 1:
+                    try {
+                        docCapt = Integer.parseInt(request.getParameter("docCapt"));
+                        codCapt = Integer.parseInt(request.getParameter("codCapt"));
+                    } catch (Exception e) {
+                        docCapt = 0;
+                        codCapt = 0;
+                        request.setAttribute("Alerta", "EConsultarCapacitador");
+                        request.getRequestDispatcher("index.jsp").forward(request, response);
+                    }
+
+                    List lst_dataConfirm = jpaccpc.Consultar_capacitador(docCapt, codCapt);
+                    if (lst_dataConfirm != null) {
+                        request.setAttribute("docCapt", docCapt);
+                        request.setAttribute("codCapt", codCapt);
+                        request.getRequestDispatcher("Capacitacion.jsp").forward(request, response);
+                    } else {
+                        request.setAttribute("Alerta", "EConsultarCapacitador");
+                        request.getRequestDispatcher("index.jsp").forward(request, response);
+                    }
+                    break;
                 case 22:
                     mnu = Integer.parseInt(request.getParameter("mnu"));
                     request.setAttribute("Permisos", mnu);
@@ -120,9 +146,11 @@ public class Capacitacion extends HttpServlet {
                     request.setAttribute("txtDocument", doc);
                     request.setAttribute("txtCode", cod);
                     request.setAttribute("Id_capDetall", id_capacitacion_detalle);
+                    request.setAttribute("docCapt", docCapt);
                     request.getRequestDispatcher("Capacitacion.jsp").forward(request, response);
                     break;
                 case 23:
+                    docCapt = Integer.parseInt(request.getParameter("docCapt"));
                     try {
                         id_capacitacion = Integer.parseInt(request.getParameter("icp"));
                         fecha = request.getParameter("Txt_fecha");
@@ -146,13 +174,14 @@ public class Capacitacion extends HttpServlet {
 //                        folio = request.getParameter("Txt_folio");
                         duracion = Double.parseDouble(request.getParameter("Txt_duracion"));
                         observacion = request.getParameter("Txt_descripcion");
-                        proceso = jpaccpc.Registrar_capacitacion(entidad, fecha, titulo, duracion, capacitador, observacion, capacitador);
+                        proceso = jpaccpc.Registrar_capacitacion_v2(entidad, fecha, titulo, duracion, capacitador, observacion, capacitador, docCapt + "");
                         if (proceso) {
                             request.setAttribute("Alerta", "Registro_capacitacion");
                         } else {
                             request.setAttribute("Alerta", "Error_capacitacion");
                         }
                     }
+                    request.setAttribute("docCapt", docCapt);
                     request.getRequestDispatcher("Capacitacion?opc=22&mnu=23").forward(request, response);
                     break;
                 case 24:
@@ -166,7 +195,7 @@ public class Capacitacion extends HttpServlet {
                         } else {
                             proceso = false;
                         }
-                    }else if (manual.equals("External")) {
+                    } else if (manual.equals("External")) {
                         docu = Long.parseLong(request.getParameter("NmbDoc").toString());
                         name = request.getParameter("TxtName").toString();
                         cargo = request.getParameter("TxtCargo").toString();
@@ -176,7 +205,7 @@ public class Capacitacion extends HttpServlet {
                         } else {
                             proceso = false;
                         }
-                    }  else {
+                    } else {
                         documento = Long.parseLong(manual.split(" / ")[1]);
                         if (jpaccpc.Verificar_registro(id_capacitacion, documento) == 0) {
                             proceso = jpaccpc.Registrar_capacitacion_detalle(id_capacitacion, Long.parseLong(manual.split(" / ")[1]), manual.split(" / ")[0], manual.split(" / ")[3] + " / " + manual.split(" / ")[2], "", capacitador);
@@ -189,6 +218,7 @@ public class Capacitacion extends HttpServlet {
                     } else {
                         request.setAttribute("Alerta", "Error_capacitación_detalle");
                     }
+                    request.setAttribute("docCapt", docCapt);
                     request.getRequestDispatcher("Capacitacion?opc=22&mnu=23&fml=3&icp=" + id_capacitacion).forward(request, response);
                     break;
                 case 25:
@@ -205,12 +235,14 @@ public class Capacitacion extends HttpServlet {
                         jpaccpc.Eliminar_capacitacion(id_capacitacion);
                         request.setAttribute("Alerta", "EliminarCapacitacion");
                     }
+                    request.setAttribute("docCapt", docCapt);
                     request.getRequestDispatcher("Capacitacion?opc=22&mnu=23").forward(request, response);
                     break;
                 case 26:
                     id_capacitacion = Integer.parseInt(request.getParameter("icp"));
                     id_capacitacion_detalle = Integer.parseInt(request.getParameter("icd"));
                     jpaccpc.Eliminar_capacitacion_detalle(id_capacitacion_detalle);
+                    request.setAttribute("docCapt", docCapt);
                     request.getRequestDispatcher("Capacitacion?opc=22&mnu=23&fml=3&icp=" + id_capacitacion).forward(request, response);
                     break;
                 case 35:
@@ -218,6 +250,7 @@ public class Capacitacion extends HttpServlet {
                     id_capacitacion_detalle = Integer.parseInt(request.getParameter("idCapDetalle"));
                     doc = Integer.parseInt(request.getParameter("txtDocument"));
                     cod = Integer.parseInt(request.getParameter("txtCode"));
+                    request.setAttribute("docCapt", docCapt);
                     request.getRequestDispatcher("Capacitacion?opc=22&mnu=23&fml=3&icp=" + id_capacitacion + "&idCapd=" + id_capacitacion_detalle + "&DocUSer=" + doc + "&CodUser=" + cod + "").forward(request, response);
                     break;
                 case 36:
@@ -228,6 +261,7 @@ public class Capacitacion extends HttpServlet {
                     if (result) {
                         request.setAttribute("Alerta", "CapacitacionFirmada");
                     }
+                    request.setAttribute("docCapt", docCapt);
                     request.getRequestDispatcher("Capacitacion?opc=22&mnu=23&fml=3&icp=" + id_capacitacion + "&DocUSer=" + 0 + "&CodUser=" + 0 + "").forward(request, response);
                     break;
                 case 37:
@@ -239,6 +273,7 @@ public class Capacitacion extends HttpServlet {
                     if (result) {
                         request.setAttribute("Alerta", "CapacitacionCalificacion");
                     }
+                    request.setAttribute("docCapt", docCapt);
                     request.getRequestDispatcher("Capacitacion?opc=22&mnu=23&fml=3&icp=" + id_capacitacion + "&DocUSer=" + 0 + "&CodUser=" + 0 + "").forward(request, response);
                     break;
                 case 38:
@@ -267,9 +302,10 @@ public class Capacitacion extends HttpServlet {
                     if (result) {
                         request.setAttribute("Alerta", "ParametrosActualizados");
                     }
+                    request.setAttribute("docCapt", docCapt);
                     request.getRequestDispatcher("Capacitacion?opc=22&mnu=23&fml=3&icp=" + id_capacitacion + "&DocUSer=" + 0 + "&CodUser=" + 0 + "").forward(request, response);
                     break;
-                    
+
 //</editor-fold>
             }
 

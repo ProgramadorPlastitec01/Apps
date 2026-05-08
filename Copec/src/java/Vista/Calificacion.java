@@ -237,7 +237,7 @@ public class Calificacion extends TagSupport {
                             String image = "";
                             for (int k = 0; k < arg_link.length; k++) {
                                 if (arg_link[k].contains("UserFiles")) {
-                                    image = "http://172.16.2.117:8084/Herramental/" + arg_link[k] + "";
+                                    image = "http://172.16.2.117:8080/Herramental/" + arg_link[k] + "";
                                     out.print("<a href='#' onclick=\"Image('" + image + "');return false;\">");
                                     out.print("<img class='prueba' src=\"" + image + "\" alt=\" \" width=\"300\" height=\"212\">");
                                     out.print("</a>");

@@ -12,8 +12,8 @@ public class DotacionMANT {
 
     public List Productos() throws Exception {
         try {
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            Connection con = DriverManager.getConnection("jdbc:sqlserver://172.16.2.116:1433;databaseName=EMP001_MANT", "sa", "plast");
+            Class.forName("net.sourceforge.jtds.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:jtds:sqlserver://172.16.2.116:1433/EMP001_MANT;user=sa;password=plast;");
             String query = "SELECT COD,REPLACE(REPLACE(REPLACE(NOM,'-',' '),'/',''),':','') AS NOM FROM MAESTRO WHERE GRUP LIKE 'DO%'";
             Statement sttm = con.createStatement();
             ResultSet rs = sttm.executeQuery(query);
@@ -32,8 +32,9 @@ public class DotacionMANT {
     
     public List ProductosEpp() throws Exception {
         try {
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            Connection con = DriverManager.getConnection("jdbc:sqlserver://172.16.2.116:1433;databaseName=EMP001_MANT", "sa", "plast");
+            Class.forName("net.sourceforge.jtds.jdbc.Driver");
+//            Connection con = DriverManager.getConnection("jdbc:sqlserver://172.16.2.116:1433;databaseName=EMP001_MANT", "sa", "plast");
+            Connection con = DriverManager.getConnection("jdbc:jtds:sqlserver://172.16.2.116:1433/EMP001_MANT;user=sa;password=plast;");
             String query = "SELECT COD,REPLACE(REPLACE(REPLACE(NOM,'-',' '),'/',''),':','') AS NOM FROM MAESTRO WHERE COD LIKE '%EPP%' OR NOM LIKE '%guante%'";
             Statement sttm = con.createStatement();
             ResultSet rs = sttm.executeQuery(query);

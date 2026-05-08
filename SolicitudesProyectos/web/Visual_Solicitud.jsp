@@ -22,7 +22,7 @@
         <script>
             function abrirVentana() {
           // Abre una nueva ventana con una URL específica
-                window.open("http://172.16.2.117:8084/Solicitudes_Proyectos/", "_blank");
+                window.open("http://172.16.2.117:8080/Solicitudes_Proyectos/", "_blank");
             }
         </script>
         <script src="Interfaz/Contenido/assets/modules/bootstrap/js/bootstrap.min.js"></script>

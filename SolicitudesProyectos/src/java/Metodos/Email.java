@@ -521,14 +521,14 @@ public class Email {
                     } else {
                         desc = "<p style='font-family: arial, verdana, sans-serif; font-size: 14px;'>Se ha solucionado un pendiente en el herramental " + obj_pendiente[2] + "</p>";
                         sol = obj_pendiente[8].toString();
-                        sol = sol.replace("<a href=\"UserFiles/", "<a href=\"http://172.16.2.117:8084/Herramental/UserFiles/");
-                        sol = sol.replace("<img src=\"UserFiles/", "<img src=\"http://172.16.2.117:8084/Herramental/UserFiles/");
+                        sol = sol.replace("<a href=\"UserFiles/", "<a href=\"http://172.16.2.117:8080/Herramental/UserFiles/");
+                        sol = sol.replace("<img src=\"UserFiles/", "<img src=\"http://172.16.2.117:8080/Herramental/UserFiles/");
                     }
                     String[] arg_descripcion = obj_pendiente[4].toString().replace("<hr />", "<hr/>").split("<hr/>");
                     for (int j = 0; j < arg_descripcion.length; j++) {
                         des = des + "<td valign='top' style='padding: 3px 3px 3px 3px;border-color: #CAA427;font-size: 11px;color: #292929;background-color:#fff;border-right: 2px solid #eee;border-bottom: 2px solid #eee;text-transform: uppercase;'>" + arg_descripcion[j] + "</td>";
-                        des = des.replace("<a href=\"UserFiles/", "<a href=\"http://172.16.2.117:8084/Herramental/UserFiles/");
-                        des = des.replace("<img src=\"UserFiles/", "<img src=\"http://172.16.2.117:8084/Herramental/UserFiles/");
+                        des = des.replace("<a href=\"UserFiles/", "<a href=\"http://172.16.2.117:8080/Herramental/UserFiles/");
+                        des = des.replace("<img src=\"UserFiles/", "<img src=\"http://172.16.2.117:8080/Herramental/UserFiles/");
 
                     }
                     message.setSubject("Pendiente herramental " + obj_pendiente[2] + "");

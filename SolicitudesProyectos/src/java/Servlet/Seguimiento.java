@@ -101,7 +101,7 @@ public class Seguimiento extends HttpServlet {
                             jpa_solicitud.estadoSolicitud(id_solicitud, 100);
                             correo.mail_Finaliza_Solicitud(id_solicitud);
                             if (id_pendiente != 0) {
-//                                String link = "<a href=\"http://172.16.2.117:8084/Solicitudes_Proyectos/Pendiente?opc=3&idS=" + id_solicitud + "\">Seguimiento Solucion</a>";
+//                                String link = "<a href=\"http://172.16.2.117:8080/Solicitudes_Proyectos/Pendiente?opc=3&idS=" + id_solicitud + "\">Seguimiento Solucion</a>";
                                 String link = "<a target=\"_blank\" href=\"http://localhost:8084/SolicitudesProyectos/Pendiente?opc=3&idS=" + id_solicitud + "\">Seguimiento Solucion</a>";
                                 jpa_seguimiento.solucionPendienteHerramental(id_pendiente, fecha, link);
                                 jpa_seguimiento.estadoPendienteHerramental(id_pendiente, 2);
@@ -117,7 +117,7 @@ public class Seguimiento extends HttpServlet {
                                 correo.mail_Finaliza_Solicitud(id_solicitud);
                                 if (id_pendiente != 0) {
                                     String link = "<a target=\"_blank\" href=\"http://localhost:8084/SolicitudesProyectos/Pendiente?opc=3&idS=" + id_solicitud + "\">Seguimiento Solucion</a>";
-//                                    String link = "<a href=\"http://172.16.2.117:8084/Solicitudes_Proyectos/Pendiente?opc=3&idS=" + id_solicitud + "\">Seguimiento Solucion</a>";
+//                                    String link = "<a href=\"http://172.16.2.117:8080/Solicitudes_Proyectos/Pendiente?opc=3&idS=" + id_solicitud + "\">Seguimiento Solucion</a>";
                                     jpa_seguimiento.solucionPendienteHerramental(id_pendiente, fecha, link);
                                     jpa_seguimiento.estadoPendienteHerramental(id_pendiente, 2);
                                     List lst_pendiente = jpa_seguimiento.consultaPendienteId(id_pendiente);
@@ -133,7 +133,7 @@ public class Seguimiento extends HttpServlet {
                     } else {
                         //<editor-fold defaultstate="collapsed" desc="Validacion Ficha Tecnica Herramental">
                         if (id_pendiente != 0) {
-//                            String link = "<a href=\"http://172.16.2.117:8084/Solicitudes_Proyectos/Pendiente?opc=3&idS=" + id_solicitud + "&var=1\">Seguimiento Solucion</a>";
+//                            String link = "<a href=\"http://172.16.2.117:8080/Solicitudes_Proyectos/Pendiente?opc=3&idS=" + id_solicitud + "&var=1\">Seguimiento Solucion</a>";
                             String link = "<a target=\"_blank\" href=\"http://localhost:8084/SolicitudesProyectos/Pendiente?opc=3&idS=" + id_solicitud + "&var=1\">Seguimiento Solucion</a>";
                             jpa_seguimiento.solucionPendienteHerramental(id_pendiente, fecha, link);
                             jpa_seguimiento.estadoPendienteHerramental(id_pendiente, 2);

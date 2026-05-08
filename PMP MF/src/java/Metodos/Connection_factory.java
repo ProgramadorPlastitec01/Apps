@@ -12,8 +12,9 @@ public class Connection_factory {
 
     public List Productos(String cdg) throws Exception {
         try {
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            Connection con = DriverManager.getConnection("jdbc:sqlserver://172.16.2.116:1433;databaseName=EMP001_INV", "sa", "plast");
+            Class.forName("net.sourceforge.jtds.jdbc.Driver");
+//            Connection con = DriverManager.getConnection("jdbc:sqlserver://172.16.2.116:1433;databaseName=EMP001_INV", "sa", "plast");
+            Connection con = DriverManager.getConnection("jdbc:jtds:sqlserver://172.16.2.116:1433/EMP001_INV;user=sa;password=plast;");
             String query = "SELECT TOP(1) COD,NOM FROM MAESTRO WHERE COD LIKE '%" + cdg + "'";
             Statement sttm = con.createStatement();
             ResultSet rs = sttm.executeQuery(query);

@@ -376,7 +376,7 @@ public class CompetenciaJpaController implements Serializable {
     //<editor-fold defaultstate="collapsed" desc="CALIFICACION">
 
     public List Consultar_calificacion_realizadas(String fpi, String fpf, int iar, int cps, String min, String max) {
-        EntityManager etm = getEntityManager();
+         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
         try {
             Query q = etm.createNativeQuery("CALL `sp_mc_clf_c_realizadas`('" + fpi + "','" + fpf + "','" + iar + "','" + cps + "','" + min + "','" + max + "')");
