@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Properties;
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
-import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -65,7 +64,7 @@ public class Mail {
                         + "            </div>"
                         + "            <p style='color:#555; font-size:14px; text-align:center; line-height:1.6; margin:10px 0;'>Por seguridad, te recomendamos iniciar sesión y cambiarla de inmediato.</p>"
                         + "            <div style='text-align:center; padding:20px 0;'>"
-                        + "              <a href='http://172.16.2.117:8084/COA/' style='background-color:#4D4AE8; color:#ffffff; text-decoration:none; padding:12px 28px; border-radius:4px; font-size:15px; display:inline-block;'>Ir a GBGC</a>"
+                        + "              <a href='" + obj_mail[5] + "' style='background-color:#4D4AE8; color:#ffffff; text-decoration:none; padding:12px 28px; border-radius:4px; font-size:15px; display:inline-block;'>Ir a GBGC</a>"
                         + "            </div>"
                         + "            <p style='margin-top:30px; color:#777; font-size:13px; text-align:center;'>Si no solicitaste este cambio, puedes ignorar este correo.</p>"
                         + "            <p style='margin-top:20px; font-size:14px; color:#444; text-align:center;'>Atentamente,<br><b>Equipo COA</b></p>"
@@ -87,6 +86,148 @@ public class Mail {
                         + "  </tr>"
                         + "</table>";
 
+                htmlPart.setContent(htmlContent, "text/html; charset=UTF-8");
+
+                // Imagen embebida
+                MimeBodyPart imagePart = new MimeBodyPart();
+                String imagePath = context.getRealPath("/Interface/Imagen/Logo1.fw.png");
+                FileDataSource fds = new FileDataSource(imagePath);
+                imagePart.setDataHandler(new DataHandler(fds));
+                imagePart.setHeader("Content-ID", "<logo>");
+                imagePart.setDisposition(MimeBodyPart.INLINE);
+
+                // Crear el cuerpo completo
+                MimeMultipart multipart = new MimeMultipart("related");
+                multipart.addBodyPart(htmlPart);
+                multipart.addBodyPart(imagePart);
+
+                message.setContent(multipart);
+
+                // Enviar
+                Transport transport = session.getTransport("smtp");
+                transport.connect(ArrMail[0], ArrMail[4], ArrMail[5]);
+                transport.sendMessage(message, message.getAllRecipients());
+                transport.close();
+
+            } catch (MessagingException e) {
+                throw e;
+            }
+        }
+    }
+
+    public void CertificateReturn(String Certificate, String NameSender, String Justification, String Category, ServletContext context) throws MessagingException {
+        if (lst_mail != null) {
+            Object[] obj_mail = (Object[]) lst_mail.get(0);
+            String[] ArrMail = obj_mail[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+
+            Properties propiedades = new Properties();
+            propiedades.setProperty("mail.smtp.host", ArrMail[0]);
+            propiedades.setProperty("mail.smtp.starttls.enable", ArrMail[1]);
+            propiedades.setProperty("mail.smtp.port", ArrMail[2]);
+            propiedades.setProperty("mail.smtp.auth", "true");
+            propiedades.setProperty("mail.smtp.user", ArrMail[4]);
+
+            Session session = Session.getDefaultInstance(propiedades);
+
+            try {
+                MimeMessage message = new MimeMessage(session);
+                message.setFrom(new InternetAddress(ArrMail[4]));
+                if (Category.equals("Delete")) {
+                    message.setSubject("Aplicativo COA - Certificado Eliminado #" + Certificate);
+                } else {
+                    message.setSubject("Aplicativo COA - Devolucion Certificado #" + Certificate);
+                }
+                message.addRecipient(Message.RecipientType.TO, new InternetAddress("p.ti@plastitec-sa.com"));
+
+                // HTML content
+                MimeBodyPart htmlPart = new MimeBodyPart();
+                String htmlContent = ""
+                        + "<table role='presentation' width='100%' cellspacing='0' cellpadding='0' border='0' "
+                        + "style='background-color:#eef1f6; padding:40px 0; font-family:Segoe UI, Arial, sans-serif;'>"
+                        + "<tr>"
+                        + "<td align='center'>"
+                        + "<table role='presentation' width='650' cellspacing='0' cellpadding='0' border='0' "
+                        + "style='background-color:#ffffff; border-radius:8px; overflow:hidden; border:1px solid #dcdcdc;'>"
+                        /* ENCABEZADO */
+                        + "<tr>"
+                        + "   <td bgcolor='#e5e5e5' align='center' style='padding:20px;'>"
+                        + "      <img src='cid:logo' width='180' height='165' alt='Logo' style='display:block;'>"
+                        + "   </td>"
+                        + "</tr>"
+                        /* TITULO */
+                        + "<tr>"
+                        + "   <td style='padding:30px;'>"
+                        + "      <h2 style='margin:0; text-align:center; color:#120031; font-size:24px;'>"
+                        + "         Devolución de Certificado de Calidad"
+                        + "      </h2>"
+                        + "   </td>"
+                        + "</tr>"
+                        /* ALERTA */
+                        + "<tr>"
+                        + "   <td style='padding:0 30px;'>"
+                        + "      <div style='background:#fff4e5; border-left:5px solid #ff9800; "
+                        + "      padding:15px; border-radius:5px;'>"
+                        + "         <p style='margin:0; color:#8a5a00; font-size:15px;'>"
+                        + "            El certificado de calidad ha sido <b>DEVUELTO</b> y requiere revisión."
+                        + "         </p>"
+                        + "      </div>"
+                        + "   </td>"
+                        + "</tr>"
+                        /* CUERPO */
+                        + "<tr>"
+                        + "   <td style='padding:30px;'>"
+                        + "      <p style='font-size:15px; color:#444;'>"
+                        + "         Hola,"
+                        + "      </p>"
+                        + "      <p style='font-size:15px; color:#555; line-height:1.6;'>"
+                        + "         Se informa que el certificado de calidad enviado ha sido devuelto para corrección."
+                        + "      </p>"
+                        /* DETALLES */
+                        + "      <table width='100%' cellspacing='0' cellpadding='10' "
+                        + "      style='background:#f8f9fc; border:1px solid #e5e5e5; border-radius:6px;'>"
+                        + "         <tr>"
+                        + "            <td style='font-size:14px; color:#666;'><b>Enviado por:</b></td>"
+                        + "            <td style='font-size:14px; color:#333;'>" + NameSender + "</td>"
+                        + "         </tr>"
+                        + "         <tr>"
+                        + "            <td style='font-size:14px; color:#666;'><b>Certificado:</b></td>"
+                        + "            <td style='font-size:14px; color:#333;'>" + Certificate + "</td>"
+                        + "         </tr>"
+                        + "      </table>"
+                        /* JUSTIFICACION */
+                        + "      <div style='margin-top:25px;'>"
+                        + "         <h3 style='color:#120031; font-size:16px;'>Motivo de devolución</h3>"
+                        + "         <div style='background:#f4f4f4; padding:15px; border-radius:5px; "
+                        + "         border-left:4px solid #4D4AE8;'>"
+                        + "            <p style='margin:0; font-size:14px; color:#555; line-height:1.5;'>"
+                        + Justification
+                        + "            </p>"
+                        + "         </div>"
+                        + "      </div>"
+                        /* BOTON */
+                        + "      <div style='text-align:center; margin-top:30px;'>"
+                        + "         <a href='" + obj_mail[5] + "' "
+                        + "         style='background-color:#4D4AE8; color:#ffffff; text-decoration:none; "
+                        + "         padding:14px 30px; border-radius:5px; font-size:15px; "
+                        + "         font-weight:bold; display:inline-block;'>"
+                        + "            Revisar Certificado"
+                        + "         </a>"
+                        + "      </div>"
+                        + "   </td>"
+                        + "</tr>"
+                        /* FOOTER */
+                        + "<tr>"
+                        + "   <td bgcolor='#f8f8f8' style='padding:20px; border-top:1px solid #e5e5e5;'>"
+                        + "      <p style='margin:0; text-align:center; font-size:12px; color:#777;'>"
+                        + "         Este es un mensaje automático generado por el sistema COA.<br>"
+                        + "         Por favor no responder este correo."
+                        + "      </p>"
+                        + "   </td>"
+                        + "</tr>"
+                        + "</table>"
+                        + "</td>"
+                        + "</tr>"
+                        + "</table>";
                 htmlPart.setContent(htmlContent, "text/html; charset=UTF-8");
 
                 // Imagen embebida

@@ -226,7 +226,7 @@ public class GenerateReport extends TagSupport {
                     }
                     out.print("<td>" + ((ObjCerti[10] == null) ? "" : ObjCerti[10]) + "</td>");
                     out.print("<td>" + ((ObjCerti[11] == null) ? "" : ObjCerti[11].toString().trim()) + "</td>");
-                    out.print("<td>" + ((ObjCerti[13] == null) ? "" : (ObjCerti[13].toString().trim()).contains("/")?ObjCerti[13].toString().split("/")[1]:ObjCerti[13].toString().trim()) + "</td>");
+                    out.print("<td>" + ((ObjCerti[13] == null) ? "" : (ObjCerti[13].toString().trim()).contains("/") ? ObjCerti[13].toString().split("/")[1] : ObjCerti[13].toString().trim()) + "</td>");
                     try {
                         switch (State) {
                             case 0:
@@ -259,7 +259,7 @@ public class GenerateReport extends TagSupport {
                     }
                     if (State == 1) {
                         if (Permission.contains("[9]")) {
-                            out.print("<button class='btn btn-danger btn-sm' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Eliminar' onclick=\"confirmarEliminacion('Generate?opt=5&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "&Category=Delete&State=0')\"><i class='fas fa-trash'></i></button>");
+                            out.print("<button class='btn btn-danger btn-sm' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Eliminar' onclick=\"confirmarEliminacion('Generate?opt=5&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "&Category=Delete&State=0&NumberCertificate=" + ObjCerti[3] + "')\"><i class='fas fa-trash'></i></button>");
                         }
                     }
                     out.print("</div>");

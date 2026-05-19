@@ -236,7 +236,7 @@ public class CertificatesJpaController implements Serializable {
             em.getTransaction().commit();
             em.clear();
             em.close();
-            if (resultado == 1) {
+            if (resultado == 2) {
                 return true;
             } else {
                 return false;

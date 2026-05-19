@@ -11,6 +11,7 @@ import java.net.URLDecoder;
 import java.util.List;
 import Controller.CertificatesJpaController;
 import Controller.EventsJpaController;
+import Method.Mail;
 import java.io.File;
 
 public class Generate extends HttpServlet {
@@ -23,7 +24,9 @@ public class Generate extends HttpServlet {
             HttpSession session = request.getSession();
             CertificatesJpaController CertificatesJpa = new CertificatesJpaController();
             EventsJpaController EventConn = new EventsJpaController();
+            Mail MailConn = new Mail();
             String RolName = session.getAttribute("Rol/Nombres").toString();
+            String UserName = session.getAttribute("Nombres").toString();
             int IdRol = Integer.parseInt(session.getAttribute("idRol").toString());
             int opt = Integer.parseInt(request.getParameter("opt"));
             String Signature = "";
@@ -34,7 +37,8 @@ public class Generate extends HttpServlet {
             }
             int Order = 0, IdCertificates = 0, TempDelete = 0, TempM = 0, Temp = 0, StateCerti = 0, State = 0, StateM = 0, IdCertificate = 0, Anio = 0;
             String Type = "", Product = "", Batch = "", Html = "", Code = "", Consecutive = "", Customer = "", IdCertiMasive = "", Category = "",
-                    Justification = "", Record = "", FormatName = "", Message = "", Amount = "", DateDispatch = "", MaterialBatches = "", Client = "";
+                    Justification = "", Record = "", FormatName = "", Message = "", Amount = "", DateDispatch = "", MaterialBatches = "", Client = "",
+                    NumberCertificate = "";
             boolean result = false;
             List lst_id = null;
             switch (opt) {
@@ -307,6 +311,12 @@ public class Generate extends HttpServlet {
                         } else {
                             request.setAttribute("ReturnCertificates", result);
                         }
+                         try {
+                            NumberCertificate = request.getParameter("NumberCertificate");
+                        } catch (Exception e) {
+                            NumberCertificate = "";
+                        }
+                        MailConn.CertificateReturn(NumberCertificate, UserName, Justification, Category, getServletContext());
                     }
                     request.getRequestDispatcher("Generate?opt=1&Type=" + Type).forward(request, response);
                     //</editor-fold>
@@ -372,7 +382,6 @@ public class Generate extends HttpServlet {
                         Batch = "";
                     }
                     result = CertificatesJpa.UpdateCertificateFinish(IdCertificates);
-
                     if (result) {
                         // Ruta base
                         String basePath = getServletContext().getRealPath("/Certificates");

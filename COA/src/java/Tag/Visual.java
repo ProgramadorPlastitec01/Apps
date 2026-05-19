@@ -161,14 +161,19 @@ public class Visual extends TagSupport {
                 }
                 // Estado 2 → Firmar
                 if (StateCerti == 2) {
+
                     out.print("<div class='d-flex'>");
                     if (Permission.contains("[19]")) {
-                        out.print("<div class='mr-4'>"
-                                + "<button class='btn btn-outline-danger btn-sm' "
-                                + "style='border-radius: 4px; padding: 2px 9px;' onclick=\"confirmarDevolucion('Generate?opt=5&Type=" + Type + "&IdCertificates=" + IdCertificates + "&Category=Return&State=1')\" data-toggle='tooltip' "
-                                + "data-placement='top' title='Devolver'>"
-                                + "<i class=\"fas fa-undo-alt\"></i>"
-                                + "</button></div>");
+                        List lstId = CertificatesJpa.ConsultCertificatesId(Type, IdCertificates);
+                        if (lstId != null) {
+                            Object[] ObjId = (Object[]) lstId.get(0);
+                            out.print("<div class='mr-4'>"
+                                    + "<button class='btn btn-outline-danger btn-sm' "
+                                    + "style='border-radius: 4px; padding: 2px 9px;' onclick=\"confirmarDevolucion('Generate?opt=5&Type=" + Type + "&IdCertificates=" + IdCertificates + "&Category=Return&State=1&NumberCertificate=" + ObjId[3] + "')\" data-toggle='tooltip' "
+                                    + "data-placement='top' title='Devolver'>"
+                                    + "<i class=\"fas fa-undo-alt\"></i>"
+                                    + "</button></div>");
+                        }
                     }
                     if (Permission.contains("[11]")) {
                         out.print("<div>"
@@ -239,9 +244,9 @@ public class Visual extends TagSupport {
                         //<editor-fold defaultstate="collapsed" desc="HEAD FACTORY">
                         String[] ArgHead = Util.parseResult(lst_headFact.get(1));
                         Html = Html.replace("XOrderX", (ArgHead[0].equals("NULL") || ArgHead[0] == null) ? "" + Order + "" : ArgHead[0]);
-                        Html = Html.replace("XClientX", (ArgHead[1].equals("NULL") || ArgHead[1] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" +  ArgHead[1] + "</span>");
-                        Html = Html.replace("XAddressX", (ArgHead[2].equals("NULL") || ArgHead[2] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" +  ArgHead[2] + "</span>");
-                        Html = Html.replace("XPhoneX", (ArgHead[3].equals("NULL") || ArgHead[3] == null) ? "<span  class='editable' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" + ArgHead[3] + "</span>" );
+                        Html = Html.replace("XClientX", (ArgHead[1].equals("NULL") || ArgHead[1] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" + ArgHead[1] + "</span>");
+                        Html = Html.replace("XAddressX", (ArgHead[2].equals("NULL") || ArgHead[2] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" + ArgHead[2] + "</span>");
+                        Html = Html.replace("XPhoneX", (ArgHead[3].equals("NULL") || ArgHead[3] == null) ? "<span  class='editable' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" + ArgHead[3] + "</span>");
                         Html = Html.replace("XCityX", (ArgHead[4].equals("NULL") || ArgHead[4] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" + ArgHead[4] + "</span>");
                         Html = Html.replace("XCountryX", (ArgHead[5].equals("NULL") || ArgHead[5] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" + ArgHead[5] + "</span>");
                         Html = Html.replace("XBillX", (ArgHead[6].equals("NULL") || ArgHead[6] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" + ArgHead[6] + "</span>");

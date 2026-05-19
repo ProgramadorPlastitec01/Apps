@@ -356,7 +356,7 @@ public class Tag_rollo extends TagSupport {
                             out.print("<input type='radio' name='Bdr_ltr_rollo' id='Bdr_ltr_rollo_si' value='SI'  />SI");
                             out.print("<input type='radio' name='Bdr_ltr_rollo' id='Bdr_ltr_rollo_no' value='NO' checked />NO<br />");
                         } else {
-                            out.print("<input type='radio' name='Bdr_ltr_rollo' id='Bdr_ltr_rollo_si' value='SI' " + ((obj_rollo[29].equals("SI")) ? "checked" : "") + " />SI");
+                            out.print("<input type='radio' name='Bdr_ltr_rollo' id='Bdr_ltr_rollo_si' value='SI' " + ((obj_rollo[29] == null ? "" : (obj_rollo[29].equals("SI") ? "checked" : ""))) + " />SI");
                             out.print("<input type='radio' name='Bdr_ltr_rollo' id='Bdr_ltr_rollo_no' value='NO' " + ((obj_rollo[29] == null ? "checked" : (obj_rollo[29].equals("NO") ? "checked" : ""))) + "/>NO<br />");
                         }
                         //</editor-fold>
