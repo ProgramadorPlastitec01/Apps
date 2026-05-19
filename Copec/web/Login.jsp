@@ -5,6 +5,7 @@
     
     <head>
         <link rel="icon" type="image/png" href="Interfaz/Template/images/Ico.ico"/>
+        <link rel="stylesheet" href="Interfaz/LiveValidation/StyleSheetLiveValidation.css" media="screen">
         <title>Login</title>
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
         <jsp:include page="Encabezado.jsp"></jsp:include>
@@ -55,5 +56,6 @@
     </div>
 </center>
 <Alertas:Alertas/>
+<script type="text/javascript" src="Interfaz/LiveValidation/LiveValidation.js"></script>
 </body>
 </html>
