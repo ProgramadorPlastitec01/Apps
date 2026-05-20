@@ -423,6 +423,33 @@
                 }
                 return true;
             }
+            
+            function controltextosellado260521() {
+                var nopaso = ['---', '+', '*', '#', '|', '///', '°', '¬', '$', '&', '=', '^', '_', '~', '[', ']'];
+                var campos = ['campo2', 'campo3', 'campo4', 'campo5', 'campo6', 'campo7', 'campo8', 'campo9', 'campo10', 'campo11'];
+                var botonenviar = document.getElementById('subir');
+
+                for (var c = 0; c < campos.length; c++) {
+                    var textvalue = document.getElementById(campos[c]);
+                    var infor = textvalue.value;
+
+                    for (var o = 0; o < nopaso.length; o++) {
+                        if (infor.includes(nopaso[o])) {
+                            swal({
+                                title: 'Informacion',
+                                text: 'No se puede usar caracteres especiales en la descripción. Como por ejemplo: ---, +, *, #, |, ///, °, ¬, $, &, =, ^, _, ~, [, ]',
+                                type: 'info',
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
+                            infor = infor.replaceAll(nopaso[o], '');
+                            textvalue.value = infor;
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
 
             function verificacionTextoSellado() {
                 var noti = ['---', '+', '*', '#', '|', '///', '°', '¬', '$', '&', '=', '^', '_', '~', '[', ']'];
@@ -451,6 +478,30 @@
             function verificacionTextoSellado250414() {
                 var noti = ['---', '+', '*', '#', '|', '///', '°', '¬', '$', '&', '=', '^', '_', '~', '[', ']'];
                 var campose = ['campoM2', 'campoM3', 'campoM4', 'campoM5', 'campoM6', 'campoM7', 'campoM8', 'campoM9','campoM10'];
+                for (var e = 0; e < campose.length; e++) {
+                    var editarvalue = document.getElementById(campose[e]);
+                    var comunicado = editarvalue.value;
+                    for (var m = 0; m < noti.length; m++) {
+                        if (comunicado.includes(noti[m])) {
+                            swal({
+                                title: 'Informacion',
+                                text: 'No se puede usar caracteres especiales en la descripción. Como por ejemplo: ---, +, *, #, |, ///, °, ¬, $, &, =, ^, _, ~, [, ]',
+                                type: 'info',
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
+                            comunicado = comunicado.replaceAll(noti[m], '');
+                            editarvalue.value = comunicado;
+                            return false;
+                        } else {
+                        }
+                    }
+                }
+                return true;
+            }
+            function verificacionTextoSellado260520() {
+                var noti = ['---', '+', '*', '#', '|', '///', '°', '¬', '$', '&', '=', '^', '_', '~', '[', ']'];
+                var campose = ['campoM2', 'campoM3', 'campoM4', 'campoM5', 'campoM6', 'campoM7', 'campoM8', 'campoM9','campoM10','campoM11'];
                 for (var e = 0; e < campose.length; e++) {
                     var editarvalue = document.getElementById(campose[e]);
                     var comunicado = editarvalue.value;

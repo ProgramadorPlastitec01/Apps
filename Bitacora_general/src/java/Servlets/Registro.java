@@ -305,7 +305,17 @@ public class Registro extends HttpServlet {
                     if (campo9.isEmpty()) {
                         campo9 = ":";
                     }
-                    if (fechaV >= 20250415) {
+                    if (fechaV >= 20260521) {
+                        campo10 = limpiarTexto(request.getParameter("campo10").trim());
+                        if (campo10.isEmpty()) {
+                            campo10 = ":";
+                        }
+                        campo11 = limpiarTexto(request.getParameter("campo11").trim());
+                        if (campo11.isEmpty()) {
+                            campo11 = ":";
+                        }
+                        formato = "[" + idLiSell + "///" + idEquiLinSell + "///" + campo2 + "///" + campo3 + "///" + campo4 + "///" + campo5 + "///" + campo6 + "///" + campo7 + "///" + campo8 + "///" + campo9 + "///" + campo10 + "///" + campo11 + "]";
+                    } else if (fechaV >= 20250415) {
                         campo10 = limpiarTexto(request.getParameter("campo10").trim());
                         if (campo10.isEmpty()) {
                             campo10 = ":";
@@ -383,7 +393,19 @@ public class Registro extends HttpServlet {
                         if (campo9.isEmpty()) {
                             campo9 = ":";
                         }
-                        if (fechaV >= 20250415) {
+                        if (fechaV >= 20260521) {
+                            campo10 = limpiarTexto(request.getParameter("campo10").trim());
+                            if (campo10.isEmpty()) {
+                                campo10 = ":";
+                            }
+                            campo11 = limpiarTexto(request.getParameter("campo11").trim());
+                            if (campo11.isEmpty()) {
+                                campo11 = ":";
+                            }
+                            desc = request.getParameter("desc");
+                            formato = "[" + idDescNuevoLiSellado + "///" + idEquiSell + "///" + desc + "]";
+                            formatoNuevo = "[" + idDescNuevoLiSellado + "///" + idEquLiSe + "///" + campo2 + "///" + campo3 + "///" + campo4 + "///" + campo5 + "///" + campo6 + "///" + campo7 + "///" + campo8 + "///" + campo9 + "///" + campo10 + "///" + campo11 + "]";
+                        } else if (fechaV >= 20250415) {
                             campo10 = limpiarTexto(request.getParameter("campo10").trim());
                             if (campo10.isEmpty()) {
                                 campo10 = ":";
