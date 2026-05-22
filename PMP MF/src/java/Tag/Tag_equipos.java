@@ -958,7 +958,7 @@ public class Tag_equipos extends TagSupport {
                     } else {
                         out.print("<input type='hidden' id='Txt_enlace_volver' value='Equipo?opc=1' />");
                     }
-                    if (nombre_rol.equals("Administrador") || nombre_rol.equals("Jefe_Mtto") || nombre_rol.equals("Asistente")) {
+                    if (nombre_rol.equals("Administrador") || nombre_rol.equals("Jefe_Mtto") || nombre_rol.equals("Asistente") || nombre_rol.equals("Coordinador")) {
                         if (id_nota != 0) {
                             //<editor-fold defaultstate="collapsed" desc="Modificar">
                             lst_notas_id = jpaceqp.Notas_Id(id_nota);

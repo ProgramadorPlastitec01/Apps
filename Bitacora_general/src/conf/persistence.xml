@@ -4,12 +4,11 @@
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
-      <!--<property name="javax.persistence.jdbc.url" value="jdbc:mysql://172.16.2.111:3306/bitacora?zeroDateTimeBehavior=convertToNull"/>-->
-      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3308/bitacora?zeroDateTimeBehavior=convertToNull"/>
-      <property name="javax.persistence.jdbc.user" value="root"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://172.16.2.111:3306/bitacora?zeroDateTimeBehavior=convertToNull"/>
+      <property name="javax.persistence.jdbc.user" value="app_plas"/>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
       <property name="javax.persistence.jdbc.password" value=""/>
-      <!--<property name="javax.persistence.jdbc.password" value="x85Ov4"/>-->
+      <property name="javax.persistence.jdbc.password" value="94#qS0"/>
       <property name="javax.persistence.schema-generation.database.action" value="create"/>
     </properties>
   </persistence-unit>
