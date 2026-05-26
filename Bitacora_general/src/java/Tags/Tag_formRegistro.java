@@ -908,7 +908,7 @@ public class Tag_formRegistro extends TagSupport {
                     //</editor-fold>
                 }
                 if (date >= 20260521) {
-                    out.println("<div " + ((objRegistro[12].equals(1)) ? "class='sellado26520 espacio sombreado'" : "class='sellado-2 espacio sombreado'") + ">");
+                    out.println("<div " + ((objRegistro[12].equals(1)) ? "class='sellado26520 espacio sombreado'" : "class='sellado26520C espacio sombreado'") + ">");
                 } else if (date >= 20250415) {
                     out.println("<div " + ((objRegistro[12].equals(1)) ? "class='sellado25417 espacio sombreado'" : "class='sellado-2 espacio sombreado'") + ">");
                 } else {
@@ -928,7 +928,7 @@ public class Tag_formRegistro extends TagSupport {
                     out.println("<div class='titulo fuente-negrita color-fondo'> SISTEMA CORTE DUCTO </div>");
                 }
                 if (date >= 20260521) {
-                    out.println("<div class='titulo fuente-negrita color-fondo'> ALINEACION Y CENTRADO DE MANDRILES </div>");
+                    out.println("<div class='titulo fuente-negrita color-fondo'> ALINEACION Y <br/> CENTRADO DE MANDRILES </div>");
                 }
                 if (objRegistro[12].equals(1)) {
                     out.println("<div class='titulo fuente-negrita color-fondo'> EDITAR </div>");
