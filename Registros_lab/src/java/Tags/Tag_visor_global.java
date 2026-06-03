@@ -117,7 +117,7 @@ public class Tag_visor_global extends TagSupport {
                 out.print("<link type=\"text/css\" rel=\"stylesheet\" href=\"Interfaz/HTML_Editor/jquery-te-1.4.0.css\" />");
                 out.print("<script type=\"text/javascript\" src=\"Interfaz/HTML_Editor/HtmlEditor.js\" charset=\"utf-8\"></script>");
                 out.print("<script type=\"text/javascript\" src=\"Interfaz/HTML_Editor/jquery-te-1.4.0.min.js\" charset=\"utf-8\"></script>");
-                if (rol.equals("Consulta")) {
+                if (!rol.equals("Consulta")) {
                     if ((Integer) obj_plantilla[3] == 1) {
                         //OPC IMPRIMIR
                         out.print("<div style='float:right'>"
