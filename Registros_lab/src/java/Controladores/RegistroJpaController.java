@@ -737,7 +737,7 @@ public class RegistroJpaController {
             String query = "UPDATE registro rt "
                     + "SET rt.estado = 0, "
                     + "    rt.verificado = 1 "
-                    + "WHERE rt.turno = 'Turno 1' "
+                    + "WHERE rt.turno = 'Turno " + tno + "' "
                     + "  AND NOT EXISTS ( "
                     + "        SELECT 1 "
                     + "        FROM registro_entrada_material r "
