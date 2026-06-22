@@ -62,10 +62,8 @@ public class Menu extends TagSupport {
                         out.print("<li><a href='#'>Procesos y Activos</a>");
                         out.print("<ul>");
                         out.print("<li><a href='Proceso?opc=1&idProceso=0'>Activos en Proceso</a></li>");
-                        if (rol.equals("ADMINISTRADOR") || rol.equals("MANTENIMIENTO")) {
-                            out.print("<li><a href='Proceso?opc=6&idProceso=0'>Procesos por Definir </a></li>");
-                            out.print("<li><a href='Activo?opc=1&idActivo=0&query='>Inventario Maquinaria</a></li>");
-                        }
+                        out.print("<li><a href='Proceso?opc=6&idProceso=0'>Procesos por Definir </a></li>");
+                        out.print("<li><a href='Activo?opc=1&idActivo=0&query='>Inventario Maquinaria</a></li>");
                         out.print("</ul>");
                     }
                     out.print("</li>");
