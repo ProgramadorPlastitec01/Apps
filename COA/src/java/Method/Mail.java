@@ -206,7 +206,7 @@ public class Mail {
                         + "      </div>"
                         /* BOTON */
                         + "      <div style='text-align:center; margin-top:30px;'>"
-                        + "         <a href='" + obj_mail[5] + "' "
+                        + "         <a href='" + ArrMail[7] + "' "
                         + "         style='background-color:#4D4AE8; color:#ffffff; text-decoration:none; "
                         + "         padding:14px 30px; border-radius:5px; font-size:15px; "
                         + "         font-weight:bold; display:inline-block;'>"
