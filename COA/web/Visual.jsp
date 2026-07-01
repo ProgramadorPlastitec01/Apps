@@ -505,15 +505,16 @@
     </script>
     <script>
         function confirmarDevolucion(url) {
+
             swal({
                 title: "¿Está seguro de devolver?",
-                text: "Por favor, justifique la razón de la devolucion",
+                text: "Por favor, justifique la razón de la devolución.",
                 content: {
                     element: "textarea",
                     attributes: {
                         placeholder: "Escriba aquí la justificación...",
                         id: "razonDevolucion"
-                    },
+                    }
                 },
                 icon: "warning",
                 buttons: {
@@ -521,32 +522,61 @@
                         text: "Cancelar",
                         visible: true,
                         className: "btn btn-secondary",
-                        closeModal: true,
+                        closeModal: true
                     },
                     confirm: {
                         text: "Devolver",
                         visible: true,
-                        className: "btn btn-green",
-                        closeModal: false,
-                    },
-                },
-                dangerMode: true,
-            }).then((value) => {
-                if (value) {
-                    const razon = document.getElementById("razonDevolucion").value.trim();
-                    if (!razon) {
-                        swal("Debe justificar la devolución", {
-                            icon: "error",
-                        });
-                        return;
+                        className: "btn btn-success",
+                        closeModal: false
                     }
-                    // Redirige al servlet con la razón codificada
-                    const razonEncoded = encodeURIComponent(razon);
-                    window.location.href = url + "&Justification=" + razonEncoded;
+                },
+                dangerMode: true
+            }).then((value) => {
+
+                if (!value)
+                    return;
+
+                const razon = document.getElementById("razonDevolucion").value.trim();
+
+                if (!razon) {
+                    swal({
+                        title: "Justificación requerida",
+                        text: "Debe ingresar una justificación para realizar la devolución.",
+                        icon: "error"
+                    });
+                    return;
                 }
+
+                // Crear contenido de carga
+                const loading = document.createElement("div");
+                loading.innerHTML = `
+            <div class="loader"></div>
+            <div class="loader-text">
+                <strong>Procesando devolución...</strong><br>
+                Registrando la devolución y enviando la notificación por correo.<br><br>
+                <small>Este proceso puede tardar algunos segundos.<br>Por favor, no cierre esta ventana.</small>
+            </div>
+        `;
+
+                // Mostrar alerta de espera
+                swal({
+                    title: "Espere un momento",
+                    content: loading,
+                    buttons: false,
+                    closeOnClickOutside: false,
+                    closeOnEsc: false
+                });
+
+                // Dar tiempo para que el usuario vea la animación antes de redirigir
+                setTimeout(function () {
+                    window.location.href = url + "&Justification=" + encodeURIComponent(razon);
+                }, 500);
+
             });
+
         }
-        
+
     </script>
 
     <script src="Interface/Content/Assets/js/eventLogger.js"></script>

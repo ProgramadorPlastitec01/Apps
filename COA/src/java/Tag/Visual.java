@@ -30,6 +30,7 @@ public class Visual extends TagSupport {
         CertificatesJpaController CertificatesJpa = new CertificatesJpaController();
         ConnectionGeneracionLotes GeneracionLotesJpa = new ConnectionGeneracionLotes();
         String Type = "", Product = "", ProductFact = "", Batch = "", DataTechnicalSheet = "", Html = "", BatchLay = "", Record = "", FormatName = "", Message = "", IdSig = "", Permission = "", Client = "";
+        String[] BatchCycle = {};
         int Order = 0, IdForm = 0, Count = 1, Count2 = 1, IdCertificates = 0, State = 0, TempDelete = 0, StateCerti = 0, TempM = 0;
         List lst_content = null;
         List lst_headFact = null;
@@ -99,6 +100,10 @@ public class Visual extends TagSupport {
                 Permission = sesion.getAttribute("Permisos").toString();
             } catch (Exception e) {
                 Permission = "";
+            }
+            if (Batch.contains("///")) {
+                BatchCycle = Batch.split("///");
+                Batch = BatchCycle[0];
             }
             Client = Optional.ofNullable(pageContext.getRequest().getParameter("Client")).orElse("");
             //</editor-fold>

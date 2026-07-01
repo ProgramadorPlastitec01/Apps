@@ -256,9 +256,10 @@
                     }
                 });
             }
-        </script>
+        </script> 
         <script>
             function confirmarFinalizar(url) {
+
                 swal({
                     title: "¿Está seguro de finalizar?",
                     text: "Una vez finalizado no podrá realizar cambios o modificaciones al documento.",
@@ -268,24 +269,48 @@
                             text: "Cancelar",
                             visible: true,
                             className: "btn btn-secondary",
-                            closeModal: true,
+                            closeModal: true
                         },
                         confirm: {
                             text: "Aceptar",
                             visible: true,
                             className: "btn btn-success",
-                            closeModal: false,
-                        },
+                            closeModal: false
+                        }
                     },
-                    dangerMode: true,
+                    dangerMode: true
+
                 }).then((value) => {
 
-                    // SI CANCELA → no hace nada
+                    // Si cancela
                     if (!value)
                         return;
 
-                    // SI ACEPTA → redirige
-                    window.location.href = url;
+                    // Contenido de la alerta de carga
+                    const loading = document.createElement("div");
+                    loading.innerHTML = `
+            <div class="loader"></div>
+            <div class="loader-text">
+                <strong>Finalizando documento...</strong><br>
+                Estamos registrando la información y enviando las notificaciones correspondientes.<br><br>
+                <small>Este proceso puede tardar algunos segundos.<br>Por favor, no cierre esta ventana.</small>
+            </div>
+        `;
+
+                    // Mostrar alerta de espera
+                    swal({
+                        title: "Espere un momento",
+                        content: loading,
+                        buttons: false,
+                        closeOnClickOutside: false,
+                        closeOnEsc: false
+                    });
+
+                    // Pequeña espera para que se vea la animación
+                    setTimeout(function () {
+                        window.location.href = url;
+                    }, 500);
+
                 });
             }
         </script>

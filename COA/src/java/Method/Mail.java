@@ -257,6 +257,160 @@ public class Mail {
         }
     }
 
+    public void CertificateSend(String Certificate, String NameSender, ServletContext context) throws MessagingException {
+        if (lst_mail != null) {
+            Object[] obj_mail = (Object[]) lst_mail.get(0);
+            String[] ArrMail = obj_mail[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+
+            Properties propiedades = new Properties();
+            propiedades.setProperty("mail.smtp.host", ArrMail[0]);
+            propiedades.setProperty("mail.smtp.starttls.enable", ArrMail[1]);
+            propiedades.setProperty("mail.smtp.port", ArrMail[2]);
+            propiedades.setProperty("mail.smtp.auth", "true");
+            propiedades.setProperty("mail.smtp.user", ArrMail[4]);
+
+            Session session = Session.getDefaultInstance(propiedades);
+
+            try {
+                MimeMessage message = new MimeMessage(session);
+                message.setFrom(new InternetAddress(ArrMail[4]));
+                message.setSubject("Aplicativo COA - Certificado Finalizado #" + Certificate);
+                message.addRecipient(Message.RecipientType.TO, new InternetAddress("p.ti@plastitec-sa.com"));
+
+                // HTML content
+                MimeBodyPart htmlPart = new MimeBodyPart();
+                String htmlContent = ""
+                        + "<table role='presentation' width='100%' cellpadding='0' cellspacing='0' "
+                        + "style='background:#f3f6fb;padding:40px;font-family:Segoe UI,Arial,sans-serif;'>"
+                        + "<tr><td align='center'>"
+                        + "<table width='650' cellpadding='0' cellspacing='0' "
+                        + "style='background:#ffffff;border-radius:12px;overflow:hidden;"
+                        + "box-shadow:0 4px 15px rgba(0,0,0,.08);'>"
+                        //==================== CABECERA ====================
+                        + "<tr>"
+                        + "<td align='center' bgcolor='#120031' style='padding:35px;'>"
+                        + "<img src='cid:logo' width='160' alt='COA' style='display:block;'>"
+                        + "</td>"
+                        + "</tr>"
+                        //==================== TITULO ====================
+                        + "<tr>"
+                        + "<td align='center' style='padding:35px 35px 20px;'>"
+                        + "<h1 style='margin:0;font-size:28px;color:#120031;'>"
+                        + "✅ Certificado Finalizado"
+                        + "</h1>"
+                        + "</td>"
+                        + "</tr>"
+                        //==================== MENSAJE ====================
+                        + "<tr>"
+                        + "<td style='padding:0 40px;'>"
+                        + "<div style='background:#ecfdf3;"
+                        + "border-left:6px solid #22c55e;"
+                        + "padding:18px;"
+                        + "border-radius:8px;'>"
+                        + "<p style='margin:0;"
+                        + "font-size:16px;"
+                        + "color:#166534;'>"
+                        + "<b>¡Proceso completado con éxito!</b><br>"
+                        + "El certificado de calidad ya fue finalizado y se encuentra disponible para su consulta."
+                        + "</p>"
+                        + "</div>"
+                        + "</td>"
+                        + "</tr>"
+                        //==================== CUERPO ====================
+                        + "<tr>"
+                        + "<td style='padding:35px 40px;'>"
+                        + "<p style='font-size:15px;color:#555;line-height:1.7;margin-top:0;'>"
+                        + "Hola,<br><br>"
+                        + "Le informamos que el siguiente certificado ha culminado satisfactoriamente su proceso dentro del sistema COA."
+                        + "</p>"
+                        //==================== TARJETA ====================
+                        + "<table width='100%' cellpadding='12' cellspacing='0' "
+                        + "style='background:#f8fafc;"
+                        + "border:1px solid #e5e7eb;"
+                        + "border-radius:8px;'>"
+                        + "<tr>"
+                        + "<td width='180' style='color:#6b7280;font-weight:bold;'>Certificado</td>"
+                        + "<td style='color:#111827;font-size:15px;'>" + Certificate + "</td>"
+                        + "</tr>"
+                        + "<tr>"
+                        + "<td style='color:#6b7280;font-weight:bold;'>Finalizado por</td>"
+                        + "<td style='color:#111827;font-size:15px;'>" + NameSender + "</td>"
+                        + "</tr>"
+                        + "<tr>"
+                        + "<td style='color:#6b7280;font-weight:bold;'>Estado</td>"
+                        + "<td>"
+                        + "<span style='background:#dcfce7;"
+                        + "color:#166534;"
+                        + "padding:6px 14px;"
+                        + "border-radius:20px;"
+                        + "font-size:13px;"
+                        + "font-weight:bold;'>"
+                        + "FINALIZADO"
+                        + "</span>"
+                        + "</td>"
+                        + "</tr>"
+                        + "</table>"
+                        //==================== BOTON ====================
+                        + "<div style='text-align:center;margin-top:40px;'>"
+                        + "<a href='" + ArrMail[7] + "' "
+                        + "style='display:inline-block;"
+                        + "background:#4D4AE8;"
+                        + "color:#ffffff;"
+                        + "text-decoration:none;"
+                        + "padding:15px 38px;"
+                        + "border-radius:8px;"
+                        + "font-size:16px;"
+                        + "font-weight:bold;'>"
+                        + "Ver Certificado"
+                        + "</a>"
+                        + "</div>"
+                        + "</td>"
+                        + "</tr>"
+                        //==================== FOOTER ====================
+                        + "<tr>"
+                        + "<td style='background:#f8fafc;"
+                        + "border-top:1px solid #e5e7eb;"
+                        + "padding:25px;"
+                        + "text-align:center;'>"
+                        + "<p style='margin:0;"
+                        + "font-size:13px;"
+                        + "color:#6b7280;'>"
+                        + "Este es un mensaje automático generado por el sistema <b>COA</b>.<br>"
+                        + "Por favor, no responda este correo."
+                        + "</p>"
+                        + "</td>"
+                        + "</tr>"
+                        + "</table>"
+                        + "</td></tr></table>";
+                htmlPart.setContent(htmlContent, "text/html; charset=UTF-8");
+
+                // Imagen embebida
+                MimeBodyPart imagePart = new MimeBodyPart();
+                String imagePath = context.getRealPath("/Interface/Imagen/Logo1.fw.png");
+                FileDataSource fds = new FileDataSource(imagePath);
+                imagePart.setDataHandler(new DataHandler(fds));
+                imagePart.setHeader("Content-ID", "<logo>");
+                imagePart.setDisposition(MimeBodyPart.INLINE);
+
+                // Crear el cuerpo completo
+                MimeMultipart multipart = new MimeMultipart("related");
+                multipart.addBodyPart(htmlPart);
+                multipart.addBodyPart(imagePart);
+
+                message.setContent(multipart);
+
+                // Enviar
+                Transport transport = session.getTransport("smtp");
+                transport.connect(ArrMail[0], ArrMail[4], ArrMail[5]);
+                transport.sendMessage(message, message.getAllRecipients());
+                transport.close();
+
+            } catch (MessagingException e) {
+                throw e;
+            }
+        }
+    }
+
 //    public void SendError404Mail(String usuario, String url, String ip, ServletContext context) throws MessagingException {
 //        if (lst_mail != null) {
 //            Object[] obj_mail = (Object[]) lst_mail.get(0);

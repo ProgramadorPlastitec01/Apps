@@ -311,7 +311,7 @@ public class Generate extends HttpServlet {
                         } else {
                             request.setAttribute("ReturnCertificates", result);
                         }
-                         try {
+                        try {
                             NumberCertificate = request.getParameter("NumberCertificate");
                         } catch (Exception e) {
                             NumberCertificate = "";
@@ -400,6 +400,7 @@ public class Generate extends HttpServlet {
                                 System.out.println("No se pudo crear la estructura de carpetas");
                             }
                         }
+                        MailConn.CertificateSend(NumberCertificate, UserName ,getServletContext());
                         request.setAttribute("FinishCertificate", true);
                     }
                     request.getRequestDispatcher("Generate?opt=1&Type=" + Type).forward(request, response);
