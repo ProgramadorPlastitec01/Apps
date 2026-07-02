@@ -51,9 +51,14 @@ public class Email {
             propiedades.setProperty("mail.smtp.port", arrConf[2]);
             propiedades.setProperty("mail.smtp.auth", arrConf[3]);
             propiedades.setProperty("mail.smtp.user", arrConf[4]);
-            propiedades.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
+
+            propiedades.put("mail.smtp.ssl.protocols", "TLSv1.2");
+            propiedades.put("mail.smtp.connectiontimeout", "15000");
+            propiedades.put("mail.smtp.timeout", "15000");
+            propiedades.put("mail.smtp.writetimeout", "15000");
+
             propiedades.setProperty("mail.debug", "true");
-            Session session = Session.getDefaultInstance(propiedades);
+            Session session = Session.getInstance(propiedades);
             try {
                 MimeMessage message = new MimeMessage(session);
                 String[] destino = (obj_proceso[12] + ";" + obj_area[3]).split(";");
@@ -153,9 +158,14 @@ public class Email {
             propiedades.setProperty("mail.smtp.port", arrConf[2]);
             propiedades.setProperty("mail.smtp.auth", arrConf[3]);
             propiedades.setProperty("mail.smtp.user", arrConf[4]);
-            propiedades.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
+
+            propiedades.put("mail.smtp.ssl.protocols", "TLSv1.2");
+            propiedades.put("mail.smtp.connectiontimeout", "15000");
+            propiedades.put("mail.smtp.timeout", "15000");
+            propiedades.put("mail.smtp.writetimeout", "15000");
+
             propiedades.setProperty("mail.debug", "true");
-            Session session = Session.getDefaultInstance(propiedades);
+            Session session = Session.getInstance(propiedades);
             try {
                 MimeMessage message = new MimeMessage(session);
                 String[] destino = (obj_proceso[12] + ";" + obj_area[3]).split(";");
@@ -250,9 +260,14 @@ public class Email {
             propiedades.setProperty("mail.smtp.port", arrConf[2]);
             propiedades.setProperty("mail.smtp.auth", arrConf[3]);
             propiedades.setProperty("mail.smtp.user", arrConf[4]);
-            propiedades.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
+
+            propiedades.put("mail.smtp.ssl.protocols", "TLSv1.2");
+            propiedades.put("mail.smtp.connectiontimeout", "15000");
+            propiedades.put("mail.smtp.timeout", "15000");
+            propiedades.put("mail.smtp.writetimeout", "15000");
+
             propiedades.setProperty("mail.debug", "true");
-            Session session = Session.getDefaultInstance(propiedades);
+            Session session = Session.getInstance(propiedades);
             try {
                 MimeMessage message = new MimeMessage(session);
                 String[] destino = (obj_proceso[10] + ";" + obj_area[3]).split(";");
@@ -359,9 +374,14 @@ public class Email {
             propiedades.setProperty("mail.smtp.port", arrConf[2]);
             propiedades.setProperty("mail.smtp.auth", arrConf[3]);
             propiedades.setProperty("mail.smtp.user", arrConf[4]);
-            propiedades.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
+
+            propiedades.put("mail.smtp.ssl.protocols", "TLSv1.2");
+            propiedades.put("mail.smtp.connectiontimeout", "15000");
+            propiedades.put("mail.smtp.timeout", "15000");
+            propiedades.put("mail.smtp.writetimeout", "15000");
+
             propiedades.setProperty("mail.debug", "true");
-            Session session = Session.getDefaultInstance(propiedades);
+            Session session = Session.getInstance(propiedades);
             try {
                 MimeMessage message = new MimeMessage(session);
                 String[] destino = (obj_activo[25] + ";" + obj_area[3]).split(";");
@@ -396,7 +416,7 @@ public class Email {
                             + "<td valign='top' style='padding: 7px 15px 8px 15px;border: none;font-size: 12px;color: black;background-color:whitesmoke;'><b>Marca: </b>" + obj_activos[9] + "<br><Modelo:</b>" + obj_activos[10] + "<br><b>Serie:</b>" + obj_activos[11] + "</td>"
                             + "<td valign='top' style='padding: 7px 15px 8px 15px;border: none;font-size: 12px;color: black;background-color:whitesmoke;'><b>Fabricante:</b>" + obj_activos[13] + "<br><b>Año Fabricación:</b>" + obj_activos[12] + "<br><b>Fecha Ingreso:</b>" + obj_activos[19] + "</td>"
                             + "<td valign='top' style='padding: 7px 15px 8px 15px;border: none;font-size: 12px;color: black;background-color:whitesmoke;'><b>Núm. Orden Compra:</b>" + obj_activos[14] + "<br><b>Num Factura:</b>" + obj_activos[17] + "<br><b>Fecha Compra:</b>" + obj_activos[15] + "<br><b>Valor:</b>" + obj_activos[16] + "</td>"
-                            + "<td valign='top' style='padding: 7px 15px 8px 15px;border: none;font-size: 12px;color: black;background-color:whitesmoke;'>" + obj_activos[18].toString().replace("<img src=\"UserFiles/", "<img src=\"http://172.16.2.111:8084/Activos/UserFiles/").replace("<a href=\"UserFiles/", "<a href=\"http://172.16.2.111:8084/Activos/UserFiles/") + "<br><b>Fecha dada de Baja:</b>" + obj_activos[23] + "<br><b>Justificación Dada de Baja: </b>" + obj_activos[24] + "</td>"
+                            + "<td valign='top' style='padding: 7px 15px 8px 15px;border: none;font-size: 12px;color: black;background-color:whitesmoke;'>" + obj_activos[18].toString().replace("<img src=\"UserFiles/", "<img src=\"http://172.16.2.111:8080/Activos/UserFiles/").replace("<a href=\"UserFiles/", "<a href=\"http://172.16.2.111:8080/Activos/UserFiles/") + "<br><b>Fecha dada de Baja:</b>" + obj_activos[23] + "<br><b>Justificación Dada de Baja: </b>" + obj_activos[24] + "</td>"
                             + "</tr>"
                             + "</table> ";
                 }
@@ -450,9 +470,14 @@ public class Email {
             propiedades.setProperty("mail.smtp.port", arrConf[2]);
             propiedades.setProperty("mail.smtp.auth", arrConf[3]);
             propiedades.setProperty("mail.smtp.user", arrConf[4]);
-            propiedades.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
+
+            propiedades.put("mail.smtp.ssl.protocols", "TLSv1.2");
+            propiedades.put("mail.smtp.connectiontimeout", "15000");
+            propiedades.put("mail.smtp.timeout", "15000");
+            propiedades.put("mail.smtp.writetimeout", "15000");
+
             propiedades.setProperty("mail.debug", "true");
-            Session session = Session.getDefaultInstance(propiedades);
+            Session session = Session.getInstance(propiedades);
             try {
                 MimeMessage message = new MimeMessage(session);
                 String[] destino = (obj_proceso[10] + ";" + obj_area[3]).split(";");
@@ -561,9 +586,14 @@ public class Email {
             propiedades.setProperty("mail.smtp.port", arrConf[2]);
             propiedades.setProperty("mail.smtp.auth", arrConf[3]);
             propiedades.setProperty("mail.smtp.user", arrConf[4]);
-            propiedades.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
+
+            propiedades.put("mail.smtp.ssl.protocols", "TLSv1.2");
+            propiedades.put("mail.smtp.connectiontimeout", "15000");
+            propiedades.put("mail.smtp.timeout", "15000");
+            propiedades.put("mail.smtp.writetimeout", "15000");
+
             propiedades.setProperty("mail.debug", "true");
-            Session session = Session.getDefaultInstance(propiedades);
+            Session session = Session.getInstance(propiedades);
             try {
                 MimeMessage message = new MimeMessage(session);
                 String[] destino = (obj_area[3] + ";").split(";");
@@ -594,7 +624,7 @@ public class Email {
                         + "<td valign='top' style='padding: 7px 15px 8px 15px;border: none;font-size: 12px;color: black;background-color:whitesmoke;'><b>Marca: </b>" + marca + "<br><Modelo:</b>" + modelo + "<br><b>Serie:</b>" + serie + "</td>"
                         + "<td valign='top' style='padding: 7px 15px 8px 15px;border: none;font-size: 12px;color: black;background-color:whitesmoke;'><b>Fabricante:</b>" + fabricante + "<br><b>Año Fabricación:</b>" + ano_fabricacion + "<br><b>Fecha Ingreso::</b>" + fecha_ingreso + "</td>"
                         + "<td valign='top' style='padding: 7px 15px 8px 15px;border: none;font-size: 12px;color: black;background-color:whitesmoke;'><b>Núm Orden Compra:</b>" + orden_compra + "<br><b>Num Factura:</b>" + num_factura + "<br><b>Fecha Compra:</b>" + fecha_compra + "<br><b>Valor:</b>" + costo + "</td>"
-                        + "<td valign='top' style='padding: 7px 15px 8px 15px;border: none;font-size: 12px;color: black;background-color:whitesmoke;'>" + descripcion.replace("<img src=\"UserFiles/", "<img src=\"http://172.16.2.111:8084/Activos/UserFiles/").replace("<a href=\"UserFiles/", "<a href=\"http://172.16.2.111:8084/Activos/UserFiles/") + "</td>"
+                        + "<td valign='top' style='padding: 7px 15px 8px 15px;border: none;font-size: 12px;color: black;background-color:whitesmoke;'>" + descripcion.replace("<img src=\"UserFiles/", "<img src=\"http://172.16.2.111:8080/Activos/UserFiles/").replace("<a href=\"UserFiles/", "<a href=\"http://172.16.2.111:8080/Activos/UserFiles/") + "</td>"
                         + "</tr>"
                         + "</table> "
                         + ""
@@ -658,9 +688,14 @@ public class Email {
                 propiedades.setProperty("mail.smtp.port", arrConf[2]);
                 propiedades.setProperty("mail.smtp.auth", arrConf[3]);
                 propiedades.setProperty("mail.smtp.user", arrConf[4]);
-                propiedades.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
+
+                propiedades.put("mail.smtp.ssl.protocols", "TLSv1.2");
+                propiedades.put("mail.smtp.connectiontimeout", "15000");
+                propiedades.put("mail.smtp.timeout", "15000");
+                propiedades.put("mail.smtp.writetimeout", "15000");
+
                 propiedades.setProperty("mail.debug", "true");
-                Session session = Session.getDefaultInstance(propiedades);
+                Session session = Session.getInstance(propiedades);
                 try {
                     MimeMessage message = new MimeMessage(session);
                     String[] destino = (obj_reqO[30].toString().split(";"));
@@ -806,9 +841,14 @@ public class Email {
             propiedades.setProperty("mail.smtp.port", arrConf[2]);
             propiedades.setProperty("mail.smtp.auth", arrConf[3]);
             propiedades.setProperty("mail.smtp.user", arrConf[4]);
-            propiedades.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
+
+            propiedades.put("mail.smtp.ssl.protocols", "TLSv1.2");
+            propiedades.put("mail.smtp.connectiontimeout", "15000");
+            propiedades.put("mail.smtp.timeout", "15000");
+            propiedades.put("mail.smtp.writetimeout", "15000");
+
             propiedades.setProperty("mail.debug", "true");
-            Session session = Session.getDefaultInstance(propiedades);
+            Session session = Session.getInstance(propiedades);
             try {
                 MimeMessage message = new MimeMessage(session);
                 String[] destino = (obj_reqD[47] + ";").split(";");
@@ -905,9 +945,14 @@ public class Email {
             propiedades.setProperty("mail.smtp.port", arrConf[2]);
             propiedades.setProperty("mail.smtp.auth", arrConf[3]);
             propiedades.setProperty("mail.smtp.user", arrConf[4]);
-            propiedades.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
+
+            propiedades.put("mail.smtp.ssl.protocols", "TLSv1.2");
+            propiedades.put("mail.smtp.connectiontimeout", "15000");
+            propiedades.put("mail.smtp.timeout", "15000");
+            propiedades.put("mail.smtp.writetimeout", "15000");
+
             propiedades.setProperty("mail.debug", "true");
-            Session session = Session.getDefaultInstance(propiedades);
+            Session session = Session.getInstance(propiedades);
             try {
                 MimeMessage message = new MimeMessage(session);
                 String[] destino = (obj_reqD[30] + ";").split(";");
@@ -1002,9 +1047,14 @@ public class Email {
                     propiedades.setProperty("mail.smtp.port", arrConf[2]);
                     propiedades.setProperty("mail.smtp.auth", arrConf[3]);
                     propiedades.setProperty("mail.smtp.user", arrConf[4]);
-                    propiedades.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
+
+                    propiedades.put("mail.smtp.ssl.protocols", "TLSv1.2");
+                    propiedades.put("mail.smtp.connectiontimeout", "15000");
+                    propiedades.put("mail.smtp.timeout", "15000");
+                    propiedades.put("mail.smtp.writetimeout", "15000");
+
                     propiedades.setProperty("mail.debug", "true");
-                    Session session = Session.getDefaultInstance(propiedades);
+                    Session session = Session.getInstance(propiedades);
                     Object[] obj_areas = (Object[]) lst_area.get(i);
                     lst_req_mail = jpa_requisicion.consultaCorreo(Integer.parseInt(obj_areas[0].toString()));
                     MimeMessage message = new MimeMessage(session);
@@ -1108,9 +1158,14 @@ public class Email {
             propiedades.setProperty("mail.smtp.port", arrConf[2]);
             propiedades.setProperty("mail.smtp.auth", arrConf[3]);
             propiedades.setProperty("mail.smtp.user", arrConf[4]);
-            propiedades.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
+
+            propiedades.put("mail.smtp.ssl.protocols", "TLSv1.2");
+            propiedades.put("mail.smtp.connectiontimeout", "15000");
+            propiedades.put("mail.smtp.timeout", "15000");
+            propiedades.put("mail.smtp.writetimeout", "15000");
+
             propiedades.setProperty("mail.debug", "true");
-            Session session = Session.getDefaultInstance(propiedades);
+            Session session = Session.getInstance(propiedades);
             try {
                 MimeMessage message = new MimeMessage(session);
                 Object[] obj_area = (Object[]) lst_area.get(0);
@@ -1206,9 +1261,14 @@ public class Email {
             propiedades.setProperty("mail.smtp.port", arrConf[2]);
             propiedades.setProperty("mail.smtp.auth", arrConf[3]);
             propiedades.setProperty("mail.smtp.user", arrConf[4]);
-            propiedades.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
+
+            propiedades.put("mail.smtp.ssl.protocols", "TLSv1.2");
+            propiedades.put("mail.smtp.connectiontimeout", "15000");
+            propiedades.put("mail.smtp.timeout", "15000");
+            propiedades.put("mail.smtp.writetimeout", "15000");
+
             propiedades.setProperty("mail.debug", "true");
-            Session session = Session.getDefaultInstance(propiedades);
+            Session session = Session.getInstance(propiedades);
             try {
                 MimeMessage message = new MimeMessage(session);
                 Object[] obj_area = (Object[]) lst_area.get(0);
@@ -1305,6 +1365,18 @@ public class Email {
                 transport.sendMessage(message, message.getAllRecipients());
                 transport.close();
             } catch (MessagingException e) {
+                e.printStackTrace();
+
+                Exception ex = e;
+                while (ex != null) {
+                    ex.printStackTrace();
+                    if (ex instanceof MessagingException) {
+                        ex = ((MessagingException) ex).getNextException();
+                    } else {
+                        ex = null;
+                    }
+                }
+
                 return false;
             }
         }
@@ -1328,7 +1400,13 @@ public class Email {
             propiedades.setProperty("mail.smtp.port", arrConf[2]);
             propiedades.setProperty("mail.smtp.auth", arrConf[3]);
             propiedades.setProperty("mail.smtp.user", arrConf[4]);
-            Session session = Session.getDefaultInstance(propiedades);
+
+            propiedades.put("mail.smtp.ssl.protocols", "TLSv1.2");
+            propiedades.put("mail.smtp.connectiontimeout", "15000");
+            propiedades.put("mail.smtp.timeout", "15000");
+            propiedades.put("mail.smtp.writetimeout", "15000");
+
+            Session session = Session.getInstance(propiedades);
             try {
                 MimeMessage message = new MimeMessage(session);
                 Object[] obj_area = (Object[]) lst_area.get(0);
@@ -1445,7 +1523,7 @@ public class Email {
                     propiedades.setProperty("mail.smtp.port", arrConf[2]);
                     propiedades.setProperty("mail.smtp.auth", arrConf[3]);
                     propiedades.setProperty("mail.smtp.user", arrConf[4]);
-                    Session session = Session.getDefaultInstance(propiedades);
+                    Session session = Session.getInstance(propiedades);
                     Object[] obj_areas = (Object[]) lst_area.get(i);
                     MimeMessage message = new MimeMessage(session);
                     String[] destino = (obj_areas[3] + ";").split(";");
@@ -1462,7 +1540,7 @@ public class Email {
                             + "<p style='font-family: Segoe UI; font-size: 14px; color:#880E4F;'>Buen día</p>"
                             + "<p style='font-family: Segoe UI; font-size: 14px;'></p>"
                             + "<p></b></p>";
-                    enlace = enlace + "http://172.16.2.111:8084/Activos/Reporte_requisicion.jsp";
+                    enlace = enlace + "http://172.16.2.111:8080/Activos/Reporte_requisicion.jsp";
                     MimeBodyPart htmlPart = new MimeBodyPart();
                     htmlContent = "<fieldset style='width: 90%;background-color: #fff;border:1px solid #880E4F;height: auto;'>"
                             + "<legend style='padding: 7px 15px 8px 15px;border: none;font-size: 13px;font-weight: bold;color: #FFF;background-color:#880E4F;'>ACTIVOS</legend>"
