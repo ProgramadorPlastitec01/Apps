@@ -16,7 +16,13 @@ public class Menu extends TagSupport {
         try {
             HttpSession sesion = pageContext.getSession();
             String Permission = "";
-            String NameUser = sesion.getAttribute("Nombres").toString();
+            String NameUser = "";
+            try {
+                Object objNombre = sesion.getAttribute("Nombres");
+                NameUser = objNombre != null ? objNombre.toString() : "";
+            } catch (Exception e) {
+                NameUser = "";
+            }
             int year = LocalDate.now().getYear();
             try {
                 Permission = sesion.getAttribute("Permisos").toString();

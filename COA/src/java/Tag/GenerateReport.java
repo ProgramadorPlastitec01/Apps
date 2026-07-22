@@ -52,71 +52,151 @@ public class GenerateReport extends TagSupport {
             }
             if (Permission.contains("[8]")) {
                 //<editor-fold defaultstate="collapsed" desc="CONSULT REPORT">
-                out.print("<div class='sweet-local' tabindex='-1' id='Ventana1' style='opacity: 1.03; display:none;'>");
+
+                out.print("<div class='sweet-local' tabindex='-1' id='Ventana1' style='opacity:1.03;display:none;'>");
                 out.print("<div class='contGeneral'>");
-                out.print("<div style='display: flex; justify-content: space-between'>");
-                out.print("<h2>Generar Reporte</h2>");
-                out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(1)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
+
+                /* ===================== CABECERA ===================== */
+                out.print("<div class='d-flex justify-content-between align-items-center mb-4'>");
+                out.print("<h2 class='mb-0'>Generar Reporte</h2>");
+                out.print("<button class='btn btn-outline-secondary btn-sm' onclick='mostrarConvencion(1)'>");
+                out.print("<i class='fas fa-times'></i>");
+                out.print("</button>");
                 out.print("</div>");
 
                 out.print("<div class='cont_form_user'>");
-                out.print("<form action='Generate?opt=2' method='post' class='needs-validation' novalidate='' onsubmit='return FormGenerate(this)'>");
+
+                out.print("<form action='Generate?opt=2' method='post' class='needs-validation' novalidate onsubmit='return FormGenerate(this)'>");
+
                 out.print("<input type='hidden' name='Type' value='" + Type + "'>");
 
-                out.print("<div class='d-flex justify-content-center'>");
+                /* ===================== FILA 1 ===================== */
+                out.print("<div class='row'>");
 
-                // Input de Orden
-                out.print("<div class='col-6' data-toggle='tooltip' data-placement='top' title='Orden'>");
-                out.print("<input type='number' class='form-control' name='Order' id='orderInput' min='0' placeholder='Orden/Pedido' required autocomplete='off'>");
-                out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un orden!</div>");
+                /* ORDEN */
+                out.print("<div class='col-md-12'>");
+                out.print("<label><b>Orden de Producción</b></label>");
+                out.print("<input type='number' "
+                        + "class='form-control' "
+                        + "name='Order' "
+                        + "id='orderInput' "
+                        + "min='0' "
+                        + "placeholder='Ingrese la Orden/Pedido' "
+                        + "autocomplete='off' required>");
+                out.print("<div class='invalid-feedback invalid_data'>");
+                out.print("<i class='fas fa-exclamation-circle'></i> Debe ingresar una orden.");
+                out.print("</div>");
                 out.print("</div>");
 
-                // Select de Producto
-                out.print("<div class='col-6 d-none' data-toggle='tooltip' data-placement='top' title='Producto' id='producto-section'>");
-                out.print("<select class='form-control' style='margin-top:12px' name='Product' id='resultadoProductos' required>");
-                out.print("<option value=''>-- Seleccione un producto --</option>");
+                out.print("</div>");
+
+                /* ===================== FILA 2 ===================== */
+                out.print("<div class='row'>");
+
+                /* PRODUCTO */
+                out.print("<div class='col-md-6 d-none' id='producto-section'>");
+                out.print("<label><b>Producto</b></label>");
+                out.print("<select class='form-control' name='Product' id='resultadoProductos' required>");
+                out.print("<option value=''>Seleccione un producto</option>");
                 out.print("</select>");
-                out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe seleccionar un producto!</div>");
+                out.print("<div class='invalid-feedback invalid_data'>");
+                out.print("<i class='fas fa-exclamation-circle'></i> Debe seleccionar un producto.");
+                out.print("</div>");
                 out.print("</div>");
 
-                out.print("</div>");
-
-                out.print("<div class='d-flex'>");
-
-                // Select de Lotes
-                out.print("<div class='col-6 mt-2 d-none' data-toggle='tooltip' title='Lote' id='lote-section'>");
+                /* LOTE */
+                out.print("<div class='col-md-6 d-none' id='lote-section'>");
+                out.print("<label><b>Lote</b></label>");
                 out.print("<select class='form-control' name='Batch' id='resultadoLotes' required>");
-                out.print("<option value=''>-- Seleccione un lote --</option>");
+                out.print("<option value=''>Seleccione un lote</option>");
                 out.print("</select>");
-                out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un lote!</div>");
+                out.print("<div class='invalid-feedback invalid_data'>");
+                out.print("<i class='fas fa-exclamation-circle'></i> Debe seleccionar un lote.");
+                out.print("</div>");
                 out.print("</div>");
 
-                out.print("<div class='col-6 d-none' data-toggle='tooltip' data-placement='top' title='Registro' id='registro-section'>");
-                out.print("<select class='form-control' style='margin-top:12px' name='FormatName' required>");
+                out.print("</div>");
+
+                /* ===================== FILA 3 ===================== */
+                out.print("<div class='row d-none' id='date-section'>");
+
+                /* FECHA INICIO */
+                out.print("<div class='col-md-6'>");
+                out.print("<label><b>Fecha Inicio</b></label>");
+                out.print("<input type='date' id='fechaInicio' class='form-control'>");
+                out.print("</div>");
+
+                /* FECHA FIN */
+                out.print("<div class='col-md-6'>");
+                out.print("<label><b>Fecha Fin</b></label>");
+                out.print("<input type='date' id='fechaFin' class='form-control'>");
+                out.print("</div>");
+
+                out.print("</div>");
+
+                /* ===================== FILA 4 ===================== */
+                out.print("<div class='row'>");
+
+                /* REGISTRO */
+                out.print("<div class='col-md-6 d-none' id='registro-section'>");
+                out.print("<label><b>Formato de Registro</b></label>");
+                out.print("<select class='form-control' name='FormatName' id='resultadoRegistro' required>");
+
                 lst_format = FormatJpa.ConsultFormatActive(Type);
+
+                out.print("<option value=''>Seleccione un registro</option>");
+
                 if (lst_format != null) {
-                    out.print("<option value=''>-- Seleccione un registro --</option>");
+
                     for (int i = 0; i < lst_format.size(); i++) {
+
                         Object[] ObjFormat = (Object[]) lst_format.get(i);
-                        out.print("<option value='" + ObjFormat[0] + "/" + ObjFormat[2] + "'>" + ObjFormat[2] + " - " + ObjFormat[4] + "</option>");
+
+                        out.print("<option value='" + ObjFormat[0] + "/" + ObjFormat[2] + "'>");
+                        out.print(ObjFormat[2] + " - " + ObjFormat[4]);
+                        out.print("</option>");
                     }
-                } else {
-                    out.print("<option value=''>-- Seleccione un registro --</option>");
                 }
+
                 out.print("</select>");
-                out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe seleccionar un producto!</div>");
+
+                out.print("<div class='invalid-feedback invalid_data'>");
+                out.print("<i class='fas fa-exclamation-circle'></i> Debe seleccionar un registro.");
                 out.print("</div>");
 
                 out.print("</div>");
-                out.print("<div class='text-center mt-2'>");
-                out.print("<button class='btn btn-green' id='btnGenerar' disabled >Generar</button>");
+
+                /* TOTAL REGISTROS */
+                out.print("<div class='col-md-6 d-none' id='countReg'>");
+
+                out.print("<label><b>Total de registros encontrados</b></label>");
+
+                out.print("<div class='rounded text-center'>");
+
+                out.print("<div id='DataReg' "
+                        + "style='font-size:32px;"
+                        + "font-weight:700;"
+                        + "color:#3abaf4;'>0</div>");
+                out.print("</div>");
+
+                out.print("</div>");
+
+                out.print("</div>");
+
+                /* ===================== BOTÓN ===================== */
+                out.print("<div class='text-center mt-4'>");
+                out.print("<button type='submit' class='btn btn-green btn-lg px-5' id='btnGenerar' disabled>");
+                out.print("<i class='fas fa-file-download mr-2'></i>");
+                out.print("Generar Reporte");
+                out.print("</button>");
                 out.print("</div>");
 
                 out.print("</form>");
-                out.print("</div>");
 
                 out.print("</div>");
                 out.print("</div>");
+                out.print("</div>");
+
                 //</editor-fold>
             }
             out.print("<section class=\"section\">");
