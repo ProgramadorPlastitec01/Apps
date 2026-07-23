@@ -322,7 +322,6 @@
                 });
             });
         </script>
-
         <script>
             function mostrarCarga(texto) {
                 document.getElementById("loading-text").innerText = texto;
@@ -503,7 +502,61 @@
                 });
             }
         </script>
+        <script>
+            function DuplicateReg(url) {
+                swal({
+                    title: "¿Está seguro de duplicar?",
+                    icon: "warning",
+                    buttons: {
+                        cancel: {
+                            text: "Cancelar",
+                            visible: true,
+                            className: "btn btn-secondary",
+                            closeModal: true
+                        },
+                        confirm: {
+                            text: "Aceptar",
+                            visible: true,
+                            className: "btn btn-success",
+                            closeModal: false
+                        }
+                    },
+                    dangerMode: true
 
+                }).then((value) => {
+
+                    // Si cancela
+                    if (!value)
+                        return;
+
+                    // Contenido de la alerta de carga
+                    const loading = document.createElement("div");
+                    loading.innerHTML = `
+            <div class="loader"></div>
+            <div class="loader-text">
+                <strong>Duplicando documento...</strong><br>
+                Estamos registrando la información.<br><br>
+                <small>Este proceso puede tardar algunos segundos.<br>Por favor, no cierre esta ventana.</small>
+            </div>
+        `;
+
+                    // Mostrar alerta de espera
+                    swal({
+                        title: "Espere un momento",
+                        content: loading,
+                        buttons: false,
+                        closeOnClickOutside: false,
+                        closeOnEsc: false
+                    });
+
+                    // Pequeña espera para que se vea la animación
+                    setTimeout(function () {
+                        window.location.href = url;
+                    }, 500);
+
+                });
+            }
+        </script>
         <script src="Interface/Content/Assets/modules/izitoast/js/iziToast.min.js"></script>
         <script src="Interface/Content/Assets/js/page/modules-toastr.js"></script>
         <script src="Interface/Content/Assets/modules/sweetalert/sweetalert.min.js"></script>

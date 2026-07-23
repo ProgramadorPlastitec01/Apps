@@ -329,6 +329,7 @@ public class GenerateReport extends TagSupport {
                     }
                     out.print("<td >");
                     out.print("<div class='d-flex'>");
+                    out.print("<button class='btn btn-info btn-sm mr-2' style='border-radius: 4px;' onclick=\"DuplicateReg('Generate?opt=10&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "')\" data-toggle='tooltip' data-placement='bottom' title='Duplicar'><i class=\"fas fa-copy\"></i></button>");
                     if (State == 1) {
                         if (Permission.contains("[28]")) {
                             out.print("<button class='btn btn-success btn-sm mr-2' style='border-radius: 4px;' onclick=\"confirmarFinalizar('Generate?opt=7&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "&Customer=" + ObjCerti[4] + "&Anio=" + ObjCerti[12] + "&Order=" + ObjCerti[5] + "&Batch=" + ObjCerti[7] + "')\" data-toggle='tooltip' data-placement='bottom' title='Finalizar'><i class=\"fas fa-check\"></i></button>");

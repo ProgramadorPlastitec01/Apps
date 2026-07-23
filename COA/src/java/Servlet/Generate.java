@@ -418,7 +418,7 @@ public class Generate extends HttpServlet {
                                 System.out.println("No se pudo crear la estructura de carpetas");
                             }
                         }
-                        MailConn.CertificateSend(NumberCertificate, UserName ,getServletContext());
+                        MailConn.CertificateSend(NumberCertificate, UserName, getServletContext());
                         request.setAttribute("FinishCertificate", true);
                     }
                     request.getRequestDispatcher("Generate?opt=1&Type=" + Type).forward(request, response);
@@ -445,6 +445,26 @@ public class Generate extends HttpServlet {
                     request.setAttribute("IdCertificates", IdCertificates);
                     request.getRequestDispatcher("CertifiedView.jsp").forward(request, response);
 
+                    //</editor-fold>
+                    break;
+                case 10:
+                    //<editor-fold defaultstate="collapsed" desc="DUPLICATE REG">
+                    try {
+                        Type = request.getParameter("Type");
+                    } catch (Exception e) {
+                        Type = "";
+                    }
+                    try {
+                        IdCertificates = Integer.parseInt(request.getParameter("IdCertificates"));
+                    } catch (Exception e) {
+                        IdCertificates = 0;
+                    }
+                    result = CertificatesJpa.DuplicateRegister(IdCertificates, UserName);
+                    if (result) {
+                        request.setAttribute("DuplicateCertificate", result);
+                    }
+                    request.setAttribute("Type", Type);
+                    request.getRequestDispatcher("GenerateReport.jsp").forward(request, response);
                     //</editor-fold>
                     break;
             }
