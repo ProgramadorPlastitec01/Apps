@@ -35,10 +35,10 @@ public class Generate extends HttpServlet {
             } catch (Exception e) {
                 Signature = "";
             }
-            int Order = 0, IdCertificates = 0, TempDelete = 0, TempM = 0, Temp = 0, StateCerti = 0, State = 0, StateM = 0, IdCertificate = 0, Anio = 0;
+            int Order = 0, IdCertificates = 0, TempDelete = 0, TempM = 0, Temp = 0, StateCerti = 0, State = 0, StateM = 0, IdCertificate = 0, Anio = 0, CountReg = 0;
             String Type = "", Product = "", Batch = "", Html = "", Code = "", Consecutive = "", Customer = "", IdCertiMasive = "", Category = "",
                     Justification = "", Record = "", FormatName = "", Message = "", Amount = "", DateDispatch = "", MaterialBatches = "", Client = "",
-                    NumberCertificate = "";
+                    NumberCertificate = "", DateI = "", DateF = "";
             boolean result = false;
             List lst_id = null;
             switch (opt) {
@@ -123,6 +123,21 @@ public class Generate extends HttpServlet {
                     } catch (Exception e) {
                         Client = "";
                     }
+                    try {
+                        DateI = request.getParameter("DateI");
+                    } catch (Exception e) {
+                        DateI = "";
+                    }
+                    try {
+                        DateF = request.getParameter("DateF");
+                    } catch (Exception e) {
+                        DateF = "";
+                    }
+                    try {
+                        CountReg = Integer.parseInt(request.getParameter("CountReg"));
+                    } catch (Exception e) {
+                        CountReg = 0;
+                    }
                     request.setAttribute("Type", Type);
                     request.setAttribute("Order", Order);
                     request.setAttribute("Product", Product);
@@ -134,6 +149,9 @@ public class Generate extends HttpServlet {
                     request.setAttribute("StateCerti", StateCerti);
                     request.setAttribute("TempM", TempM);
                     request.setAttribute("Client", Client);
+                    request.setAttribute("DateI", DateI);
+                    request.setAttribute("DateF", DateF);
+                    request.setAttribute("CountReg", CountReg);
                     request.getRequestDispatcher("Visual.jsp").forward(request, response);
                     //</editor-fold>
                     break;

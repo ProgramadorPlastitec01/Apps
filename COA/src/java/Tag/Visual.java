@@ -29,9 +29,9 @@ public class Visual extends TagSupport {
         SettingJpaController SettingJpa = new SettingJpaController();
         CertificatesJpaController CertificatesJpa = new CertificatesJpaController();
         ConnectionGeneracionLotes GeneracionLotesJpa = new ConnectionGeneracionLotes();
-        String Type = "", Product = "", ProductFact = "", Batch = "", DataTechnicalSheet = "", Html = "", BatchLay = "", Record = "", FormatName = "", Message = "", IdSig = "", Permission = "", Client = "";
+        String Type = "", Product = "", ProductFact = "", Batch = "", DataTechnicalSheet = "", Html = "", BatchLay = "", Record = "", FormatName = "", Message = "", IdSig = "", Permission = "", Client = "", DateI = "", DateF = "";
         String[] BatchCycle = {};
-        int Order = 0, IdForm = 0, Count = 1, Count2 = 1, IdCertificates = 0, State = 0, TempDelete = 0, StateCerti = 0, TempM = 0;
+        int Order = 0, IdForm = 0, Count = 1, Count2 = 1, IdCertificates = 0, State = 0, TempDelete = 0, StateCerti = 0, TempM = 0, CountReg = 0;
         List lst_content = null;
         List lst_headFact = null;
         List lst_RLab = null;
@@ -101,6 +101,21 @@ public class Visual extends TagSupport {
             } catch (Exception e) {
                 Permission = "";
             }
+            try {
+                DateI = sesion.getAttribute("DateI").toString();
+            } catch (Exception e) {
+                DateI = "";
+            }
+            try {
+                DateF = sesion.getAttribute("DateF").toString();
+            } catch (Exception e) {
+                DateF = "";
+            }
+            try {
+                CountReg = Integer.parseInt(Optional.ofNullable(pageContext.getRequest().getParameter("CountReg")).orElse("0"));
+            } catch (NumberFormatException e) {
+                CountReg = 0;
+            }
             if (Batch.contains("///")) {
                 BatchCycle = Batch.split("///");
                 Batch = BatchCycle[0];
@@ -118,6 +133,9 @@ public class Visual extends TagSupport {
                 //</editor-fold>
             }
             if (lst_content != null) {
+                out.print(" <div class=\"alert alert-info\"  style=\"display:block; margin-top:10px; background-color: #bae9ff; color: black\">\n"
+                        + "                   ✔️ Registros asociados: <b>"+CountReg+"</b> \n"
+                        + "                </div>");
                 Object[] Obj_Format = (Object[]) lst_content.get(0);
                 out.print("<div class='row'>");
                 out.print("<div class='col-12'>");
@@ -147,6 +165,7 @@ public class Visual extends TagSupport {
                 }
                 out.print("<h4>Generación Certificado</h4>");
                 out.print("</div>");
+
                 //<editor-fold defaultstate="collapsed" desc="BUTTOM'S">
                 if (StateCerti == 1) {
                     if (Permission.contains("[28]")) {

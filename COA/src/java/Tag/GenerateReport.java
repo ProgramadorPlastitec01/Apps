@@ -123,13 +123,13 @@ public class GenerateReport extends TagSupport {
                 /* FECHA INICIO */
                 out.print("<div class='col-md-6'>");
                 out.print("<label><b>Fecha Inicio</b></label>");
-                out.print("<input type='date' id='fechaInicio' class='form-control'>");
+                out.print("<input type='date' id='fechaInicio' name='DateI' class='form-control'>");
                 out.print("</div>");
 
                 /* FECHA FIN */
                 out.print("<div class='col-md-6'>");
                 out.print("<label><b>Fecha Fin</b></label>");
-                out.print("<input type='date' id='fechaFin' class='form-control'>");
+                out.print("<input type='date' id='fechaFin' name='DateF' class='form-control'>");
                 out.print("</div>");
 
                 out.print("</div>");
@@ -178,6 +178,8 @@ public class GenerateReport extends TagSupport {
                         + "font-weight:700;"
                         + "color:#3abaf4;'>0</div>");
                 out.print("</div>");
+                
+                out.print("<input type='hidden' id='CountReg' name='CountReg' value=''>");
 
                 out.print("</div>");
 
