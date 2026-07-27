@@ -879,9 +879,9 @@ public class Alert extends TagSupport {
                     out.print("</script>");
                 }
             }
-        //</editor-fold>
+            //</editor-fold>
             //<editor-fold defaultstate="collapsed" desc="NOVETLY">
-        if (pageContext.getRequest().getAttribute("RegisterNovetly") != null) {
+            if (pageContext.getRequest().getAttribute("RegisterNovetly") != null) {
                 boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("RegisterNovetly").toString());
                 if (result) {
                     out.print("<script type='text/javascript'>");
@@ -889,6 +889,56 @@ public class Alert extends TagSupport {
                             + "  iziToast.success({\n"
                             + "    title: 'Correcto',\n"
                             + "    message: 'Se ha registra evento correctamente.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                } else {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-4\").ready(function() {\n"
+                            + "  iziToast.error({\n"
+                            + "    title: 'Error',\n"
+                            + "    message: 'Ha ocurrido un problema en el registro.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                }
+            }
+            //</editor-fold>
+            //<editor-fold defaultstate="collapsed" desc="CUSTOMER">
+            if (pageContext.getRequest().getAttribute("RegisterCustomer") != null) {
+                boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("RegisterCustomer").toString());
+                if (result) {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-2\").ready(function() {\n"
+                            + "  iziToast.success({\n"
+                            + "    title: 'Correcto',\n"
+                            + "    message: 'Se registro el cliente correctamente.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                } else {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-4\").ready(function() {\n"
+                            + "  iziToast.error({\n"
+                            + "    title: 'Error',\n"
+                            + "    message: 'Ha ocurrido un problema en el registro.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                }
+            }
+            if (pageContext.getRequest().getAttribute("UpdateCustomer") != null) {
+                boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("UpdateCustomer").toString());
+                if (result) {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-2\").ready(function() {\n"
+                            + "  iziToast.success({\n"
+                            + "    title: 'Correcto',\n"
+                            + "    message: 'Se modificó el cliente correctamente.',\n"
                             + "    position: 'bottomRight'\n"
                             + "  });\n"
                             + "});");
