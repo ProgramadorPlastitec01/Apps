@@ -664,38 +664,38 @@
         }
     </script>
     <script>
+        function actualizarCampo(id, valor) {
+            const elemento = document.getElementById(id);
+            if (!elemento)
+                return;
+            elemento.textContent = valor || "";
+            elemento.classList.add("editable");
+            elemento.setAttribute("contenteditable", "true");
+            // Si manejas estados pendientes, puedes remover esa clase
+            elemento.classList.remove("pending");
+        }
         function seleccionarCliente(id) {
+
             try {
+
                 const cliente = window.lstCustomers.find(c => c.id == id);
 
-                console.log(cliente);
+                if (!cliente)
+                    return;
 
-                document.getElementById("clientValue").textContent = cliente.name;
-                console.log("✓ client");
-
-                document.getElementById("tAddress").textContent = cliente.address;
-                console.log("✓ address");
-
-                document.getElementById("tCity").textContent = cliente.city;
-                console.log("✓ city");
-
-                document.getElementById("tCountry").textContent = cliente.country;
-                console.log("✓ country");
-
-                document.getElementById("tCode").textContent = cliente.code || "";
-                console.log("✓ code");
+                actualizarCampo("clientValue", cliente.name);
+                actualizarCampo("tAddress", cliente.address);
+                actualizarCampo("tCity", cliente.city);
+                actualizarCampo("tCountry", cliente.country);
+                actualizarCampo("tCode", cliente.code || "");
 
                 swal.close();
-
-                console.log("✓ swal");
 
                 iziToast.success({
                     title: "Correcto",
                     message: "Cliente actualizado correctamente.",
                     position: "topRight"
                 });
-
-                console.log("✓ toast");
 
             } catch (e) {
                 console.error(e);
