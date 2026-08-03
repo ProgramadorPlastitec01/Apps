@@ -2,6 +2,7 @@
 <%@taglib uri="/WEB-INF/tlds/generate" prefix="Generate"%>
 <%@taglib uri="/WEB-INF/tlds/alert" prefix="Alert" %>
 
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -101,7 +102,7 @@
                                         "<div style='font-size:32px;font-weight:700;color:#3abaf4'>"
                                         + data.totalRegistros +
                                         "</div>";
-                                document.getElementById("CountReg").value = data.totalRegistros;
+                                document.getElementById("AmoutReg").value = data.totalRegistros;
 
                             })
                             .catch(err => {

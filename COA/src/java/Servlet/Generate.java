@@ -35,7 +35,7 @@ public class Generate extends HttpServlet {
             } catch (Exception e) {
                 Signature = "";
             }
-            int Order = 0, IdCertificates = 0, TempDelete = 0, TempM = 0, Temp = 0, StateCerti = 0, State = 0, StateM = 0, IdCertificate = 0, Anio = 0, CountReg = 0;
+            int Order = 0, IdCertificates = 0, TempDelete = 0, TempM = 0, Temp = 0, StateCerti = 0, State = 0, StateM = 0, IdCertificate = 0, Anio = 0, CountReg = 0, AmoutReg = 0;
             String Type = "", Product = "", Batch = "", Html = "", Code = "", Consecutive = "", Customer = "", IdCertiMasive = "", Category = "",
                     Justification = "", Record = "", FormatName = "", Message = "", Amount = "", DateDispatch = "", MaterialBatches = "", Client = "",
                     NumberCertificate = "", DateI = "", DateF = "";
@@ -138,6 +138,11 @@ public class Generate extends HttpServlet {
                     } catch (Exception e) {
                         CountReg = 0;
                     }
+                    try {
+                        AmoutReg = Integer.parseInt(request.getParameter("AmoutReg"));
+                    } catch (Exception e) {
+                        AmoutReg = 0;
+                    }
                     request.setAttribute("Type", Type);
                     request.setAttribute("Order", Order);
                     request.setAttribute("Product", Product);
@@ -152,6 +157,7 @@ public class Generate extends HttpServlet {
                     request.setAttribute("DateI", DateI);
                     request.setAttribute("DateF", DateF);
                     request.setAttribute("CountReg", CountReg);
+                    request.setAttribute("AmoutReg", AmoutReg);
                     request.getRequestDispatcher("Visual.jsp").forward(request, response);
                     //</editor-fold>
                     break;
@@ -231,7 +237,12 @@ public class Generate extends HttpServlet {
                         } catch (Exception e) {
                             FormatName = "";
                         }
-                        result = CertificatesJpa.CertificatesRegister(Type, Code, Order, Product, Batch, Consecutive, Customer, Amount, DateDispatch, RolName, MaterialBatches, Html);
+                        try {
+                            AmoutReg = Integer.parseInt(request.getParameter("AmoutReg"));
+                        } catch (Exception e) {
+                            AmoutReg = 0;
+                        }
+                        result = CertificatesJpa.CertificatesRegister(Type, Code, Order, Product, Batch, Consecutive, Customer, Amount, DateDispatch, RolName, MaterialBatches, AmoutReg, Html);
                         if (result) {
                             lst_id = CertificatesJpa.ConsultCertificatesIdType(Type);
                             if (lst_id != null) {
@@ -244,7 +255,7 @@ public class Generate extends HttpServlet {
                             }
                             request.setAttribute("RegisterCertificates", result);
                         }
-                        request.getRequestDispatcher("Generate?opt=2&Type=" + Type + "&Order=" + Order + "&Product=" + Product + "&Batch=" + Batch + "&FormatName=" + FormatName + "&IdCertificates=" + IdCertificates + "&StateCerti=1")
+                        request.getRequestDispatcher("Generate?opt=2&Type=" + Type + "&Order=" + Order + "&Product=" + Product + "&Batch=" + Batch + "&FormatName=" + FormatName + "&IdCertificates=" + IdCertificates + "&StateCerti=1&AmoutReg=" + AmoutReg )
                                 .forward(request, response);
                         //</editor-fold>
                     }

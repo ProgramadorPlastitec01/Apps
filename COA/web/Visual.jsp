@@ -1,7 +1,11 @@
 
+<%@page import="com.google.gson.Gson"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="/WEB-INF/tlds/visual"  prefix="Visual" %>
 <%@taglib uri="/WEB-INF/tlds/alert" prefix="Alert" %>
+<%@page import="Controller.CustomerJpaController"%>
+<%@page import="java.util.List"%>
+
 
 <!DOCTYPE html>
 <html>
@@ -59,31 +63,24 @@
             document.addEventListener('DOMContentLoaded', () => {
 
                 const isEmpty = t => !t || t.trim() === '' || t.trim() === '-' || t.trim() === '----';
-
                 const phoneTd = document.getElementById('TelefonoValue');
-
                 if (phoneTd) {
                     const phoneEditable = phoneTd.querySelector('.editable');
-
                     if (phoneEditable) {
 
                         const getText = () => phoneEditable.innerText.trim();
-
                         const updatePhoneState = () => {
                             if (isEmpty(getText())) {
-                                phoneTd.classList.add('pending');   // gris en TD
-                                phoneEditable.innerText = '';       // ✅ nunca mostrar ----
+                                phoneTd.classList.add('pending'); // gris en TD
+                                phoneEditable.innerText = ''; // ✅ nunca mostrar ----
                             } else {
                                 phoneTd.classList.remove('pending');
                             }
                         };
-
                         // Estado inicial
                         updatePhoneState();
-
                         // Mientras escribe
                         phoneEditable.addEventListener('input', updatePhoneState);
-
                         // Al salir
                         phoneEditable.addEventListener('blur', updatePhoneState);
                     }
@@ -94,9 +91,7 @@
                     // 🚫 excluir teléfono
                     if (el.closest('#TelefonoValue'))
                         return;
-
                     const getText = () => el.innerText.trim();
-
                     // Estado inicial
                     if (getText() === '' || getText() === '----') {
                         el.innerText = '----';
@@ -108,7 +103,6 @@
                         if (getText() === '----')
                             el.innerText = '';
                     });
-
                     // Blur
                     el.addEventListener('blur', () => {
                         if (getText() === '') {
@@ -118,7 +112,6 @@
                             el.classList.remove('pending');
                         }
                     });
-
                     // Mientras escribe
                     el.addEventListener('input', () => {
                         const t = getText();
@@ -126,9 +119,7 @@
                             el.classList.remove('pending');
                         }
                     });
-
                 });
-
             });
         </script>
 
@@ -144,7 +135,6 @@
                         });
                     }
                 });
-
                 // ✅ Quitar borde rojo cuando se seleccione fecha
                 const dateInput = document.querySelector('#DateDispatch input');
                 if (dateInput) {
@@ -169,7 +159,6 @@
                 }
 
                 var htmlContainer = document.getElementById('HtmlContent');
-
                 // Sincronizar inputs
                 if (htmlContainer) {
                     htmlContainer.querySelectorAll('input').forEach(input => {
@@ -186,24 +175,19 @@
                 // HTML actualizado
                 var contentHtml = htmlContainer ? htmlContainer.innerHTML : "";
                 var encodedHtml = encodeURIComponent(contentHtml);
-
                 // ===== CAPTURA =====
                 var clientSpan = document.getElementById('clientValue');
                         var clientText = clientSpan?.textContent.trim() || '';
-
                 var amountSpan = document.getElementById('AmountValue');
                         var amountRaw = amountSpan?.textContent.trim() || '';
                 var amountClean = amountRaw.replace(/[^\d]/g, '');
                 var amountNumber = Number(amountClean);
-
                 var dateInput = document.querySelector('#DateDispatch input');
                         var dateValue = dateInput?.value || '';
                 ;
-
-                var consText = document.getElementById('consValue')?.textContent.trim() || '';
+                        var consText = document.getElementById('consValue')?.textContent.trim() || '';
                         var idRegisterText = document.getElementById('IdRegister')?.textContent.trim() || '';
                         var Code = document.getElementById('codeValue')?.textContent.trim() || '';
-
                 // ===== VALIDACIONES =====
                 if (clientText === '' || clientText === '-----') {
                     showWarning(clientSpan, 'Debe ingresar el Cliente.');
@@ -228,12 +212,9 @@
                     input.value = value;
                     form.appendChild(input);
                 };
-
-
                 // Limpiar hidden inputs previos
 
                 let batchValues = [];
-
                 if (htmlContainer) {
                     htmlContainer.querySelectorAll('[id^="IdBatchM"]').forEach(td => {
                         const value = td.textContent.trim();
@@ -245,22 +226,18 @@
 
                 // UNIFICAR (eliminar duplicados sin alertar)
                 const uniqueBatches = [...new Set(batchValues)];
-
                 addHidden('Html', encodedHtml);
                 addHidden('clientValue', clientText);
                 addHidden('AmountValue', amountNumber);
                 addHidden('DateDispatch', dateValue);
                 addHidden('MaterialBatches', uniqueBatches.join(','));
                 addHidden('MaterialBatchCount', uniqueBatches.length);
-
-
                 if (consText)
                     addHidden('ConsValue', consText);
                 if (idRegisterText)
                     addHidden('IdRegisterValue', idRegisterText);
                 if (Code)
                     addHidden('codeValue', Code);
-
                 // ===== SUBMIT =====
                 form.submit();
             }
@@ -274,7 +251,6 @@
                     position: 'bottomRight',
                     timeout: 4000
                 });
-
                 if (element) {
                     element.focus();
                     element.style.border = '2px solid red';
@@ -288,14 +264,11 @@
                 const canvas = document.getElementById('signature-canvas');
                 const ctx = canvas.getContext('2d');
                 const input = document.getElementById('coordenadas-hidden');
-
                 if (!input || !input.value)
                     return;
-
                 // 1) Leer y decodificar entidades html
                 let raw = input.value;
                 raw = raw.replace(/&quot;/g, '"').replace(/&#39;/g, "'").trim();
-
                 // Función auxiliar para intentar parsear y devolver resultado o null
                 function tryParse(s) {
                     try {
@@ -352,16 +325,13 @@
                 }
 
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-
                 // ⚙️ ---- ESCALADO AUTOMÁTICO Y CENTRADO ---- ⚙️
                 const maxX = Math.max(...coordenadas.map(c => Math.max(c.lx, c.mx)));
                 const maxY = Math.max(...coordenadas.map(c => Math.max(c.ly, c.my)));
                 const minX = Math.min(...coordenadas.map(c => Math.min(c.lx, c.mx)));
                 const minY = Math.min(...coordenadas.map(c => Math.min(c.ly, c.my)));
-
                 const originalWidth = maxX - minX;
                 const originalHeight = maxY - minY;
-
                 const scaleX = canvas.width / originalWidth;
                 const scaleY = canvas.height / originalHeight;
                 const scale = Math.min(scaleX, scaleY); // mantiene proporción
@@ -369,13 +339,10 @@
                 // Calcular offset para centrar
                 const offsetX = (canvas.width - originalWidth * scale) / 2 - minX * scale;
                 const offsetY = (canvas.height - originalHeight * scale) / 2 - minY * scale;
-
                 console.log(`Escala aplicada: ${scale.toFixed(2)} | Offset: (${offsetX.toFixed(1)}, ${offsetY.toFixed(1)})`);
-
                 // ---- DIBUJAR CON ESCALA Y CENTRADO ----
                 ctx.strokeStyle = 'black';
                 ctx.lineWidth = 1.5;
-
                 coordenadas.forEach(coord => {
                     if (coord && typeof coord.lx === 'number' && typeof coord.ly === 'number'
                             && typeof coord.mx === 'number' && typeof coord.my === 'number') {
@@ -386,7 +353,6 @@
                         ctx.stroke();
                     }
                 });
-
                 console.log("Dibujo completado. Puntos dibujados:", coordenadas.length);
             }
 
@@ -418,10 +384,8 @@
             const container = document.getElementById(htmlContainerId);
             if (!container)
                 return;
-
             const modalBody = document.getElementById('htmlModalBody');
             modalBody.innerHTML = container.innerHTML;
-
             // 🔹 Ajuste dinámico del tamaño según el contenido
             const modalDialog = modalBody.closest('.modal-dialog');
             modalDialog.style.width = 'auto';
@@ -430,7 +394,6 @@
 
             const modal = new bootstrap.Modal(document.getElementById('htmlModal'));
             modal.show();
-
             // 🔹 Ajusta automáticamente el alto si el contenido es pequeño
             setTimeout(() => {
                 const contentHeight = modalBody.scrollHeight;
@@ -453,7 +416,6 @@
                 const modalEl = document.getElementById('htmlModal');
                 if (!modalEl)
                     return;
-
                 // Asegurar una instancia de bootstrap.Modal
                 let modalInstance = null;
                 try {
@@ -484,7 +446,6 @@
                     btn.addEventListener('click', handler);
                     btn._closeHandler = handler;
                 });
-
                 // Si cierras el modal por fuera (backdrop o ESC), asegúrate de que la instancia existe
                 // (opcional) manejar ESC manualmente si quieres:
                 document.addEventListener('keydown', function (ev) {
@@ -536,9 +497,7 @@
 
                 if (!value)
                     return;
-
                 const razon = document.getElementById("razonDevolucion").value.trim();
-
                 if (!razon) {
                     swal({
                         title: "Justificación requerida",
@@ -558,7 +517,6 @@
                 <small>Este proceso puede tardar algunos segundos.<br>Por favor, no cierre esta ventana.</small>
             </div>
         `;
-
                 // Mostrar alerta de espera
                 swal({
                     title: "Espere un momento",
@@ -567,18 +525,184 @@
                     closeOnClickOutside: false,
                     closeOnEsc: false
                 });
-
                 // Dar tiempo para que el usuario vea la animación antes de redirigir
                 setTimeout(function () {
                     window.location.href = url + "&Justification=" + encodeURIComponent(razon);
                 }, 500);
-
             });
-
         }
 
     </script>
 
+    <%
+        CustomerJpaController customerJpa = new CustomerJpaController();
+        List lstCustomer = customerJpa.ConsultCustomer();
+
+        Gson gson = new Gson();
+        String jsonCustomer = gson.toJson(lstCustomer);
+    %>
+
+    <script>
+
+        window.lstCustomers = <%=jsonCustomer%>;
+        window.lstCustomers = window.lstCustomers.map(c => ({
+                id: c[0],
+                name: c[1],
+                address: c[2],
+                city: c[3],
+                country: c[4],
+                code: c[5]
+            }));
+
+    </script>
+
+    <script>
+        function UpdateCustomer() {
+
+            let html = `
+        <div class="mb-2">
+            <input type="text"
+                   id="buscarCliente"
+                   class="form-control"
+                   placeholder="🔍 Buscar cliente..."
+                   onkeyup="filtrarClientes()">
+        </div>
+
+        <div style="max-height:420px; overflow-y:auto; border:1px solid #dee2e6; border-radius:6px;" >
+
+        <table class="table table-bordered table-hover table-sm mb-0" id="tablaClientes" style="font-size: 13px;color: black;text-align: left;">
+
+            <thead style="position:sticky; top:0; background:#dccbfe; color:black; z-index:10;">
+
+                <tr>
+                    <th style="width:28%">Cliente</th>
+                    <th style="width:30%">Dirección</th>
+                    <th style="width:12%">Ciudad</th>
+                    <th style="width:12%">País</th>
+                    <th style="width:8%">Código</th>
+                    <th style="width:10% text-align: center;">Opc</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+    `;
+
+            window.lstCustomers.forEach(c => {
+
+                html += "<tr>";
+
+                html += "<td>" + c.name + "</td>";
+                html += "<td>" + c.address + "</td>";
+                html += "<td>" + c.city + "</td>";
+                html += "<td>" + c.country + "</td>";
+                html += "<td>" + (c.code || "-") + "</td>";
+
+                html += "<td style='text-align:center'>";
+                html += "<button class='btn btn-success btn-sm' onclick='seleccionarCliente(" + c.id + ")'>";
+                html += "<i class='fas fa-check'></i>";
+                html += "</button>";
+                html += "</td>";
+
+                html += "</tr>";
+
+            });
+
+            html += `
+            </tbody>
+
+        </table>
+
+        </div>
+    `;
+
+            swal({
+
+                title: "Seleccionar Cliente",
+
+                content: {
+                    element: "div",
+                    attributes: {
+                        innerHTML: html
+                    }
+                },
+
+                button: "Cerrar"
+
+            });
+
+            setTimeout(function () {
+
+                const modal = document.querySelector(".swal-modal");
+
+                modal.style.width = "878px";
+                modal.style.maxWidth = "878px";
+                modal.style.borderRadius = "10px";
+                modal.style.height = "height: 677px;";
+
+                document.querySelector(".swal-content").style.padding = "10px 20px";
+
+            }, 50);
+
+        }
+    </script>
+    <script>
+        function filtrarClientes() {
+
+            let filtro = document.getElementById("buscarCliente").value.toUpperCase();
+
+            let filas = document.querySelectorAll("#tablaClientes tbody tr");
+
+            filas.forEach(fila => {
+
+                let texto = fila.innerText.toUpperCase();
+
+                fila.style.display = texto.indexOf(filtro) > -1 ? "" : "none";
+
+            });
+
+        }
+    </script>
+    <script>
+        function seleccionarCliente(id) {
+            try {
+                const cliente = window.lstCustomers.find(c => c.id == id);
+
+                console.log(cliente);
+
+                document.getElementById("clientValue").textContent = cliente.name;
+                console.log("✓ client");
+
+                document.getElementById("tAddress").textContent = cliente.address;
+                console.log("✓ address");
+
+                document.getElementById("tCity").textContent = cliente.city;
+                console.log("✓ city");
+
+                document.getElementById("tCountry").textContent = cliente.country;
+                console.log("✓ country");
+
+                document.getElementById("tCode").textContent = cliente.code || "";
+                console.log("✓ code");
+
+                swal.close();
+
+                console.log("✓ swal");
+
+                iziToast.success({
+                    title: "Correcto",
+                    message: "Cliente actualizado correctamente.",
+                    position: "topRight"
+                });
+
+                console.log("✓ toast");
+
+            } catch (e) {
+                console.error(e);
+            }
+
+        }
+    </script>
     <script src="Interface/Content/Assets/js/eventLogger.js"></script>
     <script src="Interface/Content/Assets/js/Print.js"></script>
     <script src="Interface/Content/Assets/js/html2canvas.min.js"></script>
