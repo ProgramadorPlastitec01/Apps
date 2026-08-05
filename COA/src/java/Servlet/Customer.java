@@ -21,7 +21,7 @@ public class Customer extends HttpServlet {
             String name_user = sesion.getAttribute("Nombres").toString();
             int opt = Integer.parseInt(request.getParameter("opt"));
             int id_customer = 0, state = 0;
-            String name = "", address = "", city = "", country = "", code = "";
+            String name = "", address = "", city = "", country = "";
             boolean result = false;
             switch (opt) {
                 case 1:
@@ -44,13 +44,25 @@ public class Customer extends HttpServlet {
                     address = request.getParameter("address");
                     city = request.getParameter("city");
                     country = request.getParameter("country");
-                    code = request.getParameter("code");
                     if (id_customer > 0) {
-                        result = CustomerJpa.CustomerUpdate(id_customer, name, address, city, country, code, name_user);
+                        result = CustomerJpa.CustomerUpdate(id_customer, name, address, city, country, name_user);
                         request.setAttribute("UpdateCustomer", result);
                     } else {
-                        result = CustomerJpa.CustomerRegister(name, address, city, country, code, name_user);
+                        result = CustomerJpa.CustomerRegister(name, address, city, country, name_user);
                         request.setAttribute("RegisterCustomer", result);
+                    }
+                    request.getRequestDispatcher("Customer?opt=1&id_customer=0").forward(request, response);
+                    break;
+                case 3:
+                    try {
+                        id_customer = Integer.parseInt(request.getParameter("id_customer"));
+                    } catch (NumberFormatException e) {
+                        id_customer = 0;
+                    }
+                    state = Integer.parseInt(request.getParameter("state"));
+                    result = CustomerJpa.CustomerUpdateState(id_customer, state);
+                    if (result) {
+                        request.setAttribute("UpdateCustomerState", result);
                     }
                     request.getRequestDispatcher("Customer?opt=1&id_customer=0").forward(request, response);
                     break;

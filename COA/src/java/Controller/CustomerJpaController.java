@@ -55,11 +55,11 @@ public class CustomerJpaController {
         }
     }
 
-    public boolean CustomerRegister(String nmb, String ads, String cty, String cut, String cde, String urg) {
+    public boolean CustomerRegister(String nmb, String ads, String cty, String cut, String urg) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
-            Query q = em.createNativeQuery("CALL `Sp_ctm_r_RegisterCustomer`('" + nmb + "','" + ads + "','" + cty + "','" + cut + "','" + cde + "','" + urg + "')");
+            Query q = em.createNativeQuery("CALL `Sp_ctm_r_RegisterCustomer`('" + nmb + "','" + ads + "','" + cty + "','" + cut + "','" + urg + "')");
             int resultado = q.executeUpdate();
             em.getTransaction().commit();
             em.clear();
@@ -74,11 +74,29 @@ public class CustomerJpaController {
         }
     }
 
-    public boolean CustomerUpdate(int IdC, String nmb, String ads, String cty, String cut, String cde, String urg) {
+    public boolean CustomerUpdate(int IdC, String nmb, String ads, String cty, String cut, String urg) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
-            Query q = em.createNativeQuery("CALL `Sp_ctm_u_UpdateCustomer`('" + IdC + "','" + nmb + "','" + ads + "','" + cty + "','" + cut + "','" + cde + "','" + urg + "')");
+            Query q = em.createNativeQuery("CALL `Sp_ctm_u_UpdateCustomer`('" + IdC + "','" + nmb + "','" + ads + "','" + cty + "','" + cut + "','" + urg + "')");
+            int resultado = q.executeUpdate();
+            em.getTransaction().commit();
+            em.clear();
+            em.close();
+            if (resultado == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    public boolean CustomerUpdateState(int IdC, int ste) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        try {
+            Query q = em.createNativeQuery("CALL `Sp_ctm_u_UpdateStateCustomer`('" + IdC + "','" + ste + "')");
             int resultado = q.executeUpdate();
             em.getTransaction().commit();
             em.clear();

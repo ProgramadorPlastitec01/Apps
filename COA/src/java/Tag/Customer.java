@@ -51,7 +51,6 @@ public class Customer extends TagSupport {
                     Object[] ObjUpdate = (Object[]) lst_consultaUpdate.get(0);
                     out.print("<form action='Customer?opt=2&id_customer=" + ObjUpdate[0] + "' method='post' onsubmit='return cargarDatosForm(this)'>");
                     out.print("<div class='d-flex'>");
-                    out.print("<input type='number' class='form-control' name='code' id='' placeholder='Codigo' data-toggle='tooltip' data-placement='top' title='Codigo' value='" + ((ObjUpdate[5] == null) ? "0" : ObjUpdate[5]) + "'>");
                     out.print("<input type='text' class='form-control' name='name' id='' placeholder='Nombre' data-toggle='tooltip' data-placement='top' title='Nombre' value='" + ObjUpdate[1] + "'>");
                     out.print("</div>");
                     out.print("<div class='d-flex'>");
@@ -92,7 +91,6 @@ public class Customer extends TagSupport {
             out.print("<div class='cont_form_user'>");
             out.print("<form action='Customer?opt=2&id_customer=0' method='post' onsubmit='return cargarDatosForm(this)'>");
             out.print("<div class='d-flex'>");
-            out.print("<input type='number' class='form-control' name='code' id='' placeholder='Codigo' data-toggle='tooltip' data-placement='top' title='Codigo' value=''>");
             out.print("<input type='text' class='form-control' name='name' id='' placeholder='Nombre' data-toggle='tooltip' data-placement='top' title='Nombre' value=''>");
             out.print("</div>");
             out.print("<div class='d-flex'>");
@@ -134,7 +132,6 @@ public class Customer extends TagSupport {
             out.print("<th>Dirección</th>");
             out.print("<th>Ciudad</th>");
             out.print("<th>País</th>");
-            out.print("<th>Código</th>");
             out.print("<th>Estado</th>");
             out.print("<th>OPC</th>");
             out.print("</tr>");
@@ -149,8 +146,7 @@ public class Customer extends TagSupport {
                     out.print("<td>" + ObjCustomer[2] + "</td>");
                     out.print("<td>" + ObjCustomer[3] + "</td>");
                     out.print("<td>" + ObjCustomer[4] + "</td>");
-                    out.print("<td>" + ((ObjCustomer[5] == null) ? "Sin código asignado" : ObjCustomer[5]) + "</td>");
-                    int state = Integer.parseInt(ObjCustomer[6].toString());
+                    int state = Integer.parseInt(ObjCustomer[5].toString());
                     out.print("<td><div class='badge badge-" + ((state == 1) ? "success'>Activo" : "danger'>Inactivo") + "</div></td>");
                     out.print("<td class='text-center'>");
                     out.print("<div class='d-flex justify-content-around'>");

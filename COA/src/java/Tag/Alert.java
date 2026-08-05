@@ -955,6 +955,30 @@ public class Alert extends TagSupport {
                     out.print("</script>");
                 }
             }
+            if (pageContext.getRequest().getAttribute("UpdateCustomerState") != null) {
+                boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("UpdateCustomerState").toString());
+                if (result) {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-2\").ready(function() {\n"
+                            + "  iziToast.success({\n"
+                            + "    title: 'Correcto',\n"
+                            + "    message: 'Se actualizo el estado correctamente.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                } else {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-4\").ready(function() {\n"
+                            + "  iziToast.error({\n"
+                            + "    title: 'Error',\n"
+                            + "    message: 'Ha ocurrido un problema en el registro.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                }
+            }
             //</editor-fold>
         } catch (IOException ex) {
             Logger.getLogger(Alert.class.getName()).log(Level.SEVERE, null, ex);
