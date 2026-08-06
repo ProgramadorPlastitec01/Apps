@@ -339,9 +339,9 @@ public class Visual extends TagSupport {
                         String[] ArgTags = Util.parseResult(lst_tags.get(1));
                         if (ArgTags[5].contains("-")) {
                             String[] DateExpiración = ArgTags[5].split("-");
-                            Html = Html.replace("XYearMANX", DateExpiración[0]);
-                            Html = Html.replace("XMonthMANX", DateExpiración[1]);
-                            Html = Html.replace("XDayMANX", DateExpiración[2]);
+                            Html = Html.replace("XYearMANX", "<span  class='editable' contenteditable='true'>" + DateExpiración[0]  + "</span>");
+                            Html = Html.replace("XMonthMANX","<span  class='editable' contenteditable='true'>" + DateExpiración[1]  + "</span>");
+                            Html = Html.replace("XDayMANX", "<span  class='editable' contenteditable='true'>" + DateExpiración[2]  + "</span>");
                         } else {
                             Html = Html.replace("XYearMANX", "<span  class='editable pending' contenteditable='true'>----</span>");
                             Html = Html.replace("XMonthMANX", "<span  class='editable pending' contenteditable='true'>----</span>");
@@ -349,9 +349,9 @@ public class Visual extends TagSupport {
                         }
                         if (ArgTags[6].contains("-")) {
                             String[] DateExpiración = ArgTags[6].split("-");
-                            Html = Html.replace("XYearEXPX", DateExpiración[0]);
-                            Html = Html.replace("XMonthEXPX", DateExpiración[1]);
-                            Html = Html.replace("XDayEXPX", DateExpiración[2]);
+                            Html = Html.replace("XYearEXPX", "<span  class='editable' contenteditable='true'>" + DateExpiración[0] + "</span>");
+                            Html = Html.replace("XMonthEXPX", "<span  class='editable' contenteditable='true'>" + DateExpiración[1] + "</span>");
+                            Html = Html.replace("XDayEXPX", "<span  class='editable' contenteditable='true'>" + DateExpiración[2] + "</span>");
                         } else {
                             Html = Html.replace("XYearEXPX", "<span  class='editable pending' contenteditable='true'>----</span>");
                             Html = Html.replace("XMonthEXPX", "<span  class='editable pending' contenteditable='true'>----</span>");
