@@ -91,6 +91,11 @@ public class Menu extends TagSupport {
                 out.print("<a href='Customer?opt=1' class=\"nav-link\" onclick='cargarDatos()'><i class=\"fas fa-users\"></i><span>Cliente</span></a>");
                 out.print("</li>");
             }
+            if (Permission.contains("[35]")) {
+                out.print("<li class=\"dropdown\">");
+                out.print("<a href='Code?opt=1' class=\"nav-link\" onclick='cargarDatos()'><i class=\"fas fa-list-ol\"></i><span>Código</span></a>");
+                out.print("</li>");
+            }
             // ===================== BatchRecord =====================
             out.print("<li class=\"menu-header\">Batch Record</li>");
 
