@@ -37,10 +37,14 @@ public class Control_correo {
                 propiedades.setProperty("mail.smtp.port", arrConf[2]);
                 propiedades.setProperty("mail.smtp.auth", arrConf[3]);
                 propiedades.setProperty("mail.smtp.user", arrConf[4]);
+                propiedades.put("mail.smtp.ssl.protocols", "TLSv1.2");
+                propiedades.put("mail.smtp.connectiontimeout", "15000");
+                propiedades.put("mail.smtp.timeout", "15000");
+                propiedades.put("mail.smtp.writetimeout", "15000");
                 Session session = Session.getDefaultInstance(propiedades);
                 try {
                     MimeMessage message = new MimeMessage(session);
-                    String[] destino = {"c.navarro@plastitec-sa.com", "a.ti@plastitec-sa.com", "p.ti@plastitec-sa.com"};
+                    String[] destino = {"c.navarro@plastitec-sa.com", "a.mttoinsumos@plastitec.co", "p.ti@plastitec-sa.com"};
                     InternetAddress[] addresto = new InternetAddress[destino.length];
                     for (int i = 0; i < destino.length; i++) {
                         addresto[i] = new InternetAddress(destino[i]);
@@ -113,19 +117,19 @@ public class Control_correo {
                     htmlContent = htmlContent + "<h3>Coordialmente</h3>";
                     htmlContent = htmlContent + "<h3 style='color: #016279; font-weight: normal;'>Programa de mantenimiento preventivo PLASTITEC</h3>";
                     htmlPart.setContent(htmlContent, "text/html; charset=UTF-8");
+
+                    // Crear el cuerpo completo
                     MimeMultipart multipart = new MimeMultipart("related");
                     multipart.addBodyPart(htmlPart);
+
                     message.setContent(multipart);
+
+                    // Enviar
                     Transport transport = session.getTransport("smtp");
-                    try {
-                        transport.connect(arrConf[4], arrConf[5]);
-                    } catch (Exception e) {
-                    }
-                    try {
-                        transport.sendMessage(message, message.getAllRecipients());
-                    } finally {
-                        transport.close();
-                    }
+                    transport.connect(arrConf[0], arrConf[4], arrConf[5]);
+                    transport.sendMessage(message, message.getAllRecipients());
+                    transport.close();
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -151,10 +155,14 @@ public class Control_correo {
                 propiedades.setProperty("mail.smtp.port", arrConf[2]);
                 propiedades.setProperty("mail.smtp.auth", arrConf[3]);
                 propiedades.setProperty("mail.smtp.user", arrConf[4]);
+                propiedades.put("mail.smtp.ssl.protocols", "TLSv1.2");
+                propiedades.put("mail.smtp.connectiontimeout", "15000");
+                propiedades.put("mail.smtp.timeout", "15000");
+                propiedades.put("mail.smtp.writetimeout", "15000");
                 Session session = Session.getDefaultInstance(propiedades);
                 try {
                     MimeMessage message = new MimeMessage(session);
-                    String[] destino = {"c.navarro@plastitec-sa.com", "a.ti@plastitec-sa.com", "p.ti@plastitec-sa.com"};
+                    String[] destino = {"c.navarro@plastitec-sa.com", "a.mttoinsumos@plastitec.co", "p.ti@plastitec-sa.com"};
                     InternetAddress[] addresto = new InternetAddress[destino.length];
                     for (int i = 0; i < destino.length; i++) {
                         addresto[i] = new InternetAddress(destino[i]);
@@ -168,19 +176,17 @@ public class Control_correo {
                     htmlContent = htmlContent + "<br />Coordialmente</h3>";
                     htmlContent = htmlContent + "<h3 style='color: #016279; font-weight: normal;'>Programa de mantenimiento preventivo PLASTITEC</h3>";
                     htmlPart.setContent(htmlContent, "text/html; charset=UTF-8");
+                    // Crear el cuerpo completo
                     MimeMultipart multipart = new MimeMultipart("related");
                     multipart.addBodyPart(htmlPart);
+
                     message.setContent(multipart);
+
+                    // Enviar
                     Transport transport = session.getTransport("smtp");
-                    try {
-                        transport.connect(arrConf[4], arrConf[5]);
-                    } catch (Exception e) {
-                    }
-                    try {
-                        transport.sendMessage(message, message.getAllRecipients());
-                    } finally {
-                        transport.close();
-                    }
+                    transport.connect(arrConf[0], arrConf[4], arrConf[5]);
+                    transport.sendMessage(message, message.getAllRecipients());
+                    transport.close();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -205,10 +211,14 @@ public class Control_correo {
                 propiedades.setProperty("mail.smtp.port", arrConf[2]);
                 propiedades.setProperty("mail.smtp.auth", arrConf[3]);
                 propiedades.setProperty("mail.smtp.user", arrConf[4]);
+                propiedades.put("mail.smtp.ssl.protocols", "TLSv1.2");
+                propiedades.put("mail.smtp.connectiontimeout", "15000");
+                propiedades.put("mail.smtp.timeout", "15000");
+                propiedades.put("mail.smtp.writetimeout", "15000");
                 Session session = Session.getDefaultInstance(propiedades);
                 try {
                     MimeMessage message = new MimeMessage(session);
-                    String[] destino = {"c.navarro@plastitec-sa.com", "a.ti@plastitec-sa.com", "p.ti@plastitec-sa.com"};
+                    String[] destino = {"c.navarro@plastitec-sa.com", "a.mttoinsumos@plastitec.co", "p.ti@plastitec-sa.com"};
                     InternetAddress[] addresto = new InternetAddress[destino.length];
                     for (int i = 0; i < destino.length; i++) {
                         addresto[i] = new InternetAddress(destino[i]);
@@ -221,22 +231,20 @@ public class Control_correo {
                     htmlContent = htmlContent + "<h3 style='color: #292929; font-weight: normal;'>Se ha programado la orden de trabajo # " + obj_orden[1] + " para el equipo " + obj_orden[3] + "";
                     htmlContent = htmlContent + "<h3 style='color: #016279; font-weight: normal;'>Responsables</h3>";
                     htmlContent = htmlContent + "<h3 style='color: #292929; font-weight: normal;'>Quien programo :" + obj_orden[6] + "<br /> Quien ejecuta :" + obj_orden[8] + "<br />Quien revisa :" + obj_orden[10] + "";
-                    htmlContent = htmlContent + "<br /><br />Coordialmente</h3>";
+                    htmlContent = htmlContent + "<br /><br />Cordialmente</h3>";
                     htmlContent = htmlContent + "<h3 style='color: #016279; font-weight: normal;'>Programa de mantenimiento preventivo PLASTITEC</h3>";
                     htmlPart.setContent(htmlContent, "text/html; charset=UTF-8");
+                    // Crear el cuerpo completo
                     MimeMultipart multipart = new MimeMultipart("related");
                     multipart.addBodyPart(htmlPart);
+
                     message.setContent(multipart);
+
+                    // Enviar
                     Transport transport = session.getTransport("smtp");
-                    try {
-                        transport.connect(arrConf[4], arrConf[5]);
-                    } catch (Exception e) {
-                    }
-                    try {
-                        transport.sendMessage(message, message.getAllRecipients());
-                    } finally {
-                        transport.close();
-                    }
+                    transport.connect(arrConf[0], arrConf[4], arrConf[5]);
+                    transport.sendMessage(message, message.getAllRecipients());
+                    transport.close();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -261,10 +269,14 @@ public class Control_correo {
                 propiedades.setProperty("mail.smtp.port", arrConf[2]);
                 propiedades.setProperty("mail.smtp.auth", arrConf[3]);
                 propiedades.setProperty("mail.smtp.user", arrConf[4]);
+                propiedades.put("mail.smtp.ssl.protocols", "TLSv1.2");
+                propiedades.put("mail.smtp.connectiontimeout", "15000");
+                propiedades.put("mail.smtp.timeout", "15000");
+                propiedades.put("mail.smtp.writetimeout", "15000");
                 Session session = Session.getDefaultInstance(propiedades);
                 try {
                     MimeMessage message = new MimeMessage(session);
-                    String[] destino = {"c.navarro@plastitec-sa.com", "a.ti@plastitec-sa.com", "p.ti@plastitec-sa.com"};
+                    String[] destino = {"c.navarro@plastitec-sa.com", "a.mttoinsumos@plastitec.co", "p.ti@plastitec-sa.com"};
                     InternetAddress[] addresto = new InternetAddress[destino.length];
                     for (int i = 0; i < destino.length; i++) {
                         addresto[i] = new InternetAddress(destino[i]);
@@ -279,22 +291,20 @@ public class Control_correo {
                     htmlContent = htmlContent + "<h3 style='color: #292929; font-weight: normal;'>" + jtf + "</h3>";
                     htmlContent = htmlContent + "<h3 style='color: #016279; font-weight: normal;'>Responsables</h3>";
                     htmlContent = htmlContent + "<h3 style='color: #292929; font-weight: normal;'>Quien devuelve :" + user + "<br /> Quien ejecuta :" + obj_orden[8] + "<br />Quien revisa :" + obj_orden[10] + "";
-                    htmlContent = htmlContent + "<br /><br />Coordialmente</h3>";
+                    htmlContent = htmlContent + "<br /><br />Cordialmente</h3>";
                     htmlContent = htmlContent + "<h3 style='color: #016279; font-weight: normal;'>Programa de mantenimiento preventivo PLASTITEC</h3>";
                     htmlPart.setContent(htmlContent, "text/html; charset=UTF-8");
+                    // Crear el cuerpo completo
                     MimeMultipart multipart = new MimeMultipart("related");
                     multipart.addBodyPart(htmlPart);
+
                     message.setContent(multipart);
+
+                    // Enviar
                     Transport transport = session.getTransport("smtp");
-                    try {
-                        transport.connect(arrConf[4], arrConf[5]);
-                    } catch (Exception e) {
-                    }
-                    try {
-                        transport.sendMessage(message, message.getAllRecipients());
-                    } finally {
-                        transport.close();
-                    }
+                    transport.connect(arrConf[0], arrConf[4], arrConf[5]);
+                    transport.sendMessage(message, message.getAllRecipients());
+                    transport.close();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -319,10 +329,14 @@ public class Control_correo {
                 propiedades.setProperty("mail.smtp.port", arrConf[2]);
                 propiedades.setProperty("mail.smtp.auth", arrConf[3]);
                 propiedades.setProperty("mail.smtp.user", arrConf[4]);
+                propiedades.put("mail.smtp.ssl.protocols", "TLSv1.2");
+                propiedades.put("mail.smtp.connectiontimeout", "15000");
+                propiedades.put("mail.smtp.timeout", "15000");
+                propiedades.put("mail.smtp.writetimeout", "15000");
                 Session session = Session.getDefaultInstance(propiedades);
                 try {
                     MimeMessage message = new MimeMessage(session);
-                    String[] destino = {"c.navarro@plastitec-sa.com", "a.ti@plastitec-sa.com", "p.ti@plastitec-sa.com"};
+                    String[] destino = {"c.navarro@plastitec-sa.com", "a.mttoinsumos@plastitec.co", "p.ti@plastitec-sa.com"};
                     InternetAddress[] addresto = new InternetAddress[destino.length];
                     for (int i = 0; i < destino.length; i++) {
                         addresto[i] = new InternetAddress(destino[i]);
@@ -335,22 +349,20 @@ public class Control_correo {
                     htmlContent = htmlContent + "<h3 style='color: #292929; font-weight: normal;'>Se ha devuelto a etapa de programación la orden de trabajo # " + obj_orden[1] + " del equipo " + obj_orden[3] + ".";
                     htmlContent = htmlContent + "<h3 style='color: #016279; font-weight: normal;'>Responsables</h3>";
                     htmlContent = htmlContent + "<h3 style='color: #292929; font-weight: normal;'>Quien devuelve :" + user + "<br />Quien programa :" + obj_orden[6] + "<br />Quien ejecuta :" + obj_orden[8] + "<br />Quien revisa :" + obj_orden[10] + "";
-                    htmlContent = htmlContent + "<br /><br />Coordialmente</h3>";
+                    htmlContent = htmlContent + "<br /><br />Cordialmente</h3>";
                     htmlContent = htmlContent + "<h3 style='color: #016279; font-weight: normal;'>Programa de mantenimiento preventivo PLASTITEC</h3>";
                     htmlPart.setContent(htmlContent, "text/html; charset=UTF-8");
+                    // Crear el cuerpo completo
                     MimeMultipart multipart = new MimeMultipart("related");
                     multipart.addBodyPart(htmlPart);
+
                     message.setContent(multipart);
+
+                    // Enviar
                     Transport transport = session.getTransport("smtp");
-                    try {
-                        transport.connect(arrConf[4], arrConf[5]);
-                    } catch (Exception e) {
-                    }
-                    try {
-                        transport.sendMessage(message, message.getAllRecipients());
-                    } finally {
-                        transport.close();
-                    }
+                    transport.connect(arrConf[0], arrConf[4], arrConf[5]);
+                    transport.sendMessage(message, message.getAllRecipients());
+                    transport.close();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -364,7 +376,7 @@ public class Control_correo {
         lst_conf = Configuracion.ConsultaConfCorreo();
         if (lst_conf != null) {
             String[] ArrMail = lst_conf.toString().split("///");
-            String[] arrConf = ArrMail[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+            String[] arrConf = ArrMail[2].replace("][", "///").replace("[", "").replace("]", "").split("///");
             try {
                 Properties propiedades = new Properties();
                 propiedades.setProperty("mail.smtp.host", arrConf[0]);
@@ -372,10 +384,14 @@ public class Control_correo {
                 propiedades.setProperty("mail.smtp.port", arrConf[2]);
                 propiedades.setProperty("mail.smtp.auth", arrConf[3]);
                 propiedades.setProperty("mail.smtp.user", arrConf[4]);
+                propiedades.put("mail.smtp.ssl.protocols", "TLSv1.2");
+                propiedades.put("mail.smtp.connectiontimeout", "15000");
+                propiedades.put("mail.smtp.timeout", "15000");
+                propiedades.put("mail.smtp.writetimeout", "15000");
                 Session session = Session.getDefaultInstance(propiedades);
                 try {
                     MimeMessage message = new MimeMessage(session);
-                    String[] destino = {"c.navarro@plastitec-sa.com", "a.ti@plastitec-sa.com", "p.ti@plastitec-sa.com"};
+                    String[] destino = {"c.navarro@plastitec-sa.com", "a.mttoinsumos@plastitec.co", "p.ti@plastitec-sa.com"};
                     InternetAddress[] addresto = new InternetAddress[destino.length];
                     for (int i = 0; i < destino.length; i++) {
                         addresto[i] = new InternetAddress(destino[i]);
@@ -386,22 +402,20 @@ public class Control_correo {
                     MimeBodyPart htmlPart = new MimeBodyPart();
                     String htmlContent = "<h3 style='color: #016279; font-weight: normal;'>Buen día</h3>";
                     htmlContent = htmlContent + "<h3 style='color: #292929; font-weight: normal;'>No se han actualizado horometros en los equipos desde el dia " + ult + ". favor programar y diligenciar en el registro R-MTI-151, se espera que para el dia " + fin + " se ejecute la actualización si no se presentan Paradas de equipo, festivos u otras novedades justificadas por el lider del proceso.";
-                    htmlContent = htmlContent + "<br /><br />Coordialmente</h3>";
+                    htmlContent = htmlContent + "<br /><br />Cordialmente</h3>";
                     htmlContent = htmlContent + "<h3 style='color: #016279; font-weight: normal;'>Programa de mantenimiento preventivo PLASTITEC</h3>";
                     htmlPart.setContent(htmlContent, "text/html; charset=UTF-8");
+                    // Crear el cuerpo completo
                     MimeMultipart multipart = new MimeMultipart("related");
                     multipart.addBodyPart(htmlPart);
+
                     message.setContent(multipart);
+
+                    // Enviar
                     Transport transport = session.getTransport("smtp");
-                    try {
-                        transport.connect(arrConf[4], arrConf[5]);
-                    } catch (Exception e) {
-                    }
-                    try {
-                        transport.sendMessage(message, message.getAllRecipients());
-                    } finally {
-                        transport.close();
-                    }
+                    transport.connect(arrConf[0], arrConf[4], arrConf[5]);
+                    transport.sendMessage(message, message.getAllRecipients());
+                    transport.close();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -423,12 +437,17 @@ public class Control_correo {
                 propiedades.setProperty("mail.smtp.host", arrConf[0]);
                 propiedades.setProperty("mail.smtp.starttls.enable", arrConf[1]);
                 propiedades.setProperty("mail.smtp.port", arrConf[2]);
-                propiedades.setProperty("mail.smtp.auth", arrConf[3]);
+                propiedades.setProperty("mail.smtp.auth", "true");
                 propiedades.setProperty("mail.smtp.user", arrConf[4]);
+                propiedades.setProperty("mail.debug", "true");
+                propiedades.put("mail.smtp.ssl.protocols", "TLSv1.2");
+                propiedades.put("mail.smtp.connectiontimeout", "15000");
+                propiedades.put("mail.smtp.timeout", "15000");
+                propiedades.put("mail.smtp.writetimeout", "15000");
                 Session session = Session.getDefaultInstance(propiedades);
                 try {
                     MimeMessage message = new MimeMessage(session);
-                    String[] destino = {"c.navarro@plastitec-sa.com", "a.ti@plastitec-sa.com", "p.ti@plastitec-sa.com"};
+                    String[] destino = {"c.navarro@plastitec-sa.com", "a.mttoinsumos@plastitec.co", "p.ti@plastitec-sa.com"};
                     InternetAddress[] addresto = new InternetAddress[destino.length];
                     for (int i = 0; i < destino.length; i++) {
                         addresto[i] = new InternetAddress(destino[i]);
@@ -459,26 +478,30 @@ public class Control_correo {
                         }
                     }
                     htmlContent = htmlContent + "</table>";
-                    htmlContent = htmlContent + "<br /><br />Coordialmente</h3>";
+                    htmlContent = htmlContent + "<br /><br />Cordialmente</h3>";
                     htmlContent = htmlContent + "<h3 style='color: #016279; font-weight: normal;'>Programa de mantenimiento preventivo PLASTITEC</h3>";
                     htmlPart.setContent(htmlContent, "text/html; charset=UTF-8");
+                    // Crear el cuerpo completo
                     MimeMultipart multipart = new MimeMultipart("related");
                     multipart.addBodyPart(htmlPart);
+
                     message.setContent(multipart);
+
+                    // Enviar
                     Transport transport = session.getTransport("smtp");
-                    try {
-                        transport.connect(arrConf[4], arrConf[5]);
-                    } catch (Exception e) {
-                    }
-                    try {
-                        transport.sendMessage(message, message.getAllRecipients());
-                    } finally {
-                        transport.close();
-                    }
+                    transport.connect(arrConf[0], arrConf[4], arrConf[5]);
+                    transport.sendMessage(message, message.getAllRecipients());
+                    transport.close();
                 } catch (Exception e) {
+                    System.err.println(
+                            "ERROR EN Recordatorio_OT_emitidas_sin_ejecucion()"
+                    );
                     e.printStackTrace();
                 }
             } catch (Exception e) {
+                System.err.println(
+                        "ERROR EN Recordatorio_OT_emitidas_sin_ejecucion()"
+                );
                 e.printStackTrace();
             }
         }
