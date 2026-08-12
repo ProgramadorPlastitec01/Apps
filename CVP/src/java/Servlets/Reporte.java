@@ -85,7 +85,7 @@ public class Reporte extends HttpServlet {
                             }
                         }
                     }
-                    response.sendRedirect("http:////172.16.2.117:8084//Aplicativos_Plastitec//Automatic_servlets.jsp");
+                    response.sendRedirect("http://172.16.2.117:8080/Aplicativos_Plastitec/Automatic_servlets.jsp");
                     break;
                 case 6:
                     try {
@@ -109,10 +109,10 @@ public class Reporte extends HttpServlet {
                             request.setAttribute("Alerta", "Informe_vigente");
                             request.getRequestDispatcher("Calificacion?opc=5&icl=" + id_calificacion + "&iif=0").forward(request, response);
                         } else {
-                            response.sendRedirect("http:////172.16.2.117:8084//Aplicativos_Plastitec//Automatic_servlets.jsp");
+                            response.sendRedirect("http://172.16.2.117:8080/Aplicativos_Plastitec/Automatic_servlets.jsp");
                         }
                     } catch (Exception e) {
-                        response.sendRedirect("http:////172.16.2.117:8084//Aplicativos_Plastitec//Automatic_servlets.jsp");
+                        response.sendRedirect("http://172.16.2.117:8080/Aplicativos_Plastitec/Automatic_servlets.jsp");
                     }
                     break;
 //                case 2:
