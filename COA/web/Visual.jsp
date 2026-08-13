@@ -1,4 +1,5 @@
 
+<%@page import="Controller.CodeJpaController"%>
 <%@page import="com.google.gson.Gson"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="/WEB-INF/tlds/visual"  prefix="Visual" %>
@@ -122,7 +123,6 @@
                 });
             });
         </script>
-
         <script>
             document.addEventListener('DOMContentLoaded', function () {
 
@@ -257,8 +257,6 @@
                 }
             }
         </script>
-
-
         <script>
             function dibujarCoordenadas() {
                 const canvas = document.getElementById('signature-canvas');
@@ -377,7 +375,7 @@
                     </div>
                 </div>
             </div>
-        </div>>
+        </div>
     </div>
     <script>
         function showHtmlAttachmentById(htmlContainerId) {
@@ -533,7 +531,6 @@
         }
 
     </script>
-
     <%
         CustomerJpaController customerJpa = new CustomerJpaController();
         List lstCustomer = customerJpa.ConsultCustomer();
@@ -541,7 +538,6 @@
         Gson gson = new Gson();
         String jsonCustomer = gson.toJson(lstCustomer);
     %>
-
     <script>
 
         window.lstCustomers = <%=jsonCustomer%>;
@@ -550,12 +546,10 @@
                 name: c[1],
                 address: c[2],
                 city: c[3],
-                country: c[4],
-                code: c[5]
+                country: c[4]
             }));
 
     </script>
-
     <script>
         function UpdateCustomer() {
 
@@ -579,7 +573,6 @@
                     <th style="width:30%">Dirección</th>
                     <th style="width:12%">Ciudad</th>
                     <th style="width:12%">País</th>
-                    <th style="width:8%">Código</th>
                     <th style="width:10% text-align: center;">Opc</th>
                 </tr>
 
@@ -596,7 +589,6 @@
                 html += "<td>" + c.address + "</td>";
                 html += "<td>" + c.city + "</td>";
                 html += "<td>" + c.country + "</td>";
-                html += "<td>" + (c.code || "-") + "</td>";
 
                 html += "<td style='text-align:center'>";
                 html += "<button class='btn btn-success btn-sm' onclick='seleccionarCliente(" + c.id + ")'>";
@@ -687,7 +679,6 @@
                 actualizarCampo("tAddress", cliente.address);
                 actualizarCampo("tCity", cliente.city);
                 actualizarCampo("tCountry", cliente.country);
-                actualizarCampo("tCode", cliente.code || "");
 
                 swal.close();
 
@@ -703,6 +694,477 @@
 
         }
     </script>
+    <%
+        // ============================================================
+        // CONSULTAR CÓDIGOS
+        // ============================================================
+
+        CodeJpaController codeJpa = new CodeJpaController();
+        List lstCode = codeJpa.ConsultCode();
+
+        Gson gsonCode = new Gson();
+        String jsonCode = gsonCode.toJson(lstCode);
+    %>
+    <script>
+
+        // ============================================================
+        // CARGAR CÓDIGOS
+        // ============================================================
+
+        window.lstCodes = <%=jsonCode%>;
+
+        window.lstCodes = window.lstCodes.map(c => ({
+                id: c[0],
+                code: c[1],
+                client: c[2]
+            }));
+
+        console.log("Códigos:", window.lstCodes);
+
+    </script>
+    <script>
+
+        // ============================================================
+        // ABRIR MODAL
+        // ============================================================
+
+        function UpdateCustomerCode() {
+
+            let html = `
+
+                <div class="mb-2">
+
+                    <input
+                        type="text"
+                        id="buscarCodigo"
+                        class="form-control"
+                        placeholder="🔍 Buscar cliente o código..."
+                        onkeyup="filtrarCodigos()"
+                    >
+
+                </div>
+
+
+                <div
+                    style="
+                        max-height:420px;
+                        overflow-y:auto;
+                        border:1px solid #dee2e6;
+                        border-radius:6px;
+                    "
+                >
+
+                    <table
+                        class="table table-bordered table-hover table-sm mb-0"
+                        id="tablaCodigos"
+                        style="
+                            font-size:13px;
+                            color:black;
+                            text-align:left;
+                        "
+                    >
+
+                        <thead
+                            style="
+                                position:sticky;
+                                top:0;
+                                background:#dccbfe;
+                                color:black;
+                                z-index:10;
+                            "
+                        >
+
+                            <tr>
+
+                                <th style="width:45%">
+                                    Cliente
+                                </th>
+
+                                <th style="width:35%">
+                                    Código
+                                </th>
+
+                                <th
+                                    style="
+                                        width:20%;
+                                        text-align:center;
+                                    "
+                                >
+                                    Opc
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+            `;
+
+
+            // ========================================================
+            // RECORRER DATOS
+            // ========================================================
+
+            window.lstCodes.forEach(c => {
+
+                html += "<tr>";
+
+                html += "<td>";
+                html += c.client || "";
+                html += "</td>";
+
+                html += "<td>";
+                html += c.code || "";
+                html += "</td>";
+
+                // ====================================================
+                // BOTÓN OPC
+                // ====================================================
+
+                html += "<td style='text-align:center'>";
+
+                html +=
+                        "<button " +
+                        "type='button' " +
+                        "class='btn btn-success btn-sm btnCodigo' " +
+                        "data-id='" + c.id + "' " +
+                        "title='Seleccionar código'>" +
+                        "<i class='fas fa-check'></i>" +
+                        "</button>";
+
+                html += "</td>";
+
+                html += "</tr>";
+
+            });
+
+
+            html += `
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            `;
+
+
+            // ========================================================
+            // MOSTRAR SWAL
+            // ========================================================
+
+            swal({
+
+                title: "Seleccionar Código",
+
+                content: {
+
+                    element: "div",
+
+                    attributes: {
+
+                        innerHTML: html
+
+                    }
+
+                },
+
+                button: "Cerrar"
+
+            });
+
+
+            // ========================================================
+            // CONFIGURAR MODAL
+            // ========================================================
+
+            setTimeout(function () {
+
+                const modal =
+                        document.querySelector(".swal-modal");
+
+
+                if (modal) {
+
+                    modal.style.width = "750px";
+                    modal.style.maxWidth = "750px";
+                    modal.style.borderRadius = "10px";
+
+                }
+
+
+                const content =
+                        document.querySelector(".swal-content");
+
+
+                if (content) {
+
+                    content.style.padding =
+                            "10px 20px";
+
+                }
+
+
+                // ====================================================
+                // EVENTO DE LOS BOTONES
+                // ====================================================
+
+                const botones =
+                        document.querySelectorAll(
+                                ".btnCodigo"
+                                );
+
+
+                botones.forEach(function (boton) {
+
+                    boton.addEventListener(
+                            "click",
+                            function () {
+
+                                const id =
+                                        this.getAttribute(
+                                                "data-id"
+                                                );
+
+
+                                console.log(
+                                        "ID seleccionado:",
+                                        id
+                                        );
+
+
+                                seleccionarCodigo(id);
+
+                            }
+                    );
+
+                });
+
+            }, 100);
+
+        }
+
+    </script>
+    <script>
+
+        // ============================================================
+        // FILTRAR
+        // ============================================================
+
+        function filtrarCodigos() {
+
+            const input =
+                    document.getElementById(
+                            "buscarCodigo"
+                            );
+
+
+            if (!input)
+                return;
+
+
+            const filtro =
+                    input.value.toUpperCase();
+
+
+            const filas =
+                    document.querySelectorAll(
+                            "#tablaCodigos tbody tr"
+                            );
+
+
+            filas.forEach(function (fila) {
+
+                const texto =
+                        fila.innerText.toUpperCase();
+
+
+                fila.style.display =
+                        texto.indexOf(filtro) > -1
+                        ? ""
+                        : "none";
+
+            });
+
+        }
+
+    </script>
+    <script>
+
+        // ============================================================
+        // SELECCIONAR CLIENTE + CÓDIGO
+        // ============================================================
+
+        function seleccionarCodigo(id) {
+
+            try {
+
+                console.log(
+                        "ID recibido:",
+                        id
+                        );
+
+
+                // ====================================================
+                // BUSCAR REGISTRO
+                // ====================================================
+
+                const registro =
+                        window.lstCodes.find(function (c) {
+
+                            return String(c.id) === String(id);
+
+                        });
+
+
+                if (!registro) {
+
+                    console.error(
+                            "No se encontró el registro:",
+                            id
+                            );
+
+                    return;
+
+                }
+
+
+                console.log(
+                        "Registro seleccionado:",
+                        registro
+                        );
+
+
+                // ====================================================
+                // ACTUALIZAR CLIENTE
+                // ====================================================
+
+                const elementoCliente =
+                        document.getElementById(
+                                "clientValue"
+                                );
+
+
+                if (!elementoCliente) {
+
+                    console.error(
+                            "No se encontró el elemento #clientValue"
+                            );
+
+                    return;
+
+                }
+
+
+                elementoCliente.textContent =
+                        registro.client || "";
+
+
+                elementoCliente.classList.add(
+                        "editable"
+                        );
+
+
+                elementoCliente.setAttribute(
+                        "contenteditable",
+                        "true"
+                        );
+
+
+                elementoCliente.classList.remove(
+                        "pending"
+                        );
+
+
+                console.log(
+                        "Cliente actualizado:",
+                        registro.client
+                        );
+
+
+                // ====================================================
+                // ACTUALIZAR CÓDIGO
+                // ====================================================
+
+                const elementoCodigo =
+                        document.getElementById(
+                                "tCode"
+                                );
+
+
+                if (!elementoCodigo) {
+
+                    console.error(
+                            "No se encontró el elemento #tCode"
+                            );
+
+                    return;
+
+                }
+
+
+                elementoCodigo.textContent =
+                        registro.code || "";
+
+
+                elementoCodigo.classList.add(
+                        "editable"
+                        );
+
+
+                elementoCodigo.setAttribute(
+                        "contenteditable",
+                        "true"
+                        );
+
+
+                elementoCodigo.classList.remove(
+                        "pending"
+                        );
+
+
+                console.log(
+                        "Código actualizado:",
+                        registro.code
+                        );
+
+
+                // ====================================================
+                // CERRAR MODAL
+                // ====================================================
+
+                swal.close();
+
+
+                // ====================================================
+                // MOSTRAR ALERTA
+                // ====================================================
+
+                iziToast.success({
+
+                    title: "Correcto",
+
+                    message:
+                            "Cliente y código actualizados correctamente.",
+
+                    position: "topRight"
+
+                });
+
+
+            } catch (e) {
+
+                console.error(
+                        "Error al seleccionar cliente y código:",
+                        e
+                        );
+
+            }
+
+        }
+
+    </script> 
     <script src="Interface/Content/Assets/js/eventLogger.js"></script>
     <script src="Interface/Content/Assets/js/Print.js"></script>
     <script src="Interface/Content/Assets/js/html2canvas.min.js"></script>

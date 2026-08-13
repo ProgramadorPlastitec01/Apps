@@ -239,6 +239,14 @@ public class Visual extends TagSupport {
                 if (IdCertificates == 0) {
                     out.print("<div class='d-flex'>");
                     out.print("<div>"
+                            + "<button class='btn btn-outline-warning btn-sm' "
+                            + "style='border-radius: 4px; padding: 2px 9px;' "
+                            + "onclick=\"UpdateCustomerCode();cargarDatos()\""
+                            + " data-toggle='tooltip' "
+                            + "data-placement='top' title='Código'>"
+                            + "<i class=\"fas fa-list-ol\"></i>"
+                            + "</button></div>");
+                    out.print("<div class='ml-4' >"
                             + "<button class='btn btn-outline-info btn-sm' "
                             + "style='border-radius: 4px; padding: 2px 9px;' "
                             + "onclick=\"UpdateCustomer();cargarDatos()\""
