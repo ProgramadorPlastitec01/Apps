@@ -2342,7 +2342,6 @@ public class Tag_roll extends TagSupport {
                                 out.print("<td align='center' style='background:#e5e5e570;' colspan='" + ((txtPermisos.contains("[41]") || txtPermisos.contains("[40]")) ? "17" : "16") + "'><b class='txtPend' onclick='RolloReplace(" + id_roll + ")' data-toggle='tooltip' data-placement='top' title='Registrar datos'> Pendiente ingresar datos del rollo! <i class='fas fa-exclamation-triangle'></i> </b></td>");
                             } else {
                                 if ((nroRll % 2) == 0) {
-
                                     //<editor-fold defaultstate="collapsed" desc="EXTRUSIÓN">
                                     if (Userrol.equals("OPERARIO EXTRUSION") || Userrol.equals("OPERARIO EXTRUSION 1") || Userrol.equals("COORDINADOR EXTRUSION")) {
                                         est = Integer.parseInt(obj_roll[20].toString());

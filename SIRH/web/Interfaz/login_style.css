@@ -1,6 +1,6 @@
 .popUpData{
     position: absolute; 
-    background: #cacaca91; 
+    background: #6e6d6dc9; 
     width: 100%; 
     height: 100%; 
     z-index: 2; 
@@ -8,10 +8,10 @@
 
 
 .windData{
-    width: 50%;
+    width: 38%;
     margin: auto;
     background: white;
     border-radius: 6px;
     padding: 25px;
-    margin-top: 10%;
+    margin-top: 15%;
 }

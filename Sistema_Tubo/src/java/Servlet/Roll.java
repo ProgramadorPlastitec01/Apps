@@ -19,8 +19,7 @@ public class Roll extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=ISO-8859-1");
-        PrintWriter out = response.getWriter();
+        response.setContentType("text/html;charset=UTF-8");
         HttpSession sesion = request.getSession();
         String UserName = sesion.getAttribute("Nombres").toString();
         String UserRol = sesion.getAttribute("idRol").toString();

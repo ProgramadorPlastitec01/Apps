@@ -92,6 +92,11 @@ public class Capacitacion extends HttpServlet {
             } catch (Exception e) {
                 docCapt = 0;
             }
+
+            if (docCapt == 0) {
+                request.setAttribute("Alerta", "EConsultarCapacitador");
+                request.getRequestDispatcher("index.jsp").forward(request, response);
+            }
             switch (opc) {
                 //<editor-fold defaultstate="collapsed" desc="CAPACITACION"> 
                 case 1:

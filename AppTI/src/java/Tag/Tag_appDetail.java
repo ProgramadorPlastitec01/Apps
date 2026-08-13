@@ -1136,7 +1136,7 @@ public class Tag_appDetail extends TagSupport {
                         String idDetMasive = "";
                         for (int i = 0; i < lst_appDetail.size(); i++) {
                             Object[] masvDe = (Object[]) lst_appDetail.get(i);
-                            idDetMasive += "["+ masvDe[0].toString() +"]";
+                            idDetMasive += "" + masvDe[0].toString() + "";
                         }
                         out.print("<button class='btn btn-yellow' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Continuar' onclick='window.location.href=\"AppDetail?opt=9&idApp=" + idApp + "&idDetail=" + idDetMasive + "&mod=2&swpt=1&idHead=" + idHead + "&step=" + step + "&xtemp=1\";cargarDatos()'><i class=\"fas fa-share\"></i></button>");
                     }
@@ -1354,12 +1354,21 @@ public class Tag_appDetail extends TagSupport {
                     //<editor-fold defaultstate="collapsed" desc="ANNEXES">
                     if (lst_appDetail != null) {
                         Object[] ObjDe = (Object[]) lst_appDetail.get(0);
-                        out.print("<form action='AppDetail?opt=5&idDet=" + ObjDe[0] + "&idHead=" + idHead + "&idApp=" + idApp + "&idDoc=" + idDoc + "&type=" + type + "&step=" + step + "' method='post' class=''>");
-                        out.print("<textarea id='editorCK' name='txtProtoData' class='form-control'>" + ObjDe[4] + "</textarea>");
-                        out.print("<div class='text-center'>");
-                        out.print("<button class='btn btn-green mt-2'>Actualizar</button>");
-                        out.print("</div>");
-                        out.print("</form>");
+                        int ste = Integer.parseInt(ObjDe[6].toString());
+                        if (ste == 1) {
+                            out.print("<form action='AppDetail?opt=5&idDet=" + ObjDe[0] + "&idHead=" + idHead + "&idApp=" + idApp + "&idDoc=" + idDoc + "&type=" + type + "&step=" + step + "' method='post' class=''>");
+                            out.print("<textarea id='editorCK' name='txtProtoData' class='form-control'>" + ObjDe[4] + "</textarea>");
+                            out.print("<div class='text-center'>");
+                            out.print("<button class='btn btn-green mt-2'>Actualizar</button>");
+                            out.print("</div>");
+                            out.print("</form>");
+                        } else if (ste == 2) {
+                            out.print("<div class='card' style='box-shadow: 1px 1px 12px 4px #d9d9d9;padding: 38px;border-radius: 6px;'>");
+                            out.print("<h6>Anexos - Evidencia</h6>");
+                            out.print("<span>" + ObjDe[4] + "</span>");
+                            out.print("</div>");
+                        }
+
                     } else {
                         out.print("<form action='AppDetail?opt=5&idHead=" + idHead + "&idApp=" + idApp + "&idDoc=" + idDoc + "&type=" + type + "&step=" + step + "' method='post' class=''>");
                         out.print("<textarea id='editorCK' name='txtProtoData' class='form-control' required></textarea>");
@@ -1775,7 +1784,7 @@ public class Tag_appDetail extends TagSupport {
                 out.print("</div>");
                 out.print("</div>");
                 out.print("</section>");
-                //</editor-fold>
+                //</editor-fold>Detail
             } else if (module == 1) {
                 //<editor-fold defaultstate="collapsed" desc="APP VERSIONS">
                 String nameApp = "";

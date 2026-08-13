@@ -270,7 +270,12 @@ public class Document extends HttpServlet {
                     break;
                 case 3:
                     //<editor-fold defaultstate="collapsed" desc="SIGNATURE BOSS">
-                    module = 16;
+                    if (typeDoc.contains("Due ")) {
+                        module = 10;
+                    } else {
+                        module = 16;
+                    }
+
                     String dataRecap = "";
                     IdDoc = Integer.parseInt(request.getParameter("IdDoc"));
                     TypeSig = Integer.parseInt(request.getParameter("TypeSig"));
@@ -381,7 +386,7 @@ public class Document extends HttpServlet {
                 case 4:
                     //<editor-fold defaultstate="collapsed" desc="APROVE DOCUMENT">
                     if (typeDoc.contains("Due ")) {
-                        module = 8;
+                        module = 9;
                     } else {
                         module = 15;
                     }

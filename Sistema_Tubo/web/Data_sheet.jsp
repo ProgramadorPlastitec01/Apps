@@ -59,6 +59,19 @@
                 </script>
             </div>
         </div>
+
+        <script>
+            function process(proc) {
+                if (proc == "PP") {
+                    document.getElementById("DivProces").style.display = "block";
+                } else {
+                    document.getElementById("DivProces").style.display = "none";
+                }
+            }
+        </script>
+
+
+
         <!-- Tables -->
         <script src="Interfaz/Contenido/assets/modules/datatables/datatables.min.js"></script>
         <script src="Interfaz/Contenido/assets/modules/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js"></script>

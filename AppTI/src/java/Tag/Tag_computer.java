@@ -201,7 +201,7 @@ public class Tag_computer extends TagSupport {
                         singExits = "";
                     }
 
-                    if ((code.contains("-003") && idPcHead > 385) || code.contains("-004") || code.contains("-013") || code.contains("-029") || code.contains("-031") || code.contains("-032")) {
+                    if ((code.contains("-003") && idPcHead > 396) || code.contains("-004") || code.contains("-013") || code.contains("-029") || code.contains("-031") || code.contains("-032")) {
                         format = ObjDetail[4].toString();
                     }
                     try {
@@ -218,7 +218,7 @@ public class Tag_computer extends TagSupport {
                                 if (lst_signa != null) {
                                     String[] ObjSi = lst_signa.toString().split("///");
                                     String codeUser = ObjSi[2].toString().trim();
-                                    if ((code.contains("-003") && idPcHead > 385) || code.contains("-004") || code.contains("-013") || code.contains("-029") || code.contains("-031") || code.contains("-032")) {
+                                    if ((code.contains("-003") && idPcHead > 396) || code.contains("-004") || code.contains("-013") || code.contains("-029") || code.contains("-031") || code.contains("-032")) {
 //                                      
                                         format = format.replace("XXX" + usrx[0] + "XXX", "<canvas id='signaCanvas" + i + "' width='120' height='60' style='border: 1px solid #fff;'></canvas>");
                                         format = format.replace("Firma " + usrx[0] + "", "<canvas id='signaCanvas" + i + "' width='120' height='60' style='border: 1px solid #fff;'></canvas>");
@@ -491,10 +491,11 @@ public class Tag_computer extends TagSupport {
                     if (singExits.contains("XX")) {
                         out.print("<button class='btn btn-warning mr-2' style='border-radius: 4px;' onclick='mostrarConvencion(3)'><i class='fas fa-signature'></i></button>");
                     }
+                    String tempIdDetail = ObjDetail[0].toString().replace("[", "").replace("]", "").trim();
                     if (stetx == 0 && (code.equals("A") || code.contains("-019"))) {
-                        out.print("<button class='btn btn-green mr-2' style='border-radius: 4px;' onclick='window.location.href=\"Computer?opt=5&IdComputer=" + IdComputer + "&idpcHead=" + idPcHead + "&idDetail=" + ObjDetail[0] + "&type=" + type + "&mod=2&xtemp=1\"'><i class='fas fa-share'></i></button>");
+                        out.print("<button class='btn btn-green mr-2' style='border-radius: 4px;' onclick='window.location.href=\"Computer?opt=5&IdComputer=" + IdComputer + "&idpcHead=" + idPcHead + "&idDetail=" + tempIdDetail + "&type=" + type + "&mod=2&xtemp=1\"'><i class='fas fa-share'></i></button>");
                     } else if (stetx == 1) {
-                        out.print("<button class='btn btn-green mr-2' style='border-radius: 4px;' onclick='window.location.href=\"Computer?opt=5&IdComputer=" + IdComputer + "&idpcHead=" + idPcHead + "&idDetail=" + ObjDetail[0] + "&type=" + type + "&mod=2&xtemp=1\"'><i class='fas fa-share'></i></button>");
+                        out.print("<button class='btn btn-green mr-2' style='border-radius: 4px;' onclick='window.location.href=\"Computer?opt=5&IdComputer=" + IdComputer + "&idpcHead=" + idPcHead + "&idDetail=" + tempIdDetail + "&type=" + type + "&mod=2&xtemp=1\"'><i class='fas fa-share'></i></button>");
                     }
                 } else {
                     out.print("<span> </span>");
@@ -518,11 +519,10 @@ public class Tag_computer extends TagSupport {
                         Object[] ObCom = (Object[]) lst_compDetail.get(0);
                         int statxx = Integer.parseInt(ObCom[6].toString());
                         if (statxx == 2) {
-                            out.print("<div class='text-center'>");
-                            out.print("<h3>Contenido</h3>");
-                            out.print("</div>");
-                            out.print("<div class='dvContentD'>");
-                            out.print(ObCom[4]);
+                            
+                            out.print("<div class='card' style='box-shadow: 1px 1px 12px 4px #d9d9d9;padding: 38px;border-radius: 6px;'>");
+                            out.print("<h6>Anexos - Evidencia</h6>");
+                            out.print("<span>" + ObCom[4] + "</span>");
                             out.print("</div>");
                         } else {
                             out.print("<form action='Computer?opt=4&IdComputer=" + IdComputer + "&idpcHead=" + idPcHead + "&type=" + type + "&idDetail=" + ObCom[0] + "&xtemp=1' method='post' class=''>");
@@ -711,7 +711,7 @@ public class Tag_computer extends TagSupport {
                         //</editor-fold>
                     }
                     //</editor-fold>
-                } else if (code.contains("-003") && idPcHead <= 385) {
+                } else if (code.contains("-003") && idPcHead <= 396) {
                     //<editor-fold defaultstate="collapsed" desc="ASSIGN PC">
                     lst_computer = ComputerJpa.ConsultInfoComputerId(IdComputer);
                     if (lst_compDetail != null) {
@@ -1304,7 +1304,7 @@ public class Tag_computer extends TagSupport {
                         Object[] comp = (Object[]) lst_computer.get(i);
                         out.print("<tr>");
                         out.print("<td>" + comp[2] + " V" + comp[4] + " <br> " + comp[3] + "</td>");
-                        String linkDoc = comp[5].toString().replace("UserFiles/File/", "http://172.16.2.117:8084/REDEAC/UserFiles/File/");
+                        String linkDoc = comp[5].toString().replace("UserFiles/File/", "http://172.16.2.117:8080/REDEAC/UserFiles/File/");
                         out.print("<td>" + comp[6].toString().split(" ")[0] + "</td>");
                         out.print("<td>" + comp[7] + "</td>");
                         out.print("<td>" + linkDoc + "</td>");

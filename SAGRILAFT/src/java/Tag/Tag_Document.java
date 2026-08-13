@@ -517,7 +517,13 @@ public class Tag_Document extends TagSupport {
                             Progress = 100;
                         }
 //                        "+ advance +" / "+ cantModules +" 
-                        out.print("<td><p class='text-center' style='margin: 0; font-size: 12px;'><b>" + modules[advance].toString().split("/")[1] + "</b></p><div class='progress'><div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: " + Progress + "%; " + ((Progress < 5) ? "color: black;" : "") + "' aria-valuenow='10' aria-valuemin='0' aria-valuemax='100'>" + Progress + "%</div></div></td>");
+                        try {
+                            out.print("<td><p class='text-center' style='margin: 0; font-size: 12px;'><b>" + modules[advance].toString().split("/")[1] + "</b></p><div class='progress'><div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: " + Progress + "%; " + ((Progress < 5) ? "color: black;" : "") + "' aria-valuenow='10' aria-valuemin='0' aria-valuemax='100'>" + Progress + "%</div></div></td>");
+                        } catch (Exception e) {
+                            if (advance == 15) {
+                                out.print("<td><p class='text-center' style='margin: 0; font-size: 12px;'><b>" + modules[9].toString().split("/")[1] + "</b></p><div class='progress'><div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: " + Progress + "%; " + ((Progress < 5) ? "color: black;" : "") + "' aria-valuenow='10' aria-valuemin='0' aria-valuemax='100'>" + Progress + "%</div></div></td>");
+                            }
+                        }
 
                         int State = Integer.parseInt(objDoc[8].toString());
                         lst_config = ConfigJpa.ConsultSettingsByCategorie("StatesIcons" + State + "");
@@ -907,7 +913,7 @@ public class Tag_Document extends TagSupport {
                         Data = dataFiles[15].replace("][", "///").replace("[", "").replace("]", "").split("///");
                     } catch (Exception e) {
                         try {
-                            Data = dataFiles[8].replace("][", "///").replace("[", "").replace("]", "").split("///");
+                            Data = dataFiles[9].replace("][", "///").replace("[", "").replace("]", "").split("///");
                         } catch (Exception ex) {
 
                         }
@@ -958,7 +964,6 @@ public class Tag_Document extends TagSupport {
                     out.print("<div class='cont_form_user'>");
                     out.print("<form action='DueDiligence.jsp' enctype='multipart/form-data' method='post' class='needs-validation' novalidate='' >");
                     out.print("<input type='hidden' class='form-control' name='IdDoc' id='' value='" + IdDoc + "' >");
-//                    out.print("<input type='hidden' class='form-control' name='TxtFormat' id='' value='" + FormClient + "' >");
 
                     out.print("<div class='d-flex justify-content-around mt-2'>");
                     out.print("<div class='col-lg-3'>");
@@ -2405,7 +2410,7 @@ public class Tag_Document extends TagSupport {
                                             }
                                         }
                                     } else if (DataClient[1].contains("No")) {
-                                        Template = Template.replace("id=\"XXXPERSONAPEPNOXXX\">", "id=\"XXXPERSONAPEPSIXXX\" checked disabled>");
+                                        Template = Template.replace("id=\"XXXPERSONAPEPNOXXX\">", "id=\"XXXPERSONAPEPNOXXX\" checked disabled>");
                                         for (int i = 1; i <= 6; i++) {
                                             Template = Template.replace("XXXPREGUNTASI" + i + "XXX", "<span style='color: #cacaca'>-</span>");
                                             Template = Template.replace("XXXPREGUNTANO" + i + "XXX", "<span style='color: #cacaca'>-</span>");
@@ -2746,6 +2751,7 @@ public class Tag_Document extends TagSupport {
                                     Template = Template.replace("XXXCARGOXXX", DataClient[4]);
                                     Template = Template.replace("XXXNROTELEFNOXXX", DataClient[5]);
                                     Template = Template.replace("XXXMAILFACTURAXXX", DataClient[6]);
+                                    Template = Template.replace("XXXOTRO2XXX", "");
                                 } else {
                                     Template = Template.replace("XXXOTRO2XXX", "<span style='color: #cacaca'>Otro</span>");
                                     Template = Template.replace("XXXNOMBRESAPELLIDOS1XXX", "<span style='color: #cacaca'>Nombres</span>");
@@ -2777,6 +2783,9 @@ public class Tag_Document extends TagSupport {
                                         if (DataClient[2].split("/")[0].equals("Si")) {
                                             Template = Template.replace("id=\"XXXAUTRESIXXX\">", "id=\"XXXAUTRESIXXX\" checked disabled>");
                                             Template = Template.replace("XXXRESOLUTIONONEXXX", DataClient[2].split("/")[1]);
+                                        } else if (DataClient[2].split("/")[0].equals("No")) {
+                                            Template = Template.replace("id=\"XXXAUTRENOXXX\">", "id=\"XXXAUTRENOXXX\" checked disabled>");
+                                            Template = Template.replace("XXXRESOLUTIONONEXXX", "N/a");
                                         }
                                     } else {
                                         Template = Template.replace("id=\"XXXAUTRESIXXX\">", "id=\"XXXAUTRESIXXX\" checked disabled>");
@@ -2786,6 +2795,9 @@ public class Tag_Document extends TagSupport {
                                         if (DataClient[3].split("/")[0].equals("Si")) {
                                             Template = Template.replace("id=\"XXXGRANCONSIXXX\">", "id=\"XXXGRANCONSIXXX\" checked disabled>");
                                             Template = Template.replace("XXXRESOLUTIONTWOXXX", DataClient[3].split("/")[1]);
+                                        } else if (DataClient[3].split("/")[0].equals("No")) {
+                                            Template = Template.replace("id=\"XXXGRANCONNOXXX\">", "id=\"XXXGRANCONNOXXX\" checked disabled>");
+                                            Template = Template.replace("XXXRESOLUTIONTWOXXX", "N/a");
                                         }
                                     } else {
                                         Template = Template.replace("id=\"XXXGRANCONSIXXX\">", "id=\"XXXGRANCONSIXXX\" checked disabled>");
@@ -2830,15 +2842,13 @@ public class Tag_Document extends TagSupport {
                             String[] finanData = {};
                             try {
                                 comerData = DataClient[0].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
-                                if (comerData.length == 1) {
-                                    isComercial = false;
-                                    Template = Template.replace("XXXNOMBRECOMERCIALXXX", "<span style='color: #cacaca'>Comercial</span>");
-                                    Template = Template.replace("XXXIDENTIFICACIONCOMERCIALXXX", "<span style='color: #cacaca'>Num. Identificacion</span>");
-                                    Template = Template.replace("XXXCONTACTOCOMERCIALXXX", "<span style='color: #cacaca'>Contacto</span>");
-                                    Template = Template.replace("XXXMAILCOMERCIALXXX", "<span style='color: #cacaca'>Correo</span>");
-                                    Template = Template.replace("XXXTELEFONOCOMERCIALXXX", "<span style='color: #cacaca'>Telefono</span>");
-                                }
                             } catch (Exception e) {
+                                isComercial = false;
+                                Template = Template.replace("XXXNOMBRECOMERCIALXXX", "<span style='color: #cacaca'>Comercial</span>");
+                                Template = Template.replace("XXXIDENTIFICACIONCOMERCIALXXX", "<span style='color: #cacaca'>Num. Identificacion</span>");
+                                Template = Template.replace("XXXCONTACTOCOMERCIALXXX", "<span style='color: #cacaca'>Contacto</span>");
+                                Template = Template.replace("XXXMAILCOMERCIALXXX", "<span style='color: #cacaca'>Correo</span>");
+                                Template = Template.replace("XXXTELEFONOCOMERCIALXXX", "<span style='color: #cacaca'>Telefono</span>");
                             }
                             try {
                                 finanData = DataClient[1].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
@@ -2875,10 +2885,8 @@ public class Tag_Document extends TagSupport {
                                         NewContent = NewContent.replace("XXXTELEFONOCOMERCIALXXX", Comercial[4]);
                                         if (i == comerData.length - 1) {
                                             NewContent = NewContent.replace("</td>++</tr>", "</td></tr>");
-                                            Template = Template.replace("</td>++</tr>", NewContent);
-                                        } else {
-                                            Template = Template.replace("</td>++</tr>", NewContent);
                                         }
+                                        Template = Template.replace("</td>++</tr>", NewContent);
                                     }
                                 }
                             } else {
@@ -2913,10 +2921,8 @@ public class Tag_Document extends TagSupport {
                                         NewContent = NewContent.replace("XXXTELEFONOFINANCIALXXX", Financial[4]);
                                         if (i == finanData.length - 1) {
                                             NewContent = NewContent.replace("</td>**</tr>", "</td></tr>");
-                                            Template = Template.replace("</td>**</tr>", NewContent);
-                                        } else {
-                                            Template = Template.replace("</td>**</tr>", NewContent);
                                         }
+                                        Template = Template.replace("</td>**</tr>", NewContent);
                                     }
                                 }
                             } else {
@@ -3085,6 +3091,10 @@ public class Tag_Document extends TagSupport {
                                         }
                                         Template = Template.replace("XXXCLIENTENOMBREXXX", DataClient[1]);
                                         Template = Template.replace("XXXIDENTIFICACIONCLIENTEXXX", DataClient[2]);
+                                    } else {
+                                        Template = Template.replace("XXXFIRMACLIENTEXXX", "<i class='text-secondary'>Firma cliente</i>");
+                                        Template = Template.replace("XXXCLIENTENOMBREXXX", "");
+                                        Template = Template.replace("XXXIDENTIFICACIONCLIENTEXXX", "");
                                     }
                                 } else {
                                     Template = Template.replace("XXXFIRMACLIENTEXXX", "<i class='text-secondary'>Firma cliente</i>");
@@ -3378,7 +3388,7 @@ public class Tag_Document extends TagSupport {
 
                             //<editor-fold defaultstate="collapsed" desc="SIGNATURE CLIENT">
                             try {
-                                DataClient = ModuleCliente[7].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                                DataClient = ModuleCliente[8].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
                                 if (!DataClient[1].contains("N/A")) {
                                     lst_document = DocumentJpa.ConsultDocumentSignatureId(IdDoc);
                                     if (lst_document != null) {
@@ -3407,7 +3417,13 @@ public class Tag_Document extends TagSupport {
                                         Template = Template.replace("XXXNAME_SIGNAXXX", DataClient[1]);
                                         Template = Template.replace("XXXID_SIGNATUREXXX", DataClient[2]);
                                         Template = Template.replace("XXXTITLE_SIGNAXXX", DataClient[3]);
+                                    } else {
+                                        Template = Template.replace("XXXFIRMACLIENTEXXX", "<i class='text-secondary'>Firma cliente</i>");
+                                        Template = Template.replace("XXXNAME_SIGNAXXX", "<span style='color: #cacaca'>Nombre representante</span>");
+                                        Template = Template.replace("XXXID_SIGNATUREXXX", "<span style='color: #cacaca'>Num. Identificacion</span>");
+                                        Template = Template.replace("XXXTITLE_SIGNAXXX", "<span style='color: #cacaca'>Cargo</span>");
                                     }
+
                                 } else {
                                     Template = Template.replace("XXXFIRMACLIENTEXXX", "<i class='text-secondary'>Firma cliente</i>");
                                     Template = Template.replace("XXXNAME_SIGNAXXX", "<span style='color: #cacaca'>Nombre representante</span>");
@@ -3424,7 +3440,7 @@ public class Tag_Document extends TagSupport {
 
                             //<editor-fold defaultstate="collapsed" desc="SIGNATURE PLASTITEC">
                             try {
-                                DataClient = ModuleCliente[8].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                                DataClient = ModuleCliente[9].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
                                 if (!DataClient[1].contains("N/A")) {
                                     Template = Template.replace("XXXFECHAPLASTXXX", DataClient[1]);
                                     Template = Template.replace("XXXFUNCIONARIOPLASTXXX", DataClient[2]);

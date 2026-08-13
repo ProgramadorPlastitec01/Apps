@@ -208,7 +208,7 @@ public class Tag_device extends TagSupport {
                     } catch (Exception e) {
                         singExits = "";
                     }
-                    if ((code.contains("-003") && idDeviceHead > 379) || code.contains("-004") || code.contains("-013") || code.contains("-029") || code.contains("-031") || code.contains("-032")) {
+                    if ((code.contains("-003") && idDeviceHead > 421) || code.contains("-004") || code.contains("-013") || code.contains("-029") || code.contains("-031") || code.contains("-032")) {
                         format = ObjDetail[4].toString();
                     }
                     try {
@@ -225,7 +225,7 @@ public class Tag_device extends TagSupport {
                                 if (lst_signa != null) {
                                     String[] ObjSi = lst_signa.toString().split("///");
                                     String codeUser = ObjSi[2].toString().trim();
-                                    if ((code.contains("-003") && idDeviceHead > 379) || code.contains("-004") || code.contains("-013") || code.contains("-029") || code.contains("-031") || code.contains("-032")) {
+                                    if ((code.contains("-003") && idDeviceHead > 421) || code.contains("-004") || code.contains("-013") || code.contains("-029") || code.contains("-031") || code.contains("-032")) {
 //                                      
                                         format = format.replace("Firma " + usrx[0] + "", "<canvas id='signaCanvas" + i + "' width='120' height='60' style='border: 1px solid #fff;'></canvas>");
                                         format = format.replace("XXX" + usrx[0] + "XXX", "<canvas id='signaCanvas" + i + "' width='200' height='100' style='border: 1px solid #fff;'></canvas>");
@@ -503,10 +503,11 @@ public class Tag_device extends TagSupport {
                     if (singExits.contains("XX")) {
                         out.print("<button class='btn btn-warning mr-2' style='border-radius: 4px;' onclick='mostrarConvencion(3)'><i class='fas fa-signature'></i></button>");
                     }
+                    String tempIdDetail = ObjDetail[0].toString().replace("[", "").replace("]", "").trim();
                     if (stetx == 0 && (code.equals("A") || code.contains("-019"))) {
-                        out.print("<button class='btn btn-green mr-2' style='border-radius: 4px;' onclick='window.location.href=\"Device?opt=5&idTypeDv=" + idTypeDv + "&idDevice=" + idDevice + "&idDeviceHead=" + idDeviceHead + "&idDeviceDetail=" + ObjDetail[0] + "&type=" + type + "&act=3&xtemp=1\";cargarDatos()'><i class='fas fa-share'></i></button>");
+                        out.print("<button class='btn btn-green mr-2' style='border-radius: 4px;' onclick='window.location.href=\"Device?opt=5&idTypeDv=" + idTypeDv + "&idDevice=" + idDevice + "&idDeviceHead=" + idDeviceHead + "&idDeviceDetail=" + tempIdDetail + "&type=" + type + "&act=3&xtemp=1\";cargarDatos()'><i class='fas fa-share'></i></button>");
                     } else if (stetx == 1) {
-                        out.print("<button class='btn btn-green mr-2' style='border-radius: 4px;' onclick='window.location.href=\"Device?opt=5&idTypeDv=" + idTypeDv + "&idDevice=" + idDevice + "&idDeviceHead=" + idDeviceHead + "&idDeviceDetail=" + ObjDetail[0] + "&type=" + type + "&act=3&xtemp=1\";cargarDatos()'><i class='fas fa-share'></i></button>");
+                        out.print("<button class='btn btn-green mr-2' style='border-radius: 4px;' onclick='window.location.href=\"Device?opt=5&idTypeDv=" + idTypeDv + "&idDevice=" + idDevice + "&idDeviceHead=" + idDeviceHead + "&idDeviceDetail=" + tempIdDetail + "&type=" + type + "&act=3&xtemp=1\";cargarDatos()'><i class='fas fa-share'></i></button>");
                     }
                 } else {
                     out.print("<span></span>");
@@ -519,162 +520,193 @@ public class Tag_device extends TagSupport {
                 //<editor-fold defaultstate="collapsed" desc="LOAD DOCUMENT">
                 if (code.equals("A")) {
                     //<editor-fold defaultstate="collapsed" desc="ATTACH FILES">
-                    if (lst_DeviceDetail == null) {
-                        //<editor-fold defaultstate="collapsed" desc="NEW UPLOAD">
-                        lst_setting = SettingJpa.ConsultSettingId(74);
-                        if (lst_setting != null) {
-                            Object[] ObjStt = (Object[]) lst_setting.get(0);
-                            String[] docs = ObjStt[2].toString().split("///");
-                            out.print("<form action='Attach.jsp' method='post' class='needs-validation' novalidate='' enctype='multipart/form-data' onsubmit='return cargarDatosForm(this)'>");
+                    if (idDeviceHead < 397) {
+                        //<editor-fold defaultstate="collapsed" desc="OLD ATTCH FILES">
+                        if (lst_DeviceDetail == null) {
+                            //<editor-fold defaultstate="collapsed" desc="NEW UPLOAD">
+                            lst_setting = SettingJpa.ConsultSettingId(74);
+                            if (lst_setting != null) {
+                                Object[] ObjStt = (Object[]) lst_setting.get(0);
+                                String[] docs = ObjStt[2].toString().split("///");
+                                out.print("<form action='Attach.jsp' method='post' class='needs-validation' novalidate='' enctype='multipart/form-data' onsubmit='return cargarDatosForm(this)'>");
 
-                            out.print("<input type='hidden' name='idDevice' value='" + idDevice + "'>");
-                            out.print("<input type='hidden' name='idDeviceHead' value='" + idDeviceHead + "'>");
-                            out.print("<input type='hidden' name='typeDoc' value='" + type + "'>");
-                            out.print("<input type='hidden' class='form-control' name='txtNameCat' id='pruebas'>");
-                            out.print("<input type='hidden' name='validDevice' value='1'>");
+                                out.print("<input type='hidden' name='idDevice' value='" + idDevice + "'>");
+                                out.print("<input type='hidden' name='idDeviceHead' value='" + idDeviceHead + "'>");
+                                out.print("<input type='hidden' name='typeDoc' value='" + type + "'>");
+                                out.print("<input type='hidden' class='form-control' name='txtNameCat' id='pruebas'>");
+                                out.print("<input type='hidden' name='validDevice' value='1'>");
 
-                            out.print("<div class='row'>");
-                            for (int i = 0; i < docs.length; i++) {
-                                String[] dtail = docs[i].split("/");
-                                int counter = i + 1;
-                                out.print("<div class='mt-4 col-lg-6'>");
-                                out.print("<span class='mb-2'>" + counter + ". " + dtail[0] + "</span> <i class='fas fa-question-circle' data-toggle='tooltip' data-placement='top' title='" + dtail[1] + "'></i>");
+                                out.print("<div class='row'>");
+                                for (int i = 0; i < docs.length; i++) {
+                                    String[] dtail = docs[i].split("/");
+                                    int counter = i + 1;
+                                    out.print("<div class='mt-4 col-lg-6'>");
+                                    out.print("<span class='mb-2'>" + counter + ". " + dtail[0] + "</span> <i class='fas fa-question-circle' data-toggle='tooltip' data-placement='top' title='" + dtail[1] + "'></i>");
+
+                                    out.print("<div class='d-flex' style='align-items: center;'>");
+                                    out.print("<input type='file' class='form-control intFile' data-categoria='" + dtail[0] + "' name='txtFile" + i + "' id='txtFile" + i + "' data-toggle='tooltip' data-placement='top' title='' value='' required>");
+                                    out.print("<div id='DownloadFile" + i + "'></div>");
+                                    out.print("</div>");
+
+                                    out.print("</div>");
+                                    out.print("<script>");
+                                    out.print("document.getElementById('txtFile" + i + "').addEventListener('change', function(){ "
+                                            + "var input = this; "
+                                            + "var NameFile = input.files[0].name; "
+                                            + "var DownloadFile = document.getElementById('DownloadFile" + i + "'); "
+                                            + "DownloadFile.innerHTML = '<a class=\"btn btn-info\" href=\"' + URL.createObjectURL(input.files[0]) + '\" download=\"' + NameFile + '\"><i class=\"fas fa-download\"></i></a>'; "
+                                            + "});");
+                                    out.print("</script>");
+                                }
+                                out.print("</div>");
+
+                                out.print("<div class='text-center mt-4'>");
+                                out.print("<button class='btn btn-green'>Registrar</button>");
+                                out.print("</div>");
+
+                                out.print("<script>\n"
+                                        + "document.addEventListener(\"DOMContentLoaded\", function () {\n"
+                                        + "    document.querySelectorAll(\".intFile\").forEach(function(input) {\n"
+                                        + "        input.addEventListener(\"change\", function() {\n"
+                                        + "            if (this.files.length > 0) {\n"
+                                        + "                const fileName = this.files[0].name;\n"
+                                        + "                const categoria = this.getAttribute(\"data-categoria\");\n"
+                                        + "                const combo = categoria + \"/\" + fileName;\n"
+                                        + "\n"
+                                        + "                const campoOculto = document.getElementById(\"pruebas\");\n"
+                                        + "                // Si ya hay contenido, agregamos con separador. Si no, solo el nuevo.\n"
+                                        + "                if (campoOculto.value.trim() !== \"\") {\n"
+                                        + "                    campoOculto.value += \"[\" + combo + \"]\";\n"
+                                        + "                } else {\n"
+                                        + "                    campoOculto.value = \"[\" + combo + \"]\";\n"
+                                        + "                }\n"
+                                        + "            }\n"
+                                        + "        });\n"
+                                        + "    });\n"
+                                        + "});\n"
+                                        + "</script>");
+
+                                out.print("</form>");
+                            }
+                            //</editor-fold>
+                        } else {
+                            //<editor-fold defaultstate="collapsed" desc="LIST FILES">
+                            Object[] ObjD = (Object[]) lst_DeviceDetail.get(0);
+                            String[] Cons_docs = ObjD[4].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                            String allDocs = ObjD[4].toString();
+                            out.print("<div class='row' style='justify-content: space-evenly;'>");
+                            for (int i = 0; i < Cons_docs.length; i++) {
+                                Object[] DataFiles = Cons_docs[i].split("/");
+                                out.print("<div class='text-center mt-4 mb-4 col-lg-2'>");
+                                out.print("<div class='SqDocs' onclick='window.location.href=\"Download?File_name=" + DataFiles[1] + "\"'>");
+                                out.print("<div class='SqDetail'>");
+                                out.print("<i class=\"fas fa-pen\" style='font-size: 15px;' onclick='mostrarConvencion(" + i + ");editar(event) '></i>");
+                                out.print("</div>");
+                                out.print("<i class=\"fas fa-cloud-download-alt\"></i>");
+                                out.print("</div>");
+                                out.print("<span class='mb-2'>" + DataFiles[0] + "</span> </i>");
+                                out.print("</div>");
+
+                                out.print("<div class='sweet-local' tabindex='-1' id='Ventana" + i + "' style='opacity: 1.03; display:none;'>");
+                                out.print("<div class='contGeneral' style='width: 35%; top: 10%; right: 22%;'>");
+                                out.print("<div style='display: flex; justify-content: space-between'>");
+                                out.print("<h2>Modificar Archivo </h2>");
+                                out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(" + i + ")' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
+                                out.print("</div>");
+                                out.print("<div class='cont_form_user'>");
+
+                                out.print("<form action='Attach.jsp' method='post' class='needs-validation' novalidate='' enctype='multipart/form-data' onsubmit='return cargarDatosForm(this)'>");
+                                out.print("<input type='hidden' name='idDevice' value='" + idDevice + "'>");
+                                out.print("<input type='hidden' name='idDeviceHead' value='" + idDeviceHead + "'>");
+                                out.print("<input type='hidden' name='typeDoc' value='" + type + "'>");
+                                out.print("<input type='hidden' class='form-control' name='txtNameCat' id='xpr" + DataFiles[0] + "'>");
+                                out.print("<input type='hidden' class='form-control' name='fileDelete' value='" + DataFiles[1] + "'>");
+                                out.print("<input type='hidden' name='allDocs' value='" + allDocs + "'>");
+                                out.print("<input type='hidden' name='idDeviceDetail' value='" + ObjD[0] + "'>");
+                                out.print("<input type='hidden' name='validDevice' value='1'>");
 
                                 out.print("<div class='d-flex' style='align-items: center;'>");
-                                out.print("<input type='file' class='form-control intFile' data-categoria='" + dtail[0] + "' name='txtFile" + i + "' id='txtFile" + i + "' data-toggle='tooltip' data-placement='top' title='' value='' required>");
+                                out.print("<input type='file' class='form-control intxFile' data-categoria='" + DataFiles[0] + "' name='txtFile" + i + "' id='txtFilex" + i + "' required>");
                                 out.print("<div id='DownloadFile" + i + "'></div>");
                                 out.print("</div>");
 
                                 out.print("</div>");
+
+                                out.print("<div class='text-center'>");
+                                out.print("<button class='btn btn-green'>Modificar</button>");
+                                out.print("</div>");
+
                                 out.print("<script>");
-                                out.print("document.getElementById('txtFile" + i + "').addEventListener('change', function(){ "
+                                out.print("document.getElementById('txtFilex" + i + "').addEventListener('change', function(){ "
                                         + "var input = this; "
                                         + "var NameFile = input.files[0].name; "
                                         + "var DownloadFile = document.getElementById('DownloadFile" + i + "'); "
                                         + "DownloadFile.innerHTML = '<a class=\"btn btn-info\" href=\"' + URL.createObjectURL(input.files[0]) + '\" download=\"' + NameFile + '\"><i class=\"fas fa-download\"></i></a>'; "
                                         + "});");
                                 out.print("</script>");
+
+                                out.print("</form>");
+
+                                out.print("</div>");
+                                out.print("</div>");
+//                            out.print("</div>");
+
+                                out.print("<script>\n"
+                                        + "document.addEventListener(\"DOMContentLoaded\", function () {\n"
+                                        + "  const inputs = document.querySelectorAll(\".intxFile\");\n"
+                                        + "  inputs.forEach(function(input) {\n"
+                                        + "    if (!input.dataset.listenerAttached) {\n"
+                                        + "      input.dataset.listenerAttached = true;\n"
+                                        + "      input.addEventListener(\"change\", function() {\n"
+                                        + "        if (this.files.length > 0) {\n"
+                                        + "          const fileName = this.files[0].name;\n"
+                                        + "          const categoria = this.getAttribute(\"data-categoria\");\n"
+                                        + "          const combo = categoria + \"/\" + fileName;\n"
+                                        + "          const campoOculto = document.getElementById(\"xpr\"+ categoria );\n"
+                                        + "\n"
+                                        + "          if (campoOculto.value.trim() !== \"\") {\n"
+                                        + "            campoOculto.value = \"[\" + combo + \"]\";\n"
+                                        + "          } else {\n"
+                                        + "            campoOculto.value = \"[\" + combo + \"]\";\n"
+                                        + "          }\n"
+                                        + "        }\n"
+                                        + "      });\n"
+                                        + "    }\n"
+                                        + "  });\n"
+                                        + "});\n"
+                                        + "</script>");
                             }
                             out.print("</div>");
-
-                            out.print("<div class='text-center mt-4'>");
-                            out.print("<button class='btn btn-green'>Registrar</button>");
-                            out.print("</div>");
-
-                            out.print("<script>\n"
-                                    + "document.addEventListener(\"DOMContentLoaded\", function () {\n"
-                                    + "    document.querySelectorAll(\".intFile\").forEach(function(input) {\n"
-                                    + "        input.addEventListener(\"change\", function() {\n"
-                                    + "            if (this.files.length > 0) {\n"
-                                    + "                const fileName = this.files[0].name;\n"
-                                    + "                const categoria = this.getAttribute(\"data-categoria\");\n"
-                                    + "                const combo = categoria + \"/\" + fileName;\n"
-                                    + "\n"
-                                    + "                const campoOculto = document.getElementById(\"pruebas\");\n"
-                                    + "                // Si ya hay contenido, agregamos con separador. Si no, solo el nuevo.\n"
-                                    + "                if (campoOculto.value.trim() !== \"\") {\n"
-                                    + "                    campoOculto.value += \"[\" + combo + \"]\";\n"
-                                    + "                } else {\n"
-                                    + "                    campoOculto.value = \"[\" + combo + \"]\";\n"
-                                    + "                }\n"
-                                    + "            }\n"
-                                    + "        });\n"
-                                    + "    });\n"
-                                    + "});\n"
-                                    + "</script>");
-
-                            out.print("</form>");
+//</editor-fold>
                         }
                         //</editor-fold>
                     } else {
-                        //<editor-fold defaultstate="collapsed" desc="LIST FILES">
-                        Object[] ObjD = (Object[]) lst_DeviceDetail.get(0);
-                        String[] Cons_docs = ObjD[4].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
-                        String allDocs = ObjD[4].toString();
-                        out.print("<div class='row' style='justify-content: space-evenly;'>");
-                        for (int i = 0; i < Cons_docs.length; i++) {
-                            Object[] DataFiles = Cons_docs[i].split("/");
-                            out.print("<div class='text-center mt-4 mb-4 col-lg-2'>");
-                            out.print("<div class='SqDocs' onclick='window.location.href=\"Download?File_name=" + DataFiles[1] + "\"'>");
-                            out.print("<div class='SqDetail'>");
-                            out.print("<i class=\"fas fa-pen\" style='font-size: 15px;' onclick='mostrarConvencion(" + i + ");editar(event) '></i>");
-                            out.print("</div>");
-                            out.print("<i class=\"fas fa-cloud-download-alt\"></i>");
-                            out.print("</div>");
-                            out.print("<span class='mb-2'>" + DataFiles[0] + "</span> </i>");
-                            out.print("</div>");
-
-                            out.print("<div class='sweet-local' tabindex='-1' id='Ventana" + i + "' style='opacity: 1.03; display:none;'>");
-                            out.print("<div class='contGeneral' style='width: 35%; top: 10%; right: 22%;'>");
-                            out.print("<div style='display: flex; justify-content: space-between'>");
-                            out.print("<h2>Modificar Archivo </h2>");
-                            out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(" + i + ")' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
-                            out.print("</div>");
-                            out.print("<div class='cont_form_user'>");
-
-                            out.print("<form action='Attach.jsp' method='post' class='needs-validation' novalidate='' enctype='multipart/form-data' onsubmit='return cargarDatosForm(this)'>");
-                            out.print("<input type='hidden' name='idDevice' value='" + idDevice + "'>");
-                            out.print("<input type='hidden' name='idDeviceHead' value='" + idDeviceHead + "'>");
-                            out.print("<input type='hidden' name='typeDoc' value='" + type + "'>");
-                            out.print("<input type='hidden' class='form-control' name='txtNameCat' id='xpr" + DataFiles[0] + "'>");
-                            out.print("<input type='hidden' class='form-control' name='fileDelete' value='" + DataFiles[1] + "'>");
-                            out.print("<input type='hidden' name='allDocs' value='" + allDocs + "'>");
-                            out.print("<input type='hidden' name='idDeviceDetail' value='" + ObjD[0] + "'>");
-                            out.print("<input type='hidden' name='validDevice' value='1'>");
-
-                            out.print("<div class='d-flex' style='align-items: center;'>");
-                            out.print("<input type='file' class='form-control intxFile' data-categoria='" + DataFiles[0] + "' name='txtFile" + i + "' id='txtFilex" + i + "' data-toggle='tooltip' data-placement='top' title='' value='' required>");
-                            out.print("<div id='DownloadFile" + i + "'></div>");
-                            out.print("</div>");
-
-                            out.print("</div>");
-
+                        //<editor-fold defaultstate="collapsed" desc="NEW PROCEDURE TO ATACH FILES">
+                        if (lst_DeviceDetail == null) {
+                            out.print("<form action='Device?opt=4&idDevice=" + idDevice + "&idDeviceHead=" + idDeviceHead + "&type=" + type + "&validDevice=1' method='post' class=''>");
+                            out.print("<textarea id='editorCK' name='txtInitData' class='form-control' required></textarea>");
                             out.print("<div class='text-center'>");
-                            out.print("<button class='btn btn-green'>Modificar</button>");
+                            out.print("<button class='btn btn-green mt-2'>Registrar</button>");
                             out.print("</div>");
-
-                            out.print("<script>");
-                            out.print("document.getElementById('txtFilex" + i + "').addEventListener('change', function(){ "
-                                    + "var input = this; "
-                                    + "var NameFile = input.files[0].name; "
-                                    + "var DownloadFile = document.getElementById('DownloadFile" + i + "'); "
-                                    + "DownloadFile.innerHTML = '<a class=\"btn btn-info\" href=\"' + URL.createObjectURL(input.files[0]) + '\" download=\"' + NameFile + '\"><i class=\"fas fa-download\"></i></a>'; "
-                                    + "});");
-                            out.print("</script>");
-
                             out.print("</form>");
-
-                            out.print("</div>");
-                            out.print("</div>");
-//                            out.print("</div>");
-
-                            out.print("<script>\n"
-                                    + "document.addEventListener(\"DOMContentLoaded\", function () {\n"
-                                    + "  const inputs = document.querySelectorAll(\".intxFile\");\n"
-                                    + "  inputs.forEach(function(input) {\n"
-                                    + "    if (!input.dataset.listenerAttached) {\n"
-                                    + "      input.dataset.listenerAttached = true;\n"
-                                    + "      input.addEventListener(\"change\", function() {\n"
-                                    + "        if (this.files.length > 0) {\n"
-                                    + "          const fileName = this.files[0].name;\n"
-                                    + "          const categoria = this.getAttribute(\"data-categoria\");\n"
-                                    + "          const combo = categoria + \"/\" + fileName;\n"
-                                    + "          const campoOculto = document.getElementById(\"xpr\"+ categoria );\n"
-                                    + "\n"
-                                    + "          if (campoOculto.value.trim() !== \"\") {\n"
-                                    + "            campoOculto.value = \"[\" + combo + \"]\";\n"
-                                    + "          } else {\n"
-                                    + "            campoOculto.value = \"[\" + combo + \"]\";\n"
-                                    + "          }\n"
-                                    + "        }\n"
-                                    + "      });\n"
-                                    + "    }\n"
-                                    + "  });\n"
-                                    + "});\n"
-                                    + "</script>");
+                        } else {
+                            Object[] ObCom = (Object[]) lst_DeviceDetail.get(0);
+                            int statxx = Integer.parseInt(ObCom[6].toString());
+                            if (statxx == 2) {
+                                out.print("<div class='card' style='box-shadow: 1px 1px 12px 4px #d9d9d9;padding: 38px;border-radius: 6px;'>");
+                                out.print("<h6>Anexos - Evidencia</h6>");
+                                out.print("<span>" + ObCom[4] + "</span>");
+                                out.print("</div>");
+                            } else {
+                                out.print("<form action='Device?opt=4&idDevice=" + idDevice + "&idDeviceHead=" + idDeviceHead + "&type=" + type + "&validDevice=1' method='post' class=''>");
+                                out.print("<textarea id='editorCK' name='txtInitData' class='form-control' required>" + ObCom[4] + "</textarea>");
+                                out.print("<div class='text-center'>");
+                                out.print("<button class='btn btn-green mt-2'>Guardar</button>");
+                                out.print("</div>");
+                                out.print("</form>");
+                            }
                         }
-                        out.print("</div>");
-//</editor-fold>
+                        //</editor-fold>
                     }
                     //</editor-fold>
                 } else if (code.contains("-019")) {
@@ -854,7 +886,7 @@ public class Tag_device extends TagSupport {
                         //</editor-fold>
                     }
                     //</editor-fold>
-                } else if (code.contains("-003") && idDeviceHead <= 379) {
+                } else if (code.contains("-003") && idDeviceHead <= 421) {
                     //<editor-fold defaultstate="collapsed" desc="ASSIGN PC">
                     lst_device = DeviceJpa.ConsultDevicexId(idDevice);
                     if (lst_DeviceDetail != null) {

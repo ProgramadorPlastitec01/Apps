@@ -27,15 +27,15 @@
                     </div>
 
                     <span>Indique los datos correspondientes:</span>
-                    <form action="Capacitacion?opc=1" method="POST">
+                    <form action="Capacitacion?opc=1" method="POST" style="margin-top: 15px;">
                         <center>
                             <div>
                                 <span>Numero de cedula:</span><br>
-                                <input type="number" name="docCapt" placeholder="Numero de identificación" >
+                                <input type="number" name="docCapt" placeholder="Numero de identificación" required>
                             </div>
                             <div style="">
                                 <span>Codigo:</span><br>
-                                <input type="number" name="codCapt" placeholder="Codigo" >
+                                <input type="number" name="codCapt" placeholder="Codigo" required>
                             </div>
 
                             <div>
@@ -70,7 +70,8 @@
                             <b>Va 01.05.02</b>-->
                             <!--<b>Va 03.12.03</b>-->
                             <!--<b>Va 04.15.04</b>-->
-                            <div style="padding: 2px 0 0 0 ;"><b>Va 05.16.05</b></div>
+                            <!--<div style="padding: 2px 0 0 0 ;"><b>Va 05.16.05</b></div>-->
+                            <div style="padding: 2px 0 0 0 ;"><b>Va 07.18.06</b></div>
                         </form>
                     </div>
                 </div>
