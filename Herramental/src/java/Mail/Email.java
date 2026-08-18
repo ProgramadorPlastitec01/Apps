@@ -61,14 +61,14 @@ public class Email {
                 } else {
                     desc = "<p style='font-family: arial, verdana, sans-serif; font-size: 14px;'>Se ha solucionado un pendiente en el herramental " + obj_pendiente[2] + "</p>";
                     sol = obj_pendiente[8].toString();
-                    sol = sol.replace("<a href=\"UserFiles/", "<a href=\"http://172.16.5.99:8084/Herramental/UserFiles/");
-                    sol = sol.replace("<img src=\"UserFiles/", "<img src=\"http://172.16.5.99:8084/Herramental/UserFiles/");
+                    sol = sol.replace("<a href=\"UserFiles/", "<a href=\"http://172.16.2.117:8080/Herramental/UserFiles/");
+                    sol = sol.replace("<img src=\"UserFiles/", "<img src=\"http://172.16.2.117:8080/Herramental/UserFiles/");
                 }
                 String[] arg_descripcion = obj_pendiente[4].toString().replace("<hr />", "<hr/>").split("<hr/>");
                 for (int j = 0; j < arg_descripcion.length; j++) {
                     des = des + "<td valign='top' style='padding: 3px 3px 3px 3px;border-color: #CAA427;font-size: 11px;color: #292929;background-color:#fff;border-right: 2px solid #eee;border-bottom: 2px solid #eee;text-transform: uppercase;'>" + arg_descripcion[j] + "</td>";
-                    des = des.replace("<a href=\"UserFiles/", "<a href=\"http://172.16.5.99:8084/Herramental/UserFiles/");
-                    des = des.replace("<img src=\"UserFiles/", "<img src=\"http://172.16.5.99:8084/Herramental/UserFiles/");
+                    des = des.replace("<a href=\"UserFiles/", "<a href=\"http://172.16.2.117:8080/Herramental/UserFiles/");
+                    des = des.replace("<img src=\"UserFiles/", "<img src=\"http://172.16.2.117:8080/Herramental/UserFiles/");
 
                 }
                 message.setSubject("Pendiente herramental " + obj_pendiente[2] + "");
@@ -109,6 +109,7 @@ public class Email {
             return false;
         }
     }
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed"  desc="Mail movimiento herramental">
     public boolean mail_Movimiento_Herramental(String id_usuarios, List lst_movimiento, String usuario) throws javax.mail.MessagingException, Exception {
@@ -140,8 +141,8 @@ public class Email {
                     message.setRecipients(Message.RecipientType.TO, addresto);// correo destinatario
                 }
                 String des = obj_movimiento[13].toString();
-                des = des.replace("<a href=\"UserFiles/", "<a href=\"http://172.16.5.99:8084/Herramental/UserFiles/");
-                des = des.replace("<img src=\"UserFiles/", "<img src=\"http://172.16.5.99:8084/Herramental/UserFiles/");
+                des = des.replace("<a href=\"UserFiles/", "<a href=\"http://172.16.2.117:8080/Herramental/UserFiles/");
+                des = des.replace("<img src=\"UserFiles/", "<img src=\"http://172.16.2.117:8080/Herramental/UserFiles/");
                 message.setSubject("Movimiento herramental " + obj_movimiento[4] + " " + obj_movimiento[15] + "");
                 MimeBodyPart htmlPart = new MimeBodyPart();
                 String htmlContent = "\n"
@@ -222,12 +223,12 @@ public class Email {
                 } else {
                     desc = "<p style='font-family: arial, verdana, sans-serif; font-size: 14px;'>Se ha solucionado un pendiente en la maquina " + obj_pendinte[2] + "</p>";
                     sol = "<b>Fecha: </b>" + obj_pendinte[7] + "<br />" + obj_pendinte[8].toString();
-                    sol = sol.replace("<a href=\"UserFiles/", "<a href=\"http://172.16.5.99:8084/Herramental/UserFiles/");
-                    sol = sol.replace("<img src=\"UserFiles/", "<img src=\"http://172.16.5.99:8084/Herramental/UserFiles/");
+                    sol = sol.replace("<a href=\"UserFiles/", "<a href=\"http://172.16.2.117:8080/Herramental/UserFiles/");
+                    sol = sol.replace("<img src=\"UserFiles/", "<img src=\"http://172.16.2.117:8080/Herramental/UserFiles/");
                 }
                 String des = obj_pendinte[4].toString();
-                des = des.replace("<a href=\"UserFiles/", "<a href=\"http://172.16.5.99:8084/Herramental/UserFiles/");
-                des = des.replace("<img src=\"UserFiles/", "<img src=\"http://172.16.5.99:8084/Herramental/UserFiles/");
+                des = des.replace("<a href=\"UserFiles/", "<a href=\"http://172.16.2.117:8080/Herramental/UserFiles/");
+                des = des.replace("<img src=\"UserFiles/", "<img src=\"http://172.16.2.117:8080/Herramental/UserFiles/");
                 message.setSubject("Pendiente maquina " + obj_pendinte[2] + "");
                 MimeBodyPart htmlPart = new MimeBodyPart();
                 String htmlContent = "\n"
@@ -302,12 +303,12 @@ public class Email {
                 } else {
                     desc = "<p style='font-family: arial, verdana, sans-serif; font-size: 14px;'>Se ha solucionado un pendiente en la ficha tecnica  <b style='color:black;'>" + obj_pendinte[9] + "</b> </p>";
                     sol = "<b>Fecha: </b>" + obj_pendinte[7] + "<br />" + obj_pendinte[8].toString();
-                    sol = sol.replace("<a href=\"UserFiles/", "<a href=\"http://172.16.5.99:8084/Herramental/UserFiles/");
-                    sol = sol.replace("<img src=\"UserFiles/", "<img src=\"http://172.16.5.99:8084/Herramental/UserFiles/");
+                    sol = sol.replace("<a href=\"UserFiles/", "<a href=\"http://172.16.2.117:8080/Herramental/UserFiles/");
+                    sol = sol.replace("<img src=\"UserFiles/", "<img src=\"http://172.16.2.117:8080/Herramental/UserFiles/");
                 }
                 String des = obj_pendinte[4].toString();
-                des = des.replace("<a href=\"UserFiles/", "<a href=\"http://172.16.5.99:8084/Herramental/UserFiles/");
-                des = des.replace("<img src=\"UserFiles/", "<img src=\"http://172.16.5.99:8084/Herramental/UserFiles/");
+                des = des.replace("<a href=\"UserFiles/", "<a href=\"http://172.16.2.117:8080/Herramental/UserFiles/");
+                des = des.replace("<img src=\"UserFiles/", "<img src=\"http://172.16.2.117:8080/Herramental/UserFiles/");
 
                 String[] Pendient = obj_pendinte[3].toString()
                         .replace("<strong>Causas: </strong><br>", "")
@@ -394,8 +395,8 @@ public class Email {
                     message.setRecipients(Message.RecipientType.TO, addresto);// correo destinatario
                 }
                 String des = obj_movimiento[13].toString();
-                des = des.replace("<a href=\"UserFiles/", "<a href=\"http://172.16.5.99:8084/Herramental/UserFiles/");
-                des = des.replace("<img src=\"UserFiles/", "<img src=\"http://172.16.5.99:8084/Herramental/UserFiles/");
+                des = des.replace("<a href=\"UserFiles/", "<a href=\"http://172.16.2.117:8080/Herramental/UserFiles/");
+                des = des.replace("<img src=\"UserFiles/", "<img src=\"http://172.16.2.117:8080/Herramental/UserFiles/");
                 message.setSubject("Movimiento maquina " + obj_movimiento[2] + "");
                 MimeBodyPart htmlPart = new MimeBodyPart();
                 String htmlContent = "\n"
@@ -474,8 +475,8 @@ public class Email {
                 message.addRecipient(Message.RecipientType.TO, new InternetAddress("w.hernandez@plastitec-sa.com"));
                 message.addRecipient(Message.RecipientType.TO, new InternetAddress("c.sgs@plastitec-sa.com"));
                 String des = obj_movimiento[13].toString();
-                des = des.replace("<a href=\"UserFiles/", "<a href=\"http://172.16.5.99:8084/Herramental/UserFiles/");
-                des = des.replace("<img src=\"UserFiles/", "<img src=\"http://172.16.5.99:8084/Herramental/UserFiles/");
+                des = des.replace("<a href=\"UserFiles/", "<a href=\"http://172.16.2.117:8080/Herramental/UserFiles/");
+                des = des.replace("<img src=\"UserFiles/", "<img src=\"http://172.16.2.117:8080/Herramental/UserFiles/");
                 message.setSubject("Movimiento maquina " + obj_movimiento[2] + "");
                 MimeBodyPart htmlPart = new MimeBodyPart();
                 String htmlContent = "\n"
@@ -541,11 +542,11 @@ public class Email {
                 Object[] obj_defecto = (Object[]) lst_defecto.get(((lst_defecto.size() != 1) ? (lst_defecto.size() - 1) : 0));
                 MimeMessage message = new MimeMessage(session);
                 message.setFrom(new InternetAddress(arrConf[4]));
-                String[] destino = {"i.colmenares@plastitec-sa.com", "d.iso13485@plastitec-sa.com", "c.calidad1@plastitec-sa.com", "c.calidad2@plastitec-sa.com",
-                    "c.calidad3@plastitec-sa.com", "c.calidad4@plastitec-sa.com", "a.calidad9@plastitec-sa.com", "w.bustos@plastitec-sa.com", "c.produccionf1@plastitec-sa.com",
-                    "c.produccionf2@plastitec-sa.com", "a.prodprocesobolsa2@plastitec-sa.com", "e.rodriguez@plastitec-sa.com", "c.inyeccion1@plastitec-sa.com",
-                    "c.extrusion1@plastitec-sa.com", "n.castillo@plastitec-sa.com", "c.proyectos@plastitec-sa.com", "ajus.inyeccion@plastitec-sa.com", "j.mttofarma@plastitec-sa.com",
-                    "p.ti@plastitec-sa.com", "c.sgs@plastitec-sa.com", "w.hernandez@plastitec-sa.com"};
+                String[] destino = {"c.calidad1@plastitec.co", "c.calidad2@plastitec.co",
+                    "c.calidad3@plastitec.co", "c.calidad4@plastitec.co", "a.calidad9@plastitec.co", "c.gallo@plastitec-sa.com", "c.produccionf1@plastitec.co",
+                    "c.produccionf2@plastitec.co", "a.prodprocesobolsa2@plastitec-sa.com", "e.rodriguez@plastitec-sa.com", "c.inyeccion1@plastitec-sa.com",
+                    "c.extrusion1@plastitec-sa.com", "n.castillo@plastitec-sa.com", "c.proyectos@plastitec-sa.com", "ajus.inyeccion@plastitec.co", "j.villegas@plastitec-sa.com",
+                    "p.ti@plastitec-sa.com", "c.sgs@plastitec-sa.com", "w.hernandez@plastitec-sa.com", "d.mamian@plastitec-sa.com", "a.castiblanco@plastitec-sa.com"};
                 InternetAddress[] addresto = new InternetAddress[destino.length];
                 for (int i = 0; i < destino.length; i++) {
                     addresto[i] = new InternetAddress(destino[i]);
@@ -554,10 +555,10 @@ public class Email {
                 String[] arg_descripcion = obj_defecto[6].toString().replace("<hr />", "<hr/>").split("<hr/>");
                 String des1 = arg_descripcion[0].toString();
                 String des2 = arg_descripcion[1].toString();
-                des1 = des1.replace("<a href=\"UserFiles/", "<a href=\"http://172.16.5.99:8084/Herramental/UserFiles/");
-                des1 = des1.replace("<img src=\"UserFiles/", "<img src=\"http://172.16.5.99:8084/Herramental/UserFiles/");
-                des2 = des2.replace("<a href=\"UserFiles/", "<a href=\"http://172.16.5.99:8084/Herramental/UserFiles/");
-                des2 = des2.replace("<img src=\"UserFiles/", "<img src=\"http://172.16.5.99:8084/Herramental/UserFiles/");
+                des1 = des1.replace("<a href=\"UserFiles/", "<a href=\"http://172.16.2.117:8080/Herramental/UserFiles/");
+                des1 = des1.replace("<img src=\"UserFiles/", "<img src=\"http://172.16.2.117:8080/Herramental/UserFiles/");
+                des2 = des2.replace("<a href=\"UserFiles/", "<a href=\"http://172.16.2.117:8080/Herramental/UserFiles/");
+                des2 = des2.replace("<img src=\"UserFiles/", "<img src=\"http://172.16.2.117:8080/Herramental/UserFiles/");
                 String color = "";
                 if ((Integer) obj_defecto[1] == 1) {
                     color = "#FFE0E0";
