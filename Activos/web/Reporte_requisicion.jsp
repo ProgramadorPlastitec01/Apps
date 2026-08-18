@@ -20,7 +20,7 @@
         <body id="subpage">
             <div id="templatemo_wrapper">
             <alertas:Alertas/>
-            <div style="float: right;"><a href="javascript:window.open('http://172.16.2.111:8084/Activos/','','width=1024,height=720,left=50,top=50,toolbar=yes');void 0"><img style="width: 100px" src="Interfaz/Contenido/images/logoAct.png" alt="Portfolio1"></a></div><br /><br /><br />
+            <div style="float: right;"><a href="javascript:window.open('http://172.16.2.111:8080/Activos/','','width=1024,height=720,left=50,top=50,toolbar=yes');void 0"><img style="width: 100px" src="Interfaz/Contenido/images/logoAct.png" alt="Portfolio1"></a></div><br /><br /><br />
             <Reporte:Reporte_requisicion/>
         </div>
     </body>

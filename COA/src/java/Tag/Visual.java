@@ -29,8 +29,9 @@ public class Visual extends TagSupport {
         SettingJpaController SettingJpa = new SettingJpaController();
         CertificatesJpaController CertificatesJpa = new CertificatesJpaController();
         ConnectionGeneracionLotes GeneracionLotesJpa = new ConnectionGeneracionLotes();
-        String Type = "", Product = "", ProductFact = "", Batch = "", DataTechnicalSheet = "", Html = "", BatchLay = "", Record = "", FormatName = "", Message = "", IdSig = "", Permission = "", Client = "";
-        int Order = 0, IdForm = 0, Count = 1, Count2 = 1, IdCertificates = 0, State = 0, TempDelete = 0, StateCerti = 0, TempM = 0;
+        String Type = "", Product = "", ProductFact = "", Batch = "", DataTechnicalSheet = "", Html = "", BatchLay = "", Record = "", FormatName = "", Message = "", IdSig = "", Permission = "", Client = "", DateI = "", DateF = "";
+        String[] BatchCycle = {};
+        int Order = 0, IdForm = 0, Count = 1, Count2 = 1, IdCertificates = 0, State = 0, TempDelete = 0, StateCerti = 0, TempM = 0, AmoutReg = 0;
         List lst_content = null;
         List lst_headFact = null;
         List lst_RLab = null;
@@ -100,6 +101,25 @@ public class Visual extends TagSupport {
             } catch (Exception e) {
                 Permission = "";
             }
+            try {
+                DateI = sesion.getAttribute("DateI").toString();
+            } catch (Exception e) {
+                DateI = "";
+            }
+            try {
+                DateF = sesion.getAttribute("DateF").toString();
+            } catch (Exception e) {
+                DateF = "";
+            }
+            try {
+                AmoutReg = Integer.parseInt(Optional.ofNullable(pageContext.getRequest().getParameter("AmoutReg")).orElse("0"));
+            } catch (NumberFormatException e) {
+                AmoutReg = 0;
+            }
+            if (Batch.contains("///")) {
+                BatchCycle = Batch.split("///");
+                Batch = BatchCycle[0];
+            }
             Client = Optional.ofNullable(pageContext.getRequest().getParameter("Client")).orElse("");
             //</editor-fold>
             out.print("<section class='section'>");
@@ -113,6 +133,9 @@ public class Visual extends TagSupport {
                 //</editor-fold>
             }
             if (lst_content != null) {
+                out.print(" <div class=\"alert alert-info\"  style=\"display:block; margin-top:10px; background-color: #bae9ff; color: black\">\n"
+                        + "                   ✔️ Registros asociados: <b>" + AmoutReg + "</b> \n"
+                        + "                </div>");
                 Object[] Obj_Format = (Object[]) lst_content.get(0);
                 out.print("<div class='row'>");
                 out.print("<div class='col-12'>");
@@ -142,13 +165,24 @@ public class Visual extends TagSupport {
                 }
                 out.print("<h4>Generación Certificado</h4>");
                 out.print("</div>");
+
                 //<editor-fold defaultstate="collapsed" desc="BUTTOM'S">
                 if (StateCerti == 1) {
                     if (Permission.contains("[28]")) {
+                        out.print("<div class='d-flex'>");
                         List lstId = CertificatesJpa.ConsultCertificatesId(Type, IdCertificates);
                         if (lstId != null) {
                             Object[] ObjId = (Object[]) lstId.get(0);
                             out.print("<div>"
+                                    + "<button class='btn btn-outline-info btn-sm' "
+                                    + "style='border-radius: 4px; padding: 2px 9px;' "
+                                    + "onclick=\"UpdateCustomer();cargarDatos()\""
+                                    + " data-toggle='tooltip' "
+                                    + "data-placement='top' title='Clientes'>"
+                                    + "<i class=\"fas fa-id-card\"></i>"
+                                    + "</button></div>");
+
+                            out.print("<div class='ml-4'>"
                                     + "<button class='btn btn-outline-success btn-sm' "
                                     + "style='border-radius: 4px; padding: 2px 9px;' "
                                     + "onclick=\"javascript:location.href='Generate?opt=7&Type=" + Type + "&IdCertificates=" + IdCertificates + "&Customer=" + ObjId[4] + "&Anio=" + ObjId[12] + "&Order=" + ObjId[5] + "&Batch=" + ObjId[7] + "';cargarDatos()\""
@@ -157,18 +191,24 @@ public class Visual extends TagSupport {
                                     + "<i class='fas fa-check'></i>"
                                     + "</button></div>");
                         }
+                        out.print("</div>");
                     }
                 }
                 // Estado 2 → Firmar
                 if (StateCerti == 2) {
+
                     out.print("<div class='d-flex'>");
                     if (Permission.contains("[19]")) {
-                        out.print("<div class='mr-4'>"
-                                + "<button class='btn btn-outline-danger btn-sm' "
-                                + "style='border-radius: 4px; padding: 2px 9px;' onclick=\"confirmarDevolucion('Generate?opt=5&Type=" + Type + "&IdCertificates=" + IdCertificates + "&Category=Return&State=1')\" data-toggle='tooltip' "
-                                + "data-placement='top' title='Devolver'>"
-                                + "<i class=\"fas fa-undo-alt\"></i>"
-                                + "</button></div>");
+                        List lstId = CertificatesJpa.ConsultCertificatesId(Type, IdCertificates);
+                        if (lstId != null) {
+                            Object[] ObjId = (Object[]) lstId.get(0);
+                            out.print("<div class='mr-4'>"
+                                    + "<button class='btn btn-outline-danger btn-sm' "
+                                    + "style='border-radius: 4px; padding: 2px 9px;' onclick=\"confirmarDevolucion('Generate?opt=5&Type=" + Type + "&IdCertificates=" + IdCertificates + "&Category=Return&State=1&NumberCertificate=" + ObjId[3] + "')\" data-toggle='tooltip' "
+                                    + "data-placement='top' title='Devolver'>"
+                                    + "<i class=\"fas fa-undo-alt\"></i>"
+                                    + "</button></div>");
+                        }
                     }
                     if (Permission.contains("[11]")) {
                         out.print("<div>"
@@ -197,13 +237,32 @@ public class Visual extends TagSupport {
                     }
                 }
                 if (IdCertificates == 0) {
+                    out.print("<div class='d-flex'>");
                     out.print("<div>"
+                            + "<button class='btn btn-outline-warning btn-sm' "
+                            + "style='border-radius: 4px; padding: 2px 9px;' "
+                            + "onclick=\"UpdateCustomerCode();cargarDatos()\""
+                            + " data-toggle='tooltip' "
+                            + "data-placement='top' title='Código'>"
+                            + "<i class=\"fas fa-list-ol\"></i>"
+                            + "</button></div>");
+                    out.print("<div class='ml-4' >"
+                            + "<button class='btn btn-outline-info btn-sm' "
+                            + "style='border-radius: 4px; padding: 2px 9px;' "
+                            + "onclick=\"UpdateCustomer();cargarDatos()\""
+                            + " data-toggle='tooltip' "
+                            + "data-placement='top' title='Clientes'>"
+                            + "<i class=\"fas fa-id-card\"></i>"
+                            + "</button></div>");
+                    out.print("<div class='ml-4'>"
                             + "<button class='btn btn-outline-primary btn-sm' "
                             + "style='border-radius: 4px; padding: 2px 9px;' "
                             + "onclick='location.reload();' data-toggle='tooltip' "
                             + "data-placement='top' title='Recargar'>"
                             + "<i class='fas fa-sync-alt'></i>"
                             + "</button></div>");
+                    out.print("</div>");
+
                 }
                 out.print("</div>"); // Cierra contenedor principal
                 out.print("</div>");
@@ -239,18 +298,18 @@ public class Visual extends TagSupport {
                         //<editor-fold defaultstate="collapsed" desc="HEAD FACTORY">
                         String[] ArgHead = Util.parseResult(lst_headFact.get(1));
                         Html = Html.replace("XOrderX", (ArgHead[0].equals("NULL") || ArgHead[0] == null) ? "" + Order + "" : ArgHead[0]);
-                        Html = Html.replace("XClientX", (ArgHead[1].equals("NULL") || ArgHead[1] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" +  ArgHead[1] + "</span>");
-                        Html = Html.replace("XAddressX", (ArgHead[2].equals("NULL") || ArgHead[2] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" +  ArgHead[2] + "</span>");
-                        Html = Html.replace("XPhoneX", (ArgHead[3].equals("NULL") || ArgHead[3] == null) ? "<span  class='editable' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" + ArgHead[3] + "</span>" );
-                        Html = Html.replace("XCityX", (ArgHead[4].equals("NULL") || ArgHead[4] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" + ArgHead[4] + "</span>");
-                        Html = Html.replace("XCountryX", (ArgHead[5].equals("NULL") || ArgHead[5] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" + ArgHead[5] + "</span>");
+                        Html = Html.replace("XClientX", (ArgHead[1].equals("NULL") || ArgHead[1] == null) ? "<span class='editable pending' contenteditable='true'>----</span>" : "<span class='editable' contenteditable='true'>" + ArgHead[1] + "</span>");
+                        Html = Html.replace("XAddressX", (ArgHead[2].equals("NULL") || ArgHead[2] == null) ? "<span class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" + ArgHead[2] + "</span>");
+                        Html = Html.replace("XPhoneX", (ArgHead[3].equals("NULL") || ArgHead[3] == null) ? "<span  class='editable' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" + ArgHead[3] + "</span>");
+                        Html = Html.replace("XCityX", (ArgHead[4].equals("NULL") || ArgHead[4] == null) ? "<span class='editable pending' contenteditable='true'>----</span>" : "<span class='editable' contenteditable='true'>" + ArgHead[4] + "</span>");
+                        Html = Html.replace("XCountryX", (ArgHead[5].equals("NULL") || ArgHead[5] == null) ? "<span class='editable pending' contenteditable='true'>----</span>" : "<span class='editable' contenteditable='true'>" + ArgHead[5] + "</span>");
                         Html = Html.replace("XBillX", (ArgHead[6].equals("NULL") || ArgHead[6] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" + ArgHead[6] + "</span>");
                         Html = Html.replace("XReissue_listX", (ArgHead[7].equals("NULL") || ArgHead[7] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable ' contenteditable='true'>" + ArgHead[7] + "</span>");
                         Html = Html.replace("XProductX", (ArgHead[9].equals("NULL") || ArgHead[9] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable ' contenteditable='true'>" + ArgHead[9] + "</span>");
                         Html = Html.replace("XAbilityX", (ArgHead[10].equals("NULL") || ArgHead[10] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" + ArgHead[10] + "</span>");
                         Html = Html.replace("XBatchX", Batch);
                         Html = Html.replace("XQuatityGenX", "<span  class='editable' contenteditable='true'>" + ((ArgHead[11].equals("NULL") || ArgHead[11] == null) ? "----" : ArgHead[11]) + " UNIDADES </span>");
-                        Html = Html.replace("XClient_OrderX", (ArgHead[12].equals("NULL") || ArgHead[12] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" + ArgHead[12] + "</span>");
+                        Html = Html.replace("XClient_OrderX", (ArgHead[12].equals("NULL") || ArgHead[12] == null) ? "<span class='editable pending' contenteditable='true'>----</span>" : "<span class='editable' contenteditable='true'>" + ArgHead[12] + "</span>");
                         Html = Html.replace("<h3 id=\"consValue\" class=\"mb-0\">XConsX</h3>", "<h3 id=\"consValue\" class=\"mb-0 editable\" contenteditable='true' pending>CC----</h3>");
 
                         Html = Html.replace("XSampleX", "<span  class='editable pending' contenteditable='true'>----</span>");
@@ -288,9 +347,9 @@ public class Visual extends TagSupport {
                         String[] ArgTags = Util.parseResult(lst_tags.get(1));
                         if (ArgTags[5].contains("-")) {
                             String[] DateExpiración = ArgTags[5].split("-");
-                            Html = Html.replace("XYearMANX", DateExpiración[0]);
-                            Html = Html.replace("XMonthMANX", DateExpiración[1]);
-                            Html = Html.replace("XDayMANX", DateExpiración[2]);
+                            Html = Html.replace("XYearMANX", "<span  class='editable' contenteditable='true'>" + DateExpiración[0]  + "</span>");
+                            Html = Html.replace("XMonthMANX","<span  class='editable' contenteditable='true'>" + DateExpiración[1]  + "</span>");
+                            Html = Html.replace("XDayMANX", "<span  class='editable' contenteditable='true'>" + DateExpiración[2]  + "</span>");
                         } else {
                             Html = Html.replace("XYearMANX", "<span  class='editable pending' contenteditable='true'>----</span>");
                             Html = Html.replace("XMonthMANX", "<span  class='editable pending' contenteditable='true'>----</span>");
@@ -298,9 +357,9 @@ public class Visual extends TagSupport {
                         }
                         if (ArgTags[6].contains("-")) {
                             String[] DateExpiración = ArgTags[6].split("-");
-                            Html = Html.replace("XYearEXPX", DateExpiración[0]);
-                            Html = Html.replace("XMonthEXPX", DateExpiración[1]);
-                            Html = Html.replace("XDayEXPX", DateExpiración[2]);
+                            Html = Html.replace("XYearEXPX", "<span  class='editable' contenteditable='true'>" + DateExpiración[0] + "</span>");
+                            Html = Html.replace("XMonthEXPX", "<span  class='editable' contenteditable='true'>" + DateExpiración[1] + "</span>");
+                            Html = Html.replace("XDayEXPX", "<span  class='editable' contenteditable='true'>" + DateExpiración[2] + "</span>");
                         } else {
                             Html = Html.replace("XYearEXPX", "<span  class='editable pending' contenteditable='true'>----</span>");
                             Html = Html.replace("XMonthEXPX", "<span  class='editable pending' contenteditable='true'>----</span>");
@@ -931,6 +990,7 @@ public class Visual extends TagSupport {
                         out.print("<input type='hidden' name='Product' value='" + ProductFact + "'>");
                         out.print("<input type='hidden' name='Batch' value='" + Batch + "'>");
                         out.print("<input type='hidden' name='FormatName' value='" + FormatName + "'>");
+                        out.print("<input type='hidden' name='AmoutReg' value='" + AmoutReg + "'>");
                         out.print("</form>");
                         out.print("<div class='DivButtonPending'>");
                         out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='saveHtml()' data-toggle='tooltip' data-placement='top' title='Guardar'><i class='fas fa-save'></i></button>");

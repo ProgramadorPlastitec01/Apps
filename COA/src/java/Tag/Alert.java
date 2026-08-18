@@ -182,6 +182,30 @@ public class Alert extends TagSupport {
                     out.print("</script>");
                 }
             }
+            if (pageContext.getRequest().getAttribute("DuplicateCertificate") != null) {
+                boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("DuplicateCertificate").toString());
+                if (result) {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-2\").ready(function() {\n"
+                            + "  iziToast.success({\n"
+                            + "    title: 'Correcto',\n"
+                            + "    message: 'Se duplico el certificado correctamente .',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                } else {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-4\").ready(function() {\n"
+                            + "  iziToast.error({\n"
+                            + "    title: 'Error',\n"
+                            + "    message: 'Ha ocurrido un problema en el registro.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                }
+            }
             //</editor-fold>
             //<editor-fold defaultstate="collapsed" desc="SESSION">
             //<editor-fold defaultstate="collapsed" desc="UPDATE PASSWORD">
@@ -855,9 +879,9 @@ public class Alert extends TagSupport {
                     out.print("</script>");
                 }
             }
-        //</editor-fold>
+            //</editor-fold>
             //<editor-fold defaultstate="collapsed" desc="NOVETLY">
-        if (pageContext.getRequest().getAttribute("RegisterNovetly") != null) {
+            if (pageContext.getRequest().getAttribute("RegisterNovetly") != null) {
                 boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("RegisterNovetly").toString());
                 if (result) {
                     out.print("<script type='text/javascript'>");
@@ -865,6 +889,154 @@ public class Alert extends TagSupport {
                             + "  iziToast.success({\n"
                             + "    title: 'Correcto',\n"
                             + "    message: 'Se ha registra evento correctamente.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                } else {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-4\").ready(function() {\n"
+                            + "  iziToast.error({\n"
+                            + "    title: 'Error',\n"
+                            + "    message: 'Ha ocurrido un problema en el registro.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                }
+            }
+            //</editor-fold>
+            //<editor-fold defaultstate="collapsed" desc="CUSTOMER">
+            if (pageContext.getRequest().getAttribute("RegisterCustomer") != null) {
+                boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("RegisterCustomer").toString());
+                if (result) {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-2\").ready(function() {\n"
+                            + "  iziToast.success({\n"
+                            + "    title: 'Correcto',\n"
+                            + "    message: 'Se registro el cliente correctamente.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                } else {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-4\").ready(function() {\n"
+                            + "  iziToast.error({\n"
+                            + "    title: 'Error',\n"
+                            + "    message: 'Ha ocurrido un problema en el registro.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                }
+            }
+            if (pageContext.getRequest().getAttribute("UpdateCustomer") != null) {
+                boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("UpdateCustomer").toString());
+                if (result) {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-2\").ready(function() {\n"
+                            + "  iziToast.success({\n"
+                            + "    title: 'Correcto',\n"
+                            + "    message: 'Se modificó el cliente correctamente.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                } else {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-4\").ready(function() {\n"
+                            + "  iziToast.error({\n"
+                            + "    title: 'Error',\n"
+                            + "    message: 'Ha ocurrido un problema en el registro.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                }
+            }
+            if (pageContext.getRequest().getAttribute("UpdateCustomerState") != null) {
+                boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("UpdateCustomerState").toString());
+                if (result) {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-2\").ready(function() {\n"
+                            + "  iziToast.success({\n"
+                            + "    title: 'Correcto',\n"
+                            + "    message: 'Se actualizo el estado correctamente.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                } else {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-4\").ready(function() {\n"
+                            + "  iziToast.error({\n"
+                            + "    title: 'Error',\n"
+                            + "    message: 'Ha ocurrido un problema en el registro.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                }
+            }
+            //</editor-fold>
+            //<editor-fold defaultstate="collapsed" desc="CODE">
+            if (pageContext.getRequest().getAttribute("UpdateCode") != null) {
+                boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("UpdateCode").toString());
+                if (result) {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-2\").ready(function() {\n"
+                            + "  iziToast.success({\n"
+                            + "    title: 'Correcto',\n"
+                            + "    message: 'Se modifico el código correctamente.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                } else {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-4\").ready(function() {\n"
+                            + "  iziToast.error({\n"
+                            + "    title: 'Error',\n"
+                            + "    message: 'Ha ocurrido un problema en el registro.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                }
+            }
+            if (pageContext.getRequest().getAttribute("RegisterCode") != null) {
+                boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("RegisterCode").toString());
+                if (result) {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-2\").ready(function() {\n"
+                            + "  iziToast.success({\n"
+                            + "    title: 'Correcto',\n"
+                            + "    message: 'Se registró el código correctamente.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                } else {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-4\").ready(function() {\n"
+                            + "  iziToast.error({\n"
+                            + "    title: 'Error',\n"
+                            + "    message: 'Ha ocurrido un problema en el registro.',\n"
+                            + "    position: 'bottomRight'\n"
+                            + "  });\n"
+                            + "});");
+                    out.print("</script>");
+                }
+            }
+            if (pageContext.getRequest().getAttribute("UpdateCodeState") != null) {
+                boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("UpdateCodeState").toString());
+                if (result) {
+                    out.print("<script type='text/javascript'>");
+                    out.print("$(\"#toastr-2\").ready(function() {\n"
+                            + "  iziToast.success({\n"
+                            + "    title: 'Correcto',\n"
+                            + "    message: 'Se actualizo el estado del código correctamente.',\n"
                             + "    position: 'bottomRight'\n"
                             + "  });\n"
                             + "});");

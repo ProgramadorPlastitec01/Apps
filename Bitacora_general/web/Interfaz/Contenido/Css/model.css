@@ -278,6 +278,20 @@ h2 {
     text-transform: uppercase;
     background-color: #fff;
 }
+.sellado26520 {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr) repeat(2, .5fr);
+    border: 1px solid #888;
+    text-transform: uppercase;
+    background-color: #fff;
+}
+.sellado26520C {
+    display: grid;
+    grid-template-columns: repeat(11, 1fr);
+    border: 1px solid #888;
+    text-transform: uppercase;
+    background-color: #fff;
+}
 
 .sellado-2 {
     display: grid;
@@ -290,6 +304,12 @@ h2 {
 }
 .sellado25417 .titulo:nth-child(1){
     grid-column: 1 / 13;
+}
+.sellado26520 .titulo:nth-child(1){
+    grid-column: 1 / 14;
+}
+.sellado26520C .titulo:nth-child(1){
+    grid-column: 1 / -1;
 }
 
 .sellado-2 .titulo:nth-child(1){
@@ -306,6 +326,24 @@ h2 {
     padding: 5px;
 }
 .sellado25417 .titulo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border: 1px solid #888;
+    color: #000;
+    padding: 5px;
+}
+.sellado26520 .titulo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border: 1px solid #888;
+    color: #000;
+    padding: 5px;
+}
+.sellado26520C .titulo{
     display: flex;
     justify-content: center;
     align-items: center;

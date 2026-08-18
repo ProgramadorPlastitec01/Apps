@@ -90,11 +90,11 @@ public class Informe extends HttpServlet {
                     if (obj_historial[4].toString().equals("SI")) {
                         mail.Recordatorio_actualizacion_horometros(obj_historial[0].toString(), obj_historial[3].toString());
                     }
-                    response.sendRedirect("http://172.16.2.117:8084/Aplicativos_Plastitec/Automatic_servlets.jsp");
+                    response.sendRedirect("http://172.16.2.117:8080/Aplicativos_Plastitec/Automatic_servlets.jsp");
                     break;
                 case 7:
                     mail.Recordatorio_OT_emitidas_sin_ejecucion();
-                    response.sendRedirect("http://172.16.2.117:8084/Aplicativos_Plastitec/Automatic_servlets.jsp");
+                    response.sendRedirect("http://172.16.2.117:8080/Aplicativos_Plastitec/Automatic_servlets.jsp");
                     break;
             }
         } catch (Exception ex) {

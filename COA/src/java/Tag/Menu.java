@@ -16,7 +16,13 @@ public class Menu extends TagSupport {
         try {
             HttpSession sesion = pageContext.getSession();
             String Permission = "";
-            String NameUser = sesion.getAttribute("Nombres").toString();
+            String NameUser = "";
+            try {
+                Object objNombre = sesion.getAttribute("Nombres");
+                NameUser = objNombre != null ? objNombre.toString() : "";
+            } catch (Exception e) {
+                NameUser = "";
+            }
             int year = LocalDate.now().getYear();
             try {
                 Permission = sesion.getAttribute("Permisos").toString();
@@ -78,7 +84,18 @@ public class Menu extends TagSupport {
             out.print("</div>");
 
             out.print("<ul class=\"sidebar-menu\">");
-
+            out.print("<li class=\"menu-header\">Parametrización</li>");
+            // ===================== Customer =====================
+            if (Permission.contains("[35]")) {
+                out.print("<li class=\"dropdown\">");
+                out.print("<a href='Customer?opt=1' class=\"nav-link\" onclick='cargarDatos()'><i class=\"fas fa-users\"></i><span>Cliente</span></a>");
+                out.print("</li>");
+            }
+            if (Permission.contains("[35]")) {
+                out.print("<li class=\"dropdown\">");
+                out.print("<a href='Code?opt=1' class=\"nav-link\" onclick='cargarDatos()'><i class=\"fas fa-list-ol\"></i><span>Código</span></a>");
+                out.print("</li>");
+            }
             // ===================== BatchRecord =====================
             out.print("<li class=\"menu-header\">Batch Record</li>");
 

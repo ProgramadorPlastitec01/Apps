@@ -43,22 +43,26 @@ public class Alertas extends TagSupport {
                 out.print("<div class='sweet-local' style='opacity: 1.03; display: flex; margin:auto;align-items: center;'>");
                 out.print("<fieldset class='popup_local' style='margin-left:25%;margin-top:-10%;width:45%;'>");
                 out.print("<center><b>Cambiar Contraseña</b></center>");
-                out.print("<p>Recordar que la protección de datos, usuario y contraseña, ayuda a evitar fraudes o alteraciones en la Organización (Platitec S.A) y en este Aplicativo.</p>");
+                out.print("<p>Recordar que la protección de datos, usuario y contraseña, ayuda a evitar fraudes o alteraciones en la Organización (Platitec) y en este Aplicativo.</p>");
                 out.print("<form action='Login?opc=5' method='post'>");
                 out.print("<center>");
                 out.print("<input type='hidden' id='Id_usuario' name='Id_usuario' value='" + id_usuario + "' />");
-                out.print("<input class='respass' type='password' id='pass-input' class='placeholder-white' placeholder='Nueva Contraseña' style='border-bottom: solid 1px gray; border-left: none;border-right: none;border-top: none;position:relative;top:2px'>&nbsp;&nbsp;&nbsp;");
+                out.print("<input type='password' id='pass-input' class='placeholder-white' placeholder='Nueva Contraseña' style='border-bottom: solid 1px gray; border-left: none;border-right: none;border-top: none;position:relative;top:2px'>&nbsp;&nbsp;&nbsp;");
+               
                 out.print("<script>");
                 out.print("var validatedObj = new LiveValidation('pass-input');");
                 out.print("validatedObj.add(Validate.Password);");
                 out.print("validatedObj.add(Validate.Presence);");
                 out.print("</script>");
-                out.print("<input class='respass' type='password' id='confpass-input' class='placeholder-white' name='Txt_password' placeholder='Confirmar Contraseña' style='border-bottom: solid 1px gray; border-left: none;border-right: none;border-top: none;position:relative;top:2px' >");
+                
+                out.print("<input type='password' id='confpass-input' class='placeholder-white' name='Txt_password' placeholder='Confirmar Contraseña' style='border-bottom: solid 1px gray; border-left: none;border-right: none;border-top: none;position:relative;top:2px' >");
+               
                 out.print("<script>");
                 out.print("var validatedObj = new LiveValidation('confpass-input');");
                 out.print("validatedObj.add(Validate.Password);");
                 out.print("validatedObj.add(Validate.Confirmation, { match: 'pass-input' });");
                 out.print("</script>");
+                
                 out.print("</center>");
                 out.print("<div style='float:right;'><img src='Interfaz/Graficas/api/images/spy.gif' alt='Logo' width='200' height='150' style='margin-right: 40px;' /></div>");
                 out.print("<div class='Ayuda'>");

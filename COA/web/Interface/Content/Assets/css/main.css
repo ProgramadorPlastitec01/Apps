@@ -3460,3 +3460,34 @@ thead.sticky-top {
 .pdf-mode col.col-text {
     width: 50% !important;
 }
+
+.loader {
+    width: 60px;
+    height: 60px;
+    margin: 15px auto;
+    border: 6px solid #e9ecef;
+    border-top: 6px solid #28a745;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+.loader-text {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 15px;
+    color: #555;
+    line-height: 1.5;
+}
+
+.loader-text strong {
+    color: #28a745;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}

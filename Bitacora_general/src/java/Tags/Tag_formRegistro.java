@@ -45,8 +45,6 @@ public class Tag_formRegistro extends TagSupport {
 
         String fechaFormateada = fechaActual.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 
-        int currentDate = Integer.parseInt(fechaFormateada);
-
         try {
             try {
                 idLinea = Integer.parseInt(pageContext.getRequest().getAttribute("idLinea").toString());
@@ -97,7 +95,6 @@ public class Tag_formRegistro extends TagSupport {
             // Obtiene la informacion del registro segun su ID
             lstRegistro = jpaRegistro.consultarRegistrosPorID(idRegistro);
             if (lstRegistro != null) {
-
                 Object[] objRegistro = (Object[]) lstRegistro.get(0);
                 String dates = objRegistro[1].toString().replace("-", "");
                 int date = Integer.parseInt(dates.toString());
@@ -131,7 +128,9 @@ public class Tag_formRegistro extends TagSupport {
                 out.println("<div class='cabecera-titulo'><span>REGISTRO</span></div>");
                 out.println("<div class='cabecera-titulo'><span>CODIGO: R-MTF-011</span></div>");
                 out.println("<div class='cabecera-titulo'><span style='text-align: center;' >REPORTE DE TRABAJO DE MANTENIMIENTO</span></div>");
-                if (date >= 20250415) {
+                if (date >= 20260521) {
+                    out.println("<div class='cabecera-titulo'><span>VERSION: 018</span></div>");
+                } else if (date >= 20250415) {
                     out.println("<div class='cabecera-titulo'><span>VERSION: 017</span></div>");
                 } else if (date >= 20241204) {
                     out.println("<div class='cabecera-titulo'><span>VERSION: 016</span></div>");
@@ -594,12 +593,59 @@ public class Tag_formRegistro extends TagSupport {
                 for (int i = 0; i < equipos.length; i++) {
                     Object[] idLiSellado = equipos[i].toString().replace(", ", "").split("---");
                     out.println("<option value='" + idLiSellado[0] + "'>" + idLiSellado[1] + "</option>");
-
                 }
                 out.println("</select>");
                 out.println("</div>");
-                if (date >= 20250415) {
-                    //<editor-fold defaultstate="collapsed" desc="NUEVA VERSIÓN">
+                if (date >= 20260521) {
+                    //<editor-fold defaultstate="collapsed" desc="VERSION 2026-05-20">
+                    out.println("<div class='campo-modal'>");
+                    out.println("<label for='campo2' class='titulo-label'>TIEMPOS SELLADO (ANILLOS - MANGA - FLAMEADO) SEG</label>");
+                    out.println("<div class='entrada'><input type='text' name='campo2' id='campo2' oninput='controltextosellado260521()'></div>");
+                    out.println("</div>");
+                    out.println("<div class='campo-modal'>");
+                    out.println("<label for='campo3' class='titulo-label'>SISTEMA CORTE DUCTO (CUCHILLAS)</label>");
+                    out.println("<div class='entrada'><input type='text' name='campo3' id='campo3' oninput='controltextosellado260521()'></div>");
+                    out.println("</div>");
+                    out.println("<div class='campo-modal'>");
+                    out.println("<label for='campo4' class='titulo-label'>PRESION REFRIGERACION - GENERACION PSI</label>");
+                    out.println("<div class='entrada'><input type='text' name='campo4' id='campo4' oninput='controltextosellado260521()'></div>");
+                    out.println("</div>");
+                    out.println("<div class='campo-modal'>");
+                    out.println("<label for='campo5' class='titulo-label'>PRESION NEUM./HCA. PRENSA BAR/PSI</label>");
+                    out.println("<div class='entrada'><input type='text' name='campo5' id='campo5' oninput='controltextosellado260521()'></div>");
+                    out.println("</div>");
+                    out.println("<div class='campo-modal'>");
+                    out.println("<label for='campo6' class='titulo-label'>T° HORNO U.V °C <br/> / LED </label>");
+                    out.println("<div class='entrada'><input type='text' name='campo6' id='campo6' oninput='controltextosellado260521()'></div>");
+                    out.println("</div>");
+
+                    out.println("<div class='campo-modal'>");
+                    out.println("<label for='campo7' class='titulo-label'>T° ELECTRODOS °C</label>");
+                    out.println("<div class='entrada'><input type='text' name='campo7' id='campo7' oninput='controltextosellado260521()'></div>");
+                    out.println("</div>");
+
+                    out.println("<div class='campo-modal'>");
+                    out.println("<label for='campo8' class='titulo-label'>ESTADO MANDRILES</label>");
+                    out.println("<div class='entrada'><input type='text' name='campo8' id='campo8' oninput='controltextosellado260521()'></div>");
+                    out.println("</div>");
+
+                    out.println("<div class='campo-modal'>");
+                    out.println("<label for='campo9' class='titulo-label'>VOLTAJE GRILLA</label>");
+                    out.println("<div class='entrada'><input type='text' name='campo9' id='campo9' oninput='controltextosellado260521()'></div>");
+                    out.println("</div>");
+
+                    out.println("<div class='campo-modal'>");
+                    out.println("<label for='campo10' class='titulo-label'>SISTEMA CORTE DUCTO</label>");
+                    out.println("<div class='entrada'><input type='text' name='campo10' id='campo10' oninput='controltextosellado260521()'></div>");
+                    out.println("</div>");
+
+                    out.println("<div class='campo-modal'>");
+                    out.println("<label for='campo11' class='titulo-label'>ALINEACION Y CENTRADO DE MANDRILES</label>");
+                    out.println("<div class='entrada'><input type='text' name='campo11' id='campo11' oninput='controltextosellado260521()'></div>");
+                    out.println("</div>");
+                    //</editor-fold>
+                } else if (date >= 20250415) {
+                    //<editor-fold defaultstate="collapsed" desc="2025-04-15">
                     out.println("<div class='campo-modal'>");
                     out.println("<label for='campo2' class='titulo-label'>TIEMPOS SELLADO (ANILLOS - MANGA - FLAMEADO) SEG</label>");
                     out.println("<div class='entrada'><input type='text' name='campo2' id='campo2' oninput='controltextosellado250414()'></div>");
@@ -625,7 +671,7 @@ public class Tag_formRegistro extends TagSupport {
                     out.println("<label for='campo7' class='titulo-label'>T° ELECTRODOS °C</label>");
                     out.println("<div class='entrada'><input type='text' name='campo7' id='campo7' oninput='controltextosellado250414()'></div>");
                     out.println("</div>");
-                    
+
                     out.println("<div class='campo-modal'>");
                     out.println("<label for='campo8' class='titulo-label'>ESTADO MANDRILES</label>");
                     out.println("<div class='entrada'><input type='text' name='campo8' id='campo8' oninput='controltextosellado250414()'></div>");
@@ -640,6 +686,7 @@ public class Tag_formRegistro extends TagSupport {
                     out.println("<label for='campo10' class='titulo-label'>SISTEMA CORTE DUCTO</label>");
                     out.println("<div class='entrada'><input type='text' name='campo10' id='campo10' oninput='controltextosellado250414()'></div>");
                     out.println("</div>");
+
                     //</editor-fold>
                 } else {
                     //<editor-fold defaultstate="collapsed" desc="ANTES">
@@ -720,43 +767,86 @@ public class Tag_formRegistro extends TagSupport {
                             }
                             out.println("</select>");
                             out.println("</div>");
-                            if (date >= 20250415) {
-                                //<editor-fold defaultstate="collapsed" desc="NUEVA VERSION">
+                            if (date >= 20260521) {
+                                //<editor-fold defaultstate="collapsed" desc="VERSION 2026-05-20">
                                 out.println("<div>");
                                 out.println("<label for='campo2' class='titulo-label'>TIEMPOS SELLADO (ANILLOS - MANGA - FLAMEADO) SEG</label>");
-                                out.println(!descLinSell[2].equals(":") ? "<input type='text' name='campo2' id='campoM2' oninput='verificacionTextoSellado()' value='" + descLinSell[2] + "'>" : "<input type='text' name='campo2' id='campoM2' oninput='verificacionTextoSellado()' value=''>");
+                                out.println(!descLinSell[2].equals(":") ? "<input type='text' name='campo2' id='campoM2' oninput='verificacionTextoSellado260520()' value='" + descLinSell[2] + "'>" : "<input type='text' name='campo2' id='campoM2' oninput='verificacionTextoSellado260520()' value=''>");
                                 out.println("</div>");
                                 out.println("<div>");
                                 out.println("<label for='campo3' class='titulo-label'>SISTEMA CORTE DUCTO (CUCHILLAS)</label>");
-                                out.println(!descLinSell[3].equals(":") ? "<div class='entrada'><input type='text' name='campo3' id='campoM3' oninput='verificacionTextoSellado()' value='" + descLinSell[3] + "'></div>" : "<div class='entrada'><input type='text' name='campo3' id='campoM3' oninput='verificacionTextoSellado()' value=''></div>");
+                                out.println(!descLinSell[3].equals(":") ? "<div class='entrada'><input type='text' name='campo3' id='campoM3' oninput='verificacionTextoSellado260520()' value='" + descLinSell[3] + "'></div>" : "<div class='entrada'><input type='text' name='campo3' id='campoM3' oninput='verificacionTextoSellado260520()' value=''></div>");
                                 out.println("</div>");
                                 out.println("<div>");
                                 out.println("<label for='campo4' class='titulo-label'>PRESION REFRIGERACION - GENERACION PSI</label>");
-                                out.println(!descLinSell[4].equals(":") ? "<div class='entrada'><input type='text' name='campo4' id='campoM4' oninput='verificacionTextoSellado()' value='" + descLinSell[4] + "'></div>" : "<div class='entrada'><input type='text' name='campo4' id='campoM4' oninput='verificacionTextoSellado()' value=''></div>");
+                                out.println(!descLinSell[4].equals(":") ? "<div class='entrada'><input type='text' name='campo4' id='campoM4' oninput='verificacionTextoSellado260520()' value='" + descLinSell[4] + "'></div>" : "<div class='entrada'><input type='text' name='campo4' id='campoM4' oninput='verificacionTextoSellado260520()' value=''></div>");
                                 out.println("</div>");
                                 out.println("<div>");
                                 out.println("<label for='campo5' class='titulo-label'>PRESION NEUM./HCA. PRENSA BAR/PSI</label>");
-                                out.println(!descLinSell[5].equals(":") ? "<div class='entrada'><input type='text' name='campo5' id='campoM5' oninput='verificacionTextoSellado()' value='" + descLinSell[5] + "'></div>" : "<div class='entrada'><input type='text' name='campo5' id='campoM5' oninput='verificacionTextoSellado()' value=''></div>");
+                                out.println(!descLinSell[5].equals(":") ? "<div class='entrada'><input type='text' name='campo5' id='campoM5' oninput='verificacionTextoSellado260520()' value='" + descLinSell[5] + "'></div>" : "<div class='entrada'><input type='text' name='campo5' id='campoM5' oninput='verificacionTextoSellado260520()' value=''></div>");
                                 out.println("</div>");
                                 out.println("<div>");
                                 out.println("<label for='campo6' class='titulo-label'>T° HORNO U.V °C <br/> / LED </label>");
-                                out.println(!descLinSell[6].equals(":") ? "<div class='entrada'><input type='text' name='campo6' id='campoM6' oninput='verificacionTextoSellado()' value='" + descLinSell[6] + "'></div>" : "<div class='entrada'><input type='text' name='campo6' id='campoM6' oninput='verificacionTextoSellado()' value=''></div>");
+                                out.println(!descLinSell[6].equals(":") ? "<div class='entrada'><input type='text' name='campo6' id='campoM6' oninput='verificacionTextoSellado260520()' value='" + descLinSell[6] + "'></div>" : "<div class='entrada'><input type='text' name='campo6' id='campoM6' oninput='verificacionTextoSellado260520()' value=''></div>");
                                 out.println("</div>");
                                 out.println("<div>");
                                 out.println("<label for='campo7' class='titulo-label'>T° ELECTRODOS °C</label>");
-                                out.println(!descLinSell[7].equals(":") ? "<div class='entrada'><input type='text' name='campo7' id='campoM7' oninput='verificacionTextoSellado()' value='" + descLinSell[7] + "'></div>" : "<div class='entrada'><input type='text' name='campo7' id='campoM7' oninput='verificacionTextoSellado()' value=''></div>");
+                                out.println(!descLinSell[7].equals(":") ? "<div class='entrada'><input type='text' name='campo7' id='campoM7' oninput='verificacionTextoSellado260520()' value='" + descLinSell[7] + "'></div>" : "<div class='entrada'><input type='text' name='campo7' id='campoM7' oninput='verificacionTextoSellado260520()' value=''></div>");
                                 out.println("</div>");
                                 out.println("<div>");
                                 out.println("<label for='campo8' class='titulo-label'>ESTADO MANDRILES</label>");
-                                out.println(!descLinSell[8].equals(":") ? "<div class='entrada'><input type='text' name='campo8' id='campoM8' oninput='verificacionTextoSellado()' value='" + descLinSell[8] + "'></div>" : "<div class='entrada'><input type='text' name='campo8' id='campoM8' oninput='verificacionTextoSellado()' value=''></div>");
+                                out.println(!descLinSell[8].equals(":") ? "<div class='entrada'><input type='text' name='campo8' id='campoM8' oninput='verificacionTextoSellado260520()' value='" + descLinSell[8] + "'></div>" : "<div class='entrada'><input type='text' name='campo8' id='campoM8' oninput='verificacionTextoSellado260520()' value=''></div>");
                                 out.println("</div>");
                                 out.println("<div>");
                                 out.println("<label for='campo9' class='titulo-label'>VOLTAJE GRILLA</label>");
-                                out.println(!descLinSell[9].equals(":") ? "<div class='entrada'><input type='text' name='campo9' id='campoM9' oninput='verificacionTextoSellado()' value='" + descLinSell[9] + "'></div>" : "<div class='entrada'><input type='text' name='campo9' id='campoM9' oninput='verificacionTextoSellado()' value=''></div>");
+                                out.println(!descLinSell[9].equals(":") ? "<div class='entrada'><input type='text' name='campo9' id='campoM9' oninput='verificacionTextoSellado260520()' value='" + descLinSell[9] + "'></div>" : "<div class='entrada'><input type='text' name='campo9' id='campoM9' oninput='verificacionTextoSellado260520()' value=''></div>");
                                 out.println("</div>");
                                 out.println("<div>");
                                 out.println("<label for='campo10' class='titulo-label'>SISTEMA CORTE DUCTO</label>");
-                                out.println(!descLinSell[10].equals(":") ? "<div class='entrada'><input type='text' name='campo10' id='campoM10' oninput='verificacionTextoSellado()' value='" + descLinSell[10] + "'></div>" : "<div class='entrada'><input type='text' name='campo10' id='campoM10' oninput='verificacionTextoSellado()' value=''></div>");
+                                out.println(!descLinSell[10].equals(":") ? "<div class='entrada'><input type='text' name='campo10' id='campoM10' oninput='verificacionTextoSellado260520()' value='" + descLinSell[10] + "'></div>" : "<div class='entrada'><input type='text' name='campo10' id='campoM10' oninput='verificacionTextoSellado260520()' value=''></div>");
+                                out.println("</div>");
+                                out.println("<div>");
+                                out.println("<label for='campo11' class='titulo-label'>ALINEACION Y CENTRADO DE MANDRILES</label>");
+                                out.println(!descLinSell[11].equals(":") ? "<div class='entrada'><input type='text' name='campo11' id='campoM11' oninput='verificacionTextoSellado260520()' value='" + descLinSell[11] + "'></div>" : "<div class='entrada'><input type='text' name='campo11' id='campoM11' oninput='verificacionTextoSellado260520()' value=''></div>");
+                                out.println("</div>");
+                                //</editor-fold>
+                            } else if (date >= 20250415) {
+                                //<editor-fold defaultstate="collapsed" desc="NUEVA VERSION">
+                                out.println("<div>");
+                                out.println("<label for='campo2' class='titulo-label'>TIEMPOS SELLADO (ANILLOS - MANGA - FLAMEADO) SEG</label>");
+                                out.println(!descLinSell[2].equals(":") ? "<input type='text' name='campo2' id='campoM2' oninput='verificacionTextoSellado250414()' value='" + descLinSell[2] + "'>" : "<input type='text' name='campo2' id='campoM2' oninput='verificacionTextoSellado250414()' value=''>");
+                                out.println("</div>");
+                                out.println("<div>");
+                                out.println("<label for='campo3' class='titulo-label'>SISTEMA CORTE DUCTO (CUCHILLAS)</label>");
+                                out.println(!descLinSell[3].equals(":") ? "<div class='entrada'><input type='text' name='campo3' id='campoM3' oninput='verificacionTextoSellado250414()' value='" + descLinSell[3] + "'></div>" : "<div class='entrada'><input type='text' name='campo3' id='campoM3' oninput='verificacionTextoSellado250414()' value=''></div>");
+                                out.println("</div>");
+                                out.println("<div>");
+                                out.println("<label for='campo4' class='titulo-label'>PRESION REFRIGERACION - GENERACION PSI</label>");
+                                out.println(!descLinSell[4].equals(":") ? "<div class='entrada'><input type='text' name='campo4' id='campoM4' oninput='verificacionTextoSellado250414()' value='" + descLinSell[4] + "'></div>" : "<div class='entrada'><input type='text' name='campo4' id='campoM4' oninput='verificacionTextoSellado250414()' value=''></div>");
+                                out.println("</div>");
+                                out.println("<div>");
+                                out.println("<label for='campo5' class='titulo-label'>PRESION NEUM./HCA. PRENSA BAR/PSI</label>");
+                                out.println(!descLinSell[5].equals(":") ? "<div class='entrada'><input type='text' name='campo5' id='campoM5' oninput='verificacionTextoSellado250414()' value='" + descLinSell[5] + "'></div>" : "<div class='entrada'><input type='text' name='campo5' id='campoM5' oninput='verificacionTextoSellado250414()' value=''></div>");
+                                out.println("</div>");
+                                out.println("<div>");
+                                out.println("<label for='campo6' class='titulo-label'>T° HORNO U.V °C <br/> / LED </label>");
+                                out.println(!descLinSell[6].equals(":") ? "<div class='entrada'><input type='text' name='campo6' id='campoM6' oninput='verificacionTextoSellado250414()' value='" + descLinSell[6] + "'></div>" : "<div class='entrada'><input type='text' name='campo6' id='campoM6' oninput='verificacionTextoSellado250414()' value=''></div>");
+                                out.println("</div>");
+                                out.println("<div>");
+                                out.println("<label for='campo7' class='titulo-label'>T° ELECTRODOS °C</label>");
+                                out.println(!descLinSell[7].equals(":") ? "<div class='entrada'><input type='text' name='campo7' id='campoM7' oninput='verificacionTextoSellado250414()' value='" + descLinSell[7] + "'></div>" : "<div class='entrada'><input type='text' name='campo7' id='campoM7' oninput='verificacionTextoSellado250414()' value=''></div>");
+                                out.println("</div>");
+                                out.println("<div>");
+                                out.println("<label for='campo8' class='titulo-label'>ESTADO MANDRILES</label>");
+                                out.println(!descLinSell[8].equals(":") ? "<div class='entrada'><input type='text' name='campo8' id='campoM8' oninput='verificacionTextoSellado250414()' value='" + descLinSell[8] + "'></div>" : "<div class='entrada'><input type='text' name='campo8' id='campoM8' oninput='verificacionTextoSellado250414()' value=''></div>");
+                                out.println("</div>");
+                                out.println("<div>");
+                                out.println("<label for='campo9' class='titulo-label'>VOLTAJE GRILLA</label>");
+                                out.println(!descLinSell[9].equals(":") ? "<div class='entrada'><input type='text' name='campo9' id='campoM9' oninput='verificacionTextoSellado250414()' value='" + descLinSell[9] + "'></div>" : "<div class='entrada'><input type='text' name='campo9' id='campoM9' oninput='verificacionTextoSellado250414()' value=''></div>");
+                                out.println("</div>");
+                                out.println("<div>");
+                                out.println("<label for='campo10' class='titulo-label'>SISTEMA CORTE DUCTO</label>");
+                                out.println(!descLinSell[10].equals(":") ? "<div class='entrada'><input type='text' name='campo10' id='campoM10' oninput='verificacionTextoSellado250414()' value='" + descLinSell[10] + "'></div>" : "<div class='entrada'><input type='text' name='campo10' id='campoM10' oninput='verificacionTextoSellado250414()' value=''></div>");
                                 out.println("</div>");
                                 //</editor-fold>
                             } else {
@@ -797,7 +887,10 @@ public class Tag_formRegistro extends TagSupport {
                             }
                             out.println("</div>");
                             String desc = "";
-                            if (date >= 20250415) {
+                            if (date >= 20260521) {
+                                desc = descLinSell[2] + "///" + descLinSell[3] + "///" + descLinSell[4] + "///" + descLinSell[5] + "///" + descLinSell[6]
+                                        + "///" + descLinSell[7] + "///" + descLinSell[8] + "///" + descLinSell[9] + "///" + descLinSell[10] + "///" + descLinSell[11];
+                            } else if (date >= 20250415) {
                                 desc = descLinSell[2] + "///" + descLinSell[3] + "///" + descLinSell[4] + "///" + descLinSell[5] + "///" + descLinSell[6]
                                         + "///" + descLinSell[7] + "///" + descLinSell[8] + "///" + descLinSell[9] + "///" + descLinSell[10];
                             } else {
@@ -814,8 +907,9 @@ public class Tag_formRegistro extends TagSupport {
                     out.println("</div>");
                     //</editor-fold>
                 }
-
-                if (date >= 20250415) {
+                if (date >= 20260521) {
+                    out.println("<div " + ((objRegistro[12].equals(1)) ? "class='sellado26520 espacio sombreado'" : "class='sellado26520C espacio sombreado'") + ">");
+                } else if (date >= 20250415) {
                     out.println("<div " + ((objRegistro[12].equals(1)) ? "class='sellado25417 espacio sombreado'" : "class='sellado-2 espacio sombreado'") + ">");
                 } else {
                     out.println("<div " + ((objRegistro[12].equals(1)) ? "class='sellado espacio sombreado'" : "class='sellado-2 espacio sombreado'") + ">");
@@ -832,6 +926,9 @@ public class Tag_formRegistro extends TagSupport {
                 out.println("<div class='titulo fuente-negrita color-fondo'> VOLTAJE GRILLA </div>");
                 if (date >= 20250415) {
                     out.println("<div class='titulo fuente-negrita color-fondo'> SISTEMA CORTE DUCTO </div>");
+                }
+                if (date >= 20260521) {
+                    out.println("<div class='titulo fuente-negrita color-fondo'> ALINEACION Y <br/> CENTRADO DE MANDRILES </div>");
                 }
                 if (objRegistro[12].equals(1)) {
                     out.println("<div class='titulo fuente-negrita color-fondo'> EDITAR </div>");
@@ -863,8 +960,13 @@ public class Tag_formRegistro extends TagSupport {
                             if (date >= 20250415) {
                                 out.println(campo[10].equals(":") ? "<div class='titulo'> - </div>" : "<div class='titulo'>" + campo[10] + "</div>");
                             }
+                            if (date >= 20260521) {
+                                out.println(campo[11].equals(":") ? "<div class='titulo'> - </div>" : "<div class='titulo'>" + campo[11] + "</div>");
+                            }
                             String frase = "";
-                            if (date >= 20250415) {
+                            if (date >= 20260521) {
+                                frase = campo[2].toString() + "///" + campo[3] + "///" + campo[4] + "///" + campo[5] + "///" + campo[6] + "///" + campo[7] + "///" + campo[8] + "///" + campo[9] + "///" + campo[10] + "///" + campo[11];
+                            } else if (date >= 20250415) {
                                 frase = campo[2].toString() + "///" + campo[3] + "///" + campo[4] + "///" + campo[5] + "///" + campo[6] + "///" + campo[7] + "///" + campo[8] + "///" + campo[9] + "///" + campo[10];
                             } else {
                                 frase = campo[2].toString() + "///" + campo[3] + "///" + campo[4] + "///" + campo[5] + "///" + campo[6] + "///" + campo[7] + "///" + campo[8] + "///" + campo[9];
@@ -889,8 +991,20 @@ public class Tag_formRegistro extends TagSupport {
                             out.println("<div class='titulo fuente-negrita'>");
                             out.println("<i class=\"fas fa-plus\" style='cursor:pointer' onclick=\"lineaSellado(1)\"></i>");
                             out.println("</div>");
-                            out.println("<div class='titulo'></div><div class='titulo'></div><div class='titulo'></div><div class='titulo'></div><div class='titulo'></div><div class='titulo'></div><div class='titulo'></div><div class='titulo'></div><div class='titulo'></div><div class='titulo'></div>");
+                            out.println(""
+                                    + "<div class='titulo'></div>"
+                                    + "<div class='titulo'></div>"
+                                    + "<div class='titulo'></div>"
+                                    + "<div class='titulo'></div>"
+                                    + "<div class='titulo'></div>"
+                                    + "<div class='titulo'></div>"
+                                    + "<div class='titulo'></div>"
+                                    + "<div class='titulo'></div>"
+                                    + "<div class='titulo'></div>"
+                                    + "<div class='titulo'></div>"
+                                    + "<div class='titulo'></div>");
                         } else {
+                            out.println("<div class='campo-bocas fuente-negrita linea'>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</div>");
                             out.println("<div class='campo-bocas fuente-negrita linea'>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</div>");
                             out.println("<div class='campo-bocas fuente-negrita linea'>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</div>");
                             out.println("<div class='campo-bocas fuente-negrita linea'>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</div>");
@@ -913,6 +1027,9 @@ public class Tag_formRegistro extends TagSupport {
                 out.println("<strong>- VERIFICAR ESTADO DE MANDRILES</strong> EN LAS LINEAS COLPITT ASEGURANDO QUE NO SE ENCUENTREN CON LA SUPERFICIE BRILLANTE.");
                 if (date >= 20250415) {
                     out.println("<br><strong>- VERIFICAR SISTEMA CORTE DUCTO </strong> GARANTIZAR CORRECTO FUNCIONAMIENTO DEL SISTEMA CORTE DUCTO, REALIZAR LIMPIEZA AL SISTEMA INCLUYENDO LA RANURA DE CORTE DUCTO CON TRAPO EN CERRUTINA Y ALCOHOL DE SER NECESARIO.");
+                }
+                if (date >= 20260521) {
+                    out.println("<br><strong>- VERIFICAR CENTRADO DE MANDRILES VS DADOS DE SELLADO ANILLOS EN LAS LINEAS PP, PARA GARANTIZAR SU CORRECTA POSICION DURANTE EL PROCESO DE FABRICACION DE BOLSAS.</strong>");
                 }
                 out.println("</div>");
                 //</editor-fold>

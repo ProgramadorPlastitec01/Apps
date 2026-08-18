@@ -22,7 +22,7 @@ public class ReferenciasMANT {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
 //            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 //            Connection con = DriverManager.getConnection("jdbc:jtds:sqlserver://172.16.2.119:1433;databaseName=EMP002_MANT;encrypt=false;trustServerCertificate=true;", "sa", "plast");
-            Connection con = DriverManager.getConnection("jdbc:jtds:sqlserver://172.16.2.116:1433/EMP001_MANT;user=sa;password=plast;");
+            Connection con = DriverManager.getConnection("jdbc:jtds:sqlserver://172.16.2.119:1433/EMP002_MANT;user=sa;password=plast;");
             String query = "SELECT COD,NOM FROM MAESTRO WHERE PRESENT LIKE 'M%' ";
             Statement sttm = con.createStatement();
             ResultSet rs = sttm.executeQuery(query);
@@ -75,7 +75,7 @@ public class ReferenciasMANT {
 
         try {
 
-            con = DriverManager.getConnection("jdbc:jtds:sqlserver://172.16.2.116:1433/EMP001_MANT;user=sa;password=plast;");
+            con = DriverManager.getConnection("jdbc:jtds:sqlserver://172.16.2.119:1433/EMP002_MANT;user=sa;password=plast;");
 
             ps = con.prepareStatement(query);
 
@@ -130,7 +130,7 @@ public class ReferenciasMANT {
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             Connection con = DriverManager.getConnection(
-                    "jdbc:jtds:sqlserver://172.16.2.116:1433/EMP001_MANT;user=sa;password=plast;");
+                    "jdbc:jtds:sqlserver://172.16.2.119:1433/EMP002_MANT;user=sa;password=plast;");
             String query = "SELECT m.COD,m.NOM,m.EXIST,m.UD "
                     + "FROM MAESTRO m "
                     + "WHERE PRESENT LIKE 'M%' ";

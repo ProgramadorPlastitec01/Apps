@@ -71,7 +71,7 @@ public class Tag_registro extends TagSupport {
         }
         try {
             out.println("<div class='buscar'>");
-            if (rol.equals("COORDINADOR MANTENIMIENTO FARMACEUTICO") || rol.equals("TECNICO MANTENIMIENTO FARMACEUTICO")) {
+            if (rol.equals("COORDINADOR MANTENIMIENTO FARMACEUTICO") || rol.equals("TECNICO MANTENIMIENTO FARMACEUTICO") || rol.equals("ADMINISTRADOR")) {
                 out.println("<div class='tooltip-container'>");
                 out.println("<i class=\"fas fa-bars fa-lg\" id='Menu_registroB' style='cursor:pointer'></i>");
                 out.println("<div class=\"tooltip medida\">CREAR REGISTRO</div>");

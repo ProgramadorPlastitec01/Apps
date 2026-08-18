@@ -48,6 +48,10 @@ public class Control_correo {
                 propiedades.setProperty("mail.smtp.port", arrConf[2]);
                 propiedades.setProperty("mail.smtp.auth", arrConf[3]);
                 propiedades.setProperty("mail.smtp.user", arrConf[4]);
+                propiedades.put("mail.smtp.ssl.protocols", "TLSv1.2");
+                propiedades.put("mail.smtp.connectiontimeout", "15000");
+                propiedades.put("mail.smtp.timeout", "15000");
+                propiedades.put("mail.smtp.writetimeout", "15000");
                 Session session = Session.getDefaultInstance(propiedades);
                 MimeMessage message = new MimeMessage(session);
                 lst_areas = jpacara.Areas();
@@ -140,6 +144,10 @@ public class Control_correo {
                 propiedades.setProperty("mail.smtp.port", arrConf[2]);
                 propiedades.setProperty("mail.smtp.auth", arrConf[3]);
                 propiedades.setProperty("mail.smtp.user", arrConf[4]);
+                propiedades.put("mail.smtp.ssl.protocols", "TLSv1.2");
+                propiedades.put("mail.smtp.connectiontimeout", "15000");
+                propiedades.put("mail.smtp.timeout", "15000");
+                propiedades.put("mail.smtp.writetimeout", "15000");
                 Session session = Session.getDefaultInstance(propiedades);
                 MimeMessage message = new MimeMessage(session);
                 //cod java

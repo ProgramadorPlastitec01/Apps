@@ -26,11 +26,11 @@ public class Automatico extends HttpServlet {
                     } else if (turno == 3) {
                         jpacrgt.Cerrar_turnos_automatico("Turno 3");
                     }
-                    response.sendRedirect("http://172.16.2.117:8084/Aplicativos_Plastitec/Automatic_servlets.jsp");
+                    response.sendRedirect("http://172.16.2.117:8080/Aplicativos_Plastitec/Automatic_servlets.jsp");
                     break;
             }
         } catch (Exception ex) {
-            response.sendRedirect("http://172.16.2.117:8084/Aplicativos_Plastitec/Automatic_servlets.jsp");
+            response.sendRedirect("http://172.16.2.117:8080/Aplicativos_Plastitec/Automatic_servlets.jsp");
         }
     }
 

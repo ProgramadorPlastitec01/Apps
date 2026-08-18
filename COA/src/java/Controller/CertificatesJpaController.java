@@ -170,11 +170,11 @@ public class CertificatesJpaController implements Serializable {
         }
     }
 
-    public boolean CertificatesRegister(String Tpe, String Cde, int Ord, String Pdt, String Btc, String Cql, String Ctm, String Amt, String Ddt, String Urg, String Mbt, String Fmt) {
+    public boolean CertificatesRegister(String Tpe, String Cde, int Ord, String Pdt, String Btc, String Cql, String Ctm, String Amt, String Ddt, String Urg, String Mbt, int Arg ,String Fmt) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
-            Query q = em.createNativeQuery("CALL `Sp_cft_r_RegisterCertificates`('" + Tpe + "','" + Cde + "','" + Ord + "','" + Pdt + "','" + Btc + "','" + Cql + "','" + Ctm + "','" + Amt + "','" + Ddt + "','" + Urg + "','" + Mbt + "','" + Fmt + "')");
+            Query q = em.createNativeQuery("CALL `Sp_cft_r_RegisterCertificates`('" + Tpe + "','" + Cde + "','" + Ord + "','" + Pdt + "','" + Btc + "','" + Cql + "','" + Ctm + "','" + Amt + "','" + Ddt + "','" + Urg + "','" + Mbt + "','" + Arg + "','" + Fmt + "')");
             int resultado = q.executeUpdate();
             em.getTransaction().commit();
             em.clear();
@@ -236,7 +236,7 @@ public class CertificatesJpaController implements Serializable {
             em.getTransaction().commit();
             em.clear();
             em.close();
-            if (resultado == 1) {
+            if (resultado == 2) {
                 return true;
             } else {
                 return false;
@@ -251,6 +251,25 @@ public class CertificatesJpaController implements Serializable {
         em.getTransaction().begin();
         try {
             Query q = em.createNativeQuery("CALL `Sp_ctf_u_UpdateCertificateFinish`('" + IdC + "')");
+            int resultado = q.executeUpdate();
+            em.getTransaction().commit();
+            em.clear();
+            em.close();
+            if (resultado == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean DuplicateRegister(int IdC, String UserReg) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        try {
+            Query q = em.createNativeQuery("CALL `Sp_ctf_r_RegistrerDuplicate`('" + IdC + "','" + UserReg + "')");
             int resultado = q.executeUpdate();
             em.getTransaction().commit();
             em.clear();

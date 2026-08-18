@@ -2,6 +2,7 @@
 <%@taglib uri="/WEB-INF/tlds/generate" prefix="Generate"%>
 <%@taglib uri="/WEB-INF/tlds/alert" prefix="Alert" %>
 
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -12,12 +13,12 @@
         <link rel="stylesheet" href="Interface/Content/Assets/modules/izitoast/css/iziToast.min.css">
         <link rel="icon" type="image/png" href="Interface/Imagen/LogoSWhite.png">
         <title>Generación</title>
-        <script type="text/javascript">
-            history.pushState(null, null, 'GenerateReport.jsp');
-            window.addEventListener('popstate', function (event) {
-                history.pushState(null, null, 'GenerateReport.jsp');
-            });
-        </script>
+        <!--        <script type="text/javascript">
+                    history.pushState(null, null, 'GenerateReport.jsp');
+                    window.addEventListener('popstate', function (event) {
+                        history.pushState(null, null, 'GenerateReport.jsp');
+                    });
+                </script>-->
     </head>
     <body class="sidebar-mini">
         <jsp:include page="Menu.jsp"></jsp:include>
@@ -35,16 +36,27 @@
             document.addEventListener("DOMContentLoaded", () => {
 
                 const orderInput = document.getElementById("orderInput");
+
                 const productoSection = document.getElementById("producto-section");
                 const loteSection = document.getElementById("lote-section");
                 const registroSection = document.getElementById("registro-section");
+                const dateSection = document.getElementById("date-section");
 
                 const productosSelect = document.getElementById("resultadoProductos");
                 const lotesSelect = document.getElementById("resultadoLotes");
+                const registroSelect = document.getElementById("resultadoRegistro");
 
+                const btnGenerar = document.getElementById("btnGenerar");
                 const loadingScreen = document.getElementById("loading-screen");
 
+                const fechaInicio = document.getElementById("fechaInicio");
+                const fechaFin = document.getElementById("fechaFin");
+
+                const countReg = document.getElementById("countReg");
+                const dataReg = document.getElementById("DataReg");
+
                 /* ================== LOADER ================== */
+
                 function mostrarCarga(texto) {
                     document.getElementById("loading-text").innerText = texto;
                     loadingScreen.style.display = "flex";
@@ -54,85 +66,263 @@
                     loadingScreen.style.display = "none";
                 }
 
-                /* ============ PASO 1: ORDEN ============ */
+                /* ================== CONSULTAR CANTIDAD ================== */
+
+                function actualizarCantidadRegistros() {
+
+                    if (!fechaInicio.value || !fechaFin.value || !lotesSelect.value) {
+                        return;
+                    }
+
+                    dataReg.innerHTML =
+                            "<span class='badge badge-warning'>Consultando...</span>";
+
+                    fetch(
+                            "SearchCountServlet?"
+                            + "orden=" + encodeURIComponent(orderInput.value.trim())
+                            + "&producto=" + encodeURIComponent(productosSelect.value)
+                            + "&lote=" + encodeURIComponent(lotesSelect.value)
+                            + "&fechaInicio=" + encodeURIComponent(fechaInicio.value)
+                            + "&fechaFin=" + encodeURIComponent(fechaFin.value)
+                            )
+                            .then(response => response.json())
+                            .then(data => {
+
+                                console.log("Respuesta SearchCountServlet:", data);
+
+                                if (!data.success) {
+
+                                    dataReg.innerHTML =
+                                            "<span class='badge badge-danger'>Error</span>";
+
+                                    return;
+                                }
+
+                                dataReg.innerHTML =
+                                        "<div style='font-size:32px;font-weight:700;color:#3abaf4'>"
+                                        + data.totalRegistros +
+                                        "</div>";
+                                document.getElementById("AmoutReg").value = data.totalRegistros;
+
+                            })
+                            .catch(err => {
+
+                                console.error(err);
+
+                                dataReg.innerHTML =
+                                        "<span class='badge badge-danger'>Error</span>";
+
+                            });
+
+                }
+
+                /* ================== PASO 1 ================== */
+
                 orderInput.addEventListener("blur", () => {
+
                     const order = orderInput.value.trim();
+
                     if (!order)
                         return;
 
                     mostrarCarga("Buscando productos...");
+
                     productosSelect.innerHTML = "";
                     lotesSelect.innerHTML = "";
+                    registroSelect.selectedIndex = 0;
+
+                    fechaInicio.value = "";
+                    fechaFin.value = "";
+
+                    dataReg.innerHTML = "0";
+
+                    countReg.classList.add("d-none");
+                    productoSection.classList.add("d-none");
                     loteSection.classList.add("d-none");
                     registroSection.classList.add("d-none");
+                    dateSection.classList.add("d-none");
 
-                    fetch("SearchProductsServlet?orden=" + order)
+                    btnGenerar.disabled = true;
+
+                    fetch("SearchProductsServlet?orden=" + encodeURIComponent(order))
                             .then(r => r.json())
                             .then(data => {
+
                                 ocultarCarga();
 
                                 productoSection.classList.remove("d-none");
-                                productosSelect.innerHTML = "<option value=''>-- Seleccione un producto --</option>";
 
-                                if (data.length === 0) {
-                                    productosSelect.innerHTML = "<option>No hay productos</option>";
+                                productosSelect.innerHTML =
+                                        "<option value=''>-- Seleccione un producto --</option>";
+
+                                if (!data || data.length === 0) {
+
+                                    productosSelect.innerHTML =
+                                            "<option value=''>No hay productos</option>";
+
                                     return;
                                 }
 
                                 data.forEach(item => {
+
                                     const opt = document.createElement("option");
+
                                     opt.value = item.codigo;
                                     opt.text = item.codigo + " - " + item.producto;
                                     opt.dataset.lotes = item.lote;
+
                                     productosSelect.appendChild(opt);
+
                                 });
+
                             })
                             .catch(err => {
+
                                 ocultarCarga();
                                 console.error(err);
+
                             });
+
                 });
 
-                /* ============ PASO 2: PRODUCTO ============ */
+                /* ================== PASO 2 ================== */
+
                 productosSelect.addEventListener("change", () => {
+
                     const selected = productosSelect.options[productosSelect.selectedIndex];
+
+                    loteSection.classList.add("d-none");
+                    registroSection.classList.add("d-none");
+                    dateSection.classList.add("d-none");
+                    countReg.classList.add("d-none");
+
+                    fechaInicio.value = "";
+                    fechaFin.value = "";
+
+                    dataReg.innerHTML = "0";
+
+                    btnGenerar.disabled = true;
+
                     if (!selected || !selected.dataset.lotes)
                         return;
 
                     mostrarCarga("Cargando lotes...");
+
                     lotesSelect.innerHTML = "";
 
                     setTimeout(() => {
+
                         ocultarCarga();
+
                         loteSection.classList.remove("d-none");
 
-                        const lotes = selected.dataset.lotes.split(",");
-                        lotesSelect.innerHTML = "<option value=''>-- Seleccione un lote --</option>";
+                        lotesSelect.innerHTML =
+                                "<option value=''>-- Seleccione un lote --</option>";
 
-                        lotes.forEach(l => {
+                        selected.dataset.lotes.split(",").forEach(lote => {
+
                             const opt = document.createElement("option");
-                            opt.value = l.trim();
-                            opt.text = l.trim();
+
+                            opt.value = lote.trim();
+                            opt.text = lote.trim();
+
                             lotesSelect.appendChild(opt);
+
                         });
-                    }, 800);
+
+                    }, 300);
+
                 });
 
-                /* ============ PASO 3: LOTE ============ */
+                /* ================== PASO 3 ================== */
+
                 lotesSelect.addEventListener("change", () => {
+
+                    registroSection.classList.add("d-none");
+                    dateSection.classList.add("d-none");
+                    countReg.classList.add("d-none");
+
+                    fechaInicio.value = "";
+                    fechaFin.value = "";
+
+                    dataReg.innerHTML = "0";
+
+                    btnGenerar.disabled = true;
+
                     if (!lotesSelect.value)
                         return;
 
-                    mostrarCarga("Cargando registros...");
-                    setTimeout(() => {
-                        ocultarCarga();
-                        registroSection.classList.remove("d-none");
-                        btnGenerar.disabled = false;
-                    }, 800);
+                    mostrarCarga("Consultando fechas...");
+
+                    fetch(
+                            "SearchDatesServlet?orden=" + encodeURIComponent(orderInput.value.trim())
+                            + "&producto=" + encodeURIComponent(productosSelect.value)
+                            + "&lote=" + encodeURIComponent(lotesSelect.value)
+                            )
+                            .then(r => r.json())
+                            .then(data => {
+
+                                ocultarCarga();
+
+                                if (!data.success) {
+                                    alert(data.message || "No fue posible consultar las fechas.");
+                                    return;
+                                }
+
+                                fechaInicio.value = data.fechaInicio;
+                                fechaFin.value = data.fechaFin;
+
+                                fechaInicio.min = data.fechaInicio;
+                                fechaInicio.max = data.fechaFin;
+
+                                fechaFin.min = data.fechaInicio;
+                                fechaFin.max = data.fechaFin;
+
+                                registroSection.classList.remove("d-none");
+                                dateSection.classList.remove("d-none");
+                                countReg.classList.remove("d-none");
+
+                                actualizarCantidadRegistros();
+
+                            })
+                            .catch(err => {
+
+                                ocultarCarga();
+                                console.error(err);
+
+                            });
+
+                });
+
+                /* ================== CAMBIO FECHAS ================== */
+
+                fechaInicio.addEventListener("change", () => {
+
+                    if (fechaInicio.value > fechaFin.value) {
+
+                        alert("La fecha inicial no puede ser mayor a la fecha final.");
+                        fechaInicio.value = fechaFin.value;
+
+                    }
+
+                    actualizarCantidadRegistros();
+
+                });
+
+                fechaFin.addEventListener("change", () => {
+                    if (fechaFin.value < fechaInicio.value) {
+                        alert("La fecha final no puede ser menor a la fecha inicial.");
+                        fechaFin.value = fechaInicio.value;
+                    }
+                    actualizarCantidadRegistros();
+                });
+
+                /* ================== REGISTRO ================== */
+                registroSelect.addEventListener("change", () => {
+                    btnGenerar.disabled = !registroSelect.value;
                 });
             });
         </script>
-
         <script>
             function mostrarCarga(texto) {
                 document.getElementById("loading-text").innerText = texto;
@@ -143,7 +333,6 @@
                 loadingScreen.style.display = "none";
             }
         </script>
-
         <script>
             // Validación igual a tu versión funcional
             function FormGenerate(form) {
@@ -151,7 +340,7 @@
                 const orderInput = document.getElementById("orderInput");
                 const productosSelect = document.getElementById("resultadoProductos");
                 const lotesSelect = document.getElementById("resultadoLotes");
-                const registroSelect = document.getElementById("registroSelect");
+                const registroSelect = document.getElementById("resultadoRegistro");
                 const btnGenerar = document.getElementById("btnGenerar");
 
                 let valido = true;
@@ -256,9 +445,10 @@
                     }
                 });
             }
-        </script>
+        </script> 
         <script>
             function confirmarFinalizar(url) {
+
                 swal({
                     title: "¿Está seguro de finalizar?",
                     text: "Una vez finalizado no podrá realizar cambios o modificaciones al documento.",
@@ -268,28 +458,106 @@
                             text: "Cancelar",
                             visible: true,
                             className: "btn btn-secondary",
-                            closeModal: true,
+                            closeModal: true
                         },
                         confirm: {
                             text: "Aceptar",
                             visible: true,
                             className: "btn btn-success",
-                            closeModal: false,
-                        },
+                            closeModal: false
+                        }
                     },
-                    dangerMode: true,
+                    dangerMode: true
+
                 }).then((value) => {
 
-                    // SI CANCELA → no hace nada
+                    // Si cancela
                     if (!value)
                         return;
 
-                    // SI ACEPTA → redirige
-                    window.location.href = url;
+                    // Contenido de la alerta de carga
+                    const loading = document.createElement("div");
+                    loading.innerHTML = `
+            <div class="loader"></div>
+            <div class="loader-text">
+                <strong>Finalizando documento...</strong><br>
+                Estamos registrando la información y enviando las notificaciones correspondientes.<br><br>
+                <small>Este proceso puede tardar algunos segundos.<br>Por favor, no cierre esta ventana.</small>
+            </div>
+        `;
+
+                    // Mostrar alerta de espera
+                    swal({
+                        title: "Espere un momento",
+                        content: loading,
+                        buttons: false,
+                        closeOnClickOutside: false,
+                        closeOnEsc: false
+                    });
+
+                    // Pequeña espera para que se vea la animación
+                    setTimeout(function () {
+                        window.location.href = url;
+                    }, 500);
+
                 });
             }
         </script>
+        <script>
+            function DuplicateReg(url) {
+                swal({
+                    title: "¿Está seguro de duplicar?",
+                    icon: "warning",
+                    buttons: {
+                        cancel: {
+                            text: "Cancelar",
+                            visible: true,
+                            className: "btn btn-secondary",
+                            closeModal: true
+                        },
+                        confirm: {
+                            text: "Aceptar",
+                            visible: true,
+                            className: "btn btn-success",
+                            closeModal: false
+                        }
+                    },
+                    dangerMode: true
 
+                }).then((value) => {
+
+                    // Si cancela
+                    if (!value)
+                        return;
+
+                    // Contenido de la alerta de carga
+                    const loading = document.createElement("div");
+                    loading.innerHTML = `
+            <div class="loader"></div>
+            <div class="loader-text">
+                <strong>Duplicando documento...</strong><br>
+                Estamos registrando la información.<br><br>
+                <small>Este proceso puede tardar algunos segundos.<br>Por favor, no cierre esta ventana.</small>
+            </div>
+        `;
+
+                    // Mostrar alerta de espera
+                    swal({
+                        title: "Espere un momento",
+                        content: loading,
+                        buttons: false,
+                        closeOnClickOutside: false,
+                        closeOnEsc: false
+                    });
+
+                    // Pequeña espera para que se vea la animación
+                    setTimeout(function () {
+                        window.location.href = url;
+                    }, 500);
+
+                });
+            }
+        </script>
         <script src="Interface/Content/Assets/modules/izitoast/js/iziToast.min.js"></script>
         <script src="Interface/Content/Assets/js/page/modules-toastr.js"></script>
         <script src="Interface/Content/Assets/modules/sweetalert/sweetalert.min.js"></script>

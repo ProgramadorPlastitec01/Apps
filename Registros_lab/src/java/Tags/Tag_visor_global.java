@@ -117,7 +117,7 @@ public class Tag_visor_global extends TagSupport {
                 out.print("<link type=\"text/css\" rel=\"stylesheet\" href=\"Interfaz/HTML_Editor/jquery-te-1.4.0.css\" />");
                 out.print("<script type=\"text/javascript\" src=\"Interfaz/HTML_Editor/HtmlEditor.js\" charset=\"utf-8\"></script>");
                 out.print("<script type=\"text/javascript\" src=\"Interfaz/HTML_Editor/jquery-te-1.4.0.min.js\" charset=\"utf-8\"></script>");
-                if (!(rol.equals("Documental") || rol.equals("Consulta"))) {
+                if (!rol.equals("Consulta")) {
                     if ((Integer) obj_plantilla[3] == 1) {
                         //OPC IMPRIMIR
                         out.print("<div style='float:right'>"
@@ -125,7 +125,7 @@ public class Tag_visor_global extends TagSupport {
                                 + "<span class='fas fa-print fa-size_small' onclick='Imprimir();' title='Imprimir'></span> Imprimir o PDF "
                                 + "</div>");
                         //OPC FIRMAR
-                        if (rol.equals("Coordinadora-Calidad") || rol.equals("Administrador")) {
+                        if (rol.equals("Coordinadora-Calidad") || rol.equals("Administrador") || rol.equals("Documental")) {
                             out.print("<div style='float:left'>");
                             out.print("<form action='Orden?opc=17&Id_registro=" + id_registro + "&Id_registro_despeje=" + obj_plantilla[0] + "&iut=" + obj_usuario[0] + "' method='post' name='FormFirmarDespeje' id='FormFirmarDespeje'>");
                             //+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='#' onclick='FirmarDespeje();'><img src=\"Interfaz/Contenido/Iconos/Edit.png\" style=\"width: 22px;height: 22px\" alt=\"\" title='Firmar Despeje' /></a> Firmar registro "
@@ -184,7 +184,7 @@ public class Tag_visor_global extends TagSupport {
 //                                + "<a href='#' onclick='EliminarDespeje();'><img src=\"Interfaz/Contenido/Iconos/Delete.png\" style=\"width: 22px;height: 22px\" alt=\"\" title='Eliminar Despeje' /></a> Eliminar registro"
 //                                + "</form></div>");
                         //OPC LIBERAR
-                        if (rol.equals("Inspectora-Calidad") || rol.equals("Coordinadora-Calidad") || rol.equals("Administrador")) {
+                        if (rol.equals("Inspectora-Calidad") || rol.equals("Coordinadora-Calidad") || rol.equals("Administrador") || rol.equals("Documental")) {
                             out.print("<div style='float:left'>"
                                     + "<form action='Orden?opc=16&Id_registro=" + id_registro + "&Id_registro_despeje=" + obj_plantilla[0] + "&iut=" + obj_usuario[0] + "' method='post' name='FormFreeDespeje' id='FormFreeDespeje'>"
                                     //+ "<a href='#' onclick='LiberarDespeje();'><img src=\"Interfaz/Contenido/Iconos/Check.png\" style=\"width: 22px;height: 22px\" alt=\"\" title='Guardar Despeje' /></a> Liberar registro &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
@@ -229,7 +229,7 @@ public class Tag_visor_global extends TagSupport {
                 out.print("</div>");
                 out.print("<textarea id='Txt_plantilla' class='jqte-test' contenteditable='false'>");
                 String visor = "";
-                if ((Integer) obj_plantilla[3] == 1 || rol.equals("Documental") || rol.equals("Consulta")) {
+                if ((Integer) obj_plantilla[3] == 1 || rol.equals("Consulta")) {
                     visor = visor + obj_plantilla[2].toString().replace("true", "false");
 //                    if ((Integer) obj_plantilla[4] == 1) {
 //                        visor = visor.replace("<td colspan=\"7\" id=\"Txt_observaciones_1\" contenteditable=\"true\">", "<td colspan=\"7\" id=\"Txt_observaciones_1\" contenteditable=\"false\">");
