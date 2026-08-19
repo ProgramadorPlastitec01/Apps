@@ -37,8 +37,8 @@ public class ClientSection extends HttpServlet {
 
         SendMail MailData = new SendMail();
 
-        int opt = 0, IdDoc = 0, module = 0, NroIdenti = 0, counter = 0, TypeSig = 0, IdSig = 0, State = 0;
-        String Format = "", Forms = "", TypeProc = "", DateInit = "", TypeThird = "", FinalForm = "", ValidAction = "", AlterText = "",
+        int opt = 0, IdDoc = 0, module = 0, counter = 0, TypeSig = 0, IdSig = 0, State = 0;
+        String NroIdenti = "", Format = "", Forms = "", TypeProc = "", DateInit = "", TypeThird = "", FinalForm = "", ValidAction = "", AlterText = "",
                 BusinessName = "", NroDv = "", Country = "", City = "", Address = "", Phones = "", Mail = "", WebPage = "", PostalCode = "",
                 CodeCiiu_1 = "", CodeCiiu_2 = "", NroComercial = "", TypeCompany = "", ClasiCompany = "", Certification = "", IdOther = "",
                 Iva = "", Resolution = "", SelfRetaining = "", ReteSource = "", ValueReteSource = "", DataRetaining = "", Ica = "",
@@ -741,7 +741,7 @@ public class ClientSection extends HttpServlet {
                         ReadDoc = request.getParameter("Txt_ReadDoc");
                         try {
                             TypeSig = Integer.parseInt(request.getParameter("TypeSig"));
-                            NroIdenti = Integer.parseInt(request.getParameter("NmbDocx").toString());
+                            NroIdenti = request.getParameter("NmbDocx").toString();
                             try {
                                 IdSig = Integer.parseInt(request.getParameter("NbmIdSigna"));
                             } catch (Exception e) {
@@ -938,7 +938,7 @@ public class ClientSection extends HttpServlet {
                         TypeSig = Integer.parseInt(request.getParameter("TypeSig"));
                         Names = request.getParameter("TxtName");
                         Title = request.getParameter("TxtTitle");
-                        NroIdenti = Integer.parseInt(request.getParameter("NmbDocx").toString());
+                        NroIdenti = request.getParameter("NmbDocx").toString();
                         try {
                             IdSig = Integer.parseInt(request.getParameter("NbmIdSigna"));
                         } catch (Exception e) {
@@ -966,7 +966,7 @@ public class ClientSection extends HttpServlet {
                             Signature = "";
                         }
 
-                        Forms = "[[" + module + "][" + Names + "][" + NroIdenti + "]["+ Title +"]]";
+                        Forms = "[[" + module + "][" + Names + "][" + NroIdenti + "][" + Title + "]]";
                         for (int i = 0; i < DtaFormat.length; i++) {
                             if (i == DtaFormat.length - 1) {
                                 if (i != module) {
@@ -1017,8 +1017,9 @@ public class ClientSection extends HttpServlet {
                 String PostCode = "", ApliCode = "", Economy = "", oneQuest = "", twoQuest = "", threeQuest = "",
                         fourQuest = "", fiveQuest = "", sixQuest = "", Countries = "", Currency = "", Service = "", Subsidiaries = "",
                         CitiesSub = "", manager = "", EmailManager = "", Comercial = "", EmailComercial = "", TxtContac = "", EmailContac = "",
-                        Payment = "", EmailPayment = "", Financial = "", TypeAccount = "", TxtPayment = "", Title = "";
-                int IdManager = 0, IdComercial = 0, IdContac = 0, IdPayment = 0, Account = 0, Limit = 0;
+                        Payment = "", EmailPayment = "", Financial = "", TypeAccount = "", TxtPayment = "", Title = "", Account = "";
+                String IdManager = "", IdComercial = "", IdContac = "", IdPayment = "";
+                int Limit = 0;
                 switch (opt) {
                     case 1:
                         IdDoc = Integer.parseInt(request.getParameter("IdDoc"));
@@ -1150,16 +1151,16 @@ public class ClientSection extends HttpServlet {
                         //<editor-fold defaultstate="collapsed" desc="MODULE 3 - CONTACT">
                         module = 3;
                         manager = request.getParameter("TxtManager");
-                        IdManager = Integer.parseInt(request.getParameter("NmbIdManager"));
+                        IdManager = request.getParameter("NmbIdManager");
                         EmailManager = request.getParameter("TxtEmailManager");
                         Comercial = request.getParameter("TxtComercial");
-                        IdComercial = Integer.parseInt(request.getParameter("NmbIdComercial"));
+                        IdComercial = request.getParameter("NmbIdComercial");
                         EmailComercial = request.getParameter("TxtEmailComercial");
                         TxtContac = request.getParameter("TxtContac");
-                        IdContac = Integer.parseInt(request.getParameter("NmbIdContac"));
+                        IdContac = request.getParameter("NmbIdContac");
                         EmailContac = request.getParameter("TxtEmailContac");
                         Payment = request.getParameter("TxtPayment");
-                        IdPayment = Integer.parseInt(request.getParameter("NmbIdPayment"));
+                        IdPayment = request.getParameter("NmbIdPayment");
                         EmailPayment = request.getParameter("TxtEmailPayment");
 
                         ValidAction = parseOrDefault(request.getParameter("TxtValidAction"));
@@ -1198,7 +1199,7 @@ public class ClientSection extends HttpServlet {
                         if (TypeAccount.equals("Other")) {
                             TypeAccount = request.getParameter("txtOtherOne");
                         }
-                        Account = Integer.parseInt(request.getParameter("NmbAccount"));
+                        Account = request.getParameter("NmbAccount");
                         Limit = Integer.parseInt(request.getParameter("NmbLimit"));
                         TxtPayment = request.getParameter("TxtPayment");
 
@@ -1228,7 +1229,7 @@ public class ClientSection extends HttpServlet {
                         request.getRequestDispatcher("ClientSection?opt=1").forward(request, response);
                         //</editor-fold>
                         break;
-                    case 13:
+                    case 7:
                         //<editor-fold defaultstate="collapsed" desc="SUPPLY CHAIN ​​SECURITY AGREEMENT">
                         module = 5;
                         IdDoc = Integer.parseInt(request.getParameter("IdDoc"));
@@ -1236,7 +1237,7 @@ public class ClientSection extends HttpServlet {
                         ReadDoc = request.getParameter("Txt_ReadDoc");
                         try {
                             TypeSig = Integer.parseInt(request.getParameter("TypeSig"));
-                            NroIdenti = Integer.parseInt(request.getParameter("NmbDocx").toString());
+                            NroIdenti = request.getParameter("NmbDocx").toString();
                             try {
                                 IdSig = Integer.parseInt(request.getParameter("NbmIdSigna"));
                             } catch (Exception e) {
@@ -1289,7 +1290,7 @@ public class ClientSection extends HttpServlet {
                         request.setAttribute("UpdateFormClient", result);
                         request.getRequestDispatcher("ClientSection?opt=1&IdDoc=" + IdDoc + "").forward(request, response);
 //</editor-fold>
-                        break; 
+                        break;
                     case 8:
                         //<editor-fold defaultstate="collapsed" desc="MODULE 6 - STATEMENTS">
                         module = 6;
@@ -1433,7 +1434,7 @@ public class ClientSection extends HttpServlet {
                         TypeSig = Integer.parseInt(request.getParameter("TypeSig"));
                         Names = request.getParameter("TxtName");
                         Title = request.getParameter("TxtTitle");
-                        NroIdenti = Integer.parseInt(request.getParameter("NmbDocx").toString());
+                        NroIdenti = request.getParameter("NmbDocx").toString();
                         try {
                             IdSig = Integer.parseInt(request.getParameter("NbmIdSigna"));
                         } catch (Exception e) {
@@ -1461,7 +1462,7 @@ public class ClientSection extends HttpServlet {
                             Signature = "";
                         }
 
-                        Forms = "[[" + module + "][" + Names + "][" + NroIdenti + "]["+ Title +"]]";
+                        Forms = "[[" + module + "][" + Names + "][" + NroIdenti + "][" + Title + "]]";
                         for (int i = 0; i < DtaFormat.length; i++) {
                             if (i == DtaFormat.length - 1) {
                                 if (i != module) {

@@ -2068,7 +2068,13 @@ public class Tag_orden extends TagSupport {
                             } else {
                                 enlace = "" + obj_registros[6];
                             }
-                            out.print("<td><b>Lote " + ((estria_ventana > 0) ? "C:</b><br />" + enlace : "prod:</b><br />" + obj_registros[5] + "") + "</td>");
+                            String newEnlace = "";
+                            try {
+                                newEnlace = enlace.split("/")[0];
+                            } catch (Exception e) {
+                                newEnlace = enlace;
+                            }
+                            out.print("<td><b>Lote " + ((estria_ventana > 0) ? "C:</b><br />" + newEnlace : "prod:</b><br />" + obj_registros[5] + "") + "</td>");
                             if (material == 1 || estria_ventana <= 1) {
                                 out.print("<td><b>Factor de medida:</b><br /><b class='negro'>N/A</b></td>");
                             } else if (estria_ventana == 2) {
@@ -2233,7 +2239,13 @@ public class Tag_orden extends TagSupport {
                             } else {
                                 enlace = "" + obj_registros[6];
                             }
-                            out.print("<td><b>Lote " + ((estria_ventana > 0) ? "C alt" : "C") + ":</b><br />" + enlace + "</td>");
+                            String newEnlaceAlt = "";
+                            try {
+                                newEnlaceAlt = enlace.split("/")[1];
+                            } catch (Exception e) {
+                                newEnlaceAlt = enlace;
+                            }
+                            out.print("<td><b>Lote " + ((estria_ventana > 0) ? "C alt" : "C") + ":</b><br />" + newEnlaceAlt + "</td>");
                             out.print("<td rowspan='2'><b>Línea: </b>" + obj_registros[9] + "</td>");
                             out.print("<td>");
                             String[] reportantes = null;

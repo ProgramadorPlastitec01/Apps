@@ -30,14 +30,15 @@
                         }
                     }
                 </script>
-                <script type="text/javascript">
+                
+                <script>
                     function Masivo(ide) {
                         var id = "[" + ide + "]";
-                        var content = document.getElementById("ChMonth").value;
+                        var content = document.getElementById("Cbx_permission").value;
                         if (content.includes(id)) {
-                            document.getElementById("ChMonth").value = content.replace(id, "");
+                            document.getElementById("Cbx_permission").value = content.replace(id, "");
                         } else {
-                            document.getElementById("ChMonth").value += id;
+                            document.getElementById("Cbx_permission").value += id;
                         }
                     }
                 </script>

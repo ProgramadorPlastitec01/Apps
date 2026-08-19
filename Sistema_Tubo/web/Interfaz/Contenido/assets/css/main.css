@@ -1379,3 +1379,16 @@ div:empty:not(:focus):before {
 .cont_reg_press2::-webkit-scrollbar-thumb:active {
     background-color: #c9e433;
 }
+
+
+.dvCounter{
+    border-radius: 6px;
+    padding: 10px;
+    color: black; 
+    cursor: pointer;
+}
+
+.dvCounter:hover{
+    transition: 0.3s ease-in;
+    transform: scale(1.02);
+}

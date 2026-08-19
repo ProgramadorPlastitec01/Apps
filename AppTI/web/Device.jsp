@@ -183,6 +183,15 @@
                     alert("No se encontró el contenedor con ID 'idtabla'");
                     return;
                 }
+                
+                const requeridos = contenedor.querySelectorAll("[required]");
+                for (let campo of requeridos) {
+                    if (!campo.checkValidity()) {
+                        campo.reportValidity();
+                        campo.focus();
+                        return;
+                    }
+                }
 
                 const inputs = contenedor.querySelectorAll("input, textarea, select");
 
@@ -246,11 +255,11 @@
                 let filaBoton = document.getElementById("filaBoton");
                 let nuevaFila = document.createElement("tr");
                 nuevaFila.innerHTML = `
-                                    <td><input type="text" class="form-control"></td>
-                                    <td><input type="text" class="form-control"></td>
-                                    <td><input type="text" class="form-control"></td>
-                                    <td><input type="text" class="form-control"></td>
-                                    <td><input type="text" class="form-control"></td>
+                                    <td><input type="text" class="form-control" required></td>
+                                    <td><input type="text" class="form-control" required></td>
+                                    <td><input type="text" class="form-control" required></td>
+                                    <td><input type="text" class="form-control" required></td>
+                                    <td><input type="text" class="form-control" required></td>
                                     <td><button class="btn btn-danger" onclick="eliminarFila(this)"><i class="fas fa-trash"></i></button></td>
                                 `;
                 tbody.insertBefore(nuevaFila, filaBoton);
@@ -274,20 +283,17 @@
                 let nuevaFila = document.createElement("tr");
 
                 nuevaFila.innerHTML = `
-                            <td><input type="text" class="form-control"></td>
-                            <td><input type="text" class="form-control"></td>
-                            <td><input type="text" class="form-control"></td>
+                            <td><input type="text" class="form-control" required></td>
+                            <td><input type="text" class="form-control" required></td>
+                            <td><input type="text" class="form-control" required></td>
                             <td><button class="btn btn-danger" onclick="eliminarFila(this)"><i class="fas fa-trash"></i></button></td>
                         `;
-
                 tbody.insertBefore(nuevaFila, filaBoton);
             }
 
 
             function eliminarFila(boton) {
-
                 let fila = boton.closest("tr");
-
                 fila.remove();
 
             }

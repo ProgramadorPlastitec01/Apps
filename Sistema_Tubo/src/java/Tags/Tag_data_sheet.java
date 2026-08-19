@@ -7,6 +7,7 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 import Controladores.FichaTecnicaJpaController;
 import Controladores.RolJpaController;
+
 import Factory.Connection_Inv;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class Tag_data_sheet extends TagSupport {
         List lst_data_sheet_id = null;
         List lst_permission = null;
         JspWriter out = pageContext.getOut();
-        int state = 0, I_visual = 0, id_data_sheet = 0, temp_1 = 0, state_data = 0, UserRol = 0;
+        int state = 0, I_visual = 0, id_data_sheet = 0, temp_1 = 0, optFilter = 0, UserRol = 0;
         String code = "", txtPermisos = "";
         try {
             try {
@@ -41,9 +42,9 @@ public class Tag_data_sheet extends TagSupport {
                 temp_1 = 0;
             }
             try {
-                state_data = Integer.parseInt(pageContext.getRequest().getAttribute("state_data").toString());
+                optFilter = Integer.parseInt(pageContext.getRequest().getAttribute("optFilter").toString());
             } catch (NumberFormatException e) {
-                state_data = 0;
+                optFilter = 3;
             }
             try {
                 UserRol = Integer.parseInt(pageContext.getRequest().getAttribute("id_rol").toString());
@@ -54,6 +55,21 @@ public class Tag_data_sheet extends TagSupport {
                 UserRol = 0;
                 txtPermisos = "";
             }
+
+            //<editor-fold defaultstate="collapsed" desc="CONSULT DATA">
+            int actCount = 0, ppCount = 0, pvcCount = 0;
+            try {
+                lst_data_sheet = JpaFicha.Consult_Data_sheet_counter();
+                if (lst_data_sheet != null) {
+                    Object[] objCoun = (Object[]) lst_data_sheet.get(0);
+                    pvcCount = Integer.parseInt(objCoun[0].toString());
+                    ppCount = Integer.parseInt(objCoun[1].toString());
+                    actCount = Integer.parseInt(objCoun[2].toString());
+                }
+            } catch (Exception e) {
+            }
+            //</editor-fold>
+
             out.print("<section class='section'>");
             out.print("<div class='section-header'>");
             out.print("<h1>Modulo Ficha Tecnica</h1>");
@@ -71,16 +87,24 @@ public class Tag_data_sheet extends TagSupport {
             out.print("<div style='display:flex;justify-content:space-between;'>");
             out.print("<div style='text-align: center;'>");
             out.print("<div class='selectgroup w-100'>");
-            out.print("<label class='selectgroup-item' onclick=\"javascript:location.href='Data_sheet?opc=1&state_data=2'\">");
-            out.print("<input type='radio' name='state' value='1' class='selectgroup-input' " + ((state_data == 2) ? "checked=''" : "") + ">");
+            out.print("<label class='selectgroup-item' onclick=\"javascript:location.href='Data_sheet?opc=1&optFilter=0'\">");
+            out.print("<input type='radio' name='state' value='1' class='selectgroup-input' " + ((optFilter == 0) ? "checked=''" : "") + ">");
             out.print("<span class='selectgroup-button selectgroup-button-icon'>Todos</span>");
             out.print("</label>");
-            out.print("<label class='selectgroup-item' onclick=\"javascript:location.href='Data_sheet?opc=1&state_data=1'\">");
-            out.print("<input type='radio' name='state' value='1' class='selectgroup-input' " + ((state_data == 1) ? "checked=''" : "") + ">");
-            out.print("<span class='selectgroup-button selectgroup-button-icon'>Activo</span>");
+            out.print("<label class='selectgroup-item' onclick=\"javascript:location.href='Data_sheet?opc=1&optFilter=1'\">");
+            out.print("<input type='radio' name='state' value='2' class='selectgroup-input' " + ((optFilter == 1) ? "checked=''" : "") + ">");
+            out.print("<span class='selectgroup-button selectgroup-button-icon'>PCV (" + pvcCount + ")</span>");
             out.print("</label>");
-            out.print("<label class='selectgroup-item' onclick=\"javascript:location.href='Data_sheet?opc=1&state_data=0'\">");
-            out.print("<input type='radio' name='state' value='2' class='selectgroup-input' " + ((state_data == 0) ? "checked=''" : "") + ">");
+            out.print("<label class='selectgroup-item' onclick=\"javascript:location.href='Data_sheet?opc=1&optFilter=2'\">");
+            out.print("<input type='radio' name='state' value='2' class='selectgroup-input' " + ((optFilter == 2) ? "checked=''" : "") + ">");
+            out.print("<span class='selectgroup-button selectgroup-button-icon'>PP (" + ppCount + ")</span>");
+            out.print("</label>");
+            out.print("<label class='selectgroup-item' onclick=\"javascript:location.href='Data_sheet?opc=1&optFilter=3'\">");
+            out.print("<input type='radio' name='state' value='1' class='selectgroup-input' " + ((optFilter == 3) ? "checked=''" : "") + ">");
+            out.print("<span class='selectgroup-button selectgroup-button-icon'>Activo (" + actCount + ") </span>");
+            out.print("</label>");
+            out.print("<label class='selectgroup-item' onclick=\"javascript:location.href='Data_sheet?opc=1&optFilter=4'\">");
+            out.print("<input type='radio' name='state' value='2' class='selectgroup-input' " + ((optFilter == 4) ? "checked=''" : "") + ">");
             out.print("<span class='selectgroup-button selectgroup-button-icon'>Inactivo</span>");
             out.print("</label>");
             out.print("</div>");
@@ -307,25 +331,25 @@ public class Tag_data_sheet extends TagSupport {
                     out.print("<div style='width:24%'>");
                     //<editor-fold defaultstate="collapsed" desc="PRESION">
                     out.print("<div class='col-lg-12'>");
-                    out.print("<input type='text' class='form-control' name='Txt_pressure' id='Txt_pressure' placeholder='Presión' required='' data-toggle='tooltip' data-placement='right' title='Presión' autocomplete='off' value='"+ ((obj_data_id[35] == null) ? "0" : obj_data_id[35]) +"'>");
+                    out.print("<input type='text' class='form-control' name='Txt_pressure' id='Txt_pressure' placeholder='Presión' required='' data-toggle='tooltip' data-placement='right' title='Presión' autocomplete='off' value='" + ((obj_data_id[35] == null) ? "0" : obj_data_id[35]) + "'>");
                     out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
                     out.print("</div>");
 
                     out.print("<div class='divTlData'>");
                     out.print("<div style='margin-right:5px;' class=\"input-group\">"
                             + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-plus\"></i></div>"
-                            + "<input type='text' style='width:20%' class='form-control' name='Txt_pressurized_max' id='Txt_pressurized_max' placeholder='' required='' value='"+ ((obj_data_id[37] == null) ? "0" : obj_data_id[37]) +"' autocomplete='off'>"
+                            + "<input type='text' style='width:20%' class='form-control' name='Txt_pressurized_max' id='Txt_pressurized_max' placeholder='' required='' value='" + ((obj_data_id[37] == null) ? "0" : obj_data_id[37]) + "' autocomplete='off'>"
                             + "</div>");
                     out.print("<div class=\"input-group\">"
                             + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-minus\"></i></div>"
-                            + "<input type='text' style='width:20%' class='form-control' name='Txt_pressurized_min' id='Txt_pressurized_min' placeholder='' required='' value='"+ ((obj_data_id[36] == null) ? "0" : obj_data_id[36]) +"' autocomplete='off'>"
+                            + "<input type='text' style='width:20%' class='form-control' name='Txt_pressurized_min' id='Txt_pressurized_min' placeholder='' required='' value='" + ((obj_data_id[36] == null) ? "0" : obj_data_id[36]) + "' autocomplete='off'>"
                             + "</div>");
                     out.print("</div>");
                     //</editor-fold>
                     out.print("</div>");
 
                     out.print("<div style='width:24%'>");
-                    
+
                     out.print("<div class='col-lg-12'>");
                     out.print("<span>Rugosidad</span>");
                     out.print("</div>");
@@ -341,20 +365,43 @@ public class Tag_data_sheet extends TagSupport {
                             + "</div>");
                     out.print("</div>");
                     out.print("</div>");
-                    
+
                     out.print("<div style='width:48%'>");
-                    out.print("<div class=''>");
+                    out.print("<div class='d-flex'>");
+                    //<editor-fold defaultstate="collapsed" desc="TIPO DE PROCESO">
+                    out.print("<div class=' col-lg-4'>");
+                    out.print("<span class=''>Proceso</span>");
+                    out.print("<div class='d-flex' style='justify-content: space-evenly;margin-top: 10%;'>");
+                    String tipyProces = obj_data_id[38].toString();
+                    out.print("PVC <input type='radio' class='' name='txtType' value='PVC' " + (tipyProces.equals("PVC") ? "checked" : "") + " onclick='process(\"PVC\")'>");
+                    out.print("PP <input type='radio' class='' name='txtType' value='PP' " + (tipyProces.contains("PP") ? "checked" : "") + " onclick='process(\"PP\")'>");
+                    out.print("</div>");
+                    if (tipyProces.contains("PP/")) {
+                        out.print("<div id='DivProces' class='' style='justify-content: space-evenly;margin-top: 1%;display: block;'>");
+                        out.print("Interno <input type='radio' class='' name='txtDest' value='Interno' " + (tipyProces.contains("PP/Interno") ? "checked" : "") + "> &nbsp");
+                        out.print("Cliente <input type='radio' class='' name='txtDest' value='Cliente' " + (tipyProces.contains("PP/Cliente") ? "checked" : "") + ">");
+                        out.print("</div>");
+                    } else {
+                        out.print("<div id='DivProces' class='' style='justify-content: space-evenly;margin-top: 1%;display: none;'>");
+                        out.print("Interno <input type='radio' class='' name='txtDest' value='Interno' checked> &nbsp");
+                        out.print("Cliente <input type='radio' class='' name='txtDest' value='Cliente'>");
+                        out.print("</div>");
+                    }
+                    out.print("</div>");
+                    //</editor-fold>
+
+                    out.print("<div class='col-lg-8'>");
+                    out.print("<span class=''>Observaciones</span>");
                     out.print("<textarea class='form-control' name='Txt_observation' id='Txt_observation' placeholder='Observaciones' data-toggle='tooltip' data-placement='right' title='Observaciones' required=''>" + obj_data_id[31] + "</textarea>");
                     out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
                     out.print("</div>");
                     out.print("</div>");
-                    
+                    out.print("</div>");
+
                     out.print("</div>");
 
                     //<editor-fold defaultstate="collapsed" desc="RUGOSIDAD Y OBSERVACIONES">
-                    
                     //</editor-fold>
-
                     out.print("</div>");
                     out.print("<div class='' style='margin-top:14px;width: 100%; text-align:center;'>");
                     out.print("<button class='btn btn-green btn-lg'>" + ((temp_1 == 1) ? "Actualizar" : "Modificar") + "</button>");
@@ -395,268 +442,495 @@ public class Tag_data_sheet extends TagSupport {
                         out.print("<button class='btn btn-outline-secondary' onclick='mostrarConvencion(2)' style='height: 30px;padding: 3px;width: 30px;'><i class='fas fa-times'></i></button>");
                         out.print("</div>");
                         String[] Arr_products = lst_products.toString().replace("[", "").replace("]", "").split("////");
-                        out.print("<div class=''>");
-                        out.print("<form action='Data_sheet?opc=2' class='needs-validation' novalidate='' method='post'>");
-                        out.print("<div class='' style='display: flex;justify-content: space-around;'>");
-                        out.print("<div style='width:47%' data-toggle='tooltip' data-placement='right' title='Codigo'><input type='text'  style='background-color:  #ebebeb;' class='form-control input_none' name='Txt_code' id='Txt_code' placeholder='Codigo' value='" + Arr_products[0] + "' ></div>");
-                        out.print("<div style='width:47%' data-toggle='tooltip' data-placement='right' title='Producto'><input type='text' style='background-color:  #ebebeb;' class='form-control input_none' name='Txt_product' id='Txt_product' placeholder='Producto' value='" + Arr_products[1] + "'></div>");
+
+                        if (Arr_products[1].toString().contains("PP TUBING")) {
+                            //<editor-fold defaultstate="collapsed" desc="REGISTER PP">
+                            out.print("<div class=''>");
+                            out.print("<form action='Data_sheet?opc=4' class='needs-validation' novalidate='' method='post'>");
+                            out.print("<div class='' style='display: flex;justify-content: space-around;'>");
+                            out.print("<div style='width:47%' data-toggle='tooltip' data-placement='right' title='Codigo'><input type='text'  style='background-color:  #ebebeb;' class='form-control input_none' name='Txt_code' id='Txt_code' placeholder='Codigo' value='" + Arr_products[0] + "' ></div>");
+                            out.print("<div style='width:47%' data-toggle='tooltip' data-placement='right' title='Producto'><input type='text' style='background-color:  #ebebeb;' class='form-control input_none' name='Txt_product' id='Txt_product' placeholder='Producto' value='" + Arr_products[1] + "'></div>");
+                            out.print("</div>");
+
+                            out.print("<div class='' style='display: flex;justify-content: space-around; margin-top:10px;'>");
+                            out.print("<div class='col-lg-6'>");
+                            out.print("<input type='text' class='form-control' name='Txt_name_sheet' id='Txt_name_sheet' placeholder='Nombre Ficha Tecnica'  data-toggle='tooltip' data-placement='right' title='Nombre Ficha Tecnica' required='' autocomplete='off' value='FT-EX-'>");
+                            out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
+                            out.print("</div>");
+                            out.print("<div class='col-lg-6'>");
+                            out.print("<input type='number' class='form-control' name='version' id='Txt_version' placeholder='Version' data-toggle='tooltip' data-placement='right' title='Version' required='' autocomplete='off' value='0' >");
+                            out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
+                            out.print("</div>");
+                            out.print("</div>");
+
+                            out.print("<div class='divCbData'>");
+
+                            out.print("<div style='width:30%'>");
+                            //<editor-fold defaultstate="collapsed" desc="DIAMETRO INTERNO">
+                            out.print("<div class='col-lg-12'>");
+                            out.print("<input type='text' class='form-control' name='Txt_diamInt' id='Txt_diamInt' placeholder='Diametro Interno' required='' data-toggle='tooltip' data-placement='right' title='Diametro Interno' autocomplete='off'>");
+                            out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
+                            out.print("</div>");
+
+                            out.print("<div class='divTlData'>");
+                            out.print("<div style='margin-right:5px;' class=\"input-group\">"
+                                    + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-plus\"></i></div>"
+                                    + "<input type='text' style='width:25%' class='form-control' name='Txt_diamInt_max' id='Txt_diamInt_max' placeholder='' required='' autocomplete='off' >"
+                                    + "</div>");
+
+                            out.print("<div class=\"input-group\">"
+                                    + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-minus\"></i></div>"
+                                    + "<input type='text' style='width:25%' class='form-control' name='Txt_diamInt_min' id='Txt_diamInt_min' placeholder='' required='' autocomplete='off'>"
+                                    + "</div>");
+
+                            out.print("</div>");
+                            //</editor-fold>
+                            out.print("</div>");
+
+                            out.print("<div style='width:30%'>");
+                            //<editor-fold defaultstate="collapsed" desc="DIAMETRO EXTERNO">
+                            out.print("<div class='col-lg-12'>");
+                            out.print("<input type='text' class='form-control' name='Txt_diaExt' id='Txt_diaExt' placeholder='Diametro Externo' required='' data-toggle='tooltip' data-placement='right' title='Diametro Externo' autocomplete='off'>");
+                            out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
+                            out.print("</div>");
+
+                            out.print("<div class='divTlData'>");
+
+                            out.print("<div style='margin-right:5px;' class=\"input-group\">"
+                                    + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-plus\"></i></div>"
+                                    + "<input type='text' style='width:25%' class='form-control' name='Txt_diaExt_max' id='Txt_diaExt_max' placeholder='' required='' autocomplete='off'>"
+                                    + "</div>");
+
+                            out.print("<div class=\"input-group\">"
+                                    + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-minus\"></i></div>"
+                                    + "<input type='text' style='width:25%' class='form-control' name='Txt_diaExt_min' id='Txt_diaExt_min' placeholder='' required='' autocomplete='off'>"
+                                    + "</div>");
+
+                            out.print("</div>");
+                            //</editor-fold>
+                            out.print("</div>");
+
+                            out.print("<div style='width:30%;'>");
+                            //<editor-fold defaultstate="collapsed" desc="ESPESOR PARED DER">
+                            out.print("<div class='col-lg-12'>");
+                            out.print("<input type='text' class='form-control' name='Txt_espParedDer' id='Txt_espParedDer' placeholder='Espesor pared Der' required='' data-toggle='tooltip' data-placement='right' title='Espesor pared Der' autocomplete='off'>");
+                            out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
+                            out.print("</div>");
+
+                            out.print("<div class='divTlData'>");
+                            out.print("<div style='margin-right:5px;' class=\"input-group\">"
+                                    + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-plus\"></i></div>"
+                                    + "<input type='text' style='width:20%' class='form-control' name='Txt_espParedDer_max' id='Txt_espParedDer_max' placeholder='' required='' autocomplete='off'>"
+                                    + "</div>");
+
+                            out.print("<div class=\"input-group\">"
+                                    + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-minus\"></i></div>"
+                                    + "<input type='text' style='width:20%' class='form-control' name='Txt_espParedDer_min' id='Txt_espParedDer_min' placeholder='' required='' autocomplete='off'>"
+                                    + "</div>");
+                            out.print("</div>");
+
+                            //</editor-fold>
+                            out.print("</div>");
+
+
+                            out.print("</div>");
+
+                            out.print("<div class='divCbData'>");
+                            
+                            out.print("<div style='width:30%;'>");
+                            //<editor-fold defaultstate="collapsed" desc="ESPESOR PARED IZQ">
+                            out.print("<div class='col-lg-12'>");
+                            out.print("<input type='text' class='form-control' name='Txt_espParedIzq' id='Txt_espParedIzq' placeholder='Espesor Pared Izq' required='' data-toggle='tooltip' data-placement='right' title='Espesor Pared Izq' autocomplete='off'>");
+                            out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
+                            out.print("</div>");
+
+                            out.print("<div class='divTlData'>");
+                            out.print("<div style='margin-right:5px;' class=\"input-group\">"
+                                    + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-plus\"></i></div>"
+                                    + "<input type='text' style='width:20%' class='form-control' name='Txt_espParedIzq_max' id='Txt_espParedIzq_max' placeholder='' required='' autocomplete='off'>"
+                                    + "</div>");
+
+                            out.print("<div class=\"input-group\">"
+                                    + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-minus\"></i></div>"
+                                    + "<input type='text' style='width:20%' class='form-control' name='Txt_espParedIzq_min' id='Txt_espParedIzq_min' placeholder='' required='' autocomplete='off'>"
+                                    + "</div>");
+                            out.print("</div>");
+                            //</editor-fold>
+                            out.print("</div>");
+
+                            out.print("<div style='width:30%;'>");
+                            //<editor-fold defaultstate="collapsed" desc="GALGA">
+                            out.print("<div class='col-lg-12'>");
+                            out.print("<input type='text' class='form-control' name='Txt_galga' id='Txt_galga' placeholder='Espesor pared' required='' data-toggle='tooltip' data-placement='right' title='Galga' autocomplete='off'>");
+                            out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
+                            out.print("</div>");
+
+                            out.print("<div class='divTlData'>");
+                            out.print("<div style='margin-right:5px;' class=\"input-group\">"
+                                    + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-plus\"></i></div>"
+                                    + "<input type='text' style='width:20%' class='form-control' name='Txt_galga_max' id='Txt_galga_max' placeholder='' required='' autocomplete='off'>"
+                                    + "</div>");
+
+                            out.print("<div class=\"input-group\">"
+                                    + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-minus\"></i></div>"
+                                    + "<input type='text' style='width:20%' class='form-control' name='Txt_galga_min' id='Txt_galga_min' placeholder='' required='' autocomplete='off'>"
+                                    + "</div>");
+                            out.print("</div>");
+
+                            //</editor-fold>
+                            out.print("</div>");
+
+
+                            out.print("<div style='width:30%'>");
+                            //<editor-fold defaultstate="collapsed" desc="PESO DEL ROLLO">
+                            out.print("<div class='col-lg-12'>");
+                            out.print("<input type='text' class='form-control' name='Txt_roll_weight' id='Txt_roll_weight' placeholder='Peso del rollo' required='' data-toggle='tooltip' data-placement='right' title='Peso del rollo' autocomplete='off'>");
+                            out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
+                            out.print("</div>");
+
+                            out.print("<div class='divTlData'>");
+
+                            out.print("<div style='margin-right:5px;' class=\"input-group\">"
+                                    + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-plus\"></i></div>"
+                                    + "<input type='number' style='width:20%' class='form-control' name='Txt_roll_weight_max' id='Txt_roll_weight_max' placeholder='' required='' autocomplete='off'>"
+                                    + "</div>");
+
+                            out.print("<div class=\"input-group\">"
+                                    + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-minus\"></i></div>"
+                                    + "<input type='number' style='width:20%' class='form-control' name='Txt_roll_weight_min' id='Txt_roll_weight_min' placeholder='' required='' autocomplete='off'>"
+                                    + "</div>");
+
+                            out.print("</div>");
+                            //</editor-fold>
+                            out.print("</div>");
+                            out.print("</div>");
+
+                            out.print("<div style='width:90%; margin: auto;'>");
+
+                            out.print("<div class=''>");
+                            //<editor-fold defaultstate="collapsed" desc="OBSERVACIONES">
+                            out.print("<span class=''>Observaciones</span>");
+                            out.print("<textarea class='form-control' name='Txt_observation' id='Txt_code' placeholder='Escribir...' data-toggle='tooltip' data-placement='right' title='Observaciones' required='' autocomplete='off' ></textarea>");
+                            out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
+                            //</editor-fold>
+                            out.print("</div>");
+                            out.print("</div>");
+                            out.print("</div>");
+
+//                        out.print("<div class=''>");
+//                        //<editor-fold defaultstate="collapsed" desc="SELECT TYPE">
+//                        out.print("<div class='d-flex'>");
+//                        out.print("PVC <input type='radio' class='' name='txtType' value='PVC'>");
+//                        out.print("PP <input type='radio' class='' name='txtType' value='PP'>");
+//                        out.print("</div>");
+//                        //</editor-fold>
+//                        out.print("</div>");
+                            out.print("</div>");
+
+                            out.print("<div class='' style='margin-top:14px;width: 100%; text-align:center;'>");
+                            out.print("<button class='btn btn-green btn-lg'>Registrar</button>");
+                            out.print("</div>");
+
+                            out.print("</form>");
+                            out.print("</div>");
+                            out.print("</div>");
+                            //</editor-fold>
+                        } else {
+                            //<editor-fold defaultstate="collapsed" desc="REGISTER PVC">
+                            out.print("<div class=''>");
+                            out.print("<form action='Data_sheet?opc=2' class='needs-validation' novalidate='' method='post'>");
+                            out.print("<div class='' style='display: flex;justify-content: space-around;'>");
+                            out.print("<div style='width:47%' data-toggle='tooltip' data-placement='right' title='Codigo'><input type='text'  style='background-color:  #ebebeb;' class='form-control input_none' name='Txt_code' id='Txt_code' placeholder='Codigo' value='" + Arr_products[0] + "' ></div>");
+                            out.print("<div style='width:47%' data-toggle='tooltip' data-placement='right' title='Producto'><input type='text' style='background-color:  #ebebeb;' class='form-control input_none' name='Txt_product' id='Txt_product' placeholder='Producto' value='" + Arr_products[1] + "'></div>");
+                            out.print("</div>");
+
+                            out.print("<div class='' style='display: flex;justify-content: space-around; margin-top:10px;'>");
+                            out.print("<div class='col-lg-6'>");
+                            out.print("<input type='text' class='form-control' name='Txt_name_sheet' id='Txt_name_sheet' placeholder='Nombre Ficha Tecnica'  data-toggle='tooltip' data-placement='right' title='Nombre Ficha Tecnica' required='' autocomplete='off' value='FT-EX-'>");
+                            out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
+                            out.print("</div>");
+                            out.print("<div class='col-lg-6'>");
+                            out.print("<input type='number' class='form-control' name='version' id='Txt_version' placeholder='Version' data-toggle='tooltip' data-placement='right' title='Version' required='' autocomplete='off' value='0' >");
+                            out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
+                            out.print("</div>");
+                            out.print("</div>");
+
+                            out.print("<div class='divCbData'>");
+
+                            out.print("<div style='width:24%'>");
+                            //<editor-fold defaultstate="collapsed" desc="INTERNO SIN PRESURIZAR">
+                            out.print("<div class='col-lg-12'>");
+                            out.print("<input type='text' class='form-control' name='Txt_intSinPre' id='Txt_intSinPre' placeholder='Interno sin presurizar' required='' data-toggle='tooltip' data-placement='right' title='Interno sin presurizar' autocomplete='off'>");
+                            out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
+                            out.print("</div>");
+
+                            out.print("<div class='divTlData'>");
+                            out.print("<div style='margin-right:5px;' class=\"input-group\">"
+                                    + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-plus\"></i></div>"
+                                    + "<input type='text' style='width:25%' class='form-control' name='Txt_intSinPre_max' id='Txt_diameter_ex_max' placeholder='' required='' autocomplete='off' >"
+                                    + "</div>");
+
+                            out.print("<div class=\"input-group\">"
+                                    + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-minus\"></i></div>"
+                                    + "<input type='text' style='width:25%' class='form-control' name='Txt_intSinPre_min' id='Txt_diameter_ex_min' placeholder='' required='' autocomplete='off'>"
+                                    + "</div>");
+
+                            out.print("</div>");
+                            //</editor-fold>
+                            out.print("</div>");
+
+                            out.print("<div style='width:24%'>");
+                            //<editor-fold defaultstate="collapsed" desc="INTERNO PRESURIZADO">
+                            out.print("<div class='col-lg-12'>");
+                            out.print("<input type='text' class='form-control' name='Txt_intPre' id='Txt_intPre' placeholder='Interno presurizado' required='' data-toggle='tooltip' data-placement='right' title='Interno presurizado' autocomplete='off'>");
+                            out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
+                            out.print("</div>");
+
+                            out.print("<div class='divTlData'>");
+
+                            out.print("<div style='margin-right:5px;' class=\"input-group\">"
+                                    + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-plus\"></i></div>"
+                                    + "<input type='text' style='width:25%' class='form-control' name='Txt_intPre_max' id='Txt_diameter_ex_max' placeholder='' required='' autocomplete='off'>"
+                                    + "</div>");
+
+                            out.print("<div class=\"input-group\">"
+                                    + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-minus\"></i></div>"
+                                    + "<input type='text' style='width:25%' class='form-control' name='Txt_intPre_min' id='Txt_diameter_ex_min' placeholder='' required='' autocomplete='off'>"
+                                    + "</div>");
+
+                            out.print("</div>");
+                            //</editor-fold>
+                            out.print("</div>");
+
+                            out.print("<div style='width:24%;'>");
+                            //<editor-fold defaultstate="collapsed" desc="EXTERNO_SIN_PRESURIZAR">
+                            out.print("<div class='col-lg-12'>");
+                            out.print("<input type='text' class='form-control' name='Txt_extSinPre' id='Txt_wall_thickness' placeholder='Externo sin presurizar' required='' data-toggle='tooltip' data-placement='right' title='Externo sin presurizar' autocomplete='off'>");
+                            out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
+                            out.print("</div>");
+
+                            out.print("<div class='divTlData'>");
+                            out.print("<div style='margin-right:5px;' class=\"input-group\">"
+                                    + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-plus\"></i></div>"
+                                    + "<input type='text' style='width:20%' class='form-control' name='Txt_extSinPre_max' id='Txt_wall_thickness_max' placeholder='' required='' autocomplete='off'>"
+                                    + "</div>");
+
+                            out.print("<div class=\"input-group\">"
+                                    + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-minus\"></i></div>"
+                                    + "<input type='text' style='width:20%' class='form-control' name='Txt_extSinPre_min' id='Txt_wall_thickness_min' placeholder='' required='' autocomplete='off'>"
+                                    + "</div>");
+                            out.print("</div>");
+
+                            //</editor-fold>
+                            out.print("</div>");
+
+                            out.print("<div style='width:24%;'>");
+                            //<editor-fold defaultstate="collapsed" desc="EXTERNO_PRESURIZADO">
+                            out.print("<div class='col-lg-12'>");
+                            out.print("<input type='text' class='form-control' name='Txt_extPre' id='Txt_wall_thickness' placeholder='Externo presurizado' required='' data-toggle='tooltip' data-placement='right' title='Externo presurizado' autocomplete='off'>");
+                            out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
+                            out.print("</div>");
+
+                            out.print("<div class='divTlData'>");
+                            out.print("<div style='margin-right:5px;' class=\"input-group\">"
+                                    + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-plus\"></i></div>"
+                                    + "<input type='text' style='width:20%' class='form-control' name='Txt_extPre_max' id='Txt_wall_thickness_max' placeholder='' required='' autocomplete='off'>"
+                                    + "</div>");
+
+                            out.print("<div class=\"input-group\">"
+                                    + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-minus\"></i></div>"
+                                    + "<input type='text' style='width:20%' class='form-control' name='Txt_extPre_min' id='Txt_wall_thickness_min' placeholder='' required='' autocomplete='off'>"
+                                    + "</div>");
+                            out.print("</div>");
+
+                            //</editor-fold>
+                            out.print("</div>");
+
+                            out.print("</div>");
+
+                            out.print("<div class='divCbData'>");
+
+                            out.print("<div style='width:24%;'>");
+                            //<editor-fold defaultstate="collapsed" desc="ESPESOR DE PARED">
+                            out.print("<div class='col-lg-12'>");
+                            out.print("<input type='text' class='form-control' name='Txt_wall_thickness' id='Txt_wall_thickness' placeholder='Espesor pared' required='' data-toggle='tooltip' data-placement='right' title='Espesor de Pared' autocomplete='off'>");
+                            out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
+                            out.print("</div>");
+
+                            out.print("<div class='divTlData'>");
+                            out.print("<div style='margin-right:5px;' class=\"input-group\">"
+                                    + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-plus\"></i></div>"
+                                    + "<input type='text' style='width:20%' class='form-control' name='Txt_wall_thickness_max' id='Txt_wall_thickness_max' placeholder='' required='' autocomplete='off'>"
+                                    + "</div>");
+
+                            out.print("<div class=\"input-group\">"
+                                    + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-minus\"></i></div>"
+                                    + "<input type='text' style='width:20%' class='form-control' name='Txt_wall_thickness_min' id='Txt_wall_thickness_min' placeholder='' required='' autocomplete='off'>"
+                                    + "</div>");
+                            out.print("</div>");
+
+                            //</editor-fold>
+                            out.print("</div>");
+
+                            out.print("<div style='width:24%'>");
+                            //<editor-fold defaultstate="collapsed" desc="DIAMETRO EXTERIOR BOBINA">
+                            out.print("<div class='col-lg-12'>");
+                            out.print("<input type='text' class='form-control' name='Txt_diameter_coil_ex' id='Txt_diameter_coil_ex' placeholder='Diametro Exterior Bobina' required='' data-toggle='tooltip' data-placement='right' title='Diametro Exterior Bobina' autocomplete='off'>");
+                            out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
+                            out.print("</div>");
+
+                            out.print("<div class='divTlData'>");
+
+                            out.print("<div style='margin-right:5px;' class=\"input-group\">"
+                                    + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-plus\"></i></div>"
+                                    + "<input type='text' style='width:20%' class='form-control' name='Txt_diameter_coil_ex_max' id='Txt_diameter_coil_max' placeholder='' required='' autocomplete='off'>"
+                                    + "</div>");
+
+                            out.print("<div class=\"input-group\">"
+                                    + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-minus\"></i></div>"
+                                    + "<input type='text' style='width:20%' class='form-control' name='Txt_diameter_coil_ex_min' id='Txt_diameter_coil_min' placeholder='' required='' autocomplete='off'>"
+                                    + "</div>");
+
+                            out.print("</div>");
+                            //</editor-fold>
+                            out.print("</div>");
+
+                            out.print("<div style='width:24%'>");
+                            //<editor-fold defaultstate="collapsed" desc="DIAMETRO INTERIOR BOBINA">
+                            out.print("<div class='col-lg-12'>");
+                            out.print("<input type='number' class='form-control' name='Txt_diameter_coil_in' id='Txt_diameter_coil_in' placeholder='Diametro Interior Bobina' required='' data-toggle='tooltip' data-placement='right' title='Diametro Interior Bobina' autocomplete='off'>");
+                            out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
+                            out.print("</div>");
+
+                            out.print("<div class='divTlData'>");
+
+                            out.print("<div style='margin-right:5px;' class=\"input-group\">"
+                                    + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-plus\"></i></div>"
+                                    + "<input type='number' style='width:20%' class='form-control' name='Txt_diameter_coil_in_max' id='Txt_diameter_coil_max' placeholder='' required='' autocomplete='off'>"
+                                    + "</div>");
+
+                            out.print("<div class=\"input-group\">"
+                                    + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-minus\"></i></div>"
+                                    + "<input type='number' style='width:20%' class='form-control' name='Txt_diameter_coil_in_min' id='Txt_diameter_coil_min' placeholder='' required='' autocomplete='off'>"
+                                    + "</div>");
+
+                            out.print("</div>");
+                            //</editor-fold>
+                            out.print("</div>");
+
+                            out.print("<div style='width:24%'>");
+                            //<editor-fold defaultstate="collapsed" desc="PESO DEL ROLLO">
+                            out.print("<div class='col-lg-12'>");
+                            out.print("<input type='text' class='form-control' name='Txt_roll_weight' id='Txt_roll_weight' placeholder='Peso del rollo' required='' data-toggle='tooltip' data-placement='right' title='Peso del rollo' autocomplete='off'>");
+                            out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
+                            out.print("</div>");
+
+                            out.print("<div class='divTlData'>");
+
+                            out.print("<div style='margin-right:5px;' class=\"input-group\">"
+                                    + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-plus\"></i></div>"
+                                    + "<input type='number' style='width:20%' class='form-control' name='Txt_roll_weight_max' id='Txt_roll_weight_max' placeholder='' required='' autocomplete='off'>"
+                                    + "</div>");
+
+                            out.print("<div class=\"input-group\">"
+                                    + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-minus\"></i></div>"
+                                    + "<input type='number' style='width:20%' class='form-control' name='Txt_roll_weight_min' id='Txt_roll_weight_min' placeholder='' required='' autocomplete='off'>"
+                                    + "</div>");
+
+                            out.print("</div>");
+                            //</editor-fold>
+                            out.print("</div>");
+                            out.print("</div>");
+
+                            out.print("<div class='divCbData'>");
+
+                            out.print("<div style='width:24%'>");
+                            //<editor-fold defaultstate="collapsed" desc="PRESION">
+                            out.print("<div class='col-lg-12'>");
+                            out.print("<input type='text' class='form-control' name='Txt_pressure' id='Txt_pressure' placeholder='Presión' required='' data-toggle='tooltip' data-placement='right' title='Presión' autocomplete='off'>");
+                            out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
+                            out.print("</div>");
+
+                            out.print("<div class='divTlData'>");
+                            out.print("<div style='margin-right:5px;' class=\"input-group\">"
+                                    + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-plus\"></i></div>"
+                                    + "<input type='text' style='width:20%' class='form-control' name='Txt_pressurized_max' id='Txt_pressurized_max' placeholder='' required='' autocomplete='off'>"
+                                    + "</div>");
+                            out.print("<div class=\"input-group\">"
+                                    + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-minus\"></i></div>"
+                                    + "<input type='text' style='width:20%' class='form-control' name='Txt_pressurized_min' id='Txt_pressurized_min' placeholder='' required='' autocomplete='off'>"
+                                    + "</div>");
+                            out.print("</div>");
+                            //</editor-fold>
+                            out.print("</div>");
+
+                            out.print("<div style='width:24%'>");
+                            //<editor-fold defaultstate="collapsed" desc="RUGOSIDAD">
+                            out.print("<div class='col-lg-12'>");
+                            out.print("<span>Rugosidad</span>");
+                            out.print("</div>");
+                            out.print("<div class='divTlData'>");
+                            out.print("<div style='margin-right:5px;' class=\"input-group\">"
+                                    + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-plus\"></i></div>"
+                                    + "<input type='number' style='width:20%' class='form-control' name='Txt_min_rugosity' id='Txt_min_rugosity' data-toggle='tooltip' data-placement='top' title='Min Rugosidad' placeholder='' required='' autocomplete='off'>"
+                                    + "</div>");
+                            out.print("<div class=\"input-group\">"
+                                    + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-minus\"></i></div>"
+                                    + "<input type='number' style='width:20%' class='form-control' name='Txt_max_rugosity' id='Txt_max_rugosity' data-toggle='tooltip' data-placement='top' title='Max Rugosidad' placeholder='' required='' autocomplete='off'>"
+                                    + "</div>");
+                            //</editor-fold>
+                            out.print("</div>");
+                            out.print("</div>");
+
+                            out.print("<div style='width:48%'>");
+
+                            out.print("<div class='d-flex'>");
+                            //<editor-fold defaultstate="collapsed" desc="SELECT TYPE">
+                            out.print("<div class=' col-lg-4'>");
+                            out.print("<span class=''>Proceso</span>");
+                            out.print("<div class='d-flex' style='justify-content: space-evenly;margin-top: 10%;'>");
+                            out.print("PVC <input type='radio' class='' name='txtType' value='PVC' checked onclick='process(\"PVC\")'>");
+                            out.print("PP <input type='radio' class='' name='txtType' value='PP' onclick='process(\"PP\")'>");
+                            out.print("</div>");
+                            out.print("<div id='DivProces' class='' style='justify-content: space-evenly;margin-top: 1%;display: none;'>");
+                            out.print("Interno <input type='radio' class='' name='txtDest' value='Interno'>");
+                            out.print("Cliente <input type='radio' class='' name='txtDest' value='Cliente'>");
+                            out.print("</div>");
+                            out.print("</div>");
+                            //</editor-fold>
+//                        out.print("</div>");
+                            //<editor-fold defaultstate="collapsed" desc="OBSERVACIONES">
+                            out.print("<div class='col-lg-8'>");
+                            out.print("<span class=''>Observaciones</span>");
+                            out.print("<textarea class='form-control' name='Txt_observation' id='Txt_code' placeholder='Escribir...' data-toggle='tooltip' data-placement='right' title='Observaciones' required='' autocomplete='off' ></textarea>");
+                            out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
+                            out.print("</div>");
+                            //</editor-fold>
+                            out.print("</div>");
+                            out.print("</div>");
+                            out.print("</div>");
+
+//                        out.print("<div class=''>");
+//                        //<editor-fold defaultstate="collapsed" desc="SELECT TYPE">
+//                        out.print("<div class='d-flex'>");
+//                        out.print("PVC <input type='radio' class='' name='txtType' value='PVC'>");
+//                        out.print("PP <input type='radio' class='' name='txtType' value='PP'>");
+//                        out.print("</div>");
+//                        //</editor-fold>
+//                        out.print("</div>");
+                            out.print("</div>");
+
+                            out.print("<div class='' style='margin-top:14px;width: 100%; text-align:center;'>");
+                            out.print("<button class='btn btn-green btn-lg'>Registrar</button>");
+                            out.print("</div>");
+
+                            out.print("</form>");
+                            out.print("</div>");
+                            out.print("</div>");
+                            //</editor-fold>
+                        }
                         out.print("</div>");
 
-                        out.print("<div class='' style='display: flex;justify-content: space-around; margin-top:10px;'>");
-                        out.print("<div class='col-lg-6'>");
-                        out.print("<input type='text' class='form-control' name='Txt_name_sheet' id='Txt_name_sheet' placeholder='Nombre Ficha Tecnica'  data-toggle='tooltip' data-placement='right' title='Nombre Ficha Tecnica' required='' autocomplete='off' >");
-                        out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
-                        out.print("</div>");
-                        out.print("<div class='col-lg-6'>");
-                        out.print("<input type='number' class='form-control' name='version' id='Txt_version' placeholder='Version' data-toggle='tooltip' data-placement='right' title='Version' required='' autocomplete='off' >");
-                        out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
-                        out.print("</div>");
-                        out.print("</div>");
-
-                        out.print("<div class='divCbData'>");
-
-                        out.print("<div style='width:24%'>");
-                        //<editor-fold defaultstate="collapsed" desc="INTERNO SIN PRESURIZAR">
-                        out.print("<div class='col-lg-12'>");
-                        out.print("<input type='text' class='form-control' name='Txt_intSinPre' id='Txt_intSinPre' placeholder='Interno sin presurizar' required='' data-toggle='tooltip' data-placement='right' title='Interno sin presurizar' autocomplete='off'>");
-                        out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
-                        out.print("</div>");
-
-                        out.print("<div class='divTlData'>");
-                        out.print("<div style='margin-right:5px;' class=\"input-group\">"
-                                + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-plus\"></i></div>"
-                                + "<input type='text' style='width:25%' class='form-control' name='Txt_intSinPre_max' id='Txt_diameter_ex_max' placeholder='' required='' autocomplete='off' >"
-                                + "</div>");
-
-                        out.print("<div class=\"input-group\">"
-                                + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-minus\"></i></div>"
-                                + "<input type='text' style='width:25%' class='form-control' name='Txt_intSinPre_min' id='Txt_diameter_ex_min' placeholder='' required='' autocomplete='off'>"
-                                + "</div>");
-
-                        out.print("</div>");
-                        //</editor-fold>
-                        out.print("</div>");
-
-                        out.print("<div style='width:24%'>");
-                        //<editor-fold defaultstate="collapsed" desc="INTERNO PRESURIZADO">
-                        out.print("<div class='col-lg-12'>");
-                        out.print("<input type='text' class='form-control' name='Txt_intPre' id='Txt_intPre' placeholder='Interno presurizado' required='' data-toggle='tooltip' data-placement='right' title='Interno presurizado' autocomplete='off'>");
-                        out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
-                        out.print("</div>");
-
-                        out.print("<div class='divTlData'>");
-
-                        out.print("<div style='margin-right:5px;' class=\"input-group\">"
-                                + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-plus\"></i></div>"
-                                + "<input type='text' style='width:25%' class='form-control' name='Txt_intPre_max' id='Txt_diameter_ex_max' placeholder='' required='' autocomplete='off'>"
-                                + "</div>");
-
-                        out.print("<div class=\"input-group\">"
-                                + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-minus\"></i></div>"
-                                + "<input type='text' style='width:25%' class='form-control' name='Txt_intPre_min' id='Txt_diameter_ex_min' placeholder='' required='' autocomplete='off'>"
-                                + "</div>");
-
-                        out.print("</div>");
-                        //</editor-fold>
-                        out.print("</div>");
-
-                        out.print("<div style='width:24%;'>");
-                        //<editor-fold defaultstate="collapsed" desc="EXTERNO_SIN_PRESURIZAR">
-                        out.print("<div class='col-lg-12'>");
-                        out.print("<input type='text' class='form-control' name='Txt_extSinPre' id='Txt_wall_thickness' placeholder='Externo sin presurizar' required='' data-toggle='tooltip' data-placement='right' title='Externo sin presurizar' autocomplete='off'>");
-                        out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
-                        out.print("</div>");
-
-                        out.print("<div class='divTlData'>");
-                        out.print("<div style='margin-right:5px;' class=\"input-group\">"
-                                + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-plus\"></i></div>"
-                                + "<input type='text' style='width:20%' class='form-control' name='Txt_extSinPre_max' id='Txt_wall_thickness_max' placeholder='' required='' autocomplete='off'>"
-                                + "</div>");
-
-                        out.print("<div class=\"input-group\">"
-                                + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-minus\"></i></div>"
-                                + "<input type='text' style='width:20%' class='form-control' name='Txt_extSinPre_min' id='Txt_wall_thickness_min' placeholder='' required='' autocomplete='off'>"
-                                + "</div>");
-                        out.print("</div>");
-
-                        //</editor-fold>
-                        out.print("</div>");
-
-                        out.print("<div style='width:24%;'>");
-                        //<editor-fold defaultstate="collapsed" desc="EXTERNO_PRESURIZADO">
-                        out.print("<div class='col-lg-12'>");
-                        out.print("<input type='text' class='form-control' name='Txt_extPre' id='Txt_wall_thickness' placeholder='Externo presurizado' required='' data-toggle='tooltip' data-placement='right' title='Externo presurizado' autocomplete='off'>");
-                        out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
-                        out.print("</div>");
-
-                        out.print("<div class='divTlData'>");
-                        out.print("<div style='margin-right:5px;' class=\"input-group\">"
-                                + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-plus\"></i></div>"
-                                + "<input type='text' style='width:20%' class='form-control' name='Txt_extPre_max' id='Txt_wall_thickness_max' placeholder='' required='' autocomplete='off'>"
-                                + "</div>");
-
-                        out.print("<div class=\"input-group\">"
-                                + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-minus\"></i></div>"
-                                + "<input type='text' style='width:20%' class='form-control' name='Txt_extPre_min' id='Txt_wall_thickness_min' placeholder='' required='' autocomplete='off'>"
-                                + "</div>");
-                        out.print("</div>");
-
-                        //</editor-fold>
-                        out.print("</div>");
-
-                        out.print("</div>");
-
-                        out.print("<div class='divCbData'>");
-
-                        out.print("<div style='width:24%;'>");
-                        //<editor-fold defaultstate="collapsed" desc="ESPESOR DE PARED">
-                        out.print("<div class='col-lg-12'>");
-                        out.print("<input type='text' class='form-control' name='Txt_wall_thickness' id='Txt_wall_thickness' placeholder='Espesor pared' required='' data-toggle='tooltip' data-placement='right' title='Espesor de Pared' autocomplete='off'>");
-                        out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
-                        out.print("</div>");
-
-                        out.print("<div class='divTlData'>");
-                        out.print("<div style='margin-right:5px;' class=\"input-group\">"
-                                + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-plus\"></i></div>"
-                                + "<input type='text' style='width:20%' class='form-control' name='Txt_wall_thickness_max' id='Txt_wall_thickness_max' placeholder='' required='' autocomplete='off'>"
-                                + "</div>");
-
-                        out.print("<div class=\"input-group\">"
-                                + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-minus\"></i></div>"
-                                + "<input type='text' style='width:20%' class='form-control' name='Txt_wall_thickness_min' id='Txt_wall_thickness_min' placeholder='' required='' autocomplete='off'>"
-                                + "</div>");
-                        out.print("</div>");
-
-                        //</editor-fold>
-                        out.print("</div>");
-
-                        out.print("<div style='width:24%'>");
-                        //<editor-fold defaultstate="collapsed" desc="DIAMETRO EXTERIOR BOBINA">
-                        out.print("<div class='col-lg-12'>");
-                        out.print("<input type='text' class='form-control' name='Txt_diameter_coil_ex' id='Txt_diameter_coil_ex' placeholder='Diametro Exterior Bobina' required='' data-toggle='tooltip' data-placement='right' title='Diametro Exterior Bobina' autocomplete='off'>");
-                        out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
-                        out.print("</div>");
-
-                        out.print("<div class='divTlData'>");
-
-                        out.print("<div style='margin-right:5px;' class=\"input-group\">"
-                                + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-plus\"></i></div>"
-                                + "<input type='text' style='width:20%' class='form-control' name='Txt_diameter_coil_ex_max' id='Txt_diameter_coil_max' placeholder='' required='' autocomplete='off'>"
-                                + "</div>");
-
-                        out.print("<div class=\"input-group\">"
-                                + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-minus\"></i></div>"
-                                + "<input type='text' style='width:20%' class='form-control' name='Txt_diameter_coil_ex_min' id='Txt_diameter_coil_min' placeholder='' required='' autocomplete='off'>"
-                                + "</div>");
-
-                        out.print("</div>");
-                        //</editor-fold>
-                        out.print("</div>");
-
-                        out.print("<div style='width:24%'>");
-                        //<editor-fold defaultstate="collapsed" desc="DIAMETRO INTERIOR BOBINA">
-                        out.print("<div class='col-lg-12'>");
-                        out.print("<input type='number' class='form-control' name='Txt_diameter_coil_in' id='Txt_diameter_coil_in' placeholder='Diametro Interior Bobina' required='' data-toggle='tooltip' data-placement='right' title='Diametro Interior Bobina' autocomplete='off'>");
-                        out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
-                        out.print("</div>");
-
-                        out.print("<div class='divTlData'>");
-
-                        out.print("<div style='margin-right:5px;' class=\"input-group\">"
-                                + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-plus\"></i></div>"
-                                + "<input type='number' style='width:20%' class='form-control' name='Txt_diameter_coil_in_max' id='Txt_diameter_coil_max' placeholder='' required='' autocomplete='off'>"
-                                + "</div>");
-
-                        out.print("<div class=\"input-group\">"
-                                + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-minus\"></i></div>"
-                                + "<input type='number' style='width:20%' class='form-control' name='Txt_diameter_coil_in_min' id='Txt_diameter_coil_min' placeholder='' required='' autocomplete='off'>"
-                                + "</div>");
-
-                        out.print("</div>");
-                        //</editor-fold>
-                        out.print("</div>");
-
-                        out.print("<div style='width:24%'>");
-                        //<editor-fold defaultstate="collapsed" desc="PESO DEL ROLLO">
-                        out.print("<div class='col-lg-12'>");
-                        out.print("<input type='text' class='form-control' name='Txt_roll_weight' id='Txt_roll_weight' placeholder='Peso del rollo' required='' data-toggle='tooltip' data-placement='right' title='Peso del rollo' autocomplete='off'>");
-                        out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
-                        out.print("</div>");
-
-                        out.print("<div class='divTlData'>");
-
-                        out.print("<div style='margin-right:5px;' class=\"input-group\">"
-                                + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-plus\"></i></div>"
-                                + "<input type='number' style='width:20%' class='form-control' name='Txt_roll_weight_max' id='Txt_roll_weight_max' placeholder='' required='' autocomplete='off'>"
-                                + "</div>");
-
-                        out.print("<div class=\"input-group\">"
-                                + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-minus\"></i></div>"
-                                + "<input type='number' style='width:20%' class='form-control' name='Txt_roll_weight_min' id='Txt_roll_weight_min' placeholder='' required='' autocomplete='off'>"
-                                + "</div>");
-
-                        out.print("</div>");
-                        //</editor-fold>
-                        out.print("</div>");
-                        out.print("</div>");
-
-                        out.print("<div class='divCbData'>");
-
-                        out.print("<div style='width:24%'>");
-                        //<editor-fold defaultstate="collapsed" desc="PRESION">
-                        out.print("<div class='col-lg-12'>");
-                        out.print("<input type='text' class='form-control' name='Txt_pressure' id='Txt_pressure' placeholder='Presión' required='' data-toggle='tooltip' data-placement='right' title='Presión' autocomplete='off'>");
-                        out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
-                        out.print("</div>");
-
-                        out.print("<div class='divTlData'>");
-                        out.print("<div style='margin-right:5px;' class=\"input-group\">"
-                                + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-plus\"></i></div>"
-                                + "<input type='text' style='width:20%' class='form-control' name='Txt_pressurized_max' id='Txt_pressurized_max' placeholder='' required='' autocomplete='off'>"
-                                + "</div>");
-                        out.print("<div class=\"input-group\">"
-                                + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-minus\"></i></div>"
-                                + "<input type='text' style='width:20%' class='form-control' name='Txt_pressurized_min' id='Txt_pressurized_min' placeholder='' required='' autocomplete='off'>"
-                                + "</div>");
-                        out.print("</div>");
-                        //</editor-fold>
-                        out.print("</div>");
-
-                        out.print("<div style='width:24%'>");
-                        //<editor-fold defaultstate="collapsed" desc="RUGOSIDAD">
-                        out.print("<div class='col-lg-12'>");
-                        out.print("<span>Rugosidad</span>");
-                        out.print("</div>");
-                        out.print("<div class='divTlData'>");
-                        out.print("<div style='margin-right:5px;' class=\"input-group\">"
-                                + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-plus\"></i></div>"
-                                + "<input type='number' style='width:20%' class='form-control' name='Txt_min_rugosity' id='Txt_min_rugosity' data-toggle='tooltip' data-placement='top' title='Min Rugosidad' placeholder='' required='' autocomplete='off'>"
-                                + "</div>");
-                        out.print("<div class=\"input-group\">"
-                                + "<div style='padding: 10px 8px;' class=\"input-group-text\"><i class=\"fas fa-minus\"></i></div>"
-                                + "<input type='number' style='width:20%' class='form-control' name='Txt_max_rugosity' id='Txt_max_rugosity' data-toggle='tooltip' data-placement='top' title='Max Rugosidad' placeholder='' required='' autocomplete='off'>"
-                                + "</div>");
-                        //</editor-fold>
-                        out.print("</div>");
-                        out.print("</div>");
-
-                        out.print("<div style='width:48%'>");
-                        //<editor-fold defaultstate="collapsed" desc="OBSERVACIONES">
-                        out.print("<textarea class='form-control' name='Txt_observation' id='Txt_code' placeholder='Observaciones' data-toggle='tooltip' data-placement='right' title='Observaciones' required='' autocomplete='off' ></textarea>");
-                        out.print("<div class='invalid-feedback invalid_data'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp; Debe ingresar un valor!</div>");
-                        //</editor-fold>
-                        out.print("</div>");
-                        out.print("</div>");
-
-                        out.print("</div>");
-
-                        out.print("<div class='' style='margin-top:14px;width: 100%; text-align:center;'>");
-                        out.print("<button class='btn btn-green btn-lg'>Registrar</button>");
-                        out.print("</div>");
-
-                        out.print("</form>");
-                        out.print("</div>");
-                        out.print("</div>");
                         //</editor-fold>
                     }
                     out.print("</div>");
@@ -691,147 +965,313 @@ public class Tag_data_sheet extends TagSupport {
             //</editor-fold>
             out.print("<div id=\"accordion\">");
             out.print("<div class=\"accordion\">");
-
-            if (state_data == 2) {
+            boolean isPP = false;
+            if (optFilter == 0) {
                 lst_data_sheet = JpaFicha.Consult_Data_sheet();
             } else {
-                lst_data_sheet = JpaFicha.Consult_Data_sheet_State(state_data);
+                String condition = "";
+                switch (optFilter) {
+                    case 1:
+                        condition = "f.tipo LIKE '%PVC%' AND f.estado = 1 ";
+                        lst_data_sheet = JpaFicha.ConsultDataSheet_filter(condition);
+                        break;
+                    case 2:
+//                        condition = "f.tipo LIKE '%PP%' AND f.estado = 1 ";
+                        lst_data_sheet = JpaFicha.Consult_Data_sheet_PP();
+                        isPP = true;
+                        break;
+                    case 3:
+                        condition = "f.estado = 1 ";
+                        lst_data_sheet = JpaFicha.ConsultDataSheet_filter(condition);
+                        break;
+                    case 4:
+                        condition = "f.estado = 0 ";
+                        lst_data_sheet = JpaFicha.ConsultDataSheet_filter(condition);
+                        break;
+                }
             }
             if (lst_data_sheet != null) {
-                out.print("<div id='container' class=\"container\">");
-                for (int i = 0; i < lst_data_sheet.size(); i++) {
-                    Object[] obj_data = (Object[]) lst_data_sheet.get(i);
-                    state = Integer.parseInt(obj_data[32].toString());
-                    out.print("<div id='list'><span>");
-                    out.print("<div class=\"single-item\">");
-                    //<editor-fold defaultstate="collapsed" desc="Cabecera">
-                    out.print("<div class=\"accordion-header accc_div_dataSheet\" role=\"button\" data-toggle=\"collapse\" data-target=\"#panel-body-" + i + "\" aria-expanded=\"true\">");
-                    out.print("<div  class='styledata single-item'  style='display:flex; justify-content:space-between;width:100%; text-align:center; border-right: 3px solid " + ((state == 1) ? "green" : "#fd1e08") + "; border-left: 3px solid " + ((state == 1) ? "green" : "#fd1e08") + ";'>");
+                if (isPP) {
+                    //<editor-fold defaultstate="collapsed" desc="PRODUCT PP">
+                    out.print("<div id='container' class=\"container\">");
+                    for (int i = 0; i < lst_data_sheet.size(); i++) {
+                        Object[] obj_data = (Object[]) lst_data_sheet.get(i);
+                        state = Integer.parseInt(obj_data[26].toString());
+                        out.print("<div id='list'><span>");
+                        out.print("<div class=\"single-item\">");
+                        //<editor-fold defaultstate="collapsed" desc="Cabecera">
+                        out.print("<div class=\"accordion-header accc_div_dataSheet\" role=\"button\" data-toggle=\"collapse\" data-target=\"#panel-body-" + i + "\" aria-expanded=\"true\">");
+                        out.print("<div  class='styledata single-item'  style='display:flex; justify-content:space-between;width:100%; text-align:center; border-right: 3px solid " + ((state == 1) ? "green" : "#fd1e08") + "; border-left: 3px solid " + ((state == 1) ? "green" : "#fd1e08") + ";'>");
 
-                    out.print("<div style='width:33%'>");
-                    out.print("<b>" + obj_data[3] + "(" + obj_data[4] + ")</b>");
-                    out.print("</div>");
+                        out.print("<div class='width:25%'>");
+                        out.print("<b>PP</b>");
+                        out.print("</div>");
 
-                    out.print("<div style='width:33%'>");
-                    out.print("<b>" + obj_data[1] + "</b>");
-                    out.print("</div>");
+                        out.print("<div style='width:25%'>");
+                        out.print("<b>" + obj_data[1] + "(" + obj_data[2] + ")</b>");
+                        out.print("</div>");
 
-                    out.print("<div style='width:33%'>"
-                            + "");
-                    if (txtPermisos.contains("[74]")) {
+                        out.print("<div style='width:25%'>");
+                        out.print("<b>" + obj_data[3] + "</b>");
+                        out.print("</div>");
+
+                        out.print("<div style='width:25%'>"
+                                + "");
+//                        if (txtPermisos.contains("[74]")) {
                         out.print("" + ((state == 1) ? "<a href='Data_sheet?opc=3&id_data_sheet=" + obj_data[0] + "&state=" + state + "'><i style='font-size:22px; color:green '  class=\"fas fa-check-circle\"></i></a>"
                                 : "<a href='Data_sheet?opc=3&id_data_sheet=" + obj_data[0] + "&state=" + state + "'><i style='font-size:23px; color:#fd1e08 ' class=\"fas fa-times-circle\"></i></a>") + "");
-                    } else {
-                        out.print("" + ((state == 1) ? "<i style='font-size:22px; color:green '  class=\"fas fa-check-circle\"></i>"
-                                : "<i style='font-size:23px; color:#fd1e08 ' class=\"fas fa-times-circle\"></i>") + "");
-                    }
-                    out.print("</div>");
+//                        } else {
+//                            out.print("" + ((state == 1) ? "<i style='font-size:22px; color:green '  class=\"fas fa-check-circle\"></i>"
+//                                    : "<i style='font-size:23px; color:#fd1e08 ' class=\"fas fa-times-circle\"></i>") + "");
+//                        }
+                        out.print("</div>");
 
-                    out.print("</div>");
+                        out.print("</div>");
+                        out.print("</div>");
+                        //</editor-fold>
+                        //<editor-fold defaultstate="collapsed" desc="Contenido">
+                        out.print("<div class=\"accordion-body collapse\" id=\"panel-body-" + i + "\" style='background-color: rgb(251 251 251);max-width: 99%;' data-parent=\"#accordion\">");
+                        out.print("<div style='display:flex; padding-top:16px; justify-content: space-evenly;'>");
+                        if (txtPermisos.contains("[3]")) {
+                            out.print("<div>"
+                                    + ((state == 1) ? "<a href='Data_sheet?opc=1&id_data_sheet=" + obj_data[0] + "&temp_1=1'><i style='font-size:25px; color:black;' class=\"far fa-hand-point-up\"></i></a>" : "")
+                                    + "</div>");
+                        }
+                        out.print("<div style='width:85%;text-align:center;'><b class='b_text' >" + obj_data[4] + "</b></div>");
+                        if (txtPermisos.contains("[2]")) {
+                            out.print("<div>"
+                                    + ((state == 1) ? "<a href='Data_sheet?opc=1&id_data_sheet=" + obj_data[0] + "'><i style='font-size:22px; color:black;' class=\"fas fa-pencil-alt\"></i></a>" : "")
+                                    + "</div>");
+                        }
+                        out.print("</div>");
+
+                        out.print("<hr class='hr_sheet'>");
+                        out.print("<div>");
+
+                        out.print("<div style='display:flex;justify-content:space-around;width:100%;'>");
+
+                        out.print("<div class='DivGrip'>");
+                        out.print("<div><b class='b_text'>Diametro Interno: </b>" + obj_data[5] + "</div>");
+                        out.print("<div><b class='b_text'>Diametro Interno Int: </b>" + obj_data[6] + "</div>");
+                        out.print("<div><b class='b_text'>Diametro Interno Max: </b>" + obj_data[7] + "</div>");
+                        out.print("</div>");
+
+                        out.print("<div class='DivGrip'>");
+                        out.print("<div><b class='b_text'>Diametro Externo: </b>" + obj_data[8] + "</div>");
+                        out.print("<div><b class='b_text'>Diametro Externo Min: </b>" + obj_data[9] + "</div>");
+                        out.print("<div><b class='b_text'>Diametro Externo Max: </b>" + obj_data[10] + "</div>");
+                        out.print("</div>");
+
+                        out.print("<div class='DivGrip'>");
+                        out.print("<div><b class='b_text'>Espesor pared der: </b>" + obj_data[11] + "</div>");
+                        out.print("<div><b class='b_text'>Espesor pared der Min: </b>" + obj_data[12] + "</div>");
+                        out.print("<div><b class='b_text'>Espesor pared der Max: </b>" + obj_data[13] + "</div>");
+                        out.print("</div>");
+
+                        out.print("<div class='DivGrip'>");
+                        out.print("<div><b class='b_text'>Espesor pared izq: </b>" + obj_data[14] + "</div>");
+                        out.print("<div><b class='b_text'>Espesor pared izq Min: </b>" + obj_data[15] + "</div>");
+                        out.print("<div><b class='b_text'>Espesor pared izq Max: </b>" + obj_data[16] + "</div>");
+                        out.print("</div>");
+
+                        out.print("</div>");
+
+                        out.print("<div style='display:flex;justify-content:space-around;width:100%;'>");
+                        out.print("<div class='DivGrip'>");
+                        out.print("<div><b class='b_text'>Galga: </b>" + obj_data[17] + "</div>");
+                        out.print("<div><b class='b_text'>Galga Min: </b>" + obj_data[18] + "</div>");
+                        out.print("<div><b class='b_text'>Galga Max: </b>" + obj_data[19] + "</div>");
+                        out.print("</div>");
+
+                        out.print("<div class='DivGrip'>");
+                        out.print("<div><b class='b_text'>Peso rollo: </b>" + obj_data[20] + "</div>");
+                        out.print("<div><b class='b_text'>Peso rollo Min: </b>" + obj_data[21] + "</div>");
+                        out.print("<div><b class='b_text'>Peso rollo Max: </b>" + obj_data[22] + "</div>");
+                        out.print("</div>");
+
+                        out.print("<div class='DivGrip'>");
+                        out.print("<div><b class='b_text'>Adherencia Accesorios: </b>" + ((obj_data[23].toString().equals("true")) ? "Cumple" : "") + "</div>");
+                        out.print("<div><b class='b_text'>Adherencia entre capas: </b>" + ((obj_data[24].toString().equals("1true")) ? "Cumple" : "") + "</div>");
+                        out.print("<div><b class='b_text'>Particulas: </b>" + ((obj_data[25].toString().equals("true")) ? "Si" : "No") + "</div>");
+                        out.print("</div>");
+
+                        out.print("</div>");
+
+                        out.print("<div style='display:flex;justify-content:space-around;width:100%;'>");
+
+                        out.print("</div>");
+
+                        out.print("</div>");
+
+                        out.print("<hr class='hr_sheet'>");
+                        out.print("<div class='DivObservation'>");
+                        out.print("<div><b class='b_text'>Observaciones:</b><br>" + obj_data[27] + "</div>");
+
+                        out.print("</div>");
+
+                        out.print("</div>");
+                        //</editor-fold>
+                        out.print("</div>");
+                        out.print("</span></div>");
+                    }
                     out.print("</div>");
                     //</editor-fold>
-                    //<editor-fold defaultstate="collapsed" desc="Contenido">
-                    out.print("<div class=\"accordion-body collapse\" id=\"panel-body-" + i + "\" style='background-color: rgb(251 251 251);max-width: 99%;' data-parent=\"#accordion\">");
-                    out.print("<div style='display:flex; padding-top:16px; justify-content: space-evenly;'>");
-                    if (txtPermisos.contains("[3]")) {
-                        out.print("<div>"
-                                + ((state == 1) ? "<a href='Data_sheet?opc=1&id_data_sheet=" + obj_data[0] + "&temp_1=1'><i style='font-size:25px; color:black;' class=\"far fa-hand-point-up\"></i></a>" : "")
-                                + "</div>");
+                } else {
+                    //<editor-fold defaultstate="collapsed" desc="PRODUCT PVC">
+                    out.print("<div id='container' class=\"container\">");
+                    for (int i = 0; i < lst_data_sheet.size(); i++) {
+                        Object[] obj_data = (Object[]) lst_data_sheet.get(i);
+                        state = Integer.parseInt(obj_data[32].toString());
+                        out.print("<div id='list'><span>");
+                        out.print("<div class=\"single-item\">");
+                        //<editor-fold defaultstate="collapsed" desc="Cabecera">
+                        out.print("<div class=\"accordion-header accc_div_dataSheet\" role=\"button\" data-toggle=\"collapse\" data-target=\"#panel-body-" + i + "\" aria-expanded=\"true\">");
+                        out.print("<div  class='styledata single-item'  style='display:flex; justify-content:space-between;width:100%; text-align:center; border-right: 3px solid " + ((state == 1) ? "green" : "#fd1e08") + "; border-left: 3px solid " + ((state == 1) ? "green" : "#fd1e08") + ";'>");
+
+                        out.print("<div class='width:25%'>");
+                        String typeProc = obj_data[38].toString();
+//                    out.print("<span> Producto </span><br>"); typeProc
+                        if (typeProc.contains("/")) {
+                            out.print("<b>" + typeProc.replace("/", " - ") + "</b>");
+                        } else {
+                            out.print("<b>" + typeProc + "</b>");
+                        }
+                        out.print("</div>");
+
+                        out.print("<div style='width:25%'>");
+                        out.print("<b>" + obj_data[3] + "(" + obj_data[4] + ")</b>");
+                        out.print("</div>");
+
+                        out.print("<div style='width:25%'>");
+                        out.print("<b>" + obj_data[1] + "</b>");
+                        out.print("</div>");
+
+                        out.print("<div style='width:25%'>"
+                                + "");
+                        if (txtPermisos.contains("[74]")) {
+                            out.print("" + ((state == 1) ? "<a href='Data_sheet?opc=3&id_data_sheet=" + obj_data[0] + "&state=" + state + "'><i style='font-size:22px; color:green '  class=\"fas fa-check-circle\"></i></a>"
+                                    : "<a href='Data_sheet?opc=3&id_data_sheet=" + obj_data[0] + "&state=" + state + "'><i style='font-size:23px; color:#fd1e08 ' class=\"fas fa-times-circle\"></i></a>") + "");
+                        } else {
+                            out.print("" + ((state == 1) ? "<i style='font-size:22px; color:green '  class=\"fas fa-check-circle\"></i>"
+                                    : "<i style='font-size:23px; color:#fd1e08 ' class=\"fas fa-times-circle\"></i>") + "");
+                        }
+                        out.print("</div>");
+
+                        out.print("</div>");
+                        out.print("</div>");
+                        //</editor-fold>
+                        //<editor-fold defaultstate="collapsed" desc="Contenido">
+                        out.print("<div class=\"accordion-body collapse\" id=\"panel-body-" + i + "\" style='background-color: rgb(251 251 251);max-width: 99%;' data-parent=\"#accordion\">");
+                        out.print("<div style='display:flex; padding-top:16px; justify-content: space-evenly;'>");
+                        if (txtPermisos.contains("[3]")) {
+                            out.print("<div>"
+                                    + ((state == 1) ? "<a href='Data_sheet?opc=1&id_data_sheet=" + obj_data[0] + "&temp_1=1'><i style='font-size:25px; color:black;' class=\"far fa-hand-point-up\"></i></a>" : "")
+                                    + "</div>");
+                        }
+                        out.print("<div style='width:85%;text-align:center;'><b class='b_text' >" + obj_data[2] + "</b></div>");
+                        if (txtPermisos.contains("[2]")) {
+                            out.print("<div>"
+                                    + ((state == 1) ? "<a href='Data_sheet?opc=1&id_data_sheet=" + obj_data[0] + "'><i style='font-size:22px; color:black;' class=\"fas fa-pencil-alt\"></i></a>" : "")
+                                    + "</div>");
+                        }
+                        out.print("</div>");
+
+                        out.print("<hr class='hr_sheet'>");
+                        out.print("<div>");
+
+                        out.print("<div style='display:flex;justify-content:space-around;width:100%;'>");
+
+                        out.print("<div class='DivGrip'>");
+                        out.print("<div><b class='b_text'>Interno sin presurizar: </b>" + obj_data[5] + "</div>");
+                        out.print("<div><b class='b_text'>Interno sin presurizar Min: </b>" + obj_data[6] + "</div>");
+                        out.print("<div><b class='b_text'>Interno sin presurizar Max: </b>" + obj_data[7] + "</div>");
+                        out.print("</div>");
+
+                        out.print("<div class='DivGrip'>");
+                        out.print("<div><b class='b_text'>Interno presurizado: </b>" + obj_data[8] + "</div>");
+                        out.print("<div><b class='b_text'>Interno presurizado Min: </b>" + obj_data[9] + "</div>");
+                        out.print("<div><b class='b_text'>Interno presurizado Max: </b>" + obj_data[10] + "</div>");
+                        out.print("</div>");
+
+                        out.print("<div class='DivGrip'>");
+                        out.print("<div><b class='b_text'>Externo sin presurizar: </b>" + obj_data[11] + "</div>");
+                        out.print("<div><b class='b_text'>Externo sin presurizar Min: </b>" + obj_data[12] + "</div>");
+                        out.print("<div><b class='b_text'>Externo sin presurizar Max: </b>" + obj_data[13] + "</div>");
+                        out.print("</div>");
+
+                        out.print("<div class='DivGrip'>");
+                        out.print("<div><b class='b_text'>Externo presurizado: </b>" + obj_data[14] + "</div>");
+                        out.print("<div><b class='b_text'>Externo presurizado Min: </b>" + obj_data[15] + "</div>");
+                        out.print("<div><b class='b_text'>Externo presurizado Max: </b>" + obj_data[16] + "</div>");
+                        out.print("</div>");
+
+                        out.print("</div>");
+
+                        out.print("<div style='display:flex;justify-content:space-around;width:100%;'>");
+                        out.print("<div class='DivGrip'>");
+                        out.print("<div><b class='b_text'>Espesor de pared: </b>" + obj_data[17] + "</div>");
+                        out.print("<div><b class='b_text'>Espesor de pared Min: </b>" + obj_data[18] + "</div>");
+                        out.print("<div><b class='b_text'>Espesor de pared Max: </b>" + obj_data[19] + "</div>");
+                        out.print("</div>");
+
+                        out.print("<div class='DivGrip'>");
+                        out.print("<div><b class='b_text'>Diametro exterior bobina: </b>" + obj_data[20] + "</div>");
+                        out.print("<div><b class='b_text'>Diametro exterior bobina Min: </b>" + obj_data[21] + "</div>");
+                        out.print("<div><b class='b_text'>Diametro exterior bobina Max: </b>" + obj_data[22] + "</div>");
+                        out.print("</div>");
+
+                        out.print("<div class='DivGrip'>");
+                        out.print("<div><b class='b_text'>Diametro interior bobina: </b>" + obj_data[23] + "</div>");
+                        out.print("<div><b class='b_text'>Diametro interior bobina Min: </b>" + obj_data[24] + "</div>");
+                        out.print("<div><b class='b_text'>Diametro interior bobina Max: </b>" + obj_data[25] + "</div>");
+                        out.print("</div>");
+
+                        out.print("<div class='DivGrip'>");
+                        out.print("<div><b class='b_text'>Peso de rollo: </b>" + obj_data[26] + "</div>");
+                        out.print("<div><b class='b_text'>Peso de rollo Min: </b>" + obj_data[27] + "</div>");
+                        out.print("<div><b class='b_text'>Peso de rollo Max: </b>" + obj_data[28] + "</div>");
+                        out.print("</div>");
+
+                        out.print("</div>");
+
+                        out.print("<div style='display:flex;justify-content:space-around;width:100%;'>");
+
+                        out.print("<div class='DivGrip'>");
+                        out.print("<div><b class='b_text'>Presión: </b>" + ((obj_data[35] == null) ? "0" : obj_data[35]) + "</div>");
+                        out.print("<div><b class='b_text'>Presión Min: </b>" + ((obj_data[36] == null) ? "0" : obj_data[36]) + "</div>");
+                        out.print("<div><b class='b_text'>Presión Max: </b>" + ((obj_data[37] == null) ? "0" : obj_data[37]) + "</div>");
+                        out.print("</div>");
+
+                        out.print("<div class='DivGrip'>");
+                        out.print("<div><b class='b_text'>Min. rugosidad: </b>" + obj_data[29] + "</div>");
+                        out.print("<div><b class='b_text'>Max. rugosidad: </b>" + obj_data[30] + "</div>");
+                        out.print("</div>");
+
+                        if (typeProc.contains("PP")) {
+                            out.print("<div class='DivGrip'>");
+                            out.print("<div><b class='b_text'>Tipo Producto: </b>" + typeProc.split("/")[0] + "</div>");
+                            out.print("<div><b class='b_text'>Destino: </b>" + typeProc.split("/")[1] + "</div>");
+                            out.print("</div>");
+                        }
+
+                        out.print("</div>");
+
+                        out.print("</div>");
+
+                        out.print("<hr class='hr_sheet'>");
+                        out.print("<div class='DivObservation'>");
+                        out.print("<div><b class='b_text'>Observaciones:</b><br>" + obj_data[31] + "</div>");
+
+                        out.print("</div>");
+
+                        out.print("</div>");
+                        //</editor-fold>
+                        out.print("</div>");
+                        out.print("</span></div>");
                     }
-                    out.print("<div style='width:85%;text-align:center;'><b class='b_text' >" + obj_data[2] + "</b></div>");
-                    if (txtPermisos.contains("[2]")) {
-                        out.print("<div>"
-                                + ((state == 1) ? "<a href='Data_sheet?opc=1&id_data_sheet=" + obj_data[0] + "'><i style='font-size:22px; color:black;' class=\"fas fa-pencil-alt\"></i></a>" : "")
-                                + "</div>");
-                    }
-                    out.print("</div>");
-
-                    out.print("<hr class='hr_sheet'>");
-                    out.print("<div>");
-
-                    out.print("<div style='display:flex;justify-content:space-around;width:100%;'>");
-
-                    out.print("<div class='DivGrip'>");
-                    out.print("<div><b class='b_text'>Interno sin presurizar: </b>" + obj_data[5] + "</div>");
-                    out.print("<div><b class='b_text'>Interno sin presurizar Min: </b>" + obj_data[6] + "</div>");
-                    out.print("<div><b class='b_text'>Interno sin presurizar Max: </b>" + obj_data[7] + "</div>");
-                    out.print("</div>");
-
-                    out.print("<div class='DivGrip'>");
-                    out.print("<div><b class='b_text'>Interno presurizado: </b>" + obj_data[8] + "</div>");
-                    out.print("<div><b class='b_text'>Interno presurizado Min: </b>" + obj_data[9] + "</div>");
-                    out.print("<div><b class='b_text'>Interno presurizado Max: </b>" + obj_data[10] + "</div>");
-                    out.print("</div>");
-
-                    out.print("<div class='DivGrip'>");
-                    out.print("<div><b class='b_text'>Externo sin presurizar: </b>" + obj_data[11] + "</div>");
-                    out.print("<div><b class='b_text'>Externo sin presurizar Min: </b>" + obj_data[12] + "</div>");
-                    out.print("<div><b class='b_text'>Externo sin presurizar Max: </b>" + obj_data[13] + "</div>");
-                    out.print("</div>");
-
-                    out.print("<div class='DivGrip'>");
-                    out.print("<div><b class='b_text'>Externo presurizado: </b>" + obj_data[14] + "</div>");
-                    out.print("<div><b class='b_text'>Externo presurizado Min: </b>" + obj_data[15] + "</div>");
-                    out.print("<div><b class='b_text'>Externo presurizado Max: </b>" + obj_data[16] + "</div>");
-                    out.print("</div>");
-
-                    out.print("</div>");
-
-                    out.print("<div style='display:flex;justify-content:space-around;width:100%;'>");
-                    out.print("<div class='DivGrip'>");
-                    out.print("<div><b class='b_text'>Espesor de pared: </b>" + obj_data[17] + "</div>");
-                    out.print("<div><b class='b_text'>Espesor de pared Min: </b>" + obj_data[18] + "</div>");
-                    out.print("<div><b class='b_text'>Espesor de pared Max: </b>" + obj_data[19] + "</div>");
-                    out.print("</div>");
-
-                    out.print("<div class='DivGrip'>");
-                    out.print("<div><b class='b_text'>Diametro exterior bobina: </b>" + obj_data[20] + "</div>");
-                    out.print("<div><b class='b_text'>Diametro exterior bobina Min: </b>" + obj_data[21] + "</div>");
-                    out.print("<div><b class='b_text'>Diametro exterior bobina Max: </b>" + obj_data[22] + "</div>");
-                    out.print("</div>");
-
-                    out.print("<div class='DivGrip'>");
-                    out.print("<div><b class='b_text'>Diametro interior bobina: </b>" + obj_data[23] + "</div>");
-                    out.print("<div><b class='b_text'>Diametro interior bobina Min: </b>" + obj_data[24] + "</div>");
-                    out.print("<div><b class='b_text'>Diametro interior bobina Max: </b>" + obj_data[25] + "</div>");
-                    out.print("</div>");
-
-                    out.print("<div class='DivGrip'>");
-                    out.print("<div><b class='b_text'>Peso de rollo: </b>" + obj_data[26] + "</div>");
-                    out.print("<div><b class='b_text'>Peso de rollo Min: </b>" + obj_data[27] + "</div>");
-                    out.print("<div><b class='b_text'>Peso de rollo Max: </b>" + obj_data[28] + "</div>");
-                    out.print("</div>");
-
-                    out.print("</div>");
-
-                    out.print("<div style='display:flex;justify-content:space-around;width:100%;'>");
-
-                    out.print("<div class='DivGrip'>");
-                    out.print("<div><b class='b_text'>Presión: </b>" + ((obj_data[35] == null) ? "0" : obj_data[35]) + "</div>");
-                    out.print("<div><b class='b_text'>Presión Min: </b>" + ((obj_data[36] == null) ? "0" : obj_data[36]) + "</div>");
-                    out.print("<div><b class='b_text'>Presión Max: </b>" + ((obj_data[37] == null) ? "0" : obj_data[37]) + "</div>");
-                    out.print("</div>");
-
-                    out.print("<div class='DivGrip'>");
-                    out.print("<div><b class='b_text'>Min. rugosidad: </b>" + obj_data[29] + "</div>");
-                    out.print("<div><b class='b_text'>Max. rugosidad: </b>" + obj_data[30] + "</div>");
-                    out.print("</div>");
-                    out.print("</div>");
-
-                    out.print("</div>");
-
-                    out.print("<hr class='hr_sheet'>");
-                    out.print("<div class='DivObservation'>");
-                    out.print("<div><b class='b_text'>Observaciones:</b><br>" + obj_data[31] + "</div>");
-
-                    out.print("</div>");
-
-                    out.print("</div>");
-                    //</editor-fold>
-                    out.print("</div>");
-                    out.print("</span></div>");
+                    out.print("</div>");//</editor-fold>
                 }
-                out.print("</div>");
+
             } else {
                 out.print("<div style=\"text-align:center;\"><h4>No existe fichas tecnicas registradas</h4></div>");
             }

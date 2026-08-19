@@ -19,6 +19,37 @@ public class OrdenProduccionJpaController implements Serializable {
     }
 
     //<editor-fold defaultstate="collapsed" desc="LIST">
+    public List Consult_OrderFilter(String condition) {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        if (condition.equals("")) {
+            condition = condition;
+        } else {
+            condition = "WHERE " + condition;
+        }
+        try {
+            Query q = etm.createNativeQuery("SELECT o.id_orden,tf.nombre,o.numero,o.cliente,o.observacion,o.estado,o.usuario_registro,o.fecha_registro, "
+                    + "GROUP_CONCAT(DISTINCT r.lote_producto ORDER BY r.lote_producto SEPARATOR ', ') AS lotes, tf.tipo "
+                    + "FROM orden_produccion o "
+                    + "INNER JOIN ficha_tecnica tf ON o.id_ficha_tecnica = tf.id_ficha_tecnica "
+                    + "LEFT JOIN registro r ON o.id_orden = r.id_orden "
+                    + "" + condition + ""
+                    + "GROUP BY o.id_orden "
+                    + "ORDER BY o.fecha_registro desc");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
     public List Consult_Order() {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
@@ -43,6 +74,25 @@ public class OrdenProduccionJpaController implements Serializable {
         etm.getTransaction().begin();
         try {
             Query q = etm.createNativeQuery("CALL `sp_orden_c_consultarOrden_id`('" + id_order + "')");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public List Consult_Ordertype(String type) {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `sp_orden_c_consultarOrdenTipo`('" + type + "')");
             List consulta = q.getResultList();
             etm.getTransaction().commit();
             etm.clear();
@@ -133,11 +183,49 @@ public class OrdenProduccionJpaController implements Serializable {
         }
     }
 
+    public List Order_OpenTipo() {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `sp_c_consultarOrden_abiertoTipo`()");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
     public List OrderClose() {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
         try {
             Query q = etm.createNativeQuery("CALL `sp_c_consultarOrden_cerrado`()");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public List OrderCloseType(String tpe) {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `sp_c_consultarOrden_cerradoTipo`('" + tpe + "')");
             List consulta = q.getResultList();
             etm.getTransaction().commit();
             etm.clear();
@@ -266,10 +354,46 @@ public class OrdenProduccionJpaController implements Serializable {
         }
     }
 
-   
+    public List ConsultCounter() {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_counterOrdenes`()");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public List ConsultCounterType(String tpe) {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_counterType`('" + tpe + "')");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="PROCESS">
-
     public boolean Register_orderProduction(int id_data, String NoOrder, String client, String obs, String userReg) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
@@ -364,12 +488,12 @@ public class OrdenProduccionJpaController implements Serializable {
             return false;
         }
     }
-    
+
     public boolean OrderChangeStatus_v2(int idOrder, String chanLote) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
-            Query q = em.createNativeQuery("CALL `sp_orden_a_actualizarEstado_v2`('" + idOrder + "', '"+ chanLote +"')");
+            Query q = em.createNativeQuery("CALL `sp_orden_a_actualizarEstado_v2`('" + idOrder + "', '" + chanLote + "')");
             int resultado = q.executeUpdate();
             em.getTransaction().commit();
             em.clear();
@@ -440,6 +564,7 @@ public class OrdenProduccionJpaController implements Serializable {
             return false;
         }
     }
+
     public boolean OrderUpdateRollRegister(int idOrder, String RollRegister) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();

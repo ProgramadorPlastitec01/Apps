@@ -204,29 +204,123 @@ public class Tag_production_order extends TagSupport {
             //</editor-fold>
             //<editor-fold defaultstate="collapsed" desc="MAIN LIST">
             out.print("<section class='section'>");
-            out.print("<div class='section-header'>");
+            out.print("<div class='section-header' style='justify-content: space-between;'>");
             out.print("<h1>Modulo de Orden de Producción</h1>");
+            out.print("<div class=''>");
+            out.print("<button class='btn btn-green btn-sm' style='border-radius: 4px; margin-left:12px' onclick='mostrarConvencion(1)' data-toggle='tooltip' data-placement='top' title='Registrar'><i class='fas fa-plus'></i></button>");
+            out.print("</div>");
             out.print("</div>");
             out.print("<div class='section-body'>");
             out.print("<div class='row'>");
             out.print("<div class='col-12'>");
             out.print("<div class='card'>");
-            out.print("<div class='card-header' style='justify-content: space-between;'>");
-            out.print("<h4>Listado de Orden de Producción</h4>");
-            out.print("<div class=''>");
-            if (temp > 0) {
-                out.print("<a href='Production_order?opc=1&temp=0' class='btn btn-danger btn-sm' style='border-radius: 4px; margin-left:12px; color: white;' data-toggle='tooltip' data-placement='top' title='Quitar Filtro'><i class=\"fas fa-times\"></i></a>");
+            out.print("<div class='card-header' style=''>");
+//            out.print("<div class='card-header' style='justify-content: space-between;'>");
+
+            //<editor-fold defaultstate="collapsed" desc="OLD DATA">
+//            out.print("<h4>Listado de Orden de Producción</h4>");
+//            out.print("<div class=''>");
+//            if (temp > 0) {
+//                out.print("<a href='Production_order?opc=1&temp=0' class='btn btn-danger btn-sm' style='border-radius: 4px; margin-left:12px; color: white;' data-toggle='tooltip' data-placement='top' title='Quitar Filtro'><i class=\"fas fa-times\"></i></a>");
+//            }
+//
+//            out.print("<a href='Production_order?opc=1&temp=1' class='btn btn-success btn-sm' style='border-radius: 4px; margin-left:12px; color: white;' data-toggle='tooltip' data-placement='top' title='Ordenes Abiertas'><i class=\"fas fa-lock-open\"></i></a>");
+//            out.print("<a href='Production_order?opc=1&temp=2' class='btn btn-secondary btn-sm' style='border-radius: 4px; margin-left:12px; color: white;' data-toggle='tooltip' data-placement='top' title='Ordenes Cerrada'><i class=\"fas fa-lock\"></i></a>");
+//            if (txtPermisos.contains("[28]")) {
+//            } else {
+//                out.print("<button class='btn btn-green btn-sm' style='border-radius: 4px; margin-left:12px; opacity: 0.5;' data-toggle='tooltip' data-placement='top' title='No tiene permisos' ><i class='fas fa-plus'></i></button>");
+//            }
+//            out.print("</div>");
+//</editor-fold>
+            //<editor-fold defaultstate="collapsed" desc="KPIS">
+            int OpTotal = 0, OpProcess = 0, OpClose = 0, OpPP = 0, OpPvc = 0;
+            String TypeProcess = "";
+            if (txtPermisos.contains("[80]")) {
+                lst_order = OrderJpa.ConsultCounter();
+                TypeProcess = "ambas";
+            } else if (txtPermisos.contains("[79]")) {
+                lst_order = OrderJpa.ConsultCounterType("PVC");
+                TypeProcess = "PVC";
+            } else if (txtPermisos.contains("[78]")) {
+                lst_order = OrderJpa.ConsultCounterType("PP");
+                TypeProcess = "PP";
+            }
+            try {
+                if (lst_order != null) {
+                    Object[] objCounter = (Object[]) lst_order.get(0);
+                    OpTotal = Integer.parseInt(objCounter[0].toString());
+                    OpProcess = Integer.parseInt(objCounter[1].toString());
+                    OpClose = Integer.parseInt(objCounter[2].toString());
+                    OpPP = Integer.parseInt(objCounter[3].toString());
+                    OpPvc = Integer.parseInt(objCounter[4].toString());
+                }
+            } catch (Exception e) {
+            }
+            out.print("<div class='col-lg-12 row' style='justify-content: space-between;'>");
+
+            out.print("<div class='col-lg-3 dvCounter' style='' onclick='window.location.href=\"Production_order?opc=1\"'>");
+//            out.print("<div class='d-flex' style='justify-content: space-between;'>");
+            out.print("<h3>Ordenes de producción " + ((TypeProcess.contains("ambas")) ? " PVC - PP" : TypeProcess) + "</h3>");
+//            out.print("<span><i style='font-size: 25px;color: #001680;' class=\"fas fa-project-diagram\"></i></span>");
+//            out.print("</div>");
+//            out.print("<h1 style='font-weight: bolder;'>" + OpTotal + "</h1>");
+            out.print("</div>");
+
+            out.print("<div class='col-lg-2 dvCounter' style='border: 2px solid #95aad1;background: #def0ff;' onclick='window.location.href=\"Production_order?opc=1\"'>");
+            out.print("<div class='d-flex' style='justify-content: space-between;'>");
+            out.print("<h6>Ordenes</h6>");
+            out.print("<span><i style='font-size: 25px;color: #001680;' class=\"fas fa-project-diagram\"></i></span>");
+            out.print("</div>");
+            out.print("<h1 style='font-weight: bolder;'>" + OpTotal + "</h1>");
+            out.print("</div>");
+
+            out.print("<div class='col-lg-2 dvCounter' style='border: 2px solid #d1b995;background: #fff3de;' onclick='window.location.href=\"Production_order?opc=1&temp=1\"'>");
+            out.print("<div class='d-flex' style='justify-content: space-between;'>");
+            out.print("<h6>En Proceso</h6>");
+            out.print("<span><i style='font-size: 25px;color: #c75d03;' class=\"fas fa-spinner\"></i></span>");
+            out.print("</div>");
+            out.print("<h1 style='font-weight: bolder;'>" + OpProcess + "</h1>");
+            out.print("</div>");
+
+            out.print("<div class='col-lg-2 dvCounter' style='border: 2px solid #a7a6a6;background: #ebebeb;' onclick='window.location.href=\"Production_order?opc=1&temp=2\"'>");
+            out.print("<div class='d-flex' style='justify-content: space-between;'>");
+            out.print("<h6>Cerradas</h6>");
+            out.print("<span><i style='font-size: 25px;color: #434343;' class=\"fas fa-check-circle\"></i></span>");
+            out.print("</div>");
+            out.print("<h1 style='font-weight: bolder;'>" + OpClose + "</h1>");
+            out.print("</div>");
+
+//            out.print("<div class='col-lg-2 dvCounter' style='border: 2px solid #95d197;background: #deffde;' " + ((txtPermisos.contains("[80]") || txtPermisos.contains("[78]")) ? "onclick='window.location.href=\"Production_order?opc=1&temp=3\"'" : "") + " >");
+//            out.print("<div class='d-flex' style='justify-content: space-between;'>");
+//            out.print("<h6>PP</h6>");
+//            out.print("<span><i style='font-size: 25px;color: green;' class=\"fas fa-list\"></i></span>");
+//            out.print("</div>");
+//            out.print("<h1 style='font-weight: bolder;'>" + OpPP + "</h1>");
+//            out.print("</div>");
+//
+//            out.print("<div class='col-lg-2 dvCounter' style='border: 2px solid #95d197;background: #deffde;' " + ((txtPermisos.contains("[80]") || txtPermisos.contains("[79]")) ? "onclick='window.location.href=\"Production_order?opc=1&temp=4\"'" : "") + " >");
+//            out.print("<div class='d-flex' style='justify-content: space-between;'>");
+//            out.print("<h6>PVC</h6>");
+//            out.print("<span><i style='font-size: 25px;color: green;' class=\"fas fa-list-alt\"></i></span>");
+//            out.print("</div>");
+//            out.print("<h1 style='font-weight: bolder;'>" + OpPvc + "</h1>");
+//            out.print("</div>");
+            out.print("</div>");
+            //</editor-fold>
+
+            out.print("</div>");
+
+            if (TypeProcess.contains("PP")) {
+                out.print("<div class='d-flex' style='margin-left: 2%;'>");
+                out.print("<div class=''>");
+                out.print("<button class='btn btn-" + ((temp == 4) ? "green" : (temp < 3) ? "green" : "secondary") + "' onclick='window.location.href=\"Production_order?opc=1&temp=4\"'>PP - Interno</button>");
+                out.print("</div>");
+                out.print("<div class=''>");
+                out.print("<button class='btn btn-" + ((temp == 3) ? "green" : "secondary") + "' onclick='window.location.href=\"Production_order?opc=1&temp=3\"'>PP - Cliente</button>");
+                out.print("</div>");
+                out.print("</div>");
             }
 
-            out.print("<a href='Production_order?opc=1&temp=1' class='btn btn-success btn-sm' style='border-radius: 4px; margin-left:12px; color: white;' data-toggle='tooltip' data-placement='top' title='Ordenes Abiertas'><i class=\"fas fa-lock-open\"></i></a>");
-            out.print("<a href='Production_order?opc=1&temp=2' class='btn btn-secondary btn-sm' style='border-radius: 4px; margin-left:12px; color: white;' data-toggle='tooltip' data-placement='top' title='Ordenes Cerrada'><i class=\"fas fa-lock\"></i></a>");
-            if (txtPermisos.contains("[28]")) {
-                out.print("<button class='btn btn-green btn-sm' style='border-radius: 4px; margin-left:12px' onclick='mostrarConvencion(1)' data-toggle='tooltip' data-placement='top' title='Registrar'><i class='fas fa-plus'></i></button>");
-            } else {
-                out.print("<button class='btn btn-green btn-sm' style='border-radius: 4px; margin-left:12px; opacity: 0.5;' data-toggle='tooltip' data-placement='top' title='No tiene permisos' ><i class='fas fa-plus'></i></button>");
-            }
-            out.print("</div>");
-            out.print("</div>");
             out.print("<div class='card-body'>");
             out.print("<div class='table-responsive'>");
             out.print("<table class='table table-bordered' id='table-1'>");
@@ -243,21 +337,45 @@ public class Tag_production_order extends TagSupport {
             out.print("</tr>");
             out.print("</thead>");
             out.print("<tbody>");
+            String condition = "";
 
-            if (temp == 1) {
-                lst_order = OrderJpa.Order_Open();
-            } else if (temp == 2) {
-                lst_order = OrderJpa.OrderClose();
-            } else {
-                lst_order = OrderJpa.Consult_Order();
+            // Condición por estado
+            switch (temp) {
+                case 1:
+                    condition = "o.estado = 1";
+                    break;
+                case 2:
+                    condition = "o.estado = 2";
+                    break;
+                case 3:
+                    condition = "o.estado = 1 AND tf.tipo like '" + TypeProcess + "/Cli%'";
+                    break;
+                case 4:
+                    condition = "o.estado = 1 AND tf.tipo like '" + TypeProcess + "/Int%'";
+                    break;
             }
+            // Solo para los casos 0, 1 y 2 se aplica la lógica de "ambas"
+            if (temp <= 2 && !TypeProcess.equals("ambas")) {
+                if (!condition.isEmpty()) {
+                    condition += " AND ";
+                }
+                condition += "tf.tipo like '" + TypeProcess + "%'";
+            }
+
+            lst_order = OrderJpa.Consult_OrderFilter(condition);
 
             if (lst_order != null) {
                 for (int i = 0; i < lst_order.size(); i++) {
                     Object[] Obj_order = (Object[]) lst_order.get(i);
                     out.print("<tr>");
                     out.print("<td align='center'> <a href='Record?opc=1&id_order=" + Obj_order[0] + "' class='btn btn-white'><i class='fas fa-eye'></i></a></td>");
-                    out.print("<td>" + Obj_order[1].toString() + "</td>");
+                    String typPrc = "";
+                    try {
+                        typPrc = Obj_order[9].toString().split("/")[0];
+                    } catch (Exception e) {
+                        typPrc = Obj_order[9].toString();
+                    }
+                    out.print("<td><span><b>" + typPrc + "</b></span> <br> " + Obj_order[1].toString() + "</td>");
                     out.print("<td><b>" + Obj_order[2].toString() + "</b></td>");
                     out.print("<td>" + Obj_order[3].toString() + "</td>");
                     out.print("<td>" + Obj_order[4].toString() + "</td>");
@@ -266,6 +384,7 @@ public class Tag_production_order extends TagSupport {
                         out.print("<td class='text-center'><i class='fas fa-comment-alt' style='font-size: 20px;' data-toggle='tooltip' data-placement='top' title='Sin lotes Registrados'></i></td>");
                     } else {
                         out.print("<td>");
+
                         out.print("<div style='max-height: 60px; max-width: 100px; overflow-y: auto; white-space: normal;'>");
                         out.print(Obj_order[8]);
                         out.print("</div>");

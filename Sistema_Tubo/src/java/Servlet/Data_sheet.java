@@ -22,7 +22,7 @@ public class Data_sheet extends HttpServlet {
             FichaTecnicaJpaController JpaDataS = new FichaTecnicaJpaController();
             PrintWriter out = response.getWriter();
             int opc = Integer.parseInt(request.getParameter("opc"));
-            int state = 0, id_data_sheet = 0, version = 0, temp_1 = 0, state_data = 0;
+            int state = 0, id_data_sheet = 0, version = 0, temp_1 = 0, optFilter = 0;
             double intSinPre = 0, intSinPre_min = 0, intSinPre_max = 0,
                     intPre = 0, intPre_min = 0, intPre_max = 0,
                     extSinPre = 0, extSinPre_min = 0, extSinPre_max = 0,
@@ -31,7 +31,14 @@ public class Data_sheet extends HttpServlet {
                     diameter_coil_ex_max = 0, diameter_coil_ex_min = 0, diameter_coil_in = 0, diameter_coil_in_min = 0,
                     diameter_coil_in_max = 0, min_rugosity = 0, max_rugosity = 0, rollo_weight = 0, rollo_weight_min = 0,
                     rollo_weight_max = 0, pressure = 0, press_min = 0, press_max = 0;
-            String name_sheet = "", code = "", product = "", observation = "";
+
+            double diameter_int = 0, diameter_int_min = 0, diameter_int_max = 0,
+                    diameter_ext = 0, diameter_ext_min = 0, diameter_ext_max = 0,
+                    espesor_der = 0, espesor_der_min = 0, espesor_der_max = 0,
+                    espesor_izq = 0, espesor_izq_min = 0, espesor_izq_max = 0,
+                    galga = 0, galga_min = 0, galga_max = 0, peso = 0, peso_min = 0, peso_max = 0;
+
+            String name_sheet = "", code = "", product = "", observation = "", process = "", destination = "";
             boolean result = false;
             switch (opc) {
                 case 1:
@@ -52,14 +59,14 @@ public class Data_sheet extends HttpServlet {
                         id_data_sheet = 0;
                     }
                     try {
-                        state_data = Integer.parseInt(request.getParameter("state_data"));
+                        optFilter = Integer.parseInt(request.getParameter("optFilter"));
                     } catch (NumberFormatException e) {
-                        state_data = 2;
+                        optFilter = 3;
                     }
                     request.setAttribute("code", code);
                     request.setAttribute("id_data_sheet", id_data_sheet);
                     request.setAttribute("temp_1", temp_1);
-                    request.setAttribute("state_data", state_data);
+                    request.setAttribute("optFilter", optFilter);
                     request.setAttribute("id_rol", UserRol);
                     request.getRequestDispatcher("Data_sheet.jsp").forward(request, response);
                     //</editor-fold>
@@ -107,6 +114,7 @@ public class Data_sheet extends HttpServlet {
 
                     min_rugosity = Double.parseDouble(request.getParameter("Txt_min_rugosity"));
                     max_rugosity = Double.parseDouble(request.getParameter("Txt_max_rugosity"));
+
                     observation = request.getParameter("Txt_observation");
                     try {
                         id_data_sheet = Integer.parseInt(request.getParameter("id_data_sheet"));
@@ -173,6 +181,85 @@ public class Data_sheet extends HttpServlet {
                     result = JpaDataS.DataSheetChangeState(id_data_sheet, state);
                     request.setAttribute("Data_Sheet_Change_State", result);
                     request.getRequestDispatcher("Data_sheet?opc=1&code=0&id_data_sheet=0").forward(request, response);
+                    //</editor-fold>
+                    break;
+                case 4:
+                    //<editor-fold defaultstate="collapsed" desc="REGISTER - UPDATE PP">
+                    name_sheet = request.getParameter("Txt_name_sheet");
+                    version = Integer.parseInt(request.getParameter("version"));
+                    code = request.getParameter("Txt_code");
+                    product = request.getParameter("Txt_product");
+
+                    diameter_int = Double.parseDouble(request.getParameter("Txt_diamInt"));
+                    diameter_int_min = Double.parseDouble(request.getParameter("Txt_diamInt_min"));
+                    diameter_int_max = Double.parseDouble(request.getParameter("Txt_diamInt_max"));
+
+                    diameter_ext = Double.parseDouble(request.getParameter("Txt_diaExt"));
+                    diameter_ext_min = Double.parseDouble(request.getParameter("Txt_diaExt_min"));
+                    diameter_ext_max = Double.parseDouble(request.getParameter("Txt_diaExt_max"));
+
+                    espesor_der = Double.parseDouble(request.getParameter("Txt_espParedDer"));
+                    espesor_der_min = Double.parseDouble(request.getParameter("Txt_espParedDer_min"));
+                    espesor_der_max = Double.parseDouble(request.getParameter("Txt_espParedDer_max"));
+
+                    espesor_izq = Double.parseDouble(request.getParameter("Txt_espParedIzq"));
+                    espesor_izq_min = Double.parseDouble(request.getParameter("Txt_espParedIzq_min"));
+                    espesor_izq_max = Double.parseDouble(request.getParameter("Txt_espParedIzq_max"));
+
+                    galga = Double.parseDouble(request.getParameter("Txt_galga"));
+                    galga_min = Double.parseDouble(request.getParameter("Txt_galga_min"));
+                    galga_max = Double.parseDouble(request.getParameter("Txt_galga_max"));
+
+                    peso = Double.parseDouble(request.getParameter("Txt_roll_weight"));
+                    peso_min = Double.parseDouble(request.getParameter("Txt_roll_weight_min"));
+                    peso_max = Double.parseDouble(request.getParameter("Txt_roll_weight_max"));
+
+                    observation = request.getParameter("Txt_observation");
+
+                    try {
+                        id_data_sheet = Integer.parseInt(request.getParameter("id_data_sheetPP"));
+                    } catch (Exception e) {
+                        id_data_sheet = 0;
+                    }
+
+                    try {
+                        temp_1 = Integer.parseInt(request.getParameter("temp_1"));
+                    } catch (Exception e) {
+                        temp_1 = 0;
+                    }
+
+                    if (id_data_sheet > 0) {
+                        if (temp_1 == 1) {
+                            result = JpaDataS.DataSheetRegisterPP(name_sheet, version, code, product,
+                                    diameter_int, diameter_int_min, diameter_int_max,
+                                    diameter_ext, diameter_ext_min, espesor_izq_max,
+                                    espesor_der, espesor_izq_min, espesor_der_max,
+                                    espesor_izq, espesor_izq_min, espesor_izq_max,
+                                    galga, galga_min, galga_max,
+                                    peso, peso_min, peso_max, observation, rol_usuario);
+                            result = JpaDataS.DataSheetChangeState(id_data_sheet, 0);
+                            request.setAttribute("Data_Sheet_update", result);
+                        } else {
+                            result = JpaDataS.DataSheetUpdatePP(id_data_sheet, code, product, name_sheet, version,
+                                    diameter_int, diameter_int_min, diameter_int_max,
+                                    diameter_ext, diameter_ext_min, espesor_izq_max,
+                                    espesor_der, espesor_izq_min, espesor_der_max,
+                                    espesor_izq, espesor_izq_min, espesor_izq_max,
+                                    galga, galga_min, galga_max,
+                                    peso, peso_min, peso_max, observation);
+                            request.setAttribute("Data_Sheet_modify", result);
+                        }
+                    } else {
+                        result = JpaDataS.DataSheetRegisterPP(name_sheet, version, code, product,
+                                diameter_int, diameter_int_min, diameter_int_max,
+                                diameter_ext, diameter_ext_min, espesor_izq_max,
+                                espesor_der, espesor_izq_min, espesor_der_max,
+                                espesor_izq, espesor_izq_min, espesor_izq_max,
+                                galga, galga_min, galga_max,
+                                peso, peso_min, peso_max, observation, rol_usuario);
+                        request.setAttribute("Data_Sheet_register", result);
+                    }
+                    request.getRequestDispatcher("Data_sheet?opc=1&code=0&id_data_sheet=0&optFilter=2").forward(request, response);
                     //</editor-fold>
                     break;
             }

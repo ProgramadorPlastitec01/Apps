@@ -140,7 +140,7 @@ public class Tag_Alert extends TagSupport {
                 out.print("</div>");
                 out.print("<p style='text-align: center;'>Recordar que la protección de datos, usuario y contraseña, ayuda a evitar fraudes o alteraciones en la Organización (Plastitec) y en este Aplicativo.</p>");
                 out.print("<div style='width:100%' class='camb_body'>");
-                out.print("<form action='Login?opt=2' method='post'>");
+                out.print("<form action='ResetPassword?opt=1' method='post'>");
                 out.print("<div class='form_pass'>");
                 out.print("<input type='hidden' name='Id_usuario' id='usuario' value='" + id_usuario + "'>");
                 out.print("<input class='form-control' type='password' id='pass-input' placeholder='Nueva Contraseña' style='margin-right: 4%;'>");

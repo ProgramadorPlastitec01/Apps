@@ -87,7 +87,8 @@
 
                             <button class="button">Ingresar</button>
 
-                            <div class="login_signup">VA 00.00.00 </div>
+                            <!--<div class="login_signup">VA 00.00.00 </div>-->
+                            <div class="login_signup">VA 01.01.02 </div>
                         </form>
                     </div>
 

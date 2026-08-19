@@ -80,6 +80,10 @@
         <servlet-name>Cleanup</servlet-name>
         <servlet-class>Servlet.Cleanup</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>RollPP</servlet-name>
+        <servlet-class>Servlet.RollPP</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Data_sheet</servlet-name>
         <url-pattern>/Data_sheet</url-pattern>
@@ -159,6 +163,10 @@
     <servlet-mapping>
         <servlet-name>Cleanup</servlet-name>
         <url-pattern>/Cleanup</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RollPP</servlet-name>
+        <url-pattern>/RollPP</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -215,7 +215,7 @@ public class Device extends HttpServlet {
                         type = "";
                     }
                     try {
-                        DocFiles = request.getParameter("fileDocs");
+                        DocFiles = request.getParameter("txtInitData");
                     } catch (Exception e) {
                         DocFiles = "";
                     }
