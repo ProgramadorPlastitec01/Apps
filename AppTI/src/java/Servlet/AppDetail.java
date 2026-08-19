@@ -371,8 +371,13 @@ public class AppDetail extends HttpServlet {
                     lst_app = AppJpa.ConsultAppId(idApp);
                     if (lst_app != null) {
                         Object[] ObjApp = (Object[]) lst_app.get(0);
-                        resp_doc = ObjApp[2].toString().split(" / ")[2].trim();
-                        resp_data = ObjApp[2].toString().replace("[", "").replace("]", "");
+                        if (ObjApp[2].toString().contains("/")) {
+                            resp_doc = ObjApp[2].toString().split(" / ")[2].trim();
+                            resp_data = ObjApp[2].toString().replace("[", "").replace("]", "");
+                        }else{
+                            resp_doc = ObjApp[2].toString().trim();
+                            resp_data = ObjApp[2].toString();
+                        }
                     }
                     //</editor-fold>
 
