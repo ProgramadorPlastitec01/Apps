@@ -36,9 +36,13 @@ public class ConnectionGeneracionLotes {
                 String query = "";
                 if (Lote.contains("/")) {
                     String[] BatchN = Lote.split("/");
-                    query = "SELECT GROUP_CONCAT(c.consecutivo SEPARATOR ' - CC') AS consecutivo "
+                    query = "SELECT GROUP_CONCAT( "
+                            + "    c.consecutivo "
+                            + "    ORDER BY FIELD(c.lote, '" + BatchN[0].trim() + "', '" + BatchN[1].trim() + "') "
+                            + "    SEPARATOR ' - CC' "
+                            + ") AS consecutivo "
                             + "FROM control_consecutivos c "
-                            + "WHERE c.lote IN ('" + BatchN[0] + "', '" + BatchN[1] + "')";
+                            + "WHERE c.lote IN ('" + BatchN[0].trim() + "', '" + BatchN[1].trim() + "');";
                 } else {
                     query = "SELECT c.consecutivo FROM control_consecutivos c WHERE c.lote LIKE '%" + Lote.trim() + "%'";
                 }
