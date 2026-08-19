@@ -376,7 +376,6 @@
                 </div>
             </div>
         </div>
-    </div>
     <script>
         function showHtmlAttachmentById(htmlContainerId) {
             const container = document.getElementById(htmlContainerId);
@@ -718,8 +717,6 @@
                 code: c[1],
                 client: c[2]
             }));
-
-        console.log("Códigos:", window.lstCodes);
 
     </script>
     <script>

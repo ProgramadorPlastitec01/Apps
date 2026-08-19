@@ -126,7 +126,7 @@ public class Tag_usuario extends TagSupport {
                 out.print("validation.add( Validate.Presence );");
                 out.print("</script>");
                 out.print("<b>Documento: </b><br />");
-                out.print("<input type='text' name='txt_documento' id='documento-id' placeholder='Documento' onchange='javascript:this.value=this.value.toUpperCase();'><br />");
+                out.print("<input type='number' name='txt_documento' id='documento-id' placeholder='Documento' onchange='javascript:this.value=this.value.toUpperCase();'><br />");
                 out.print("<script type='text/javascript'>");
                 out.print("var validation = new LiveValidation('documento-id');");
                 out.print("validation.add( Validate.Presence );");

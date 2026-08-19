@@ -82,7 +82,7 @@ public class Usuario extends HttpServlet {
                         usuarioR = request.getParameter("txt_registro");
                         nombre = request.getParameter("txt_nombre");
                         apellido = request.getParameter("txt_apellido");
-                        documento = Integer.parseInt(request.getParameter("txt_documento").toString());
+                        documento = Integer.parseInt(request.getParameter("txt_documento"));
                         codigo = Integer.parseInt(request.getParameter("txt_codigo").toString());
                         usuario = request.getParameter("txt_usuario");
                         contrasena = request.getParameter("txt_pass");
