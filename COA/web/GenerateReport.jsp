@@ -51,7 +51,19 @@
 
                 const fechaInicio = document.getElementById("fechaInicio");
                 const fechaFin = document.getElementById("fechaFin");
+                console.log("Elementos fechas:", {
+                    fechaInicio: fechaInicio,
+                    fechaFin: fechaFin
+                });
 
+                /*
+                 * Verificamos que existan los elementos antes
+                 * de agregar eventos.
+                 */
+                if (!fechaInicio || !fechaFin) {
+                    console.warn("No se encontraron los campos de fecha.");
+                    return;
+                }
                 const countReg = document.getElementById("countReg");
                 const dataReg = document.getElementById("DataReg");
 
