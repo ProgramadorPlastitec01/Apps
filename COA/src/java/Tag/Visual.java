@@ -14,6 +14,7 @@ import Controller.CertificatesJpaController;
 import java.util.List;
 import Method.Util;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Optional;
 import javax.servlet.http.HttpSession;
 
@@ -347,9 +348,9 @@ public class Visual extends TagSupport {
                         String[] ArgTags = Util.parseResult(lst_tags.get(1));
                         if (ArgTags[5].contains("-")) {
                             String[] DateExpiración = ArgTags[5].split("-");
-                            Html = Html.replace("XYearMANX", "<span  class='editable' contenteditable='true'>" + DateExpiración[0]  + "</span>");
-                            Html = Html.replace("XMonthMANX","<span  class='editable' contenteditable='true'>" + DateExpiración[1]  + "</span>");
-                            Html = Html.replace("XDayMANX", "<span  class='editable' contenteditable='true'>" + DateExpiración[2]  + "</span>");
+                            Html = Html.replace("XYearMANX", "<span  class='editable' contenteditable='true'>" + DateExpiración[0] + "</span>");
+                            Html = Html.replace("XMonthMANX", "<span  class='editable' contenteditable='true'>" + DateExpiración[1] + "</span>");
+                            Html = Html.replace("XDayMANX", "<span  class='editable' contenteditable='true'>" + DateExpiración[2] + "</span>");
                         } else {
                             Html = Html.replace("XYearMANX", "<span  class='editable pending' contenteditable='true'>----</span>");
                             Html = Html.replace("XMonthMANX", "<span  class='editable pending' contenteditable='true'>----</span>");
@@ -413,6 +414,9 @@ public class Visual extends TagSupport {
                                         Html = Html.replace(etiqueta, "<span  class='editable pending' contenteditable='true'>----</span>");
                                     } else {
                                         Html = Html.replace(etiqueta, valor);
+                                    }
+                                    if (ArgMaterials.length == etiquetas.length - 1) {
+                                        
                                     }
                                 }
 

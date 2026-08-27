@@ -32,6 +32,13 @@
                     <div class='float-right'><button class="btn btn-sm btn-dark " onclick="mostrarDetalles()">Ver detalles</button></div>
                 </div>
 
+                <div id="alertaRegistrosError"
+                     class="alert alert-info"
+                     style="display:none; margin-top:10px; background-color:#bae9ff; color:black;">
+                    ✖️ Diferencias en la información: 
+                    <div class='float-right'><button class="btn btn-sm btn-dark " onclick="mostrarDetalles()">Ver detalles</button></div>
+                </div>
+
                 <!-- Modal de eventos -->
                 <div id="modalEventos" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
                      background:rgba(0,0,0,0.5); z-index:9999; justify-content:center; align-items:center;">
@@ -376,799 +383,799 @@
                 </div>
             </div>
         </div>
-    <script>
-        function showHtmlAttachmentById(htmlContainerId) {
-            const container = document.getElementById(htmlContainerId);
-            if (!container)
-                return;
-            const modalBody = document.getElementById('htmlModalBody');
-            modalBody.innerHTML = container.innerHTML;
-            // 🔹 Ajuste dinámico del tamaño según el contenido
-            const modalDialog = modalBody.closest('.modal-dialog');
-            modalDialog.style.width = 'auto';
-            modalDialog.style.maxWidth = '68vw'; // ocupa hasta 95% del ancho de pantalla
-            modalBody.style.maxHeight = '58vh'; // ocupa hasta 85% de la altura
-
-            const modal = new bootstrap.Modal(document.getElementById('htmlModal'));
-            modal.show();
-            // 🔹 Ajusta automáticamente el alto si el contenido es pequeño
-            setTimeout(() => {
-                const contentHeight = modalBody.scrollHeight;
-                const windowHeight = window.innerHeight * 0.85;
-                if (contentHeight < windowHeight) {
-                    modalBody.style.maxHeight = contentHeight + 'px';
-                }
-            }, 200);
-        }
-
-        function downloadHtmlAsPDF() {
-            const content = document.getElementById('htmlModalBody').innerHTML;
-            const w = window.open('', '_blank');
-            w.document.write('<html><head><title>Adjunto</title></head><body>' + content + '</body></html>');
-            w.document.close();
-            setTimeout(() => w.print(), 400);
-        }
-        (function () {
-            function attachCloseHandlers() {
-                const modalEl = document.getElementById('htmlModal');
-                if (!modalEl)
+        <script>
+            function showHtmlAttachmentById(htmlContainerId) {
+                const container = document.getElementById(htmlContainerId);
+                if (!container)
                     return;
-                // Asegurar una instancia de bootstrap.Modal
-                let modalInstance = null;
-                try {
-                    modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl);
-                } catch (e) {
-                    console.warn('Bootstrap Modal API no disponible:', e);
-                }
+                const modalBody = document.getElementById('htmlModalBody');
+                modalBody.innerHTML = container.innerHTML;
+                // 🔹 Ajuste dinámico del tamaño según el contenido
+                const modalDialog = modalBody.closest('.modal-dialog');
+                modalDialog.style.width = 'auto';
+                modalDialog.style.maxWidth = '68vw'; // ocupa hasta 95% del ancho de pantalla
+                modalBody.style.maxHeight = '58vh'; // ocupa hasta 85% de la altura
 
-                // Botones con data-bs-dismiss="modal" dentro del modal
-                const dismissButtons = modalEl.querySelectorAll('[data-bs-dismiss="modal"]');
-                dismissButtons.forEach(btn => {
-                    // quitar escuchadores antiguos si los hay
-                    btn.removeEventListener('click', btn._closeHandler || function () {});
-                    const handler = function (e) {
-                        e.preventDefault();
-                        if (modalInstance && typeof modalInstance.hide === 'function') {
-                            modalInstance.hide();
-                        } else {
-                            // fallback: ocultar manualmente
-                            modalEl.classList.remove('show');
-                            modalEl.style.display = 'none';
-                            document.body.classList.remove('modal-open');
-                            const backdrop = document.querySelector('.modal-backdrop');
-                            if (backdrop)
-                                backdrop.remove();
-                        }
-                    };
-                    btn.addEventListener('click', handler);
-                    btn._closeHandler = handler;
-                });
-                // Si cierras el modal por fuera (backdrop o ESC), asegúrate de que la instancia existe
-                // (opcional) manejar ESC manualmente si quieres:
-                document.addEventListener('keydown', function (ev) {
-                    if (ev.key === 'Escape') {
-                        if (modalInstance && typeof modalInstance.hide === 'function')
-                            modalInstance.hide();
+                const modal = new bootstrap.Modal(document.getElementById('htmlModal'));
+                modal.show();
+                // 🔹 Ajusta automáticamente el alto si el contenido es pequeño
+                setTimeout(() => {
+                    const contentHeight = modalBody.scrollHeight;
+                    const windowHeight = window.innerHeight * 0.85;
+                    if (contentHeight < windowHeight) {
+                        modalBody.style.maxHeight = contentHeight + 'px';
                     }
-                });
+                }, 200);
             }
 
-            // Esperar a que DOM y bootstrap estén listos
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', attachCloseHandlers);
-            } else {
-                attachCloseHandlers();
+            function downloadHtmlAsPDF() {
+                const content = document.getElementById('htmlModalBody').innerHTML;
+                const w = window.open('', '_blank');
+                w.document.write('<html><head><title>Adjunto</title></head><body>' + content + '</body></html>');
+                w.document.close();
+                setTimeout(() => w.print(), 400);
             }
-        })();
-    </script>
-    <script>
-        function confirmarDevolucion(url) {
-
-            swal({
-                title: "¿Está seguro de devolver?",
-                text: "Por favor, justifique la razón de la devolución.",
-                content: {
-                    element: "textarea",
-                    attributes: {
-                        placeholder: "Escriba aquí la justificación...",
-                        id: "razonDevolucion"
+            (function () {
+                function attachCloseHandlers() {
+                    const modalEl = document.getElementById('htmlModal');
+                    if (!modalEl)
+                        return;
+                    // Asegurar una instancia de bootstrap.Modal
+                    let modalInstance = null;
+                    try {
+                        modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl);
+                    } catch (e) {
+                        console.warn('Bootstrap Modal API no disponible:', e);
                     }
-                },
-                icon: "warning",
-                buttons: {
-                    cancel: {
-                        text: "Cancelar",
-                        visible: true,
-                        className: "btn btn-secondary",
-                        closeModal: true
-                    },
-                    confirm: {
-                        text: "Devolver",
-                        visible: true,
-                        className: "btn btn-success",
-                        closeModal: false
-                    }
-                },
-                dangerMode: true
-            }).then((value) => {
 
-                if (!value)
-                    return;
-                const razon = document.getElementById("razonDevolucion").value.trim();
-                if (!razon) {
-                    swal({
-                        title: "Justificación requerida",
-                        text: "Debe ingresar una justificación para realizar la devolución.",
-                        icon: "error"
+                    // Botones con data-bs-dismiss="modal" dentro del modal
+                    const dismissButtons = modalEl.querySelectorAll('[data-bs-dismiss="modal"]');
+                    dismissButtons.forEach(btn => {
+                        // quitar escuchadores antiguos si los hay
+                        btn.removeEventListener('click', btn._closeHandler || function () {});
+                        const handler = function (e) {
+                            e.preventDefault();
+                            if (modalInstance && typeof modalInstance.hide === 'function') {
+                                modalInstance.hide();
+                            } else {
+                                // fallback: ocultar manualmente
+                                modalEl.classList.remove('show');
+                                modalEl.style.display = 'none';
+                                document.body.classList.remove('modal-open');
+                                const backdrop = document.querySelector('.modal-backdrop');
+                                if (backdrop)
+                                    backdrop.remove();
+                            }
+                        };
+                        btn.addEventListener('click', handler);
+                        btn._closeHandler = handler;
                     });
-                    return;
+                    // Si cierras el modal por fuera (backdrop o ESC), asegúrate de que la instancia existe
+                    // (opcional) manejar ESC manualmente si quieres:
+                    document.addEventListener('keydown', function (ev) {
+                        if (ev.key === 'Escape') {
+                            if (modalInstance && typeof modalInstance.hide === 'function')
+                                modalInstance.hide();
+                        }
+                    });
                 }
 
-                // Crear contenido de carga
-                const loading = document.createElement("div");
-                loading.innerHTML = `
-            <div class="loader"></div>
-            <div class="loader-text">
-                <strong>Procesando devolución...</strong><br>
-                Registrando la devolución y enviando la notificación por correo.<br><br>
-                <small>Este proceso puede tardar algunos segundos.<br>Por favor, no cierre esta ventana.</small>
+                // Esperar a que DOM y bootstrap estén listos
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', attachCloseHandlers);
+                } else {
+                    attachCloseHandlers();
+                }
+            })();
+        </script>
+        <script>
+            function confirmarDevolucion(url) {
+
+                swal({
+                    title: "¿Está seguro de devolver?",
+                    text: "Por favor, justifique la razón de la devolución.",
+                    content: {
+                        element: "textarea",
+                        attributes: {
+                            placeholder: "Escriba aquí la justificación...",
+                            id: "razonDevolucion"
+                        }
+                    },
+                    icon: "warning",
+                    buttons: {
+                        cancel: {
+                            text: "Cancelar",
+                            visible: true,
+                            className: "btn btn-secondary",
+                            closeModal: true
+                        },
+                        confirm: {
+                            text: "Devolver",
+                            visible: true,
+                            className: "btn btn-success",
+                            closeModal: false
+                        }
+                    },
+                    dangerMode: true
+                }).then((value) => {
+
+                    if (!value)
+                        return;
+                    const razon = document.getElementById("razonDevolucion").value.trim();
+                    if (!razon) {
+                        swal({
+                            title: "Justificación requerida",
+                            text: "Debe ingresar una justificación para realizar la devolución.",
+                            icon: "error"
+                        });
+                        return;
+                    }
+
+                    // Crear contenido de carga
+                    const loading = document.createElement("div");
+                    loading.innerHTML = `
+                <div class="loader"></div>
+                <div class="loader-text">
+                    <strong>Procesando devolución...</strong><br>
+                    Registrando la devolución y enviando la notificación por correo.<br><br>
+                    <small>Este proceso puede tardar algunos segundos.<br>Por favor, no cierre esta ventana.</small>
+                </div>
+            `;
+                    // Mostrar alerta de espera
+                    swal({
+                        title: "Espere un momento",
+                        content: loading,
+                        buttons: false,
+                        closeOnClickOutside: false,
+                        closeOnEsc: false
+                    });
+                    // Dar tiempo para que el usuario vea la animación antes de redirigir
+                    setTimeout(function () {
+                        window.location.href = url + "&Justification=" + encodeURIComponent(razon);
+                    }, 500);
+                });
+            }
+
+        </script>
+        <%
+            CustomerJpaController customerJpa = new CustomerJpaController();
+            List lstCustomer = customerJpa.ConsultCustomer();
+
+            Gson gson = new Gson();
+            String jsonCustomer = gson.toJson(lstCustomer);
+        %>
+        <script>
+
+            window.lstCustomers = <%=jsonCustomer%>;
+            window.lstCustomers = window.lstCustomers.map(c => ({
+                    id: c[0],
+                    name: c[1],
+                    address: c[2],
+                    city: c[3],
+                    country: c[4]
+                }));
+
+        </script>
+        <script>
+            function UpdateCustomer() {
+
+                let html = `
+            <div class="mb-2">
+                <input type="text"
+                       id="buscarCliente"
+                       class="form-control"
+                       placeholder="🔍 Buscar cliente..."
+                       onkeyup="filtrarClientes()">
+            </div>
+
+            <div style="max-height:420px; overflow-y:auto; border:1px solid #dee2e6; border-radius:6px;" >
+
+            <table class="table table-bordered table-hover table-sm mb-0" id="tablaClientes" style="font-size: 13px;color: black;text-align: left;">
+
+                <thead style="position:sticky; top:0; background:#dccbfe; color:black; z-index:10;">
+
+                    <tr>
+                        <th style="width:28%">Cliente</th>
+                        <th style="width:30%">Dirección</th>
+                        <th style="width:12%">Ciudad</th>
+                        <th style="width:12%">País</th>
+                        <th style="width:10% text-align: center;">Opc</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+        `;
+
+                window.lstCustomers.forEach(c => {
+
+                    html += "<tr>";
+
+                    html += "<td>" + c.name + "</td>";
+                    html += "<td>" + c.address + "</td>";
+                    html += "<td>" + c.city + "</td>";
+                    html += "<td>" + c.country + "</td>";
+
+                    html += "<td style='text-align:center'>";
+                    html += "<button class='btn btn-success btn-sm' onclick='seleccionarCliente(" + c.id + ")'>";
+                    html += "<i class='fas fa-check'></i>";
+                    html += "</button>";
+                    html += "</td>";
+
+                    html += "</tr>";
+
+                });
+
+                html += `
+                </tbody>
+
+            </table>
+
             </div>
         `;
-                // Mostrar alerta de espera
+
                 swal({
-                    title: "Espere un momento",
-                    content: loading,
-                    buttons: false,
-                    closeOnClickOutside: false,
-                    closeOnEsc: false
+
+                    title: "Seleccionar Cliente",
+
+                    content: {
+                        element: "div",
+                        attributes: {
+                            innerHTML: html
+                        }
+                    },
+
+                    button: "Cerrar"
+
                 });
-                // Dar tiempo para que el usuario vea la animación antes de redirigir
+
                 setTimeout(function () {
-                    window.location.href = url + "&Justification=" + encodeURIComponent(razon);
-                }, 500);
-            });
-        }
 
-    </script>
-    <%
-        CustomerJpaController customerJpa = new CustomerJpaController();
-        List lstCustomer = customerJpa.ConsultCustomer();
+                    const modal = document.querySelector(".swal-modal");
 
-        Gson gson = new Gson();
-        String jsonCustomer = gson.toJson(lstCustomer);
-    %>
-    <script>
+                    modal.style.width = "878px";
+                    modal.style.maxWidth = "878px";
+                    modal.style.borderRadius = "10px";
+                    modal.style.height = "height: 677px;";
 
-        window.lstCustomers = <%=jsonCustomer%>;
-        window.lstCustomers = window.lstCustomers.map(c => ({
-                id: c[0],
-                name: c[1],
-                address: c[2],
-                city: c[3],
-                country: c[4]
-            }));
+                    document.querySelector(".swal-content").style.padding = "10px 20px";
 
-    </script>
-    <script>
-        function UpdateCustomer() {
+                }, 50);
 
-            let html = `
-        <div class="mb-2">
-            <input type="text"
-                   id="buscarCliente"
-                   class="form-control"
-                   placeholder="🔍 Buscar cliente..."
-                   onkeyup="filtrarClientes()">
-        </div>
+            }
+        </script>
+        <script>
+            function filtrarClientes() {
 
-        <div style="max-height:420px; overflow-y:auto; border:1px solid #dee2e6; border-radius:6px;" >
+                let filtro = document.getElementById("buscarCliente").value.toUpperCase();
 
-        <table class="table table-bordered table-hover table-sm mb-0" id="tablaClientes" style="font-size: 13px;color: black;text-align: left;">
+                let filas = document.querySelectorAll("#tablaClientes tbody tr");
 
-            <thead style="position:sticky; top:0; background:#dccbfe; color:black; z-index:10;">
+                filas.forEach(fila => {
 
-                <tr>
-                    <th style="width:28%">Cliente</th>
-                    <th style="width:30%">Dirección</th>
-                    <th style="width:12%">Ciudad</th>
-                    <th style="width:12%">País</th>
-                    <th style="width:10% text-align: center;">Opc</th>
-                </tr>
+                    let texto = fila.innerText.toUpperCase();
 
-            </thead>
+                    fila.style.display = texto.indexOf(filtro) > -1 ? "" : "none";
 
-            <tbody>
-    `;
-
-            window.lstCustomers.forEach(c => {
-
-                html += "<tr>";
-
-                html += "<td>" + c.name + "</td>";
-                html += "<td>" + c.address + "</td>";
-                html += "<td>" + c.city + "</td>";
-                html += "<td>" + c.country + "</td>";
-
-                html += "<td style='text-align:center'>";
-                html += "<button class='btn btn-success btn-sm' onclick='seleccionarCliente(" + c.id + ")'>";
-                html += "<i class='fas fa-check'></i>";
-                html += "</button>";
-                html += "</td>";
-
-                html += "</tr>";
-
-            });
-
-            html += `
-            </tbody>
-
-        </table>
-
-        </div>
-    `;
-
-            swal({
-
-                title: "Seleccionar Cliente",
-
-                content: {
-                    element: "div",
-                    attributes: {
-                        innerHTML: html
-                    }
-                },
-
-                button: "Cerrar"
-
-            });
-
-            setTimeout(function () {
-
-                const modal = document.querySelector(".swal-modal");
-
-                modal.style.width = "878px";
-                modal.style.maxWidth = "878px";
-                modal.style.borderRadius = "10px";
-                modal.style.height = "height: 677px;";
-
-                document.querySelector(".swal-content").style.padding = "10px 20px";
-
-            }, 50);
-
-        }
-    </script>
-    <script>
-        function filtrarClientes() {
-
-            let filtro = document.getElementById("buscarCliente").value.toUpperCase();
-
-            let filas = document.querySelectorAll("#tablaClientes tbody tr");
-
-            filas.forEach(fila => {
-
-                let texto = fila.innerText.toUpperCase();
-
-                fila.style.display = texto.indexOf(filtro) > -1 ? "" : "none";
-
-            });
-
-        }
-    </script>
-    <script>
-        function actualizarCampo(id, valor) {
-            const elemento = document.getElementById(id);
-            if (!elemento)
-                return;
-            elemento.textContent = valor || "";
-            elemento.classList.add("editable");
-            elemento.setAttribute("contenteditable", "true");
-            // Si manejas estados pendientes, puedes remover esa clase
-            elemento.classList.remove("pending");
-        }
-        function seleccionarCliente(id) {
-
-            try {
-
-                const cliente = window.lstCustomers.find(c => c.id == id);
-
-                if (!cliente)
-                    return;
-
-                actualizarCampo("clientValue", cliente.name);
-                actualizarCampo("tAddress", cliente.address);
-                actualizarCampo("tCity", cliente.city);
-                actualizarCampo("tCountry", cliente.country);
-
-                swal.close();
-
-                iziToast.success({
-                    title: "Correcto",
-                    message: "Cliente actualizado correctamente.",
-                    position: "topRight"
                 });
 
-            } catch (e) {
-                console.error(e);
             }
+        </script>
+        <script>
+            function actualizarCampo(id, valor) {
+                const elemento = document.getElementById(id);
+                if (!elemento)
+                    return;
+                elemento.textContent = valor || "";
+                elemento.classList.add("editable");
+                elemento.setAttribute("contenteditable", "true");
+                // Si manejas estados pendientes, puedes remover esa clase
+                elemento.classList.remove("pending");
+            }
+            function seleccionarCliente(id) {
 
-        }
-    </script>
-    <%
-        // ============================================================
-        // CONSULTAR CÓDIGOS
-        // ============================================================
+                try {
 
-        CodeJpaController codeJpa = new CodeJpaController();
-        List lstCode = codeJpa.ConsultCode();
+                    const cliente = window.lstCustomers.find(c => c.id == id);
 
-        Gson gsonCode = new Gson();
-        String jsonCode = gsonCode.toJson(lstCode);
-    %>
-    <script>
+                    if (!cliente)
+                        return;
 
-        // ============================================================
-        // CARGAR CÓDIGOS
-        // ============================================================
+                    actualizarCampo("clientValue", cliente.name);
+                    actualizarCampo("tAddress", cliente.address);
+                    actualizarCampo("tCity", cliente.city);
+                    actualizarCampo("tCountry", cliente.country);
 
-        window.lstCodes = <%=jsonCode%>;
+                    swal.close();
 
-        window.lstCodes = window.lstCodes.map(c => ({
-                id: c[0],
-                code: c[1],
-                client: c[2]
-            }));
+                    iziToast.success({
+                        title: "Correcto",
+                        message: "Cliente actualizado correctamente.",
+                        position: "topRight"
+                    });
 
-    </script>
-    <script>
+                } catch (e) {
+                    console.error(e);
+                }
 
-        // ============================================================
-        // ABRIR MODAL
-        // ============================================================
+            }
+        </script>
+        <%
+            // ============================================================
+            // CONSULTAR CÓDIGOS
+            // ============================================================
 
-        function UpdateCustomerCode() {
+            CodeJpaController codeJpa = new CodeJpaController();
+            List lstCode = codeJpa.ConsultCode();
 
-            let html = `
+            Gson gsonCode = new Gson();
+            String jsonCode = gsonCode.toJson(lstCode);
+        %>
+        <script>
 
-                <div class="mb-2">
+            // ============================================================
+            // CARGAR CÓDIGOS
+            // ============================================================
 
-                    <input
-                        type="text"
-                        id="buscarCodigo"
-                        class="form-control"
-                        placeholder="🔍 Buscar cliente o código..."
-                        onkeyup="filtrarCodigos()"
-                    >
+            window.lstCodes = <%=jsonCode%>;
 
-                </div>
+            window.lstCodes = window.lstCodes.map(c => ({
+                    id: c[0],
+                    code: c[1],
+                    client: c[2]
+                }));
+
+        </script>
+        <script>
+
+            // ============================================================
+            // ABRIR MODAL
+            // ============================================================
+
+            function UpdateCustomerCode() {
+
+                let html = `
+
+                    <div class="mb-2">
+
+                        <input
+                            type="text"
+                            id="buscarCodigo"
+                            class="form-control"
+                            placeholder="🔍 Buscar cliente o código..."
+                            onkeyup="filtrarCodigos()"
+                        >
+
+                    </div>
 
 
-                <div
-                    style="
-                        max-height:420px;
-                        overflow-y:auto;
-                        border:1px solid #dee2e6;
-                        border-radius:6px;
-                    "
-                >
-
-                    <table
-                        class="table table-bordered table-hover table-sm mb-0"
-                        id="tablaCodigos"
+                    <div
                         style="
-                            font-size:13px;
-                            color:black;
-                            text-align:left;
+                            max-height:420px;
+                            overflow-y:auto;
+                            border:1px solid #dee2e6;
+                            border-radius:6px;
                         "
                     >
 
-                        <thead
+                        <table
+                            class="table table-bordered table-hover table-sm mb-0"
+                            id="tablaCodigos"
                             style="
-                                position:sticky;
-                                top:0;
-                                background:#dccbfe;
+                                font-size:13px;
                                 color:black;
-                                z-index:10;
+                                text-align:left;
                             "
                         >
 
-                            <tr>
+                            <thead
+                                style="
+                                    position:sticky;
+                                    top:0;
+                                    background:#dccbfe;
+                                    color:black;
+                                    z-index:10;
+                                "
+                            >
 
-                                <th style="width:45%">
-                                    Cliente
-                                </th>
+                                <tr>
 
-                                <th style="width:35%">
-                                    Código
-                                </th>
+                                    <th style="width:45%">
+                                        Cliente
+                                    </th>
 
-                                <th
-                                    style="
-                                        width:20%;
-                                        text-align:center;
-                                    "
-                                >
-                                    Opc
-                                </th>
+                                    <th style="width:35%">
+                                        Código
+                                    </th>
 
-                            </tr>
+                                    <th
+                                        style="
+                                            width:20%;
+                                            text-align:center;
+                                        "
+                                    >
+                                        Opc
+                                    </th>
 
-                        </thead>
+                                </tr>
 
-                        <tbody>
-            `;
+                            </thead>
 
-
-            // ========================================================
-            // RECORRER DATOS
-            // ========================================================
-
-            window.lstCodes.forEach(c => {
-
-                html += "<tr>";
-
-                html += "<td>";
-                html += c.client || "";
-                html += "</td>";
-
-                html += "<td>";
-                html += c.code || "";
-                html += "</td>";
-
-                // ====================================================
-                // BOTÓN OPC
-                // ====================================================
-
-                html += "<td style='text-align:center'>";
-
-                html +=
-                        "<button " +
-                        "type='button' " +
-                        "class='btn btn-success btn-sm btnCodigo' " +
-                        "data-id='" + c.id + "' " +
-                        "title='Seleccionar código'>" +
-                        "<i class='fas fa-check'></i>" +
-                        "</button>";
-
-                html += "</td>";
-
-                html += "</tr>";
-
-            });
+                            <tbody>
+                `;
 
 
-            html += `
+                // ========================================================
+                // RECORRER DATOS
+                // ========================================================
 
-                        </tbody>
+                window.lstCodes.forEach(c => {
 
-                    </table>
+                    html += "<tr>";
 
-                </div>
+                    html += "<td>";
+                    html += c.client || "";
+                    html += "</td>";
 
-            `;
+                    html += "<td>";
+                    html += c.code || "";
+                    html += "</td>";
+
+                    // ====================================================
+                    // BOTÓN OPC
+                    // ====================================================
+
+                    html += "<td style='text-align:center'>";
+
+                    html +=
+                            "<button " +
+                            "type='button' " +
+                            "class='btn btn-success btn-sm btnCodigo' " +
+                            "data-id='" + c.id + "' " +
+                            "title='Seleccionar código'>" +
+                            "<i class='fas fa-check'></i>" +
+                            "</button>";
+
+                    html += "</td>";
+
+                    html += "</tr>";
+
+                });
 
 
-            // ========================================================
-            // MOSTRAR SWAL
-            // ========================================================
+                html += `
 
-            swal({
+                            </tbody>
 
-                title: "Seleccionar Código",
+                        </table>
 
-                content: {
+                    </div>
 
-                    element: "div",
+                `;
 
-                    attributes: {
 
-                        innerHTML: html
+                // ========================================================
+                // MOSTRAR SWAL
+                // ========================================================
+
+                swal({
+
+                    title: "Seleccionar Código",
+
+                    content: {
+
+                        element: "div",
+
+                        attributes: {
+
+                            innerHTML: html
+
+                        }
+
+                    },
+
+                    button: "Cerrar"
+
+                });
+
+
+                // ========================================================
+                // CONFIGURAR MODAL
+                // ========================================================
+
+                setTimeout(function () {
+
+                    const modal =
+                            document.querySelector(".swal-modal");
+
+
+                    if (modal) {
+
+                        modal.style.width = "750px";
+                        modal.style.maxWidth = "750px";
+                        modal.style.borderRadius = "10px";
 
                     }
 
-                },
 
-                button: "Cerrar"
-
-            });
+                    const content =
+                            document.querySelector(".swal-content");
 
 
-            // ========================================================
-            // CONFIGURAR MODAL
-            // ========================================================
+                    if (content) {
 
-            setTimeout(function () {
+                        content.style.padding =
+                                "10px 20px";
 
-                const modal =
-                        document.querySelector(".swal-modal");
+                    }
 
 
-                if (modal) {
+                    // ====================================================
+                    // EVENTO DE LOS BOTONES
+                    // ====================================================
 
-                    modal.style.width = "750px";
-                    modal.style.maxWidth = "750px";
-                    modal.style.borderRadius = "10px";
-
-                }
-
-
-                const content =
-                        document.querySelector(".swal-content");
+                    const botones =
+                            document.querySelectorAll(
+                                    ".btnCodigo"
+                                    );
 
 
-                if (content) {
+                    botones.forEach(function (boton) {
 
-                    content.style.padding =
-                            "10px 20px";
+                        boton.addEventListener(
+                                "click",
+                                function () {
 
-                }
-
-
-                // ====================================================
-                // EVENTO DE LOS BOTONES
-                // ====================================================
-
-                const botones =
-                        document.querySelectorAll(
-                                ".btnCodigo"
-                                );
+                                    const id =
+                                            this.getAttribute(
+                                                    "data-id"
+                                                    );
 
 
-                botones.forEach(function (boton) {
-
-                    boton.addEventListener(
-                            "click",
-                            function () {
-
-                                const id =
-                                        this.getAttribute(
-                                                "data-id"
-                                                );
+                                    console.log(
+                                            "ID seleccionado:",
+                                            id
+                                            );
 
 
-                                console.log(
-                                        "ID seleccionado:",
-                                        id
-                                        );
+                                    seleccionarCodigo(id);
 
-
-                                seleccionarCodigo(id);
-
-                            }
-                    );
-
-                });
-
-            }, 100);
-
-        }
-
-    </script>
-    <script>
-
-        // ============================================================
-        // FILTRAR
-        // ============================================================
-
-        function filtrarCodigos() {
-
-            const input =
-                    document.getElementById(
-                            "buscarCodigo"
-                            );
-
-
-            if (!input)
-                return;
-
-
-            const filtro =
-                    input.value.toUpperCase();
-
-
-            const filas =
-                    document.querySelectorAll(
-                            "#tablaCodigos tbody tr"
-                            );
-
-
-            filas.forEach(function (fila) {
-
-                const texto =
-                        fila.innerText.toUpperCase();
-
-
-                fila.style.display =
-                        texto.indexOf(filtro) > -1
-                        ? ""
-                        : "none";
-
-            });
-
-        }
-
-    </script>
-    <script>
-
-        // ============================================================
-        // SELECCIONAR CLIENTE + CÓDIGO
-        // ============================================================
-
-        function seleccionarCodigo(id) {
-
-            try {
-
-                console.log(
-                        "ID recibido:",
-                        id
+                                }
                         );
 
+                    });
 
-                // ====================================================
-                // BUSCAR REGISTRO
-                // ====================================================
-
-                const registro =
-                        window.lstCodes.find(function (c) {
-
-                            return String(c.id) === String(id);
-
-                        });
-
-
-                if (!registro) {
-
-                    console.error(
-                            "No se encontró el registro:",
-                            id
-                            );
-
-                    return;
-
-                }
-
-
-                console.log(
-                        "Registro seleccionado:",
-                        registro
-                        );
-
-
-                // ====================================================
-                // ACTUALIZAR CLIENTE
-                // ====================================================
-
-                const elementoCliente =
-                        document.getElementById(
-                                "clientValue"
-                                );
-
-
-                if (!elementoCliente) {
-
-                    console.error(
-                            "No se encontró el elemento #clientValue"
-                            );
-
-                    return;
-
-                }
-
-
-                elementoCliente.textContent =
-                        registro.client || "";
-
-
-                elementoCliente.classList.add(
-                        "editable"
-                        );
-
-
-                elementoCliente.setAttribute(
-                        "contenteditable",
-                        "true"
-                        );
-
-
-                elementoCliente.classList.remove(
-                        "pending"
-                        );
-
-
-                console.log(
-                        "Cliente actualizado:",
-                        registro.client
-                        );
-
-
-                // ====================================================
-                // ACTUALIZAR CÓDIGO
-                // ====================================================
-
-                const elementoCodigo =
-                        document.getElementById(
-                                "tCode"
-                                );
-
-
-                if (!elementoCodigo) {
-
-                    console.error(
-                            "No se encontró el elemento #tCode"
-                            );
-
-                    return;
-
-                }
-
-
-                elementoCodigo.textContent =
-                        registro.code || "";
-
-
-                elementoCodigo.classList.add(
-                        "editable"
-                        );
-
-
-                elementoCodigo.setAttribute(
-                        "contenteditable",
-                        "true"
-                        );
-
-
-                elementoCodigo.classList.remove(
-                        "pending"
-                        );
-
-
-                console.log(
-                        "Código actualizado:",
-                        registro.code
-                        );
-
-
-                // ====================================================
-                // CERRAR MODAL
-                // ====================================================
-
-                swal.close();
-
-
-                // ====================================================
-                // MOSTRAR ALERTA
-                // ====================================================
-
-                iziToast.success({
-
-                    title: "Correcto",
-
-                    message:
-                            "Cliente y código actualizados correctamente.",
-
-                    position: "topRight"
-
-                });
-
-
-            } catch (e) {
-
-                console.error(
-                        "Error al seleccionar cliente y código:",
-                        e
-                        );
+                }, 100);
 
             }
 
-        }
+        </script>
+        <script>
 
-    </script> 
-    <script src="Interface/Content/Assets/js/eventLogger.js"></script>
-    <script src="Interface/Content/Assets/js/Print.js"></script>
-    <script src="Interface/Content/Assets/js/html2canvas.min.js"></script>
-    <script src="Interface/Content/Assets/js/jspdf.umd.min.js"></script>
-    <script src="Interface/Content/Assets/modules/izitoast/js/iziToast.min.js"></script>
-    <script src="Interface/Content/Assets/js/page/modules-toastr.js"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="Interface/Content/Assets/modules/sweetalert/sweetalert.min.js"></script>
-</body>
+            // ============================================================
+            // FILTRAR
+            // ============================================================
+
+            function filtrarCodigos() {
+
+                const input =
+                        document.getElementById(
+                                "buscarCodigo"
+                                );
+
+
+                if (!input)
+                    return;
+
+
+                const filtro =
+                        input.value.toUpperCase();
+
+
+                const filas =
+                        document.querySelectorAll(
+                                "#tablaCodigos tbody tr"
+                                );
+
+
+                filas.forEach(function (fila) {
+
+                    const texto =
+                            fila.innerText.toUpperCase();
+
+
+                    fila.style.display =
+                            texto.indexOf(filtro) > -1
+                            ? ""
+                            : "none";
+
+                });
+
+            }
+
+        </script>
+        <script>
+
+            // ============================================================
+            // SELECCIONAR CLIENTE + CÓDIGO
+            // ============================================================
+
+            function seleccionarCodigo(id) {
+
+                try {
+
+                    console.log(
+                            "ID recibido:",
+                            id
+                            );
+
+
+                    // ====================================================
+                    // BUSCAR REGISTRO
+                    // ====================================================
+
+                    const registro =
+                            window.lstCodes.find(function (c) {
+
+                                return String(c.id) === String(id);
+
+                            });
+
+
+                    if (!registro) {
+
+                        console.error(
+                                "No se encontró el registro:",
+                                id
+                                );
+
+                        return;
+
+                    }
+
+
+                    console.log(
+                            "Registro seleccionado:",
+                            registro
+                            );
+
+
+                    // ====================================================
+                    // ACTUALIZAR CLIENTE
+                    // ====================================================
+
+                    const elementoCliente =
+                            document.getElementById(
+                                    "clientValue"
+                                    );
+
+
+                    if (!elementoCliente) {
+
+                        console.error(
+                                "No se encontró el elemento #clientValue"
+                                );
+
+                        return;
+
+                    }
+
+
+                    elementoCliente.textContent =
+                            registro.client || "";
+
+
+                    elementoCliente.classList.add(
+                            "editable"
+                            );
+
+
+                    elementoCliente.setAttribute(
+                            "contenteditable",
+                            "true"
+                            );
+
+
+                    elementoCliente.classList.remove(
+                            "pending"
+                            );
+
+
+                    console.log(
+                            "Cliente actualizado:",
+                            registro.client
+                            );
+
+
+                    // ====================================================
+                    // ACTUALIZAR CÓDIGO
+                    // ====================================================
+
+                    const elementoCodigo =
+                            document.getElementById(
+                                    "tCode"
+                                    );
+
+
+                    if (!elementoCodigo) {
+
+                        console.error(
+                                "No se encontró el elemento #tCode"
+                                );
+
+                        return;
+
+                    }
+
+
+                    elementoCodigo.textContent =
+                            registro.code || "";
+
+
+                    elementoCodigo.classList.add(
+                            "editable"
+                            );
+
+
+                    elementoCodigo.setAttribute(
+                            "contenteditable",
+                            "true"
+                            );
+
+
+                    elementoCodigo.classList.remove(
+                            "pending"
+                            );
+
+
+                    console.log(
+                            "Código actualizado:",
+                            registro.code
+                            );
+
+
+                    // ====================================================
+                    // CERRAR MODAL
+                    // ====================================================
+
+                    swal.close();
+
+
+                    // ====================================================
+                    // MOSTRAR ALERTA
+                    // ====================================================
+
+                    iziToast.success({
+
+                        title: "Correcto",
+
+                        message:
+                                "Cliente y código actualizados correctamente.",
+
+                        position: "topRight"
+
+                    });
+
+
+                } catch (e) {
+
+                    console.error(
+                            "Error al seleccionar cliente y código:",
+                            e
+                            );
+
+                }
+
+            }
+
+        </script> 
+        <script src="Interface/Content/Assets/js/eventLogger.js"></script>
+        <script src="Interface/Content/Assets/js/Print.js"></script>
+        <script src="Interface/Content/Assets/js/html2canvas.min.js"></script>
+        <script src="Interface/Content/Assets/js/jspdf.umd.min.js"></script>
+        <script src="Interface/Content/Assets/modules/izitoast/js/iziToast.min.js"></script>
+        <script src="Interface/Content/Assets/js/page/modules-toastr.js"></script>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <script src="Interface/Content/Assets/modules/sweetalert/sweetalert.min.js"></script>
+    </body>
 </html>

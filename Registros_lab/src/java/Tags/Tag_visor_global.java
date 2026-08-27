@@ -264,7 +264,7 @@ public class Tag_visor_global extends TagSupport {
                         visor = visor.replace("<td colspan=\"7\" id=\"Txt_observaciones_3\" contenteditable=\"false\">", "<td colspan=\"7\" id=\"Txt_observaciones_3\" contenteditable=\"true\">");
                     }
                     //CONTROL COLOR RESPONSABLE
-                    if (rol.equals("Inspectora-Calidad") || rol.equals("Coordinadora-Calidad")) {
+                    if (rol.equals("Inspectora-Calidad") || rol.equals("Coordinadora-Calidad") || rol.equals("Documental")) {
                         out.print(visor.replace("<u contenteditable=\"true\"", "<u contenteditable=\"true\" onkeyup=\"this.style.color='blue';\" ").replace("<td contenteditable=\"true\"", "<td contenteditable=\"true\" onkeyup=\"this.style.color='blue';this.style.backgroundColor='white';\""));
                     } else if (rol.equals("Coordinadora-Produccion")) {
                         out.print(visor.replace("<u contenteditable=\"true\"", "<u contenteditable=\"true\" onkeyup=\"this.style.color='black';this.style.backgroundColor='#dcdcdc';\" ").replace("<td contenteditable=\"true\"", "<td contenteditable=\"true\" onkeyup=\"this.style.color='black';this.style.backgroundColor='dcdcdc';\""));
