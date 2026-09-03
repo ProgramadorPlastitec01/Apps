@@ -165,6 +165,10 @@
                 const tagInput = document.getElementById("tagInput");
                 const tagContainer = document.getElementById("tagContainer");
 
+                if (!tagInput || !tagContainer) {
+                    return;
+                }
+
                 tagInput.addEventListener("keypress", function (event) {
                     if (event.key === "Enter" && tagInput.value.trim() !== "") {
                         event.preventDefault();

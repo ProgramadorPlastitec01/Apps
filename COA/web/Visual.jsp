@@ -26,24 +26,272 @@
     <body class="sidebar-mini">
         <jsp:include page="Menu.jsp"></jsp:include>
             <div class="main-content" style="min-height: 694px;">
-                <!-- Alerta -->
-                <div id="alerta" class="alert alert-warning" style="display:none; margin-top:10px; background-color: #f9e4c7; color: black">
-                    ⚠️ Atención: No se encontró información para los datos ingresados. 
-                    <div class='float-right'><button class="btn btn-sm btn-dark " onclick="mostrarDetalles()">Ver detalles</button></div>
+                <div style="
+                     display:flex;
+                     align-items:stretch;
+                     width:100%;
+                     margin-top:10px;
+                     border-radius:8px;
+                     overflow:hidden;
+                     box-shadow:0 2px 6px rgba(0,0,0,0.08);
+                     ">
+
+
+                    <!-- REGISTROS ASOCIADOS -->
+                    <div id="alertaRegistros"
+                         style="
+                         display:flex;
+                         flex:1;
+                         padding:12px 16px;
+                         background:#e8f5ff;
+                         border-left:4px solid #2196f3;
+                         color:#1f4f70;
+                         ">
+
+                        <div style="
+                             display:flex;
+                             align-items:center;
+                             gap:10px;
+                             width:100%;
+                             ">
+
+                            <span style="font-size:20px;">✔️</span>
+
+                            <div>
+                                <div style="
+                                     font-weight:600;
+                                     font-size:14px;
+                                     ">
+                                    Registros asociados
+                                </div>
+
+                                <div style="
+                                     font-size:12px;
+                                     color:#52738a;
+                                     ">
+                                    <b id="AmoutRegDataText"
+                                       style="
+                                       font-size:16px;
+                                       color:#1769aa;
+                                       ">0</b>
+                                    registros encontrados
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- SIN INFORMACIÓN -->
+                    <div id="alerta"
+                         style="
+                         display:none;
+                         flex:1;
+                         padding:12px 16px;
+                         background:#fff4df;
+                         border-left:4px solid #f0ad4e;
+                         color:#5f4b32;
+                         ">
+
+                        <div style="
+                             display:flex;
+                             align-items:center;
+                             gap:10px;
+                             height:100%;
+                             ">
+
+                            <span style="font-size:20px;">⚠️</span>
+
+                            <div>
+                                <div style="
+                                     font-weight:600;
+                                     font-size:14px;
+                                     ">
+                                    Sin información
+                                </div>
+
+                                <div style="
+                                     font-size:12px;
+                                     color:#806b50;
+                                     ">
+                                    No se encontró información para los datos ingresados.
+                                </div>
+                            </div>
+
+                            <button class="btn btn-sm btn-dark"
+                                    onclick="mostrarDetalles()"
+                                    style="
+                                    margin-left:auto;
+                                    white-space:nowrap;
+                                    ">
+                                Ver detalles
+                            </button>
+
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+                    <!-- DIFERENCIAS -->
+                    <div id="alertaError"
+                         style="
+                         display:flex;
+                         flex:1;
+                         padding:12px 16px;
+                         background:#fff0f0;
+                         border-left:4px solid #dc3545;
+                         color:#6b2525;
+                         ">
+
+                        <div style="
+                             display:flex;
+                             align-items:center;
+                             gap:10px;
+                             width:100%;
+                             ">
+
+                            <i class="fas fa-times-circle" style="font-size:22px; color:#dc3545;"></i>
+
+                            <div>
+                                <div style="
+                                     font-weight:600;
+                                     font-size:14px;
+                                     ">
+                                    Diferencias encontradas
+                                </div>
+
+                                <div style="
+                                     font-size:12px;
+                                     color:#8a5050;
+                                     ">
+                                    <b id="ErrorCountText"
+                                       style="
+                                       font-size:16px;
+                                       color:#c62828;
+                                       ">0</b>
+                                    diferencias
+                                </div>
+                            </div>
+
+                            <button class="btn btn-sm btn-dark"
+                                    onclick="mostrarDetallesErrores()"
+                                    style="
+                                    margin-left:auto;
+                                    white-space:nowrap;
+                                    ">
+                                Ver detalles
+                            </button>
+
+                        </div>
+                    </div>
+
                 </div>
 
-                <div id="alertaRegistrosError"
-                     class="alert alert-info"
-                     style="display:none; margin-top:10px; background-color:#bae9ff; color:black;">
-                    ✖️ Diferencias en la información: 
-                    <div class='float-right'><button class="btn btn-sm btn-dark " onclick="mostrarDetalles()">Ver detalles</button></div>
+                <!-- ====================================================== -->
+                <!-- MODAL DE DIFERENCIAS (COMPROBAR ERRORES) -->
+                <!-- ====================================================== -->
+
+                <div id="modalErrores"
+                     style="
+                     display:none;
+                     position:fixed;
+                     top:0;
+                     left:0;
+                     width:100%;
+                     height:100%;
+                     background:rgba(0,0,0,0.55);
+                     z-index:9999;
+                     justify-content:center;
+                     align-items:center;
+                     ">
+
+                    <div style="
+                         background:#fff;
+                         padding:0;
+                         border-radius:10px;
+                         width:92%;
+                         max-width:1150px;
+                         max-height:88vh;
+                         overflow:hidden;
+                         box-shadow:0 8px 30px rgba(0,0,0,0.25);
+                         ">
+
+                        <!-- ENCABEZADO -->
+                        <div style="
+                             padding:16px 20px;
+                             border-bottom:1px solid #ddd;
+                             display:flex;
+                             align-items:center;
+                             justify-content:space-between;
+                             background:#fafafa;
+                             ">
+
+                            <div>
+                                <h4 style="margin:0; font-size:18px; font-weight:600; color:#00bcd4;">
+                                    Comprobar Errores
+                                </h4>
+
+                                <div style="margin-top:3px; font-size:12px; color:#777;">
+                                    Seleccione o edite el <b>Dato Real</b> para cada campo divergente para unificar los registros.
+                                </div>
+                            </div>
+
+                            <button type="button" onclick="cerrarModalErrores()" style="font-size:24px; border:none; background:none; cursor:pointer; color:#777;">&times;</button>
+                        </div>
+
+
+                        <!-- CONTENIDO -->
+                        <div style="max-height:68vh; overflow-y:auto; padding:15px 20px;">
+
+                            <!-- Filtro de verificación -->
+                            <div style="margin-bottom:15px;">
+                                <label style="font-size:12px; font-weight:700; color:#00bcd4; margin-bottom:4px; display:block;">Filtro de verificación :</label>
+                                <input type="text" id="filtroDiferencias" onkeyup="filtrarTablaDiferencias()" class="form-control" placeholder="Buscar por campo o valor..." style="border-radius:20px; border:1.5px solid #00bcd4; padding:6px 16px; font-size:13px;">
+                            </div>
+
+                            <table id="tablaErrores" width="100%" style="border-collapse:collapse; table-layout:fixed; font-size:13px;">
+                                <thead>
+                                    <tr>
+                                        <th style="width:22%; padding:10px; text-align:left; background:#f5f5f5; border:1px solid #ddd; color:#555; font-weight:600;">Campo / Componente</th>
+                                        <th style="width:43%; padding:10px; text-align:left; background:#f7fcff; border:1px solid #ddd; color:#1769aa; font-weight:600;">Valores Encontrados (Frecuencia)</th>
+                                        <th style="width:35%; padding:10px; text-align:left; background:#fff8f8; border:1px solid #ddd; color:#c62828; font-weight:600;">Dato Real a Aplicar (C y P)</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="tablaErroresBody">
+
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                        <!-- PIE -->
+                        <div style="padding:12px 20px; border-top:1px solid #ddd; background:#fafafa; text-align:right; display:flex; justify-content:flex-end; gap:10px;">
+                            <button type="button" class="btn btn-outline-info" onclick="consultarLogHistorial()" style="padding:6px 16px; border-radius:5px;">
+                                <i class="fas fa-history"></i> Historial de Cambios
+                            </button>
+                            <button id="btnUnificarDiferencias" class="btn btn-primary" onclick="unificarTodosCampos()" style="padding:6px 20px; border-radius:5px; display:none;">
+                                <i class="fas fa-sync-alt"></i> Aplicar todos los cambios
+                            </button>
+                            <button class="btn btn-dark" onclick="cerrarModalErrores()" style="padding:6px 18px; border-radius:5px;">Cerrar</button>
+                        </div>
+                    </div>
                 </div>
+
 
                 <!-- Modal de eventos -->
                 <div id="modalEventos" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
                      background:rgba(0,0,0,0.5); z-index:9999; justify-content:center; align-items:center;">
                     <div style="background:white; padding:20px; border-radius:10px; width:80%; max-width:800px;">
-                        <h4>📋 Eventos sin información</h4>
+                        <h4>ðŸ“‹ Eventos sin información</h4>
                         <table id="tablaEventos" border="1" width="100%" style="border-collapse:collapse;">
                             <thead>
                                 <tr>
@@ -66,7 +314,400 @@
             <Alert:Alert/>
 
         </div>
+        <!-- ====================================================== -->
+        <!-- JAVASCRIPT -->
+        <!-- ====================================================== -->
 
+        <script>
+
+            document.addEventListener("DOMContentLoaded", function () {
+
+                console.log("Inicializando panel de alertas...");
+
+                const inputRegistros = document.getElementById("AmoutRegData");
+                const textoRegistros = document.getElementById("AmoutRegDataText");
+
+                if (inputRegistros && textoRegistros) {
+                    const cantidadRegistros = inputRegistros.value;
+                    textoRegistros.textContent = cantidadRegistros || "0";
+                }
+
+                const errorCountInput = document.getElementById("ErrorCount");
+                const alertaError = document.getElementById("alertaError");
+                const errorCountText = document.getElementById("ErrorCountText");
+
+                if (alertaError) {
+                    const errorCount = errorCountInput ? (parseInt(errorCountInput.value, 10) || 0) : 0;
+                    if (errorCountText) {
+                        errorCountText.textContent = errorCount;
+                    }
+                    alertaError.style.display = "flex";
+                }
+
+            });
+
+            function cargarTablaDiferencias(datos) {
+                const tbody = document.getElementById("tablaErroresBody");
+                const btnUnificar = document.getElementById("btnUnificarDiferencias");
+
+                if (!tbody) return;
+                tbody.innerHTML = "";
+
+                if (!datos || datos.length === 0) {
+                    if (btnUnificar) btnUnificar.style.display = "none";
+                    tbody.innerHTML = '<tr><td colspan="3" style="padding:20px;text-align:center;color:#777;"><i class="fas fa-check-circle" style="color:#28a745;"></i> No se encontraron diferencias en los registros.</td></tr>';
+                    return;
+                }
+
+                if (btnUnificar) btnUnificar.style.display = "inline-block";
+
+                // Agrupar diferencias por el nombre de campo
+                const agrupados = {};
+                datos.forEach((diff) => {
+                    if (!agrupados[diff.campo]) {
+                        agrupados[diff.campo] = [];
+                    }
+                    agrupados[diff.campo].push(diff);
+                });
+
+                Object.keys(agrupados).forEach((campoName) => {
+                    const listaDiffs = agrupados[campoName];
+                    const primeraDiff = listaDiffs[0];
+                    const campoKey = campoName.replace(/[^a-zA-Z0-9]/g, '_');
+                    const parCorrecto = extraerCP(primeraDiff.valorCorrecto);
+
+                    const fila = document.createElement("tr");
+                    fila.className = "fila-diferencia";
+
+                    /* 1. CAMPO */
+                    const tdCampo = document.createElement("td");
+                    tdCampo.style.padding = "12px";
+                    tdCampo.style.border = "1px solid #ddd";
+                    tdCampo.style.verticalAlign = "middle";
+
+                    tdCampo.innerHTML = '<div style="display:flex; align-items:center; gap:8px;">'
+                        + '<i style="cursor:pointer; font-size:15px;" title="Editar dato real" onclick="focusCampo(\'' + campoKey + '\')"></i>'
+                        + '<strong style="color:#00bcd4; font-size:13px;">' + campoName + '</strong>'
+                        + '</div>';
+
+                    /* 2. VALORES ENCONTRADOS */
+                    const tdValores = document.createElement("td");
+                    tdValores.style.padding = "10px";
+                    tdValores.style.border = "1px solid #ddd";
+                    tdValores.style.verticalAlign = "top";
+                    tdValores.style.background = "#fbfbfb";
+
+                    let htmlValores = '<div style="margin-bottom:8px; padding:6px 10px; background:#eaf7ff; border-radius:4px; border:1px solid #bce4ff;">'
+                        + '<div style="font-weight:600; color:#1769aa; font-size:12px;">'
+                        + '<b>C:</b> ' + parCorrecto.c + ' &nbsp;|&nbsp; <b>P:</b> ' + parCorrecto.p
+                        + '</div>'
+                        + '<div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">'
+                        + '<small style="color:#666;">' + primeraDiff.cantidadCorrecto + ' registros (predominante)</small>'
+                        + '<button type="button" class="btn btn-xs btn-outline-primary" style="padding:2px 8px; font-size:11px;" onclick="setDatoReal(\'' + campoKey + '\', \'' + escapeJs(parCorrecto.c) + '\', \'' + escapeJs(parCorrecto.p) + '\')">Usar este</button>'
+                        + '</div>'
+                        + '</div>';
+
+                    listaDiffs.forEach((diff) => {
+                        const parDiff = extraerCP(diff.valorDiferente);
+                        htmlValores += '<div style="margin-bottom:6px; padding:6px 10px; background:#fff0f0; border-radius:4px; border:1px solid #ffcdd2;">'
+                            + '<div style="font-weight:600; color:#c62828; font-size:12px;">'
+                            + '<b>C:</b> ' + parDiff.c + ' &nbsp;|&nbsp; <b>P:</b> ' + parDiff.p
+                            + '</div>'
+                            + '<div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">'
+                            + '<small style="color:#666;">' + diff.cantidadDiferente + ' registros (diferencia)</small>'
+                            + '<button type="button" class="btn btn-xs btn-outline-danger" style="padding:2px 8px; font-size:11px;" onclick="setDatoReal(\'' + campoKey + '\', \'' + escapeJs(parDiff.c) + '\', \'' + escapeJs(parDiff.p) + '\')">Usar este</button>'
+                            + '</div>'
+                            + '</div>';
+                    });
+
+                    tdValores.innerHTML = htmlValores;
+
+                    /* 3. DATO REAL A APLICAR (CON BOTá“N DE ACCIá“N POR CAMPO) */
+                    const tdDatoReal = document.createElement("td");
+                    tdDatoReal.style.padding = "10px";
+                    tdDatoReal.style.border = "1px solid #ddd";
+                    tdDatoReal.style.verticalAlign = "middle";
+                    tdDatoReal.style.background = "#fff";
+
+                    tdDatoReal.innerHTML = '<div data-campo="' + campoName + '" data-key="' + campoKey + '">'
+                        + '<label style="font-size:11px; font-weight:700; color:#555; margin-bottom:2px; display:block;">Dato Real C (Lote C):</label>'
+                        + '<input type="text" id="input_c_' + campoKey + '" value="' + escapeJs(parCorrecto.c) + '" class="form-control form-control-sm mb-2" style="font-weight:600; color:#1769aa;">'
+                        + '<label style="font-size:11px; font-weight:700; color:#555; margin-bottom:2px; display:block;">Dato Real P (Lote P):</label>'
+                        + '<input type="text" id="input_p_' + campoKey + '" value="' + escapeJs(parCorrecto.p) + '" class="form-control form-control-sm mb-2" style="font-weight:600; color:#1769aa;">'
+                        + '<button type="button" class="btn btn-sm btn-success btn-block" style="padding:5px 10px; font-size:11px; font-weight:600; border-radius:4px;" onclick="unificarUnCampo(\'' + escapeJs(campoName) + '\', \'' + campoKey + '\')">'
+                        + '<i class="fas fa-check-circle"></i> Aplicar cambio a este campo'
+                        + '</button>'
+                        + '</div>';
+
+                    fila.appendChild(tdCampo);
+                    fila.appendChild(tdValores);
+                    fila.appendChild(tdDatoReal);
+                    tbody.appendChild(fila);
+                });
+            }
+
+            function extraerCP(valorStr) {
+                if (!valorStr) return { c: "N/A", p: "N/A" };
+                const sep = " | P: ";
+                const pos = valorStr.indexOf(sep);
+                if (valorStr.startsWith("C: ") && pos >= 0) {
+                    return {
+                        c: valorStr.substring(3, pos),
+                        p: valorStr.substring(pos + sep.length)
+                    };
+                }
+                return { c: valorStr, p: "N/A" };
+            }
+
+            function escapeJs(str) {
+                return (str || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+            }
+
+            function setDatoReal(campoKey, valC, valP) {
+                const inputC = document.getElementById("input_c_" + campoKey);
+                const inputP = document.getElementById("input_p_" + campoKey);
+                if (inputC) inputC.value = valC;
+                if (inputP) inputP.value = valP;
+            }
+
+            function focusCampo(campoKey) {
+                const inputC = document.getElementById("input_c_" + campoKey);
+                if (inputC) {
+                    inputC.focus();
+                    inputC.select();
+                }
+            }
+
+            function filtrarTablaDiferencias() {
+                const filtro = (document.getElementById("filtroDiferencias").value || "").toLowerCase();
+                const filas = document.querySelectorAll("#tablaErroresBody tr");
+                filas.forEach(fila => {
+                    const texto = fila.textContent.toLowerCase();
+                    fila.style.display = texto.includes(filtro) ? "" : "none";
+                });
+            }
+
+            function mostrarDetallesErrores() {
+                const modal = document.getElementById("modalErrores");
+                const tbody = document.getElementById("tablaErroresBody");
+
+                const idProductoInput = document.getElementById("IdProductoVerificar");
+                const loteInput = document.getElementById("LoteVerificar");
+                const idLineaInput = document.getElementById("IdLineaVerificar");
+                const cicloInput = document.getElementById("CicloVerificar");
+
+                if (!modal || !tbody || !idProductoInput || !loteInput || !idLineaInput || !cicloInput) {
+                    console.error("No se encontraron los pará¡metros o elementos del modal de diferencias.");
+                    return;
+                }
+
+                const idProducto = idProductoInput.value;
+                const lote = loteInput.value;
+                const idLinea = idLineaInput.value;
+                const ciclo = cicloInput.value;
+
+                if (!idProducto || !lote || !idLinea) {
+                    tbody.innerHTML = "<tr><td colspan='3' style='padding:20px;text-align:center;color:#c62828;'>No hay pará¡metros vá¡lidos para consultar las diferencias.</td></tr>";
+                    modal.style.display = "flex";
+                    return;
+                }
+
+                tbody.innerHTML = "<tr><td colspan='3' style='padding:20px;text-align:center;color:#777;'><i class='fas fa-spinner fa-spin'></i> Consultando diferencias...</td></tr>";
+                modal.style.display = "flex";
+
+                fetch(
+                    "ConsultarDiferenciasRegistro"
+                    + "?idProducto=" + encodeURIComponent(idProducto)
+                    + "&lote=" + encodeURIComponent(lote)
+                    + "&idLinea=" + encodeURIComponent(idLinea)
+                    + "&ciclo=" + encodeURIComponent(ciclo)
+                )
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Error HTTP: " + response.status);
+                    }
+                    return response.json();
+                })
+                .then(datos => {
+                    if (!Array.isArray(datos)) {
+                        throw new Error(datos && datos.mensaje ? datos.mensaje : "Respuesta JSON no vá¡lida.");
+                    }
+                    cargarTablaDiferencias(datos);
+                })
+                .catch(error => {
+                    console.error("Error consultando diferencias:", error);
+                    tbody.innerHTML = "<tr><td colspan='3' style='padding:20px;text-align:center;color:#c62828;'><i class='fas fa-exclamation-circle'></i> No fue posible consultar las diferencias.</td></tr>";
+                });
+            }
+
+            function consultarLogHistorial() {
+                const idProductoInput = document.getElementById("IdProductoVerificar");
+                const loteInput = document.getElementById("LoteVerificar");
+                const idLineaInput = document.getElementById("IdLineaVerificar");
+                const cicloInput = document.getElementById("CicloVerificar");
+                const tbody = document.getElementById("tablaErroresBody");
+
+                if (!idProductoInput || !loteInput || !idLineaInput || !cicloInput || !tbody) return;
+
+                const idProducto = idProductoInput.value;
+                const lote = loteInput.value;
+                const idLinea = idLineaInput.value;
+                const ciclo = cicloInput.value;
+
+                tbody.innerHTML = '<tr><td colspan="3" style="padding:20px;text-align:center;color:#777;"><i class="fas fa-spinner fa-spin"></i> Cargando historial de cambios...</td></tr>';
+
+                fetch("ConsultarLogDiferencias?idProducto=" + encodeURIComponent(idProducto) + "&lote=" + encodeURIComponent(lote) + "&idLinea=" + encodeURIComponent(idLinea) + "&ciclo=" + encodeURIComponent(ciclo))
+                .then(res => res.json())
+                .then(logs => {
+                    if (!Array.isArray(logs) || logs.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="3" style="padding:20px;text-align:center;color:#777;"><i class="fas fa-info-circle"></i> No hay registros de cambios realizados para este lote. <br><br><button type="button" class="btn btn-sm btn-secondary" onclick="mostrarDetallesErrores()">Volver a edición</button></td></tr>';
+                        return;
+                    }
+
+                    let html = '<tr><td colspan="3" style="padding:0;">'
+                        + '<div style="padding:10px 15px; background:#f0f8ff; border-bottom:1px solid #cce5ff; display:flex; justify-content:space-between; align-items:center;">'
+                        + '<strong style="color:#007bff; font-size:13px;"><i class="fas fa-history"></i> Historial de Auditorá­a de Cambios</strong>'
+                        + '<button type="button" class="btn btn-sm btn-outline-secondary" onclick="mostrarDetallesErrores()"><i class="fas fa-arrow-left"></i> Volver a edición</button>'
+                        + '</div>'
+                        + '<table class="table table-sm table-striped" style="margin:0; font-size:12px;">'
+                        + '<thead><tr style="background:#e9ecef;"><th>Fecha / Hora</th><th>Usuario Responsable</th><th>Campo</th><th>Antes (Estado previo)</th><th>Despuá©s (Dato Real)</th></tr></thead>'
+                        + '<tbody>';
+
+                    logs.forEach(log => {
+                        html += '<tr>'
+                            + '<td style="white-space:nowrap;"><b>' + (log[5] || '') + '</b></td>'
+                            + '<td><i class="fas fa-user text-info"></i> ' + (log[4] || '') + '</td>'
+                            + '<td><b style="color:#00bcd4;">' + (log[1] || '') + '</b></td>'
+                            + '<td style="color:#c62828; font-size:11px;">' + (log[2] || '') + '</td>'
+                            + '<td style="color:#28a745; font-weight:600; font-size:11px;">' + (log[3] || '') + '</td>'
+                            + '</tr>';
+                    });
+
+                    html += '</tbody></table></td></tr>';
+                    tbody.innerHTML = html;
+                })
+                .catch(err => {
+                    tbody.innerHTML = '<tr><td colspan="3" style="padding:20px;text-align:center;color:#c62828;"><i class="fas fa-exclamation-triangle"></i> Error consultando el historial de auditorá­a. <br><br><button type="button" class="btn btn-sm btn-secondary" onclick="mostrarDetallesErrores()">Volver a edición</button></td></tr>';
+                });
+            }
+
+            function cerrarModalErrores() {
+                const modal = document.getElementById("modalErrores");
+                if (modal) {
+                    modal.style.display = "none";
+                }
+            }
+
+            function unificarUnCampo(campoName, campoKey) {
+                const inputC = document.getElementById("input_c_" + campoKey);
+                const inputP = document.getElementById("input_p_" + campoKey);
+
+                if (!inputC || !inputP) return;
+
+                const listaAjustes = [{
+                    campo: campoName,
+                    c: inputC.value.trim(),
+                    p: inputP.value.trim()
+                }];
+
+                ejecutarUnificacion(listaAjustes, "al campo " + campoName);
+            }
+
+            function unificarTodosCampos() {
+                const contenedores = document.querySelectorAll("#tablaErroresBody [data-campo]");
+                const listaAjustes = [];
+
+                contenedores.forEach(c => {
+                    const campo = c.getAttribute("data-campo");
+                    const key = c.getAttribute("data-key");
+                    const inputC = document.getElementById("input_c_" + key);
+                    const inputP = document.getElementById("input_p_" + key);
+
+                    if (campo && inputC && inputP) {
+                        listaAjustes.push({
+                            campo: campo,
+                            c: inputC.value.trim(),
+                            p: inputP.value.trim()
+                        });
+                    }
+                });
+
+                if (listaAjustes.length === 0) {
+                    alert("No hay datos para actualizar.");
+                    return;
+                }
+
+                ejecutarUnificacion(listaAjustes, "a todos los campos modificados");
+            }
+
+            function ejecutarUnificacion(listaAjustes, descripcionAccion) {
+                const idProductoInput = document.getElementById("IdProductoVerificar");
+                const loteInput = document.getElementById("LoteVerificar");
+                const idLineaInput = document.getElementById("IdLineaVerificar");
+                const cicloInput = document.getElementById("CicloVerificar");
+
+                if (!idProductoInput || !loteInput || !idLineaInput || !cicloInput) {
+                    alert("Faltan pará¡metros de verificación.");
+                    return;
+                }
+
+                const idProducto = idProductoInput.value;
+                const lote = loteInput.value;
+                const idLinea = idLineaInput.value;
+                const ciclo = cicloInput.value;
+
+                if (!confirm("Está¡ seguro de aplicar el cambio " + descripcionAccion + "?\nEsta acción actualizará¡ los registros de este lote en la base de datos de Registros LAB.")) {
+                    return;
+                }
+
+                const btnUnificar = document.getElementById("btnUnificarDiferencias");
+                if (btnUnificar) {
+                    btnUnificar.disabled = true;
+                    btnUnificar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Actualizando registros...';
+                }
+
+                const params = new URLSearchParams();
+                params.append("confirmar", "SI");
+                params.append("idProducto", idProducto);
+                params.append("lote", lote);
+                params.append("idLinea", idLinea);
+                params.append("ciclo", ciclo);
+                params.append("ajustesJson", JSON.stringify(listaAjustes));
+
+                fetch("ActualizarDiferenciasRegistro", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8" },
+                    body: params.toString()
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => { throw new Error(err.mensaje || "Error actualizando registros."); });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data && data.mensaje) {
+                        if (typeof iziToast !== "undefined") {
+                            iziToast.success({ title: "á‰xito", message: data.mensaje, position: "topRight" });
+                        } else {
+                            alert(data.mensaje);
+                        }
+                    }
+                    cerrarModalErrores();
+                    setTimeout(() => { location.reload(); }, 1200);
+                })
+                .catch(error => {
+                    console.error("Error al unificar diferencias:", error);
+                    alert(error.message || "No fue posible actualizar los registros.");
+                })
+                .finally(() => {
+                    if (btnUnificar) {
+                        btnUnificar.disabled = false;
+                        btnUnificar.innerHTML = '<i class="fas fa-sync-alt"></i> Aplicar todos los cambios';
+                    }
+                });
+            }
+        </script>
         <script>
             document.addEventListener('DOMContentLoaded', () => {
 
@@ -267,9 +908,12 @@
         <script>
             function dibujarCoordenadas() {
                 const canvas = document.getElementById('signature-canvas');
-                const ctx = canvas.getContext('2d');
                 const input = document.getElementById('coordenadas-hidden');
-                if (!input || !input.value)
+                if (!canvas || !input || !input.value)
+                    return;
+
+                const ctx = canvas.getContext('2d');
+                if (!ctx)
                     return;
                 // 1) Leer y decodificar entidades html
                 let raw = input.value;
@@ -377,7 +1021,7 @@
                         <!-- Contenido dinámico -->
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cerrar</button>
                         <button type="button" class="btn btn-primary" onclick="downloadHtmlAsPDF()">Descargar PDF</button>
                     </div>
                 </div>
@@ -389,15 +1033,23 @@
                 if (!container)
                     return;
                 const modalBody = document.getElementById('htmlModalBody');
+                if (!modalBody)
+                    return;
                 modalBody.innerHTML = container.innerHTML;
                 // 🔹 Ajuste dinámico del tamaño según el contenido
                 const modalDialog = modalBody.closest('.modal-dialog');
-                modalDialog.style.width = 'auto';
-                modalDialog.style.maxWidth = '68vw'; // ocupa hasta 95% del ancho de pantalla
+                if (modalDialog) {
+                    modalDialog.style.width = 'auto';
+                    modalDialog.style.maxWidth = '68vw'; // ocupa hasta 95% del ancho de pantalla
+                }
                 modalBody.style.maxHeight = '58vh'; // ocupa hasta 85% de la altura
 
-                const modal = new bootstrap.Modal(document.getElementById('htmlModal'));
-                modal.show();
+                if (window.jQuery && jQuery.fn && jQuery.fn.modal) {
+                    jQuery('#htmlModal').modal('show');
+                } else {
+                    console.error('Bootstrap 4/jQuery no está disponible para abrir #htmlModal.');
+                    return;
+                }
                 // 🔹 Ajusta automáticamente el alto si el contenido es pequeño
                 setTimeout(() => {
                     const contentHeight = modalBody.scrollHeight;
@@ -409,64 +1061,15 @@
             }
 
             function downloadHtmlAsPDF() {
-                const content = document.getElementById('htmlModalBody').innerHTML;
+                const modalBody = document.getElementById('htmlModalBody');
+                if (!modalBody)
+                    return;
+                const content = modalBody.innerHTML;
                 const w = window.open('', '_blank');
                 w.document.write('<html><head><title>Adjunto</title></head><body>' + content + '</body></html>');
                 w.document.close();
                 setTimeout(() => w.print(), 400);
             }
-            (function () {
-                function attachCloseHandlers() {
-                    const modalEl = document.getElementById('htmlModal');
-                    if (!modalEl)
-                        return;
-                    // Asegurar una instancia de bootstrap.Modal
-                    let modalInstance = null;
-                    try {
-                        modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl);
-                    } catch (e) {
-                        console.warn('Bootstrap Modal API no disponible:', e);
-                    }
-
-                    // Botones con data-bs-dismiss="modal" dentro del modal
-                    const dismissButtons = modalEl.querySelectorAll('[data-bs-dismiss="modal"]');
-                    dismissButtons.forEach(btn => {
-                        // quitar escuchadores antiguos si los hay
-                        btn.removeEventListener('click', btn._closeHandler || function () {});
-                        const handler = function (e) {
-                            e.preventDefault();
-                            if (modalInstance && typeof modalInstance.hide === 'function') {
-                                modalInstance.hide();
-                            } else {
-                                // fallback: ocultar manualmente
-                                modalEl.classList.remove('show');
-                                modalEl.style.display = 'none';
-                                document.body.classList.remove('modal-open');
-                                const backdrop = document.querySelector('.modal-backdrop');
-                                if (backdrop)
-                                    backdrop.remove();
-                            }
-                        };
-                        btn.addEventListener('click', handler);
-                        btn._closeHandler = handler;
-                    });
-                    // Si cierras el modal por fuera (backdrop o ESC), asegúrate de que la instancia existe
-                    // (opcional) manejar ESC manualmente si quieres:
-                    document.addEventListener('keydown', function (ev) {
-                        if (ev.key === 'Escape') {
-                            if (modalInstance && typeof modalInstance.hide === 'function')
-                                modalInstance.hide();
-                        }
-                    });
-                }
-
-                // Esperar a que DOM y bootstrap estén listos
-                if (document.readyState === 'loading') {
-                    document.addEventListener('DOMContentLoaded', attachCloseHandlers);
-                } else {
-                    attachCloseHandlers();
-                }
-            })();
         </script>
         <script>
             function confirmarDevolucion(url) {
@@ -734,75 +1337,19 @@
 
             function UpdateCustomerCode() {
 
-                let html = `
-
-                    <div class="mb-2">
-
-                        <input
-                            type="text"
-                            id="buscarCodigo"
-                            class="form-control"
-                            placeholder="🔍 Buscar cliente o código..."
-                            onkeyup="filtrarCodigos()"
-                        >
-
-                    </div>
-
-
-                    <div
-                        style="
-                            max-height:420px;
-                            overflow-y:auto;
-                            border:1px solid #dee2e6;
-                            border-radius:6px;
-                        "
-                    >
-
-                        <table
-                            class="table table-bordered table-hover table-sm mb-0"
-                            id="tablaCodigos"
-                            style="
-                                font-size:13px;
-                                color:black;
-                                text-align:left;
-                            "
-                        >
-
-                            <thead
-                                style="
-                                    position:sticky;
-                                    top:0;
-                                    background:#dccbfe;
-                                    color:black;
-                                    z-index:10;
-                                "
-                            >
-
-                                <tr>
-
-                                    <th style="width:45%">
-                                        Cliente
-                                    </th>
-
-                                    <th style="width:35%">
-                                        Código
-                                    </th>
-
-                                    <th
-                                        style="
-                                            width:20%;
-                                            text-align:center;
-                                        "
-                                    >
-                                        Opc
-                                    </th>
-
-                                </tr>
-
-                            </thead>
-
-                            <tbody>
-                `;
+                let html = '<div class="mb-2">' +
+                        '<input type="text" id="buscarCodigo" class="form-control" placeholder="🔍 Buscar cliente o código..." onkeyup="filtrarCodigos()">' +
+                        '</div>' +
+                        '<div style="max-height:420px; overflow-y:auto; border:1px solid #dee2e6; border-radius:6px;">' +
+                        '<table class="table table-bordered table-hover table-sm mb-0" id="tablaCodigos" style="font-size:13px; color:black; text-align:left;">' +
+                        '<thead style="position:sticky; top:0; background:#dccbfe; color:black; z-index:10;">' +
+                        '<tr>' +
+                        '<th style="width:45%">Cliente</th>' +
+                        '<th style="width:35%">Código</th>' +
+                        '<th style="width:20%; text-align:center;">Opc</th>' +
+                        '</tr>' +
+                        '</thead>' +
+                        '<tbody>';
 
 
                 // ========================================================
@@ -842,12 +1389,6 @@
 
                 });
 
-
-                html += `
-
-                            </tbody>
-
-                        </table>
 
                     </div>
 

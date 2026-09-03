@@ -1,6 +1,7 @@
 package Connection;
 
 import Controller.SettingJpaController;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -1419,5 +1420,437 @@ public class ConnectionRegistrosLAB {
             return null;
         }
         //</editor-fold>
+    }
+
+    public List ConsultLotesRegistroVerificar(
+            int idProducto,
+            String lote,
+            int idLinea,
+            String cicloEsterilizacion) throws Exception {
+
+        // <editor-fold defaultstate="collapsed" desc="LOTES REGISTRO VERIFICAR">
+        List lst_parameter
+                = SettingJpa.ConsultSettingCategorie("ServerRegistrosLab");
+
+        if (lst_parameter == null || lst_parameter.isEmpty()) {
+            return null;
+        }
+
+        Object[] obj_data = (Object[]) lst_parameter.get(0);
+
+        String[] arr_data = obj_data[2]
+                .toString()
+                .replace("][", "///")
+                .replace("[", "")
+                .replace("]", "")
+                .split("///");
+
+        login = arr_data[0];
+        password = arr_data[1];
+        url = "jdbc:mysql://" + arr_data[2];
+
+        Connection conn = null;
+        CallableStatement cstmt = null;
+        ResultSet rs = null;
+
+        try {
+
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+
+            conn = DriverManager.getConnection(
+                    url,
+                    login,
+                    password
+            );
+
+            if (conn == null) {
+                return null;
+            }
+
+            String sql
+                    = "{CALL sp_rgt_t_lotes_registro_verificar(?, ?, ?, ?)}";
+
+            cstmt = conn.prepareCall(sql);
+
+            cstmt.setInt(1, idProducto);
+            cstmt.setString(2, lote);
+            cstmt.setInt(3, idLinea);
+            cstmt.setString(4, cicloEsterilizacion);
+
+            rs = cstmt.executeQuery();
+
+            List<Object[]> lstDatos = new ArrayList<Object[]>();
+
+            while (rs.next()) {
+
+                // Mantener índices 0..24 y extender los nuevos campos al final.
+                // El procedimiento devuelve más columnas que el arreglo anterior.
+                Object[] dato = new Object[30];
+
+                dato[0] = rs.getString("lote_producto");
+
+                // El procedimiento desplegado puede devolver el COUNT sin
+                // alias. Se conserva compatibilidad con ambas versiones.
+                try {
+                    dato[1] = rs.getInt("cantidad_registros");
+                } catch (SQLException aliasNoDisponible) {
+                    dato[1] = rs.getInt(2);
+                }
+
+                dato[2] = rs.getString("lote_manga_c");
+
+                dato[3] = rs.getString("lote_manga_p");
+
+                dato[4] = rs.getString("lote_dto_drc_c");
+
+                dato[5] = rs.getString("lote_dto_drc_p");
+
+                dato[6] = rs.getString("lote_dto_iqe_c");
+
+                dato[7] = rs.getString("lote_dto_iqe_p");
+
+                dato[8] = rs.getString("ensamble");
+
+                dato[9] = rs.getString("lote_ensamble");
+
+                dato[10] = rs.getString("lote_tinta");
+
+                dato[11] = rs.getString("nombre");
+
+                dato[12] = rs.getString("hora_inicio");
+
+                dato[13] = rs.getString("hora_fin");
+
+                dato[14] = rs.getString("color_tinta");
+
+                dato[15] = rs.getInt("id_linea");
+
+                dato[16] = rs.getString("ensamble_2");
+
+                dato[17] = rs.getString("lote_ensamble_2");
+
+                dato[18] = rs.getString("lote_manga_c_alt");
+
+                dato[19] = rs.getString("lote_dto_ctl_c");
+
+                dato[20] = rs.getString("lote_dto_ctl_p");
+
+                dato[21] = rs.getString("lote_boca");
+
+                dato[22] = rs.getString("lote_dto_c_alt");
+
+                dato[23] = rs.getString("lote_tubo_refuerzo");
+
+                dato[24] = rs.getString("ciclo_esterilizacion");
+
+                dato[25] = rs.getString("ensamble_3");
+
+                dato[26] = rs.getString("lote_ensamble_3");
+
+                dato[27] = rs.getString("ensamble_4");
+
+                dato[28] = rs.getString("lote_ensamble_4");
+
+                dato[29] = rs.getString("id_registro");
+
+                lstDatos.add(dato);
+            }
+
+            return lstDatos;
+
+        } catch (SQLException ex) {
+
+            ex.printStackTrace();
+            return null;
+
+        } catch (ClassNotFoundException ex) {
+
+            ex.printStackTrace();
+            return null;
+
+        } catch (Exception ex) {
+
+            ex.printStackTrace();
+            return null;
+
+        } finally {
+
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+
+            try {
+                if (cstmt != null) {
+                    cstmt.close();
+                }
+            } catch (Exception e) {
+            }
+
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (Exception e) {
+            }
+        }
+
+        // </editor-fold>
+    }
+
+    /**
+     * Obtiene los parámetros reales del registro seleccionado en la pantalla.
+     * Cuando hay más de una línea, se usa la de menor id para que la selección
+     * sea estable; el procedimiento sigue verificando esa línea explícita.
+     */
+    public Object[] ConsultParametrosLoteVerificar(int order, String product,
+            String lote, String cicloEsterilizacion) throws Exception {
+
+        List lstParameter = SettingJpa.ConsultSettingCategorie("ServerRegistrosLab");
+        if (lstParameter == null || lstParameter.isEmpty()) {
+            return null;
+        }
+
+        Object[] objData = (Object[]) lstParameter.get(0);
+        String[] arrData = objData[2].toString().replace("][", "///")
+                .replace("[", "").replace("]", "").split("///");
+        if (arrData.length < 3) {
+            return null;
+        }
+
+        String query = "SELECT r.id_producto, r.lote_producto, r.id_linea, "
+                + "COALESCE(r.ciclo_esterilizacion, '') AS ciclo_esterilizacion "
+                + "FROM orden_produccion o "
+                + "INNER JOIN producto p ON p.id_orden_produccion = o.id_orden_produccion "
+                + "INNER JOIN registro r ON r.id_producto = p.id_producto "
+                + "INNER JOIN linea l ON l.id_linea = r.id_linea "
+                + "WHERE o.numero = ? AND p.codigo LIKE CONCAT('%', ?, '%') "
+                + "AND r.lote_producto = ? "
+                + "AND (? = '' OR COALESCE(r.ciclo_esterilizacion, '') = ?) "
+                + "AND l.nombre NOT LIKE '%SCREEN%' AND l.nombre NOT LIKE '%COLAS%' "
+                + "ORDER BY r.id_linea, r.id_registro LIMIT 1";
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            try (Connection conn = DriverManager.getConnection("jdbc:mysql://" + arrData[2], arrData[0], arrData[1]);
+                    java.sql.PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setInt(1, order);
+                stmt.setString(2, product == null ? "" : product);
+                stmt.setString(3, lote == null ? "" : lote);
+                stmt.setString(4, cicloEsterilizacion == null ? "" : cicloEsterilizacion);
+                stmt.setString(5, cicloEsterilizacion == null ? "" : cicloEsterilizacion);
+                try (ResultSet result = stmt.executeQuery()) {
+                    if (result.next()) {
+                        return new Object[]{result.getInt("id_producto"),
+                            result.getString("lote_producto"), result.getInt("id_linea"),
+                            result.getString("ciclo_esterilizacion")};
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            throw ex;
+        }
+        return null;
+    }
+
+    /**
+     * Actualiza exclusivamente los pares C/P que el servidor acaba de
+     * identificar como diferentes. El llamador proporciona datos recalculados,
+     * no valores enviados por el navegador.
+     */
+    public int ActualizarLotesRegistroVerificar(int idProducto, String lote,
+            int idLinea, String cicloEsterilizacion, List<Object[]> ajustes)
+            throws Exception {
+
+        List lstParameter = SettingJpa.ConsultSettingCategorie("ServerRegistrosLab");
+        if (lstParameter == null || lstParameter.isEmpty() || ajustes == null) {
+            return 0;
+        }
+
+        Object[] objData = (Object[]) lstParameter.get(0);
+        String[] arrData = objData[2].toString().replace("][", "///")
+                .replace("[", "").replace("]", "").split("///");
+        if (arrData.length < 3) {
+            return 0;
+        }
+
+        Class.forName("com.mysql.jdbc.Driver").newInstance();
+        int actualizados = 0;
+        try (Connection conn = DriverManager.getConnection("jdbc:mysql://" + arrData[2], arrData[0], arrData[1])) {
+            conn.setAutoCommit(false);
+            try {
+                for (Object[] ajuste : ajustes) {
+                    String[] columnas = columnasVerificables(String.valueOf(ajuste[0]));
+                    if (columnas == null) {
+                        continue;
+                    }
+
+                    boolean updateAll = "%".equals(String.valueOf(ajuste[1])) && "%".equals(String.valueOf(ajuste[2]));
+                    String sql;
+                    if (updateAll) {
+                        sql = "UPDATE registro SET " + columnas[0] + " = ?, "
+                                + columnas[1] + " = ? WHERE id_producto = ? "
+                                + "AND lote_producto = ? AND id_linea = ? "
+                                + "AND (? = '' OR COALESCE(ciclo_esterilizacion, '') = ?)";
+                    } else {
+                        sql = "UPDATE registro SET " + columnas[0] + " = ?, "
+                                + columnas[1] + " = ? WHERE id_producto = ? "
+                                + "AND lote_producto = ? AND id_linea = ? "
+                                + "AND (? = '' OR COALESCE(ciclo_esterilizacion, '') = ?) "
+                                + "AND COALESCE(NULLIF(TRIM(" + columnas[0] + "), ''), 'N/A') = ? "
+                                + "AND COALESCE(NULLIF(TRIM(" + columnas[1] + "), ''), 'N/A') = ?";
+                    }
+
+                    try (java.sql.PreparedStatement stmt = conn.prepareStatement(sql)) {
+                        stmt.setString(1, String.valueOf(ajuste[3]));
+                        stmt.setString(2, String.valueOf(ajuste[4]));
+                        stmt.setInt(3, idProducto);
+                        stmt.setString(4, lote);
+                        stmt.setInt(5, idLinea);
+                        stmt.setString(6, cicloEsterilizacion == null ? "" : cicloEsterilizacion);
+                        stmt.setString(7, cicloEsterilizacion == null ? "" : cicloEsterilizacion);
+                        if (!updateAll) {
+                            stmt.setString(8, String.valueOf(ajuste[1]));
+                            stmt.setString(9, String.valueOf(ajuste[2]));
+                        }
+                        actualizados += stmt.executeUpdate();
+                    }
+                }
+                conn.commit();
+            } catch (Exception ex) {
+                conn.rollback();
+                throw ex;
+            } finally {
+                conn.setAutoCommit(true);
+            }
+        }
+        return actualizados;
+    }
+
+    private String[] columnasVerificables(String campo) {
+        if ("MANGA".equals(campo)) {
+            return new String[]{"lote_manga_c", "lote_manga_p"};
+        }
+        if ("DUCTO DERECHO".equals(campo)) {
+            return new String[]{"lote_dto_drc_c", "lote_dto_drc_p"};
+        }
+        if ("DUCTO IZQUIERDO".equals(campo)) {
+            return new String[]{"lote_dto_iqe_c", "lote_dto_iqe_p"};
+        }
+        if ("DUCTO CENTRAL".equals(campo)) {
+            return new String[]{"lote_dto_ctl_c", "lote_dto_ctl_p"};
+        }
+        if ("TINTA / COLOR".equals(campo) || "TINTA_COLOR_LOTE".equals(campo) || "TINTA".equals(campo)) {
+            return new String[]{"lote_tinta", "color_tinta"};
+        }
+        if ("ENSAMBLE 1".equals(campo) || "ENSAMBLE(S)".equals(campo) || "ENSAMBLE".equals(campo)) {
+            return new String[]{"ensamble", "lote_ensamble"};
+        }
+        if ("ENSAMBLE 2".equals(campo)) {
+            return new String[]{"ensamble_2", "lote_ensamble_2"};
+        }
+        if ("ENSAMBLE 3".equals(campo)) {
+            return new String[]{"ensamble_3", "lote_ensamble_3"};
+        }
+        if ("ENSAMBLE 4".equals(campo)) {
+            return new String[]{"ensamble_4", "lote_ensamble_4"};
+        }
+        return null;
+    }
+
+    public void RegistrarLogDiferencia(int idProducto, String lote, int idLinea, String ciclo,
+            String campo, String valorAntes, String valorDespues, String usuarioResponsable) {
+        try {
+            List lstParameter = SettingJpa.ConsultSettingCategorie("ServerRegistrosLab");
+            if (lstParameter == null || lstParameter.isEmpty()) {
+                return;
+            }
+            Object[] objData = (Object[]) lstParameter.get(0);
+            String[] arrData = objData[2].toString().replace("][", "///")
+                    .replace("[", "").replace("]", "").split("///");
+            if (arrData.length < 3) {
+                return;
+            }
+
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            try (Connection conn = DriverManager.getConnection("jdbc:mysql://" + arrData[2], arrData[0], arrData[1])) {
+                String createTableSql = "CREATE TABLE IF NOT EXISTS log_diferencias_registro ("
+                        + "id_log INT AUTO_INCREMENT PRIMARY KEY, "
+                        + "id_producto INT NOT NULL, "
+                        + "lote_producto VARCHAR(100) NOT NULL, "
+                        + "id_linea INT NOT NULL, "
+                        + "ciclo_esterilizacion VARCHAR(100) NULL, "
+                        + "campo VARCHAR(100) NOT NULL, "
+                        + "valor_antes TEXT NULL, "
+                        + "valor_despues TEXT NULL, "
+                        + "usuario_responsable VARCHAR(150) NOT NULL, "
+                        + "fecha_registro DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP)";
+                try (java.sql.PreparedStatement stmtCreate = conn.prepareStatement(createTableSql)) {
+                    stmtCreate.executeUpdate();
+                }
+
+                String insertSql = "INSERT INTO log_diferencias_registro "
+                        + "(id_producto, lote_producto, id_linea, ciclo_esterilizacion, campo, valor_antes, valor_despues, usuario_responsable, fecha_registro) "
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+                try (java.sql.PreparedStatement stmtInsert = conn.prepareStatement(insertSql)) {
+                    stmtInsert.setInt(1, idProducto);
+                    stmtInsert.setString(2, lote == null ? "" : lote);
+                    stmtInsert.setInt(3, idLinea);
+                    stmtInsert.setString(4, ciclo == null ? "" : ciclo);
+                    stmtInsert.setString(5, campo == null ? "" : campo);
+                    stmtInsert.setString(6, valorAntes == null ? "" : valorAntes);
+                    stmtInsert.setString(7, valorDespues == null ? "" : valorDespues);
+                    stmtInsert.setString(8, usuarioResponsable == null ? "SISTEMA" : usuarioResponsable);
+                    stmtInsert.executeUpdate();
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public List<Object[]> ConsultarLogDiferencias(int idProducto, String lote, int idLinea, String ciclo) {
+        List<Object[]> logs = new ArrayList<Object[]>();
+        try {
+            List lstParameter = SettingJpa.ConsultSettingCategorie("ServerRegistrosLab");
+            if (lstParameter == null || lstParameter.isEmpty()) {
+                return logs;
+            }
+            Object[] objData = (Object[]) lstParameter.get(0);
+            String[] arrData = objData[2].toString().replace("][", "///")
+                    .replace("[", "").replace("]", "").split("///");
+            if (arrData.length < 3) {
+                return logs;
+            }
+
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            try (Connection conn = DriverManager.getConnection("jdbc:mysql://" + arrData[2], arrData[0], arrData[1])) {
+                String sql = "SELECT id_log, campo, valor_antes, valor_despues, usuario_responsable, fecha_registro "
+                        + "FROM log_diferencias_registro WHERE id_producto = ? AND lote_producto = ? AND id_linea = ? "
+                        + "ORDER BY fecha_registro DESC";
+                try (java.sql.PreparedStatement stmt = conn.prepareStatement(sql)) {
+                    stmt.setInt(1, idProducto);
+                    stmt.setString(2, lote == null ? "" : lote);
+                    stmt.setInt(3, idLinea);
+                    try (ResultSet rs = stmt.executeQuery()) {
+                        while (rs.next()) {
+                            logs.add(new Object[]{
+                                rs.getInt("id_log"),
+                                rs.getString("campo"),
+                                rs.getString("valor_antes"),
+                                rs.getString("valor_despues"),
+                                rs.getString("usuario_responsable"),
+                                String.valueOf(rs.getTimestamp("fecha_registro"))
+                            });
+                        }
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return logs;
     }
 }

@@ -44,6 +44,7 @@ public class Visual extends TagSupport {
         List lst_sheet = null;
         List lst_prm = null;
         List lst_tags = null;
+        Object[] parametrosVerificacion = null;
         try {
             //<editor-fold defaultstate="collapsed" desc="ENVIRONMENT VARIABLES">
             // Variables recibidas
@@ -122,6 +123,17 @@ public class Visual extends TagSupport {
                 Batch = BatchCycle[0];
             }
             Client = Optional.ofNullable(pageContext.getRequest().getParameter("Client")).orElse("");
+
+            if (Order > 0 && !Product.isEmpty() && !Batch.isEmpty()) {
+                String cicloVerificacion = BatchCycle.length == 2 ? BatchCycle[1] : "";
+                try {
+                    parametrosVerificacion = RegistrosLabJpa.ConsultParametrosLoteVerificar(
+                            Order, Product, Batch, cicloVerificacion);
+                } catch (Exception ex) {
+                    Logger.getLogger(Visual.class.getName()).log(Level.WARNING,
+                            "No fue posible obtener los parámetros de verificación", ex);
+                }
+            }
             //</editor-fold>
             out.print("<section class='section'>");
             if (IdCertificates > 0) {
@@ -134,9 +146,17 @@ public class Visual extends TagSupport {
                 //</editor-fold>
             }
             if (lst_content != null) {
-                out.print(" <div class=\"alert alert-info\"  style=\"display:block; margin-top:10px; background-color: #bae9ff; color: black\">\n"
-                        + "                   ✔️ Registros asociados: <b>" + AmoutReg + "</b> \n"
-                        + "                </div>");
+                out.print("<input type='hidden' id='AmoutRegData' value='" + AmoutReg + "'>");
+                if (parametrosVerificacion != null) {
+                    out.print("<input type='hidden' id='IdProductoVerificar' value='"
+                            + escapeHtmlAttribute(parametrosVerificacion[0]) + "'>");
+                    out.print("<input type='hidden' id='LoteVerificar' value='"
+                            + escapeHtmlAttribute(parametrosVerificacion[1]) + "'>");
+                    out.print("<input type='hidden' id='IdLineaVerificar' value='"
+                            + escapeHtmlAttribute(parametrosVerificacion[2]) + "'>");
+                    out.print("<input type='hidden' id='CicloVerificar' value='"
+                            + escapeHtmlAttribute(parametrosVerificacion[3]) + "'>");
+                }
                 Object[] Obj_Format = (Object[]) lst_content.get(0);
                 out.print("<div class='row'>");
                 out.print("<div class='col-12'>");
@@ -400,6 +420,7 @@ public class Visual extends TagSupport {
                             if (lst_RLab != null && !lst_RLab.isEmpty() && lst_RLab.size() > 0) {
                                 //<editor-fold defaultstate="collapsed" desc="MATERIAL REGISTROS LAB AND GENERACION DE LOTES">
                                 String[] ArgMaterials = Util.parseResult(lst_RLab.get(0));
+                                out.print("<input type='hidden' id='ErrorCount' value='" + ArgMaterials[16] + "'>");
                                 String[] etiquetas = {
                                     "REF1", "LBT1", "REF2", "LBT2", "REF3", "LBT3",
                                     "REF4", "LBT4", "REF5", "LBT5", "REF6", "LBT6",
@@ -414,9 +435,6 @@ public class Visual extends TagSupport {
                                         Html = Html.replace(etiqueta, "<span  class='editable pending' contenteditable='true'>----</span>");
                                     } else {
                                         Html = Html.replace(etiqueta, valor);
-                                    }
-                                    if (ArgMaterials.length == etiquetas.length - 1) {
-                                        
                                     }
                                 }
 
@@ -1076,5 +1094,13 @@ public class Visual extends TagSupport {
             }
         }
         return super.doStartTag();
+    }
+
+    private String escapeHtmlAttribute(Object value) {
+        return String.valueOf(value == null ? "" : value)
+                .replace("&", "&amp;")
+                .replace("\"", "&quot;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;");
     }
 }
