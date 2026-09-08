@@ -8,8 +8,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class LinkBatchRecord {
+
+    private static final Logger LOGGER = Logger.getLogger(LinkBatchRecord.class.getName());
 
     SettingJpaController SettingJpa = new SettingJpaController();
 
@@ -27,6 +31,7 @@ public class LinkBatchRecord {
             password = arr_data[1];
             url = "jdbc:mysql://" + arr_data[2];
         } else {
+            LOGGER.severe("LinkBatchRecord.LinkBatchRecord: no se encontró configuración 'ServerRegistrosLab' en Setting");
             return null;
         }
         List lst_link = SettingJpa.ConsultSettingCategorie("BatchRecordLAB");
@@ -35,6 +40,7 @@ public class LinkBatchRecord {
             Object[] obj_link = (Object[]) lst_link.get(0);
             Qry = obj_link[2].toString();
         } else {
+            LOGGER.severe("LinkBatchRecord.LinkBatchRecord: no se encontró configuración 'BatchRecordLAB' en Setting");
             Qry = "";
             return null;
         }
@@ -59,10 +65,13 @@ public class LinkBatchRecord {
                 return null;
             }
         } catch (SQLException ex) {
+            LOGGER.log(Level.SEVERE, "LinkBatchRecord.LinkBatchRecord: SQLException conectando a " + url, ex);
             return null;
         } catch (ClassNotFoundException ex) {
+            LOGGER.log(Level.SEVERE, "LinkBatchRecord.LinkBatchRecord: ClassNotFoundException", ex);
             return null;
         } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "LinkBatchRecord.LinkBatchRecord: Exception", ex);
             return null;
         }
         //</editor-fold>
@@ -78,6 +87,7 @@ public class LinkBatchRecord {
             password = arr_data[1];
             url = "jdbc:mysql://" + arr_data[2];
         } else {
+            LOGGER.severe("LinkBatchRecord.AttachmentBatchRecord: no se encontró configuración 'ServerGeneracionLotes' en Setting");
             return null;
         }
         List lst_link = SettingJpa.ConsultSettingCategorie("BatchRecordGeneracionLotes");
@@ -86,6 +96,7 @@ public class LinkBatchRecord {
             Object[] obj_link = (Object[]) lst_link.get(0);
             Qry = obj_link[2].toString();
         } else {
+            LOGGER.severe("LinkBatchRecord.AttachmentBatchRecord: no se encontró configuración 'BatchRecordGeneracionLotes' en Setting");
             Qry = "";
             return null;
         }
@@ -122,10 +133,13 @@ public class LinkBatchRecord {
                 return null;
             }
         } catch (SQLException ex) {
+            LOGGER.log(Level.SEVERE, "LinkBatchRecord.AttachmentBatchRecord: SQLException conectando a " + url, ex);
             return null;
         } catch (ClassNotFoundException ex) {
+            LOGGER.log(Level.SEVERE, "LinkBatchRecord.AttachmentBatchRecord: ClassNotFoundException", ex);
             return null;
         } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "LinkBatchRecord.AttachmentBatchRecord: Exception", ex);
             return null;
         }
         //</editor-fold>
@@ -142,6 +156,7 @@ public class LinkBatchRecord {
             password = arr_data[1];
             url = "jdbc:mysql://" + arr_data[2];
         } else {
+            LOGGER.severe("LinkBatchRecord.RGC17BatchRecord: no se encontró configuración 'ServerRegistrosLab' en Setting");
             return null;
         }
         List lst_link = SettingJpa.ConsultSettingCategorie("BatchRecordResumen");
@@ -150,6 +165,7 @@ public class LinkBatchRecord {
             Object[] obj_link = (Object[]) lst_link.get(0);
             Qry = obj_link[2].toString();
         } else {
+            LOGGER.severe("LinkBatchRecord.RGC17BatchRecord: no se encontró configuración 'BatchRecordResumen' en Setting");
             Qry = "";
             return null;
         }
@@ -178,10 +194,13 @@ public class LinkBatchRecord {
                 return null;
             }
         } catch (SQLException ex) {
+            LOGGER.log(Level.SEVERE, "LinkBatchRecord.RGC17BatchRecord: SQLException conectando a " + url, ex);
             return null;
         } catch (ClassNotFoundException ex) {
+            LOGGER.log(Level.SEVERE, "LinkBatchRecord.RGC17BatchRecord: ClassNotFoundException", ex);
             return null;
         } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "LinkBatchRecord.RGC17BatchRecord: Exception", ex);
             return null;
         }
         //</editor-fold>

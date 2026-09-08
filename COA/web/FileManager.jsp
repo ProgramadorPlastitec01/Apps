@@ -145,25 +145,26 @@
 
 
 
-                                    <!-- ================== SUBIDA SOLO EN LOTE ================== -->
-                                    <%                                        if (Permission.contains("[3]")) {
-                                    %>
-                                    <div class="d-flex justify-content-between align-content-center">
+                                    <!-- ================== ENCABEZADO DE LOTE Y BOTÓN PDF UNIFICADO ================== -->
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
                                         <div>
-                                            <h5 class="mb-3">
-                                                <i class="fas fa-folder-open" style="font-size: 20px; color:#dccbff"></i> Archivos del lote:<b style="color:#0b0025"> <%= lote%></b>
+                                            <h5 class="m-0">
+                                                <i class="fas fa-folder-open" style="font-size: 22px; color:#6777ef;"></i> Archivos del lote: <b style="color:#0b0025; font-size:18px;"><%= lote%></b>
                                             </h5>
                                         </div>
-                                        <div class="mb-3">
-                                            <button class="btn btn-green"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#uploadModal">
+                                        <div class="d-flex" style="gap:10px;">
+                                            <button type="button" class="btn btn-danger font-weight-bold mr-2" style="background:#dc3545; border-color:#dc3545; border-radius:6px; box-shadow:0 2px 6px rgba(220,53,69,0.3);" onclick="generarBatchRecordPdfUnificado('<%= cliente%>', '<%= anio%>', '<%= orden%>', '<%= lote%>')">
+                                                <i class="fas fa-file-pdf"></i> Generar Batch Record PDF Unificado
+                                            </button>
+                                            <% if (Permission.contains("[3]")) { %>
+                                            <button type="button" class="btn btn-green" data-bs-toggle="modal" data-bs-target="#uploadModal">
                                                 <i class="fas fa-upload"></i> Subir archivos
                                             </button>
+                                            <% } %>
                                         </div> 
                                     </div>
 
-
+                                    <% if (Permission.contains("[3]")) { %>
                                     <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog">
                                         <div class="modal-dialog modal-md modal-dialog-centered" role="document">
                                             <div class="modal-content">
@@ -209,17 +210,7 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <%
-                                    } else {
-                                    %>
-
-                                    <h5 class="mb-3">
-                                        <i class="fas fa-folder-open text-warning"></i> Archivos del lote: <%= lote%>
-                                    </h5>
-                                    <%
-                                        }
-                                    %>
+                                    <% } %>
                                     <table class="table table-bordered table-hover">
                                         <thead class="table-light">
                                             <tr>
@@ -233,30 +224,37 @@
                                             <%
                                                 if (archivos != null && archivos.length > 0) {
                                                     for (File archivo : archivos) {
+                                                        String relPath = "Certificates/" + cliente + "/" + anio + "/" + orden + "/" + lote + "/" + archivo.getName();
                                             %>
                                             <tr class="file-row">
-                                                <td>Archivo Fisico</td>
+                                                <td>Archivo Físico</td>
                                                 <td><%= archivo.getName()%></td>
                                                 <td class="text-center">
                                                     <div class="btn-group btn-group-sm">
 
-                                                        <!-- VER -->
-                                                        <a class="btn btn-info mr-3"
-                                                           href="Certificates/<%= cliente + "/" + anio + "/" + orden + "/" + lote + "/" + archivo.getName()%>"
+                                                        <!-- VER EN PDF -->
+                                                        <button type="button" class="btn btn-danger mr-2" style="background:#dc3545; border-color:#dc3545;"
+                                                                onclick="verPdfIndividual('Archivo Físico', '<%= archivo.getName()%>', '<%= relPath%>')"
+                                                                title="Ver en formato PDF">
+                                                            <i class="fas fa-file-pdf"></i> PDF
+                                                        </button>
+
+                                                        <!-- VER ORIGINAL -->
+                                                        <a class="btn btn-info mr-2"
+                                                           href="<%= relPath%>"
                                                            target="_blank"
-                                                           title="Ver archivo">
+                                                           title="Ver archivo original">
                                                             <i class="fas fa-eye"></i>
                                                         </a>
 
                                                         <!-- DESCARGAR -->
-                                                        <a class="btn btn-success mr-3"
-                                                           href="Certificates/<%= cliente + "/" + anio + "/" + orden + "/" + lote + "/" + archivo.getName()%>"
+                                                        <a class="btn btn-success mr-2"
+                                                           href="<%= relPath%>"
                                                            download
                                                            title="Descargar archivo">
                                                             <i class="fas fa-download"></i>
                                                         </a>
-                                                        <%                                        if (Permission.contains("[4]")) {
-                                                        %>
+                                                        <% if (Permission.contains("[4]")) { %>
                                                         <!-- ELIMINAR -->
                                                         <button type="button"
                                                                 class="btn btn-danger"
@@ -270,18 +268,14 @@
                                                                                 )">
                                                             <i class="fas fa-trash"></i>
                                                         </button>
-                                                        <%                                        }
-                                                        %>
+                                                        <% } %>
 
                                                     </div>
                                                 </td>
                                             </tr>
                                             <%
                                                 }
-                                            } else {
-                                            %>
-                                            <%
-                                                }
+                                            }
                                             %>
                                             <%
                                                 lst_link = LinkBatch.LinkBatchRecord(orden, lote);
@@ -295,8 +289,15 @@
                                                 <td class="text-center">
                                                     <div class="btn-group btn-group-sm">
 
-                                                        <!-- VER -->
-                                                        <a class="btn btn-info mr-3"
+                                                        <!-- VER EN PDF -->
+                                                        <button type="button" class="btn btn-danger mr-2" style="background:#dc3545; border-color:#dc3545;"
+                                                                onclick="verPdfIndividual('<%= ArgLink[1]%>', '<%= ArgLink[2]%>', '<%= ArgLink[3]%>')"
+                                                                title="Ver en formato PDF">
+                                                            <i class="fas fa-file-pdf"></i> PDF
+                                                        </button>
+
+                                                        <!-- VER ORIGINAL -->
+                                                        <a class="btn btn-info"
                                                            href="<%= ArgLink[3]%>"
                                                            target="_blank"
                                                            title="Ver registro">
@@ -306,8 +307,9 @@
                                                     </div>
                                                 </td>
                                             </tr>    
-                                            <%                                                }
+                                            <%
                                                 }
+                                            }
                                             %>
                                             <%
                                                 String MaterialBatch = "";
@@ -323,8 +325,15 @@
                                                 <td class="text-center">
                                                     <div class="btn-group btn-group-sm">
 
-                                                        <!-- VER -->
-                                                        <a class="btn btn-info mr-3"
+                                                        <!-- VER EN PDF -->
+                                                        <button type="button" class="btn btn-danger mr-2" style="background:#dc3545; border-color:#dc3545;"
+                                                                onclick="verPdfIndividual('<%= ArgCertificate[1]%>', '<%= ArgCertificate[2]%>', '<%= ArgCertificate[3]%>')"
+                                                                title="Ver en formato PDF">
+                                                            <i class="fas fa-file-pdf"></i> PDF
+                                                        </button>
+
+                                                        <!-- VER ORIGINAL -->
+                                                        <a class="btn btn-info"
                                                            href="<%= ArgCertificate[3]%>"
                                                            target="_blank"
                                                            title="Ver registro">
@@ -334,8 +343,9 @@
                                                     </div>
                                                 </td>
                                             </tr>    
-                                            <%                                                }
+                                            <%
                                                 }
+                                            }
                                             %>
                                             <%
                                                 lst_material = LinkBatch.AttachmentBatchRecord(MaterialBatch);
@@ -349,8 +359,15 @@
                                                 <td class="text-center">
                                                     <div class="btn-group btn-group-sm">
 
-                                                        <!-- VER -->
-                                                        <a class="btn btn-info mr-3"
+                                                        <!-- VER EN PDF -->
+                                                        <button type="button" class="btn btn-danger mr-2" style="background:#dc3545; border-color:#dc3545;"
+                                                                onclick="verPdfIndividual('<%= ArgBatch[1]%>', '<%= ArgBatch[3]%>', 'DownloadGL?File_name=<%= ArgBatch[2].trim()%>')"
+                                                                title="Ver en formato PDF">
+                                                            <i class="fas fa-file-pdf"></i> PDF
+                                                        </button>
+
+                                                        <!-- VER ORIGINAL -->
+                                                        <a class="btn btn-info"
                                                            href="DownloadGL?File_name=<%= ArgBatch[2].trim()%>"
                                                            target="_blank"
                                                            title="Ver registro">
@@ -360,57 +377,11 @@
                                                     </div>
                                                 </td>
                                             </tr>    
-                                            <%                                                }
-                                                }
-                                            %>
                                             <%
-                                                lst_summary = LinkBatch.RGC17BatchRecord(orden, lote);
-                                                if (lst_summary != null) {
-                                                    for (int i = 0; i < lst_summary.size(); i++) {
-                                                        String[] ArgSummary = Util.parseResult(lst_summary.get(i));
-                                            %>
-                                            <tr class="file-row">
-                                                <td><%= ArgSummary[0]%></td>
-                                                <td><%= ArgSummary[13]%></td>
-                                                <td class="text-center">
-                                                    <div class="btn-group btn-group-sm">
-                                                        <form action="http://172.16.1.138/Registros_lab/VisorResumen?opc=1"
-                                                              method="post"
-                                                              target="_blank"
-                                                              name="FormVer<%= i%>"
-                                                              id="FormVer<%= i%>"
-                                                              onsubmit="checkSubmit();"
-                                                              style="display:inline;">
-
-                                                            <input type="hidden" name="Txt_orden" value="<%= ArgSummary[1]%>" />
-                                                            <input type="hidden" name="Cbx_producto" value="<%= ArgSummary[2]%>" />
-                                                            <input type="hidden" name="Cbx_lote" value="<%= ArgSummary[3]%>" />
-                                                            <input type="hidden" name="Txt_fecha_inicio" value="<%= ArgSummary[4]%>" />
-                                                            <input type="hidden" name="Txt_fecha_fin" value="<%= ArgSummary[5]%>" />
-                                                            <input type="hidden" name="Txt_hora_inicio" value="<%= ArgSummary[6]%>" />
-                                                            <input type="hidden" name="Txt_hora_fin" value="<%= ArgSummary[7]%>" />
-                                                            <input type="hidden" name="Txt_numero_certificado" value="<%= ArgSummary[8]%>" />
-                                                            <input type="hidden" name="Txt_fecha_despacho" value="<%= ArgSummary[9]%>" />
-                                                            <input type="hidden" name="Txt_datos_totales" value="<%= ArgSummary[10]%>" />
-                                                            <input type="hidden" name="Txt_usuario_responsable" value="<%= ArgSummary[11]%>" />
-                                                            <input type="hidden" name="Id_resumen" value="<%= ArgSummary[12]%>" />
-                                                            <input type="hidden" name="loteCola" value="" />
-
-                                                            <button type="submit"
-                                                                    class="btn btn-info mr-3"
-                                                                    title="Ver resumen"
-                                                                    style="padding: .25rem .5rem;">
-                                                                <i class="fas fa-eye"></i>
-                                                            </button>
-
-                                                        </form>
-
-                                                    </div>
-                                                </td>
-                                            </tr>    
-                                            <%                                                }
                                                 }
+                                            }
                                             %>
+                                            
                                         </tbody>
                                     </table>
 
@@ -597,9 +568,116 @@
             }
         </script>
 
+        <script src="Interface/Content/Assets/js/jspdf.umd.min.js"></script>
         <script src="Interface/Content/Assets/modules/izitoast/js/iziToast.min.js"></script>
         <script src="Interface/Content/Assets/modules/sweetalert/sweetalert.min.js"></script>
         <script src="Interface/Content/Assets/js/BoostratModel.js"></script>
 
+        <script>
+            // A partir de aquí, la generación de PDF (individual y Batch Record unificado) ya NO
+            // se hace en el navegador con html2canvas/jsPDF: se delega a HtmlToPdfServlet y
+            // BatchRecordPdfGenerateServlet, que renderizan con Chrome headless en el servidor
+            // (mismo motor real de "Imprimir > Guardar como PDF") y guardan una copia del PDF
+            // resultante junto a los demás documentos del lote.
+
+            function verPdfIndividual(tipo, nombre, url) {
+                if (!url) return;
+
+                if (url.toLowerCase().endsWith(".pdf")) {
+                    window.open(url, '_blank');
+                    return;
+                }
+
+                if (url.toLowerCase().match(/\.(png|jpg|jpeg|gif)$/)) {
+                    const { jsPDF } = window.jspdf;
+                    const doc = new jsPDF('p', 'mm', 'a4');
+                    const img = new Image();
+                    img.crossOrigin = "Anonymous";
+                    img.onload = function () {
+                        const imgWidth = 198;
+                        const imgHeight = (img.height * imgWidth) / img.width;
+                        doc.addImage(img, 'JPEG', 6, 6, imgWidth, Math.min(imgHeight, 280));
+                        window.open(doc.output('bloburl'), '_blank');
+                    };
+                    img.src = url;
+                    return;
+                }
+
+                if (typeof iziToast !== "undefined") {
+                    iziToast.info({
+                        title: 'Generando PDF',
+                        message: 'Generando PDF del registro en el servidor...',
+                        position: 'topRight',
+                        timeout: 2500
+                    });
+                }
+
+                window.open('HtmlToPdfServlet?proxyUrl=' + encodeURIComponent(url), '_blank');
+            }
+
+            function verPdfResumenLab(formId) {
+                const form = document.getElementById(formId);
+                if (!form) return;
+
+                if (typeof iziToast !== "undefined") {
+                    iziToast.info({
+                        title: 'Generando PDF',
+                        message: 'Generando PDF del resumen de Registros LAB en el servidor...',
+                        position: 'topRight',
+                        timeout: 2500
+                    });
+                }
+
+                // Reenvía el mismo formulario (acción + campos) hacia HtmlToPdfServlet, agregando
+                // "proxyUrl" para indicarle a qué sistema remoto conectarse, y abre el PDF resultante
+                // en una pestaña nueva.
+                const proxyForm = document.createElement('form');
+                proxyForm.method = 'POST';
+                proxyForm.action = 'HtmlToPdfServlet';
+                proxyForm.target = '_blank';
+
+                const addHidden = function (name, value) {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = name;
+                    input.value = value;
+                    proxyForm.appendChild(input);
+                };
+
+                addHidden('proxyUrl', form.action);
+                form.querySelectorAll('input').forEach(function (input) {
+                    addHidden(input.name, input.value);
+                });
+
+                document.body.appendChild(proxyForm);
+                proxyForm.submit();
+                proxyForm.remove();
+            }
+
+            function generarBatchRecordPdfUnificado(cliente, anio, orden, lote) {
+                if (!orden || !lote) {
+                    alert("No hay información suficiente del lote para generar el Batch Record.");
+                    return;
+                }
+
+                if (typeof iziToast !== "undefined") {
+                    iziToast.info({
+                        title: 'Batch Record Auditoría',
+                        message: 'Compilando expediente completo en el servidor, esto puede tardar unos segundos...',
+                        position: 'topRight',
+                        timeout: 4000
+                    });
+                }
+
+                const params = new URLSearchParams({
+                    orden: orden,
+                    lote: lote,
+                    cliente: cliente || '',
+                    anio: anio || ''
+                });
+
+                window.open('BatchRecordPdfGenerateServlet?' + params.toString(), '_blank');
+            }
+        </script>
     </body>
 </html>

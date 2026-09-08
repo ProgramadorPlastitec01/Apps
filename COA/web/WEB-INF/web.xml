@@ -113,4 +113,14 @@
         <error-code>404</error-code>
         <location>/error-404</location>
     </error-page>
+    <context-param>
+        <description>URL del Servidor Office Platform</description>
+        <param-name>OFFICE_PLATFORM_URL</param-name>
+        <param-value>http://172.16.1.182:8080</param-value>
+    </context-param>
+    <context-param>
+        <description>API Key de Integracion de Office Platform</description>
+        <param-name>OFFICE_PLATFORM_API_KEY</param-name>
+        <param-value>opk_VjxckrMO0CmPWAL1-Lfre_V4M_MejXshbU4Lgs6cltY</param-value>
+    </context-param>
 </web-app>
