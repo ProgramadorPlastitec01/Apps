@@ -236,6 +236,13 @@ public class RemoteHtmlFetcher {
                 // the full content instead of just the visible scroll viewport.
                 + ".jqte, .jqte_editor { height:auto !important; max-height:none !important; overflow:visible !important; }"
                 + ".jqte_toolbar { display:none !important; }"
+                // Certificate/registro templates flag empty fields with a red
+                // dashed ".pending" box while they're still being filled in.
+                // A printed/exported document should read as finished, not as
+                // a draft with validation errors, so neutralize that styling
+                // regardless of whether the source page's own server-side
+                // cleanup already stripped the "pending" class.
+                + ".pending, .editable.pending, [class*=\"pending\"] { background-color:transparent !important; border:none !important; color:inherit !important; }"
                 + "</style>";
 
         if (html.toLowerCase().contains("</head>")) {

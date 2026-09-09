@@ -71,6 +71,7 @@
                                 "<button class=\"btn btn-sm btn-danger me-2 mr-2\" title=\"Eliminar fila o grupo\"><i class=\"fas fa-times\"></i></button>",
                                 ""
                         );
+                        Html = Html.replaceAll("editable pending", "editable");
                         out.print(Html);
                     %>
                 </div>
