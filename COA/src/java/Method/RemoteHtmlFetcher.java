@@ -26,6 +26,11 @@ public class RemoteHtmlFetcher {
         return fetch(targetUrl, postParams, appBaseUrl, true);
     }
 
+    /** Kept for backwards compatibility: no session cookie forwarded. */
+    public static String fetch(String targetUrl, Map<String, String> postParams, String appBaseUrl, boolean stripScripts) throws IOException {
+        return fetch(targetUrl, postParams, appBaseUrl, stripScripts, null);
+    }
+
     /**
      * @param stripScripts Whether to strip &lt;script&gt; tags from the fetched document.
      *      Stripping is meant for the old "open in a live, visible browser tab" viewer,
@@ -34,8 +39,17 @@ public class RemoteHtmlFetcher {
      *      some source documents (e.g. R-PRF-007) actually need their own script to run in
      *      order to populate their printable content (a contenteditable/textarea-backed
      *      template), so PDF generation must pass stripScripts=false or it prints blank.
+     * @param cookieHeader The original caller's "Cookie" header (e.g. JSESSIONID), or null.
+     *      Some documents (e.g. "Certificado COA" via Generate?opt=9) live in COA's own
+     *      webapp and require a logged-in session (they read session attributes like
+     *      "Rol/Nombres" directly). The user's browser already carries that session cookie
+     *      when they click "PDF" themselves, but this server-side fetch is a fresh,
+     *      cookie-less request — without forwarding the caller's session it hits an
+     *      unauthenticated code path and renders the wrong page (login/menu) instead of the
+     *      certificate. Harmless to pass along even for a different app/context (e.g.
+     *      Registros_lab): an unrecognized JSESSIONID is simply ignored there.
      */
-    public static String fetch(String targetUrl, Map<String, String> postParams, String appBaseUrl, boolean stripScripts) throws IOException {
+    public static String fetch(String targetUrl, Map<String, String> postParams, String appBaseUrl, boolean stripScripts, String cookieHeader) throws IOException {
         String resolvedUrl = resolveUrl(targetUrl, appBaseUrl);
 
         HttpURLConnection conn = null;
@@ -46,6 +60,9 @@ public class RemoteHtmlFetcher {
             conn.setReadTimeout(15000);
             conn.setDoInput(true);
             conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) COA-BatchRecord/1.0");
+            if (cookieHeader != null && !cookieHeader.trim().isEmpty()) {
+                conn.setRequestProperty("Cookie", cookieHeader);
+            }
 
             if (postParams != null && !postParams.isEmpty()) {
                 conn.setRequestMethod("POST");
@@ -90,19 +107,32 @@ public class RemoteHtmlFetcher {
 
             String html = new String(rawBytes, detectCharset(conn.getContentType(), rawBytes));
             String baseUrl = resolvedUrl.substring(0, resolvedUrl.lastIndexOf('/') + 1);
-
-            // Ignore whatever charset the source page itself declares: we already
-            // decoded its bytes above and always write the temp file as UTF-8
-            // (see ChromeHeadlessPdf), so a stale <meta charset=ISO-8859-1> left
-            // in place would make Chrome misread our correctly-decoded content
-            // right back into mojibake. Strip any declaration and force UTF-8.
-            html = html.replaceAll("(?i)<meta[^>]*charset\\s*=[^>]*>", "");
             String headInjection = "<meta charset=\"UTF-8\"><base href=\"" + baseUrl + "\">";
 
-            if (html.contains("<head>")) {
-                html = html.replace("<head>", "<head>" + headInjection);
-            } else if (html.contains("<HEAD>")) {
-                html = html.replace("<HEAD>", "<HEAD>" + headInjection);
+            // Some of these pages embed a client-side "export to Excel" script
+            // whose template string contains literal text like "<head>" and
+            // "<meta ... charset=...>" (it builds a throwaway HTML document for
+            // the exported file). A plain String.replace()/replaceAll() over the
+            // whole document would touch those occurrences too — corrupting the
+            // script's string literal and leaking its raw text into the printed
+            // page. Scope both operations to the real <head>...</head> block only.
+            Matcher headOpen = HEAD_OPEN_TAG.matcher(html);
+            if (headOpen.find()) {
+                int headOpenEnd = headOpen.end();
+                Matcher headClose = HEAD_CLOSE_TAG.matcher(html);
+                int headCloseStart = headClose.find(headOpenEnd) ? headClose.start() : html.length();
+
+                String before = html.substring(0, headOpenEnd);
+                // Ignore whatever charset the source page itself declares: we
+                // already decoded its bytes above and always write the temp file
+                // as UTF-8 (see ChromeHeadlessPdf), so a stale <meta
+                // charset=ISO-8859-1> left in place would make Chrome misread our
+                // correctly-decoded content right back into mojibake.
+                String headContent = html.substring(headOpenEnd, headCloseStart)
+                        .replaceAll("(?i)<meta[^>]*charset\\s*=[^>]*>", "");
+                String after = html.substring(headCloseStart);
+
+                html = before + headInjection + headContent + after;
             } else {
                 html = headInjection + html;
             }
@@ -131,6 +161,8 @@ public class RemoteHtmlFetcher {
         return base + relative;
     }
 
+    private static final Pattern HEAD_OPEN_TAG = Pattern.compile("(?i)<head[^>]*>");
+    private static final Pattern HEAD_CLOSE_TAG = Pattern.compile("(?i)</head>");
     private static final Pattern CONTENT_TYPE_CHARSET = Pattern.compile("charset=([^;\\s]+)", Pattern.CASE_INSENSITIVE);
     private static final Pattern META_CHARSET = Pattern.compile("<meta[^>]+charset=[\"']?([^\"';>\\s]+)", Pattern.CASE_INSENSITIVE);
 
@@ -229,8 +261,16 @@ public class RemoteHtmlFetcher {
                 + "});"
                 + "}, 500);</script>";
 
-        if (html.toLowerCase().contains("</body>")) {
-            return html.replaceFirst("(?i)</body>", script + "</body>");
+        // Use the LAST "</body>" rather than the first: some of these pages
+        // embed a client-side "export to Excel" script whose template string
+        // contains a literal, throwaway "...</table></body></html>" earlier in
+        // the document (see the <head> handling above) — replaceFirst would
+        // inject our script into the middle of that string instead of before
+        // the page's real closing </body>.
+        String lowerHtml = html.toLowerCase();
+        int bodyCloseIdx = lowerHtml.lastIndexOf("</body>");
+        if (bodyCloseIdx >= 0) {
+            return html.substring(0, bodyCloseIdx) + script + html.substring(bodyCloseIdx);
         }
         return html + script;
     }

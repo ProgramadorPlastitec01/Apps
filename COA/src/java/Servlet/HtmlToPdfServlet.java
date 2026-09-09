@@ -62,7 +62,7 @@ public class HtmlToPdfServlet extends HttpServlet {
 
         File workDir = new File(System.getProperty("java.io.tmpdir"), "coa-pdf-" + System.nanoTime());
         try {
-            String html = RemoteHtmlFetcher.fetch(targetUrl.trim(), postParams.isEmpty() ? null : postParams, appBaseUrl, false);
+            String html = RemoteHtmlFetcher.fetch(targetUrl.trim(), postParams.isEmpty() ? null : postParams, appBaseUrl, false, request.getHeader("Cookie"));
             html = RemoteHtmlFetcher.injectPrintStyle(html);
 
             File pdfFile = ChromeHeadlessPdf.renderHtmlToPdf(html, workDir);

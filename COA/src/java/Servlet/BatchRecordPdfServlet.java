@@ -33,7 +33,8 @@ public class BatchRecordPdfServlet extends HttpServlet {
                 return;
             }
 
-            Map<String, Object> resultado = BatchRecordManifest.build(orden, lote, cliente, anio);
+            Map<String, Object> resultado = BatchRecordManifest.build(orden, lote, cliente, anio,
+                    getServletContext().getRealPath("/Certificates"));
             response.getWriter().print(new Gson().toJson(resultado));
         } catch (Exception ex) {
             getServletContext().log("Error generando manifest de Batch Record PDF", ex);

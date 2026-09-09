@@ -2,6 +2,7 @@ package Method;
 
 import Connection.LinkBatchRecord;
 import Controller.CertificatesJpaController;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,18 +11,53 @@ import java.util.Map;
 /**
  * Builds the list of documents that make up a Batch Record for a given
  * orden/lote, pulling from every source system involved (Registros LAB,
- * Certificados COA, Generación de Lotes, Registros LAB Resumen). Shared by
- * BatchRecordPdfServlet (JSON manifest used by older client-side code) and
- * BatchRecordPdfGenerateServlet (server-side PDF generation), so the list of
- * documents never drifts between the two.
+ * Certificados COA, Generación de Lotes, Registros LAB Resumen, and manually
+ * uploaded physical files). Shared by BatchRecordPdfServlet (JSON manifest
+ * used by older client-side code) and BatchRecordPdfGenerateServlet
+ * (server-side PDF generation), so the list of documents never drifts
+ * between the two.
  */
 public class BatchRecordManifest {
 
+    /** Kept for backwards compatibility: no physical-files folder to scan. */
     public static Map<String, Object> build(String orden, String lote, String cliente, String anio) throws Exception {
+        return build(orden, lote, cliente, anio, null);
+    }
+
+    /**
+     * @param certificatesBasePath Absolute path to the app's "Certificates" storage
+     *      root (e.g. getServletContext().getRealPath("/Certificates")), used to list
+     *      manually uploaded physical files (the same folder FileManager.jsp browses
+     *      and FileManagerServlet uploads into). Pass null to skip that step (e.g. for
+     *      contexts that don't have a ServletContext handy).
+     */
+    public static Map<String, Object> build(String orden, String lote, String cliente, String anio, String certificatesBasePath) throws Exception {
         LinkBatchRecord linkBatch = new LinkBatchRecord();
         CertificatesJpaController certJpa = new CertificatesJpaController();
 
         List<Map<String, Object>> listaDocumentos = new ArrayList<Map<String, Object>>();
+
+        // 0. Archivos físicos subidos manualmente al lote (misma carpeta que
+        // FileManager.jsp lista y FileManagerServlet usa para las subidas).
+        if (certificatesBasePath != null && cliente != null && anio != null) {
+            File lotDir = new File(certificatesBasePath + File.separator + cliente + File.separator + anio
+                    + File.separator + orden + File.separator + lote);
+            File[] archivos = lotDir.listFiles();
+            if (archivos != null) {
+                for (File archivo : archivos) {
+                    if (!archivo.isFile()) {
+                        continue;
+                    }
+                    Map<String, Object> doc = new HashMap<String, Object>();
+                    doc.put("origen", "Archivo Físico");
+                    doc.put("tipo", "Archivo Físico");
+                    doc.put("nombre", archivo.getName());
+                    doc.put("url", "Certificates/" + cliente + "/" + anio + "/" + orden + "/" + lote + "/" + archivo.getName());
+                    doc.put("categoria", "fisico");
+                    listaDocumentos.add(doc);
+                }
+            }
+        }
 
         // 1. Links Registros LAB
         List lstLink = linkBatch.LinkBatchRecord(orden, lote);

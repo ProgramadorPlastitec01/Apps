@@ -12,12 +12,18 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 /**
  * Generates the unified Batch Record PDF entirely on the server: renders a
@@ -54,7 +60,8 @@ public class BatchRecordPdfGenerateServlet extends HttpServlet {
         List<File> individualPdfs = new ArrayList<File>();
 
         try {
-            Map<String, Object> manifest = BatchRecordManifest.build(orden, lote, cliente, anio);
+            Map<String, Object> manifest = BatchRecordManifest.build(orden, lote, cliente, anio,
+                    getServletContext().getRealPath("/Certificates"));
             @SuppressWarnings("unchecked")
             List<Map<String, Object>> documentos = (List<Map<String, Object>>) manifest.get("documentos");
 
@@ -69,6 +76,14 @@ public class BatchRecordPdfGenerateServlet extends HttpServlet {
             // 2. Cada documento, renderizado con su propio <base href> intacto
             for (Map<String, Object> item : documentos) {
                 try {
+                    if ("fisico".equals(item.get("categoria"))) {
+                        File physicalPdf = renderPhysicalFile(item, workDir);
+                        if (physicalPdf != null) {
+                            individualPdfs.add(physicalPdf);
+                        }
+                        continue;
+                    }
+
                     String targetUrl = (String) item.get("url");
                     @SuppressWarnings("unchecked")
                     Map<String, String> postParams = (Map<String, String>) item.get("postParams");
@@ -82,7 +97,7 @@ public class BatchRecordPdfGenerateServlet extends HttpServlet {
 
                     getServletContext().log("DEBUG doc [" + item.get("nombre") + "]: fetchUrl=" + fetchUrl + " tienePostParams=" + (postParams != null));
 
-                    String html = RemoteHtmlFetcher.fetch(fetchUrl, postParams, appBaseUrl, false);
+                    String html = RemoteHtmlFetcher.fetch(fetchUrl, postParams, appBaseUrl, false, request.getHeader("Cookie"));
                     getServletContext().log("DEBUG doc [" + item.get("nombre") + "]: HTML obtenido, longitud=" + html.length() + " caracteres");
 
                     html = RemoteHtmlFetcher.injectPrintStyle(html);
@@ -135,6 +150,62 @@ public class BatchRecordPdfGenerateServlet extends HttpServlet {
         } finally {
             deleteRecursively(workDir);
         }
+    }
+
+    /**
+     * Manually uploaded physical files (PDFs, images) don't need the
+     * HTML-fetch + Chrome pipeline — they're not web pages. A PDF gets merged
+     * as-is; an image is dropped onto a single A4 page via PDFBox. Anything
+     * else (Word/Excel, etc.) isn't previewable as a PDF today — same
+     * limitation FileManager.jsp's own "PDF" button has for those types — so
+     * it's skipped with a log entry rather than silently producing garbage.
+     */
+    private File renderPhysicalFile(Map<String, Object> item, File workDir) throws IOException {
+        String relPath = (String) item.get("url");
+        String realPath = getServletContext().getRealPath("/" + relPath);
+        File source = realPath != null ? new File(realPath) : null;
+        if (source == null || !source.isFile()) {
+            getServletContext().log("Archivo físico no encontrado para el Batch Record: " + relPath);
+            return null;
+        }
+
+        String nameLower = source.getName().toLowerCase();
+        if (!workDir.exists()) {
+            workDir.mkdirs();
+        }
+
+        if (nameLower.endsWith(".pdf")) {
+            File copy = new File(workDir, UUID.randomUUID().toString() + ".pdf");
+            Files.copy(source.toPath(), copy.toPath());
+            return copy;
+        }
+
+        if (nameLower.endsWith(".png") || nameLower.endsWith(".jpg") || nameLower.endsWith(".jpeg") || nameLower.endsWith(".gif")) {
+            File imagePdf = new File(workDir, UUID.randomUUID().toString() + ".pdf");
+            try (PDDocument doc = new PDDocument()) {
+                PDPage page = new PDPage(PDRectangle.A4);
+                doc.addPage(page);
+                PDImageXObject image = PDImageXObject.createFromFile(source.getAbsolutePath(), doc);
+
+                float margin = 20f;
+                float maxWidth = page.getMediaBox().getWidth() - margin * 2;
+                float maxHeight = page.getMediaBox().getHeight() - margin * 2;
+                float scale = Math.min(maxWidth / image.getWidth(), maxHeight / image.getHeight());
+                float drawWidth = image.getWidth() * scale;
+                float drawHeight = image.getHeight() * scale;
+                float x = (page.getMediaBox().getWidth() - drawWidth) / 2;
+                float y = (page.getMediaBox().getHeight() - drawHeight) / 2;
+
+                try (PDPageContentStream content = new PDPageContentStream(doc, page)) {
+                    content.drawImage(image, x, y, drawWidth, drawHeight);
+                }
+                doc.save(imagePdf);
+            }
+            return imagePdf;
+        }
+
+        getServletContext().log("Archivo físico con formato no soportado para el Batch Record (se omite): " + source.getName());
+        return null;
     }
 
     private String safe(String value) {
