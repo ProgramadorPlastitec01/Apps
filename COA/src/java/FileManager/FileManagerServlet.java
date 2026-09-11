@@ -3,6 +3,8 @@ package FileManager;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -18,6 +20,21 @@ import javax.servlet.http.Part;
         maxRequestSize = 1024 * 1024 * 100  // 100MB
 )
 public class FileManagerServlet extends HttpServlet {
+
+    // Únicamente los tipos que el generador del Batch Record unificado sabe
+    // fusionar de forma nativa (PDF directo, imagen dibujada en una página).
+    // Los formatos de Office (doc/docx/xls/xlsx/ppt/pptx) requerían convertir
+    // a PDF con LibreOffice headless, pero soffice.bin crashea de forma
+    // consistente al ser lanzado como hijo de Tomcat en este servidor
+    // (interferencia del EDR corporativo con procesos hijos de un servicio
+    // de red) y no se puede tocar esa política, así que se excluyen del todo
+    // en vez de dejar al usuario subir algo que el unificado nunca va a
+    // poder incluir. Debe reflejar el "accept" del input de FileManager.jsp
+    // y lo que soporta renderPhysicalFile/renderRemoteBinaryFile en
+    // BatchRecordPdfGenerateServlet.
+    private static final List<String> ALLOWED_EXTENSIONS = Arrays.asList(
+            ".pdf", ".png", ".jpg", ".jpeg", ".gif"
+    );
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -42,6 +59,7 @@ public class FileManagerServlet extends HttpServlet {
         }
 
         boolean uploaded = false;
+        boolean rejected = false;
 
         for (Part part : request.getParts()) {
 
@@ -50,17 +68,28 @@ public class FileManagerServlet extends HttpServlet {
                 String fileName = Paths.get(part.getSubmittedFileName())
                                        .getFileName().toString();
 
+                String nameLower = fileName.toLowerCase();
+                int dot = nameLower.lastIndexOf('.');
+                String ext = dot >= 0 ? nameLower.substring(dot) : "";
+                if (!ALLOWED_EXTENSIONS.contains(ext)) {
+                    rejected = true;
+                    continue;
+                }
+
                 part.write(uploadPath + File.separator + fileName);
                 uploaded = true;
             }
         }
+
+        String msg = uploaded ? (rejected ? "upload_partial" : "upload_success")
+                : (rejected ? "error_extension" : "error_upload");
 
         String redirect = "FileManager.jsp"
                 + "?cliente=" + cliente
                 + "&anio=" + anio
                 + "&orden=" + orden
                 + "&lote=" + lote
-                + "&msg=" + (uploaded ? "upload_success" : "error_upload");
+                + "&msg=" + msg;
 
         response.sendRedirect(redirect);
     }

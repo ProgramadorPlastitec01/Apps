@@ -179,7 +179,7 @@
                                                     </button>
                                                 </div>
 
-                                                <form action="FileManagerServlet" method="post" enctype="multipart/form-data">
+                                                <form id="uploadForm" action="FileManagerServlet" method="post" enctype="multipart/form-data">
 
                                                     <div class="modal-body">
 
@@ -190,8 +190,12 @@
 
                                                         <div class="form-group">
                                                             <label>Seleccionar archivos</label>
-                                                            <input type="file" name="files" multiple class="form-control"
-                                                                   accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg">
+                                                            <input type="file" id="filesInput" name="files" multiple class="form-control"
+                                                                   accept=".pdf,.png,.jpg,.jpeg,.gif">
+                                                            <small class="form-text text-muted">
+                                                                Solo pdf, png, jpg, jpeg, gif. No se aceptan Word/Excel/PowerPoint
+                                                                (doc, docx, xls, xlsx, ppt, pptx): no se pueden incluir en el Batch Record unificado.
+                                                            </small>
                                                         </div>
 
                                                     </div>
@@ -521,6 +525,22 @@
                 position: 'bottomRight'
             });
             <%
+            } else if ("upload_partial".equals(msg)) {
+            %>
+            iziToast.warning({
+                title: 'Subida parcial',
+                message: 'Algunos archivos se subieron, pero otros se rechazaron por tener un formato no permitido (solo pdf, png, jpg, jpeg, gif)',
+                position: 'bottomRight'
+            });
+            <%
+            } else if ("error_extension".equals(msg)) {
+            %>
+            iziToast.error({
+                title: 'Formato no permitido',
+                message: 'El archivo no se subió: solo se permiten pdf, png, jpg, jpeg, gif (Word/Excel/PowerPoint no se pueden incluir en el Batch Record unificado)',
+                position: 'bottomRight'
+            });
+            <%
             } else if ("delete_success".equals(msg)) {
             %>
             iziToast.warning({
@@ -549,6 +569,68 @@
             %>
         </script>
         <script>
+            // Misma lista blanca que valida FileManagerServlet en el servidor
+            // (ver ALLOWED_EXTENSIONS): solo pdf/imagen, porque es lo único que
+            // el Batch Record PDF unificado sabe fusionar. Esto es solo una
+            // alerta temprana en el navegador; la validación real (la que no
+            // se puede saltar) es la del servidor.
+            var ALLOWED_UPLOAD_EXTENSIONS = ['.pdf', '.png', '.jpg', '.jpeg', '.gif'];
+
+            function extensionPermitida(nombreArchivo) {
+                var nombre = nombreArchivo.toLowerCase();
+                return ALLOWED_UPLOAD_EXTENSIONS.some(function (ext) {
+                    return nombre.endsWith(ext);
+                });
+            }
+
+            (function () {
+                var filesInput = document.getElementById('filesInput');
+                var uploadForm = document.getElementById('uploadForm');
+                if (!filesInput || !uploadForm) {
+                    return;
+                }
+
+                function archivosInvalidos() {
+                    var invalidos = [];
+                    for (var i = 0; i < filesInput.files.length; i++) {
+                        if (!extensionPermitida(filesInput.files[i].name)) {
+                            invalidos.push(filesInput.files[i].name);
+                        }
+                    }
+                    return invalidos;
+                }
+
+                function avisarInvalidos(invalidos) {
+                    if (typeof iziToast !== "undefined") {
+                        iziToast.error({
+                            title: 'Formato no permitido',
+                            message: 'No se puede subir el archivo. Solo se permiten pdf, png, jpg, jpeg, gif.',
+                            position: 'bottomRight',
+                            timeout: 6000
+                        });
+                    } else {
+                        alert('No se puede subir: ' + invalidos.join(', ') + '. Solo se permiten pdf, png, jpg, jpeg, gif.');
+                    }
+                }
+
+                filesInput.addEventListener('change', function () {
+                    var invalidos = archivosInvalidos();
+                    if (invalidos.length > 0) {
+                        avisarInvalidos(invalidos);
+                        filesInput.value = '';
+                    }
+                });
+
+                uploadForm.addEventListener('submit', function (e) {
+                    var invalidos = archivosInvalidos();
+                    if (invalidos.length > 0) {
+                        e.preventDefault();
+                        avisarInvalidos(invalidos);
+                        filesInput.value = '';
+                    }
+                });
+            })();
+
             function filterItems() {
                 const filter = document.getElementById("filterInput").value.toLowerCase();
 

@@ -78,7 +78,7 @@ public class LinkBatchRecord {
     }
 
     public List AttachmentBatchRecord(String DataBatch) throws Exception {
-        //<editor-fold defaultstate="collapsed" desc="LinkBatchRecord">
+        //<editor-fold defaultstate="collapsed" desc="LinkBatchRecord GENERACION LOTES">
         List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerGeneracionLotes");
         if (lst_parameter != null) {
             Object[] obj_data = (Object[]) lst_parameter.get(0);
@@ -107,13 +107,20 @@ public class LinkBatchRecord {
             if (conn != null && !Qry.equals("")) {
                 if (!DataBatch.equals("")) {
                     String[] ArgBatch = DataBatch.split(",");
+                    List<String> lst_lotes = new ArrayList<String>();
+                    for (int i = 0; i < ArgBatch.length; i++) {
+                        String[] SubBatch = ArgBatch[i].split("/");
+                        for (int j = 0; j < SubBatch.length; j++) {
+                            lst_lotes.add(SubBatch[j]);
+                        }
+                    }
                     String Batch = "";
                     Batch = "(";
-                    for (int i = 0; i < ArgBatch.length; i++) {
-                        if (i == ArgBatch.length - 1) {
-                            Batch += "'" + ArgBatch[i] + "'";
+                    for (int i = 0; i < lst_lotes.size(); i++) {
+                        if (i == lst_lotes.size() - 1) {
+                            Batch += "'" + lst_lotes.get(i) + "'";
                         } else {
-                            Batch += "'" + ArgBatch[i] + "',";
+                            Batch += "'" + lst_lotes.get(i) + "',";
                         }
                     }
                     Batch += ")";
@@ -205,5 +212,7 @@ public class LinkBatchRecord {
         }
         //</editor-fold>
     }
+    
+    
 
 }

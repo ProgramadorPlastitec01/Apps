@@ -102,46 +102,22 @@ public class BatchRecordManifest {
                 for (Object item : lstMat) {
                     String[] arg = Util.parseResult(item);
                     if (arg.length >= 4) {
+                        // arg[2] (Nombre) es el nombre real del archivo en disco (con
+                        // extensión, ej. "C17601-36B13pH_Y_C._20260910_1240.pdf");
+                        // arg[3] (Descripcion) es solo la etiqueta mostrada en pantalla
+                        // (ej. "C17601-36B13pH Y C.", sin extensión). El servidor necesita
+                        // el nombre real (con extensión) para saber cómo renderizarlo, y
+                        // codificado porque puede traer espacios.
+                        String archivoReal = arg[2].trim();
                         Map<String, Object> doc = new HashMap<String, Object>();
                         doc.put("origen", "Generación de Lotes");
                         doc.put("tipo", arg[1]);
                         doc.put("nombre", arg[3]);
-                        doc.put("url", "DownloadGL?File_name=" + arg[2].trim());
+                        doc.put("archivo", archivoReal);
+                        doc.put("url", "DownloadGL?File_name=" + java.net.URLEncoder.encode(archivoReal, "UTF-8"));
                         doc.put("categoria", "anexo");
                         listaDocumentos.add(doc);
                     }
-                }
-            }
-        }
-
-        // 4. Reportes Resumen (VisorResumen Registros LAB)
-        List lstSummary = linkBatch.RGC17BatchRecord(orden, lote);
-        if (lstSummary != null) {
-            for (Object item : lstSummary) {
-                String[] arg = Util.parseResult(item);
-                if (arg.length >= 14) {
-                    Map<String, Object> doc = new HashMap<String, Object>();
-                    doc.put("origen", "Registros LAB (Resumen)");
-                    doc.put("tipo", arg[0]);
-                    doc.put("nombre", arg[13]);
-                    doc.put("categoria", "summary");
-                    Map<String, String> postParams = new HashMap<String, String>();
-                    postParams.put("Txt_orden", arg[1]);
-                    postParams.put("Cbx_producto", arg[2]);
-                    postParams.put("Cbx_lote", arg[3]);
-                    postParams.put("Txt_fecha_inicio", arg[4]);
-                    postParams.put("Txt_fecha_fin", arg[5]);
-                    postParams.put("Txt_hora_inicio", arg[6]);
-                    postParams.put("Txt_hora_fin", arg[7]);
-                    postParams.put("Txt_numero_certificado", arg[8]);
-                    postParams.put("Txt_fecha_despacho", arg[9]);
-                    postParams.put("Txt_datos_totales", arg[10]);
-                    postParams.put("Txt_usuario_responsable", arg[11]);
-                    postParams.put("Id_resumen", arg[12]);
-                    postParams.put("loteCola", "");
-                    doc.put("postParams", postParams);
-                    doc.put("postUrl", "http://172.16.1.164:8084/Registros_lab/VisorResumen?opc=1");
-                    listaDocumentos.add(doc);
                 }
             }
         }

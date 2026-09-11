@@ -1876,9 +1876,9 @@ public class Tag_visor_plumat extends TagSupport {
                     }
                     String respons_iz = "";
                     String respons_dc = "";
-                    if (obj_insu[16] != null) {
-                        if (obj_insu[16].toString().contains("///")) {
-                            String[] respoData = obj_insu[16].toString().split("///");
+                    if (obj_insu[18] != null) {
+                        if (obj_insu[18].toString().contains("///")) {
+                            String[] respoData = obj_insu[18].toString().split("///");
                             for (int i = 0; i < respoData.length; i++) {
                                 if (respoData[i].toString().contains("[IZQ]")) {
                                     respons_iz = respoData[i].toString();
@@ -1887,10 +1887,10 @@ public class Tag_visor_plumat extends TagSupport {
                                 }
                             }
                         } else {
-                            if (obj_insu[16].toString().toString().contains("[IZQ]")) {
-                                respons_iz = obj_insu[16].toString().toString();
-                            } else if (obj_insu[16].toString().toString().contains("[DRC]")) {
-                                respons_dc = obj_insu[16].toString().toString();
+                            if (obj_insu[18].toString().toString().contains("[IZQ]")) {
+                                respons_iz = obj_insu[18].toString().toString();
+                            } else if (obj_insu[18].toString().toString().contains("[DRC]")) {
+                                respons_dc = obj_insu[18].toString().toString();
                             }
                         }
                         respons_iz = respons_iz.replace("[IZQ]", "");

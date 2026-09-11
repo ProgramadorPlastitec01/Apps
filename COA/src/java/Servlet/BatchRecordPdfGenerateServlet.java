@@ -5,6 +5,7 @@ import Method.ChromeHeadlessPdf;
 import Method.RemoteHtmlFetcher;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
@@ -80,6 +81,18 @@ public class BatchRecordPdfGenerateServlet extends HttpServlet {
                         File physicalPdf = renderPhysicalFile(item, workDir);
                         if (physicalPdf != null) {
                             individualPdfs.add(physicalPdf);
+                        }
+                        continue;
+                    }
+
+                    if ("anexo".equals(item.get("categoria"))) {
+                        // DownloadGL sirve el archivo (PDF/imagen) tal cual, en binario:
+                        // no es una página HTML que se pueda pasar por RemoteHtmlFetcher +
+                        // Chrome (eso decodifica los bytes del archivo como si fueran texto
+                        // y produce páginas de basura, ver historial de este archivo).
+                        File anexoPdf = renderRemoteBinaryFile(item, workDir, appBaseUrl, request.getHeader("Cookie"));
+                        if (anexoPdf != null) {
+                            individualPdfs.add(anexoPdf);
                         }
                         continue;
                     }
@@ -206,6 +219,94 @@ public class BatchRecordPdfGenerateServlet extends HttpServlet {
 
         getServletContext().log("Archivo físico con formato no soportado para el Batch Record (se omite): " + source.getName());
         return null;
+    }
+
+    /**
+     * "Anexos" de Generación de Lotes se sirven vía DownloadGL?File_name=...,
+     * que devuelve el archivo (típicamente un PDF, a veces una imagen) en
+     * binario con Content-Disposition: attachment — no una página HTML. Se
+     * descarga como bytes crudos y se trata igual que un archivo físico
+     * (renderPhysicalFile), en vez de pasarlo por RemoteHtmlFetcher (que
+     * decodifica la respuesta como texto) y Chrome headless.
+     */
+    private File renderRemoteBinaryFile(Map<String, Object> item, File workDir, String appBaseUrl, String cookieHeader) throws IOException {
+        String relUrl = (String) item.get("url");
+        if (relUrl == null || relUrl.trim().isEmpty()) {
+            return null;
+        }
+        String resolvedUrl = relUrl.trim().matches("(?i)^https?://.*")
+                ? relUrl.trim()
+                : (appBaseUrl.endsWith("/") ? appBaseUrl : appBaseUrl + "/") + (relUrl.startsWith("/") ? relUrl.substring(1) : relUrl);
+
+        if (!workDir.exists()) {
+            workDir.mkdirs();
+        }
+
+        java.net.HttpURLConnection conn = null;
+        try {
+            java.net.URL url = new java.net.URL(resolvedUrl);
+            conn = (java.net.HttpURLConnection) url.openConnection();
+            conn.setConnectTimeout(8000);
+            conn.setReadTimeout(20000);
+            conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) COA-BatchRecord/1.0");
+            if (cookieHeader != null && !cookieHeader.trim().isEmpty()) {
+                conn.setRequestProperty("Cookie", cookieHeader);
+            }
+
+            int status = conn.getResponseCode();
+            if (status >= 400) {
+                getServletContext().log("Anexo no encontrado en Generación de Lotes (HTTP " + status + "): " + resolvedUrl);
+                return null;
+            }
+
+            // "nombre" es solo la etiqueta descriptiva (sin extensión); "archivo" es
+            // el nombre real del archivo en disco, que es el que trae la extensión.
+            Object archivoObj = item.get("archivo");
+            String nameLower = (archivoObj != null ? String.valueOf(archivoObj) : String.valueOf(item.get("nombre"))).toLowerCase();
+
+            if (nameLower.endsWith(".pdf")) {
+                File copy = new File(workDir, UUID.randomUUID().toString() + ".pdf");
+                try (InputStream in = conn.getInputStream()) {
+                    Files.copy(in, copy.toPath());
+                }
+                return copy;
+            }
+
+            if (nameLower.endsWith(".png") || nameLower.endsWith(".jpg") || nameLower.endsWith(".jpeg") || nameLower.endsWith(".gif")) {
+                File tempImage = new File(workDir, UUID.randomUUID().toString() + "-" + new File(nameLower).getName());
+                try (InputStream in = conn.getInputStream()) {
+                    Files.copy(in, tempImage.toPath());
+                }
+                File imagePdf = new File(workDir, UUID.randomUUID().toString() + ".pdf");
+                try (PDDocument doc = new PDDocument()) {
+                    PDPage page = new PDPage(PDRectangle.A4);
+                    doc.addPage(page);
+                    PDImageXObject image = PDImageXObject.createFromFile(tempImage.getAbsolutePath(), doc);
+
+                    float margin = 20f;
+                    float maxWidth = page.getMediaBox().getWidth() - margin * 2;
+                    float maxHeight = page.getMediaBox().getHeight() - margin * 2;
+                    float scale = Math.min(maxWidth / image.getWidth(), maxHeight / image.getHeight());
+                    float drawWidth = image.getWidth() * scale;
+                    float drawHeight = image.getHeight() * scale;
+                    float x = (page.getMediaBox().getWidth() - drawWidth) / 2;
+                    float y = (page.getMediaBox().getHeight() - drawHeight) / 2;
+
+                    try (PDPageContentStream content = new PDPageContentStream(doc, page)) {
+                        content.drawImage(image, x, y, drawWidth, drawHeight);
+                    }
+                    doc.save(imagePdf);
+                }
+                return imagePdf;
+            }
+
+            getServletContext().log("Anexo con formato no soportado para el Batch Record (se omite): " + item.get("nombre"));
+            return null;
+        } finally {
+            if (conn != null) {
+                conn.disconnect();
+            }
+        }
     }
 
     private String safe(String value) {
