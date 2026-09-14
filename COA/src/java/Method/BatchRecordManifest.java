@@ -141,6 +141,12 @@ public class BatchRecordManifest {
         MangaListResult despejeResult = buildMangaDespejeDocumentos(certJpa, linkBatch, idCertificateManga);
         listaDocumentos.addAll(despejeResult.documentos);
 
+        // 6. Registros de Cabecera Inspección Manga (ver consultarRegistrosCabeceraManga).
+        MangaResult cabeceraResult = buildMangaCabeceraDocumento(certJpa, linkBatch, idCertificateManga);
+        if (cabeceraResult.documento != null) {
+            listaDocumentos.add(cabeceraResult.documento);
+        }
+
         Map<String, Object> resultado = new HashMap<String, Object>();
         resultado.put("cliente", cliente != null ? cliente : "");
         resultado.put("anio", anio != null ? anio : "");
@@ -371,6 +377,181 @@ public class BatchRecordManifest {
             return "data:image/png;base64," + buffer.toString("US-ASCII").trim();
         } catch (Exception ex) {
             return null;
+        }
+    }
+
+    /**
+     * Consulta únicamente los Registros de Cabecera de Inspección Manga para
+     * un orden/lote, sin construir el resto del manifiesto.
+     */
+    public static MangaResult consultarRegistrosCabeceraManga(String orden, String lote) throws Exception {
+        LinkBatchRecord linkBatch = new LinkBatchRecord();
+        CertificatesJpaController certJpa = new CertificatesJpaController();
+
+        int idCertificateManga = 0;
+        List lstCert = certJpa.ConsultCertificatesBatchRecord(orden, lote);
+        if (lstCert != null) {
+            for (Object item : lstCert) {
+                Object[] arg = (Object[]) item;
+                if (arg.length >= 1) {
+                    try {
+                        idCertificateManga = Integer.parseInt(String.valueOf(arg[0]));
+                    } catch (NumberFormatException ignored) {
+                    }
+                    break;
+                }
+            }
+        }
+        return buildMangaCabeceraDocumento(certJpa, linkBatch, idCertificateManga);
+    }
+
+    /**
+     * Registros de Cabecera de Inspección Manga (información base de la
+     * tabla registro/producto/línea/ficha_tecnica, sin la funcionalidad de
+     * abrir/cerrar/firmar registro ni pasar rollos de su pantalla original —
+     * ver LinkBatchRecord.InspeccionMangaRegistrosCabecera). Arma una única
+     * tabla con un renglón por cada registro encontrado para el
+     * lote_producto/lote_c del lote actual.
+     */
+    private static MangaResult buildMangaCabeceraDocumento(CertificatesJpaController certJpa, LinkBatchRecord linkBatch, int idCertificateManga) throws Exception {
+        LoteMangaResolucion lote = resolverLoteManga(certJpa, idCertificateManga);
+        if (lote.diagnostico != null) {
+            return MangaResult.fallo(lote.diagnostico);
+        }
+        List<Map<String, Object>> registros = linkBatch.InspeccionMangaRegistrosCabecera(lote.loteProducto, lote.loteC);
+        if (registros == null) {
+            String motivo = linkBatch.getDiagnosticoCabecera();
+            return MangaResult.fallo(motivo != null ? motivo
+                    : "No se pudieron obtener los Registros de Cabecera de Inspección Manga para Lote Producto '"
+                    + lote.loteProducto + "' y Lote C '" + lote.loteC + "'.");
+        }
+        if (registros.isEmpty()) {
+            return MangaResult.fallo("No se encontraron Registros de Cabecera en Inspección Manga para Lote Producto '"
+                    + lote.loteProducto + "' y Lote C '" + lote.loteC + "'.");
+        }
+        Map<String, Object> doc = new HashMap<String, Object>();
+        doc.put("origen", "Inspección Manga");
+        doc.put("tipo", "Registros de Cabecera");
+        doc.put("nombre", "Registros de Cabecera - Lote C " + lote.loteC);
+        doc.put("categoria", "manga");
+        doc.put("html", buildMangaCabeceraHtml(registros));
+        return MangaResult.ok(doc);
+    }
+
+    /**
+     * Arma la tabla de Registros de Cabecera, un renglón por registro. Los
+     * campos "Factor de Medida" y "Prueba Funcional" replican la misma regla
+     * de "N/A según tipo de material" que usa la pantalla original de
+     * Inspección Manga (material PP o sin ventana de estría no aplica).
+     * "Dureza" se simplifica a mostrar el valor de registro.dureza cuando es
+     * mayor a 0 (si no, N/A) — la pantalla original además consulta una
+     * tabla de fórmulas/control de durezas aparte como respaldo cuando ese
+     * valor es 0, que aquí no se reproduce.
+     */
+    private static String buildMangaCabeceraHtml(List<Map<String, Object>> registros) {
+        StringBuilder filas = new StringBuilder();
+        for (Map<String, Object> r : registros) {
+            int material = toInt(r.get("material"));
+            int estriaVentana = toInt(r.get("estriaVentana"));
+            String factorMedida = (material == 1 || estriaVentana <= 1) ? "N/A" : fmt(r.get("factorMedida"));
+            String pruebaFuncional = material == 1 ? "N/A" : fmt(r.get("pruebaFuncional"));
+            String dureza = toDouble(r.get("dureza")) > 0 ? fmt(r.get("dureza")) : "N/A";
+            filas.append("<tr>")
+                    .append("<td>").append(esc(r.get("fechaTurno"))).append("</td>")
+                    .append("<td>").append(esc(r.get("turnoProduccion"))).append("</td>")
+                    .append("<td>").append(esc(r.get("linea"))).append("</td>")
+                    .append("<td>").append(esc(r.get("loteProducto"))).append("</td>")
+                    .append("<td>").append(esc(r.get("loteC"))).append("</td>")
+                    .append("<td>").append(esc(r.get("loteP"))).append("</td>")
+                    .append("<td class='num'>").append(factorMedida).append("</td>")
+                    .append("<td>").append(formatResponsables(r.get("responsablesProduccion"))).append("</td>")
+                    .append("<td>").append(esc(r.get("turnoCalidad"))).append("</td>")
+                    .append("<td class='num'>").append(pruebaFuncional).append("</td>")
+                    .append("<td class='num'>").append(dureza).append("</td>")
+                    .append("<td>").append(formatRollos(r.get("rangoRollos"))).append("</td>")
+                    .append("<td>").append(formatResponsables(r.get("responsablesCalidad"))).append("</td>")
+                    .append("</tr>");
+        }
+        return "<html><head><meta charset='UTF-8'>"
+                + "<style>"
+                + "@page { size: A4 landscape; margin: 10mm; }"
+                + "body { font-family: Arial, sans-serif; margin:0; padding:0; color:#212529; }"
+                + "table { width:100%; border-collapse: collapse; font-size:11px; margin-top:12px; }"
+                + "th, td { border:1px solid #ccc; padding:5px 6px; text-align:left; vertical-align:top; }"
+                + "th { background:#e9ecef; text-align:center; }"
+                + "td.num { text-align:center; }"
+                + "</style></head><body>"
+                + "<div style='background:#0b0025;color:#fff;padding:20px;border-radius:4px;'>"
+                + "<h2 style='margin:0 0 5px 0;'>PLASTITEC S.A.S</h2>"
+                + "<h4 style='margin:0;font-weight:normal;opacity:0.9;'>REGISTROS DE CABECERA POR GENERACIÓN DE LOTES</h4>"
+                + "</div>"
+                + "<table>"
+                + "<tr><th>Fecha</th><th>Turno</th><th>Línea</th><th>Lote Producto</th><th>Lote C</th><th>Lote P</th>"
+                + "<th>Factor de Medida</th><th>Responsables PI</th><th>Turno Calidad</th><th>Prueba Funcional</th>"
+                + "<th>Dureza</th><th>Rollos</th><th>Responsables GC</th></tr>"
+                + filas
+                + "</table>"
+                + "</body></html>";
+    }
+
+    /**
+     * "Rol/Nombre,Rol/Nombre" (formato de registro.responsables_produccion y
+     * responsables_calidad en Inspección Manga) → solo los nombres, uno por
+     * línea, sin el color por rol que usa su pantalla original.
+     */
+    private static String formatResponsables(Object raw) {
+        if (raw == null) {
+            return "N/A";
+        }
+        String[] partes = String.valueOf(raw).split(",");
+        StringBuilder sb = new StringBuilder();
+        for (String parte : partes) {
+            if (parte.trim().isEmpty()) {
+                continue;
+            }
+            // Se toma el ÚLTIMO segmento (no el índice 1) porque a veces el rol
+            // viene duplicado en el dato crudo, ej. "Operario_extrusion/Operario_extrusion/NOMBRE".
+            String[] rolNombre = parte.split("/");
+            String nombre = rolNombre[rolNombre.length - 1];
+            if (sb.length() > 0) {
+                sb.append("<br>");
+            }
+            sb.append(esc(nombre.trim()));
+        }
+        return sb.length() > 0 ? sb.toString() : "N/A";
+    }
+
+    /**
+     * "[1036-1054][1055-1059]" (formato de registro.rango_rollos) →
+     * "1036-1054<br>1055-1059", igual que la pantalla original.
+     */
+    private static String formatRollos(Object raw) {
+        if (raw == null) {
+            return "N/A";
+        }
+        String s = esc(raw).replace("][", "<br>").replace("[", "").replace("]", "");
+        return s.isEmpty() ? "N/A" : s;
+    }
+
+    private static int toInt(Object value) {
+        if (value == null) {
+            return 0;
+        }
+        try {
+            return Integer.parseInt(String.valueOf(value).trim());
+        } catch (NumberFormatException ex) {
+            return 0;
+        }
+    }
+
+    private static double toDouble(Object value) {
+        if (value == null) {
+            return 0;
+        }
+        try {
+            return Double.parseDouble(String.valueOf(value).trim());
+        } catch (NumberFormatException ex) {
+            return 0;
         }
     }
 

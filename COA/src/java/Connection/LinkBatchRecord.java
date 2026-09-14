@@ -454,4 +454,102 @@ public class LinkBatchRecord {
         }
     }
 
+    /**
+     * Explica por qué la última llamada a InspeccionMangaRegistrosCabecera
+     * devolvió null (mismo propósito que {@link #getDiagnosticoManga()}).
+     */
+    private String diagnosticoCabecera;
+
+    public String getDiagnosticoCabecera() {
+        return diagnosticoCabecera;
+    }
+
+    /**
+     * Registros de Cabecera de Inspección Manga: la misma información base
+     * de la tabla {@code registro} (join con producto/línea/ficha técnica)
+     * que arma su listado principal ("Producción Turno X" / "Calidad Turno
+     * Y"), pero solo los datos informativos — sin los botones/formularios de
+     * abrir-cerrar registro, firmar, pasar rollos, etc. de esa pantalla, que
+     * no aplican en un PDF de auditoría de solo lectura.
+     * <p>
+     * A diferencia de {@code sp_rgt_c_registro_orden_producto} (que filtra
+     * por {@code id_producto}/{@code numero} de ORDEN, datos que COA no
+     * tiene ni debe intentar mapear 1:1 — la orden de LAB puede diferir de
+     * la de Manga), esta es una consulta propia con el mismo JOIN pero
+     * filtrada por {@code lote_producto}/{@code lote_c}, igual que el
+     * Resumen Estadístico y los Registros de Despeje.
+     */
+    public List<Map<String, Object>> InspeccionMangaRegistrosCabecera(String LoteProducto, String LoteC) throws Exception {
+        diagnosticoCabecera = null;
+        List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerInspeccionManga");
+        if (lst_parameter != null) {
+            Object[] obj_data = (Object[]) lst_parameter.get(0);
+            String[] arr_data = obj_data[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+            login = arr_data[0];
+            password = arr_data[1];
+            url = "jdbc:mysql://" + arr_data[2];
+        } else {
+            LOGGER.severe("LinkBatchRecord.InspeccionMangaRegistrosCabecera: no se encontró configuración 'ServerInspeccionManga' en Setting");
+            diagnosticoCabecera = "No hay configuración de conexión a Inspección Manga (falta la categoría 'ServerInspeccionManga' en Setting).";
+            return null;
+        }
+
+        String lpd = LoteProducto == null ? "" : LoteProducto.replace("'", "''");
+        String ltc = LoteC == null ? "" : LoteC.replace("'", "''");
+
+        Connection conn = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            conn = DriverManager.getConnection(url, login, password);
+            Statement sttm = conn.createStatement();
+            String sql = "SELECT r.fecha_turno, r.turno_produccion, r.responsables_produccion, "
+                    + "r.lote_producto, r.lote_c, r.lote_p, l.nombre, r.factor_medida, r.turno_calidad, "
+                    + "r.responsables_calidad, r.prueba_funcional, r.dureza, r.rango_rollos, ft.material, ft.estria_ventana "
+                    + "FROM registro r "
+                    + "INNER JOIN producto p ON r.id_producto = p.id_producto "
+                    + "INNER JOIN ficha_tecnica ft ON ft.id_ficha_tecnica = p.id_ficha_tecnica "
+                    + "INNER JOIN linea l ON l.id_linea = r.id_linea "
+                    + "WHERE r.lote_producto = '" + lpd + "' AND r.lote_c = '" + ltc + "' "
+                    + "ORDER BY r.fecha_turno DESC, r.turno_produccion DESC";
+            ResultSet rs = sttm.executeQuery(sql);
+
+            List<Map<String, Object>> lstRegistros = new ArrayList<Map<String, Object>>();
+            while (rs.next()) {
+                Map<String, Object> registro = new HashMap<String, Object>();
+                registro.put("fechaTurno", rs.getObject(1));
+                registro.put("turnoProduccion", rs.getObject(2));
+                registro.put("responsablesProduccion", rs.getString(3));
+                registro.put("loteProducto", rs.getString(4));
+                registro.put("loteC", rs.getString(5));
+                registro.put("loteP", rs.getString(6));
+                registro.put("linea", rs.getString(7));
+                registro.put("factorMedida", rs.getObject(8));
+                registro.put("turnoCalidad", rs.getString(9));
+                registro.put("responsablesCalidad", rs.getString(10));
+                registro.put("pruebaFuncional", rs.getString(11));
+                registro.put("dureza", rs.getObject(12));
+                registro.put("rangoRollos", rs.getString(13));
+                registro.put("material", rs.getObject(14));
+                registro.put("estriaVentana", rs.getObject(15));
+                lstRegistros.add(registro);
+            }
+            rs.close();
+            sttm.close();
+            conn.close();
+            return lstRegistros;
+        } catch (SQLException ex) {
+            LOGGER.log(Level.SEVERE, "LinkBatchRecord.InspeccionMangaRegistrosCabecera: SQLException conectando a " + url, ex);
+            diagnosticoCabecera = "No se pudo conectar a la base de datos de Inspección Manga (" + url + "): " + ex.getMessage();
+            return null;
+        } catch (ClassNotFoundException ex) {
+            LOGGER.log(Level.SEVERE, "LinkBatchRecord.InspeccionMangaRegistrosCabecera: ClassNotFoundException", ex);
+            diagnosticoCabecera = "No se encontró el driver de conexión a la base de datos de Inspección Manga.";
+            return null;
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "LinkBatchRecord.InspeccionMangaRegistrosCabecera: Exception", ex);
+            diagnosticoCabecera = "Error inesperado al consultar los registros de cabecera de Inspección Manga: " + ex.getMessage();
+            return null;
+        }
+    }
+
 }
