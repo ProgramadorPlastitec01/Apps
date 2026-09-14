@@ -1,0 +1,52 @@
+.treeview {
+    padding: 7px 15px 8px 15px;
+    list-style: none;
+    border-color: #EEE;
+    font-size: 14px;
+    color: #006666;
+    font-weight: bold;
+/*    color: #FFF;*/
+    font-family: 'Fuente', arial, serif;
+    background-color: #EEE;
+    width: 500px;
+}
+
+.treeview .hover {
+    list-style: none;
+    font-family: 'Fuente', arial, serif;
+    border-color: #006666;
+    font-size: 14px;
+    background-color: #FFF;
+    color:#006666;
+}
+
+.treeview ul{
+    list-style: none;
+    margin-left: 10px;
+    padding: 7px 11px 8px 11px;
+    font-family: 'Fuente', arial, serif;
+    background-color: #FFF;
+    font-size: 12px;
+}
+
+.treeview ul li{
+    list-style: none;
+    font-family: 'Fuente', arial, serif;
+    background-color: #DCDCDC;
+    color: #292929;
+    font-size: 12px;
+}
+/*.treeview ul li .hover{
+    list-style: none;
+    font-family: 'Fuente', arial, serif;
+    background-color: #EEE;
+    color: #292929;
+    font-size: 12px;
+}
+
+.treeview ul li ul{
+    list-style: none;
+    font-family: 'Fuente', arial, serif;
+    color :#006666;
+    font-size: 12px;
+}*/
