@@ -3,7 +3,10 @@
 <%@page import="Connection.LinkBatchRecord"%>
 <%@page import="Controller.CertificatesJpaController"%>
 <%@page import="java.util.List"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.Map"%>
 <%@page import="Method.Util"%>
+<%@page import="Method.BatchRecordManifest"%>
 <%@taglib uri="/WEB-INF/tlds/alert" prefix="Alert" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
@@ -55,6 +58,7 @@
                                         List lst_certificate = null;
                                         List lst_material = null;
                                         List lst_summary = null;
+                                        List<String> eventosListado = new ArrayList<String>();
                                         try {
                                             Permission = sesion.getAttribute("Permisos").toString();
                                         } catch (Exception e) {
@@ -141,6 +145,11 @@
                                                     }
                                                 });
 
+                                                BatchRecordManifest.MangaResult mangaResultado = BatchRecordManifest.consultarInspeccionManga(orden, lote);
+                                                Map<String, Object> docManga = mangaResultado.documento;
+                                                if (mangaResultado.diagnostico != null) {
+                                                    eventosListado.add("Inspección Manga: " + mangaResultado.diagnostico);
+                                                }
                                     %>
 
 
@@ -161,8 +170,22 @@
                                                 <i class="fas fa-upload"></i> Subir archivos
                                             </button>
                                             <% } %>
-                                        </div> 
+                                        </div>
                                     </div>
+
+                                    <!-- ================== EVENTOS DE INTEGRACIÓN (fuentes externas) ================== -->
+                                    <% if (!eventosListado.isEmpty()) { %>
+                                    <div class="alert alert-warning" role="alert" style="border-left:4px solid #ffc107;">
+                                        <h6 class="mb-2">
+                                            <i class="fas fa-triangle-exclamation"></i> Eventos de integración
+                                        </h6>
+                                        <ul class="mb-0" style="padding-left:18px;">
+                                            <% for (String evento : eventosListado) { %>
+                                            <li><%= evento%></li>
+                                            <% } %>
+                                        </ul>
+                                    </div>
+                                    <% } %>
 
                                     <% if (Permission.contains("[3]")) { %>
                                     <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog">
@@ -385,7 +408,40 @@
                                                 }
                                             }
                                             %>
-                                            
+                                            <%
+                                                if (docManga != null) {
+                                                    String mangaTipo = String.valueOf(docManga.get("tipo"));
+                                                    String mangaNombre = String.valueOf(docManga.get("nombre"));
+                                                    String mangaUrl = "MangaResumenViewServlet?orden=" + java.net.URLEncoder.encode(orden, "UTF-8")
+                                                            + "&lote=" + java.net.URLEncoder.encode(lote, "UTF-8");
+                                            %>
+                                            <tr class="file-row">
+                                                <td><%= mangaTipo%></td>
+                                                <td><%= mangaNombre%></td>
+                                                <td class="text-center">
+                                                    <div class="btn-group btn-group-sm">
+
+                                                        <!-- VER EN PDF -->
+                                                        <button type="button" class="btn btn-danger mr-2" style="background:#dc3545; border-color:#dc3545;"
+                                                                onclick="verPdfIndividual('<%= mangaTipo%>', '<%= mangaNombre%>', '<%= mangaUrl%>')"
+                                                                title="Ver en formato PDF">
+                                                            <i class="fas fa-file-pdf"></i> PDF
+                                                        </button>
+
+                                                        <!-- VER ORIGINAL -->
+                                                        <a class="btn btn-info"
+                                                           href="<%= mangaUrl%>"
+                                                           target="_blank"
+                                                           title="Ver registro">
+                                                            <i class="fas fa-eye"></i>
+                                                        </a>
+
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <%
+                                                }
+                                            %>
                                         </tbody>
                                     </table>
 

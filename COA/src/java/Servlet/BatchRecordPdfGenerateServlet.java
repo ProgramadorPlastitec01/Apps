@@ -97,6 +97,18 @@ public class BatchRecordPdfGenerateServlet extends HttpServlet {
                         continue;
                     }
 
+                    if ("manga".equals(item.get("categoria"))) {
+                        // Resumen Estadístico de Inspección Manga: BatchRecordManifest ya
+                        // armó el HTML con datos traídos directo de su base de datos (su
+                        // servlet "Reporte" exige sesión de usuario logeado, que COA no
+                        // tiene), así que aquí solo se imprime, sin fetch remoto.
+                        String htmlManga = (String) item.get("html");
+                        if (htmlManga != null) {
+                            individualPdfs.add(ChromeHeadlessPdf.renderHtmlToPdf(htmlManga, workDir));
+                        }
+                        continue;
+                    }
+
                     String targetUrl = (String) item.get("url");
                     @SuppressWarnings("unchecked")
                     Map<String, String> postParams = (Map<String, String>) item.get("postParams");
@@ -139,9 +151,15 @@ public class BatchRecordPdfGenerateServlet extends HttpServlet {
             merger.mergeDocuments(null);
 
             // 4. Guardar una copia en el almacenamiento de documentos del lote
-            //    (misma convención de carpetas que FileManagerServlet usa para uploads manuales)
+            //    (misma convención de carpetas que FileManagerServlet/Generate.java usan:
+            //    cliente/anio/orden/lote SIN sanitizar, tal cual vienen. Antes esto usaba
+            //    safe(cliente) etc., que reemplaza espacios y otros caracteres por "_" y
+            //    terminaba creando una carpeta de cliente duplicada, ej. "LABORATORIOS_LIFE"
+            //    junto a la ya existente "LABORATORIOS LIFE" creada por Generate.java al
+            //    aprobar el certificado. Los valores deben coincidir exactamente con esa
+            //    carpeta para no duplicarla.)
             File storageDir = new File(getServletContext().getRealPath(
-                    "/Certificates/" + safe(cliente) + "/" + safe(anio) + "/" + safe(orden) + "/" + safe(lote) + "/BatchRecord"));
+                    "/Certificates/" + cliente + "/" + anio + "/" + orden + "/" + lote + "/BatchRecord"));
             storageDir.mkdirs();
             String fileName = "BatchRecord_" + safe(orden) + "_" + safe(lote) + "_"
                     + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".pdf";
