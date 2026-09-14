@@ -368,4 +368,90 @@ public class LinkBatchRecord {
         }
     }
 
+    /**
+     * Explica por qué la última llamada a InspeccionMangaRegistrosDespeje
+     * devolvió null (mismo propósito que {@link #getDiagnosticoManga()}, pero
+     * para los registros de despeje en vez del resumen estadístico).
+     */
+    private String diagnosticoDespeje;
+
+    public String getDiagnosticoDespeje() {
+        return diagnosticoDespeje;
+    }
+
+    /**
+     * Registros de Despeje de Línea de Inspección Manga ("VER REGISTROS DE
+     * DESPEJE" de su Reporte por lote) para un lote_producto + lote_c, con
+     * lote_p="TODOS" (misma semántica que sp_rgt_t_registro_depeje_lotes_todos_p:
+     * trae todos los despejes de esa referencia, no uno solo).
+     * <p>
+     * A diferencia del Resumen Estadístico (que hay que recalcular a partir
+     * de datos crudos), cada despeje ya tiene su HTML final completo
+     * guardado en registro_despeje.formato — el mismo documento que se abre
+     * con el ícono de la lupa/copia en su listado (Orden?opc=14) — así que
+     * solo hace falta traerlo tal cual, sin reconstruir nada.
+     */
+    public List<Map<String, Object>> InspeccionMangaRegistrosDespeje(String LoteProducto, String LoteC) throws Exception {
+        diagnosticoDespeje = null;
+        List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerInspeccionManga");
+        if (lst_parameter != null) {
+            Object[] obj_data = (Object[]) lst_parameter.get(0);
+            String[] arr_data = obj_data[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+            login = arr_data[0];
+            password = arr_data[1];
+            url = "jdbc:mysql://" + arr_data[2];
+        } else {
+            LOGGER.severe("LinkBatchRecord.InspeccionMangaRegistrosDespeje: no se encontró configuración 'ServerInspeccionManga' en Setting");
+            diagnosticoDespeje = "No hay configuración de conexión a Inspección Manga (falta la categoría 'ServerInspeccionManga' en Setting).";
+            return null;
+        }
+
+        String lpd = LoteProducto == null ? "" : LoteProducto.replace("'", "''");
+        String ltc = LoteC == null ? "" : LoteC.replace("'", "''");
+
+        Connection conn = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            conn = DriverManager.getConnection(url, login, password);
+            Statement sttm = conn.createStatement();
+            ResultSet rs = sttm.executeQuery("CALL sp_rgt_t_registro_depeje_lotes_todos_p('" + lpd + "','" + ltc + "')");
+
+            List<Map<String, Object>> lstDespejes = new ArrayList<Map<String, Object>>();
+            while (rs.next()) {
+                Map<String, Object> despeje = new HashMap<String, Object>();
+                despeje.put("idRegistro", rs.getObject(1));
+                despeje.put("fechaTurno", rs.getObject(2));
+                despeje.put("turnoProduccion", rs.getObject(3));
+                despeje.put("responsablesProduccion", rs.getObject(4));
+                despeje.put("loteProducto", rs.getString(5));
+                despeje.put("loteC", rs.getString(6));
+                despeje.put("loteP", rs.getString(7));
+                despeje.put("turnoCalidad", rs.getObject(8));
+                despeje.put("responsablesCalidad", rs.getObject(9));
+                despeje.put("estadoPi", rs.getObject(10));
+                despeje.put("estadoGc", rs.getObject(11));
+                despeje.put("idRegistroDespeje", rs.getObject(12));
+                despeje.put("formato", rs.getString(13));
+                despeje.put("estado", rs.getObject(14));
+                lstDespejes.add(despeje);
+            }
+            rs.close();
+            sttm.close();
+            conn.close();
+            return lstDespejes;
+        } catch (SQLException ex) {
+            LOGGER.log(Level.SEVERE, "LinkBatchRecord.InspeccionMangaRegistrosDespeje: SQLException conectando a " + url, ex);
+            diagnosticoDespeje = "No se pudo conectar a la base de datos de Inspección Manga (" + url + "): " + ex.getMessage();
+            return null;
+        } catch (ClassNotFoundException ex) {
+            LOGGER.log(Level.SEVERE, "LinkBatchRecord.InspeccionMangaRegistrosDespeje: ClassNotFoundException", ex);
+            diagnosticoDespeje = "No se encontró el driver de conexión a la base de datos de Inspección Manga.";
+            return null;
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "LinkBatchRecord.InspeccionMangaRegistrosDespeje: Exception", ex);
+            diagnosticoDespeje = "Error inesperado al consultar los registros de despeje de Inspección Manga: " + ex.getMessage();
+            return null;
+        }
+    }
+
 }

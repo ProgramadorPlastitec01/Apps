@@ -97,11 +97,11 @@ public class BatchRecordPdfGenerateServlet extends HttpServlet {
                         continue;
                     }
 
-                    if ("manga".equals(item.get("categoria"))) {
-                        // Resumen Estadístico de Inspección Manga: BatchRecordManifest ya
-                        // armó el HTML con datos traídos directo de su base de datos (su
-                        // servlet "Reporte" exige sesión de usuario logeado, que COA no
-                        // tiene), así que aquí solo se imprime, sin fetch remoto.
+                    if ("manga".equals(item.get("categoria")) || "manga_despeje".equals(item.get("categoria"))) {
+                        // Resumen Estadístico / Registros de Despeje de Inspección Manga:
+                        // BatchRecordManifest ya trajo o armó el HTML directo de su base de
+                        // datos (su servlet "Reporte"/"Orden" exige sesión de usuario logeado,
+                        // que COA no tiene), así que aquí solo se imprime, sin fetch remoto.
                         String htmlManga = (String) item.get("html");
                         if (htmlManga != null) {
                             individualPdfs.add(ChromeHeadlessPdf.renderHtmlToPdf(htmlManga, workDir));

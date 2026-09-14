@@ -148,7 +148,13 @@
                                                 BatchRecordManifest.MangaResult mangaResultado = BatchRecordManifest.consultarInspeccionManga(orden, lote);
                                                 Map<String, Object> docManga = mangaResultado.documento;
                                                 if (mangaResultado.diagnostico != null) {
-                                                    eventosListado.add("Inspección Manga: " + mangaResultado.diagnostico);
+                                                    eventosListado.add("Inspección Manga (Resumen Estadístico): " + mangaResultado.diagnostico);
+                                                }
+
+                                                BatchRecordManifest.MangaListResult despejeResultado = BatchRecordManifest.consultarRegistrosDespejeManga(orden, lote);
+                                                List<Map<String, Object>> docsDespeje = despejeResultado.documentos;
+                                                if (despejeResultado.diagnostico != null) {
+                                                    eventosListado.add("Inspección Manga (Registros de Despeje): " + despejeResultado.diagnostico);
                                                 }
                                     %>
 
@@ -440,6 +446,44 @@
                                                 </td>
                                             </tr>
                                             <%
+                                                }
+                                            %>
+                                            <%
+                                                if (docsDespeje != null) {
+                                                    for (int i = 0; i < docsDespeje.size(); i++) {
+                                                        Map<String, Object> docDespeje = docsDespeje.get(i);
+                                                        String despejeTipo = String.valueOf(docDespeje.get("tipo"));
+                                                        String despejeNombre = String.valueOf(docDespeje.get("nombre"));
+                                                        String despejeUrl = "MangaDespejeViewServlet?orden=" + java.net.URLEncoder.encode(orden, "UTF-8")
+                                                                + "&lote=" + java.net.URLEncoder.encode(lote, "UTF-8")
+                                                                + "&indice=" + i;
+                                            %>
+                                            <tr class="file-row">
+                                                <td><%= despejeTipo%></td>
+                                                <td><%= despejeNombre%></td>
+                                                <td class="text-center">
+                                                    <div class="btn-group btn-group-sm">
+
+                                                        <!-- VER EN PDF -->
+                                                        <button type="button" class="btn btn-danger mr-2" style="background:#dc3545; border-color:#dc3545;"
+                                                                onclick="verPdfIndividual('<%= despejeTipo%>', '<%= despejeNombre%>', '<%= despejeUrl%>')"
+                                                                title="Ver en formato PDF">
+                                                            <i class="fas fa-file-pdf"></i> PDF
+                                                        </button>
+
+                                                        <!-- VER ORIGINAL -->
+                                                        <a class="btn btn-info"
+                                                           href="<%= despejeUrl%>"
+                                                           target="_blank"
+                                                           title="Ver registro">
+                                                            <i class="fas fa-eye"></i>
+                                                        </a>
+
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <%
+                                                    }
                                                 }
                                             %>
                                         </tbody>

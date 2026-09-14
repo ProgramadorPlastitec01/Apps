@@ -2,7 +2,9 @@ package Method;
 
 import Connection.LinkBatchRecord;
 import Controller.CertificatesJpaController;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -135,6 +137,10 @@ public class BatchRecordManifest {
             listaDocumentos.add(mangaResult.documento);
         }
 
+        // 5. Registros de Despeje de Línea Inspección Manga (ver consultarRegistrosDespejeManga).
+        MangaListResult despejeResult = buildMangaDespejeDocumentos(certJpa, linkBatch, idCertificateManga);
+        listaDocumentos.addAll(despejeResult.documentos);
+
         Map<String, Object> resultado = new HashMap<String, Object>();
         resultado.put("cliente", cliente != null ? cliente : "");
         resultado.put("anio", anio != null ? anio : "");
@@ -223,20 +229,247 @@ public class BatchRecordManifest {
      * extrae de ahí en vez de tocar el flujo de creación del certificado.
      */
     private static MangaResult buildMangaDocumento(CertificatesJpaController certJpa, LinkBatchRecord linkBatch, int idCertificateManga) throws Exception {
+        LoteMangaResolucion lote = resolverLoteManga(certJpa, idCertificateManga);
+        if (lote.diagnostico != null) {
+            return MangaResult.fallo(lote.diagnostico);
+        }
+        Map<String, Object> resumenManga = linkBatch.InspeccionMangaResumenEstadistico(lote.loteProducto, lote.loteC);
+        if (resumenManga == null) {
+            String motivo = linkBatch.getDiagnosticoManga();
+            return MangaResult.fallo(motivo != null ? motivo
+                    : "No se pudo obtener el Resumen Estadístico de Inspección Manga para Lote Producto '" + lote.loteProducto
+                    + "' y Lote C '" + lote.loteC + "'.");
+        }
+        Map<String, Object> doc = new HashMap<String, Object>();
+        doc.put("origen", "Inspección Manga");
+        doc.put("tipo", "Resumen Estadístico");
+        doc.put("nombre", "Resumen Estadístico - Lote C " + lote.loteC);
+        doc.put("categoria", "manga");
+        doc.put("html", buildMangaResumenHtml(resumenManga));
+        return MangaResult.ok(doc);
+    }
+
+    /**
+     * Resultado de una lista de documentos de Inspección Manga (un
+     * documento por cada registro, ej. cada despeje de línea asociado al
+     * lote): {@code documentos} nunca es null (puede venir vacía), y
+     * {@code diagnostico} explica por qué vino vacía cuando corresponde a un
+     * fallo real (certificado/Referencia inválidos, error de conexión, o
+     * simplemente no hay registros para ese lote en Inspección Manga).
+     */
+    public static class MangaListResult {
+
+        public List<Map<String, Object>> documentos = new ArrayList<Map<String, Object>>();
+        public String diagnostico;
+    }
+
+    /**
+     * Consulta únicamente los Registros de Despeje de Línea de Inspección
+     * Manga para un orden/lote, sin construir el resto del manifiesto —
+     * mismo propósito que consultarInspeccionManga pero para "VER REGISTROS
+     * DE DESPEJE", que trae uno o varios registros (uno por cada turno de
+     * arranque) en vez de un único resumen.
+     */
+    public static MangaListResult consultarRegistrosDespejeManga(String orden, String lote) throws Exception {
+        LinkBatchRecord linkBatch = new LinkBatchRecord();
+        CertificatesJpaController certJpa = new CertificatesJpaController();
+
+        int idCertificateManga = 0;
+        List lstCert = certJpa.ConsultCertificatesBatchRecord(orden, lote);
+        if (lstCert != null) {
+            for (Object item : lstCert) {
+                Object[] arg = (Object[]) item;
+                if (arg.length >= 1) {
+                    try {
+                        idCertificateManga = Integer.parseInt(String.valueOf(arg[0]));
+                    } catch (NumberFormatException ignored) {
+                    }
+                    break;
+                }
+            }
+        }
+        return buildMangaDespejeDocumentos(certJpa, linkBatch, idCertificateManga);
+    }
+
+    /**
+     * Registros de Despeje de Línea ("VER REGISTROS DE DESPEJE" del Reporte
+     * por lote de Inspección Manga, sp_rgt_t_registro_depeje_lotes_todos_p).
+     * A diferencia del Resumen Estadístico, cada despeje ya trae su HTML
+     * final completo guardado (registro_despeje.formato — el mismo
+     * documento que se abre con el ícono de su listado, Orden?opc=14), así
+     * que no hay que recalcular ni reconstruir nada: solo traerlo tal cual
+     * (ver LinkBatchRecord.InspeccionMangaRegistrosDespeje) y agregar un
+     * documento del manifiesto por cada uno, para que todos los despejes
+     * asociados al lote_producto/lote_c queden incluidos en el Batch
+     * Record.
+     */
+    private static MangaListResult buildMangaDespejeDocumentos(CertificatesJpaController certJpa, LinkBatchRecord linkBatch, int idCertificateManga) throws Exception {
+        MangaListResult resultado = new MangaListResult();
+        LoteMangaResolucion lote = resolverLoteManga(certJpa, idCertificateManga);
+        if (lote.diagnostico != null) {
+            resultado.diagnostico = lote.diagnostico;
+            return resultado;
+        }
+        List<Map<String, Object>> despejes = linkBatch.InspeccionMangaRegistrosDespeje(lote.loteProducto, lote.loteC);
+        if (despejes == null) {
+            String motivo = linkBatch.getDiagnosticoDespeje();
+            resultado.diagnostico = motivo != null ? motivo
+                    : "No se pudieron obtener los Registros de Despeje de Inspección Manga para Lote Producto '"
+                    + lote.loteProducto + "' y Lote C '" + lote.loteC + "'.";
+            return resultado;
+        }
+        if (despejes.isEmpty()) {
+            resultado.diagnostico = "No se encontraron Registros de Despeje en Inspección Manga para Lote Producto '"
+                    + lote.loteProducto + "' y Lote C '" + lote.loteC + "'.";
+            return resultado;
+        }
+        for (Map<String, Object> despeje : despejes) {
+            String formato = (String) despeje.get("formato");
+            if (formato == null || formato.isEmpty()) {
+                continue;
+            }
+            Map<String, Object> doc = new HashMap<String, Object>();
+            doc.put("origen", "Inspección Manga");
+            doc.put("tipo", "Registro de Despeje");
+            doc.put("nombre", "Despeje - " + esc(despeje.get("fechaTurno")) + " - Turno " + esc(despeje.get("turnoProduccion"))
+                    + " - Lote P " + esc(despeje.get("loteP")));
+            doc.put("categoria", "manga_despeje");
+            doc.put("html", limpiarHtmlDespeje(formato));
+            resultado.documentos.add(doc);
+        }
+        if (resultado.documentos.isEmpty()) {
+            resultado.diagnostico = "Se encontraron Registros de Despeje en Inspección Manga para Lote Producto '"
+                    + lote.loteProducto + "' y Lote C '" + lote.loteC + "', pero ninguno tiene el HTML del formato guardado.";
+        }
+        return resultado;
+    }
+
+    /**
+     * Logo de PLASTITEC como Data URI (base64), precargado una sola vez desde
+     * logo_plastitec_base64.txt (empaquetado junto a esta clase, así que
+     * llega al classpath sin depender de ServletContext/rutas de disco). Se
+     * usa para reemplazar la referencia rota
+     * {@code <img src="Interfaz/Contenido/images/Logo.png">} que trae el
+     * HTML de Inspección Manga — esa ruta es relativa a SU propio servidor
+     * web y nunca resuelve desde COA. Es el mismo logo (PLASTITEC S.A.S) que
+     * ya usa COA en web/Interface/Imagen/Logo.png. null si no se pudo cargar
+     * (no rompe el render, el despeje simplemente queda sin logo).
+     */
+    private static final String LOGO_DATA_URI = cargarLogoBase64();
+
+    private static String cargarLogoBase64() {
+        try (InputStream in = BatchRecordManifest.class.getResourceAsStream("logo_plastitec_base64.txt")) {
+            if (in == null) {
+                return null;
+            }
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            byte[] chunk = new byte[8192];
+            int leidos;
+            while ((leidos = in.read(chunk)) != -1) {
+                buffer.write(chunk, 0, leidos);
+            }
+            return "data:image/png;base64," + buffer.toString("US-ASCII").trim();
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    /**
+     * Deja el HTML del despeje (registro_despeje.formato, ya con todos los
+     * valores diligenciados) listo para imprimirse como PDF:
+     * <ul>
+     * <li>Desactiva cualquier campo/checkbox editable, igual que
+     * CertifiedView.jsp hace con el HTML propio de un certificado antes de
+     * mostrarlo/imprimirlo.</li>
+     * <li>Reemplaza el logo de Inspección Manga (ruta relativa a su propio
+     * servidor, rota desde COA) por el mismo logo ya empaquetado en
+     * COA.</li>
+     * <li>Lo envuelve en una página con un CSS de respaldo que reconstruye
+     * el mismo look (encabezados de sección en verde, bordes de tabla,
+     * campos subrayados) que este formato tiene en Inspección Manga —
+     * a diferencia de "Certificado COA" (que sí se puede pedir por su
+     * propia URL dentro de COA, con Bootstrap ya cargado), este HTML llega
+     * crudo desde la base de datos de Inspección Manga sin su hoja de
+     * estilos ni Bootstrap disponibles, así que hay que suministrar todo el
+     * estilo visual aquí.</li>
+     * </ul>
+     */
+    private static String limpiarHtmlDespeje(String html) {
+        String limpio = html
+                .replace("contenteditable=\"true\"", "contenteditable=\"false\"")
+                .replaceAll("<input type=\"checkbox\"", "<input type=\"checkbox\" disabled=\"disabled\" ")
+                .replaceAll("<input([^>]*)type=\"radio\"", "<input$1type=\"radio\" disabled=\"disabled\"");
+        if (LOGO_DATA_URI != null) {
+            limpio = limpio.replaceAll("src=\"[^\"]*Logo\\.png\"", "src=\"" + LOGO_DATA_URI + "\"");
+        }
+        return "<html><head><meta charset='UTF-8'>"
+                + "<style>"
+                + "@page { size: A4 portrait; margin: 8mm; }"
+                + "body { font-family: Arial, sans-serif; font-size:11px; color:#212529; margin:0; }"
+                + "table.table { width:100%; border-collapse: collapse; margin-bottom:6px; }"
+                + "table.table td, table.table th { border: 1px solid #444; padding: 3px 6px; vertical-align: top; font-size:11px; }"
+                + "table.table th { background:#1a7a4c; color:#fff; text-align:center; font-size:11px; }"
+                + "table.table i { font-style: normal; }"
+                + "table.table u { text-decoration: underline; }"
+                + "</style></head><body>"
+                + limpio
+                + "</body></html>";
+    }
+
+    /**
+     * Resultado de derivar el lote_producto/lote_c de Inspección Manga a
+     * partir del certificado COA del lote (ver la clase base
+     * BatchRecordManifest.buildMangaDocumento para el porqué de la fórmula):
+     * o bien {@code loteProducto}/{@code loteC} resueltos, o
+     * {@code diagnostico} explicando por qué no se pudo.
+     */
+    private static class LoteMangaResolucion {
+
+        String loteProducto;
+        String loteC;
+        String diagnostico;
+
+        private static LoteMangaResolucion ok(String loteProducto, String loteC) {
+            LoteMangaResolucion r = new LoteMangaResolucion();
+            r.loteProducto = loteProducto;
+            r.loteC = loteC;
+            return r;
+        }
+
+        private static LoteMangaResolucion fallo(String diagnostico) {
+            LoteMangaResolucion r = new LoteMangaResolucion();
+            r.diagnostico = diagnostico;
+            return r;
+        }
+    }
+
+    /**
+     * Inspección Manga identifica sus registros con su PROPIO "lote_producto"
+     * (ej. "8835-36H12"), que NO es ni el lote de COA (ej. "4824-36H11") ni el
+     * "LOTE #" del certificado (ej. "17601-36H12") por sí solo — es
+     * "&lt;Referencia del material&gt;-&lt;mismo sufijo de fecha que el LOTE #&gt;",
+     * confirmado consultando su base de datos directamente. La "Referencia"
+     * (ej. "8835") no se guarda en ningún lado de COA salvo dentro del HTML del
+     * certificado ya almacenado (columna certificates.format), así que se
+     * extrae de ahí en vez de tocar el flujo de creación del certificado.
+     * Compartido por el Resumen Estadístico y los Registros de Despeje, que
+     * se filtran por el mismo lote_producto/lote_c.
+     */
+    private static LoteMangaResolucion resolverLoteManga(CertificatesJpaController certJpa, int idCertificateManga) throws Exception {
         if (idCertificateManga <= 0) {
-            return MangaResult.fallo("No se encontró un certificado COA para este lote, por lo que no se puede determinar "
+            return LoteMangaResolucion.fallo("No se encontró un certificado COA para este lote, por lo que no se puede determinar "
                     + "la Referencia necesaria para consultar Inspección Manga.");
         }
         List lstHtml = certJpa.ConsultCertificatesIdHtml(idCertificateManga);
         if (lstHtml == null || lstHtml.isEmpty()) {
-            return MangaResult.fallo("No se pudo leer el contenido del certificado (id " + idCertificateManga
+            return LoteMangaResolucion.fallo("No se pudo leer el contenido del certificado (id " + idCertificateManga
                     + ") para extraer la Referencia y el Lote #.");
         }
         Object[] certRow = (Object[]) lstHtml.get(0);
         String htmlCertificado = certRow.length > 3 && certRow[3] != null ? certRow[3].toString() : "";
         String[] materialManga = extraerPrimerMaterial(htmlCertificado);
         if (materialManga == null) {
-            return MangaResult.fallo("No se pudo extraer la Referencia y el Lote # del certificado (id " + idCertificateManga
+            return LoteMangaResolucion.fallo("No se pudo extraer la Referencia y el Lote # del certificado (id " + idCertificateManga
                     + "): el formato del HTML no coincidió con lo esperado.");
         }
         String referencia = materialManga[0];
@@ -244,24 +477,11 @@ public class BatchRecordManifest {
         int guionIdx = loteC.lastIndexOf('-');
         if (referencia.isEmpty() || referencia.equals("----") || loteC.isEmpty()
                 || loteC.equals("----") || guionIdx < 0) {
-            return MangaResult.fallo("El certificado no tiene una Referencia ('" + referencia + "') o Lote # ('" + loteC
+            return LoteMangaResolucion.fallo("El certificado no tiene una Referencia ('" + referencia + "') o Lote # ('" + loteC
                     + "') válidos para consultar Inspección Manga.");
         }
         String loteProducto = referencia + loteC.substring(guionIdx);
-        Map<String, Object> resumenManga = linkBatch.InspeccionMangaResumenEstadistico(loteProducto, loteC);
-        if (resumenManga == null) {
-            String motivo = linkBatch.getDiagnosticoManga();
-            return MangaResult.fallo(motivo != null ? motivo
-                    : "No se pudo obtener el Resumen Estadístico de Inspección Manga para Lote Producto '" + loteProducto
-                    + "' y Lote C '" + loteC + "'.");
-        }
-        Map<String, Object> doc = new HashMap<String, Object>();
-        doc.put("origen", "Inspección Manga");
-        doc.put("tipo", "Resumen Estadístico");
-        doc.put("nombre", "Resumen Estadístico - Lote C " + loteC);
-        doc.put("categoria", "manga");
-        doc.put("html", buildMangaResumenHtml(resumenManga));
-        return MangaResult.ok(doc);
+        return LoteMangaResolucion.ok(loteProducto, loteC);
     }
 
     /**
