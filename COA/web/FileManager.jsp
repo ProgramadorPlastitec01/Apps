@@ -162,6 +162,12 @@
                                                 if (cabeceraResultado.diagnostico != null) {
                                                     eventosListado.add("Inspección Manga (Registros de Cabecera): " + cabeceraResultado.diagnostico);
                                                 }
+
+                                                BatchRecordManifest.MangaListResult formulaResultado = BatchRecordManifest.consultarRegistrosFormula(orden, lote);
+                                                List<Map<String, Object>> docsFormula = formulaResultado.documentos;
+                                                if (formulaResultado.diagnostico != null) {
+                                                    eventosListado.add("Control Fórmulas (R-PI-004): " + formulaResultado.diagnostico);
+                                                }
                                     %>
 
 
@@ -524,6 +530,44 @@
                                                 </td>
                                             </tr>
                                             <%
+                                                }
+                                            %>
+                                            <%
+                                                if (docsFormula != null) {
+                                                    for (int i = 0; i < docsFormula.size(); i++) {
+                                                        Map<String, Object> docFormula = docsFormula.get(i);
+                                                        String formulaTipo = String.valueOf(docFormula.get("tipo"));
+                                                        String formulaNombre = String.valueOf(docFormula.get("nombre"));
+                                                        String formulaUrl = "FormulaViewServlet?orden=" + java.net.URLEncoder.encode(orden, "UTF-8")
+                                                                + "&lote=" + java.net.URLEncoder.encode(lote, "UTF-8")
+                                                                + "&indice=" + i;
+                                            %>
+                                            <tr class="file-row">
+                                                <td><%= formulaTipo%></td>
+                                                <td><%= formulaNombre%></td>
+                                                <td class="text-center">
+                                                    <div class="btn-group btn-group-sm">
+
+                                                        <!-- VER EN PDF -->
+                                                        <button type="button" class="btn btn-danger mr-2" style="background:#dc3545; border-color:#dc3545;"
+                                                                onclick="verPdfIndividual('<%= formulaTipo%>', '<%= formulaNombre%>', '<%= formulaUrl%>')"
+                                                                title="Ver en formato PDF">
+                                                            <i class="fas fa-file-pdf"></i> PDF
+                                                        </button>
+
+                                                        <!-- VER ORIGINAL -->
+                                                        <a class="btn btn-info"
+                                                           href="<%= formulaUrl%>"
+                                                           target="_blank"
+                                                           title="Ver registro">
+                                                            <i class="fas fa-eye"></i>
+                                                        </a>
+
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <%
+                                                    }
                                                 }
                                             %>
                                         </tbody>

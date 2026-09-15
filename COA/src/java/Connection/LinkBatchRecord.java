@@ -552,4 +552,108 @@ public class LinkBatchRecord {
         }
     }
 
+    /**
+     * Explica por qué la última llamada a ControlFormulasRegistrosPorLote
+     * devolvió null (mismo propósito que {@link #getDiagnosticoManga()},
+     * pero para el aplicativo de Control Fórmulas).
+     */
+    private String diagnosticoFormula;
+
+    public String getDiagnosticoFormula() {
+        return diagnosticoFormula;
+    }
+
+    /**
+     * Registros R-PI-004 ("Control Lotes de Materias Primas en Fórmulas")
+     * del aplicativo Control Fórmulas para un lote/lote_c dado (ej.
+     * "17601-35G11" — el mismo valor de "LOTE #"/lote_c que ya usamos para
+     * Inspección Manga, así que no hace falta ninguna derivación nueva).
+     * <p>
+     * Se conecta directo a su base de datos (misma estrategia que ya se usa
+     * con Registros LAB, Generación de Lotes e Inspección Manga: su propia
+     * app exige sesión de usuario logeado, así que nunca se le pide la
+     * página por HTTP). {@code sp_rgt_t_registros_lote_app} ya trae todos
+     * los campos de cabecera que hacían falta (no hace falta además llamar
+     * sp_rgt_t_registro por cada fila, que trae prácticamente lo mismo); por
+     * cada registro encontrado se trae además su detalle de materiales con
+     * sp_rdt_t_registro_detalle.
+     */
+    public List<Map<String, Object>> ControlFormulasRegistrosPorLote(String lote) throws Exception {
+        diagnosticoFormula = null;
+        List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerControlFormulas");
+        if (lst_parameter != null) {
+            Object[] obj_data = (Object[]) lst_parameter.get(0);
+            String[] arr_data = obj_data[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+            login = arr_data[0];
+            password = arr_data[1];
+            url = "jdbc:mysql://" + arr_data[2];
+        } else {
+            LOGGER.severe("LinkBatchRecord.ControlFormulasRegistrosPorLote: no se encontró configuración 'ServerControlFormulas' en Setting");
+            diagnosticoFormula = "No hay configuración de conexión a Control Fórmulas (falta la categoría 'ServerControlFormulas' en Setting).";
+            return null;
+        }
+
+        String ltc = lote == null ? "" : lote.replace("'", "''");
+
+        Connection conn = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            conn = DriverManager.getConnection(url, login, password);
+
+            Statement sttmRegistros = conn.createStatement();
+            ResultSet rs = sttmRegistros.executeQuery("CALL sp_rgt_t_registros_lote_app('" + ltc + "')");
+            List<Map<String, Object>> lstRegistros = new ArrayList<Map<String, Object>>();
+            while (rs.next()) {
+                Map<String, Object> registro = new HashMap<String, Object>();
+                registro.put("idRegistro", rs.getInt(1));
+                registro.put("nombreFormula", rs.getString(3));
+                registro.put("fechaGeneracion", rs.getObject(4));
+                registro.put("loteGeneracion", rs.getString(5));
+                registro.put("codigoCompuesto", rs.getString(6));
+                registro.put("responsableProduccion", rs.getString(7));
+                registro.put("responsableCalidad", rs.getString(8));
+                registro.put("observacion", rs.getString(12));
+                registro.put("clasificacion", rs.getString(13));
+                lstRegistros.add(registro);
+            }
+            rs.close();
+            sttmRegistros.close();
+
+            for (Map<String, Object> registro : lstRegistros) {
+                int idRegistro = (Integer) registro.get("idRegistro");
+                Statement sttmDetalle = conn.createStatement();
+                ResultSet rsDetalle = sttmDetalle.executeQuery("CALL sp_rdt_t_registro_detalle(" + idRegistro + ")");
+                List<Map<String, Object>> lstDetalles = new ArrayList<Map<String, Object>>();
+                while (rsDetalle.next()) {
+                    Map<String, Object> detalle = new HashMap<String, Object>();
+                    detalle.put("idTipoMateriaPrima", rsDetalle.getObject(3));
+                    detalle.put("consecutivo", rsDetalle.getString(4));
+                    detalle.put("lotePrincipal", rsDetalle.getString(5));
+                    detalle.put("consecutivoCalidadPrincipal", rsDetalle.getString(6));
+                    detalle.put("subLote", rsDetalle.getString(7));
+                    detalle.put("consecutivoCalidadSub", rsDetalle.getString(8));
+                    lstDetalles.add(detalle);
+                }
+                rsDetalle.close();
+                sttmDetalle.close();
+                registro.put("detalles", lstDetalles);
+            }
+
+            conn.close();
+            return lstRegistros;
+        } catch (SQLException ex) {
+            LOGGER.log(Level.SEVERE, "LinkBatchRecord.ControlFormulasRegistrosPorLote: SQLException conectando a " + url, ex);
+            diagnosticoFormula = "No se pudo conectar a la base de datos de Control Fórmulas (" + url + "): " + ex.getMessage();
+            return null;
+        } catch (ClassNotFoundException ex) {
+            LOGGER.log(Level.SEVERE, "LinkBatchRecord.ControlFormulasRegistrosPorLote: ClassNotFoundException", ex);
+            diagnosticoFormula = "No se encontró el driver de conexión a la base de datos de Control Fórmulas.";
+            return null;
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "LinkBatchRecord.ControlFormulasRegistrosPorLote: Exception", ex);
+            diagnosticoFormula = "Error inesperado al consultar los registros de Control Fórmulas: " + ex.getMessage();
+            return null;
+        }
+    }
+
 }

@@ -147,6 +147,10 @@ public class BatchRecordManifest {
             listaDocumentos.add(cabeceraResult.documento);
         }
 
+        // 7. Registros R-PI-004 de Control Fórmulas (ver consultarRegistrosFormula).
+        MangaListResult formulaResult = buildFormulaDocumentos(certJpa, linkBatch, idCertificateManga);
+        listaDocumentos.addAll(formulaResult.documentos);
+
         Map<String, Object> resultado = new HashMap<String, Object>();
         resultado.put("cliente", cliente != null ? cliente : "");
         resultado.put("anio", anio != null ? anio : "");
@@ -553,6 +557,216 @@ public class BatchRecordManifest {
         } catch (NumberFormatException ex) {
             return 0;
         }
+    }
+
+    /**
+     * Consulta únicamente los registros R-PI-004 de Control Fórmulas para un
+     * orden/lote, sin construir el resto del manifiesto. La búsqueda es por
+     * el mismo lote_c del certificado que ya usamos para Inspección Manga
+     * (Control Fórmulas identifica sus propios registros por
+     * "lote_generacion", que coincide con ese mismo valor — no hace falta
+     * ninguna derivación adicional, a diferencia de Inspección Manga que
+     * necesitaba también la Referencia).
+     */
+    public static MangaListResult consultarRegistrosFormula(String orden, String lote) throws Exception {
+        LinkBatchRecord linkBatch = new LinkBatchRecord();
+        CertificatesJpaController certJpa = new CertificatesJpaController();
+
+        int idCertificateManga = 0;
+        List lstCert = certJpa.ConsultCertificatesBatchRecord(orden, lote);
+        if (lstCert != null) {
+            for (Object item : lstCert) {
+                Object[] arg = (Object[]) item;
+                if (arg.length >= 1) {
+                    try {
+                        idCertificateManga = Integer.parseInt(String.valueOf(arg[0]));
+                    } catch (NumberFormatException ignored) {
+                    }
+                    break;
+                }
+            }
+        }
+        return buildFormulaDocumentos(certJpa, linkBatch, idCertificateManga);
+    }
+
+    /**
+     * Registros R-PI-004 ("Control Lotes de Materias Primas en Fórmulas") de
+     * Control Fórmulas — un documento por cada registro encontrado para el
+     * lote_c del lote actual (ver LinkBatchRecord.ControlFormulasRegistrosPorLote).
+     * Reutiliza resolverLoteManga solo para obtener el lote_c (no se necesita
+     * la Referencia ni el lote_producto que sí hacen falta para Inspección
+     * Manga).
+     */
+    private static MangaListResult buildFormulaDocumentos(CertificatesJpaController certJpa, LinkBatchRecord linkBatch, int idCertificateManga) throws Exception {
+        MangaListResult resultado = new MangaListResult();
+        LoteMangaResolucion lote = resolverLoteManga(certJpa, idCertificateManga);
+        if (lote.diagnostico != null) {
+            resultado.diagnostico = lote.diagnostico;
+            return resultado;
+        }
+        List<Map<String, Object>> registros = linkBatch.ControlFormulasRegistrosPorLote(lote.loteC);
+        if (registros == null) {
+            String motivo = linkBatch.getDiagnosticoFormula();
+            resultado.diagnostico = motivo != null ? motivo
+                    : "No se pudieron obtener los registros R-PI-004 de Control Fórmulas para el lote '" + lote.loteC + "'.";
+            return resultado;
+        }
+        if (registros.isEmpty()) {
+            resultado.diagnostico = "No se encontraron registros R-PI-004 en Control Fórmulas para el lote '" + lote.loteC + "'.";
+            return resultado;
+        }
+        for (Map<String, Object> registro : registros) {
+            Map<String, Object> doc = new HashMap<String, Object>();
+            doc.put("origen", "Control Fórmulas");
+            doc.put("tipo", "R-PI-004");
+            doc.put("nombre", "R-PI-004 - Lote " + esc(registro.get("loteGeneracion")) + " - " + esc(registro.get("nombreFormula")));
+            doc.put("categoria", "manga");
+            doc.put("html", buildFormulaHtml(registro));
+            resultado.documentos.add(doc);
+        }
+        return resultado;
+    }
+
+    /**
+     * Arma la página HTML de un registro R-PI-004 individual (cabecera +
+     * tabla transpuesta de materiales, un renglón por atributo y una columna
+     * por material), replicando el mismo formato y las mismas reglas de
+     * Control Fórmulas: la barra "COPIA NO CONTROLADA" y el encabezado
+     * "REGISTRO"/"VERSIÓN 1" solo aparecen para fechas >= 2015-04-22 (antes
+     * era "MANUAL DE REGISTROS"/"VERSION 0"), y la columna de Clasificación
+     * en Observaciones también depende de esa fecha.
+     */
+    private static String buildFormulaHtml(Map<String, Object> registro) {
+        String fechaGeneracion = String.valueOf(registro.get("fechaGeneracion"));
+        double version = 0;
+        try {
+            String[] partesFecha = fechaGeneracion.split("-");
+            version = Double.parseDouble(partesFecha[0] + "." + partesFecha[1] + partesFecha[2]);
+        } catch (Exception ignored) {
+        }
+
+        List<Map<String, Object>> detalles = (List<Map<String, Object>>) registro.get("detalles");
+        if (detalles == null) {
+            detalles = new ArrayList<Map<String, Object>>();
+        }
+        int contadorMaestra = 0;
+        int contadorEquivalente = 0;
+        for (Map<String, Object> detalle : detalles) {
+            if (toInt(detalle.get("idTipoMateriaPrima")) == 1) {
+                contadorMaestra++;
+            } else {
+                contadorEquivalente++;
+            }
+        }
+
+        StringBuilder html = new StringBuilder();
+        html.append("<html><head><meta charset='UTF-8'>")
+                .append("<style>")
+                .append("@page { size: A4 landscape; margin: 8mm; }")
+                .append("body { font-family: Arial, sans-serif; font-size:11px; color:#212529; margin:0; }")
+                .append("table.rpi { width:100%; border-collapse: collapse; margin-top:8px; }")
+                .append("table.rpi td, table.rpi th { border:1px solid #444; padding:4px 6px; }")
+                .append("td.vacia { background:#ddd; }")
+                .append(".rojo { color:#c0392b; } .calidad { color:#1a7a4c; } .negro { color:#000; }")
+                .append("</style></head><body>")
+                .append("<table class='rpi'>");
+
+        if (version >= 2016.0101) {
+            html.append("<tr><td colspan='6' style='background:#979595;text-align:center;'><b style='color:#fff;'>COPIA NO CONTROLADA</b></td></tr>");
+        }
+
+        html.append("<tr>")
+                .append("<td align='center' colspan='2' rowspan='2'>");
+        if (LOGO_DATA_URI != null) {
+            html.append("<img src='").append(LOGO_DATA_URI).append("' alt='Logo' style='width:202.5px;height:67.5px' />");
+        }
+        html.append("</td>");
+        if (version >= 2015.0422) {
+            html.append("<td align='center' colspan='2'>REGISTRO</td>")
+                    .append("<td align='center' colspan='2'>CODIGO <b>R-PI-004</b></td>");
+        } else {
+            html.append("<td align='center' colspan='2'>MANUAL DE REGISTROS</td>")
+                    .append("<td align='center' colspan='2'>CODIGO <b>R-PI-004</b></td>");
+        }
+        html.append("</tr>")
+                .append("<tr>")
+                .append("<td align='center' colspan='2'>CONTROL LOTES DE MATERIAS<br />PRIMAS EN FORMULAS</td>");
+        if (version >= 2015.0422) {
+            html.append("<td align='center' colspan='2'>VERSIÓN: <b>1</b></td>");
+        } else {
+            html.append("<td align='center' colspan='2'>VERSION <b>0</b></td>");
+        }
+        html.append("</tr>")
+                .append("<tr>")
+                .append("<th colspan='2'>FECHA</th>")
+                .append("<th colspan='2'>RESPONSABLE POR PRODUCCIÓN</th>")
+                .append("<th colspan='2'>RESPONSABLE POR CALIDAD</th>")
+                .append("</tr>")
+                .append("<tr>")
+                .append("<td align='center' colspan='2'>").append(esc(registro.get("fechaGeneracion"))).append("</td>")
+                .append("<td align='center' colspan='2'>").append(esc(registro.get("responsableProduccion"))).append("</td>");
+        String responsableCalidad = String.valueOf(registro.get("responsableCalidad"));
+        String claseCalidad = "PENDIENTE".equals(responsableCalidad) ? "rojo" : "calidad";
+        html.append("<td align='center' colspan='2'><b class='").append(claseCalidad).append("'>")
+                .append(esc(responsableCalidad)).append("</b></td>")
+                .append("</tr>")
+                .append("<tr>")
+                .append("<td align='center'><b>FORMULA</b></td>")
+                .append("<td align='center'>").append(esc(registro.get("nombreFormula"))).append("</td>")
+                .append("<td align='center'><b>LOTE</b></td>")
+                .append("<td align='center'><b class='negro'>").append(esc(registro.get("loteGeneracion"))).append("</b></td>")
+                .append("<td align='center'><b>COD DEL COMPUESTO</b></td>")
+                .append("<td align='center'>").append(esc(registro.get("codigoCompuesto"))).append("</td>")
+                .append("</tr>")
+                .append("</table>")
+                .append("<table class='rpi'>")
+                .append("<tr><th></th>");
+        if (contadorMaestra > 0) {
+            html.append("<th colspan='").append(contadorMaestra).append("'>M DESCRITOS EN LA FORMULA MAESTRA</th>");
+        }
+        if (contadorEquivalente > 0) {
+            html.append("<th colspan='").append(contadorEquivalente).append("'>M EQUIVALENTES</th>");
+        }
+        html.append("</tr>")
+                .append(filaDetalleFormula("CONSECUTIVO", detalles, "consecutivo"))
+                .append(filaDetalleFormula("LOTE PRINCIPAL", detalles, "lotePrincipal"))
+                .append(filaDetalleFormula("CONSECUTIVO DE CALIDAD", detalles, "consecutivoCalidadPrincipal"))
+                .append(filaDetalleFormula("SUBLOTES DE MATERIA PRIMA", detalles, "subLote"))
+                .append(filaDetalleFormula("CONSECUTIVO DE CALIDAD", detalles, "consecutivoCalidadSub"))
+                .append("<tr><th>OBSERVACIONES</th>");
+        int totalColumnas = contadorMaestra + contadorEquivalente;
+        Object observacion = registro.get("observacion");
+        String textoObservacion = observacion == null ? "<b class='rojo'>NINGUNA</b>" : esc(observacion);
+        if (version >= 2015.0422) {
+            html.append("<td colspan='").append(Math.max(totalColumnas - 2, 1)).append("'>").append(textoObservacion).append("</td>")
+                    .append("<td colspan='2'><b>Clasificación</b><br /><b class='negro'>").append(esc(registro.get("clasificacion"))).append("</b></td>");
+        } else {
+            html.append("<td colspan='").append(Math.max(totalColumnas, 1)).append("'>").append(textoObservacion).append("</td>");
+        }
+        html.append("</tr>")
+                .append("</table>")
+                .append("</body></html>");
+        return html.toString();
+    }
+
+    /**
+     * Un renglón de la tabla transpuesta de materiales: la etiqueta y luego
+     * una celda por cada material en {@code detalles}, con fondo gris si el
+     * valor de ese campo viene vacío (igual que la pantalla original).
+     */
+    private static String filaDetalleFormula(String etiqueta, List<Map<String, Object>> detalles, String campo) {
+        StringBuilder fila = new StringBuilder("<tr><td>").append(etiqueta).append("</td>");
+        for (Map<String, Object> detalle : detalles) {
+            Object valor = detalle.get(campo);
+            String texto = valor == null ? "" : String.valueOf(valor).trim();
+            if (texto.isEmpty()) {
+                fila.append("<td class='vacia'></td>");
+            } else {
+                fila.append("<td>").append(esc(texto)).append("</td>");
+            }
+        }
+        fila.append("</tr>");
+        return fila.toString();
     }
 
     /**
