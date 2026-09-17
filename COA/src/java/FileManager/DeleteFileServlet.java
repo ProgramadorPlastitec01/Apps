@@ -20,6 +20,8 @@ public class DeleteFileServlet extends HttpServlet {
         String orden   = request.getParameter("orden");
         String lote    = request.getParameter("lote");
         String archivo = request.getParameter("archivo");
+        // Subcarpeta opcional dentro del lote (ej. "SupportDocs"); vacío = raíz del lote (comportamiento previo).
+        String carpeta = request.getParameter("carpeta");
 
         String msg = "error_delete";
 
@@ -33,6 +35,7 @@ public class DeleteFileServlet extends HttpServlet {
                 + anio + File.separator
                 + orden + File.separator
                 + lote + File.separator
+                + ((carpeta != null && !carpeta.trim().isEmpty()) ? carpeta + File.separator : "")
                 + archivo
             );
 

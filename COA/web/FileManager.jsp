@@ -188,6 +188,11 @@
                                                 <i class="fas fa-upload"></i> Subir archivos
                                             </button>
                                             <% } %>
+                                            <% if (Permission.contains("[39]")) { %>
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#supportUploadModal">
+                                                <i class="fas fa-file-signature"></i> Adjuntar documento de soporte
+                                            </button>
+                                            <% } %>
                                         </div>
                                     </div>
 
@@ -247,6 +252,57 @@
                                                         </button>
                                                         <button type="submit" class="btn btn-green">
                                                             <i class="fas fa-cloud-upload-alt"></i> Subir
+                                                        </button>
+                                                    </div>
+
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% } %>
+                                    <% if (Permission.contains("[39]")) { %>
+                                    <div class="modal fade" id="supportUploadModal" tabindex="-1" role="dialog">
+                                        <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">
+                                                        <i class="fas fa-file-signature text-primary"></i>
+                                                        Adjuntar documento de soporte
+                                                    </h5>
+                                                    <button type="button" class="close" data-dismiss="modal">
+                                                        <span>&times;</span>
+                                                    </button>
+                                                </div>
+
+                                                <form id="supportUploadForm" action="SupportDocumentUploadServlet" method="post" enctype="multipart/form-data">
+
+                                                    <div class="modal-body">
+
+                                                        <input type="hidden" name="cliente" value="<%= cliente%>">
+                                                        <input type="hidden" name="anio" value="<%= anio%>">
+                                                        <input type="hidden" name="orden" value="<%= orden%>">
+                                                        <input type="hidden" name="lote" value="<%= lote%>">
+
+                                                        <div class="form-group">
+                                                            <label>Documento (carta de cliente u otro soporte)</label>
+                                                            <input type="file" id="supportFileInput" name="file" class="form-control"
+                                                                   accept=".pdf,.png,.jpg,.jpeg,.gif">
+                                                            <small class="form-text text-muted">
+                                                                Solo pdf, png, jpg, jpeg, gif. Quedará vinculado al lote y disponible
+                                                                para firmar con la firma registrada del Director de Calidad.
+                                                            </small>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                                            Cancelar
+                                                        </button>
+                                                        <button type="submit" class="btn btn-primary">
+                                                            <i class="fas fa-cloud-upload-alt"></i> Adjuntar
                                                         </button>
                                                     </div>
 
@@ -570,6 +626,70 @@
                                                     }
                                                 }
                                             %>
+                                            <%
+                                                File supportDocsDir = new File(currentPath + File.separator + "SupportDocs");
+                                                File[] soportes = supportDocsDir.listFiles();
+                                                if (soportes != null) {
+                                                    for (File soporte : soportes) {
+                                                        String nombreSoporte = soporte.getName();
+                                                        boolean firmado = nombreSoporte.contains("_FIRMADO_");
+                                                        String relPathSoporte = "Certificates/" + cliente + "/" + anio + "/" + orden + "/" + lote + "/SupportDocs/" + nombreSoporte;
+                                            %>
+                                            <tr class="file-row">
+                                                <td>Documento de Soporte <%= firmado ? "<span class='badge badge-success'>Firmado</span>" : "<span class='badge badge-warning'>Pendiente de firma</span>"%></td>
+                                                <td><%= nombreSoporte%></td>
+                                                <td class="text-center">
+                                                    <div class="btn-group btn-group-sm">
+
+                                                        <!-- VER -->
+                                                        <a class="btn btn-info mr-2"
+                                                           href="<%= relPathSoporte%>"
+                                                           target="_blank"
+                                                           title="Ver documento">
+                                                            <i class="fas fa-eye"></i>
+                                                        </a>
+
+                                                        <!-- DESCARGAR -->
+                                                        <a class="btn btn-success mr-2"
+                                                           href="<%= relPathSoporte%>"
+                                                           download
+                                                           title="Descargar documento">
+                                                            <i class="fas fa-download"></i>
+                                                        </a>
+
+                                                        <% if (!firmado && Permission.contains("[39]")) { %>
+                                                        <!-- FIRMAR -->
+                                                        <button type="button"
+                                                                class="btn btn-primary mr-2"
+                                                                title="Firmar documento"
+                                                                onclick="window.open('SupportDocumentSign.jsp?cliente=<%= cliente%>&anio=<%= anio%>&orden=<%= orden%>&lote=<%= lote%>&archivo=<%= nombreSoporte%>', '_blank')">
+                                                            <i class="fas fa-file-signature"></i>
+                                                        </button>
+                                                        <% } %>
+
+                                                        <% if (Permission.contains("[4]")) { %>
+                                                        <!-- ELIMINAR -->
+                                                        <button type="button"
+                                                                class="btn btn-danger"
+                                                                title="Eliminar documento"
+                                                                onclick="confirmDeleteSupportFile(
+                                                                                '<%= cliente%>',
+                                                                                '<%= anio%>',
+                                                                                '<%= orden%>',
+                                                                                '<%= lote%>',
+                                                                                '<%= nombreSoporte%>'
+                                                                                )">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                        <% } %>
+
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <%
+                                                    }
+                                                }
+                                            %>
                                         </tbody>
                                     </table>
 
@@ -688,6 +808,41 @@
 
                 });
             }
+
+            function confirmDeleteSupportFile(cliente, anio, orden, lote, archivo) {
+
+                swal({
+                    title: "¿Eliminar documento de soporte?",
+                    text: "Esta acción no se puede deshacer",
+                    icon: "warning",
+                    buttons: {
+                        cancel: {
+                            text: "Cancelar",
+                            visible: true,
+                            className: "btn btn-secondary"
+                        },
+                        confirm: {
+                            text: "Sí, eliminar",
+                            value: true,
+                            className: "btn btn-danger"
+                        }
+                    },
+                    dangerMode: true
+                }).then(function (confirm) {
+
+                    if (confirm) {
+                        window.location.href =
+                                "DeleteFileServlet"
+                                + "?cliente=" + encodeURIComponent(cliente)
+                                + "&anio=" + encodeURIComponent(anio)
+                                + "&orden=" + encodeURIComponent(orden)
+                                + "&lote=" + encodeURIComponent(lote)
+                                + "&carpeta=SupportDocs"
+                                + "&archivo=" + encodeURIComponent(archivo);
+                    }
+
+                });
+            }
         </script>
         <script>
             <%
@@ -746,6 +901,46 @@
             iziToast.warning({
                 title: 'Atención',
                 message: '"El archivo no existe',
+                position: 'bottomRight'
+            });
+            <%
+            } else if ("support_upload_success".equals(msg)) {
+            %>
+            iziToast.success({
+                title: 'Éxito',
+                message: 'Documento de soporte adjuntado correctamente. Ya puede firmarlo.',
+                position: 'bottomRight'
+            });
+            <%
+            } else if ("support_upload_partial".equals(msg)) {
+            %>
+            iziToast.warning({
+                title: 'Formato no permitido',
+                message: 'El documento no se adjuntó: solo se permiten pdf, png, jpg, jpeg, gif.',
+                position: 'bottomRight'
+            });
+            <%
+            } else if ("support_sign_success".equals(msg)) {
+            %>
+            iziToast.success({
+                title: 'Documento firmado',
+                message: 'El documento de soporte fue firmado correctamente.',
+                position: 'bottomRight'
+            });
+            <%
+            } else if ("error_permission".equals(msg)) {
+            %>
+            iziToast.error({
+                title: 'Sin permiso',
+                message: 'No tiene permiso para realizar esta acción, o no tiene una firma registrada.',
+                position: 'bottomRight'
+            });
+            <%
+            } else if ("error_sign".equals(msg)) {
+            %>
+            iziToast.error({
+                title: 'Error al firmar',
+                message: 'No se pudo firmar el documento de soporte.',
                 position: 'bottomRight'
             });
             <%
@@ -811,6 +1006,22 @@
                         e.preventDefault();
                         avisarInvalidos(invalidos);
                         filesInput.value = '';
+                    }
+                });
+            })();
+
+            (function () {
+                var supportFileInput = document.getElementById('supportFileInput');
+                var supportUploadForm = document.getElementById('supportUploadForm');
+                if (!supportFileInput || !supportUploadForm) {
+                    return;
+                }
+
+                supportUploadForm.addEventListener('submit', function (e) {
+                    if (supportFileInput.files.length > 0 && !extensionPermitida(supportFileInput.files[0].name)) {
+                        e.preventDefault();
+                        avisarInvalidos([supportFileInput.files[0].name]);
+                        supportFileInput.value = '';
                     }
                 });
             })();

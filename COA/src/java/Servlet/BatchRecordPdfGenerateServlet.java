@@ -2,6 +2,7 @@ package Servlet;
 
 import Method.BatchRecordManifest;
 import Method.ChromeHeadlessPdf;
+import Method.PdfImageUtil;
 import Method.RemoteHtmlFetcher;
 import java.io.File;
 import java.io.IOException;
@@ -20,11 +21,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 /**
  * Generates the unified Batch Record PDF entirely on the server: renders a
@@ -77,7 +73,7 @@ public class BatchRecordPdfGenerateServlet extends HttpServlet {
             // 2. Cada documento, renderizado con su propio <base href> intacto
             for (Map<String, Object> item : documentos) {
                 try {
-                    if ("fisico".equals(item.get("categoria"))) {
+                    if ("fisico".equals(item.get("categoria")) || "soporte".equals(item.get("categoria"))) {
                         File physicalPdf = renderPhysicalFile(item, workDir);
                         if (physicalPdf != null) {
                             individualPdfs.add(physicalPdf);
@@ -213,25 +209,7 @@ public class BatchRecordPdfGenerateServlet extends HttpServlet {
 
         if (nameLower.endsWith(".png") || nameLower.endsWith(".jpg") || nameLower.endsWith(".jpeg") || nameLower.endsWith(".gif")) {
             File imagePdf = new File(workDir, UUID.randomUUID().toString() + ".pdf");
-            try (PDDocument doc = new PDDocument()) {
-                PDPage page = new PDPage(PDRectangle.A4);
-                doc.addPage(page);
-                PDImageXObject image = PDImageXObject.createFromFile(source.getAbsolutePath(), doc);
-
-                float margin = 20f;
-                float maxWidth = page.getMediaBox().getWidth() - margin * 2;
-                float maxHeight = page.getMediaBox().getHeight() - margin * 2;
-                float scale = Math.min(maxWidth / image.getWidth(), maxHeight / image.getHeight());
-                float drawWidth = image.getWidth() * scale;
-                float drawHeight = image.getHeight() * scale;
-                float x = (page.getMediaBox().getWidth() - drawWidth) / 2;
-                float y = (page.getMediaBox().getHeight() - drawHeight) / 2;
-
-                try (PDPageContentStream content = new PDPageContentStream(doc, page)) {
-                    content.drawImage(image, x, y, drawWidth, drawHeight);
-                }
-                doc.save(imagePdf);
-            }
+            PdfImageUtil.imageToPdf(source, imagePdf);
             return imagePdf;
         }
 
@@ -296,25 +274,7 @@ public class BatchRecordPdfGenerateServlet extends HttpServlet {
                     Files.copy(in, tempImage.toPath());
                 }
                 File imagePdf = new File(workDir, UUID.randomUUID().toString() + ".pdf");
-                try (PDDocument doc = new PDDocument()) {
-                    PDPage page = new PDPage(PDRectangle.A4);
-                    doc.addPage(page);
-                    PDImageXObject image = PDImageXObject.createFromFile(tempImage.getAbsolutePath(), doc);
-
-                    float margin = 20f;
-                    float maxWidth = page.getMediaBox().getWidth() - margin * 2;
-                    float maxHeight = page.getMediaBox().getHeight() - margin * 2;
-                    float scale = Math.min(maxWidth / image.getWidth(), maxHeight / image.getHeight());
-                    float drawWidth = image.getWidth() * scale;
-                    float drawHeight = image.getHeight() * scale;
-                    float x = (page.getMediaBox().getWidth() - drawWidth) / 2;
-                    float y = (page.getMediaBox().getHeight() - drawHeight) / 2;
-
-                    try (PDPageContentStream content = new PDPageContentStream(doc, page)) {
-                        content.drawImage(image, x, y, drawWidth, drawHeight);
-                    }
-                    doc.save(imagePdf);
-                }
+                PdfImageUtil.imageToPdf(tempImage, imagePdf);
                 return imagePdf;
             }
 

@@ -334,13 +334,16 @@ public class GenerateReport extends TagSupport {
                             out.print("<button class='btn btn-info btn-sm mr-2' style='border-radius: 4px;' onclick=\"DuplicateReg('Generate?opt=10&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "')\" data-toggle='tooltip' data-placement='bottom' title='Duplicar'><i class=\"fas fa-copy\"></i></button>");
                         }
                         if (Permission.contains("[28]")) {
-                            out.print("<button class='btn btn-success btn-sm mr-2' style='border-radius: 4px;' onclick=\"confirmarFinalizar('Generate?opt=7&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "&Customer=" + ObjCerti[4] + "&Anio=" + ObjCerti[12] + "&Order=" + ObjCerti[5] + "&Batch=" + ObjCerti[7] + "')\" data-toggle='tooltip' data-placement='bottom' title='Finalizar'><i class=\"fas fa-check\"></i></button>");
+                            out.print("<button class='btn btn-success btn-sm mr-2' style='border-radius: 4px;' onclick=\"confirmarFinalizar('Generate?opt=7&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "')\" data-toggle='tooltip' data-placement='bottom' title='Finalizar'><i class=\"fas fa-check\"></i></button>");
                         }
                     }
                     if (Permission.contains("[25]")) {
                         out.print("<button class='btn btn-green btn-sm mr-2' style='border-radius: 4px;' onclick=\"javascript:location.href='Generate?opt=2&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "&TempDelete=" + TempDelete + "&Order=" + ObjCerti[5] + "&Batch=" + ObjCerti[7] + "&StateCerti=" + State + "&TempM=0&AmoutReg=" + ObjCerti[14] + "';cargarDatos()\"  data-toggle='tooltip' data-placement='top' title='Ver'><i class=\"fas fa-eye\"></i></button>");
                     } else {
                         out.print("<button class='btn btn-green disabled btn-sm mr-2' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Sin permiso'><i class=\"fas fa-eye\"></i></button>");
+                    }
+                    if (Permission.contains("[39]")) {
+                        out.print("<button class='btn btn-primary btn-sm mr-2' style='border-radius: 4px;' onclick=\"javascript:location.href='FileManager.jsp?cliente=" + ObjCerti[4] + "&anio=" + ObjCerti[12] + "&orden=" + ObjCerti[5] + "&lote=" + ObjCerti[7] + "'\" data-toggle='tooltip' data-placement='top' title='Adjuntar soporte y firmar'><i class=\"fas fa-folder\"></i></button>");
                     }
                     if (State == 1) {
                         if (Permission.contains("[9]")) {

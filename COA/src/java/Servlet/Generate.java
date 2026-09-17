@@ -255,7 +255,7 @@ public class Generate extends HttpServlet {
                             }
                             request.setAttribute("RegisterCertificates", result);
                         }
-                        request.getRequestDispatcher("Generate?opt=2&Type=" + Type + "&Order=" + Order + "&Product=" + Product + "&Batch=" + Batch + "&FormatName=" + FormatName + "&IdCertificates=" + IdCertificates + "&StateCerti=1&AmoutReg=" + AmoutReg )
+                        request.getRequestDispatcher("Generate?opt=2&Type=" + Type + "&Order=" + Order + "&Product=" + Product + "&Batch=" + Batch + "&FormatName=" + FormatName + "&IdCertificates=" + IdCertificates + "&StateCerti=1&AmoutReg=" + AmoutReg)
                                 .forward(request, response);
                         //</editor-fold>
                     }
@@ -278,6 +278,26 @@ public class Generate extends HttpServlet {
                     } catch (Exception e) {
                         Temp = 0;
                     }
+                    try {
+                        Customer = request.getParameter("Customer");
+                    } catch (Exception e) {
+                        Customer = "";
+                    }
+                    try {
+                        Anio = Integer.parseInt(request.getParameter("Anio"));
+                    } catch (Exception e) {
+                        Anio = 0;
+                    }
+                    try {
+                        Order = Integer.parseInt(request.getParameter("Order"));
+                    } catch (Exception e) {
+                        Order = 0;
+                    }
+                    try {
+                        Batch = request.getParameter("Batch");
+                    } catch (Exception e) {
+                        Batch = "";
+                    }
                     if ((IdRol == 1) || (IdRol == 2)) {
                         if (Signature != null) {
                             if (Temp == 0) {
@@ -288,6 +308,23 @@ public class Generate extends HttpServlet {
                                     result = CertificatesJpa.CertificatesUpdateSignature(IdCertificates, Signature);
                                 }
                                 if (result) {
+                                    // Ruta base
+                                    String basePath = getServletContext().getRealPath("/Certificates");
+                                    // Construcción de la ruta
+                                    File dirLote = new File(
+                                            basePath
+                                            + File.separator + Customer
+                                            + File.separator + Anio
+                                            + File.separator + Order
+                                            + File.separator + Batch
+                                    );
+                                    // Crear carpetas si no existen
+                                    if (!dirLote.exists()) {
+                                        boolean created = dirLote.mkdirs();
+                                        if (!created) {
+                                            System.out.println("No se pudo crear la estructura de carpetas");
+                                        }
+                                    }
                                     request.setAttribute("SigMasive", result);
                                 }
                                 request.getRequestDispatcher("Generate?opt=8").forward(request, response);
@@ -297,6 +334,23 @@ public class Generate extends HttpServlet {
                                 IdCertificates = Integer.parseInt(IdCertiMasive);
                                 result = CertificatesJpa.CertificatesUpdateSignature(IdCertificates, Signature);
                                 if (result) {
+                                    // Ruta base
+                                    String basePath = getServletContext().getRealPath("/Certificates");
+                                    // Construcción de la ruta
+                                    File dirLote = new File(
+                                            basePath
+                                            + File.separator + Customer
+                                            + File.separator + Anio
+                                            + File.separator + Order
+                                            + File.separator + Batch
+                                    );
+                                    // Crear carpetas si no existen
+                                    if (!dirLote.exists()) {
+                                        boolean created = dirLote.mkdirs();
+                                        if (!created) {
+                                            System.out.println("No se pudo crear la estructura de carpetas");
+                                        }
+                                    }
                                     request.setAttribute("SigUnique", result);
                                 }
                                 request.getRequestDispatcher("Generate?opt=2&Type=" + Type + "&IdCertificates=" + IdCertificates + "&TempDelete=0&StateCerti=3").forward(request, response);
@@ -390,45 +444,8 @@ public class Generate extends HttpServlet {
                     } catch (Exception e) {
                         IdCertificates = 0;
                     }
-                    try {
-                        Customer = request.getParameter("Customer");
-                    } catch (Exception e) {
-                        Customer = "";
-                    }
-                    try {
-                        Anio = Integer.parseInt(request.getParameter("Anio"));
-                    } catch (Exception e) {
-                        Anio = 0;
-                    }
-                    try {
-                        Order = Integer.parseInt(request.getParameter("Order"));
-                    } catch (Exception e) {
-                        Order = 0;
-                    }
-                    try {
-                        Batch = request.getParameter("Batch");
-                    } catch (Exception e) {
-                        Batch = "";
-                    }
                     result = CertificatesJpa.UpdateCertificateFinish(IdCertificates);
                     if (result) {
-                        // Ruta base
-                        String basePath = getServletContext().getRealPath("/Certificates");
-                        // Construcción de la ruta
-                        File dirLote = new File(
-                                basePath
-                                + File.separator + Customer
-                                + File.separator + Anio
-                                + File.separator + Order
-                                + File.separator + Batch
-                        );
-                        // Crear carpetas si no existen
-                        if (!dirLote.exists()) {
-                            boolean created = dirLote.mkdirs();
-                            if (!created) {
-                                System.out.println("No se pudo crear la estructura de carpetas");
-                            }
-                        }
                         MailConn.CertificateSend(NumberCertificate, UserName, getServletContext());
                         request.setAttribute("FinishCertificate", true);
                     }

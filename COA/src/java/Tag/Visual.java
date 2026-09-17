@@ -232,15 +232,19 @@ public class Visual extends TagSupport {
                         }
                     }
                     if (Permission.contains("[11]")) {
-                        out.print("<div>"
-                                + "<button class='btn btn-outline-warning btn-sm' "
-                                + "style='border-radius: 4px; padding: 2px 9px;' "
-                                + "onclick=\"javascript:location.href='Generate?opt=4&Type="
-                                + Type + "&Temp=1&IdCertiMasive=" + IdCertificates
-                                + "';cargarDatos()\" data-toggle='tooltip' "
-                                + "data-placement='top' title='Firmar'>"
-                                + "<i class='fas fa-signature'></i>"
-                                + "</button></div>");
+                        List lstId = CertificatesJpa.ConsultCertificatesId(Type, IdCertificates);
+                        if (lstId != null) {
+                            Object[] ObjId = (Object[]) lstId.get(0);
+                            out.print("<div>"
+                                    + "<button class='btn btn-outline-warning btn-sm' "
+                                    + "style='border-radius: 4px; padding: 2px 9px;' "
+                                    + "onclick=\"javascript:location.href='Generate?opt=4&Type="
+                                    + Type + "&Temp=1&IdCertiMasive=" + IdCertificates
+                                    + "&Customer=" + ObjId[4] + "&Anio=" + ObjId[12] + "&Order=" + ObjId[5] + "&Batch=" + ObjId[7] + "';cargarDatos()\" data-toggle='tooltip' "
+                                    + "data-placement='top' title='Firmar'>"
+                                    + "<i class='fas fa-signature'></i>"
+                                    + "</button></div>");
+                        }
                     }
                     out.print("</div>");
 

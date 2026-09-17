@@ -61,6 +61,31 @@ public class BatchRecordManifest {
             }
         }
 
+        // 0b. Documentos de soporte adjuntados y firmados desde GenerateReport
+        // (SupportDocumentUploadServlet/SupportDocumentSignServlet), guardados en
+        // la subcarpeta SupportDocs/ dentro del mismo lote. Se tratan como archivo
+        // físico (PDF o imagen ya convertida a PDF) a la hora de fusionar.
+        if (certificatesBasePath != null && cliente != null && anio != null) {
+            File supportDocsDir = new File(certificatesBasePath + File.separator + cliente + File.separator + anio
+                    + File.separator + orden + File.separator + lote + File.separator + "SupportDocs");
+            File[] soportes = supportDocsDir.listFiles();
+            if (soportes != null) {
+                for (File soporte : soportes) {
+                    if (!soporte.isFile()) {
+                        continue;
+                    }
+                    Map<String, Object> doc = new HashMap<String, Object>();
+                    boolean firmado = soporte.getName().contains("_FIRMADO_");
+                    doc.put("origen", "Documento de Soporte");
+                    doc.put("tipo", firmado ? "Documento de Soporte (Firmado)" : "Documento de Soporte (Pendiente de firma)");
+                    doc.put("nombre", soporte.getName());
+                    doc.put("url", "Certificates/" + cliente + "/" + anio + "/" + orden + "/" + lote + "/SupportDocs/" + soporte.getName());
+                    doc.put("categoria", "soporte");
+                    listaDocumentos.add(doc);
+                }
+            }
+        }
+
         // 1. Links Registros LAB
         List lstLink = linkBatch.LinkBatchRecord(orden, lote);
         if (lstLink != null) {

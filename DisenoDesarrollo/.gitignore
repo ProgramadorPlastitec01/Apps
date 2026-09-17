@@ -1,0 +1,13 @@
+# NetBeans / Ant build output
+build/
+dist/
+
+# IDE local (per-developer) state
+nbproject/private/
+
+# Agent tooling (local)
+.atl/
+
+# Runtime/build artifacts (externos)
+web/WEB-INF/classes/
+tomcat_output.txt
