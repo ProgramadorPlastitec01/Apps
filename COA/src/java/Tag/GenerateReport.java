@@ -343,7 +343,7 @@ public class GenerateReport extends TagSupport {
                         out.print("<button class='btn btn-green disabled btn-sm mr-2' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Sin permiso'><i class=\"fas fa-eye\"></i></button>");
                     }
                     if (Permission.contains("[39]")) {
-                        out.print("<button class='btn btn-primary btn-sm mr-2' style='border-radius: 4px;' onclick=\"javascript:location.href='FileManager.jsp?cliente=" + ObjCerti[4] + "&anio=" + ObjCerti[12] + "&orden=" + ObjCerti[5] + "&lote=" + ObjCerti[7] + "'\" data-toggle='tooltip' data-placement='top' title='Adjuntar soporte y firmar'><i class=\"fas fa-folder\"></i></button>");
+                        out.print("<button class='btn btn-primary btn-sm mr-2' style='border-radius: 4px;' onclick=\"javascript:location.href='FileManager.jsp?cliente=" + ObjCerti[4] + "&anio=" + ObjCerti[12] + "&orden=" + ObjCerti[5] + "&lote=" + ObjCerti[7] + "'\" data-toggle='tooltip' data-placement='top' title='Batch Record'><i class=\"fas fa-folder\"></i></button>");
                     }
                     if (State == 1) {
                         if (Permission.contains("[9]")) {

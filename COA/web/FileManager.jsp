@@ -29,10 +29,339 @@
                 float: right;
 
             }
+
+            /* ================== BREADCRUMB ================== */
+            .breadcrumb-bar {
+                background:#fff;
+                border:1px solid #e9ecef;
+                border-radius:8px;
+                padding:10px 16px;
+                margin-bottom:20px;
+                box-shadow:0 1px 3px rgba(0,0,0,0.04);
+            }
+            .breadcrumb-bar .breadcrumb {
+                background:transparent;
+                margin:0;
+                padding:0;
+                font-size:14px;
+            }
+            .breadcrumb-bar .breadcrumb-item a {
+                color:#6777ef;
+                font-weight:500;
+                text-decoration:none;
+            }
+            .breadcrumb-bar .breadcrumb-item a:hover {
+                text-decoration:underline;
+            }
+            .breadcrumb-bar .breadcrumb-item.active {
+                color:#0b0025;
+                font-weight:600;
+            }
+
+            /* ================== CARPETAS ================== */
+            .folder-item .card {
+                border:1px solid #e9ecef !important;
+                border-radius:10px;
+                transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+            }
+            .folder-item .card:hover {
+                transform: translateY(-3px);
+                box-shadow:0 8px 20px rgba(11,0,37,0.12) !important;
+                border-color:#6777ef !important;
+            }
+            .folder-item .card i.fa-folder {
+                color:#6777ef !important;
+                font-size:44px !important;
+            }
+            .folder-item .card h6 {
+                margin-top:10px;
+                font-weight:600;
+                color:#0b0025;
+                word-break: break-word;
+            }
+
+            /* ================== ENCABEZADO / TOOLBAR DEL LOTE ================== */
+            .lote-toolbar {
+                background:#fff;
+                border:1px solid #e9ecef;
+                border-radius:8px;
+                padding:16px;
+                margin-bottom:16px;
+            }
+            .lote-toolbar .btn {
+                border-radius:6px;
+                font-weight:500;
+            }
+
+            /* ================== EVENTOS DE INTEGRACIÓN ================== */
+            .integration-alert {
+                background:#fff8e6;
+                border:1px solid #ffe4a3;
+                border-left:4px solid #ffc107;
+                border-radius:6px;
+                padding:10px 16px;
+                margin-bottom:16px;
+                color:#7a5b00;
+            }
+            .integration-alert h6 {
+                color:#946200;
+                font-size:13px;
+                font-weight:600;
+                margin-bottom:6px;
+            }
+            .integration-alert ul {
+                font-size:13px;
+            }
+
+            /* ================== TABLA DE ARCHIVOS ================== */
+            .table-files {
+                border:1px solid #e9ecef;
+                border-radius:8px;
+                overflow:hidden;
+            }
+            .table-files thead th {
+                background:#0b0025;
+                color:#fff;
+                font-weight:600;
+                font-size:13px;
+                border:none;
+                vertical-align:middle;
+            }
+            .table-files tbody tr:hover {
+                background:#f3f4fb;
+            }
+            .table-files td {
+                vertical-align:middle;
+                font-size:12.5px;
+                padding:8px 8px;
+            }
+            .table-files thead th {
+                padding:8px 8px;
+                font-size:11.5px;
+            }
+
+            /* ================== BATCH RECORD (namespaced, no toca .btn/.table/.card globales) ================== */
+            .batch-record-header {
+                background:#fff;
+                border:1px solid #e9ecef;
+                border-left:5px solid #6777ef;
+                border-radius:10px;
+                padding:16px 20px;
+                margin-bottom:16px;
+                display:flex;
+                justify-content:space-between;
+                align-items:flex-start;
+                flex-wrap:wrap;
+                gap:12px;
+                box-shadow:0 1px 3px rgba(16,24,40,0.05);
+            }
+            .batch-record-lote-title { font-size:20px; font-weight:700; color:#0b0025; }
+            .batch-record-lote-subtitle { font-size:13px; color:#6c757d; margin-top:2px; }
+            .batch-record-header-right { display:flex; align-items:center; gap:20px; flex-wrap:wrap; }
+            .batch-record-updated-label { font-size:11px; color:#9aa0ac; font-weight:600; }
+            .batch-record-updated-value { font-size:13px; color:#495057; font-weight:600; margin-top:2px; }
+            .batch-record-events-badge {
+                display:inline-flex; align-items:center; gap:8px;
+                background:#fff8e6; border:1px solid #ffe4a3; border-radius:8px;
+                padding:8px 14px; color:#7a5b00; font-size:12.5px; font-weight:600;
+                text-decoration:none;
+            }
+            .batch-record-events-badge:hover { color:#5c4500; text-decoration:none; }
+            .batch-record-events-count {
+                background:#dc3545; color:#fff; font-size:11px; font-weight:700;
+                border-radius:9px; padding:1px 7px;
+            }
+
+            .batch-record-summary {
+                display:grid; grid-template-columns:repeat(3, minmax(0,1fr));
+                gap:14px; margin-bottom:16px;
+            }
+            .batch-record-summary-card {
+                background:#fff; border:1px solid #e9ecef; border-top:3px solid #e9ecef; border-radius:10px;
+                padding:14px 16px; display:flex; align-items:center; gap:12px;
+            }
+            .batch-record-summary-card:nth-child(1) { border-top-color:#6777ef; }
+            .batch-record-summary-card:nth-child(2) { border-top-color:#28a745; }
+            .batch-record-summary-card:nth-child(3) { border-top-color:#e0a800; }
+            .batch-record-summary-icon {
+                width:34px; height:34px; border-radius:8px; flex-shrink:0;
+                display:flex; align-items:center; justify-content:center; font-size:15px;
+            }
+            .batch-record-summary-icon-total { background:#eef0fd; color:#6777ef; }
+            .batch-record-summary-icon-firmados { background:#e9f9ee; color:#28a745; }
+            .batch-record-summary-icon-pendientes { background:#fff6e6; color:#e0a800; }
+            .batch-record-summary-value { font-size:20px; font-weight:700; color:#0b0025; line-height:1; }
+            .batch-record-summary-label { font-size:12px; color:#6c757d; margin-top:3px; }
+            .batch-record-summary-sub { font-size:11px; color:#9aa0ac; margin-top:1px; }
+
+            .batch-record-actions {
+                display:flex; flex-wrap:wrap; gap:10px; margin-bottom:16px; justify-content: flex-end;
+            }
+            .batch-record-actions .btn-green {
+                background:linear-gradient(180deg,#22c55e,#16a34a) !important;
+                border-color:#16a34a !important; color:#fff !important;
+                box-shadow:0 2px 6px rgba(22,163,74,0.35);
+            }
+            .batch-record-actions .btn-primary {
+                background:linear-gradient(180deg,#7c86f5,#6777ef) !important;
+                border-color:#6777ef !important; color:#fff !important;
+                box-shadow:0 2px 6px rgba(103,119,239,0.35);
+            }
+
+            .batch-record-tabs.nav-tabs {
+                border-bottom:1px solid #e9ecef; margin-bottom:16px;
+                flex-wrap:nowrap; overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch;
+            }
+            .batch-record-tabs.nav-tabs .nav-item { flex-shrink:0; }
+            .batch-record-tabs.nav-tabs .nav-link {
+                color:#6c757d; font-size:13px; font-weight:500; border:none;
+                border-radius:8px; padding:9px 14px; cursor:pointer; white-space:nowrap;
+            }
+            .batch-record-tabs.nav-tabs .nav-link.active {
+                color:#fff; font-weight:700; background:#6a7bff2e;
+            }
+            .batch-record-tab-count { color:#adb5bd; font-weight:600; margin-left:4px; }
+            .batch-record-tabs.nav-tabs .nav-link.active .batch-record-tab-count { color:#dfe1fc; }
+
+            .batch-record-main {
+                display:flex; gap:12px; align-items:flex-start; margin-bottom:16px;
+            }
+            .batch-record-doc-panel {
+                flex-grow:1; min-width:0; background:#fff; border:1px solid #e9ecef;
+                border-radius:10px; overflow:hidden;
+            }
+            .batch-record-doc-panel-header {
+                padding:12px 16px; border-bottom:1px solid #f0f1f3;
+            }
+            .batch-record-doc-panel-title { font-size:15px; font-weight:700; color:#0b0025; }
+            .batch-record-doc-name {
+                font-weight:600; color:#0b0025;
+                max-width:280px; white-space:normal; word-break:break-word; overflow-wrap:anywhere;
+            }
+            .batch-record-src-icon {
+                width:16px; height:16px; object-fit:contain; vertical-align:-3px; margin-right:2px;
+            }
+            .batch-record-src-icon-lg {
+                width:20px; height:20px; object-fit:contain; vertical-align:-5px; margin-right:3px;
+            }
+            .batch-record-src-box {
+                display:inline-flex; align-items:center; justify-content:center;
+                width:24px; height:24px; border-radius:6px; vertical-align:-7px; margin-right:6px;
+            }
+            .batch-record-src-box img { width:28px; height:28px; object-fit:contain; }
+            .batch-record-src-box-lab { background:#dbeafe; }
+            .batch-record-src-box-coa { background:#f3e8ff; }
+            .batch-record-src-box-lotes { background:#e0f2fe; }
+            .batch-record-src-box-manga { background:#fce7f3; }
+            .batch-record-src-box-formula { background:#ccfbf1; }
+            .batch-record-ext-chip {
+                display:inline-flex; align-items:center; justify-content:center;
+                width:22px; height:22px; border-radius:5px; font-size:7.5px; font-weight:700; color:#fff;
+                vertical-align:-6px; margin-right:5px;
+            }
+            .batch-record-ext-pdf { background:#dc2626; }
+            .batch-record-ext-img { background:#2563eb; }
+
+            .batch-record-viewer {
+                width:280px; flex-shrink:0; background:#fff; border:1px solid #e9ecef;
+                border-radius:10px; min-height:420px; display:flex; flex-direction:column;
+            }
+            .batch-record-viewer-header {
+                padding:12px 16px; border-bottom:1px solid #f0f1f3; font-size:13.5px; font-weight:700; color:#0b0025;
+            }
+            .batch-record-viewer-empty {
+                padding:30px 20px; text-align:center; color:#adb5bd; font-size:12.5px;
+            }
+            .batch-record-viewer-empty i { font-size:28px; display:block; margin-bottom:10px; }
+            .batch-record-viewer-content { display:none; flex-direction:column; flex-grow:1; min-height:0; }
+            .batch-record-viewer-meta { padding:10px 14px; border-bottom:1px solid #f0f1f3; }
+            .batch-record-viewer-name { font-size:12.5px; font-weight:700; color:#0b0025; word-break:break-all; }
+            .batch-record-viewer-sub { font-size:11px; color:#9aa0ac; margin-top:2px; }
+            .batch-record-viewer-frame { width:100%; flex-grow:1; min-height:340px; border:none; }
+            .batch-record-viewer-actions { padding:10px 14px; border-top:1px solid #f0f1f3; }
+            .batch-record-row-selected td { background:#eef2ff !important; }
+
+            .batch-record-pill {
+                display:inline-flex; align-items:center; gap:5px; padding:3px 10px;
+                border-radius:20px; font-size:11px; font-weight:600;
+            }
+            .batch-record-pill-fisico { background:#f1f2f4; color:#4b5563; }
+            .batch-record-pill-soporte { background:#ffedd5; color:#c2410c; }
+            .batch-record-pill-lab { background:#dbeafe; color:#1d4ed8; }
+            .batch-record-pill-coa { background:#f3e8ff; color:#7e22ce; }
+            .batch-record-pill-lotes { background:#e0f2fe; color:#0369a1; }
+            .batch-record-pill-manga { background:#fce7f3; color:#be185d; }
+            .batch-record-pill-formula { background:#ccfbf1; color:#0d9488; }
+
+            .batch-record-status { display:inline-flex; align-items:center; gap:5px; font-size:12.5px; font-weight:600; white-space:nowrap; }
+            .batch-record-status-na { color:#0d6efd; }
+            .batch-record-status-firmado { color:#28a745; }
+            .batch-record-status-pendiente { color:#e0a800; }
+
+            .batch-record-events {
+                background:#fff; border:1px solid #e9ecef; border-radius:10px; overflow:hidden;
+            }
+            .batch-record-events-header {
+                padding:12px 16px; border-bottom:1px solid #f0f1f3; font-size:13px; font-weight:700; color:#946200;
+            }
+            .batch-record-events-empty { padding:14px 16px; color:#adb5bd; font-size:12.5px; }
+            .batch-record-event-row {
+                padding:10px 16px; border-top:1px solid #f7f7f8; display:flex; gap:10px; align-items:center; font-size:12.5px;
+            }
+            .batch-record-event-row:first-child { border-top:none; }
+            .batch-record-event-text { color:#6c757d; }
+
+            .batch-record-menu { position:relative; display:inline-block; }
+            .batch-record-menu-btn {
+                background:#fff; border:1px solid #e5e7eb; border-radius:6px;
+                width:28px; height:28px; padding:0; display:inline-flex; align-items:center; justify-content:center;
+                color:#6b7280; line-height:1;
+            }
+            .batch-record-menu-btn:hover { background:#f3f4f6; }
+            .batch-record-menu-list { min-width:175px; font-size:13px; z-index:2000; }
+            .batch-record-menu-list .dropdown-item { cursor:pointer; }
+            .batch-record-menu-list .dropdown-item i { width:16px; text-align:center; margin-right:4px; }
+
+            .batch-record-toolbar {
+                display:flex; gap:10px; align-items:center; padding:10px 16px;
+                border-bottom:1px solid #f0f1f3; flex-wrap:wrap;
+            }
+            .batch-record-search {
+                flex-grow:1; min-width:160px; display:flex; align-items:center; gap:7px;
+                border:1px solid #e5e7eb; border-radius:7px; padding:6px 11px; background:#fafafa; color:#9ca3af;
+            }
+            .batch-record-search input {
+                border:none; background:transparent; outline:none; flex-grow:1; font-size:12.5px; color:#1f2937;
+            }
+            .batch-record-toolbar-btn {
+                background:#fff; border:1px solid #d1d5db; border-radius:7px; padding:6px 12px;
+                font-size:12.5px; color:#374151; white-space:nowrap;
+            }
+            .batch-record-toolbar-btn:hover { background:#f8f9fa; }
+            .batch-record-filter-label {
+                font-size:10.5px; font-weight:700; color:#9aa0ac; padding:4px 16px 2px; text-transform:uppercase;
+            }
+            .batch-record-filter-list label.dropdown-item { display:flex; align-items:center; gap:7px; margin-bottom:0; }
+
+            @media (max-width: 992px) {
+                .batch-record-main { flex-direction:column; }
+                .batch-record-viewer { width:100%; }
+                .batch-record-summary { grid-template-columns:1fr 1fr; }
+                .batch-record-header { flex-direction:column; align-items:flex-start; }
+                .batch-record-header-right { width:100%; justify-content:space-between; }
+            }
+            @media (max-width: 620px) {
+                .batch-record-summary { grid-template-columns:1fr; }
+                .batch-record-actions .btn span.batch-record-btn-label { display:none; }
+                .table-files thead { display:none; }
+                .table-files, .table-files tbody, .table-files tr, .table-files td { display:block; width:100%; }
+                .table-files tr { border-top:1px solid #f2f3f5; padding:8px 4px; }
+                .table-files td { padding:3px 12px !important; border:none !important; }
+            }
         </style>
     </head>
 
-    <body class="bg-light">
+    <body class="bg-light sidebar-mini">
 
         <jsp:include page="Menu.jsp" />
 
@@ -89,45 +418,42 @@
                                     %>
 
                                     <!-- ================== BREADCRUMB ================== -->
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div style="width: 74%">
-                                            <nav aria-label="breadcrumb">
-                                                <ol class="breadcrumb">
-                                                    <li class="breadcrumb-item"><a href="FileManager.jsp">Clientes</a></li>
-                                                        <% if (cliente != null) {%>
-                                                    <li class="breadcrumb-item">
-                                                        <a href="FileManager.jsp?cliente=<%=cliente%>"><%=cliente%></a>
-                                                    </li>
+                                    <div class="breadcrumb-bar d-flex justify-content-between align-items-center flex-wrap">
+                                        <nav aria-label="breadcrumb">
+                                            <ol class="breadcrumb">
+                                                <li class="breadcrumb-item"><a href="FileManager.jsp"><i class="fas fa-home mr-1"></i>Clientes</a></li>
+                                                    <% if (cliente != null) {%>
+                                                <li class="breadcrumb-item">
+                                                    <a href="FileManager.jsp?cliente=<%=cliente%>"><%=cliente%></a>
+                                                </li>
+                                                <% } %>
+                                                <% if (anio != null) {%>
+                                                <li class="breadcrumb-item">
+                                                    <a href="FileManager.jsp?cliente=<%=cliente%>&anio=<%=anio%>"><%=anio%></a>
+                                                </li>
+                                                <% } %>
+                                                <% if (orden != null) {%>
+                                                <li class="breadcrumb-item">
+                                                    <a href="FileManager.jsp?cliente=<%=cliente%>&anio=<%=anio%>&orden=<%=orden%>"><%=orden%></a>
+                                                </li>
+                                                <% } %>
+                                                <% if (lote != null) {%>
+                                                <li class="breadcrumb-item active"><%=lote%></li>
                                                     <% } %>
-                                                    <% if (anio != null) {%>
-                                                    <li class="breadcrumb-item">
-                                                        <a href="FileManager.jsp?cliente=<%=cliente%>&anio=<%=anio%>"><%=anio%></a>
-                                                    </li>
-                                                    <% } %>
-                                                    <% if (orden != null) {%>
-                                                    <li class="breadcrumb-item">
-                                                        <a href="FileManager.jsp?cliente=<%=cliente%>&anio=<%=anio%>&orden=<%=orden%>"><%=orden%></a>
-                                                    </li>
-                                                    <% } %>
-                                                    <% if (lote != null) {%>
-                                                    <li class="breadcrumb-item active"><%=lote%></li>
-                                                        <% } %>
-                                                </ol>
-                                            </nav>
-                                        </div>
-                                        <div class="row mb-3 justify-content-end">
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <div class="input-group-text">
-                                                        <i class="fas fa-filter"></i>
-                                                    </div>
+                                            </ol>
+                                        </nav>
+                                        <div class="input-group" style="width:auto; min-width:240px;">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text bg-white">
+                                                    <i class="fas fa-filter text-muted"></i>
                                                 </div>
-                                                <input type="text"
-                                                       id="filterInput"
-                                                       class="form-control"
-                                                       placeholder="Filtrar carpetas o archivos..."
-                                                       onkeyup="filterItems()">
                                             </div>
+                                            <input type="text"
+                                                   id="filterInput"
+                                                   class="form-control"
+                                                   placeholder="Filtrar carpetas o archivos..."
+                                                   onkeyup="filterItems()"
+                                                   style="width:auto; float:none;">
                                         </div>
                                     </div>
                                     <Alert:Alert/>
@@ -144,6 +470,28 @@
                                                         return file.isFile();
                                                     }
                                                 });
+
+                                                File supportDocsDir = new File(currentPath + File.separator + "SupportDocs");
+                                                File[] soportes = supportDocsDir.listFiles();
+
+                                                long ultimaActualizacionMillis = 0L;
+                                                if (archivos != null) {
+                                                    for (File f : archivos) {
+                                                        if (f.lastModified() > ultimaActualizacionMillis) {
+                                                            ultimaActualizacionMillis = f.lastModified();
+                                                        }
+                                                    }
+                                                }
+                                                if (soportes != null) {
+                                                    for (File f : soportes) {
+                                                        if (f.lastModified() > ultimaActualizacionMillis) {
+                                                            ultimaActualizacionMillis = f.lastModified();
+                                                        }
+                                                    }
+                                                }
+                                                String ultimaActualizacionTexto = ultimaActualizacionMillis > 0
+                                                        ? new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(new java.util.Date(ultimaActualizacionMillis))
+                                                        : "—";
 
                                                 BatchRecordManifest.MangaResult mangaResultado = BatchRecordManifest.consultarInspeccionManga(orden, lote);
                                                 Map<String, Object> docManga = mangaResultado.documento;
@@ -172,43 +520,82 @@
 
 
 
-                                    <!-- ================== ENCABEZADO DE LOTE Y BOTÓN PDF UNIFICADO ================== -->
-                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <!-- ================== BATCH RECORD: HEADER DEL LOTE ================== -->
+                                    <div class="batch-record-header">
                                         <div>
-                                            <h5 class="m-0">
-                                                <i class="fas fa-folder-open" style="font-size: 22px; color:#6777ef;"></i> Archivos del lote: <b style="color:#0b0025; font-size:18px;"><%= lote%></b>
-                                            </h5>
+                                            <div class="batch-record-lote-title">Lote <%= lote%></div>
+                                            <div class="batch-record-lote-subtitle">Orden: <%= orden%>&nbsp;&nbsp;&nbsp;Cliente: <%= cliente%>&nbsp;&nbsp;&nbsp;Año: <%= anio%></div>
                                         </div>
-                                        <div class="d-flex" style="gap:10px;">
-                                            <button type="button" class="btn btn-danger font-weight-bold mr-2" style="background:#dc3545; border-color:#dc3545; border-radius:6px; box-shadow:0 2px 6px rgba(220,53,69,0.3);" onclick="generarBatchRecordPdfUnificado('<%= cliente%>', '<%= anio%>', '<%= orden%>', '<%= lote%>')">
-                                                <i class="fas fa-file-pdf"></i> Generar Batch Record PDF Unificado
-                                            </button>
-                                            <% if (Permission.contains("[3]")) { %>
-                                            <button type="button" class="btn btn-green" data-bs-toggle="modal" data-bs-target="#uploadModal">
-                                                <i class="fas fa-upload"></i> Subir archivos
-                                            </button>
-                                            <% } %>
-                                            <% if (Permission.contains("[39]")) { %>
-                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#supportUploadModal">
-                                                <i class="fas fa-file-signature"></i> Adjuntar documento de soporte
-                                            </button>
+                                        <div class="batch-record-header-right">
+                                            <div>
+                                                <div class="batch-record-updated-label">Última actualización</div>
+                                                <div class="batch-record-updated-value"><i class="fas fa-clock"></i> <%= ultimaActualizacionTexto%></div>
+                                            </div>
+                                            <% if (!eventosListado.isEmpty()) { %>
+                                            <a href="#batchRecordEventos" class="batch-record-events-badge">
+                                                <i class="fas fa-triangle-exclamation"></i>
+                                                Eventos de integración
+                                                <span class="batch-record-events-count"><%= eventosListado.size()%></span>
+                                            </a>
                                             <% } %>
                                         </div>
                                     </div>
 
-                                    <!-- ================== EVENTOS DE INTEGRACIÓN (fuentes externas) ================== -->
-                                    <% if (!eventosListado.isEmpty()) { %>
-                                    <div class="alert alert-warning" role="alert" style="border-left:4px solid #ffc107;">
-                                        <h6 class="mb-2">
-                                            <i class="fas fa-triangle-exclamation"></i> Eventos de integración
-                                        </h6>
-                                        <ul class="mb-0" style="padding-left:18px;">
-                                            <% for (String evento : eventosListado) { %>
-                                            <li><%= evento%></li>
-                                            <% } %>
-                                        </ul>
+                                    <!-- ================== BATCH RECORD: RESUMEN ================== -->
+                                    <div class="batch-record-summary">
+                                        <div class="batch-record-summary-card">
+                                            <div class="batch-record-summary-icon batch-record-summary-icon-total"><i class="fas fa-file-alt"></i></div>
+                                            <div>
+                                                <div class="batch-record-summary-value" id="brTotalDocs">0</div>
+                                                <div class="batch-record-summary-label">Total documentos</div>
+                                            </div>
+                                        </div>
+                                        <div class="batch-record-summary-card">
+                                            <div class="batch-record-summary-icon batch-record-summary-icon-firmados"><i class="fas fa-check-circle"></i></div>
+                                            <div>
+                                                <div class="batch-record-summary-value" id="brFirmados">0</div>
+                                                <div class="batch-record-summary-label">Soportes firmados</div>
+                                                <div class="batch-record-summary-sub" id="brFirmadosPct"></div>
+                                            </div>
+                                        </div>
+                                        <div class="batch-record-summary-card">
+                                            <div class="batch-record-summary-icon batch-record-summary-icon-pendientes"><i class="fas fa-clock"></i></div>
+                                            <div>
+                                                <div class="batch-record-summary-value" id="brPendientes">0</div>
+                                                <div class="batch-record-summary-label">Soportes pendientes de firma</div>
+                                                <div class="batch-record-summary-sub" id="brPendientesPct"></div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <% } %>
+
+                                    <!-- ================== BATCH RECORD: ACCIONES ================== -->
+                                    <div class="batch-record-actions">
+                                        <button type="button" class="btn btn-danger font-weight-bold" style="background:#dc3545; border-color:#dc3545; box-shadow:0 2px 6px rgba(220,53,69,0.3);" onclick="generarBatchRecordPdfUnificado('<%= cliente%>', '<%= anio%>', '<%= orden%>', '<%= lote%>')">
+                                            <i class="fas fa-file-pdf"></i> <span class="batch-record-btn-label">Generar Batch Record PDF Unificado</span>
+                                        </button>
+                                        <% if (Permission.contains("[3]")) { %>
+                                        <button type="button" class="btn btn-green" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                                            <i class="fas fa-upload"></i> <span class="batch-record-btn-label">Subir archivos</span>
+                                        </button>
+                                        <% } %>
+                                        <% if (Permission.contains("[39]")) { %>
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#supportUploadModal">
+                                            <i class="fas fa-file-signature"></i> <span class="batch-record-btn-label">Adjuntar documento de soporte</span>
+                                        </button>
+                                        <% } %>
+                                    </div>
+
+                                    <!-- ================== BATCH RECORD: TABS DE CATEGORÍA ================== -->
+                                    <ul class="nav nav-tabs batch-record-tabs" id="batchRecordTabs">
+                                        <li class="nav-item"><a class="nav-link active" href="#" data-br-tab="todos" onclick="brFiltrarCategoria('todos'); return false;">Todos <span class="batch-record-tab-count" id="brCountTodos">0</span></a></li>
+                                        <li class="nav-item"><a class="nav-link" href="#" data-br-tab="fisico" onclick="brFiltrarCategoria('fisico'); return false;"><i class="fas fa-file"></i> Archivos físicos <span class="batch-record-tab-count" id="brCountFisico">0</span></a></li>
+                                        <li class="nav-item"><a class="nav-link" href="#" data-br-tab="soporte" onclick="brFiltrarCategoria('soporte'); return false;"><i class="fas fa-paperclip"></i> Soporte <span class="batch-record-tab-count" id="brCountSoporte">0</span></a></li>
+                                        <li class="nav-item"><a class="nav-link" href="#" data-br-tab="lab" onclick="brFiltrarCategoria('lab'); return false;"><img class="batch-record-src-icon" src="Interface/Imagen/Registros_lab_Logo.png" alt=""> Registros LAB <span class="batch-record-tab-count" id="brCountLab">0</span></a></li>
+                                        <li class="nav-item"><a class="nav-link" href="#" data-br-tab="coa" onclick="brFiltrarCategoria('coa'); return false;"><img class="batch-record-src-icon" src="Interface/Imagen/LogoSText.fw.png" alt=""> Certificados COA <span class="batch-record-tab-count" id="brCountCoa">0</span></a></li>
+                                        <li class="nav-item"><a class="nav-link" href="#" data-br-tab="lotes" onclick="brFiltrarCategoria('lotes'); return false;"><img class="batch-record-src-icon" src="Interface/Imagen/Generacion_lotes.png" alt=""> Generación de Lotes <span class="batch-record-tab-count" id="brCountLotes">0</span></a></li>
+                                        <li class="nav-item"><a class="nav-link" href="#" data-br-tab="manga" onclick="brFiltrarCategoria('manga'); return false;"><img class="batch-record-src-icon" src="Interface/Imagen/Inspeccion_manga_new.png" alt=""> Inspección Manga <span class="batch-record-tab-count" id="brCountManga">0</span></a></li>
+                                        <li class="nav-item"><a class="nav-link" href="#" data-br-tab="formula" onclick="brFiltrarCategoria('formula'); return false;"><img class="batch-record-src-icon" src="Interface/Imagen/Control_formulas_new.png" alt=""> Control Fórmulas <span class="batch-record-tab-count" id="brCountFormula">0</span></a></li>
+                                    </ul>
 
                                     <% if (Permission.contains("[3]")) { %>
                                     <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog">
@@ -312,12 +699,47 @@
                                         </div>
                                     </div>
                                     <% } %>
-                                    <table class="table table-bordered table-hover">
-                                        <thead class="table-light">
+                                    <div class="batch-record-main">
+                                        <div class="batch-record-doc-panel">
+                                            <div class="batch-record-doc-panel-header">
+                                                <div class="batch-record-doc-panel-title">Documentos del lote</div>
+                                            </div>
+                                            <div class="batch-record-toolbar">
+                                                <div class="batch-record-search">
+                                                    <i class="fas fa-search"></i>
+                                                    <input type="text" id="brSearchInput" placeholder="Buscar documento..." onkeyup="brBuscarDocumento()">
+                                                </div>
+                                                <div class="batch-record-menu">
+                                                    <button type="button" class="batch-record-toolbar-btn" onclick="brToggleMenu(event, this)">
+                                                        <i class="fas fa-filter"></i> Filtros
+                                                    </button>
+                                                    <div class="dropdown-menu batch-record-menu-list batch-record-filter-list" onclick="event.stopPropagation();">
+                                                        <div class="batch-record-filter-label">Estado</div>
+                                                        <label class="dropdown-item"><input type="checkbox" class="br-filter-status" value="firmado" checked onchange="brAplicarFiltrosEstado()"> Firmado</label>
+                                                        <label class="dropdown-item"><input type="checkbox" class="br-filter-status" value="pendiente" checked onchange="brAplicarFiltrosEstado()"> Pendiente</label>
+                                                        <label class="dropdown-item"><input type="checkbox" class="br-filter-status" value="na" checked onchange="brAplicarFiltrosEstado()"> Disponible</label>
+                                                    </div>
+                                                </div>
+                                                <div class="batch-record-menu">
+                                                    <button type="button" class="batch-record-toolbar-btn" onclick="brToggleMenu(event, this)">
+                                                        Ordenar: <span id="brOrdenLabel">Más reciente</span> <i class="fas fa-chevron-down"></i>
+                                                    </button>
+                                                    <div class="dropdown-menu batch-record-menu-list">
+                                                        <a class="dropdown-item" href="#" onclick="brOrdenar('fecha'); return false;">Más reciente</a>
+                                                        <a class="dropdown-item" href="#" onclick="brOrdenar('nombre'); return false;">Nombre A-Z</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    <div class="batch-record-table-scroll" style="overflow-x:auto;">
+                                    <table class="table table-hover table-files mb-0">
+                                        <thead>
                                             <tr>
-                                                <th>Tipo</th>
-                                                <th>Informacion</th>
-                                                <th width="160">Acciones</th>
+                                                <th>Documento</th>
+                                                <th>Categoría</th>
+                                                <th>Estado</th>
+                                                <th>Fecha</th>
+                                                <th>Origen</th>
+                                                <th width="56" class="text-center">Acciones</th>
                                             </tr>
                                         </thead>
                                         <tbody id="fileTable">
@@ -326,51 +748,41 @@
                                                 if (archivos != null && archivos.length > 0) {
                                                     for (File archivo : archivos) {
                                                         String relPath = "Certificates/" + cliente + "/" + anio + "/" + orden + "/" + lote + "/" + archivo.getName();
+                                                        String fechaArchivo = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(new java.util.Date(archivo.lastModified()));
+                                                        String archivoExtLower = archivo.getName().toLowerCase();
+                                                        String archivoExtClass = "batch-record-ext-img";
+                                                        String archivoExtLabel = "IMG";
+                                                        if (archivoExtLower.endsWith(".pdf")) {
+                                                            archivoExtClass = "batch-record-ext-pdf";
+                                                            archivoExtLabel = "PDF";
+                                                        } else if (archivoExtLower.endsWith(".png")) {
+                                                            archivoExtLabel = "PNG";
+                                                        } else if (archivoExtLower.endsWith(".jpg") || archivoExtLower.endsWith(".jpeg")) {
+                                                            archivoExtLabel = "JPG";
+                                                        } else if (archivoExtLower.endsWith(".gif")) {
+                                                            archivoExtLabel = "GIF";
+                                                        }
                                             %>
-                                            <tr class="file-row">
-                                                <td>Archivo Físico</td>
-                                                <td><%= archivo.getName()%></td>
+                                            <tr class="file-row batch-record-row" data-category="fisico" data-status="na" data-timestamp="<%= archivo.lastModified()%>">
+                                                <td class="batch-record-doc-name" style="cursor:pointer;" onclick="brVerEnPanel(this, '<%= archivo.getName()%>', 'Archivo Físico', '<%= relPath%>')"><span class="batch-record-ext-chip <%= archivoExtClass%>"><%= archivoExtLabel%></span> <%= archivo.getName()%></td>
+                                                <td><span class="batch-record-pill batch-record-pill-fisico">Archivo Físico</span></td>
+                                                <td><span class="batch-record-status batch-record-status-na"><i class="fas fa-check-circle"></i> Disponible</span></td>
+                                                <td><%= fechaArchivo%></td>
+                                                <td>Físico</td>
                                                 <td class="text-center">
-                                                    <div class="btn-group btn-group-sm">
-
-                                                        <!-- VER EN PDF -->
-                                                        <button type="button" class="btn btn-danger mr-2" style="background:#dc3545; border-color:#dc3545;"
-                                                                onclick="verPdfIndividual('Archivo Físico', '<%= archivo.getName()%>', '<%= relPath%>')"
-                                                                title="Ver en formato PDF">
-                                                            <i class="fas fa-file-pdf"></i> PDF
+                                                    <div class="batch-record-menu">
+                                                        <button type="button" class="batch-record-menu-btn" onclick="brToggleMenu(event, this)" title="Acciones">
+                                                            <i class="fas fa-ellipsis-v"></i>
                                                         </button>
-
-                                                        <!-- VER ORIGINAL -->
-                                                        <a class="btn btn-info mr-2"
-                                                           href="<%= relPath%>"
-                                                           target="_blank"
-                                                           title="Ver archivo original">
-                                                            <i class="fas fa-eye"></i>
-                                                        </a>
-
-                                                        <!-- DESCARGAR -->
-                                                        <a class="btn btn-success mr-2"
-                                                           href="<%= relPath%>"
-                                                           download
-                                                           title="Descargar archivo">
-                                                            <i class="fas fa-download"></i>
-                                                        </a>
-                                                        <% if (Permission.contains("[4]")) { %>
-                                                        <!-- ELIMINAR -->
-                                                        <button type="button"
-                                                                class="btn btn-danger"
-                                                                title="Eliminar archivo"
-                                                                onclick="confirmDeleteFile(
-                                                                                '<%= cliente%>',
-                                                                                '<%= anio%>',
-                                                                                '<%= orden%>',
-                                                                                '<%= lote%>',
-                                                                                '<%= archivo.getName()%>'
-                                                                                )">
-                                                            <i class="fas fa-trash"></i>
-                                                        </button>
-                                                        <% } %>
-
+                                                        <div class="dropdown-menu batch-record-menu-list">
+                                                            <a class="dropdown-item" href="#" onclick="verPdfIndividual('Archivo Físico', '<%= archivo.getName()%>', '<%= relPath%>'); return false;"><i class="fas fa-file-pdf"></i> Generar PDF</a>
+                                                            <a class="dropdown-item" href="<%= relPath%>" target="_blank" onclick="brVerEnPanel(this, '<%= archivo.getName()%>', 'Archivo Físico', '<%= relPath%>'); return false;"><i class="fas fa-eye"></i> Ver original</a>
+                                                            <a class="dropdown-item" href="<%= relPath%>" download><i class="fas fa-download"></i> Descargar</a>
+                                                            <% if (Permission.contains("[4]")) { %>
+                                                            <div class="dropdown-divider"></div>
+                                                            <a class="dropdown-item text-danger" href="#" onclick="confirmDeleteFile('<%= cliente%>','<%= anio%>','<%= orden%>','<%= lote%>','<%= archivo.getName()%>'); return false;"><i class="fas fa-trash"></i> Eliminar</a>
+                                                            <% } %>
+                                                        </div>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -384,27 +796,21 @@
                                                     for (int i = 0; i < lst_link.size(); i++) {
                                                         String[] ArgLink = Util.parseResult(lst_link.get(i));
                                             %>
-                                            <tr class="file-row">
-                                                <td><%= ArgLink[1]%></td>
-                                                <td><%= ArgLink[2]%></td>
+                                            <tr class="file-row batch-record-row" data-category="lab" data-status="na">
+                                                <td class="batch-record-doc-name" style="cursor:pointer;" onclick="brVerEnPanel(this, '<%= ArgLink[2]%>', 'Registros LAB', '<%= ArgLink[3]%>')"><span class="batch-record-src-box batch-record-src-box-lab"><img src="Interface/Imagen/Registros_lab_Logo.png" alt=""></span> <%= ArgLink[1]%> — <%= ArgLink[2]%></td>
+                                                <td><span class="batch-record-pill batch-record-pill-lab">Registros LAB</span></td>
+                                                <td><span class="batch-record-status batch-record-status-na"><i class="fas fa-check-circle"></i> Disponible</span></td>
+                                                <td>—</td>
+                                                <td>LAB</td>
                                                 <td class="text-center">
-                                                    <div class="btn-group btn-group-sm">
-
-                                                        <!-- VER EN PDF -->
-                                                        <button type="button" class="btn btn-danger mr-2" style="background:#dc3545; border-color:#dc3545;"
-                                                                onclick="verPdfIndividual('<%= ArgLink[1]%>', '<%= ArgLink[2]%>', '<%= ArgLink[3]%>')"
-                                                                title="Ver en formato PDF">
-                                                            <i class="fas fa-file-pdf"></i> PDF
+                                                    <div class="batch-record-menu">
+                                                        <button type="button" class="batch-record-menu-btn" onclick="brToggleMenu(event, this)" title="Acciones">
+                                                            <i class="fas fa-ellipsis-v"></i>
                                                         </button>
-
-                                                        <!-- VER ORIGINAL -->
-                                                        <a class="btn btn-info"
-                                                           href="<%= ArgLink[3]%>"
-                                                           target="_blank"
-                                                           title="Ver registro">
-                                                            <i class="fas fa-eye"></i>
-                                                        </a>
-
+                                                        <div class="dropdown-menu batch-record-menu-list">
+                                                            <a class="dropdown-item" href="#" onclick="verPdfIndividual('<%= ArgLink[1]%>', '<%= ArgLink[2]%>', '<%= ArgLink[3]%>'); return false;"><i class="fas fa-file-pdf"></i> Generar PDF</a>
+                                                            <a class="dropdown-item" href="<%= ArgLink[3]%>" target="_blank" onclick="brVerEnPanel(this, '<%= ArgLink[2]%>', 'Registros LAB', '<%= ArgLink[3]%>'); return false;"><i class="fas fa-eye"></i> Ver registro</a>
+                                                        </div>
                                                     </div>
                                                 </td>
                                             </tr>    
@@ -420,27 +826,21 @@
                                                         Object[] ArgCertificate = (Object[]) lst_certificate.get(i);
                                                         MaterialBatch += ArgCertificate[4];
                                             %>
-                                            <tr class="file-row">
-                                                <td><%= ArgCertificate[1]%></td>
-                                                <td><%= ArgCertificate[2]%></td>
+                                            <tr class="file-row batch-record-row" data-category="coa" data-status="na">
+                                                <td class="batch-record-doc-name" style="cursor:pointer;" onclick="brVerEnPanel(this, '<%= ArgCertificate[2]%>', 'Certificados COA', '<%= ArgCertificate[3]%>')"><span class="batch-record-src-box batch-record-src-box-coa"><img src="Interface/Imagen/LogoSText.fw.png" alt=""></span> <%= ArgCertificate[1]%> — <%= ArgCertificate[2]%></td>
+                                                <td><span class="batch-record-pill batch-record-pill-coa">Certificados COA</span></td>
+                                                <td><span class="batch-record-status batch-record-status-na"><i class="fas fa-check-circle"></i> Disponible</span></td>
+                                                <td>—</td>
+                                                <td>COA</td>
                                                 <td class="text-center">
-                                                    <div class="btn-group btn-group-sm">
-
-                                                        <!-- VER EN PDF -->
-                                                        <button type="button" class="btn btn-danger mr-2" style="background:#dc3545; border-color:#dc3545;"
-                                                                onclick="verPdfIndividual('<%= ArgCertificate[1]%>', '<%= ArgCertificate[2]%>', '<%= ArgCertificate[3]%>')"
-                                                                title="Ver en formato PDF">
-                                                            <i class="fas fa-file-pdf"></i> PDF
+                                                    <div class="batch-record-menu">
+                                                        <button type="button" class="batch-record-menu-btn" onclick="brToggleMenu(event, this)" title="Acciones">
+                                                            <i class="fas fa-ellipsis-v"></i>
                                                         </button>
-
-                                                        <!-- VER ORIGINAL -->
-                                                        <a class="btn btn-info"
-                                                           href="<%= ArgCertificate[3]%>"
-                                                           target="_blank"
-                                                           title="Ver registro">
-                                                            <i class="fas fa-eye"></i>
-                                                        </a>
-
+                                                        <div class="dropdown-menu batch-record-menu-list">
+                                                            <a class="dropdown-item" href="#" onclick="verPdfIndividual('<%= ArgCertificate[1]%>', '<%= ArgCertificate[2]%>', '<%= ArgCertificate[3]%>'); return false;"><i class="fas fa-file-pdf"></i> Generar PDF</a>
+                                                            <a class="dropdown-item" href="<%= ArgCertificate[3]%>" target="_blank" onclick="brVerEnPanel(this, '<%= ArgCertificate[2]%>', 'Certificados COA', '<%= ArgCertificate[3]%>'); return false;"><i class="fas fa-eye"></i> Ver registro</a>
+                                                        </div>
                                                     </div>
                                                 </td>
                                             </tr>    
@@ -454,27 +854,21 @@
                                                     for (int i = 0; i < lst_material.size(); i++) {
                                                         String[] ArgBatch = Util.parseResult(lst_material.get(i));
                                             %>
-                                            <tr class="file-row">
-                                                <td><%= ArgBatch[1]%></td>
-                                                <td><%= ArgBatch[3]%></td>
+                                            <tr class="file-row batch-record-row" data-category="lotes" data-status="na">
+                                                <td class="batch-record-doc-name" style="cursor:pointer;" onclick="brVerEnPanel(this, '<%= ArgBatch[3]%>', 'Generación de Lotes', 'DownloadGL?File_name=<%= ArgBatch[2].trim()%>')"><span class="batch-record-src-box batch-record-src-box-lotes"><img src="Interface/Imagen/Generacion_lotes.png" alt=""></span> <%= ArgBatch[1]%> — <%= ArgBatch[3]%></td>
+                                                <td><span class="batch-record-pill batch-record-pill-lotes">Generación de Lotes</span></td>
+                                                <td><span class="batch-record-status batch-record-status-na"><i class="fas fa-check-circle"></i> Disponible</span></td>
+                                                <td>—</td>
+                                                <td>Lotes</td>
                                                 <td class="text-center">
-                                                    <div class="btn-group btn-group-sm">
-
-                                                        <!-- VER EN PDF -->
-                                                        <button type="button" class="btn btn-danger mr-2" style="background:#dc3545; border-color:#dc3545;"
-                                                                onclick="verPdfIndividual('<%= ArgBatch[1]%>', '<%= ArgBatch[3]%>', 'DownloadGL?File_name=<%= ArgBatch[2].trim()%>')"
-                                                                title="Ver en formato PDF">
-                                                            <i class="fas fa-file-pdf"></i> PDF
+                                                    <div class="batch-record-menu">
+                                                        <button type="button" class="batch-record-menu-btn" onclick="brToggleMenu(event, this)" title="Acciones">
+                                                            <i class="fas fa-ellipsis-v"></i>
                                                         </button>
-
-                                                        <!-- VER ORIGINAL -->
-                                                        <a class="btn btn-info"
-                                                           href="DownloadGL?File_name=<%= ArgBatch[2].trim()%>"
-                                                           target="_blank"
-                                                           title="Ver registro">
-                                                            <i class="fas fa-eye"></i>
-                                                        </a>
-
+                                                        <div class="dropdown-menu batch-record-menu-list">
+                                                            <a class="dropdown-item" href="#" onclick="verPdfIndividual('<%= ArgBatch[1]%>', '<%= ArgBatch[3]%>', 'DownloadGL?File_name=<%= ArgBatch[2].trim()%>'); return false;"><i class="fas fa-file-pdf"></i> Generar PDF</a>
+                                                            <a class="dropdown-item" href="DownloadGL?File_name=<%= ArgBatch[2].trim()%>" target="_blank" onclick="brVerEnPanel(this, '<%= ArgBatch[3]%>', 'Generación de Lotes', 'DownloadGL?File_name=<%= ArgBatch[2].trim()%>'); return false;"><i class="fas fa-eye"></i> Ver registro</a>
+                                                        </div>
                                                     </div>
                                                 </td>
                                             </tr>    
@@ -489,27 +883,21 @@
                                                     String mangaUrl = "MangaResumenViewServlet?orden=" + java.net.URLEncoder.encode(orden, "UTF-8")
                                                             + "&lote=" + java.net.URLEncoder.encode(lote, "UTF-8");
                                             %>
-                                            <tr class="file-row">
-                                                <td><%= mangaTipo%></td>
-                                                <td><%= mangaNombre%></td>
+                                            <tr class="file-row batch-record-row" data-category="manga" data-status="na">
+                                                <td class="batch-record-doc-name" style="cursor:pointer;" onclick="brVerEnPanel(this, '<%= mangaNombre%>', 'Inspección Manga', '<%= mangaUrl%>')"><span class="batch-record-src-box batch-record-src-box-manga"><img src="Interface/Imagen/Inspeccion_manga_new.png" alt=""></span> <%= mangaTipo%> — <%= mangaNombre%></td>
+                                                <td><span class="batch-record-pill batch-record-pill-manga">Inspección Manga</span></td>
+                                                <td><span class="batch-record-status batch-record-status-na"><i class="fas fa-check-circle"></i> Disponible</span></td>
+                                                <td>—</td>
+                                                <td>Manga</td>
                                                 <td class="text-center">
-                                                    <div class="btn-group btn-group-sm">
-
-                                                        <!-- VER EN PDF -->
-                                                        <button type="button" class="btn btn-danger mr-2" style="background:#dc3545; border-color:#dc3545;"
-                                                                onclick="verPdfIndividual('<%= mangaTipo%>', '<%= mangaNombre%>', '<%= mangaUrl%>')"
-                                                                title="Ver en formato PDF">
-                                                            <i class="fas fa-file-pdf"></i> PDF
+                                                    <div class="batch-record-menu">
+                                                        <button type="button" class="batch-record-menu-btn" onclick="brToggleMenu(event, this)" title="Acciones">
+                                                            <i class="fas fa-ellipsis-v"></i>
                                                         </button>
-
-                                                        <!-- VER ORIGINAL -->
-                                                        <a class="btn btn-info"
-                                                           href="<%= mangaUrl%>"
-                                                           target="_blank"
-                                                           title="Ver registro">
-                                                            <i class="fas fa-eye"></i>
-                                                        </a>
-
+                                                        <div class="dropdown-menu batch-record-menu-list">
+                                                            <a class="dropdown-item" href="#" onclick="verPdfIndividual('<%= mangaTipo%>', '<%= mangaNombre%>', '<%= mangaUrl%>'); return false;"><i class="fas fa-file-pdf"></i> Generar PDF</a>
+                                                            <a class="dropdown-item" href="<%= mangaUrl%>" target="_blank" onclick="brVerEnPanel(this, '<%= mangaNombre%>', 'Inspección Manga', '<%= mangaUrl%>'); return false;"><i class="fas fa-eye"></i> Ver registro</a>
+                                                        </div>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -526,27 +914,21 @@
                                                                 + "&lote=" + java.net.URLEncoder.encode(lote, "UTF-8")
                                                                 + "&indice=" + i;
                                             %>
-                                            <tr class="file-row">
-                                                <td><%= despejeTipo%></td>
-                                                <td><%= despejeNombre%></td>
+                                            <tr class="file-row batch-record-row" data-category="manga" data-status="na">
+                                                <td class="batch-record-doc-name" style="cursor:pointer;" onclick="brVerEnPanel(this, '<%= despejeNombre%>', 'Inspección Manga', '<%= despejeUrl%>')"><span class="batch-record-src-box batch-record-src-box-manga"><img src="Interface/Imagen/Inspeccion_manga_new.png" alt=""></span> <%= despejeTipo%> — <%= despejeNombre%></td>
+                                                <td><span class="batch-record-pill batch-record-pill-manga">Inspección Manga</span></td>
+                                                <td><span class="batch-record-status batch-record-status-na"><i class="fas fa-check-circle"></i> Disponible</span></td>
+                                                <td>—</td>
+                                                <td>Manga</td>
                                                 <td class="text-center">
-                                                    <div class="btn-group btn-group-sm">
-
-                                                        <!-- VER EN PDF -->
-                                                        <button type="button" class="btn btn-danger mr-2" style="background:#dc3545; border-color:#dc3545;"
-                                                                onclick="verPdfIndividual('<%= despejeTipo%>', '<%= despejeNombre%>', '<%= despejeUrl%>')"
-                                                                title="Ver en formato PDF">
-                                                            <i class="fas fa-file-pdf"></i> PDF
+                                                    <div class="batch-record-menu">
+                                                        <button type="button" class="batch-record-menu-btn" onclick="brToggleMenu(event, this)" title="Acciones">
+                                                            <i class="fas fa-ellipsis-v"></i>
                                                         </button>
-
-                                                        <!-- VER ORIGINAL -->
-                                                        <a class="btn btn-info"
-                                                           href="<%= despejeUrl%>"
-                                                           target="_blank"
-                                                           title="Ver registro">
-                                                            <i class="fas fa-eye"></i>
-                                                        </a>
-
+                                                        <div class="dropdown-menu batch-record-menu-list">
+                                                            <a class="dropdown-item" href="#" onclick="verPdfIndividual('<%= despejeTipo%>', '<%= despejeNombre%>', '<%= despejeUrl%>'); return false;"><i class="fas fa-file-pdf"></i> Generar PDF</a>
+                                                            <a class="dropdown-item" href="<%= despejeUrl%>" target="_blank" onclick="brVerEnPanel(this, '<%= despejeNombre%>', 'Inspección Manga', '<%= despejeUrl%>'); return false;"><i class="fas fa-eye"></i> Ver registro</a>
+                                                        </div>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -561,27 +943,21 @@
                                                     String cabeceraUrl = "MangaCabeceraViewServlet?orden=" + java.net.URLEncoder.encode(orden, "UTF-8")
                                                             + "&lote=" + java.net.URLEncoder.encode(lote, "UTF-8");
                                             %>
-                                            <tr class="file-row">
-                                                <td><%= cabeceraTipo%></td>
-                                                <td><%= cabeceraNombre%></td>
+                                            <tr class="file-row batch-record-row" data-category="manga" data-status="na">
+                                                <td class="batch-record-doc-name" style="cursor:pointer;" onclick="brVerEnPanel(this, '<%= cabeceraNombre%>', 'Inspección Manga', '<%= cabeceraUrl%>')"><span class="batch-record-src-box batch-record-src-box-manga"><img src="Interface/Imagen/Inspeccion_manga_new.png" alt=""></span> <%= cabeceraTipo%> — <%= cabeceraNombre%></td>
+                                                <td><span class="batch-record-pill batch-record-pill-manga">Inspección Manga</span></td>
+                                                <td><span class="batch-record-status batch-record-status-na"><i class="fas fa-check-circle"></i> Disponible</span></td>
+                                                <td>—</td>
+                                                <td>Manga</td>
                                                 <td class="text-center">
-                                                    <div class="btn-group btn-group-sm">
-
-                                                        <!-- VER EN PDF -->
-                                                        <button type="button" class="btn btn-danger mr-2" style="background:#dc3545; border-color:#dc3545;"
-                                                                onclick="verPdfIndividual('<%= cabeceraTipo%>', '<%= cabeceraNombre%>', '<%= cabeceraUrl%>')"
-                                                                title="Ver en formato PDF">
-                                                            <i class="fas fa-file-pdf"></i> PDF
+                                                    <div class="batch-record-menu">
+                                                        <button type="button" class="batch-record-menu-btn" onclick="brToggleMenu(event, this)" title="Acciones">
+                                                            <i class="fas fa-ellipsis-v"></i>
                                                         </button>
-
-                                                        <!-- VER ORIGINAL -->
-                                                        <a class="btn btn-info"
-                                                           href="<%= cabeceraUrl%>"
-                                                           target="_blank"
-                                                           title="Ver registro">
-                                                            <i class="fas fa-eye"></i>
-                                                        </a>
-
+                                                        <div class="dropdown-menu batch-record-menu-list">
+                                                            <a class="dropdown-item" href="#" onclick="verPdfIndividual('<%= cabeceraTipo%>', '<%= cabeceraNombre%>', '<%= cabeceraUrl%>'); return false;"><i class="fas fa-file-pdf"></i> Generar PDF</a>
+                                                            <a class="dropdown-item" href="<%= cabeceraUrl%>" target="_blank" onclick="brVerEnPanel(this, '<%= cabeceraNombre%>', 'Inspección Manga', '<%= cabeceraUrl%>'); return false;"><i class="fas fa-eye"></i> Ver registro</a>
+                                                        </div>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -598,27 +974,21 @@
                                                                 + "&lote=" + java.net.URLEncoder.encode(lote, "UTF-8")
                                                                 + "&indice=" + i;
                                             %>
-                                            <tr class="file-row">
-                                                <td><%= formulaTipo%></td>
-                                                <td><%= formulaNombre%></td>
+                                            <tr class="file-row batch-record-row" data-category="formula" data-status="na">
+                                                <td class="batch-record-doc-name" style="cursor:pointer;" onclick="brVerEnPanel(this, '<%= formulaNombre%>', 'Control Fórmulas', '<%= formulaUrl%>')"><span class="batch-record-src-box batch-record-src-box-formula"><img src="Interface/Imagen/Control_formulas_new.png" alt=""></span> <%= formulaTipo%> — <%= formulaNombre%></td>
+                                                <td><span class="batch-record-pill batch-record-pill-formula">Control Fórmulas</span></td>
+                                                <td><span class="batch-record-status batch-record-status-na"><i class="fas fa-check-circle"></i> Disponible</span></td>
+                                                <td>—</td>
+                                                <td>Fórmula</td>
                                                 <td class="text-center">
-                                                    <div class="btn-group btn-group-sm">
-
-                                                        <!-- VER EN PDF -->
-                                                        <button type="button" class="btn btn-danger mr-2" style="background:#dc3545; border-color:#dc3545;"
-                                                                onclick="verPdfIndividual('<%= formulaTipo%>', '<%= formulaNombre%>', '<%= formulaUrl%>')"
-                                                                title="Ver en formato PDF">
-                                                            <i class="fas fa-file-pdf"></i> PDF
+                                                    <div class="batch-record-menu">
+                                                        <button type="button" class="batch-record-menu-btn" onclick="brToggleMenu(event, this)" title="Acciones">
+                                                            <i class="fas fa-ellipsis-v"></i>
                                                         </button>
-
-                                                        <!-- VER ORIGINAL -->
-                                                        <a class="btn btn-info"
-                                                           href="<%= formulaUrl%>"
-                                                           target="_blank"
-                                                           title="Ver registro">
-                                                            <i class="fas fa-eye"></i>
-                                                        </a>
-
+                                                        <div class="dropdown-menu batch-record-menu-list">
+                                                            <a class="dropdown-item" href="#" onclick="verPdfIndividual('<%= formulaTipo%>', '<%= formulaNombre%>', '<%= formulaUrl%>'); return false;"><i class="fas fa-file-pdf"></i> Generar PDF</a>
+                                                            <a class="dropdown-item" href="<%= formulaUrl%>" target="_blank" onclick="brVerEnPanel(this, '<%= formulaNombre%>', 'Control Fórmulas', '<%= formulaUrl%>'); return false;"><i class="fas fa-eye"></i> Ver registro</a>
+                                                        </div>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -627,62 +997,53 @@
                                                 }
                                             %>
                                             <%
-                                                File supportDocsDir = new File(currentPath + File.separator + "SupportDocs");
-                                                File[] soportes = supportDocsDir.listFiles();
                                                 if (soportes != null) {
                                                     for (File soporte : soportes) {
                                                         String nombreSoporte = soporte.getName();
                                                         boolean firmado = nombreSoporte.contains("_FIRMADO_");
                                                         String relPathSoporte = "Certificates/" + cliente + "/" + anio + "/" + orden + "/" + lote + "/SupportDocs/" + nombreSoporte;
+                                                        String soporteExtLower = nombreSoporte.toLowerCase();
+                                                        String soporteExtClass = "batch-record-ext-img";
+                                                        String soporteExtLabel = "IMG";
+                                                        if (soporteExtLower.endsWith(".pdf")) {
+                                                            soporteExtClass = "batch-record-ext-pdf";
+                                                            soporteExtLabel = "PDF";
+                                                        } else if (soporteExtLower.endsWith(".png")) {
+                                                            soporteExtLabel = "PNG";
+                                                        } else if (soporteExtLower.endsWith(".jpg") || soporteExtLower.endsWith(".jpeg")) {
+                                                            soporteExtLabel = "JPG";
+                                                        } else if (soporteExtLower.endsWith(".gif")) {
+                                                            soporteExtLabel = "GIF";
+                                                        }
                                             %>
-                                            <tr class="file-row">
-                                                <td>Documento de Soporte <%= firmado ? "<span class='badge badge-success'>Firmado</span>" : "<span class='badge badge-warning'>Pendiente de firma</span>"%></td>
-                                                <td><%= nombreSoporte%></td>
+                                            <tr class="file-row batch-record-row" data-category="soporte" data-status="<%= firmado ? "firmado" : "pendiente"%>" data-timestamp="<%= soporte.lastModified()%>">
+                                                <td class="batch-record-doc-name" style="cursor:pointer;" onclick="brVerEnPanel(this, '<%= nombreSoporte%>', 'Documento de soporte', '<%= relPathSoporte%>')"><span class="batch-record-ext-chip <%= soporteExtClass%>"><%= soporteExtLabel%></span> <%= nombreSoporte%></td>
+                                                <td><span class="batch-record-pill batch-record-pill-soporte">Documento de soporte</span></td>
+                                                <td>
+                                                    <% if (firmado) { %>
+                                                    <span class="batch-record-status batch-record-status-firmado"><i class="fas fa-check-circle"></i> Firmado</span>
+                                                    <% } else { %>
+                                                    <span class="batch-record-status batch-record-status-pendiente"><i class="fas fa-clock"></i> Pendiente de firma</span>
+                                                    <% } %>
+                                                </td>
+                                                <td><%= new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(new java.util.Date(soporte.lastModified()))%></td>
+                                                <td>Soporte</td>
                                                 <td class="text-center">
-                                                    <div class="btn-group btn-group-sm">
-
-                                                        <!-- VER -->
-                                                        <a class="btn btn-info mr-2"
-                                                           href="<%= relPathSoporte%>"
-                                                           target="_blank"
-                                                           title="Ver documento">
-                                                            <i class="fas fa-eye"></i>
-                                                        </a>
-
-                                                        <!-- DESCARGAR -->
-                                                        <a class="btn btn-success mr-2"
-                                                           href="<%= relPathSoporte%>"
-                                                           download
-                                                           title="Descargar documento">
-                                                            <i class="fas fa-download"></i>
-                                                        </a>
-
-                                                        <% if (!firmado && Permission.contains("[39]")) { %>
-                                                        <!-- FIRMAR -->
-                                                        <button type="button"
-                                                                class="btn btn-primary mr-2"
-                                                                title="Firmar documento"
-                                                                onclick="window.open('SupportDocumentSign.jsp?cliente=<%= cliente%>&anio=<%= anio%>&orden=<%= orden%>&lote=<%= lote%>&archivo=<%= nombreSoporte%>', '_blank')">
-                                                            <i class="fas fa-file-signature"></i>
+                                                    <div class="batch-record-menu">
+                                                        <button type="button" class="batch-record-menu-btn" onclick="brToggleMenu(event, this)" title="Acciones">
+                                                            <i class="fas fa-ellipsis-v"></i>
                                                         </button>
-                                                        <% } %>
-
-                                                        <% if (Permission.contains("[4]")) { %>
-                                                        <!-- ELIMINAR -->
-                                                        <button type="button"
-                                                                class="btn btn-danger"
-                                                                title="Eliminar documento"
-                                                                onclick="confirmDeleteSupportFile(
-                                                                                '<%= cliente%>',
-                                                                                '<%= anio%>',
-                                                                                '<%= orden%>',
-                                                                                '<%= lote%>',
-                                                                                '<%= nombreSoporte%>'
-                                                                                )">
-                                                            <i class="fas fa-trash"></i>
-                                                        </button>
-                                                        <% } %>
-
+                                                        <div class="dropdown-menu batch-record-menu-list">
+                                                            <a class="dropdown-item" href="<%= relPathSoporte%>" target="_blank" onclick="brVerEnPanel(this, '<%= nombreSoporte%>', 'Documento de soporte', '<%= relPathSoporte%>'); return false;"><i class="fas fa-eye"></i> Ver documento</a>
+                                                            <a class="dropdown-item" href="<%= relPathSoporte%>" download><i class="fas fa-download"></i> Descargar</a>
+                                                            <% if (!firmado && Permission.contains("[39]")) { %>
+                                                            <a class="dropdown-item" href="#" onclick="window.open('SupportDocumentSign.jsp?cliente=<%= cliente%>&anio=<%= anio%>&orden=<%= orden%>&lote=<%= lote%>&archivo=<%= nombreSoporte%>', '_blank'); return false;"><i class="fas fa-file-signature"></i> Firmar</a>
+                                                            <% } %>
+                                                            <% if (Permission.contains("[4]")) { %>
+                                                            <div class="dropdown-divider"></div>
+                                                            <a class="dropdown-item text-danger" href="#" onclick="confirmDeleteSupportFile('<%= cliente%>','<%= anio%>','<%= orden%>','<%= lote%>','<%= nombreSoporte%>'); return false;"><i class="fas fa-trash"></i> Eliminar</a>
+                                                            <% } %>
+                                                        </div>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -692,8 +1053,48 @@
                                             %>
                                         </tbody>
                                     </table>
+                                    </div>
+                                        </div>
 
+                                        <div class="batch-record-viewer">
+                                            <div class="batch-record-viewer-header">
+                                                Vista del documento
+                                            </div>
+                                            <div class="batch-record-viewer-empty" id="brViewerEmpty">
+                                                <i class="fas fa-file-alt"></i>
+                                                <p>Selecciona "Ver documento"/"Ver registro" en el menú <i class="fas fa-ellipsis-v"></i> de una fila para verlo aquí.</p>
+                                            </div>
+                                            <div class="batch-record-viewer-content" id="brViewerContent">
+                                                <div class="batch-record-viewer-meta">
+                                                    <div class="batch-record-viewer-name" id="brViewerName"></div>
+                                                    <div class="batch-record-viewer-sub" id="brViewerSub"></div>
+                                                </div>
+                                                <iframe id="brViewerFrame" class="batch-record-viewer-frame" src="" title="Vista previa del documento"></iframe>
+                                                <div class="batch-record-viewer-actions">
+                                                    <a id="brViewerOpenLink" class="btn btn-outline-secondary btn-sm btn-block" href="#" target="_blank">
+                                                        <i class="fas fa-external-link-alt"></i> Abrir en pestaña nueva
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
+                                    <!-- ================== BATCH RECORD: EVENTOS DE INTEGRACIÓN ================== -->
+                                    <div class="batch-record-events" id="batchRecordEventos">
+                                        <div class="batch-record-events-header">
+                                            <i class="fas fa-triangle-exclamation"></i> Eventos de integración recientes <b><%= eventosListado.size()%></b>
+                                        </div>
+                                        <% if (eventosListado.isEmpty()) { %>
+                                        <div class="batch-record-events-empty">Sin eventos de integración recientes.</div>
+                                        <% } else { %>
+                                        <% for (String evento : eventosListado) { %>
+                                        <div class="batch-record-event-row">
+                                            <i class="fas fa-triangle-exclamation text-warning"></i>
+                                            <span class="batch-record-event-text"><%= evento%></span>
+                                        </div>
+                                        <% } %>
+                                        <% } %>
+                                    </div>
 
                                     <%
                                         /* ================== CARPETAS ================== */
@@ -735,10 +1136,10 @@
                                         %>
 
                                         <div class="col-6 col-md-4 col-lg-3 folder-item">
-                                            <div class="card text-center p-3 shadow-sm border border-warning rounded hover-card">
+                                            <div class="card text-center p-3">
                                                 <a href="<%=link%>" class="text-decoration-none text-dark">
-                                                    <i class="fas fa-folder" style="font-size:48px;color:#f5e047ad;"></i>
-                                                    <h6 class="mt-2"><%= carpeta.getName()%></h6>
+                                                    <i class="fas fa-folder"></i>
+                                                    <h6><%= carpeta.getName()%></h6>
                                                 </a>
                                             </div>
                                         </div>
@@ -1042,6 +1443,153 @@
                     const text = folder.innerText.toLowerCase();
                     folder.style.display = text.includes(filter) ? "" : "none";
                 });
+            }
+
+            var brCategoriaActiva = 'todos';
+
+            function brFiltrarCategoria(categoria) {
+                brCategoriaActiva = categoria;
+                document.querySelectorAll('#batchRecordTabs .nav-link').forEach(function (link) {
+                    link.classList.toggle('active', link.getAttribute('data-br-tab') === categoria);
+                });
+                brAplicarVisibilidad();
+            }
+
+            function brAplicarVisibilidad() {
+                document.querySelectorAll('.batch-record-row').forEach(function (row) {
+                    const coincideCategoria = brCategoriaActiva === 'todos' || row.getAttribute('data-category') === brCategoriaActiva;
+                    const oculto = row.getAttribute('data-search-hidden') === '1' || row.getAttribute('data-filter-hidden') === '1';
+                    row.style.display = (coincideCategoria && !oculto) ? '' : 'none';
+                });
+            }
+
+            function brBuscarDocumento() {
+                const texto = document.getElementById('brSearchInput').value.toLowerCase();
+                document.querySelectorAll('.batch-record-row').forEach(function (row) {
+                    row.setAttribute('data-search-hidden', row.innerText.toLowerCase().indexOf(texto) === -1 ? '1' : '0');
+                });
+                brAplicarVisibilidad();
+            }
+
+            function brAplicarFiltrosEstado() {
+                const activos = Array.prototype.map.call(document.querySelectorAll('.br-filter-status:checked'), function (cb) {
+                    return cb.value;
+                });
+                document.querySelectorAll('.batch-record-row').forEach(function (row) {
+                    const estado = row.getAttribute('data-status');
+                    row.setAttribute('data-filter-hidden', activos.indexOf(estado) === -1 ? '1' : '0');
+                });
+                brAplicarVisibilidad();
+            }
+
+            function brOrdenar(criterio) {
+                const tbody = document.getElementById('fileTable');
+                const filas = Array.prototype.slice.call(tbody.querySelectorAll('.batch-record-row'));
+                filas.sort(function (a, b) {
+                    if (criterio === 'nombre') {
+                        const nombreA = a.querySelector('.batch-record-doc-name').innerText.trim();
+                        const nombreB = b.querySelector('.batch-record-doc-name').innerText.trim();
+                        return nombreA.localeCompare(nombreB);
+                    }
+                    const fechaA = parseInt(a.getAttribute('data-timestamp') || '0', 10);
+                    const fechaB = parseInt(b.getAttribute('data-timestamp') || '0', 10);
+                    return fechaB - fechaA;
+                });
+                filas.forEach(function (fila) {
+                    tbody.appendChild(fila);
+                });
+                document.getElementById('brOrdenLabel').textContent = criterio === 'nombre' ? 'Nombre A-Z' : 'Más reciente';
+                brCerrarMenus();
+            }
+
+            function brActualizarResumen() {
+                const filas = document.querySelectorAll('.batch-record-row');
+                const conteos = {fisico: 0, soporte: 0, lab: 0, coa: 0, lotes: 0, manga: 0, formula: 0};
+                let firmados = 0;
+                let pendientesSoporte = 0;
+                let totalSoporte = 0;
+
+                filas.forEach(function (row) {
+                    const categoria = row.getAttribute('data-category');
+                    if (conteos.hasOwnProperty(categoria)) {
+                        conteos[categoria]++;
+                    }
+                    if (categoria === 'soporte') {
+                        totalSoporte++;
+                        if (row.getAttribute('data-status') === 'firmado') {
+                            firmados++;
+                        } else {
+                            pendientesSoporte++;
+                        }
+                    }
+                });
+
+                const total = filas.length;
+                document.getElementById('brTotalDocs').textContent = total;
+                document.getElementById('brCountTodos').textContent = total;
+                document.getElementById('brCountFisico').textContent = conteos.fisico;
+                document.getElementById('brCountSoporte').textContent = conteos.soporte;
+                document.getElementById('brCountLab').textContent = conteos.lab;
+                document.getElementById('brCountCoa').textContent = conteos.coa;
+                document.getElementById('brCountLotes').textContent = conteos.lotes;
+                document.getElementById('brCountManga').textContent = conteos.manga;
+                document.getElementById('brCountFormula').textContent = conteos.formula;
+
+                document.getElementById('brFirmados').textContent = firmados;
+                document.getElementById('brPendientes').textContent = pendientesSoporte;
+
+                if (totalSoporte > 0) {
+                    document.getElementById('brFirmadosPct').textContent = Math.round((firmados / totalSoporte) * 100) + '% de los soportes';
+                    document.getElementById('brPendientesPct').textContent = Math.round((pendientesSoporte / totalSoporte) * 100) + '% de los soportes';
+                } else {
+                    document.getElementById('brFirmadosPct').textContent = 'Sin documentos de soporte';
+                    document.getElementById('brPendientesPct').textContent = '';
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', brActualizarResumen);
+
+            function brCerrarMenus() {
+                document.querySelectorAll('.batch-record-menu-list.show').forEach(function (m) {
+                    m.classList.remove('show');
+                });
+            }
+
+            function brToggleMenu(evt, btn) {
+                evt.stopPropagation();
+                var menu = btn.nextElementSibling;
+                var yaAbierto = menu.classList.contains('show');
+                brCerrarMenus();
+                if (yaAbierto) {
+                    return;
+                }
+                var rect = btn.getBoundingClientRect();
+                menu.style.position = 'fixed';
+                menu.style.top = (rect.bottom + 4) + 'px';
+                menu.style.left = 'auto';
+                menu.style.right = (window.innerWidth - rect.right) + 'px';
+                menu.classList.add('show');
+            }
+
+            document.addEventListener('click', brCerrarMenus);
+            document.addEventListener('scroll', brCerrarMenus, true);
+
+            function brVerEnPanel(elemento, nombre, categoria, url) {
+                document.getElementById('brViewerEmpty').style.display = 'none';
+                document.getElementById('brViewerContent').style.display = 'flex';
+                document.getElementById('brViewerName').textContent = nombre;
+                document.getElementById('brViewerSub').textContent = categoria;
+                document.getElementById('brViewerFrame').src = url;
+                document.getElementById('brViewerOpenLink').href = url;
+
+                document.querySelectorAll('.batch-record-row-selected').forEach(function (row) {
+                    row.classList.remove('batch-record-row-selected');
+                });
+                var fila = elemento.closest('tr');
+                if (fila) {
+                    fila.classList.add('batch-record-row-selected');
+                }
+                brCerrarMenus();
             }
         </script>
 
