@@ -64,7 +64,10 @@ DELIMITER ;
 -- -------------------------------------------------------------------------
 -- Sp_cff_c_ConsultCertificateFilesByLote: reemplaza currentDir.listFiles()
 -- para la tabla de documentos de un lote (carpeta = '' -> Físico,
--- carpeta = 'SupportDocs' -> Soporte).
+-- carpeta = 'SupportDocs' -> Soporte, carpeta = 'BatchRecord' -> histórico
+-- de PDFs unificados). uploaded_by_id/uploaded_by_name viajan también aquí
+-- (no solo en ConsultCertificateFileById) para poder mostrar "Generado por"
+-- en la pestaña Batch Record de FileManager.jsp.
 -- -------------------------------------------------------------------------
 DROP PROCEDURE IF EXISTS `Sp_cff_c_ConsultCertificateFilesByLote`;
 
@@ -77,7 +80,8 @@ CREATE PROCEDURE `Sp_cff_c_ConsultCertificateFilesByLote`(
   IN p_carpeta VARCHAR(100)
 )
 BEGIN
-  SELECT id, office_file_id, original_file_name, mime_type, size_bytes, created_at
+  SELECT id, office_file_id, original_file_name, mime_type, size_bytes, created_at,
+         uploaded_by_id, uploaded_by_name
   FROM certificate_files
   WHERE cliente = p_cliente AND anio = p_anio AND orden = p_orden AND lote = p_lote AND carpeta = p_carpeta
   ORDER BY created_at ASC;

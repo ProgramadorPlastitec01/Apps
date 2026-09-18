@@ -292,6 +292,7 @@
             .batch-record-pill-lotes { background:#e0f2fe; color:#0369a1; }
             .batch-record-pill-manga { background:#fce7f3; color:#be185d; }
             .batch-record-pill-formula { background:#ccfbf1; color:#0d9488; }
+            .batch-record-pill-batchrecord { background:#fee2e2; color:#b91c1c; }
 
             .batch-record-status { display:inline-flex; align-items:center; gap:5px; font-size:12.5px; font-weight:600; white-space:nowrap; }
             .batch-record-status-na { color:#0d6efd; }
@@ -368,9 +369,6 @@
         <div class="main-content">
             <section class="section">
 
-                <div class="section-header">
-                    <h1>Gestor de Archivos</h1>
-                </div>
 
                 <div class="section-body">
                     <div class="row">
@@ -454,6 +452,7 @@
                                             if (lote != null) {
                                                 List<CertificateFileRow> archivos = certController.consultFilesByLote(cliente, anio, orden, lote, "");
                                                 List<CertificateFileRow> soportes = certController.consultFilesByLote(cliente, anio, orden, lote, "SupportDocs");
+                                                List<CertificateFileRow> batchRecords = certController.consultFilesByLote(cliente, anio, orden, lote, "BatchRecord");
 
                                                 long ultimaActualizacionMillis = 0L;
                                                 if (archivos != null) {
@@ -465,6 +464,13 @@
                                                 }
                                                 if (soportes != null) {
                                                     for (CertificateFileRow f : soportes) {
+                                                        if (f.lastModified() > ultimaActualizacionMillis) {
+                                                            ultimaActualizacionMillis = f.lastModified();
+                                                        }
+                                                    }
+                                                }
+                                                if (batchRecords != null) {
+                                                    for (CertificateFileRow f : batchRecords) {
                                                         if (f.lastModified() > ultimaActualizacionMillis) {
                                                             ultimaActualizacionMillis = f.lastModified();
                                                         }
@@ -571,6 +577,7 @@
                                         <li class="nav-item"><a class="nav-link active" href="#" data-br-tab="todos" onclick="brFiltrarCategoria('todos'); return false;">Todos <span class="batch-record-tab-count" id="brCountTodos">0</span></a></li>
                                         <li class="nav-item"><a class="nav-link" href="#" data-br-tab="fisico" onclick="brFiltrarCategoria('fisico'); return false;"><i class="fas fa-file"></i> Archivos físicos <span class="batch-record-tab-count" id="brCountFisico">0</span></a></li>
                                         <li class="nav-item"><a class="nav-link" href="#" data-br-tab="soporte" onclick="brFiltrarCategoria('soporte'); return false;"><i class="fas fa-paperclip"></i> Soporte <span class="batch-record-tab-count" id="brCountSoporte">0</span></a></li>
+                                        <li class="nav-item"><a class="nav-link" href="#" data-br-tab="batchrecord" onclick="brFiltrarCategoria('batchrecord'); return false;"><i class="fas fa-file-pdf"></i> Batch Record <span class="batch-record-tab-count" id="brCountBatchRecord">0</span></a></li>
                                         <li class="nav-item"><a class="nav-link" href="#" data-br-tab="lab" onclick="brFiltrarCategoria('lab'); return false;"><img class="batch-record-src-icon" src="Interface/Imagen/Registros_lab_Logo.png" alt=""> Registros LAB <span class="batch-record-tab-count" id="brCountLab">0</span></a></li>
                                         <li class="nav-item"><a class="nav-link" href="#" data-br-tab="coa" onclick="brFiltrarCategoria('coa'); return false;"><img class="batch-record-src-icon" src="Interface/Imagen/LogoSText.fw.png" alt=""> Certificados COA <span class="batch-record-tab-count" id="brCountCoa">0</span></a></li>
                                         <li class="nav-item"><a class="nav-link" href="#" data-br-tab="lotes" onclick="brFiltrarCategoria('lotes'); return false;"><img class="batch-record-src-icon" src="Interface/Imagen/Generacion_lotes.png" alt=""> Generación de Lotes <span class="batch-record-tab-count" id="brCountLotes">0</span></a></li>
@@ -771,6 +778,36 @@
                                             <%
                                                 }
                                             }
+                                            %>
+                                            <%
+                                                if (batchRecords != null && !batchRecords.isEmpty()) {
+                                                    for (CertificateFileRow batchRecord : batchRecords) {
+                                                        String relPathBr = "FileDownloadProxyServlet?id=" + batchRecord.getId() + "&modo=inline";
+                                                        String relPathBrDescarga = "FileDownloadProxyServlet?id=" + batchRecord.getId() + "&modo=adjunto";
+                                                        String fechaBr = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(new java.util.Date(batchRecord.lastModified()));
+                                                        String generadoPor = batchRecord.getUploadedByName() != null ? batchRecord.getUploadedByName() : "—";
+                                            %>
+                                            <tr class="file-row batch-record-row" data-category="batchrecord" data-status="na" data-timestamp="<%= batchRecord.lastModified()%>">
+                                                <td class="batch-record-doc-name" style="cursor:pointer;" onclick="brVerEnPanel(this, '<%= batchRecord.getName()%>', 'Batch Record PDF Unificado', '<%= relPathBr%>')"><span class="batch-record-ext-chip batch-record-ext-pdf">PDF</span> <%= batchRecord.getName()%></td>
+                                                <td><span class="batch-record-pill batch-record-pill-batchrecord">Batch Record</span></td>
+                                                <td><span class="batch-record-status batch-record-status-na"><i class="fas fa-check-circle"></i> Disponible</span></td>
+                                                <td><%= fechaBr%></td>
+                                                <td>Generado por <%= generadoPor%></td>
+                                                <td class="text-center">
+                                                    <div class="batch-record-menu">
+                                                        <button type="button" class="batch-record-menu-btn" onclick="brToggleMenu(event, this)" title="Acciones">
+                                                            <i class="fas fa-ellipsis-v"></i>
+                                                        </button>
+                                                        <div class="dropdown-menu batch-record-menu-list">
+                                                            <a class="dropdown-item" href="<%= relPathBr%>" target="_blank" onclick="brVerEnPanel(this, '<%= batchRecord.getName()%>', 'Batch Record PDF Unificado', '<%= relPathBr%>'); return false;"><i class="fas fa-eye"></i> Ver original</a>
+                                                            <a class="dropdown-item" href="<%= relPathBrDescarga%>" download><i class="fas fa-download"></i> Descargar</a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <%
+                                                    }
+                                                }
                                             %>
                                             <%
                                                 lst_link = LinkBatch.LinkBatchRecord(orden, lote);
@@ -1440,7 +1477,13 @@
 
             function brAplicarVisibilidad() {
                 document.querySelectorAll('.batch-record-row').forEach(function (row) {
-                    const coincideCategoria = brCategoriaActiva === 'todos' || row.getAttribute('data-category') === brCategoriaActiva;
+                    const categoria = row.getAttribute('data-category');
+                    // "Todos" no incluye Batch Record: son PDFs generados (histórico de
+                    // trazabilidad), no documentos fuente, y mezclarlos ahí saturaba la vista
+                    // general. Solo se ven entrando a su propia pestaña.
+                    const coincideCategoria = brCategoriaActiva === 'todos'
+                            ? categoria !== 'batchrecord'
+                            : categoria === brCategoriaActiva;
                     const oculto = row.getAttribute('data-search-hidden') === '1' || row.getAttribute('data-filter-hidden') === '1';
                     row.style.display = (coincideCategoria && !oculto) ? '' : 'none';
                 });
@@ -1487,7 +1530,7 @@
 
             function brActualizarResumen() {
                 const filas = document.querySelectorAll('.batch-record-row');
-                const conteos = {fisico: 0, soporte: 0, lab: 0, coa: 0, lotes: 0, manga: 0, formula: 0};
+                const conteos = {fisico: 0, soporte: 0, batchrecord: 0, lab: 0, coa: 0, lotes: 0, manga: 0, formula: 0};
                 let firmados = 0;
                 let pendientesSoporte = 0;
                 let totalSoporte = 0;
@@ -1509,9 +1552,11 @@
 
                 const total = filas.length;
                 document.getElementById('brTotalDocs').textContent = total;
-                document.getElementById('brCountTodos').textContent = total;
+                // "Todos" no cuenta los Batch Record (ver brAplicarVisibilidad): mismo criterio.
+                document.getElementById('brCountTodos').textContent = total - conteos.batchrecord;
                 document.getElementById('brCountFisico').textContent = conteos.fisico;
                 document.getElementById('brCountSoporte').textContent = conteos.soporte;
+                document.getElementById('brCountBatchRecord').textContent = conteos.batchrecord;
                 document.getElementById('brCountLab').textContent = conteos.lab;
                 document.getElementById('brCountCoa').textContent = conteos.coa;
                 document.getElementById('brCountLotes').textContent = conteos.lotes;
@@ -1530,7 +1575,10 @@
                 }
             }
 
-            document.addEventListener('DOMContentLoaded', brActualizarResumen);
+            document.addEventListener('DOMContentLoaded', function () {
+                brActualizarResumen();
+                brAplicarVisibilidad();
+            });
 
             function brCerrarMenus() {
                 document.querySelectorAll('.batch-record-menu-list.show').forEach(function (m) {
