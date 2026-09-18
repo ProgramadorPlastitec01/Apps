@@ -10,9 +10,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.List;
 import Controller.CertificatesJpaController;
+import Controller.CertificateFileJpaController;
 import Controller.EventsJpaController;
 import Method.Mail;
-import java.io.File;
 
 public class Generate extends HttpServlet {
 
@@ -308,23 +308,12 @@ public class Generate extends HttpServlet {
                                     result = CertificatesJpa.CertificatesUpdateSignature(IdCertificates, Signature);
                                 }
                                 if (result) {
-                                    // Ruta base
-                                    String basePath = getServletContext().getRealPath("/Certificates");
-                                    // Construcción de la ruta
-                                    File dirLote = new File(
-                                            basePath
-                                            + File.separator + Customer
-                                            + File.separator + Anio
-                                            + File.separator + Order
-                                            + File.separator + Batch
-                                    );
-                                    // Crear carpetas si no existen
-                                    if (!dirLote.exists()) {
-                                        boolean created = dirLote.mkdirs();
-                                        if (!created) {
-                                            System.out.println("No se pudo crear la estructura de carpetas");
-                                        }
-                                    }
+                                    // El lote queda visible en la navegación de FileManager.jsp
+                                    // (Gestor de Archivos) desde que se firma, tenga o no archivos
+                                    // subidos todavía — sin crear nada en el filesystem local (antes
+                                    // se hacía con un mkdirs() aquí mismo; certificate_lotes cumple
+                                    // ese mismo rol como marcador en BD).
+                                    new CertificateFileJpaController().registerLote(Customer, String.valueOf(Anio), String.valueOf(Order), Batch);
                                     request.setAttribute("SigMasive", result);
                                 }
                                 request.getRequestDispatcher("Generate?opt=8").forward(request, response);
@@ -334,23 +323,8 @@ public class Generate extends HttpServlet {
                                 IdCertificates = Integer.parseInt(IdCertiMasive);
                                 result = CertificatesJpa.CertificatesUpdateSignature(IdCertificates, Signature);
                                 if (result) {
-                                    // Ruta base
-                                    String basePath = getServletContext().getRealPath("/Certificates");
-                                    // Construcción de la ruta
-                                    File dirLote = new File(
-                                            basePath
-                                            + File.separator + Customer
-                                            + File.separator + Anio
-                                            + File.separator + Order
-                                            + File.separator + Batch
-                                    );
-                                    // Crear carpetas si no existen
-                                    if (!dirLote.exists()) {
-                                        boolean created = dirLote.mkdirs();
-                                        if (!created) {
-                                            System.out.println("No se pudo crear la estructura de carpetas");
-                                        }
-                                    }
+                                    // Ver comentario equivalente en SIGNATURE MASIVE.
+                                    new CertificateFileJpaController().registerLote(Customer, String.valueOf(Anio), String.valueOf(Order), Batch);
                                     request.setAttribute("SigUnique", result);
                                 }
                                 request.getRequestDispatcher("Generate?opt=2&Type=" + Type + "&IdCertificates=" + IdCertificates + "&TempDelete=0&StateCerti=3").forward(request, response);

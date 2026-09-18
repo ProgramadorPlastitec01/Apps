@@ -753,7 +753,7 @@
                                                         }
                                             %>
                                             <tr class="file-row batch-record-row" data-category="fisico" data-status="na" data-timestamp="<%= archivo.lastModified()%>">
-                                                <td class="batch-record-doc-name" style="cursor:pointer;" onclick="brVerEnPanel(this, '<%= archivo.getName()%>', 'Archivo Físico', '<%= relPath%>')"><span class="batch-record-ext-chip <%= archivoExtClass%>"><%= archivoExtLabel%></span> <%= archivo.getName()%></td>
+                                                <td class="batch-record-doc-name" style="cursor:pointer;" onclick="brVerEnPanel(this, '<%= Util.jsAttr(archivo.getName())%>', 'Archivo Físico', '<%= Util.jsAttr(relPath)%>')"><span class="batch-record-ext-chip <%= archivoExtClass%>"><%= archivoExtLabel%></span> <%= archivo.getName()%></td>
                                                 <td><span class="batch-record-pill batch-record-pill-fisico">Archivo Físico</span></td>
                                                 <td><span class="batch-record-status batch-record-status-na"><i class="fas fa-check-circle"></i> Disponible</span></td>
                                                 <td><%= fechaArchivo%></td>
@@ -765,7 +765,7 @@
                                                         </button>
                                                         <div class="dropdown-menu batch-record-menu-list">
                                                             <a class="dropdown-item" href="#" onclick="verPdfIndividual('Archivo Físico', '<%= archivo.getName()%>', '<%= relPath%>'); return false;"><i class="fas fa-file-pdf"></i> Generar PDF</a>
-                                                            <a class="dropdown-item" href="<%= relPath%>" target="_blank" onclick="brVerEnPanel(this, '<%= archivo.getName()%>', 'Archivo Físico', '<%= relPath%>'); return false;"><i class="fas fa-eye"></i> Ver original</a>
+                                                            <a class="dropdown-item" href="<%= relPath%>" target="_blank" onclick="brVerEnPanel(this, '<%= Util.jsAttr(archivo.getName())%>', 'Archivo Físico', '<%= Util.jsAttr(relPath)%>'); return false;"><i class="fas fa-eye"></i> Ver original</a>
                                                             <a class="dropdown-item" href="<%= relPathDescarga%>" download><i class="fas fa-download"></i> Descargar</a>
                                                             <% if (Permission.contains("[4]")) { %>
                                                             <div class="dropdown-divider"></div>
@@ -788,7 +788,7 @@
                                                         String generadoPor = batchRecord.getUploadedByName() != null ? batchRecord.getUploadedByName() : "—";
                                             %>
                                             <tr class="file-row batch-record-row" data-category="batchrecord" data-status="na" data-timestamp="<%= batchRecord.lastModified()%>">
-                                                <td class="batch-record-doc-name" style="cursor:pointer;" onclick="brVerEnPanel(this, '<%= batchRecord.getName()%>', 'Batch Record PDF Unificado', '<%= relPathBr%>')"><span class="batch-record-ext-chip batch-record-ext-pdf">PDF</span> <%= batchRecord.getName()%></td>
+                                                <td class="batch-record-doc-name" style="cursor:pointer;" onclick="brVerEnPanel(this, '<%= Util.jsAttr(batchRecord.getName())%>', 'Batch Record PDF Unificado', '<%= Util.jsAttr(relPathBr)%>')"><span class="batch-record-ext-chip batch-record-ext-pdf">PDF</span> <%= batchRecord.getName()%></td>
                                                 <td><span class="batch-record-pill batch-record-pill-batchrecord">Batch Record</span></td>
                                                 <td><span class="batch-record-status batch-record-status-na"><i class="fas fa-check-circle"></i> Disponible</span></td>
                                                 <td><%= fechaBr%></td>
@@ -799,7 +799,7 @@
                                                             <i class="fas fa-ellipsis-v"></i>
                                                         </button>
                                                         <div class="dropdown-menu batch-record-menu-list">
-                                                            <a class="dropdown-item" href="<%= relPathBr%>" target="_blank" onclick="brVerEnPanel(this, '<%= batchRecord.getName()%>', 'Batch Record PDF Unificado', '<%= relPathBr%>'); return false;"><i class="fas fa-eye"></i> Ver original</a>
+                                                            <a class="dropdown-item" href="<%= relPathBr%>" target="_blank" onclick="brVerEnPanel(this, '<%= Util.jsAttr(batchRecord.getName())%>', 'Batch Record PDF Unificado', '<%= Util.jsAttr(relPathBr)%>'); return false;"><i class="fas fa-eye"></i> Ver original</a>
                                                             <a class="dropdown-item" href="<%= relPathBrDescarga%>" download><i class="fas fa-download"></i> Descargar</a>
                                                         </div>
                                                     </div>
@@ -816,7 +816,7 @@
                                                         String[] ArgLink = Util.parseResult(lst_link.get(i));
                                             %>
                                             <tr class="file-row batch-record-row" data-category="lab" data-status="na">
-                                                <td class="batch-record-doc-name" style="cursor:pointer;" onclick="brVerEnPanel(this, '<%= ArgLink[2]%>', 'Registros LAB', '<%= ArgLink[3]%>')"><span class="batch-record-src-box batch-record-src-box-lab"><img src="Interface/Imagen/Registros_lab_Logo.png" alt=""></span> <%= ArgLink[1]%> — <%= ArgLink[2]%></td>
+                                                <td class="batch-record-doc-name" style="cursor:pointer;" onclick="brVerEnPanel(this, '<%= Util.jsAttr(ArgLink[2])%>', 'Registros LAB', '<%= Util.jsAttr(ArgLink[3])%>')"><span class="batch-record-src-box batch-record-src-box-lab"><img src="Interface/Imagen/Registros_lab_Logo.png" alt=""></span> <%= ArgLink[1]%> — <%= ArgLink[2]%></td>
                                                 <td><span class="batch-record-pill batch-record-pill-lab">Registros LAB</span></td>
                                                 <td><span class="batch-record-status batch-record-status-na"><i class="fas fa-check-circle"></i> Disponible</span></td>
                                                 <td>—</td>
@@ -827,8 +827,8 @@
                                                             <i class="fas fa-ellipsis-v"></i>
                                                         </button>
                                                         <div class="dropdown-menu batch-record-menu-list">
-                                                            <a class="dropdown-item" href="#" onclick="verPdfIndividual('<%= ArgLink[1]%>', '<%= ArgLink[2]%>', '<%= ArgLink[3]%>'); return false;"><i class="fas fa-file-pdf"></i> Generar PDF</a>
-                                                            <a class="dropdown-item" href="<%= ArgLink[3]%>" target="_blank" onclick="brVerEnPanel(this, '<%= ArgLink[2]%>', 'Registros LAB', '<%= ArgLink[3]%>'); return false;"><i class="fas fa-eye"></i> Ver registro</a>
+                                                            <a class="dropdown-item" href="#" onclick="verPdfIndividual('<%= Util.jsAttr(ArgLink[1])%>', '<%= Util.jsAttr(ArgLink[2])%>', '<%= Util.jsAttr(ArgLink[3])%>'); return false;"><i class="fas fa-file-pdf"></i> Generar PDF</a>
+                                                            <a class="dropdown-item" href="<%= ArgLink[3]%>" target="_blank" onclick="brVerEnPanel(this, '<%= Util.jsAttr(ArgLink[2])%>', 'Registros LAB', '<%= Util.jsAttr(ArgLink[3])%>'); return false;"><i class="fas fa-eye"></i> Ver registro</a>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -846,7 +846,7 @@
                                                         MaterialBatch += ArgCertificate[4];
                                             %>
                                             <tr class="file-row batch-record-row" data-category="coa" data-status="na">
-                                                <td class="batch-record-doc-name" style="cursor:pointer;" onclick="brVerEnPanel(this, '<%= ArgCertificate[2]%>', 'Certificados COA', '<%= ArgCertificate[3]%>')"><span class="batch-record-src-box batch-record-src-box-coa"><img src="Interface/Imagen/LogoSText.fw.png" alt=""></span> <%= ArgCertificate[1]%> — <%= ArgCertificate[2]%></td>
+                                                <td class="batch-record-doc-name" style="cursor:pointer;" onclick="brVerEnPanel(this, '<%= Util.jsAttr(ArgCertificate[2])%>', 'Certificados COA', '<%= Util.jsAttr(ArgCertificate[3])%>')"><span class="batch-record-src-box batch-record-src-box-coa"><img src="Interface/Imagen/LogoSText.fw.png" alt=""></span> <%= ArgCertificate[1]%> — <%= ArgCertificate[2]%></td>
                                                 <td><span class="batch-record-pill batch-record-pill-coa">Certificados COA</span></td>
                                                 <td><span class="batch-record-status batch-record-status-na"><i class="fas fa-check-circle"></i> Disponible</span></td>
                                                 <td>—</td>
@@ -857,8 +857,8 @@
                                                             <i class="fas fa-ellipsis-v"></i>
                                                         </button>
                                                         <div class="dropdown-menu batch-record-menu-list">
-                                                            <a class="dropdown-item" href="#" onclick="verPdfIndividual('<%= ArgCertificate[1]%>', '<%= ArgCertificate[2]%>', '<%= ArgCertificate[3]%>'); return false;"><i class="fas fa-file-pdf"></i> Generar PDF</a>
-                                                            <a class="dropdown-item" href="<%= ArgCertificate[3]%>" target="_blank" onclick="brVerEnPanel(this, '<%= ArgCertificate[2]%>', 'Certificados COA', '<%= ArgCertificate[3]%>'); return false;"><i class="fas fa-eye"></i> Ver registro</a>
+                                                            <a class="dropdown-item" href="#" onclick="verPdfIndividual('<%= Util.jsAttr(ArgCertificate[1])%>', '<%= Util.jsAttr(ArgCertificate[2])%>', '<%= Util.jsAttr(ArgCertificate[3])%>'); return false;"><i class="fas fa-file-pdf"></i> Generar PDF</a>
+                                                            <a class="dropdown-item" href="<%= ArgCertificate[3]%>" target="_blank" onclick="brVerEnPanel(this, '<%= Util.jsAttr(ArgCertificate[2])%>', 'Certificados COA', '<%= Util.jsAttr(ArgCertificate[3])%>'); return false;"><i class="fas fa-eye"></i> Ver registro</a>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -871,10 +871,15 @@
                                                 lst_material = LinkBatch.AttachmentBatchRecord(MaterialBatch);
                                                 if (lst_material != null) {
                                                     for (int i = 0; i < lst_material.size(); i++) {
-                                                        String[] ArgBatch = Util.parseResult(lst_material.get(i));
+                                                        String[] ArgBatchRaw = Util.parseResult(lst_material.get(i));
+                                                        // Registros antiguos de Generación de Lotes a veces traen
+                                                        // "<a href=\"...\">texto</a>" completo en vez de un nombre
+                                                        // plano; se normaliza aquí antes de usarlo en cualquier lado.
+                                                        String[] ArgBatch = ArgBatchRaw.clone();
+                                                        ArgBatch[2] = Util.extractFileName(ArgBatchRaw[2]);
                                             %>
                                             <tr class="file-row batch-record-row" data-category="lotes" data-status="na">
-                                                <td class="batch-record-doc-name" style="cursor:pointer;" onclick="brVerEnPanel(this, '<%= ArgBatch[3]%>', 'Generación de Lotes', 'DownloadGL?File_name=<%= ArgBatch[2].trim()%>')"><span class="batch-record-src-box batch-record-src-box-lotes"><img src="Interface/Imagen/Generacion_lotes.png" alt=""></span> <%= ArgBatch[1]%> — <%= ArgBatch[3]%></td>
+                                                <td class="batch-record-doc-name" style="cursor:pointer;" onclick="brVerEnPanel(this, '<%= Util.jsAttr(ArgBatch[3])%>', 'Generación de Lotes', 'DownloadGL?File_name=<%= Util.jsAttr(ArgBatch[2].trim())%>')"><span class="batch-record-src-box batch-record-src-box-lotes"><img src="Interface/Imagen/Generacion_lotes.png" alt=""></span> <%= ArgBatch[1]%> — <%= ArgBatch[3]%></td>
                                                 <td><span class="batch-record-pill batch-record-pill-lotes">Generación de Lotes</span></td>
                                                 <td><span class="batch-record-status batch-record-status-na"><i class="fas fa-check-circle"></i> Disponible</span></td>
                                                 <td>—</td>
@@ -885,8 +890,8 @@
                                                             <i class="fas fa-ellipsis-v"></i>
                                                         </button>
                                                         <div class="dropdown-menu batch-record-menu-list">
-                                                            <a class="dropdown-item" href="#" onclick="verPdfIndividual('<%= ArgBatch[1]%>', '<%= ArgBatch[3]%>', 'DownloadGL?File_name=<%= ArgBatch[2].trim()%>'); return false;"><i class="fas fa-file-pdf"></i> Generar PDF</a>
-                                                            <a class="dropdown-item" href="DownloadGL?File_name=<%= ArgBatch[2].trim()%>" target="_blank" onclick="brVerEnPanel(this, '<%= ArgBatch[3]%>', 'Generación de Lotes', 'DownloadGL?File_name=<%= ArgBatch[2].trim()%>'); return false;"><i class="fas fa-eye"></i> Ver registro</a>
+                                                            <a class="dropdown-item" href="#" onclick="verPdfIndividual('<%= Util.jsAttr(ArgBatch[1])%>', '<%= Util.jsAttr(ArgBatch[3])%>', 'DownloadGL?File_name=<%= Util.jsAttr(ArgBatch[2].trim())%>'); return false;"><i class="fas fa-file-pdf"></i> Generar PDF</a>
+                                                            <a class="dropdown-item" href="DownloadGL?File_name=<%= ArgBatch[2].trim()%>" target="_blank" onclick="brVerEnPanel(this, '<%= Util.jsAttr(ArgBatch[3])%>', 'Generación de Lotes', 'DownloadGL?File_name=<%= Util.jsAttr(ArgBatch[2].trim())%>'); return false;"><i class="fas fa-eye"></i> Ver registro</a>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -903,7 +908,7 @@
                                                             + "&lote=" + java.net.URLEncoder.encode(lote, "UTF-8");
                                             %>
                                             <tr class="file-row batch-record-row" data-category="manga" data-status="na">
-                                                <td class="batch-record-doc-name" style="cursor:pointer;" onclick="brVerEnPanel(this, '<%= mangaNombre%>', 'Inspección Manga', '<%= mangaUrl%>')"><span class="batch-record-src-box batch-record-src-box-manga"><img src="Interface/Imagen/Inspeccion_manga_new.png" alt=""></span> <%= mangaTipo%> — <%= mangaNombre%></td>
+                                                <td class="batch-record-doc-name" style="cursor:pointer;" onclick="brVerEnPanel(this, '<%= Util.jsAttr(mangaNombre)%>', 'Inspección Manga', '<%= Util.jsAttr(mangaUrl)%>')"><span class="batch-record-src-box batch-record-src-box-manga"><img src="Interface/Imagen/Inspeccion_manga_new.png" alt=""></span> <%= mangaTipo%> — <%= mangaNombre%></td>
                                                 <td><span class="batch-record-pill batch-record-pill-manga">Inspección Manga</span></td>
                                                 <td><span class="batch-record-status batch-record-status-na"><i class="fas fa-check-circle"></i> Disponible</span></td>
                                                 <td>—</td>
@@ -914,8 +919,8 @@
                                                             <i class="fas fa-ellipsis-v"></i>
                                                         </button>
                                                         <div class="dropdown-menu batch-record-menu-list">
-                                                            <a class="dropdown-item" href="#" onclick="verPdfIndividual('<%= mangaTipo%>', '<%= mangaNombre%>', '<%= mangaUrl%>'); return false;"><i class="fas fa-file-pdf"></i> Generar PDF</a>
-                                                            <a class="dropdown-item" href="<%= mangaUrl%>" target="_blank" onclick="brVerEnPanel(this, '<%= mangaNombre%>', 'Inspección Manga', '<%= mangaUrl%>'); return false;"><i class="fas fa-eye"></i> Ver registro</a>
+                                                            <a class="dropdown-item" href="#" onclick="verPdfIndividual('<%= Util.jsAttr(mangaTipo)%>', '<%= Util.jsAttr(mangaNombre)%>', '<%= Util.jsAttr(mangaUrl)%>'); return false;"><i class="fas fa-file-pdf"></i> Generar PDF</a>
+                                                            <a class="dropdown-item" href="<%= mangaUrl%>" target="_blank" onclick="brVerEnPanel(this, '<%= Util.jsAttr(mangaNombre)%>', 'Inspección Manga', '<%= Util.jsAttr(mangaUrl)%>'); return false;"><i class="fas fa-eye"></i> Ver registro</a>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -934,7 +939,7 @@
                                                                 + "&indice=" + i;
                                             %>
                                             <tr class="file-row batch-record-row" data-category="manga" data-status="na">
-                                                <td class="batch-record-doc-name" style="cursor:pointer;" onclick="brVerEnPanel(this, '<%= despejeNombre%>', 'Inspección Manga', '<%= despejeUrl%>')"><span class="batch-record-src-box batch-record-src-box-manga"><img src="Interface/Imagen/Inspeccion_manga_new.png" alt=""></span> <%= despejeTipo%> — <%= despejeNombre%></td>
+                                                <td class="batch-record-doc-name" style="cursor:pointer;" onclick="brVerEnPanel(this, '<%= Util.jsAttr(despejeNombre)%>', 'Inspección Manga', '<%= Util.jsAttr(despejeUrl)%>')"><span class="batch-record-src-box batch-record-src-box-manga"><img src="Interface/Imagen/Inspeccion_manga_new.png" alt=""></span> <%= despejeTipo%> — <%= despejeNombre%></td>
                                                 <td><span class="batch-record-pill batch-record-pill-manga">Inspección Manga</span></td>
                                                 <td><span class="batch-record-status batch-record-status-na"><i class="fas fa-check-circle"></i> Disponible</span></td>
                                                 <td>—</td>
@@ -945,8 +950,8 @@
                                                             <i class="fas fa-ellipsis-v"></i>
                                                         </button>
                                                         <div class="dropdown-menu batch-record-menu-list">
-                                                            <a class="dropdown-item" href="#" onclick="verPdfIndividual('<%= despejeTipo%>', '<%= despejeNombre%>', '<%= despejeUrl%>'); return false;"><i class="fas fa-file-pdf"></i> Generar PDF</a>
-                                                            <a class="dropdown-item" href="<%= despejeUrl%>" target="_blank" onclick="brVerEnPanel(this, '<%= despejeNombre%>', 'Inspección Manga', '<%= despejeUrl%>'); return false;"><i class="fas fa-eye"></i> Ver registro</a>
+                                                            <a class="dropdown-item" href="#" onclick="verPdfIndividual('<%= Util.jsAttr(despejeTipo)%>', '<%= Util.jsAttr(despejeNombre)%>', '<%= Util.jsAttr(despejeUrl)%>'); return false;"><i class="fas fa-file-pdf"></i> Generar PDF</a>
+                                                            <a class="dropdown-item" href="<%= despejeUrl%>" target="_blank" onclick="brVerEnPanel(this, '<%= Util.jsAttr(despejeNombre)%>', 'Inspección Manga', '<%= Util.jsAttr(despejeUrl)%>'); return false;"><i class="fas fa-eye"></i> Ver registro</a>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -963,7 +968,7 @@
                                                             + "&lote=" + java.net.URLEncoder.encode(lote, "UTF-8");
                                             %>
                                             <tr class="file-row batch-record-row" data-category="manga" data-status="na">
-                                                <td class="batch-record-doc-name" style="cursor:pointer;" onclick="brVerEnPanel(this, '<%= cabeceraNombre%>', 'Inspección Manga', '<%= cabeceraUrl%>')"><span class="batch-record-src-box batch-record-src-box-manga"><img src="Interface/Imagen/Inspeccion_manga_new.png" alt=""></span> <%= cabeceraTipo%> — <%= cabeceraNombre%></td>
+                                                <td class="batch-record-doc-name" style="cursor:pointer;" onclick="brVerEnPanel(this, '<%= Util.jsAttr(cabeceraNombre)%>', 'Inspección Manga', '<%= Util.jsAttr(cabeceraUrl)%>')"><span class="batch-record-src-box batch-record-src-box-manga"><img src="Interface/Imagen/Inspeccion_manga_new.png" alt=""></span> <%= cabeceraTipo%> — <%= cabeceraNombre%></td>
                                                 <td><span class="batch-record-pill batch-record-pill-manga">Inspección Manga</span></td>
                                                 <td><span class="batch-record-status batch-record-status-na"><i class="fas fa-check-circle"></i> Disponible</span></td>
                                                 <td>—</td>
@@ -974,8 +979,8 @@
                                                             <i class="fas fa-ellipsis-v"></i>
                                                         </button>
                                                         <div class="dropdown-menu batch-record-menu-list">
-                                                            <a class="dropdown-item" href="#" onclick="verPdfIndividual('<%= cabeceraTipo%>', '<%= cabeceraNombre%>', '<%= cabeceraUrl%>'); return false;"><i class="fas fa-file-pdf"></i> Generar PDF</a>
-                                                            <a class="dropdown-item" href="<%= cabeceraUrl%>" target="_blank" onclick="brVerEnPanel(this, '<%= cabeceraNombre%>', 'Inspección Manga', '<%= cabeceraUrl%>'); return false;"><i class="fas fa-eye"></i> Ver registro</a>
+                                                            <a class="dropdown-item" href="#" onclick="verPdfIndividual('<%= Util.jsAttr(cabeceraTipo)%>', '<%= Util.jsAttr(cabeceraNombre)%>', '<%= Util.jsAttr(cabeceraUrl)%>'); return false;"><i class="fas fa-file-pdf"></i> Generar PDF</a>
+                                                            <a class="dropdown-item" href="<%= cabeceraUrl%>" target="_blank" onclick="brVerEnPanel(this, '<%= Util.jsAttr(cabeceraNombre)%>', 'Inspección Manga', '<%= Util.jsAttr(cabeceraUrl)%>'); return false;"><i class="fas fa-eye"></i> Ver registro</a>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -994,7 +999,7 @@
                                                                 + "&indice=" + i;
                                             %>
                                             <tr class="file-row batch-record-row" data-category="formula" data-status="na">
-                                                <td class="batch-record-doc-name" style="cursor:pointer;" onclick="brVerEnPanel(this, '<%= formulaNombre%>', 'Control Fórmulas', '<%= formulaUrl%>')"><span class="batch-record-src-box batch-record-src-box-formula"><img src="Interface/Imagen/Control_formulas_new.png" alt=""></span> <%= formulaTipo%> — <%= formulaNombre%></td>
+                                                <td class="batch-record-doc-name" style="cursor:pointer;" onclick="brVerEnPanel(this, '<%= Util.jsAttr(formulaNombre)%>', 'Control Fórmulas', '<%= Util.jsAttr(formulaUrl)%>')"><span class="batch-record-src-box batch-record-src-box-formula"><img src="Interface/Imagen/Control_formulas_new.png" alt=""></span> <%= formulaTipo%> — <%= formulaNombre%></td>
                                                 <td><span class="batch-record-pill batch-record-pill-formula">Control Fórmulas</span></td>
                                                 <td><span class="batch-record-status batch-record-status-na"><i class="fas fa-check-circle"></i> Disponible</span></td>
                                                 <td>—</td>
@@ -1005,8 +1010,8 @@
                                                             <i class="fas fa-ellipsis-v"></i>
                                                         </button>
                                                         <div class="dropdown-menu batch-record-menu-list">
-                                                            <a class="dropdown-item" href="#" onclick="verPdfIndividual('<%= formulaTipo%>', '<%= formulaNombre%>', '<%= formulaUrl%>'); return false;"><i class="fas fa-file-pdf"></i> Generar PDF</a>
-                                                            <a class="dropdown-item" href="<%= formulaUrl%>" target="_blank" onclick="brVerEnPanel(this, '<%= formulaNombre%>', 'Control Fórmulas', '<%= formulaUrl%>'); return false;"><i class="fas fa-eye"></i> Ver registro</a>
+                                                            <a class="dropdown-item" href="#" onclick="verPdfIndividual('<%= Util.jsAttr(formulaTipo)%>', '<%= Util.jsAttr(formulaNombre)%>', '<%= Util.jsAttr(formulaUrl)%>'); return false;"><i class="fas fa-file-pdf"></i> Generar PDF</a>
+                                                            <a class="dropdown-item" href="<%= formulaUrl%>" target="_blank" onclick="brVerEnPanel(this, '<%= Util.jsAttr(formulaNombre)%>', 'Control Fórmulas', '<%= Util.jsAttr(formulaUrl)%>'); return false;"><i class="fas fa-eye"></i> Ver registro</a>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -1037,7 +1042,7 @@
                                                         }
                                             %>
                                             <tr class="file-row batch-record-row" data-category="soporte" data-status="<%= firmado ? "firmado" : "pendiente"%>" data-timestamp="<%= soporte.lastModified()%>">
-                                                <td class="batch-record-doc-name" style="cursor:pointer;" onclick="brVerEnPanel(this, '<%= nombreSoporte%>', 'Documento de soporte', '<%= relPathSoporte%>')"><span class="batch-record-ext-chip <%= soporteExtClass%>"><%= soporteExtLabel%></span> <%= nombreSoporte%></td>
+                                                <td class="batch-record-doc-name" style="cursor:pointer;" onclick="brVerEnPanel(this, '<%= Util.jsAttr(nombreSoporte)%>', 'Documento de soporte', '<%= Util.jsAttr(relPathSoporte)%>')"><span class="batch-record-ext-chip <%= soporteExtClass%>"><%= soporteExtLabel%></span> <%= nombreSoporte%></td>
                                                 <td><span class="batch-record-pill batch-record-pill-soporte">Documento de soporte</span></td>
                                                 <td>
                                                     <% if (firmado) { %>
@@ -1054,7 +1059,7 @@
                                                             <i class="fas fa-ellipsis-v"></i>
                                                         </button>
                                                         <div class="dropdown-menu batch-record-menu-list">
-                                                            <a class="dropdown-item" href="<%= relPathSoporte%>" target="_blank" onclick="brVerEnPanel(this, '<%= nombreSoporte%>', 'Documento de soporte', '<%= relPathSoporte%>'); return false;"><i class="fas fa-eye"></i> Ver documento</a>
+                                                            <a class="dropdown-item" href="<%= relPathSoporte%>" target="_blank" onclick="brVerEnPanel(this, '<%= Util.jsAttr(nombreSoporte)%>', 'Documento de soporte', '<%= Util.jsAttr(relPathSoporte)%>'); return false;"><i class="fas fa-eye"></i> Ver documento</a>
                                                             <a class="dropdown-item" href="<%= relPathSoporteDescarga%>" download><i class="fas fa-download"></i> Descargar</a>
                                                             <% if (!firmado && Permission.contains("[39]")) { %>
                                                             <a class="dropdown-item" href="#" onclick="window.open('SupportDocumentSign.jsp?cliente=<%= cliente%>&anio=<%= anio%>&orden=<%= orden%>&lote=<%= lote%>&id=<%= soporte.getId()%>', '_blank'); return false;"><i class="fas fa-file-signature"></i> Firmar</a>

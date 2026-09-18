@@ -63,6 +63,34 @@ public class CertificateFileJpaController implements Serializable {
         }
     }
 
+    /**
+     * Marca que un lote existe (se firmó en el módulo de Generación), sin
+     * archivo asociado. Antes de la migración a Office Platform, firmar un
+     * certificado creaba una carpeta local vacía (Generate.java, mkdirs())
+     * que era lo único que hacía "aparecer" el lote en la navegación de
+     * FileManager.jsp; esta fila cumple ese mismo rol sin tocar el
+     * filesystem. Idempotente: firmar el mismo lote varias veces no duplica
+     * (INSERT IGNORE en el SP, por la UNIQUE KEY de certificate_lotes).
+     */
+    public boolean registerLote(String cliente, String anio, String orden, String lote) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        try {
+            Query q = em.createNativeQuery("CALL `Sp_clt_r_RegisterLote`(?, ?, ?, ?)");
+            q.setParameter(1, cliente);
+            q.setParameter(2, anio);
+            q.setParameter(3, orden);
+            q.setParameter(4, lote);
+            q.executeUpdate();
+            em.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            return false;
+        } finally {
+            em.close();
+        }
+    }
+
     public List<CertificateFileRow> consultFilesByLote(String cliente, String anio, String orden, String lote, String carpeta) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
