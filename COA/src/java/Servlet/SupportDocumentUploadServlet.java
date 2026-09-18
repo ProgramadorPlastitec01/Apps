@@ -1,8 +1,12 @@
 package Servlet;
 
+import Controller.CertificateFileJpaController;
+import Method.OfficePlatformService;
 import Method.PdfImageUtil;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -19,10 +23,10 @@ import javax.servlet.http.Part;
 
 /**
  * Uploads a "documento de soporte" (client letter, etc.) for a lote, to be
- * signed later from SupportDocumentSignServlet. Stored under the same
- * Certificates/{cliente}/{anio}/{orden}/{lote}/ folder FileManagerServlet
- * uses, in a SupportDocs/ subfolder, so it's picked up by
- * Method.BatchRecordManifest and included in the unified Batch Record PDF.
+ * signed later from SupportDocumentSignServlet. Sube el binario a Office
+ * Platform (carpeta "SupportDocs" dentro del lote) y registra el archivo en
+ * la tabla certificate_files, para que FileManager.jsp lo muestre en la
+ * pestaña "Soporte" e incluirlo en el Batch Record unificado.
  *
  * Gated by permission code [39] ("Adjuntar y firmar documento de soporte"),
  * created via the Role/Permission admin screen (Role.java) — update this
@@ -66,22 +70,15 @@ public class SupportDocumentUploadServlet extends HttpServlet {
             return;
         }
 
-        String basePath = getServletContext().getRealPath("/Certificates");
-        String supportDocsPath = basePath
-                + File.separator + cliente
-                + File.separator + anio
-                + File.separator + orden
-                + File.separator + lote
-                + File.separator + "SupportDocs";
-
-        File uploadDir = new File(supportDocsPath);
-        if (!uploadDir.exists()) {
-            uploadDir.mkdirs();
-        }
+        String uploadedById = session.getAttribute("Documento") != null ? session.getAttribute("Documento").toString() : null;
+        String uploadedByName = session.getAttribute("Usuario") != null ? session.getAttribute("Usuario").toString() : null;
 
         boolean uploaded = false;
         boolean rejected = false;
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        Long folderId = null;
+
+        CertificateFileJpaController certificateFiles = new CertificateFileJpaController();
 
         for (Part part : request.getParts()) {
 
@@ -101,20 +98,50 @@ public class SupportDocumentUploadServlet extends HttpServlet {
 
             String baseName = dot >= 0 ? fileName.substring(0, dot) : fileName;
             String safeBaseName = baseName.replaceAll("[^a-zA-Z0-9_\\-]", "_");
+            String finalName = safeBaseName + "_" + timestamp + ".pdf";
 
-            if (ext.equals(".pdf")) {
-                File destino = new File(uploadDir, safeBaseName + "_" + timestamp + ".pdf");
-                part.write(destino.getAbsolutePath());
+            // El PDF final (directo o convertido de imagen) se sube a Office
+            // Platform por streaming; solo la conversión imagen->PDF necesita
+            // un par de archivos temporales efímeros en java.io.tmpdir (la
+            // librería de conversión trabaja con File, no con Stream) que se
+            // borran en el mismo finally, nunca queda nada persistente en disco.
+            File pdfParaSubir = null;
+            File tempImage = null;
+
+            try {
+                if (ext.equals(".pdf")) {
+                    pdfParaSubir = File.createTempFile("supportdoc_", ".pdf");
+                    part.write(pdfParaSubir.getAbsolutePath());
+                } else {
+                    tempImage = File.createTempFile("supportdoc_src_", ext);
+                    part.write(tempImage.getAbsolutePath());
+                    pdfParaSubir = File.createTempFile("supportdoc_", ".pdf");
+                    PdfImageUtil.imageToPdf(tempImage, pdfParaSubir);
+                }
+
+                if (folderId == null) {
+                    folderId = OfficePlatformService.resolveOrCreateFolderPath("COA", cliente, anio, orden, lote, "SupportDocs");
+                }
+
+                try (InputStream contenido = new FileInputStream(pdfParaSubir)) {
+                    OfficePlatformService.OfficeUploadResult resultado = OfficePlatformService.subirArchivo(
+                            folderId, finalName, null, contenido, "application/pdf",
+                            uploadedById, uploadedByName);
+
+                    certificateFiles.registerFile(cliente, anio, orden, lote, "SupportDocs", finalName,
+                            resultado.fileId, resultado.uuid, resultado.mimeType, resultado.size,
+                            uploadedById, uploadedByName);
+                }
                 uploaded = true;
-            } else {
-                File tempImage = new File(uploadDir, "tmp_" + timestamp + ext);
-                part.write(tempImage.getAbsolutePath());
-                File destino = new File(uploadDir, safeBaseName + "_" + timestamp + ".pdf");
-                try {
-                    PdfImageUtil.imageToPdf(tempImage, destino);
-                    uploaded = true;
-                } finally {
+            } catch (IOException ex) {
+                System.err.println("[SupportDocumentUploadServlet] Error subiendo '" + finalName + "' a Office Platform: " + ex.getMessage());
+                rejected = true;
+            } finally {
+                if (tempImage != null) {
                     tempImage.delete();
+                }
+                if (pdfParaSubir != null) {
+                    pdfParaSubir.delete();
                 }
             }
         }

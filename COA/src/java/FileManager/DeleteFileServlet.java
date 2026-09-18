@@ -1,6 +1,8 @@
 package FileManager;
 
-import java.io.File;
+import Controller.CertificateFileJpaController;
+import Controller.CertificateFileRow;
+import Method.OfficePlatformService;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,34 +21,28 @@ public class DeleteFileServlet extends HttpServlet {
         String anio    = request.getParameter("anio");
         String orden   = request.getParameter("orden");
         String lote    = request.getParameter("lote");
-        String archivo = request.getParameter("archivo");
-        // Subcarpeta opcional dentro del lote (ej. "SupportDocs"); vacío = raíz del lote (comportamiento previo).
-        String carpeta = request.getParameter("carpeta");
+        String idParam = request.getParameter("id");
 
         String msg = "error_delete";
 
-        if (cliente != null && anio != null && orden != null && lote != null && archivo != null) {
+        if (idParam != null) {
+            try {
+                long id = Long.parseLong(idParam);
+                CertificateFileJpaController certificateFiles = new CertificateFileJpaController();
+                CertificateFileRow fila = certificateFiles.consultFileById(id);
 
-            String basePath = request.getServletContext().getRealPath("/Certificates");
-
-            File file = new File(
-                basePath + File.separator
-                + cliente + File.separator
-                + anio + File.separator
-                + orden + File.separator
-                + lote + File.separator
-                + ((carpeta != null && !carpeta.trim().isEmpty()) ? carpeta + File.separator : "")
-                + archivo
-            );
-
-            if (file.exists()) {
-                if (file.delete()) {
-                    msg = "delete_success";
+                if (fila != null) {
+                    // Se envía a la papelera del gestor (recuperable) en vez de un
+                    // borrado físico permanente, que era el comportamiento anterior.
+                    // userId/userName deben coincidir con los usados al subir el
+                    // archivo: sin ellos la API responde "éxito" pero no borra nada.
+                    OfficePlatformService.eliminarArchivo(fila.getOfficeFileId(), fila.getUploadedById(), fila.getUploadedByName());
+                    msg = certificateFiles.deleteFile(id) ? "delete_success" : "error_delete";
                 } else {
-                    msg = "error_delete";
+                    msg = "file_not_found";
                 }
-            } else {
-                msg = "file_not_found";
+            } catch (NumberFormatException | IOException ex) {
+                msg = "error_delete";
             }
         } else {
             msg = "invalid_params";

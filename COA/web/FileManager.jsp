@@ -1,7 +1,7 @@
-<%@page import="java.io.File"%>
-<%@page import="java.io.FileFilter"%>
 <%@page import="Connection.LinkBatchRecord"%>
 <%@page import="Controller.CertificatesJpaController"%>
+<%@page import="Controller.CertificateFileJpaController"%>
+<%@page import="Controller.CertificateFileRow"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Map"%>
@@ -398,23 +398,11 @@
                                         String orden = request.getParameter("orden");
                                         String lote = request.getParameter("lote");
 
-                                        String basePath = application.getRealPath("/") + "Certificates";
-
-                                        String currentPath = basePath;
-                                        if (cliente != null) {
-                                            currentPath += File.separator + cliente;
-                                        }
-                                        if (anio != null) {
-                                            currentPath += File.separator + anio;
-                                        }
-                                        if (orden != null) {
-                                            currentPath += File.separator + orden;
-                                        }
-                                        if (lote != null) {
-                                            currentPath += File.separator + lote;
-                                        }
-
-                                        File currentDir = new File(currentPath);
+                                        // Los archivos de Batch Record ya no viven en el filesystem
+                                        // local (web/Certificates/...): el binario está en Office
+                                        // Platform y esta tabla de metadatos es la única fuente de
+                                        // verdad para navegar y listar documentos.
+                                        CertificateFileJpaController certController = new CertificateFileJpaController();
                                     %>
 
                                     <!-- ================== BREADCRUMB ================== -->
@@ -460,30 +448,23 @@
 
                                     <!-- ================== LISTADO ================== -->
                                     <%
-                                        if (currentDir.exists()) {
+                                        {
 
                                             /* ================== ARCHIVOS (LOTE) ================== */
                                             if (lote != null) {
-                                                File[] archivos = currentDir.listFiles(new FileFilter() {
-                                                    @Override
-                                                    public boolean accept(File file) {
-                                                        return file.isFile();
-                                                    }
-                                                });
-
-                                                File supportDocsDir = new File(currentPath + File.separator + "SupportDocs");
-                                                File[] soportes = supportDocsDir.listFiles();
+                                                List<CertificateFileRow> archivos = certController.consultFilesByLote(cliente, anio, orden, lote, "");
+                                                List<CertificateFileRow> soportes = certController.consultFilesByLote(cliente, anio, orden, lote, "SupportDocs");
 
                                                 long ultimaActualizacionMillis = 0L;
                                                 if (archivos != null) {
-                                                    for (File f : archivos) {
+                                                    for (CertificateFileRow f : archivos) {
                                                         if (f.lastModified() > ultimaActualizacionMillis) {
                                                             ultimaActualizacionMillis = f.lastModified();
                                                         }
                                                     }
                                                 }
                                                 if (soportes != null) {
-                                                    for (File f : soportes) {
+                                                    for (CertificateFileRow f : soportes) {
                                                         if (f.lastModified() > ultimaActualizacionMillis) {
                                                             ultimaActualizacionMillis = f.lastModified();
                                                         }
@@ -745,9 +726,10 @@
                                         <tbody id="fileTable">
 
                                             <%
-                                                if (archivos != null && archivos.length > 0) {
-                                                    for (File archivo : archivos) {
-                                                        String relPath = "Certificates/" + cliente + "/" + anio + "/" + orden + "/" + lote + "/" + archivo.getName();
+                                                if (archivos != null && !archivos.isEmpty()) {
+                                                    for (CertificateFileRow archivo : archivos) {
+                                                        String relPath = "FileDownloadProxyServlet?id=" + archivo.getId() + "&modo=inline";
+                                                        String relPathDescarga = "FileDownloadProxyServlet?id=" + archivo.getId() + "&modo=adjunto";
                                                         String fechaArchivo = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(new java.util.Date(archivo.lastModified()));
                                                         String archivoExtLower = archivo.getName().toLowerCase();
                                                         String archivoExtClass = "batch-record-ext-img";
@@ -777,10 +759,10 @@
                                                         <div class="dropdown-menu batch-record-menu-list">
                                                             <a class="dropdown-item" href="#" onclick="verPdfIndividual('Archivo Físico', '<%= archivo.getName()%>', '<%= relPath%>'); return false;"><i class="fas fa-file-pdf"></i> Generar PDF</a>
                                                             <a class="dropdown-item" href="<%= relPath%>" target="_blank" onclick="brVerEnPanel(this, '<%= archivo.getName()%>', 'Archivo Físico', '<%= relPath%>'); return false;"><i class="fas fa-eye"></i> Ver original</a>
-                                                            <a class="dropdown-item" href="<%= relPath%>" download><i class="fas fa-download"></i> Descargar</a>
+                                                            <a class="dropdown-item" href="<%= relPathDescarga%>" download><i class="fas fa-download"></i> Descargar</a>
                                                             <% if (Permission.contains("[4]")) { %>
                                                             <div class="dropdown-divider"></div>
-                                                            <a class="dropdown-item text-danger" href="#" onclick="confirmDeleteFile('<%= cliente%>','<%= anio%>','<%= orden%>','<%= lote%>','<%= archivo.getName()%>'); return false;"><i class="fas fa-trash"></i> Eliminar</a>
+                                                            <a class="dropdown-item text-danger" href="#" onclick="confirmDeleteFile('<%= cliente%>','<%= anio%>','<%= orden%>','<%= lote%>','<%= archivo.getId()%>'); return false;"><i class="fas fa-trash"></i> Eliminar</a>
                                                             <% } %>
                                                         </div>
                                                     </div>
@@ -998,10 +980,11 @@
                                             %>
                                             <%
                                                 if (soportes != null) {
-                                                    for (File soporte : soportes) {
+                                                    for (CertificateFileRow soporte : soportes) {
                                                         String nombreSoporte = soporte.getName();
                                                         boolean firmado = nombreSoporte.contains("_FIRMADO_");
-                                                        String relPathSoporte = "Certificates/" + cliente + "/" + anio + "/" + orden + "/" + lote + "/SupportDocs/" + nombreSoporte;
+                                                        String relPathSoporte = "FileDownloadProxyServlet?id=" + soporte.getId() + "&modo=inline";
+                                                        String relPathSoporteDescarga = "FileDownloadProxyServlet?id=" + soporte.getId() + "&modo=adjunto";
                                                         String soporteExtLower = nombreSoporte.toLowerCase();
                                                         String soporteExtClass = "batch-record-ext-img";
                                                         String soporteExtLabel = "IMG";
@@ -1035,13 +1018,13 @@
                                                         </button>
                                                         <div class="dropdown-menu batch-record-menu-list">
                                                             <a class="dropdown-item" href="<%= relPathSoporte%>" target="_blank" onclick="brVerEnPanel(this, '<%= nombreSoporte%>', 'Documento de soporte', '<%= relPathSoporte%>'); return false;"><i class="fas fa-eye"></i> Ver documento</a>
-                                                            <a class="dropdown-item" href="<%= relPathSoporte%>" download><i class="fas fa-download"></i> Descargar</a>
+                                                            <a class="dropdown-item" href="<%= relPathSoporteDescarga%>" download><i class="fas fa-download"></i> Descargar</a>
                                                             <% if (!firmado && Permission.contains("[39]")) { %>
-                                                            <a class="dropdown-item" href="#" onclick="window.open('SupportDocumentSign.jsp?cliente=<%= cliente%>&anio=<%= anio%>&orden=<%= orden%>&lote=<%= lote%>&archivo=<%= nombreSoporte%>', '_blank'); return false;"><i class="fas fa-file-signature"></i> Firmar</a>
+                                                            <a class="dropdown-item" href="#" onclick="window.open('SupportDocumentSign.jsp?cliente=<%= cliente%>&anio=<%= anio%>&orden=<%= orden%>&lote=<%= lote%>&id=<%= soporte.getId()%>', '_blank'); return false;"><i class="fas fa-file-signature"></i> Firmar</a>
                                                             <% } %>
                                                             <% if (Permission.contains("[4]")) { %>
                                                             <div class="dropdown-divider"></div>
-                                                            <a class="dropdown-item text-danger" href="#" onclick="confirmDeleteSupportFile('<%= cliente%>','<%= anio%>','<%= orden%>','<%= lote%>','<%= nombreSoporte%>'); return false;"><i class="fas fa-trash"></i> Eliminar</a>
+                                                            <a class="dropdown-item text-danger" href="#" onclick="confirmDeleteSupportFile('<%= cliente%>','<%= anio%>','<%= orden%>','<%= lote%>','<%= soporte.getId()%>'); return false;"><i class="fas fa-trash"></i> Eliminar</a>
                                                             <% } %>
                                                         </div>
                                                     </div>
@@ -1100,18 +1083,25 @@
                                         /* ================== CARPETAS ================== */
                                     } else {
 
-                                        File[] carpetas = currentDir.listFiles(new FileFilter() {
-                                            @Override
-                                            public boolean accept(File file) {
-                                                return file.isDirectory();
-                                            }
-                                        });
+                                        // Reemplaza la navegación por carpetas físicas: cada nivel
+                                        // lista los valores distintos ya registrados en
+                                        // certificate_files para el nivel anterior.
+                                        List<String> carpetas;
+                                        if (cliente == null) {
+                                            carpetas = certController.consultDistinctClientes();
+                                        } else if (anio == null) {
+                                            carpetas = certController.consultDistinctAnios(cliente);
+                                        } else if (orden == null) {
+                                            carpetas = certController.consultDistinctOrdenes(cliente, anio);
+                                        } else {
+                                            carpetas = certController.consultDistinctLotes(cliente, anio, orden);
+                                        }
 
                                     %>
 
                                     <div class="row g-3 mt-2"  id="folderGrid">
-                                        <%                                            if (carpetas != null && carpetas.length > 0) {
-                                                for (File carpeta : carpetas) {
+                                        <%                                            if (carpetas != null && !carpetas.isEmpty()) {
+                                                for (String nombreCarpeta : carpetas) {
 
                                                     String link = "FileManager.jsp?";
                                                     if (cliente != null) {
@@ -1125,13 +1115,13 @@
                                                     }
 
                                                     if (cliente == null) {
-                                                        link += "cliente=" + carpeta.getName();
+                                                        link += "cliente=" + nombreCarpeta;
                                                     } else if (anio == null) {
-                                                        link += "anio=" + carpeta.getName();
+                                                        link += "anio=" + nombreCarpeta;
                                                     } else if (orden == null) {
-                                                        link += "orden=" + carpeta.getName();
+                                                        link += "orden=" + nombreCarpeta;
                                                     } else {
-                                                        link += "lote=" + carpeta.getName();
+                                                        link += "lote=" + nombreCarpeta;
                                                     }
                                         %>
 
@@ -1139,7 +1129,7 @@
                                             <div class="card text-center p-3">
                                                 <a href="<%=link%>" class="text-decoration-none text-dark">
                                                     <i class="fas fa-folder"></i>
-                                                    <h6><%= carpeta.getName()%></h6>
+                                                    <h6><%= nombreCarpeta%></h6>
                                                 </a>
                                             </div>
                                         </div>
@@ -1158,13 +1148,7 @@
 
                                     <%
                                         }
-                                    } else {
-                                    %>
-                                    <div class="alert alert-warning text-center">
-                                        No existe la ruta de certificados.
-                                    </div>
-                                    <%
-                                        }
+                                    }
                                     %>
 
                                 </div>
@@ -1176,7 +1160,7 @@
             </section>
         </div>
         <script>
-            function confirmDeleteFile(cliente, anio, orden, lote, archivo) {
+            function confirmDeleteFile(cliente, anio, orden, lote, id) {
 
                 swal({
                     title: "¿Eliminar archivo?",
@@ -1204,13 +1188,13 @@
                                 + "&anio=" + encodeURIComponent(anio)
                                 + "&orden=" + encodeURIComponent(orden)
                                 + "&lote=" + encodeURIComponent(lote)
-                                + "&archivo=" + encodeURIComponent(archivo);
+                                + "&id=" + encodeURIComponent(id);
                     }
 
                 });
             }
 
-            function confirmDeleteSupportFile(cliente, anio, orden, lote, archivo) {
+            function confirmDeleteSupportFile(cliente, anio, orden, lote, id) {
 
                 swal({
                     title: "¿Eliminar documento de soporte?",
@@ -1238,8 +1222,7 @@
                                 + "&anio=" + encodeURIComponent(anio)
                                 + "&orden=" + encodeURIComponent(orden)
                                 + "&lote=" + encodeURIComponent(lote)
-                                + "&carpeta=SupportDocs"
-                                + "&archivo=" + encodeURIComponent(archivo);
+                                + "&id=" + encodeURIComponent(id);
                     }
 
                 });
@@ -1608,12 +1591,16 @@
             function verPdfIndividual(tipo, nombre, url) {
                 if (!url) return;
 
-                if (url.toLowerCase().endsWith(".pdf")) {
+                // La extensión real vive en "nombre" (el archivo puede venir de
+                // FileDownloadProxyServlet?id=..., que no termina en .pdf/.png).
+                var nombreLower = (nombre || url).toLowerCase();
+
+                if (nombreLower.endsWith(".pdf")) {
                     window.open(url, '_blank');
                     return;
                 }
 
-                if (url.toLowerCase().match(/\.(png|jpg|jpeg|gif)$/)) {
+                if (nombreLower.match(/\.(png|jpg|jpeg|gif)$/)) {
                     const { jsPDF } = window.jspdf;
                     const doc = new jsPDF('p', 'mm', 'a4');
                     const img = new Image();

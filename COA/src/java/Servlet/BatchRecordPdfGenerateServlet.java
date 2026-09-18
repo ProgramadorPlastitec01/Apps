@@ -1,10 +1,13 @@
 package Servlet;
 
+import Controller.CertificateFileJpaController;
 import Method.BatchRecordManifest;
 import Method.ChromeHeadlessPdf;
+import Method.OfficePlatformService;
 import Method.PdfImageUtil;
 import Method.RemoteHtmlFetcher;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -25,9 +28,10 @@ import org.apache.pdfbox.multipdf.PDFMergerUtility;
 /**
  * Generates the unified Batch Record PDF entirely on the server: renders a
  * cover page plus one PDF per source document with Chrome headless
- * (Method.ChromeHeadlessPdf), merges them with PDFBox, stores a copy under
- * the same Certificates/{cliente}/{anio}/{orden}/{lote} folder convention
- * already used for manually uploaded files, and streams the result back.
+ * (Method.ChromeHeadlessPdf), merges them with PDFBox, uploads a copy to
+ * Office Platform (folder "COA/{cliente}/{anio}/{orden}/{lote}/BatchRecord",
+ * registered in certificate_files) and streams the result back. No local
+ * copy is kept — workDir is a per-request temp directory, deleted at the end.
  *
  * This replaces the previous client-side html2canvas + jsPDF pipeline,
  * which could not reliably reproduce the source layout (canvas slicing cuts
@@ -49,6 +53,10 @@ public class BatchRecordPdfGenerateServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Faltan parámetros orden o lote.");
             return;
         }
+
+        javax.servlet.http.HttpSession session = request.getSession(false);
+        String userId = session != null && session.getAttribute("Documento") != null ? session.getAttribute("Documento").toString() : null;
+        String userName = session != null && session.getAttribute("Usuario") != null ? session.getAttribute("Usuario").toString() : null;
 
         String appBaseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
                 + request.getContextPath() + "/";
@@ -146,20 +154,25 @@ public class BatchRecordPdfGenerateServlet extends HttpServlet {
             }
             merger.mergeDocuments(null);
 
-            // 4. Guardar una copia en el almacenamiento de documentos del lote
-            //    (misma convención de carpetas que FileManagerServlet/Generate.java usan:
-            //    cliente/anio/orden/lote SIN sanitizar, tal cual vienen. Antes esto usaba
-            //    safe(cliente) etc., que reemplaza espacios y otros caracteres por "_" y
-            //    terminaba creando una carpeta de cliente duplicada, ej. "LABORATORIOS_LIFE"
-            //    junto a la ya existente "LABORATORIOS LIFE" creada por Generate.java al
-            //    aprobar el certificado. Los valores deben coincidir exactamente con esa
-            //    carpeta para no duplicarla.)
-            File storageDir = new File(getServletContext().getRealPath(
-                    "/Certificates/" + cliente + "/" + anio + "/" + orden + "/" + lote + "/BatchRecord"));
-            storageDir.mkdirs();
+            // 4. Subir una copia a Office Platform (cliente/anio/orden/lote SIN
+            //    sanitizar, tal cual vienen — misma convención que FileManagerServlet)
+            //    y registrarla en certificate_files, carpeta "BatchRecord". Nada queda
+            //    en disco local: workDir se borra en el finally de este método.
             String fileName = "BatchRecord_" + safe(orden) + "_" + safe(lote) + "_"
                     + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".pdf";
-            Files.copy(mergedPdf.toPath(), new File(storageDir, fileName).toPath());
+            try {
+                long folderId = OfficePlatformService.resolveOrCreateFolderPath("COA", cliente, anio, orden, lote, "BatchRecord");
+                try (InputStream contenido = new FileInputStream(mergedPdf)) {
+                    OfficePlatformService.OfficeUploadResult resultado = OfficePlatformService.subirArchivo(
+                            folderId, fileName, null, contenido, "application/pdf", userId, userName);
+                    new CertificateFileJpaController().registerFile(cliente, anio, orden, lote, "BatchRecord", fileName,
+                            resultado.fileId, resultado.uuid, resultado.mimeType, resultado.size, userId, userName);
+                }
+            } catch (IOException exSubida) {
+                // No bloquea la respuesta al usuario: el PDF ya se generó y se le va a
+                // entregar igual, solo no quedó archivada la copia en el gestor.
+                getServletContext().log("No se pudo archivar la copia del Batch Record PDF unificado en Office Platform", exSubida);
+            }
 
             // 5. Responder con el PDF recién generado
             response.setContentType("application/pdf");
@@ -188,33 +201,44 @@ public class BatchRecordPdfGenerateServlet extends HttpServlet {
      * it's skipped with a log entry rather than silently producing garbage.
      */
     private File renderPhysicalFile(Map<String, Object> item, File workDir) throws IOException {
-        String relPath = (String) item.get("url");
-        String realPath = getServletContext().getRealPath("/" + relPath);
-        File source = realPath != null ? new File(realPath) : null;
-        if (source == null || !source.isFile()) {
-            getServletContext().log("Archivo físico no encontrado para el Batch Record: " + relPath);
+        Object officeFileIdObj = item.get("officeFileId");
+        String nombre = String.valueOf(item.get("nombre"));
+        if (officeFileIdObj == null) {
+            getServletContext().log("Archivo físico sin officeFileId para el Batch Record: " + nombre);
             return null;
         }
+        long officeFileId = ((Number) officeFileIdObj).longValue();
 
-        String nameLower = source.getName().toLowerCase();
         if (!workDir.exists()) {
             workDir.mkdirs();
         }
 
+        String nameLower = nombre.toLowerCase();
+
         if (nameLower.endsWith(".pdf")) {
             File copy = new File(workDir, UUID.randomUUID().toString() + ".pdf");
-            Files.copy(source.toPath(), copy.toPath());
+            descargarAArchivo(officeFileId, copy);
             return copy;
         }
 
         if (nameLower.endsWith(".png") || nameLower.endsWith(".jpg") || nameLower.endsWith(".jpeg") || nameLower.endsWith(".gif")) {
+            File tempImage = new File(workDir, UUID.randomUUID().toString() + "-" + nombre);
+            descargarAArchivo(officeFileId, tempImage);
             File imagePdf = new File(workDir, UUID.randomUUID().toString() + ".pdf");
-            PdfImageUtil.imageToPdf(source, imagePdf);
+            PdfImageUtil.imageToPdf(tempImage, imagePdf);
             return imagePdf;
         }
 
-        getServletContext().log("Archivo físico con formato no soportado para el Batch Record (se omite): " + source.getName());
+        getServletContext().log("Archivo físico con formato no soportado para el Batch Record (se omite): " + nombre);
         return null;
+    }
+
+    /** Descarga el archivo {@code officeFileId} desde Office Platform a un archivo temporal en workDir. */
+    private void descargarAArchivo(long officeFileId, File destino) throws IOException {
+        OfficePlatformService.OfficeDownload descarga = OfficePlatformService.descargarArchivo(officeFileId);
+        try (InputStream in = descarga.inputStream) {
+            Files.copy(in, destino.toPath());
+        }
     }
 
     /**

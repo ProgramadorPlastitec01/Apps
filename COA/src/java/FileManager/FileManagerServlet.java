@@ -1,6 +1,7 @@
 package FileManager;
 
-import java.io.File;
+import Controller.CertificateFileJpaController;
+import Method.OfficePlatformService;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -11,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 @WebServlet("/FileManagerServlet")
@@ -45,21 +47,15 @@ public class FileManagerServlet extends HttpServlet {
         String orden   = request.getParameter("orden");
         String lote    = request.getParameter("lote");
 
-        String basePath = getServletContext().getRealPath("/Certificates");
-
-        String uploadPath = basePath
-                + File.separator + cliente
-                + File.separator + anio
-                + File.separator + orden
-                + File.separator + lote;
-
-        File uploadDir = new File(uploadPath);
-        if (!uploadDir.exists()) {
-            uploadDir.mkdirs();
-        }
+        HttpSession session = request.getSession();
+        String uploadedById = session.getAttribute("Documento") != null ? session.getAttribute("Documento").toString() : null;
+        String uploadedByName = session.getAttribute("Usuario") != null ? session.getAttribute("Usuario").toString() : null;
 
         boolean uploaded = false;
         boolean rejected = false;
+        Long folderId = null;
+
+        CertificateFileJpaController certificateFiles = new CertificateFileJpaController();
 
         for (Part part : request.getParts()) {
 
@@ -76,8 +72,25 @@ public class FileManagerServlet extends HttpServlet {
                     continue;
                 }
 
-                part.write(uploadPath + File.separator + fileName);
-                uploaded = true;
+                try {
+                    if (folderId == null) {
+                        folderId = OfficePlatformService.resolveOrCreateFolderPath("COA", cliente, anio, orden, lote);
+                    }
+
+                    OfficePlatformService.OfficeUploadResult resultado = OfficePlatformService.subirArchivo(
+                            folderId, fileName, null, part.getInputStream(), part.getContentType(),
+                            uploadedById, uploadedByName);
+
+                    certificateFiles.registerFile(cliente, anio, orden, lote, "", fileName,
+                            resultado.fileId, resultado.uuid, resultado.mimeType,
+                            resultado.size >= 0 ? resultado.size : part.getSize(),
+                            uploadedById, uploadedByName);
+
+                    uploaded = true;
+                } catch (IOException ex) {
+                    System.err.println("[FileManagerServlet] Error subiendo '" + fileName + "' a Office Platform: " + ex.getMessage());
+                    rejected = true;
+                }
             }
         }
 

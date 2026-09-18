@@ -101,6 +101,11 @@ public class Menu extends TagSupport {
 
             if (Permission.contains("[12]")) {
                 out.print("<li class=\"dropdown\">");
+                out.print("<a href='EditorOffice.jsp' class=\"nav-link\" onclick='cargarDatos()'><i class=\"fas fa-folder\"></i><span>Editor</span></a>");
+                out.print("</li>");
+            }
+            if (Permission.contains("[12]")) {
+                out.print("<li class=\"dropdown\">");
                 out.print("<a href='FileManager.jsp' class=\"nav-link\" onclick='cargarDatos()'><i class=\"fas fa-folder\"></i><span>Batch Record</span></a>");
                 out.print("</li>");
             }

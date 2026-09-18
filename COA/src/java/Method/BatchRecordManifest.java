@@ -1,9 +1,10 @@
 package Method;
 
 import Connection.LinkBatchRecord;
+import Controller.CertificateFileJpaController;
+import Controller.CertificateFileRow;
 import Controller.CertificatesJpaController;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,22 +40,22 @@ public class BatchRecordManifest {
 
         List<Map<String, Object>> listaDocumentos = new ArrayList<Map<String, Object>>();
 
-        // 0. Archivos físicos subidos manualmente al lote (misma carpeta que
-        // FileManager.jsp lista y FileManagerServlet usa para las subidas).
+        // 0. Archivos físicos subidos manualmente al lote. Ya no viven en el
+        // filesystem local: el binario está en Office Platform y esta tabla de
+        // metadatos (certificate_files) es la fuente de verdad. certificatesBasePath
+        // ya no se usa como ruta real, solo como bandera "sí, incluir físico/soporte"
+        // para no romper a los llamadores existentes.
+        CertificateFileJpaController certFiles = new CertificateFileJpaController();
         if (certificatesBasePath != null && cliente != null && anio != null) {
-            File lotDir = new File(certificatesBasePath + File.separator + cliente + File.separator + anio
-                    + File.separator + orden + File.separator + lote);
-            File[] archivos = lotDir.listFiles();
+            List<CertificateFileRow> archivos = certFiles.consultFilesByLote(cliente, anio, orden, lote, "");
             if (archivos != null) {
-                for (File archivo : archivos) {
-                    if (!archivo.isFile()) {
-                        continue;
-                    }
+                for (CertificateFileRow archivo : archivos) {
                     Map<String, Object> doc = new HashMap<String, Object>();
                     doc.put("origen", "Archivo Físico");
                     doc.put("tipo", "Archivo Físico");
                     doc.put("nombre", archivo.getName());
-                    doc.put("url", "Certificates/" + cliente + "/" + anio + "/" + orden + "/" + lote + "/" + archivo.getName());
+                    doc.put("url", "FileDownloadProxyServlet?id=" + archivo.getId() + "&modo=inline");
+                    doc.put("officeFileId", archivo.getOfficeFileId());
                     doc.put("categoria", "fisico");
                     listaDocumentos.add(doc);
                 }
@@ -63,23 +64,20 @@ public class BatchRecordManifest {
 
         // 0b. Documentos de soporte adjuntados y firmados desde GenerateReport
         // (SupportDocumentUploadServlet/SupportDocumentSignServlet), guardados en
-        // la subcarpeta SupportDocs/ dentro del mismo lote. Se tratan como archivo
-        // físico (PDF o imagen ya convertida a PDF) a la hora de fusionar.
+        // la subcarpeta lógica "SupportDocs" del mismo lote (carpeta = 'SupportDocs'
+        // en certificate_files). Se tratan como archivo físico (PDF o imagen ya
+        // convertida a PDF) a la hora de fusionar.
         if (certificatesBasePath != null && cliente != null && anio != null) {
-            File supportDocsDir = new File(certificatesBasePath + File.separator + cliente + File.separator + anio
-                    + File.separator + orden + File.separator + lote + File.separator + "SupportDocs");
-            File[] soportes = supportDocsDir.listFiles();
+            List<CertificateFileRow> soportes = certFiles.consultFilesByLote(cliente, anio, orden, lote, "SupportDocs");
             if (soportes != null) {
-                for (File soporte : soportes) {
-                    if (!soporte.isFile()) {
-                        continue;
-                    }
+                for (CertificateFileRow soporte : soportes) {
                     Map<String, Object> doc = new HashMap<String, Object>();
                     boolean firmado = soporte.getName().contains("_FIRMADO_");
                     doc.put("origen", "Documento de Soporte");
                     doc.put("tipo", firmado ? "Documento de Soporte (Firmado)" : "Documento de Soporte (Pendiente de firma)");
                     doc.put("nombre", soporte.getName());
-                    doc.put("url", "Certificates/" + cliente + "/" + anio + "/" + orden + "/" + lote + "/SupportDocs/" + soporte.getName());
+                    doc.put("url", "FileDownloadProxyServlet?id=" + soporte.getId() + "&modo=inline");
+                    doc.put("officeFileId", soporte.getOfficeFileId());
                     doc.put("categoria", "soporte");
                     listaDocumentos.add(doc);
                 }

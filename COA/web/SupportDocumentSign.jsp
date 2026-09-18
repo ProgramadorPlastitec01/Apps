@@ -1,3 +1,5 @@
+<%@page import="Controller.CertificateFileJpaController"%>
+<%@page import="Controller.CertificateFileRow"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     HttpSession sesion = request.getSession();
@@ -16,10 +18,19 @@
     String anio = request.getParameter("anio");
     String orden = request.getParameter("orden");
     String lote = request.getParameter("lote");
-    String archivo = request.getParameter("archivo");
+    String id = request.getParameter("id");
 
-    boolean autorizado = Permission.contains("[39]") && Firma != null && !Firma.trim().isEmpty();
-    String rutaArchivo = "Certificates/" + cliente + "/" + anio + "/" + orden + "/" + lote + "/SupportDocs/" + archivo;
+    CertificateFileRow fila = null;
+    try {
+        if (id != null) {
+            fila = new CertificateFileJpaController().consultFileById(Long.parseLong(id));
+        }
+    } catch (Exception e) {
+    }
+    String archivo = fila != null ? fila.getName() : null;
+
+    boolean autorizado = Permission.contains("[39]") && Firma != null && !Firma.trim().isEmpty() && fila != null;
+    String rutaArchivo = "FileDownloadProxyServlet?id=" + id + "&modo=inline";
 %>
 <!DOCTYPE html>
 <html>
@@ -106,7 +117,7 @@
             <input type="hidden" name="anio" value="<%= anio%>">
             <input type="hidden" name="orden" value="<%= orden%>">
             <input type="hidden" name="lote" value="<%= lote%>">
-            <input type="hidden" name="archivo" value="<%= archivo%>">
+            <input type="hidden" name="id" value="<%= id%>">
             <input type="hidden" name="firmas" id="Txt_firmas">
         </form>
 
