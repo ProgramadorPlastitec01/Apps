@@ -818,6 +818,13 @@
                             input.setAttribute('value', input.value);
                         }
                     });
+                    htmlContainer.querySelectorAll('select').forEach(select => {
+                        Array.from(select.options).forEach(option => {
+                            option.value === select.value
+                                    ? option.setAttribute('selected', 'selected')
+                                    : option.removeAttribute('selected');
+                        });
+                    });
                 }
 
                 // HTML actualizado

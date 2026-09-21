@@ -64,4 +64,38 @@ public class Util {
         }
         return s.replaceAll("<[^>]*>", "").trim();
     }
+
+    // Congela los <select> del certificado dejando únicamente el texto de la
+    // opción elegida (ej: registro INVIMA en R-GC-074). Se usa al pasar el
+    // certificado a un estado superior a "En gestión", donde ya no debe
+    // permitirse cambiar la selección.
+    public static String collapseSelects(String html) {
+        if (html == null) return html;
+        java.util.regex.Matcher selectMatcher = java.util.regex.Pattern
+                .compile("<select[^>]*>(.*?)</select>", java.util.regex.Pattern.DOTALL)
+                .matcher(html);
+        StringBuffer sb = new StringBuffer();
+        while (selectMatcher.find()) {
+            selectMatcher.appendReplacement(sb, java.util.regex.Matcher.quoteReplacement(selectedOptionText(selectMatcher.group(1))));
+        }
+        selectMatcher.appendTail(sb);
+        return sb.toString();
+    }
+
+    private static String selectedOptionText(String optionsHtml) {
+        java.util.regex.Matcher optionMatcher = java.util.regex.Pattern
+                .compile("<option([^>]*)>(.*?)</option>", java.util.regex.Pattern.DOTALL)
+                .matcher(optionsHtml);
+        String firstText = "";
+        while (optionMatcher.find()) {
+            String text = optionMatcher.group(2).trim();
+            if (firstText.isEmpty()) {
+                firstText = text;
+            }
+            if (optionMatcher.group(1).contains("selected")) {
+                return text;
+            }
+        }
+        return firstText;
+    }
 }

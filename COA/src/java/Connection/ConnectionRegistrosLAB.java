@@ -1163,7 +1163,9 @@ public class ConnectionRegistrosLAB {
                             + rs.getString("Ducto central").trim() + " /// "
                             + rs.getString("Soldadura bocas").trim() + " /// "
                             + rs.getString("Soldadura colas").trim() + " /// "
-                            + rs.getString("Ficha Tecnica").trim() + "");
+                            + rs.getString("Ficha Tecnica").trim() + " /// "
+                            + rs.getString("Soldadura bocas alt").trim() + " /// "
+                            + rs.getString("Soldadura colas alt").trim() + "");
                     count++;
                 }
                 conn.close();

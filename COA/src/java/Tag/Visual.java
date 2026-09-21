@@ -779,6 +779,7 @@ public class Visual extends TagSupport {
                                         + "</script>");
                                 //</editor-fold>
                             }
+                             Html = Html.replace("XxRINVIMAxX", "<select><option>2016DM-0014249</option><option>2025DM-0014249-R1</option></select>");
                             //</editor-fold>
                             break;
                         default:
@@ -1030,6 +1031,7 @@ public class Visual extends TagSupport {
                     if (StateCerti == 2 || StateCerti == 3) {
                         //<editor-fold defaultstate="collapsed" desc="CLOSE">
                         out.print("<div id='Imprimir'  class=\"print-scale-wrapper\" ><div id='HtmlContent'>");
+                        Html = Util.collapseSelects(Html);
                         Html = Html.replace("contenteditable=\"true\"", "contenteditable=\"false\"");
                         Html = Html.replaceAll("<input type=\"checkbox\"", "<input type=\"checkbox\" class=\"disabled\" ");
                         Html = Html.replaceAll("<input name=\"result\" type=\"radio\"", "<input name=\"result\" type=\"radio\" class=\"disabled\"");
