@@ -533,6 +533,13 @@ public class Visual extends TagSupport {
                                     lst_prm = RegistrosLabJpa.QueryTechnicalSheet(Order, Product, ObjSheet[2].toString());
                                     if (lst_prm != null && lst_prm.size() > 0) {
                                         String[] ArgPrm = Util.parseResult(lst_prm.get(0));
+                                        // Prioriza Soldadura bocas/colas "alt" sobre el valor normal cuando trae dato
+                                        if (ArgPrm.length > 17 && !ArgPrm[17].isEmpty() && !ArgPrm[17].contains("0 +/- 0")) {
+                                            ArgPrm[14] = ArgPrm[17];
+                                        }
+                                        if (ArgPrm.length > 18 && !ArgPrm[18].isEmpty() && !ArgPrm[18].contains("0 +/- 0")) {
+                                            ArgPrm[15] = ArgPrm[18];
+                                        }
                                         DataTechnicalSheet = ArgPrm[16];
                                         int ForCant = Integer.parseInt(ArgPrm[0].trim());
                                         for (int i = 1; i < ForCant; i++) {
