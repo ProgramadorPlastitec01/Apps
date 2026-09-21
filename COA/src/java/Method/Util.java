@@ -1,5 +1,7 @@
 package Method;
 
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Util {
@@ -80,6 +82,47 @@ public class Util {
         }
         selectMatcher.appendTail(sb);
         return sb.toString();
+    }
+
+    // Un lote de Recepción Material puede matchear (LIKE) más de un
+    // consecutivo/codigo distinto en Generación de Lotes. Si todos los
+    // resultados son el mismo par, se usa directamente (respetando el
+    // envoltorio que ya traía el COS en ese punto del formato); si difieren
+    // entre sí, se deja un <select> para que el usuario elija cuál aplica; el
+    // COS asociado se actualiza con el onchange inline del propio select.
+    public static String replaceLoteReception(String html, List lst_GlotesRep, int cnt2, boolean cosEditable) {
+        LinkedHashMap<String, String> distinct = new LinkedHashMap<String, String>();
+        for (Object o : lst_GlotesRep) {
+            String[] arg = parseResult(o);
+            String ref = arg[1].replace("M", "");
+            String cos = "CC" + arg[0];
+            distinct.put(ref + "|" + cos, ref + "|" + cos);
+        }
+        if (distinct.size() == 1) {
+            String[] only = distinct.keySet().iterator().next().split("\\|");
+            html = html.replace("REF" + cnt2, only[0]);
+            html = html.replace("COS" + cnt2, cosEditable
+                    ? "<span  class='editable pending' contenteditable='true'>" + only[1] + "</span>"
+                    : only[1]);
+            return html;
+        }
+        StringBuilder options = new StringBuilder();
+        String firstCos = null;
+        for (String key : distinct.keySet()) {
+            String[] parts = key.split("\\|");
+            if (firstCos == null) {
+                firstCos = parts[1];
+            }
+            options.append("<option data-cos='").append(parts[1]).append("'>").append(parts[0]).append("</option>");
+        }
+        // El COS se reemplaza primero: el <select> que se inserta abajo para
+        // REF menciona "COS" + cnt2 dentro de su onchange, y si el reemplazo
+        // de COS se hiciera después volvería a matchear (y corromper) ese
+        // texto recién insertado en vez de solo el placeholder original.
+        html = html.replace("COS" + cnt2, "<span id='COS" + cnt2 + "'>" + firstCos + "</span>");
+        html = html.replace("REF" + cnt2,
+                "<select class='editable-select' onchange=\"document.getElementById('COS" + cnt2 + "').textContent=this.options[this.selectedIndex].dataset.cos;\">" + options + "</select>");
+        return html;
     }
 
     private static String selectedOptionText(String optionsHtml) {

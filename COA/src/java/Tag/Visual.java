@@ -485,9 +485,7 @@ public class Visual extends TagSupport {
                                         lst_GlotesRep = GeneracionLotesJpa.ConsultarCC_RepcecionMaterial(ArgTnt[o]);
                                         if (lst_GlotesRep != null && !lst_GlotesRep.isEmpty() && lst_GlotesRep.size() > 0) {
                                             //<editor-fold defaultstate="collapsed" desc="CC RECECTION">
-                                            String[] ArgInk = Util.parseResult(lst_GlotesRep.get(0));
-                                            Html = Html.replace("REF" + Cnt2 + "", ArgInk[1].replace("M", ""));
-                                            Html = Html.replace("COS" + Cnt2 + "", "CC" + ArgInk[0]);
+                                            Html = Util.replaceLoteReception(Html, lst_GlotesRep, Cnt2, false);
                                             //</editor-fold>
                                         } else {
                                             //<editor-fold defaultstate="collapsed" desc="VALIDATION">
@@ -673,9 +671,7 @@ public class Visual extends TagSupport {
                                         lst_GlotesRep = GeneracionLotesJpa.ConsultarCC_RepcecionMaterial(ArgTnt[o]);
                                         if (lst_GlotesRep != null && !lst_GlotesRep.isEmpty() && lst_GlotesRep.size() > 0) {
                                             //<editor-fold defaultstate="collapsed" desc="CC RECECTION">
-                                            String[] ArgInk = Util.parseResult(lst_GlotesRep.get(0));
-                                            Html = Html.replace("REF" + Cnt2 + "", ArgInk[1].replace("M", ""));
-                                            Html = Html.replace("COS" + Cnt2 + "", "<span  class='editable pending' contenteditable='true'>CC" + ArgInk[0] + "</span>");
+                                            Html = Util.replaceLoteReception(Html, lst_GlotesRep, Cnt2, true);
                                             //</editor-fold>
                                         } else {
                                             //<editor-fold defaultstate="collapsed" desc="VALIDATION">
@@ -854,9 +850,7 @@ public class Visual extends TagSupport {
                                     } else {
                                         if (lst_GlotesRep != null && !lst_GlotesRep.isEmpty() && lst_GlotesRep.size() > 0) {
                                             //<editor-fold defaultstate="collapsed" desc="CC RECECTION">
-                                            String[] ArgInk = Util.parseResult(lst_GlotesRep.get(0));
-                                            Html = Html.replace("REF" + Cnt2 + "", ArgInk[1].replace("M", ""));
-                                            Html = Html.replace("COS" + Cnt2 + "", "CC" + ArgInk[0]);
+                                            Html = Util.replaceLoteReception(Html, lst_GlotesRep, Cnt2, false);
                                             //</editor-fold>
                                         } else {
                                             //<editor-fold defaultstate="collapsed" desc="VALIDATION">
