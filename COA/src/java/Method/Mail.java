@@ -257,8 +257,38 @@ public class Mail {
         }
     }
 
-    public void CertificateSend(String Certificate, String NameSender, ServletContext context) throws MessagingException {
+    /**
+     * Notifica la finalización de uno o varios certificados en un único
+     * correo. La finalización masiva selecciona N certificados y debe
+     * generar una sola notificación, no una por certificado.
+     */
+    public void CertificateSend(List<String> Certificates, String NameSender, ServletContext context) throws MessagingException {
+        if (Certificates == null || Certificates.isEmpty()) {
+            return;
+        }
         if (lst_mail != null) {
+            int Total = Certificates.size();
+
+            // Listado de certificados para el asunto y la tarjeta del correo.
+            StringBuilder Subject = new StringBuilder();
+            StringBuilder Detail = new StringBuilder();
+            for (int i = 0; i < Total; i++) {
+                String Number = (Certificates.get(i) == null) ? "" : Certificates.get(i).toString().trim();
+                if (i > 0) {
+                    Subject.append(", ");
+                }
+                Subject.append(Number);
+                Detail.append("<div style='display:inline-block;"
+                        + "background:#eef2ff;"
+                        + "border:1px solid #c7d2fe;"
+                        + "color:#312e81;"
+                        + "border-radius:6px;"
+                        + "padding:5px 12px;"
+                        + "margin:0 6px 6px 0;"
+                        + "font-size:14px;'>" + Number + "</div>");
+            }
+            String SubjectList = (Total > 3) ? (Total + " certificados") : Subject.toString();
+
             Object[] obj_mail = (Object[]) lst_mail.get(0);
             String[] ArrMail = obj_mail[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
 
@@ -274,7 +304,7 @@ public class Mail {
             try {
                 MimeMessage message = new MimeMessage(session);
                 message.setFrom(new InternetAddress(ArrMail[4]));
-                message.setSubject("Aplicativo COA - Certificado Finalizado #" + Certificate);
+                message.setSubject("Aplicativo COA - " + ((Total > 1) ? "Certificados Finalizados: " : "Certificado Finalizado #") + SubjectList);
                 message.addRecipient(Message.RecipientType.TO, new InternetAddress("p.ti@plastitec-sa.com"));
 
                 // HTML content
@@ -296,7 +326,7 @@ public class Mail {
                         + "<tr>"
                         + "<td align='center' style='padding:35px 35px 20px;'>"
                         + "<h1 style='margin:0;font-size:28px;color:#120031;'>"
-                        + "✅ Certificado Finalizado"
+                        + ((Total > 1) ? "✅ Certificados Finalizados" : "✅ Certificado Finalizado")
                         + "</h1>"
                         + "</td>"
                         + "</tr>"
@@ -311,7 +341,9 @@ public class Mail {
                         + "font-size:16px;"
                         + "color:#166534;'>"
                         + "<b>¡Proceso completado con éxito!</b><br>"
-                        + "El certificado de calidad ya fue finalizado y se encuentra disponible para su consulta."
+                        + ((Total > 1)
+                                ? "Los certificados de calidad ya fueron finalizados y se encuentran disponibles para su consulta."
+                                : "El certificado de calidad ya fue finalizado y se encuentra disponible para su consulta.")
                         + "</p>"
                         + "</div>"
                         + "</td>"
@@ -321,7 +353,9 @@ public class Mail {
                         + "<td style='padding:35px 40px;'>"
                         + "<p style='font-size:15px;color:#555;line-height:1.7;margin-top:0;'>"
                         + "Hola,<br><br>"
-                        + "Le informamos que el siguiente certificado ha culminado satisfactoriamente su proceso dentro del sistema COA."
+                        + ((Total > 1)
+                                ? "Le informamos que los siguientes <b>" + Total + "</b> certificados han culminado satisfactoriamente su proceso dentro del sistema COA."
+                                : "Le informamos que el siguiente certificado ha culminado satisfactoriamente su proceso dentro del sistema COA.")
                         + "</p>"
                         //==================== TARJETA ====================
                         + "<table width='100%' cellpadding='12' cellspacing='0' "
@@ -329,8 +363,9 @@ public class Mail {
                         + "border:1px solid #e5e7eb;"
                         + "border-radius:8px;'>"
                         + "<tr>"
-                        + "<td width='180' style='color:#6b7280;font-weight:bold;'>Certificado</td>"
-                        + "<td style='color:#111827;font-size:15px;'>" + Certificate + "</td>"
+                        + "<td width='180' style='color:#6b7280;font-weight:bold;vertical-align:top;'>"
+                        + ((Total > 1) ? "Certificados (" + Total + ")" : "Certificado") + "</td>"
+                        + "<td style='color:#111827;font-size:15px;'>" + Detail.toString() + "</td>"
                         + "</tr>"
                         + "<tr>"
                         + "<td style='color:#6b7280;font-weight:bold;'>Finalizado por</td>"
@@ -361,7 +396,7 @@ public class Mail {
                         + "border-radius:8px;"
                         + "font-size:16px;"
                         + "font-weight:bold;'>"
-                        + "Ver Certificado"
+                        + ((Total > 1) ? "Ver Certificados" : "Ver Certificado")
                         + "</a>"
                         + "</div>"
                         + "</td>"

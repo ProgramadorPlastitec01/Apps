@@ -171,11 +171,12 @@ public class Alert extends TagSupport {
                             + "});");
                     out.print("</script>");
                 } else {
+                    Object resume = pageContext.getRequest().getAttribute("FinishCertificateResume");
                     out.print("<script type='text/javascript'>");
                     out.print("$(\"#toastr-4\").ready(function() {\n"
                             + "  iziToast.error({\n"
                             + "    title: 'Error',\n"
-                            + "    message: 'Ha ocurrido un problema en el registro.',\n"
+                            + "    message: '" + ((resume != null) ? "No se pudieron finalizar todos los certificados. " + resume : "Ha ocurrido un problema en el registro.") + "',\n"
                             + "    position: 'bottomRight'\n"
                             + "  });\n"
                             + "});");

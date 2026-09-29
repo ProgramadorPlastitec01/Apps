@@ -45,18 +45,23 @@ public class SignatureReport extends TagSupport {
             out.print("<div class='card'>");
             out.print("<div class='card-header' style='justify-content: space-between;'>"
                     + "<h4>Revisión " + ((StateM == 2) ? "<b class='text-success'>Estado Finalizado</b>" : (StateM == 3) ? "<b class='text-primary'>Estado Finalizado</b>" : "") + "</h4>");
-            out.print("<div>");
+            out.print("<div class='d-flex align-items-center'>");
             if (IdCertificate > 0) {
                 out.print("<button class='btn btn-danger mr-4' style='border-radius: 4px;'  onclick='window.location.href=\"Generate?opt=8\";cargarDatos()' "
                         + "data-toggle='tooltip' data-placement='top' title='Limpiar' ><i class=\"fas fa-eraser\"></i></button>");
             }
             if (Permission.contains("[7]")) {
-                out.print("<button class='btn btn-warning ' style='border-radius: 4px;'  onclick='ExecuteForm()' ><i class='fas fa-signature'  data-toggle='tooltip' data-placement='top' title='Firma Masiva'></i></button>");
+                // Firma masiva: las filas finalizadas se seleccionan haciendo
+                // clic sobre ellas y este botón las firma todas.
+                out.print("<span id='ContadorFirmar' class='badge badge-warning mr-2 d-none' style='font-size:13px;padding:7px 12px;'>0 seleccionados</span>");
+                out.print("<button type='button' class='btn btn-warning ' style='border-radius: 4px;'  onclick='ExecuteForm()' ><i class='fas fa-signature'  data-toggle='tooltip' data-placement='top' title='Firma Masiva'></i></button>");
             }
             out.print("</div>");
             out.print("</div>");
             //<editor-fold defaultstate="collapsed" desc="FORM-SIGNATURE MASIVE">
-            out.print("<form action='Generate?opt=4' method='post' id='myForm' class='needs-validation' novalidate='' onsubmit='return FormGenerate(this)'>");
+            // El envío lo dispara ExecuteForm() tras confirmar; el onsubmit
+            // apuntaba a FormGenerate(), que no existe en esta página.
+            out.print("<form action='Generate?opt=4' method='post' id='myForm'>");
             out.print("<input type='hidden' id='IdCerti' name='IdCertiMasive'>");
             out.print("</form>");
             //</editor-fold>
@@ -68,13 +73,6 @@ public class SignatureReport extends TagSupport {
             out.print("<table class='table table-bordered' id='table-2'>");
             out.print("<thead>");
             out.print("<tr>");
-            out.print("<th class=\"text-center\">\n"
-                    + "  <div class=\"custom-checkbox custom-control\">\n"
-                    + "    <input type=\"checkbox\" data-checkboxes=\"mygroup\" data-checkbox-role=\"dad\""
-                    + " class=\"custom-control-input\" id=\"checkbox-all\" onchange=\"MasiveAll(this)\">\n"
-                    + "    <label for=\"checkbox-all\" class=\"custom-control-label\">&nbsp;</label>\n"
-                    + "  </div>\n"
-                    + "</th>");
             out.print("<th>App</th>");
             out.print("<th>Registro</th>");
             out.print("<th>Numero <br/> Certificado</th>");
@@ -97,19 +95,17 @@ public class SignatureReport extends TagSupport {
             if (lst_ceriticate != null) {
                 for (int i = 0; i < lst_ceriticate.size(); i++) {
                     Object[] ObjCerti = (Object[]) lst_ceriticate.get(i);
-                    out.print("<tr>");
                     try {
                         State = Integer.parseInt(ObjCerti[8].toString());
-                        if (State == 2) {
-                            out.print("<td><div class=\"custom-checkbox custom-control\">\n"
-                                    + "                                <input type=\"checkbox\" data-checkboxes=\"mygroup\"  onclick='Masive(this.value);' value='" + ObjCerti[0] + "' class=\"custom-control-input\" id=\"checkbox-" + i + "\">\n"
-                                    + "                                <label for=\"checkbox-" + i + "\" class=\"custom-control-label\">&nbsp;</label>\n"
-                                    + "                              </div></td>");
-                        } else {
-                            out.print("<td class='text-center'></td>");
-                        }
                     } catch (Exception e) {
                         State = 1;
+                    }
+                    // Solo las filas finalizadas (state 2) se pueden seleccionar
+                    // para la firma masiva.
+                    if (State == 2 && Permission.contains("[7]")) {
+                        out.print("<tr class='fila-seleccionable' data-idcerti='" + ObjCerti[0] + "'>");
+                    } else {
+                        out.print("<tr>");
                     }
                     String NameSys = ObjCerti[1].toString();
                     out.print("<td><img src='Interface/Imagen/" + (NameSys.equals("RegistrosLab") ? "Registros_lab" : NameSys.equals("InspeccionManga") ? "Inspeccion_manga" : NameSys.equals("ControlGrafado") ? "Control_grafado" : "ST_Desc_2") + ".png' alt='' class='ImgModuleModule'  data-toggle=\"tooltip\" data-placement=\"top\" title=\"\" data-original-title=\"" + NameSys + "\"/></td>");

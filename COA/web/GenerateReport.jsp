@@ -13,6 +13,22 @@
         <link rel="stylesheet" href="Interface/Content/Assets/modules/izitoast/css/iziToast.min.css">
         <link rel="icon" type="image/png" href="Interface/Imagen/LogoSWhite.png">
         <title>Generación</title>
+        <style>
+            /* Selección de filas para la finalización masiva. */
+            #table-2 tbody tr.fila-seleccionable {
+                cursor: pointer;
+            }
+            #table-2 tbody tr.fila-seleccionable:hover > td {
+                background-color: #f1f5fd;
+            }
+            #table-2 tbody tr.fila-seleccionada > td {
+                background-color: #d9f5e5 !important;
+                color: #14532d;
+            }
+            #table-2 tbody tr.fila-seleccionada > td:first-child {
+                box-shadow: inset 4px 0 0 0 #34c38f;
+            }
+        </style>
         <!--        <script type="text/javascript">
                     history.pushState(null, null, 'GenerateReport.jsp');
                     window.addEventListener('popstate', function (event) {
@@ -400,19 +416,125 @@
                 return true; // ✅ ENVÍA NORMAL
             }
 
-            document.addEventListener("DOMContentLoaded", function () {
-                const checkAll = document.getElementById("checkbox-all");
-                const checkboxes = document.querySelectorAll('input[data-checkboxes="mygroup"]:not([data-checkbox-role="dad"])');
+        </script>
+        <script>
+            /* ============ SELECCIÓN MASIVA PARA FINALIZAR ============
+             * El usuario hace clic sobre las filas en gestión (se resaltan en
+             * verde pastel) y el botón superior las finaliza todas de una vez.
+             */
+            (function () {
 
-                // Evento para el checkbox general
-                checkAll.addEventListener("change", function () {
-                    checkboxes.forEach(chk => {
-                        chk.checked = checkAll.checked; // marca/desmarca visualmente
-                        Masive(chk.value);              // ejecuta la función en cada uno
-                    });
+                var Seleccionados = [];
+
+                function refrescarSeleccion() {
+
+                    var input = document.getElementById("IdCertiFinalizar");
+                    var contador = document.getElementById("ContadorFinalizar");
+
+                    if (input) {
+                        input.value = Seleccionados.map(function (id) {
+                            return "[" + id + "]";
+                        }).join("");
+                    }
+
+                    if (contador) {
+                        contador.textContent = Seleccionados.length
+                                + (Seleccionados.length === 1 ? " seleccionado" : " seleccionados");
+                        if (Seleccionados.length === 0) {
+                            contador.classList.add("d-none");
+                        } else {
+                            contador.classList.remove("d-none");
+                        }
+                    }
+                }
+
+                $(document).on("click", "#table-2 tbody tr.fila-seleccionable", function (e) {
+
+                    // Los controles de la fila (Ver, menú, etc.) no seleccionan.
+                    if ($(e.target).closest("button, a, input, label, .dropdown").length) {
+                        return;
+                    }
+
+                    var id = String($(this).data("idcerti"));
+                    var pos = Seleccionados.indexOf(id);
+
+                    if (pos >= 0) {
+                        Seleccionados.splice(pos, 1);
+                        $(this).removeClass("fila-seleccionada");
+                    } else {
+                        Seleccionados.push(id);
+                        $(this).addClass("fila-seleccionada");
+                    }
+
+                    refrescarSeleccion();
                 });
-            });
 
+                window.FinalizarMasivo = function () {
+
+                    if (Seleccionados.length === 0) {
+                        iziToast.warning({
+                            title: 'Validación requerida',
+                            message: 'Seleccione al menos un certificado en gestión haciendo clic sobre su fila.',
+                            position: 'bottomRight',
+                            timeout: 5000
+                        });
+                        return false;
+                    }
+
+                    var total = Seleccionados.length;
+
+                    swal({
+                        title: "¿Está seguro de finalizar?",
+                        text: "Se finalizará" + (total === 1 ? "" : "n") + " " + total + " certificado"
+                                + (total === 1 ? "" : "s") + ". Una vez finalizados no podrá realizar cambios o modificaciones.",
+                        icon: "warning",
+                        buttons: {
+                            cancel: {
+                                text: "Cancelar",
+                                visible: true,
+                                className: "btn btn-secondary",
+                                closeModal: true
+                            },
+                            confirm: {
+                                text: "Aceptar",
+                                visible: true,
+                                className: "btn btn-success",
+                                closeModal: false
+                            }
+                        },
+                        dangerMode: true
+
+                    }).then(function (value) {
+
+                        if (!value)
+                            return;
+
+                        var loading = document.createElement("div");
+                        loading.innerHTML = `
+            <div class="loader"></div>
+            <div class="loader-text">
+                <strong>Finalizando documentos...</strong><br>
+                Estamos registrando la información y enviando la notificación correspondiente.<br><br>
+                <small>Este proceso puede tardar algunos segundos.<br>Por favor, no cierre esta ventana.</small>
+            </div>
+        `;
+
+                        swal({
+                            title: "Espere un momento",
+                            content: loading,
+                            buttons: false,
+                            closeOnClickOutside: false,
+                            closeOnEsc: false
+                        });
+
+                        setTimeout(function () {
+                            document.getElementById("FormFinalizar").submit();
+                        }, 500);
+                    });
+
+                    return false;
+                };
+            })();
         </script>
         <script>
             function confirmarEliminacion(url) {
@@ -458,63 +580,6 @@
                 });
             }
         </script> 
-        <script>
-            function confirmarFinalizar(url) {
-
-                swal({
-                    title: "¿Está seguro de finalizar?",
-                    text: "Una vez finalizado no podrá realizar cambios o modificaciones al documento.",
-                    icon: "warning",
-                    buttons: {
-                        cancel: {
-                            text: "Cancelar",
-                            visible: true,
-                            className: "btn btn-secondary",
-                            closeModal: true
-                        },
-                        confirm: {
-                            text: "Aceptar",
-                            visible: true,
-                            className: "btn btn-success",
-                            closeModal: false
-                        }
-                    },
-                    dangerMode: true
-
-                }).then((value) => {
-
-                    // Si cancela
-                    if (!value)
-                        return;
-
-                    // Contenido de la alerta de carga
-                    const loading = document.createElement("div");
-                    loading.innerHTML = `
-            <div class="loader"></div>
-            <div class="loader-text">
-                <strong>Finalizando documento...</strong><br>
-                Estamos registrando la información y enviando las notificaciones correspondientes.<br><br>
-                <small>Este proceso puede tardar algunos segundos.<br>Por favor, no cierre esta ventana.</small>
-            </div>
-        `;
-
-                    // Mostrar alerta de espera
-                    swal({
-                        title: "Espere un momento",
-                        content: loading,
-                        buttons: false,
-                        closeOnClickOutside: false,
-                        closeOnEsc: false
-                    });
-
-                    // Pequeña espera para que se vea la animación
-                    setTimeout(function () {
-                        window.location.href = url;
-                    }, 500);
-
-                });
-            }
-        </script>
         <script>
             function DuplicateReg(url) {
                 swal({

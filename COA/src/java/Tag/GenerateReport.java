@@ -204,13 +204,32 @@ public class GenerateReport extends TagSupport {
             out.print("<section class=\"section\">");
             out.print("<div class=\"section-header d-flex justify-content-between\" style='margin-bottom: 8px;'>");
             out.print("<h4>Certificados Calidad</h4>");
+            out.print("<div class='d-flex align-items-center'>");
+            if (TempDelete == 0) {
+                if (Permission.contains("[28]")) {
+                    // Finalización masiva: las filas en gestión se seleccionan
+                    // haciendo clic sobre ellas y este botón las finaliza todas
+                    // con un único correo de notificación.
+                    out.print("<span id='ContadorFinalizar' class='badge badge-success mr-2 d-none' style='font-size:13px;padding:7px 12px;'>0 seleccionados</span>");
+                    out.print("<button type='button' class='btn btn-success mr-2' style='border-radius: 4px;' onclick='FinalizarMasivo()' data-toggle='tooltip' data-placement='top' title='Finalizar Certificados'><i class='fas fa-check'></i></button>");
+                }
+            }
             if (!Type.equals("")) {
                 if (Permission.contains("[8]")) {
                     out.print("<button class='btn btn-green' style='border-radius: 4px;' onclick='mostrarConvencion(1)'  data-toggle='tooltip' data-placement='top' title='Generar Certificados'><i class='fas fa-plus' ></i></button>");
                 }
             }
             out.print("</div>");
+            out.print("</div>");
             out.print("</section>");
+
+            //<editor-fold defaultstate="collapsed" desc="FORM-FINISH MASIVE">
+            out.print("<form action='Generate?opt=7' method='post' id='FormFinalizar'>");
+            out.print("<input type='hidden' name='Type' value='" + Type + "'>");
+            out.print("<input type='hidden' id='IdCertiFinalizar' name='IdCertiMasive'>");
+            out.print("</form>");
+            //</editor-fold>
+
 
             out.print("<div class='section-body'>");
             out.print("<div class='row'>");
@@ -287,11 +306,17 @@ public class GenerateReport extends TagSupport {
             if (lst_ceriticate != null) {
                 for (int i = 0; i < lst_ceriticate.size(); i++) {
                     Object[] ObjCerti = (Object[]) lst_ceriticate.get(i);
-                    out.print("<tr>");
                     try {
                         State = Integer.parseInt(ObjCerti[8].toString());
                     } catch (Exception e) {
                         State = 1;
+                    }
+                    // Solo las filas en gestión (state 1) se pueden seleccionar
+                    // para la finalización masiva.
+                    if (State == 1 && TempDelete == 0 && Permission.contains("[28]")) {
+                        out.print("<tr class='fila-seleccionable' data-idcerti='" + ObjCerti[0] + "'>");
+                    } else {
+                        out.print("<tr>");
                     }
                     if (Type.equals("")) {
                         String NameSys = ObjCerti[1].toString();
@@ -330,11 +355,8 @@ public class GenerateReport extends TagSupport {
                     out.print("<td >");
                     out.print("<div class='d-flex justify-content-center'>");
 
-                    if (State == 1) {
-                        if (Permission.contains("[28]")) {
-                            out.print("<button class='btn btn-success btn-sm mr-2' style='border-radius: 4px;' onclick=\"confirmarFinalizar('Generate?opt=7&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "')\" data-toggle='tooltip' data-placement='bottom' title='Finalizar'><i class=\"fas fa-check\"></i></button>");
-                        }
-                    }
+                    // La finalización ya no vive en la fila: se hace desde el
+                    // botón superior sobre las filas seleccionadas.
                     if (Permission.contains("[25]")) {
                         out.print("<button class='btn btn-green btn-sm mr-2' style='border-radius: 4px;' onclick=\"javascript:location.href='Generate?opt=2&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "&TempDelete=" + TempDelete + "&Order=" + ObjCerti[5] + "&Batch=" + ObjCerti[7] + "&StateCerti=" + State + "&TempM=0&AmoutReg=" + ObjCerti[14] + "';cargarDatos()\"  data-toggle='tooltip' data-placement='top' title='Ver'><i class=\"fas fa-eye\"></i></button>");
                     } else {

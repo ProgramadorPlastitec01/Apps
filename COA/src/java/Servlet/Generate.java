@@ -426,14 +426,49 @@ public class Generate extends HttpServlet {
                         Type = "";
                     }
                     try {
-                        IdCertificates = Integer.parseInt(request.getParameter("IdCertificates"));
+                        IdCertiMasive = request.getParameter("IdCertiMasive");
                     } catch (Exception e) {
-                        IdCertificates = 0;
+                        IdCertiMasive = "";
                     }
-                    result = CertificatesJpa.UpdateCertificateFinish(IdCertificates);
-                    if (result) {
-                        MailConn.CertificateSend(NumberCertificate, UserName, getServletContext());
-                        request.setAttribute("FinishCertificate", true);
+                    if (IdCertiMasive == null || IdCertiMasive.trim().isEmpty()) {
+                        // Finalización única (Visual.jsp): se normaliza al mismo
+                        // formato "[id]" que usa la selección masiva.
+                        try {
+                            IdCertificates = Integer.parseInt(request.getParameter("IdCertificates"));
+                        } catch (Exception e) {
+                            IdCertificates = 0;
+                        }
+                        IdCertiMasive = (IdCertificates > 0) ? "[" + IdCertificates + "]" : "";
+                    }
+                    String[] IdsFinish = IdCertiMasive.trim().isEmpty() ? new String[0]
+                            : IdCertiMasive.replace("][", "///").replace("[", "").replace("]", "").split("///");
+                    java.util.List<String> Finished = new java.util.ArrayList<String>();
+                    int NotFinished = 0;
+                    for (int i = 0; i < IdsFinish.length; i++) {
+                        if (IdsFinish[i].trim().isEmpty()) {
+                            continue;
+                        }
+                        try {
+                            IdCertificates = Integer.parseInt(IdsFinish[i].trim());
+                        } catch (NumberFormatException e) {
+                            NotFinished++;
+                            continue;
+                        }
+                        NumberCertificate = finishCertificate(CertificatesJpa, IdCertificates);
+                        if (NumberCertificate == null) {
+                            NotFinished++;
+                        } else {
+                            Finished.add(NumberCertificate);
+                        }
+                    }
+                    if (!Finished.isEmpty()) {
+                        // Un único correo con todos los certificados finalizados.
+                        MailConn.CertificateSend(Finished, UserName, getServletContext());
+                    }
+                    request.setAttribute("FinishCertificate", !Finished.isEmpty() && NotFinished == 0);
+                    if (NotFinished > 0) {
+                        request.setAttribute("FinishCertificateResume",
+                                "Finalizados: " + Finished.size() + ", no finalizados: " + NotFinished + ".");
                     }
                     request.getRequestDispatcher("Generate?opt=1&Type=" + Type).forward(request, response);
                     //</editor-fold>
@@ -488,6 +523,31 @@ public class Generate extends HttpServlet {
             request.setAttribute("errorMessage", "Ha ocurrido un error procesando tu solicitud: " + ex.getMessage());
             request.getRequestDispatcher("GenerateReport.jsp").forward(request, response);
         }
+    }
+
+    /**
+     * Finaliza un certificado (state = 2) solo si está en estado 1 (En
+     * gestión) y devuelve su número de certificado (consecutive_quality)
+     * para la notificación. Devuelve null si no se pudo finalizar. El
+     * número se lee de BD porque la finalización masiva solo envía ids.
+     */
+    private String finishCertificate(CertificatesJpaController CertificatesJpa, int IdCertificates) {
+        List lstCerti = CertificatesJpa.ConsultCertificatesId("", IdCertificates);
+        if (lstCerti == null) {
+            return null;
+        }
+        Object[] ObjCerti = (Object[]) lstCerti.get(0);
+        try {
+            if (Integer.parseInt(ObjCerti[8].toString()) != 1) {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
+        if (!CertificatesJpa.UpdateCertificateFinish(IdCertificates)) {
+            return null;
+        }
+        return (ObjCerti[3] == null) ? String.valueOf(IdCertificates) : ObjCerti[3].toString().trim();
     }
 
     /**
