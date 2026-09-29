@@ -328,11 +328,9 @@ public class GenerateReport extends TagSupport {
                         out.print("<td class='text-center'><button class='btn btn-danter btn-sm' style='border-radius: 4px;'><i class=\"fas fa-times\"></i></button></td>");
                     }
                     out.print("<td >");
-                    out.print("<div class='d-flex'>");
+                    out.print("<div class='d-flex justify-content-center'>");
+
                     if (State == 1) {
-                        if (Permission.contains("[34]")) {
-                            out.print("<button class='btn btn-info btn-sm mr-2' style='border-radius: 4px;' onclick=\"DuplicateReg('Generate?opt=10&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "')\" data-toggle='tooltip' data-placement='bottom' title='Duplicar'><i class=\"fas fa-copy\"></i></button>");
-                        }
                         if (Permission.contains("[28]")) {
                             out.print("<button class='btn btn-success btn-sm mr-2' style='border-radius: 4px;' onclick=\"confirmarFinalizar('Generate?opt=7&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "')\" data-toggle='tooltip' data-placement='bottom' title='Finalizar'><i class=\"fas fa-check\"></i></button>");
                         }
@@ -342,14 +340,26 @@ public class GenerateReport extends TagSupport {
                     } else {
                         out.print("<button class='btn btn-green disabled btn-sm mr-2' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Sin permiso'><i class=\"fas fa-eye\"></i></button>");
                     }
-                    if (Permission.contains("[39]")) {
-                        out.print("<button class='btn btn-primary btn-sm mr-2' style='border-radius: 4px;' onclick=\"javascript:location.href='FileManager.jsp?cliente=" + ObjCerti[4] + "&anio=" + ObjCerti[12] + "&orden=" + ObjCerti[5] + "&lote=" + ObjCerti[7] + "'\" data-toggle='tooltip' data-placement='top' title='Batch Record'><i class=\"fas fa-folder\"></i></button>");
-                    }
-                    if (State == 1) {
-                        if (Permission.contains("[9]")) {
-                            out.print("<button class='btn btn-danger btn-sm' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Eliminar' onclick=\"confirmarEliminacion('Generate?opt=5&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "&Category=Delete&State=0&NumberCertificate=" + ObjCerti[3] + "')\"><i class='fas fa-trash'></i></button>");
+                    if (State == 3) {
+                        if (Permission.contains("[39]")) {
+                            out.print("<button class='btn btn-primary btn-sm mr-2' style='border-radius: 4px;' onclick=\"javascript:location.href='FileManager.jsp?cliente=" + ObjCerti[4] + "&anio=" + ObjCerti[12] + "&orden=" + ObjCerti[5] + "&lote=" + ObjCerti[7] + "'\" data-toggle='tooltip' data-placement='top' title='Batch Record'><i class=\"fas fa-folder\"></i></button>");
                         }
                     }
+                    if (State == 1) {
+                        out.print("<div class='dropdown d-inline'>\n");
+                        out.print("<button class='btn btn-warning btn-sm' type='button' id='dropdownMenuButton2' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>\n");
+                        out.print("<i class=\"fas fa-ellipsis-v\"></i>");
+                        out.print("<div class='dropdown-menu menuDropdow'>");
+                        if (Permission.contains("[34]")) {
+                            out.print("<a class='dropdown-item has-icon' data-toggle='tooltip' data-placement='right' title='Duplicar' onclick=\"DuplicateReg('Generate?opt=10&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "')\" ><i class='fas fa-copy'></i> Duplicar</a>");
+                        }
+                        if (Permission.contains("[9]")) {
+                            out.print("<a class='dropdown-item has-icon' data-toggle='tooltip' data-placement='right' title='Eliminar'  onclick=\"confirmarEliminacion('Generate?opt=5&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "&Category=Delete&State=0&NumberCertificate=" + ObjCerti[3] + "')\" ><i class='fas fa-trash'></i> Eliminar</a>");
+                        }
+                        out.print("</div>");
+                        out.print("</div>");
+                    }
+
                     out.print("</div>");
                     out.print("</td>");
                     out.print("</tr>");
