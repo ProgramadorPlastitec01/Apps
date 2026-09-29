@@ -188,7 +188,26 @@
 
                 const contenido = contenedor.innerHTML;
                 document.getElementById("htmlTabla").value = contenido;
-                document.getElementById("Form04").submit();
+                
+                const form04 = document.getElementById("Form04");
+                const addHiddenField = (name) => {
+                    const el = contenedor.querySelector(`[name='${name}']`);
+                    if (el && el.value) {
+                        const hidden = document.createElement("input");
+                        hidden.type = "hidden";
+                        hidden.name = name;
+                        hidden.value = el.value;
+                        form04.appendChild(hidden);
+                    }
+                };
+                
+                if (form04) {
+                    addHiddenField("cbxArea");
+                    addHiddenField("txt_name");
+                    addHiddenField("txt_post");
+                    addHiddenField("txt_user");
+                    form04.submit();
+                }
             }
         </script>
 

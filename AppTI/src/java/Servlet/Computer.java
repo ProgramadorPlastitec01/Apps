@@ -13,6 +13,7 @@ import Controller.ItemJpaController;
 import Controller.SettingControllerJpa;
 import java.util.List;
 import javax.servlet.http.HttpSession;
+import Method.ExtractValues;
 
 public class Computer extends HttpServlet {
 
@@ -24,6 +25,7 @@ public class Computer extends HttpServlet {
         ComputerDetailJpaController CompDetailJpa = new ComputerDetailJpaController();
         ComputerHeaderControllerJpa CompHeader = new ComputerHeaderControllerJpa();
         SettingControllerJpa SettingJpa = new SettingControllerJpa();
+        ExtractValues Extract = new ExtractValues();
         ItemJpaController ItemJpa = new ItemJpaController();
         HttpSession sesion = request.getSession();
         String UserRol = sesion.getAttribute("idRol").toString();
@@ -471,8 +473,12 @@ public class Computer extends HttpServlet {
                     }
                     //</editor-fold>
 
+                    String cargo = Extract.extraerValor(htmlTabla, "Cargo:\\s*<input[^>]*?value=\"([^\"]*)\"");
+                    String area = Extract.extraerValor(htmlTabla, "rea:\\s*<input[^>]*?value=\"([^\"]*)\"");
+                    String responsable = Extract.extraerValor(htmlTabla, "Yo\\s*<input[^>]*?value=\"([^\"]*)\"");
                     if (idDetail > 0) {
                         Result = CompDetailJpa.UpdatePcDetailContent(idDetail, htmlTabla, 0);
+                        ComputerJpa.UpdateComputerAct(IdComputer, responsable, cargo, area);
                     } else {
                         try {
                             DocCode = request.getParameter("DocCode");
@@ -490,6 +496,7 @@ public class Computer extends HttpServlet {
                             }
                         }
                         Result = CompDetailJpa.registerPcDetail(idPcHead, type, htmlTabla, respo, 1, 1);
+                        ComputerJpa.UpdateComputerAct(IdComputer, responsable, cargo, area);
                     }
                     request.setAttribute("Register004_029", Result);
                     request.getRequestDispatcher("Computer?opt=1&IdComputer=" + IdComputer + "&mod=3&idpcHead=" + idPcHead + "&type=" + type + "").forward(request, response);

@@ -380,5 +380,23 @@ public class ComputerControllerJpa {
             return false;
         }
     }
+        public boolean UpdateComputerAct(int idC, String rps, String ptc, String ara) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        try {
+            Query q = em.createNativeQuery("CALL `Sp_cpd_UpdateComputer`(" + idC + ",'" + rps + "','" + ptc + "','" + ara + "')");
+            int resultado = q.executeUpdate();
+            em.getTransaction().commit();
+            em.clear();
+            em.close();
+            if (resultado == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
     //</editor-fold>
 }

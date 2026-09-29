@@ -96,7 +96,7 @@ public class Tag_computer extends TagSupport {
             try {
                 if (lst_compDetail != null) {
                     Object[] ObjDetail = (Object[]) lst_compDetail.get(0);
-                    String[] strc = ObjDetail[3].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                    String[] strc = ObjDetail[4].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
                     cargouser = strc[2].toString();
                     area = strc[3].toString();
                     nameUser = strc[6].toString();
