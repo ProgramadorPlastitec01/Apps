@@ -3,6 +3,7 @@ package Servlet;
 import Controller.CertificateFileJpaController;
 import Controller.CertificateFileRow;
 import Method.OfficePlatformService;
+import Method.SignatureStorage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -23,7 +24,7 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 /**
  * Stamps the signed-in user's registered signature (session "Firma", an
- * image under /Interface/Uploads/Signature/) onto a pending "documento de
+ * image in the Gestor de Archivos, see Method.SignatureStorage) onto a pending "documento de
  * soporte", at every page/position the user picked interactively in
  * SupportDocumentSign.jsp (a PDF.js viewer that shows every page at once and
  * lets the user drop as many signature copies as needed, anywhere). Sube el
@@ -113,9 +114,14 @@ public class SupportDocumentSignServlet extends HttpServlet {
             return;
         }
 
-        String signaturePath = getServletContext().getRealPath("/Interface/Uploads/Signature/" + firma);
-        File signatureFile = new File(signaturePath);
-        if (!signatureFile.isFile()) {
+        byte[] signatureBytes;
+        try {
+            signatureBytes = SignatureStorage.readBytes(getServletContext(), firma);
+        } catch (IOException ex) {
+            getServletContext().log("No se pudo obtener la firma del gestor de archivos: " + firma, ex);
+            signatureBytes = null;
+        }
+        if (signatureBytes == null) {
             response.sendRedirect(redirectBase + "&msg=error_sign");
             return;
         }
@@ -145,7 +151,7 @@ public class SupportDocumentSignServlet extends HttpServlet {
                 return;
             }
 
-            boolean firmadoOk = estamparFirma(origen, destino, signatureFile, firmasParam);
+            boolean firmadoOk = estamparFirma(origen, destino, signatureBytes, firma, firmasParam);
             if (!firmadoOk) {
                 response.sendRedirect(redirectBase + "&msg=error_sign");
                 return;
@@ -188,9 +194,9 @@ public class SupportDocumentSignServlet extends HttpServlet {
     }
 
     /** Estampa la firma en todas las posiciones indicadas por {@code firmasParam} y guarda en {@code destino}. Devuelve false si no se pudo aplicar ninguna firma. */
-    private boolean estamparFirma(File origen, File destino, File signatureFile, String firmasParam) {
+    private boolean estamparFirma(File origen, File destino, byte[] signatureBytes, String signatureName, String firmasParam) {
         try (PDDocument doc = PDDocument.load(origen)) {
-            PDImageXObject signatureImage = PDImageXObject.createFromFile(signatureFile.getAbsolutePath(), doc);
+            PDImageXObject signatureImage = PDImageXObject.createFromByteArray(doc, signatureBytes, signatureName);
             float aspect = (float) signatureImage.getHeight() / (float) signatureImage.getWidth();
 
             String[] firmas = firmasParam.split(";");

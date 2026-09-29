@@ -84,6 +84,28 @@ public class Util {
         return sb.toString();
     }
 
+    // Congela los <input type="date"> del certificado (ej: fecha de despacho)
+    // dejando únicamente el valor guardado como texto plano. El type="date"
+    // puede venir con las clases/atributos en cualquier orden según cómo haya
+    // quedado guardado el HTML, así que no se busca un literal exacto: se
+    // localiza la etiqueta completa por su type y se extrae su value.
+    public static String collapseDateInputs(String html) {
+        if (html == null) return html;
+        java.util.regex.Matcher inputMatcher = java.util.regex.Pattern
+                .compile("<input[^>]*type=\"date\"[^>]*>")
+                .matcher(html);
+        StringBuffer sb = new StringBuffer();
+        while (inputMatcher.find()) {
+            java.util.regex.Matcher valueMatcher = java.util.regex.Pattern
+                    .compile("value=\"([^\"]*)\"")
+                    .matcher(inputMatcher.group());
+            String value = valueMatcher.find() ? valueMatcher.group(1) : "";
+            inputMatcher.appendReplacement(sb, java.util.regex.Matcher.quoteReplacement(value));
+        }
+        inputMatcher.appendTail(sb);
+        return sb.toString();
+    }
+
     // Un lote de Recepción Material puede matchear (LIKE) más de un
     // consecutivo/codigo distinto en Generación de Lotes. Si todos los
     // resultados son el mismo par, se usa directamente (respetando el

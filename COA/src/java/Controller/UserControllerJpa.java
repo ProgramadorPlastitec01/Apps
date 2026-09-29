@@ -369,7 +369,9 @@ public class UserControllerJpa implements Serializable {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
-            Query q = em.createNativeQuery("CALL `Sp_usr_u_UpdateSignature`('" + idUser + "','" + Signature + "')");
+            Query q = em.createNativeQuery("CALL `Sp_usr_u_UpdateSignature`(?, ?)");
+            q.setParameter(1, idUser);
+            q.setParameter(2, Signature);
             int resultado = q.executeUpdate();
             em.getTransaction().commit();
             em.clear();

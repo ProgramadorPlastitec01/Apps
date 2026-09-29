@@ -9,9 +9,12 @@ import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import Controller.CertificatesJpaController;
 import Controller.CertificateFileJpaController;
 import Controller.EventsJpaController;
+import Controller.UserControllerJpa;
 import Method.Mail;
 
 public class Generate extends HttpServlet {
@@ -178,6 +181,18 @@ public class Generate extends HttpServlet {
                     } catch (UnsupportedEncodingException e) {
                         Html = "";
                     }
+                    // Diagnóstico temporal: confirmar si el Html ya llega incompleto
+                    // desde el navegador (vs. truncarse después, al guardar/leer en BD).
+                    {
+                        String rawParam = request.getParameter("Html");
+                        Logger.getLogger(Generate.class.getName()).log(Level.INFO,
+                                "SAVE Html: rawParamLength={0}, decodedLength={1}, decodedTail=[{2}]",
+                                new Object[]{
+                                    rawParam == null ? -1 : rawParam.length(),
+                                    Html.length(),
+                                    Html.length() > 300 ? Html.substring(Html.length() - 300) : Html
+                                });
+                    }
                     try {
                         Consecutive = request.getParameter("ConsValue");
                     } catch (Exception e) {
@@ -278,59 +293,56 @@ public class Generate extends HttpServlet {
                     } catch (Exception e) {
                         Temp = 0;
                     }
+                    // La firma se toma de user.signature (BD), no solo de la sesión:
+                    // la sesión se carga al iniciar sesión, así que una firma
+                    // registrada después en el Perfil no llegaba al certificado
+                    // (quedaba authorization_signature = '').
                     try {
-                        Customer = request.getParameter("Customer");
+                        List lstUser = new UserControllerJpa().ConsultUsersid(Integer.parseInt(session.getAttribute("idUsuario").toString()));
+                        if (lstUser != null) {
+                            Object[] ObjUser = (Object[]) lstUser.get(0);
+                            Signature = (ObjUser[8] == null) ? "" : ObjUser[8].toString().trim();
+                            session.setAttribute("Firma", Signature);
+                        }
                     } catch (Exception e) {
-                        Customer = "";
+                        // Se conserva la firma de la sesión.
                     }
-                    try {
-                        Anio = Integer.parseInt(request.getParameter("Anio"));
-                    } catch (Exception e) {
-                        Anio = 0;
+                    int Signed = 0, Failed = 0;
+                    boolean CanSign = ((IdRol == 1) || (IdRol == 2)) && Signature != null && !Signature.trim().isEmpty();
+                    if (Signature == null || Signature.trim().isEmpty()) {
+                        request.setAttribute("SigMissing", true);
                     }
-                    try {
-                        Order = Integer.parseInt(request.getParameter("Order"));
-                    } catch (Exception e) {
-                        Order = 0;
-                    }
-                    try {
-                        Batch = request.getParameter("Batch");
-                    } catch (Exception e) {
-                        Batch = "";
-                    }
-                    if ((IdRol == 1) || (IdRol == 2)) {
-                        if (Signature != null) {
-                            if (Temp == 0) {
-                                //<editor-fold defaultstate="collapsed" desc="SIGNATURE MASIVE">
-                                String[] IdsCerti = IdCertiMasive.replace("][", "///").replace("[", "").replace("]", "").split("///");
-                                for (int i = 0; i < IdsCerti.length; i++) {
-                                    IdCertificates = Integer.parseInt(IdsCerti[i]);
-                                    result = CertificatesJpa.CertificatesUpdateSignature(IdCertificates, Signature);
-                                }
-                                if (result) {
-                                    // El lote queda visible en la navegación de FileManager.jsp
-                                    // (Gestor de Archivos) desde que se firma, tenga o no archivos
-                                    // subidos todavía — sin crear nada en el filesystem local (antes
-                                    // se hacía con un mkdirs() aquí mismo; certificate_lotes cumple
-                                    // ese mismo rol como marcador en BD).
-                                    new CertificateFileJpaController().registerLote(Customer, String.valueOf(Anio), String.valueOf(Order), Batch);
-                                    request.setAttribute("SigMasive", result);
-                                }
-                                request.getRequestDispatcher("Generate?opt=8").forward(request, response);
-                                //</editor-fold>
+                    if (CanSign) {
+                        // Única: IdCertiMasive = "5". Masiva: IdCertiMasive = "[5][8][9]".
+                        String[] IdsCerti = IdCertiMasive == null ? new String[0]
+                                : IdCertiMasive.replace("][", "///").replace("[", "").replace("]", "").split("///");
+                        for (int i = 0; i < IdsCerti.length; i++) {
+                            try {
+                                IdCertificates = Integer.parseInt(IdsCerti[i].trim());
+                            } catch (NumberFormatException e) {
+                                Failed++;
+                                continue;
+                            }
+                            if (signCertificate(CertificatesJpa, IdCertificates, Signature)) {
+                                Signed++;
                             } else {
-                                //<editor-fold defaultstate="collapsed" desc="SIGNATURE UNIQUE">
-                                IdCertificates = Integer.parseInt(IdCertiMasive);
-                                result = CertificatesJpa.CertificatesUpdateSignature(IdCertificates, Signature);
-                                if (result) {
-                                    // Ver comentario equivalente en SIGNATURE MASIVE.
-                                    new CertificateFileJpaController().registerLote(Customer, String.valueOf(Anio), String.valueOf(Order), Batch);
-                                    request.setAttribute("SigUnique", result);
-                                }
-                                request.getRequestDispatcher("Generate?opt=2&Type=" + Type + "&IdCertificates=" + IdCertificates + "&TempDelete=0&StateCerti=3").forward(request, response);
-                                //</editor-fold>
+                                Failed++;
                             }
                         }
+                    }
+                    if (Temp == 0) {
+                        //<editor-fold defaultstate="collapsed" desc="SIGNATURE MASIVE">
+                        request.setAttribute("SigMasive", Signed > 0 && Failed == 0);
+                        if (Failed > 0) {
+                            request.setAttribute("SigMasiveResume", "Firmados: " + Signed + ", no firmados: " + Failed + ".");
+                        }
+                        request.getRequestDispatcher("Generate?opt=8").forward(request, response);
+                        //</editor-fold>
+                    } else {
+                        //<editor-fold defaultstate="collapsed" desc="SIGNATURE UNIQUE">
+                        request.setAttribute("SigUnique", Signed == 1);
+                        request.getRequestDispatcher("Generate?opt=2&Type=" + Type + "&IdCertificates=" + IdCertificates + "&TempDelete=0&StateCerti=" + (Signed == 1 ? 3 : 2)).forward(request, response);
+                        //</editor-fold>
                     }
                     //</editor-fold>
                     break;
@@ -471,9 +483,47 @@ public class Generate extends HttpServlet {
                     break;
             }
         } catch (Exception ex) {
+            Logger.getLogger(Generate.class.getName()).log(Level.SEVERE,
+                    "Error procesando Generate?opt=" + request.getParameter("opt"), ex);
             request.setAttribute("errorMessage", "Ha ocurrido un error procesando tu solicitud: " + ex.getMessage());
             request.getRequestDispatcher("GenerateReport.jsp").forward(request, response);
         }
+    }
+
+    /**
+     * Firma un certificado (authorization_signature = firma, state = 3) solo
+     * si está en estado 2 (Finalizado), y registra su lote en
+     * certificate_lotes con los datos del propio certificado en BD. Antes se
+     * usaban Customer/Anio/Order/Batch del request, que la firma masiva no
+     * envía (quedaba un lote '' / 0 / 0 / '') y que en masivo pueden ser
+     * lotes distintos por certificado.
+     */
+    private boolean signCertificate(CertificatesJpaController CertificatesJpa, int IdCertificates, String Signature) {
+        List lstCerti = CertificatesJpa.ConsultCertificatesId("", IdCertificates);
+        if (lstCerti == null) {
+            return false;
+        }
+        Object[] ObjCerti = (Object[]) lstCerti.get(0);
+        try {
+            if (Integer.parseInt(ObjCerti[8].toString()) != 2) {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        if (!CertificatesJpa.CertificatesUpdateSignature(IdCertificates, Signature)) {
+            return false;
+        }
+        // El lote queda visible en la navegación de FileManager.jsp (Gestor de
+        // Archivos) desde que se firma, tenga o no archivos subidos todavía —
+        // sin crear nada en el filesystem local (certificate_lotes cumple el
+        // rol de marcador en BD).
+        new CertificateFileJpaController().registerLote(
+                (ObjCerti[4] == null) ? "" : ObjCerti[4].toString(),
+                (ObjCerti[12] == null) ? "" : ObjCerti[12].toString(),
+                (ObjCerti[5] == null) ? "" : ObjCerti[5].toString(),
+                (ObjCerti[7] == null) ? "" : ObjCerti[7].toString());
+        return true;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -127,7 +127,7 @@
             pdfjsLib.GlobalWorkerOptions.workerSrc = "Interface/Content/Assets/modules/pdfjs/pdf.worker.min.js";
 
             var rutaArchivo = "<%= rutaArchivo%>";
-            var rutaFirma = "Interface/Uploads/Signature/<%= Firma%>";
+            var rutaFirma = "SignatureImage?name=<%= java.net.URLEncoder.encode(Firma, "UTF-8")%>";
             var pagesContainer = document.getElementById("pagesContainer");
             var pageWrappers = []; // {el, numero}
             var firmasColocadas = []; // elementos .signature-overlay colocados sobre las páginas

@@ -77,7 +77,7 @@ public class Profile extends TagSupport {
                     if (!firma.isEmpty()) {
                         out.print("<div class='form-group col-md-6 col-12'>");
                         out.print("<label>Firma actual</label><br>");
-                        out.print("<img src='Interface/Uploads/Signature/" + firma + "' alt='Firma' style='height:100px; border:1px solid #ccc; padding:5px;'>");
+                        out.print("<img src='SignatureImage?name=" + java.net.URLEncoder.encode(firma, "UTF-8") + "' alt='Firma' style='height:100px; border:1px solid #ccc; padding:5px;'>");
                         out.print("</div>");
                     }
 

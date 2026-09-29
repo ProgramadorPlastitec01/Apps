@@ -69,11 +69,12 @@ public class SignatureReport extends TagSupport {
             out.print("<thead>");
             out.print("<tr>");
             out.print("<th class=\"text-center\">\n"
-                    + "                              <div class=\"custom-checkbox custom-control\">\n"
-                    + "                                <input type=\"checkbox\" data-checkboxes=\"mygroup\" data-checkbox-role=\"dad\" class=\"custom-control-input\" id=\"checkbox-all\">\n"
-                    + "                                <label for=\"checkbox-all\" class=\"custom-control-label\">&nbsp;</label>\n"
-                    + "                              </div>\n"
-                    + "                            </th>");
+                    + "  <div class=\"custom-checkbox custom-control\">\n"
+                    + "    <input type=\"checkbox\" data-checkboxes=\"mygroup\" data-checkbox-role=\"dad\""
+                    + " class=\"custom-control-input\" id=\"checkbox-all\" onchange=\"MasiveAll(this)\">\n"
+                    + "    <label for=\"checkbox-all\" class=\"custom-control-label\">&nbsp;</label>\n"
+                    + "  </div>\n"
+                    + "</th>");
             out.print("<th>App</th>");
             out.print("<th>Registro</th>");
             out.print("<th>Numero <br/> Certificado</th>");
@@ -136,7 +137,7 @@ public class SignatureReport extends TagSupport {
                     out.print("<div class='d-flex'>");
                     if (Permission.contains("[25]")) {
                         out.print("<button class='btn btn-green btn-sm mr-2' style='border-radius: 4px;' onclick=\"javascript:location.href='Generate?opt=2&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "&Order=" + ObjCerti[5] + "&Batch=" + ObjCerti[7] + "&StateCerti=" + State + "&TempM=1';cargarDatos()\"  data-toggle='tooltip' data-placement='top' title='Ver'><i class=\"fas fa-eye\"></i></button>");
-                    }else{
+                    } else {
                         out.print("<button class='btn btn-green disabled btn-sm mr-2' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Sin permiso'><i class=\"fas fa-eye\"></i></button>");
                     }
                     out.print("</td>");

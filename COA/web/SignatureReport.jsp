@@ -37,7 +37,22 @@
                     input.value += id;
                 }
             }
+            function MasiveAll(chk) {
+                var input = document.getElementById("IdCerti");
+                var filas = $.fn.DataTable && $.fn.DataTable.isDataTable('#table-2')
+                        ? $('#table-2').DataTable().rows({search: 'applied'}).nodes()
+                        : $('#table-2 tbody tr');
+                var valor = "";
 
+                $(filas).find('input[data-checkboxes="mygroup"]').each(function () {
+                    this.checked = chk.checked;
+                    if (chk.checked) {
+                        valor += "[" + this.value + "]";
+                    }
+                });
+
+                input.value = valor;
+            }
 
             function ExecuteForm() {
                 const form = document.getElementById("myForm");

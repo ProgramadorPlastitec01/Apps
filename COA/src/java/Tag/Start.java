@@ -15,7 +15,12 @@ public class Start extends TagSupport {
     @Override
     public int doStartTag() throws JspException {
         HttpSession session = pageContext.getSession();
-        String NameUser = session.getAttribute("Nombres").toString();
+        String NameUser = "";
+        try {
+            NameUser = session.getAttribute("Nombres").toString();
+        } catch (Exception e) {
+            NameUser = "";
+        }
         StartJpaController StartJpa = new StartJpaController();
         JspWriter out = pageContext.getOut();
         List lst_amountC = null;

@@ -399,7 +399,6 @@ public class ConnectionRegistrosLAB {
         }
         //</editor-fold>
     }
-
     public List ConsultMaterialsRGC74(int Order, String Product, String Batch) throws Exception {
         //<editor-fold defaultstate="collapsed" desc="CONSULT MATERIALS R-GC-074">
         List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerRegistrosLab");
@@ -512,8 +511,9 @@ public class ConnectionRegistrosLAB {
                     BatchCicle = Batch.split("///");
                 }
                 String Qry
-                        = "WITH datos_base AS ( "
+                        = "WITH registros_base AS ( "
                         + "    SELECT  "
+                        + "        r.id_registro, "
                         + "        SUBSTRING(r.lote_manga_p, 1, 4) AS `CAPA INTERNA / INNER LAYER`, "
                         + "        r.lote_manga_c AS `Lote LF`, "
                         + "        SUBSTRING(r.lote_manga_p, 1, 4) AS `CAPA EXTERNA / OUTER LAYER`, "
@@ -540,7 +540,49 @@ public class ConnectionRegistrosLAB {
                         + "      AND r.lote_producto LIKE CONCAT('%', '" + ((BatchCicle.length == 2) ? BatchCicle[0] : Batch) + "', '%') "
                         + ((BatchCicle.length == 2) ? "AND r.ciclo_esterilizacion = '" + BatchCicle[1] + "'" : "")
                         + "      AND l.nombre NOT LIKE '%SCREEN%' "
-                        + "    LIMIT 1 "
+                        + "), "
+                        + " "
+                        + "datos_normalizados AS ( "
+                        + "    SELECT "
+                        + "        *, "
+                        + "        CASE  "
+                        + "            WHEN `Lote LF` LIKE '%/%' THEN `Lote LF` "
+                        + "            WHEN `Lote LF` REGEXP '[VERP]' THEN  "
+                        + "                REGEXP_REPLACE(REGEXP_REPLACE(`Lote LF`, '^[A-Z0-9]+-', ''), 'V[0-9A-Z]+', '') "
+                        + "            ELSE `Lote LF` "
+                        + "        END AS lote_lf_normalizado, "
+                        + "        CASE  "
+                        + "            WHEN `Lote PP` LIKE '%/%' THEN `Lote PP` "
+                        + "            WHEN `Lote PP` REGEXP '[VERP]' THEN  "
+                        + "                REGEXP_REPLACE(REGEXP_REPLACE(`Lote PP`, '^[A-Z0-9]+-', ''), 'V[0-9A-Z]+', '') "
+                        + "            ELSE `Lote PP` "
+                        + "        END AS lote_pp_normalizado, "
+                        + "        CASE  "
+                        + "            WHEN `Lote DD` LIKE '%/%' THEN `Lote DD` "
+                        + "            WHEN `Lote DD` REGEXP '[VERP]' THEN  "
+                        + "                REGEXP_REPLACE(REGEXP_REPLACE(`Lote DD`, '^[A-Z0-9]+-', ''), 'V[0-9A-Z]+', '') "
+                        + "            ELSE `Lote DD` "
+                        + "        END AS lote_dd_normalizado, "
+                        + "        CASE  "
+                        + "            WHEN `Lote DI` LIKE '%/%' THEN `Lote DI` "
+                        + "            WHEN `Lote DI` REGEXP '[VERP]' THEN  "
+                        + "                REGEXP_REPLACE(REGEXP_REPLACE(`Lote DI`, '^[A-Z0-9]+-', ''), 'V[0-9A-Z]+', '') "
+                        + "            ELSE `Lote DI` "
+                        + "        END AS lote_di_normalizado "
+                        + "    FROM registros_base "
+                        + "), "
+                        + " "
+                        + "conteos AS ( "
+                        + "    SELECT "
+                        + "        (SELECT COUNT(*) FROM datos_normalizados d WHERE NOT (d.lote_lf_normalizado <=> (SELECT d2.lote_lf_normalizado FROM datos_normalizados d2 GROUP BY d2.lote_lf_normalizado ORDER BY COUNT(*) DESC LIMIT 1))) AS diferencias_lote_lf, "
+                        + "        (SELECT COUNT(*) FROM datos_normalizados d WHERE NOT (d.lote_pp_normalizado <=> (SELECT d2.lote_pp_normalizado FROM datos_normalizados d2 GROUP BY d2.lote_pp_normalizado ORDER BY COUNT(*) DESC LIMIT 1))) AS diferencias_lote_pp, "
+                        + "        (SELECT COUNT(*) FROM datos_normalizados d WHERE NOT (d.lote_dd_normalizado <=> (SELECT d2.lote_dd_normalizado FROM datos_normalizados d2 GROUP BY d2.lote_dd_normalizado ORDER BY COUNT(*) DESC LIMIT 1))) AS diferencias_lote_dd, "
+                        + "        (SELECT COUNT(*) FROM datos_normalizados d WHERE NOT (d.lote_di_normalizado <=> (SELECT d2.lote_di_normalizado FROM datos_normalizados d2 GROUP BY d2.lote_di_normalizado ORDER BY COUNT(*) DESC LIMIT 1))) AS diferencias_lote_di, "
+                        + "        (SELECT COUNT(*) FROM datos_normalizados d WHERE NOT (d.`Lote CONNECTOR` <=> (SELECT d2.`Lote CONNECTOR` FROM datos_normalizados d2 GROUP BY d2.`Lote CONNECTOR` ORDER BY COUNT(*) DESC LIMIT 1))) AS diferencias_connector, "
+                        + "        (SELECT COUNT(*) FROM datos_normalizados d WHERE NOT (d.`Lote INYECCION` <=> (SELECT d2.`Lote INYECCION` FROM datos_normalizados d2 GROUP BY d2.`Lote INYECCION` ORDER BY COUNT(*) DESC LIMIT 1))) AS diferencias_inyeccion, "
+                        + "        (SELECT COUNT(*) FROM datos_normalizados d WHERE NOT (d.`Lote BIG BORE` <=> (SELECT d2.`Lote BIG BORE` FROM datos_normalizados d2 GROUP BY d2.`Lote BIG BORE` ORDER BY COUNT(*) DESC LIMIT 1))) AS diferencias_bigbore, "
+                        + "        (SELECT COUNT(*) FROM datos_normalizados d WHERE NOT (d.`Lote SISTEMA VIAS` <=> (SELECT d2.`Lote SISTEMA VIAS` FROM datos_normalizados d2 GROUP BY d2.`Lote SISTEMA VIAS` ORDER BY COUNT(*) DESC LIMIT 1))) AS diferencias_sistemavias, "
+                        + "        (SELECT COUNT(*) FROM datos_normalizados d WHERE NOT (d.`FOIL NEGRO / BLACK FOIL` <=> (SELECT d2.`FOIL NEGRO / BLACK FOIL` FROM datos_normalizados d2 GROUP BY d2.`FOIL NEGRO / BLACK FOIL` ORDER BY COUNT(*) DESC LIMIT 1))) AS diferencias_foil "
                         + ") "
                         + "SELECT "
                         + "    `CAPA INTERNA / INNER LAYER`, "
@@ -595,8 +637,24 @@ public class ConnectionRegistrosLAB {
                         + "    `Lote BIG BORE`, "
                         + "    `SISTEMA DE 3 VIAS PN`, "
                         + "    `Lote SISTEMA VIAS`, "
-                        + "    `FOIL NEGRO / BLACK FOIL` "
-                        + "FROM datos_base;";
+                        + "    `FOIL NEGRO / BLACK FOIL`, "
+                        + " "
+                        + "    ( "
+                        + "        c.diferencias_lote_lf + "
+                        + "        c.diferencias_lote_pp + "
+                        + "        c.diferencias_lote_dd + "
+                        + "        c.diferencias_lote_di + "
+                        + "        c.diferencias_connector + "
+                        + "        c.diferencias_inyeccion + "
+                        + "        c.diferencias_bigbore + "
+                        + "        c.diferencias_sistemavias + "
+                        + "        c.diferencias_foil "
+                        + "    ) AS total_diferencias "
+                        + " "
+                        + "FROM datos_normalizados "
+                        + "CROSS JOIN conteos c "
+                        + " "
+                        + "LIMIT 1;";
                 sttm = conn.createStatement();
                 rs = sttm.executeQuery(Qry);
 
@@ -612,7 +670,8 @@ public class ConnectionRegistrosLAB {
                             + safeTrim(rs.getString("SITIO INYECCION / INJECTION SITE")) + " /// " + safeTrim(rs.getString("Lote INYECCION")) + " /// "
                             + safeTrim(rs.getString("ENSAMBLE BIG BORE")) + " /// " + safeTrim(rs.getString("Lote BIG BORE")) + " /// "
                             + safeTrim(rs.getString("SISTEMA DE 3 VIAS PN")) + " /// " + safeTrim(rs.getString("Lote SISTEMA VIAS")) + " /// "
-                            + safeTrim(rs.getString("FOIL NEGRO / BLACK FOIL")));
+                            + safeTrim(rs.getString("FOIL NEGRO / BLACK FOIL")) + " /// "
+                            + safeTrim(rs.getString("total_diferencias")));
                     count++;
                 }
 
@@ -652,7 +711,6 @@ public class ConnectionRegistrosLAB {
         }
         //</editor-fold>
     }
-
     public List ConsultMaterialsRGC194(int Order, String Product, String Batch) throws Exception {
         //<editor-fold defaultstate="collapsed" desc="CONSULT_MATERIALS R-GC-194">
         List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerRegistrosLab");
@@ -670,8 +728,9 @@ public class ConnectionRegistrosLAB {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             conn = DriverManager.getConnection(url, login, password);
             if (conn != null) {
-                String Qry = "WITH datos_base AS ( "
+                String Qry = "WITH registros_base AS ( "
                         + "    SELECT "
+                        + "        r.id_registro, "
                         + "        SUBSTRING(r.lote_manga_p, 1, 4) AS `FUNDA / LAY FLAT`, "
                         + "        r.lote_manga_c AS `Lote LF`, "
                         + "        SUBSTRING(r.lote_dto_drc_p, 1, 4) AS `DUCTO DERECHO / RIGHT TUBE`, "
@@ -689,7 +748,39 @@ public class ConnectionRegistrosLAB {
                         + "      AND p.codigo LIKE CONCAT('%', '" + Product + "', '%') "
                         + "      AND r.lote_producto LIKE CONCAT('%', '" + Batch + "', '%') "
                         + "      AND (l.nombre NOT LIKE '%SCREEN%' OR l.nombre NOT LIKE '%COLAS%') "
-                        + "    LIMIT 1 "
+                        + "), "
+                        + " "
+                        + "datos_normalizados AS ( "
+                        + "    SELECT "
+                        + "        *, "
+                        + "        CASE   "
+                        + "            WHEN `Lote LF` LIKE '%/%' THEN `Lote LF` "
+                        + "            WHEN `Lote LF` REGEXP '[VERP]' THEN   "
+                        + "                REGEXP_REPLACE(REGEXP_REPLACE(`Lote LF`, '^[A-Z0-9]+-', ''), 'V[0-9A-Z]+', '') "
+                        + "            ELSE `Lote LF` "
+                        + "        END AS lote_lf_normalizado, "
+                        + "        CASE   "
+                        + "            WHEN `Lote DD` LIKE '%/%' THEN `Lote DD` "
+                        + "            WHEN `Lote DD` REGEXP '[VERP]' THEN   "
+                        + "                REGEXP_REPLACE(REGEXP_REPLACE(`Lote DD`, '^[A-Z0-9]+-', ''), 'V[0-9A-Z]+', '') "
+                        + "            ELSE `Lote DD` "
+                        + "        END AS lote_dd_normalizado, "
+                        + "        CASE   "
+                        + "            WHEN `Lote DI` LIKE '%/%' THEN `Lote DI` "
+                        + "            WHEN `Lote DI` REGEXP '[VERP]' THEN   "
+                        + "                REGEXP_REPLACE(REGEXP_REPLACE(`Lote DI`, '^[A-Z0-9]+-', ''), 'V[0-9A-Z]+', '') "
+                        + "            ELSE `Lote DI` "
+                        + "        END AS lote_di_normalizado "
+                        + "    FROM registros_base "
+                        + "), "
+                        + " "
+                        + "conteos AS ( "
+                        + "    SELECT "
+                        + "        (SELECT COUNT(*) FROM datos_normalizados d WHERE NOT (d.lote_lf_normalizado <=> (SELECT d2.lote_lf_normalizado FROM datos_normalizados d2 GROUP BY d2.lote_lf_normalizado ORDER BY COUNT(*) DESC LIMIT 1))) AS diferencias_lote_lf, "
+                        + "        (SELECT COUNT(*) FROM datos_normalizados d WHERE NOT (d.lote_dd_normalizado <=> (SELECT d2.lote_dd_normalizado FROM datos_normalizados d2 GROUP BY d2.lote_dd_normalizado ORDER BY COUNT(*) DESC LIMIT 1))) AS diferencias_lote_dd, "
+                        + "        (SELECT COUNT(*) FROM datos_normalizados d WHERE NOT (d.lote_di_normalizado <=> (SELECT d2.lote_di_normalizado FROM datos_normalizados d2 GROUP BY d2.lote_di_normalizado ORDER BY COUNT(*) DESC LIMIT 1))) AS diferencias_lote_di, "
+                        + "        (SELECT COUNT(*) FROM datos_normalizados d WHERE NOT (d.`Lote CO1` <=> (SELECT d2.`Lote CO1` FROM datos_normalizados d2 GROUP BY d2.`Lote CO1` ORDER BY COUNT(*) DESC LIMIT 1))) AS diferencias_conector, "
+                        + "        (SELECT COUNT(*) FROM datos_normalizados d WHERE NOT (d.`TINTA / INK` <=> (SELECT d2.`TINTA / INK` FROM datos_normalizados d2 GROUP BY d2.`TINTA / INK` ORDER BY COUNT(*) DESC LIMIT 1))) AS diferencias_tinta "
                         + ") "
                         + "SELECT "
                         + "    `FUNDA / LAY FLAT`, "
@@ -728,8 +819,20 @@ public class ConnectionRegistrosLAB {
                         + "    `CONECTOR / TWIST OFF CONNECTOR`, "
                         + "    `Lote CO1` AS `Lote TWIST OFF`, "
                         + " "
-                        + "    `TINTA / INK` "
-                        + "FROM datos_base;";
+                        + "    `TINTA / INK`, "
+                        + " "
+                        + "    ( "
+                        + "        c.diferencias_lote_lf + "
+                        + "        c.diferencias_lote_dd + "
+                        + "        c.diferencias_lote_di + "
+                        + "        c.diferencias_conector + "
+                        + "        c.diferencias_tinta "
+                        + "    ) AS total_diferencias "
+                        + " "
+                        + "FROM datos_normalizados "
+                        + "CROSS JOIN conteos c "
+                        + " "
+                        + "LIMIT 1;";
                 Statement sttm = conn.createStatement();
                 ResultSet rs = sttm.executeQuery(Qry);
                 List<String> lst_user = new ArrayList<String>();
@@ -739,7 +842,157 @@ public class ConnectionRegistrosLAB {
                             + rs.getString("DUCTO DERECHO / RIGHT TUBE").trim() + "///" + rs.getString("Lote DD").trim() + "///"
                             + rs.getString("DUCTO IZQUIERDO / LEFT TUBE").trim() + "///" + rs.getString("Lote DI").trim() + "///"
                             + rs.getString("CONECTOR / TWIST OFF CONNECTOR").trim() + "///" + rs.getString("Lote TWIST OFF").trim() + "///"
-                            + rs.getString("TINTA / INK").trim() + "");
+                            + rs.getString("TINTA / INK").trim() + "///"
+                            + rs.getString("total_diferencias").trim() + "");
+                    count++;
+                }
+                conn.close();
+                return lst_user;
+            } else {
+                return null;
+            }
+        } catch (SQLException ex) {
+            return null;
+        } catch (ClassNotFoundException ex) {
+            return null;
+        } catch (Exception ex) {
+            return null;
+        }
+        //</editor-fold>
+    }
+    public List ConsultMaterialsRGC220(int Order, String Product, String Batch) throws Exception {
+        //<editor-fold defaultstate="collapsed" desc="CONSULT_MATERIALS R-GC-220">
+        List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerRegistrosLab");
+        if (lst_parameter != null) {
+            Object[] obj_data = (Object[]) lst_parameter.get(0);
+            String[] arr_data = obj_data[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+            login = arr_data[0];
+            password = arr_data[1];
+            url = "jdbc:mysql://" + arr_data[2];
+        } else {
+            return null;
+        }
+        Connection conn = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            conn = DriverManager.getConnection(url, login, password);
+            if (conn != null) {
+                String Qry = "WITH registros_base AS ( "
+                        + "    SELECT "
+                        + "        r.id_registro, "
+                        + "        SUBSTRING(r.lote_manga_p, 1, 4) AS `FUNDA / LAY FLAT`, "
+                        + "        r.lote_manga_c AS `Lote LF`, "
+                        + "        SUBSTRING(r.lote_dto_drc_p, 1, 4) AS `DUCTO DERECHO / RIGHT TUBE`, "
+                        + "        r.lote_dto_drc_c AS `Lote DD`, "
+                        + "        SUBSTRING(r.lote_dto_iqe_p, 1, 4) AS `DUCTO IZQUIERDO / LEFT TUBE`, "
+                        + "        r.lote_dto_iqe_c AS `Lote DI`, "
+                        + "        SUBSTRING(r.lote_ensamble, 1, 4) AS `CONECTOR / TWIST OFF CONNECTOR`, "
+                        + "        r.lote_ensamble AS `Lote CO1`, "
+                        + "        r.lote_tinta AS `TINTA / INK` "
+                        + "    FROM orden_produccion o "
+                        + "    INNER JOIN producto p ON o.id_orden_produccion = p.id_orden_produccion "
+                        + "    INNER JOIN registro r ON p.id_producto = r.id_producto "
+                        + "    INNER JOIN linea l ON r.id_linea = l.id_linea "
+                        + "    WHERE o.numero = " + Order + " "
+                        + "      AND p.codigo LIKE CONCAT('%', '" + Product + "', '%') "
+                        + "      AND r.lote_producto LIKE CONCAT('%', '" + Batch + "', '%') "
+                        + "      AND (l.nombre NOT LIKE '%SCREEN%' OR l.nombre NOT LIKE '%COLAS%') "
+                        + "), "
+                        + " "
+                        + "datos_normalizados AS ( "
+                        + "    SELECT "
+                        + "        *, "
+                        + "        CASE   "
+                        + "            WHEN `Lote LF` LIKE '%/%' THEN `Lote LF` "
+                        + "            WHEN `Lote LF` REGEXP '[VERP]' THEN   "
+                        + "                REGEXP_REPLACE(REGEXP_REPLACE(`Lote LF`, '^[A-Z0-9]+-', ''), 'V[0-9A-Z]+', '') "
+                        + "            ELSE `Lote LF` "
+                        + "        END AS lote_lf_normalizado, "
+                        + "        CASE   "
+                        + "            WHEN `Lote DD` LIKE '%/%' THEN `Lote DD` "
+                        + "            WHEN `Lote DD` REGEXP '[VERP]' THEN   "
+                        + "                REGEXP_REPLACE(REGEXP_REPLACE(`Lote DD`, '^[A-Z0-9]+-', ''), 'V[0-9A-Z]+', '') "
+                        + "            ELSE `Lote DD` "
+                        + "        END AS lote_dd_normalizado, "
+                        + "        CASE   "
+                        + "            WHEN `Lote DI` LIKE '%/%' THEN `Lote DI` "
+                        + "            WHEN `Lote DI` REGEXP '[VERP]' THEN   "
+                        + "                REGEXP_REPLACE(REGEXP_REPLACE(`Lote DI`, '^[A-Z0-9]+-', ''), 'V[0-9A-Z]+', '') "
+                        + "            ELSE `Lote DI` "
+                        + "        END AS lote_di_normalizado "
+                        + "    FROM registros_base "
+                        + "), "
+                        + " "
+                        + "conteos AS ( "
+                        + "    SELECT "
+                        + "        (SELECT COUNT(*) FROM datos_normalizados d WHERE NOT (d.lote_lf_normalizado <=> (SELECT d2.lote_lf_normalizado FROM datos_normalizados d2 GROUP BY d2.lote_lf_normalizado ORDER BY COUNT(*) DESC LIMIT 1))) AS diferencias_lote_lf, "
+                        + "        (SELECT COUNT(*) FROM datos_normalizados d WHERE NOT (d.lote_dd_normalizado <=> (SELECT d2.lote_dd_normalizado FROM datos_normalizados d2 GROUP BY d2.lote_dd_normalizado ORDER BY COUNT(*) DESC LIMIT 1))) AS diferencias_lote_dd, "
+                        + "        (SELECT COUNT(*) FROM datos_normalizados d WHERE NOT (d.lote_di_normalizado <=> (SELECT d2.lote_di_normalizado FROM datos_normalizados d2 GROUP BY d2.lote_di_normalizado ORDER BY COUNT(*) DESC LIMIT 1))) AS diferencias_lote_di, "
+                        + "        (SELECT COUNT(*) FROM datos_normalizados d WHERE NOT (d.`Lote CO1` <=> (SELECT d2.`Lote CO1` FROM datos_normalizados d2 GROUP BY d2.`Lote CO1` ORDER BY COUNT(*) DESC LIMIT 1))) AS diferencias_conector, "
+                        + "        (SELECT COUNT(*) FROM datos_normalizados d WHERE NOT (d.`TINTA / INK` <=> (SELECT d2.`TINTA / INK` FROM datos_normalizados d2 GROUP BY d2.`TINTA / INK` ORDER BY COUNT(*) DESC LIMIT 1))) AS diferencias_tinta "
+                        + ") "
+                        + "SELECT "
+                        + "    `FUNDA / LAY FLAT`, "
+                        + "    CASE   "
+                        + "        WHEN `Lote LF` LIKE '%/%' THEN `Lote LF` "
+                        + "        WHEN `Lote LF` REGEXP '[VERP]' THEN   "
+                        + "            REGEXP_REPLACE( "
+                        + "                REGEXP_REPLACE(`Lote LF`, '^[A-Z0-9]+-', ''), "
+                        + "                'V[0-9A-Z]+', '' "
+                        + "            ) "
+                        + "        ELSE `Lote LF` "
+                        + "    END AS `Lote LF`, "
+                        + " "
+                        + "    `DUCTO DERECHO / RIGHT TUBE`, "
+                        + "    CASE   "
+                        + "        WHEN `Lote DD` LIKE '%/%' THEN `Lote DD` "
+                        + "        WHEN `Lote DD` REGEXP '[VERP]' THEN   "
+                        + "            REGEXP_REPLACE( "
+                        + "                REGEXP_REPLACE(`Lote DD`, '^[A-Z0-9]+-', ''), "
+                        + "                'V[0-9A-Z]+', '' "
+                        + "            ) "
+                        + "        ELSE `Lote DD` "
+                        + "    END AS `Lote DD`, "
+                        + " "
+                        + "    `DUCTO IZQUIERDO / LEFT TUBE`, "
+                        + "    CASE   "
+                        + "        WHEN `Lote DI` LIKE '%/%' THEN `Lote DI` "
+                        + "        WHEN `Lote DI` REGEXP '[VERP]' THEN   "
+                        + "            REGEXP_REPLACE( "
+                        + "                REGEXP_REPLACE(`Lote DI`, '^[A-Z0-9]+-', ''), "
+                        + "                'V[0-9A-Z]+', '' "
+                        + "            ) "
+                        + "        ELSE `Lote DI` "
+                        + "    END AS `Lote DI`, "
+                        + " "
+                        + "    `CONECTOR / TWIST OFF CONNECTOR`, "
+                        + "    `Lote CO1` AS `Lote TWIST OFF`, "
+                        + " "
+                        + "    `TINTA / INK`, "
+                        + " "
+                        + "    ( "
+                        + "        c.diferencias_lote_lf + "
+                        + "        c.diferencias_lote_dd + "
+                        + "        c.diferencias_lote_di + "
+                        + "        c.diferencias_conector + "
+                        + "        c.diferencias_tinta "
+                        + "    ) AS total_diferencias "
+                        + " "
+                        + "FROM datos_normalizados "
+                        + "CROSS JOIN conteos c "
+                        + " "
+                        + "LIMIT 1;";
+                Statement sttm = conn.createStatement();
+                ResultSet rs = sttm.executeQuery(Qry);
+                List<String> lst_user = new ArrayList<String>();
+                int count = 0;
+                while (rs.next()) {
+                    lst_user.add(count, rs.getString("FUNDA / LAY FLAT").trim() + " /// " + rs.getString("Lote LF").trim() + " /// "
+                            + rs.getString("DUCTO DERECHO / RIGHT TUBE").trim() + "///" + rs.getString("Lote DD").trim() + "///"
+                            + rs.getString("DUCTO IZQUIERDO / LEFT TUBE").trim() + "///" + rs.getString("Lote DI").trim() + "///"
+                            + rs.getString("CONECTOR / TWIST OFF CONNECTOR").trim() + "///" + rs.getString("Lote TWIST OFF").trim() + "///"
+                            + rs.getString("TINTA / INK").trim() + "///"
+                            + rs.getString("total_diferencias").trim() + "");
                     count++;
                 }
                 conn.close();
@@ -762,6 +1015,16 @@ public class ConnectionRegistrosLAB {
         return s != null ? s.trim() : "NULL";
     }
 
+    // El ORDER BY de las consultas dimensionales viene configurado en Settings (tabla de
+    // configuración), no en este código. Si ese valor llega vacío o con un CASE sin cerrar
+    // (sin END), se usa un ORDER BY seguro en su lugar para no romper la consulta.
+    private static String sanitizeOrderBy(String rawOrderBy) {
+        String clean = rawOrderBy == null ? "" : rawOrderBy.replace("[", "").replace("]", "").trim();
+        String upper = clean.toUpperCase();
+        boolean valido = upper.startsWith("ORDER BY") && (!upper.contains("CASE") || upper.contains("END"));
+        return valido ? clean : "ORDER BY lc.comparador";
+    }
+
     public List DimensionalQuery(int Order, String Product, String Batch, String Comparator, String OrderBy) throws Exception {
         //<editor-fold defaultstate="collapsed" desc="DIMESIONAL_QUERY R-GC-064">
         List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerRegistrosLab");
@@ -780,7 +1043,7 @@ public class ConnectionRegistrosLAB {
             conn = DriverManager.getConnection(url, login, password);
             if (conn != null) {
                 String ArgParameter = Comparator.replace("[", "").replace("]", "");
-                String ArgOrderBy = OrderBy.replace("[", "").replace("]", "");
+                String ArgOrderBy = sanitizeOrderBy(OrderBy);
                 String Qry = "WITH lista_comparadores AS ( "
                         + "    SELECT 'Longitud Total' AS comparador UNION ALL "
                         + "    SELECT 'Ancho de manga' UNION ALL "
@@ -943,7 +1206,7 @@ public class ConnectionRegistrosLAB {
                     BatchCicle = Batch.split("///");
                 }
                 String ArgParameter = Comparator.replace("[", "").replace("]", "");
-                String ArgOrderBy = OrderBy.replace("[", "").replace("]", "");
+                String ArgOrderBy = sanitizeOrderBy(OrderBy);
                 String Qry = "WITH lista_comparadores AS ( "
                         + "    SELECT 'Longitud Total' AS comparador UNION ALL "
                         + "    SELECT 'Ancho de manga' UNION ALL "
@@ -1040,7 +1303,7 @@ public class ConnectionRegistrosLAB {
             conn = DriverManager.getConnection(url, login, password);
             if (conn != null) {
                 String ArgParameter = Comparator.replace("[", "").replace("]", "");
-                String ArgOrderBy = OrderBy.replace("[", "").replace("]", "");
+                String ArgOrderBy = sanitizeOrderBy(OrderBy);
                 String Qry = "WITH lista_comparadores AS ( "
                         + "    SELECT 'Longitud Total' AS comparador UNION ALL "
                         + "    SELECT 'Ancho de manga' UNION ALL "
@@ -1096,6 +1359,102 @@ public class ConnectionRegistrosLAB {
                         + "FROM lista_comparadores lc "
                         + "LEFT JOIN agregados a ON lc.comparador = a.comparador "
                         + ArgOrderBy;
+                Statement sttm = conn.createStatement();
+                ResultSet rs = sttm.executeQuery(Qry);
+                List<String> lst_param = new ArrayList<String>();
+                int count = 0;
+                while (rs.next()) {
+                    lst_param.add(count, rs.getString("comparador").trim() + " /// "
+                            + rs.getString("minimo").trim() + " /// "
+                            + rs.getString("maximo").trim() + " /// "
+                            + rs.getString("promedio").trim() + "");
+                    count++;
+                }
+                conn.close();
+                return lst_param;
+            } else {
+                return null;
+            }
+        } catch (SQLException ex) {
+            return null;
+        } catch (ClassNotFoundException ex) {
+            return null;
+        } catch (Exception ex) {
+            return null;
+        }
+        //</editor-fold>
+    }
+    public List DimensionalQueryRGC220(int Order, String Product, String Batch, String Comparator, String OrderBy) throws Exception {
+        //<editor-fold defaultstate="collapsed" desc="DIMESIONAL_QUERY R-GC-220">
+        List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerRegistrosLab");
+        if (lst_parameter != null) {
+            Object[] obj_data = (Object[]) lst_parameter.get(0);
+            String[] arr_data = obj_data[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+            login = arr_data[0];
+            password = arr_data[1];
+            url = "jdbc:mysql://" + arr_data[2];
+        } else {
+            return null;
+        }
+        Connection conn = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            conn = DriverManager.getConnection(url, login, password);
+            if (conn != null) {
+                String ArgParameter = Comparator.replace("[", "").replace("]", "");
+                String ArgOrderBy = sanitizeOrderBy(OrderBy);
+                String Qry = "WITH lista_comparadores AS ( "
+                        + "    SELECT 'Longitud Total' AS comparador UNION ALL "
+                        + "    SELECT 'Ancho de manga' UNION ALL "
+                        + "    SELECT 'Dia. Ext. ducto derecho' UNION ALL "
+                        + "    SELECT 'Dia. Int. ducto derecho' UNION ALL "
+                        + "    SELECT 'Ducto derecho' UNION ALL "
+                        + "    SELECT 'Dia. Ext. ducto izquierdo' UNION ALL "
+                        + "    SELECT 'Dia. Int. ducto izquierdo' UNION ALL "
+                        + "    SELECT 'Ducto izquierdo' "
+                        + "), "
+                        + "datos_filtrados AS ( "
+                        + "    SELECT "
+                        + "        p.comparador, "
+                        + "        h.toma1, h.toma2, h.toma3, h.toma4, h.toma5, h.toma6, h.toma7, h.toma8, h.toma9, h.toma10 "
+                        + "    FROM registro_frecuencia_hora h "
+                        + "    INNER JOIN parametro p ON h.id_parametro = p.id_parametro "
+                        + "    INNER JOIN registro r ON h.id_registro = r.id_registro "
+                        + "    INNER JOIN producto pd ON r.id_producto = pd.id_producto "
+                        + "    INNER JOIN orden_produccion o ON pd.id_orden_produccion = o.id_orden_produccion "
+                        + "    WHERE o.numero = " + Order + " "
+                        + "      AND pd.codigo LIKE '%" + Product + "%' "
+                        + "      AND r.lote_producto LIKE '%" + Batch + "%' "
+                        + "      AND p.comparador IN (" + ArgParameter + ") "
+                        + "), "
+                        + "todas_las_tomas AS ( "
+                        + "    SELECT comparador, toma1 AS valor FROM datos_filtrados WHERE toma1 IS NOT NULL AND toma1 <> 0 "
+                        + "    UNION ALL SELECT comparador, toma2 FROM datos_filtrados WHERE toma2 IS NOT NULL AND toma2 <> 0 "
+                        + "    UNION ALL SELECT comparador, toma3 FROM datos_filtrados WHERE toma3 IS NOT NULL AND toma3 <> 0 "
+                        + "    UNION ALL SELECT comparador, toma4 FROM datos_filtrados WHERE toma4 IS NOT NULL AND toma4 <> 0 "
+                        + "    UNION ALL SELECT comparador, toma5 FROM datos_filtrados WHERE toma5 IS NOT NULL AND toma5 <> 0 "
+                        + "    UNION ALL SELECT comparador, toma6 FROM datos_filtrados WHERE toma6 IS NOT NULL AND toma6 <> 0 "
+                        + "    UNION ALL SELECT comparador, toma7 FROM datos_filtrados WHERE toma7 IS NOT NULL AND toma7 <> 0 "
+                        + "    UNION ALL SELECT comparador, toma8 FROM datos_filtrados WHERE toma8 IS NOT NULL AND toma8 <> 0 "
+                        + "    UNION ALL SELECT comparador, toma9 FROM datos_filtrados WHERE toma9 IS NOT NULL AND toma9 <> 0 "
+                        + "    UNION ALL SELECT comparador, toma10 FROM datos_filtrados WHERE toma10 IS NOT NULL AND toma10 <> 0 "
+                        + "), "
+                        + "agregados AS ( "
+                        + "    SELECT "
+                        + "        comparador, "
+                        + "        MIN(valor) AS minimo, "
+                        + "        MAX(valor) AS maximo, "
+                        + "        ROUND(AVG(valor), 2) AS promedio "
+                        + "    FROM todas_las_tomas "
+                        + "    GROUP BY comparador "
+                        + ") "
+                        + "SELECT  "
+                        + "    lc.comparador, "
+                        + "    COALESCE(a.minimo, 0) AS minimo, "
+                        + "    COALESCE(a.maximo, 0) AS maximo, "
+                        + "    COALESCE(a.promedio, 0) AS promedio "
+                        + "FROM lista_comparadores lc "
+                        + "LEFT JOIN agregados a ON lc.comparador = a.comparador ";
                 Statement sttm = conn.createStatement();
                 ResultSet rs = sttm.executeQuery(Qry);
                 List<String> lst_param = new ArrayList<String>();
@@ -1275,6 +1634,57 @@ public class ConnectionRegistrosLAB {
                             + rs.getString("Ducto izquierdo").trim() + " /// "
                             + rs.getString("Soldadura bocas").trim() + " /// "
                             + rs.getString("Soldadura colas").trim() + " /// "
+                            + rs.getString("Ficha Tecnica").trim() + "");
+                    count++;
+                }
+                conn.close();
+                return lst_param;
+            } else {
+                return null;
+            }
+        } catch (SQLException ex) {
+            return null;
+        } catch (ClassNotFoundException ex) {
+            return null;
+        } catch (Exception ex) {
+            return null;
+        }
+        //</editor-fold>
+    }
+    public List QueryTechnicalSheetRGC220(int Order, String Product, String Qrt) throws Exception {
+        //<editor-fold defaultstate="collapsed" desc="QUERY TECHNICALSHEET R-GC-220">
+        List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerRegistrosLab");
+        if (lst_parameter != null) {
+            Object[] obj_data = (Object[]) lst_parameter.get(0);
+            String[] arr_data = obj_data[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+            login = arr_data[0];
+            password = arr_data[1];
+            url = "jdbc:mysql://" + arr_data[2];
+        } else {
+            return null;
+        }
+        Connection conn = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            conn = DriverManager.getConnection(url, login, password);
+            if (conn != null) {
+                String Qry = Qrt;
+                Qry = Qry.replace("XorderX", String.valueOf(Order));
+                Qry = Qry.replace("XproductX", Product);
+                Statement sttm = conn.createStatement();
+                ResultSet rs = sttm.executeQuery(Qry);
+                List<String> lst_param = new ArrayList<String>();
+                int count = 0;
+                while (rs.next()) {
+                    lst_param.add(count, rs.getString("Cant").trim() + " /// "
+                            + rs.getString("Longitud Total").trim() + " /// "
+                            + rs.getString("Ancho de manga").trim() + " /// "
+                            + rs.getString("Dia. Ext. ducto derecho").trim() + " /// "
+                            + rs.getString("Dia. Int. ducto derecho").trim() + " /// "
+                            + rs.getString("Ducto derecho").trim() + " /// "
+                            + rs.getString("Dia. Ext. ducto izquierdo").trim() + " /// "
+                            + rs.getString("Dia. Int. ducto izquierdo").trim() + " /// "
+                            + rs.getString("Ducto izquierdo").trim() + " /// "
                             + rs.getString("Ficha Tecnica").trim() + "");
                     count++;
                 }

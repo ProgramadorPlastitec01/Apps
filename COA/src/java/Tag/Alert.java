@@ -844,16 +844,28 @@ public class Alert extends TagSupport {
                             + "});");
                     out.print("</script>");
                 } else {
+                    Object resume = pageContext.getRequest().getAttribute("SigMasiveResume");
                     out.print("<script type='text/javascript'>");
                     out.print("$(\"#toastr-4\").ready(function() {\n"
                             + "  iziToast.error({\n"
                             + "    title: 'Error',\n"
-                            + "    message: 'Ha ocurrido un problema en el registro.',\n"
+                            + "    message: '" + ((resume != null) ? "No se pudieron firmar todos los certificados. " + resume : "No se firmó ningún certificado.") + "',\n"
                             + "    position: 'bottomRight'\n"
                             + "  });\n"
                             + "});");
                     out.print("</script>");
                 }
+            }
+            if (pageContext.getRequest().getAttribute("SigMissing") != null) {
+                out.print("<script type='text/javascript'>");
+                out.print("$(\"#toastr-4\").ready(function() {\n"
+                        + "  iziToast.warning({\n"
+                        + "    title: 'Sin firma',\n"
+                        + "    message: 'No tiene una firma registrada. Regístrela en su Perfil antes de firmar certificados.',\n"
+                        + "    position: 'bottomRight'\n"
+                        + "  });\n"
+                        + "});");
+                out.print("</script>");
             }
             if (pageContext.getRequest().getAttribute("SigUnique") != null) {
                 boolean result = Boolean.valueOf(pageContext.getRequest().getAttribute("SigUnique").toString());

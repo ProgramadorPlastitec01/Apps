@@ -174,7 +174,20 @@ public class CertificatesJpaController implements Serializable {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
-            Query q = em.createNativeQuery("CALL `Sp_cft_r_RegisterCertificates`('" + Tpe + "','" + Cde + "','" + Ord + "','" + Pdt + "','" + Btc + "','" + Cql + "','" + Ctm + "','" + Amt + "','" + Ddt + "','" + Urg + "','" + Mbt + "','" + Arg + "','" + Fmt + "')");
+            Query q = em.createNativeQuery("CALL `Sp_cft_r_RegisterCertificates`(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            q.setParameter(1, Tpe);
+            q.setParameter(2, Cde);
+            q.setParameter(3, Ord);
+            q.setParameter(4, Pdt);
+            q.setParameter(5, Btc);
+            q.setParameter(6, Cql);
+            q.setParameter(7, Ctm);
+            q.setParameter(8, Amt);
+            q.setParameter(9, Ddt);
+            q.setParameter(10, Urg);
+            q.setParameter(11, Mbt);
+            q.setParameter(12, Arg);
+            q.setParameter(13, Fmt);
             int resultado = q.executeUpdate();
             em.getTransaction().commit();
             em.clear();
@@ -193,7 +206,13 @@ public class CertificatesJpaController implements Serializable {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
-            Query q = em.createNativeQuery("CALL `Sp_ctf_u_UpdateCertificates`('" + IdC + "','" + Cql + "','" + Amt + "','" + Ddt + "','" + Mbt + "','" + Fmt + "')");
+            Query q = em.createNativeQuery("CALL `Sp_ctf_u_UpdateCertificates`(?, ?, ?, ?, ?, ?)");
+            q.setParameter(1, IdC);
+            q.setParameter(2, Cql);
+            q.setParameter(3, Amt);
+            q.setParameter(4, Ddt);
+            q.setParameter(5, Mbt);
+            q.setParameter(6, Fmt);
             int resultado = q.executeUpdate();
             em.getTransaction().commit();
             em.clear();
@@ -212,18 +231,19 @@ public class CertificatesJpaController implements Serializable {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
-            Query q = em.createNativeQuery("CALL `Sp_ctf_u_UpdateCertificatesSignature`('" + IdC + "','" + Asg + "')");
+            Query q = em.createNativeQuery("CALL `Sp_ctf_u_UpdateCertificatesSignature`(?, ?)");
+            q.setParameter(1, IdC);
+            q.setParameter(2, Asg);
             int resultado = q.executeUpdate();
             em.getTransaction().commit();
-            em.clear();
-            em.close();
-            if (resultado == 1) {
-                return true;
-            } else {
-                return false;
-            }
+            return resultado == 1;
         } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
             return false;
+        } finally {
+            em.close();
         }
     }
 

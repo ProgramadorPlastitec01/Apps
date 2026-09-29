@@ -1,15 +1,17 @@
 package Servlet;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import Controller.UserControllerJpa;
+import Method.SignatureStorage;
 
 @WebServlet("/UpdateSignatureUser")
 @MultipartConfig
@@ -20,37 +22,41 @@ public class UpdateSignatureUser extends HttpServlet {
             throws ServletException, IOException {
 
         UserControllerJpa UserJpa = new UserControllerJpa();
-        String nuevaFirma = null;
+        HttpSession session = request.getSession();
 
         try {
+            // El usuario siempre es el de la sesión: el idUser del formulario
+            // permitía cambiar la firma de otro usuario.
+            int idUser = Integer.parseInt(session.getAttribute("idUsuario").toString());
 
             Part filePart = request.getPart("File");
             String fileName = getFileName(filePart);
+            String mimeType = filePart != null ? filePart.getContentType() : null;
 
-            if (fileName != null && !fileName.isEmpty()) {
-
-                // Ruta real dentro del proyecto
-                String uploadPath = getServletContext().getRealPath("/Interface/Uploads/Signature/");
-
-                File uploadDir = new File(uploadPath);
-
-                if (!uploadDir.exists()) {
-                    uploadDir.mkdirs();
-                }
-
-                // Guardar archivo
-                filePart.write(uploadPath + File.separator + fileName);
-
-                nuevaFirma = fileName;
+            if (fileName == null || fileName.isEmpty() || mimeType == null || !mimeType.startsWith("image/")) {
+                response.sendRedirect("Profile?opt=1&msg=ErrorFirma");
+                return;
             }
 
-            int idUser = Integer.parseInt(request.getParameter("idUser"));
+            String userId = session.getAttribute("Documento") != null ? session.getAttribute("Documento").toString() : null;
+            String userName = session.getAttribute("Nombres") != null ? session.getAttribute("Nombres").toString() : null;
 
-            if (nuevaFirma != null) {
-                UserJpa.UpdateSignature(idUser, nuevaFirma);
+            // La imagen se guarda en el Gestor de Archivos (Office Platform),
+            // ya no en Interface/Uploads/Signature/.
+            String nuevaFirma;
+            try (InputStream contenido = filePart.getInputStream()) {
+                nuevaFirma = SignatureStorage.upload(idUser, fileName, contenido, mimeType, userId, userName);
             }
 
-            response.sendRedirect("Profile?opt=1&msg=FirmaActualizada");
+            if (UserJpa.UpdateSignature(idUser, nuevaFirma)) {
+                // Generate / SupportDocumentSign leen la firma de la sesión:
+                // sin esto seguían usando la de antes (o ninguna) hasta volver
+                // a iniciar sesión.
+                session.setAttribute("Firma", nuevaFirma);
+                response.sendRedirect("Profile?opt=1&msg=FirmaActualizada");
+            } else {
+                response.sendRedirect("Profile?opt=1&msg=ErrorFirma");
+            }
 
         } catch (Exception e) {
 
@@ -62,6 +68,10 @@ public class UpdateSignatureUser extends HttpServlet {
 
     // Método compatible con Tomcat 7
     private String getFileName(Part part) {
+
+        if (part == null) {
+            return null;
+        }
 
         String contentDisp = part.getHeader("content-disposition");
 
