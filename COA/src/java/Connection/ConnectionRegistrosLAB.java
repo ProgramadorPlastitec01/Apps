@@ -1402,16 +1402,20 @@ public class ConnectionRegistrosLAB {
             conn = DriverManager.getConnection(url, login, password);
             if (conn != null) {
                 String ArgParameter = Comparator.replace("[", "").replace("]", "");
-                String ArgOrderBy = sanitizeOrderBy(OrderBy);
+                // El orden de las filas define contra qué marcador (MIN1/MAX1/MEAN1, MIN2/...) queda cada
+                // comparador en la plantilla del R-GC-220, y debe coincidir con el orden de los PRM de la
+                // ficha tecnica. Por eso el orden se fija aqui con la columna 'orden' y NO se usa el
+                // ORDER BY de Settings: el configurado para R-GC-220 esta incompleto y ordenaria alfabetico,
+                // lo que cruzaria las mediciones con la especificacion equivocada.
                 String Qry = "WITH lista_comparadores AS ( "
-                        + "    SELECT 'Longitud Total' AS comparador UNION ALL "
-                        + "    SELECT 'Ancho de manga' UNION ALL "
-                        + "    SELECT 'Dia. Ext. ducto derecho' UNION ALL "
-                        + "    SELECT 'Dia. Int. ducto derecho' UNION ALL "
-                        + "    SELECT 'Ducto derecho' UNION ALL "
-                        + "    SELECT 'Dia. Ext. ducto izquierdo' UNION ALL "
-                        + "    SELECT 'Dia. Int. ducto izquierdo' UNION ALL "
-                        + "    SELECT 'Ducto izquierdo' "
+                        + "    SELECT 'Longitud Total' AS comparador, 1 AS orden UNION ALL "
+                        + "    SELECT 'Ancho de manga', 2 UNION ALL "
+                        + "    SELECT 'Dia. Ext. ducto derecho', 3 UNION ALL "
+                        + "    SELECT 'Dia. Int. ducto derecho', 4 UNION ALL "
+                        + "    SELECT 'Ducto derecho', 5 UNION ALL "
+                        + "    SELECT 'Dia. Ext. ducto izquierdo', 6 UNION ALL "
+                        + "    SELECT 'Dia. Int. ducto izquierdo', 7 UNION ALL "
+                        + "    SELECT 'Ducto izquierdo', 8 "
                         + "), "
                         + "datos_filtrados AS ( "
                         + "    SELECT "
@@ -1454,7 +1458,8 @@ public class ConnectionRegistrosLAB {
                         + "    COALESCE(a.maximo, 0) AS maximo, "
                         + "    COALESCE(a.promedio, 0) AS promedio "
                         + "FROM lista_comparadores lc "
-                        + "LEFT JOIN agregados a ON lc.comparador = a.comparador ";
+                        + "LEFT JOIN agregados a ON lc.comparador = a.comparador "
+                        + "ORDER BY lc.orden";
                 Statement sttm = conn.createStatement();
                 ResultSet rs = sttm.executeQuery(Qry);
                 List<String> lst_param = new ArrayList<String>();
