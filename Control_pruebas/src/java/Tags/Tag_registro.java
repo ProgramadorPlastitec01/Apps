@@ -15,6 +15,8 @@ import java.util.logging.Logger;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Tag_registro extends TagSupport {
 
@@ -1003,6 +1005,19 @@ public class Tag_registro extends TagSupport {
 //</editor-fold>
                         // <editor-fold defaultstate="collapsed" desc="TABLA DINAMICA">
                         // <editor-fold defaultstate="collapsed" desc="CABECERA">
+                        Date fecha = (Date) obj_registro[1];   // 8/10/2026 12:00:00 AM
+                        String fechaAMD = (fecha != null) ? new SimpleDateFormat("yyyyMMdd").format(fecha) : "";
+                        String registro;
+                        String version;
+                        if (fechaAMD.compareTo("20261008") >= 0) {
+                            // Desde el 08/10/2026 en adelante
+                            registro = "R-GC-205";
+                            version = "V1";
+                        } else {
+                            // Registros anteriores: conservan el formato anterior
+                            registro = "R-GC-023";   // reemplaza por el registro anterior
+                            version = "V1";         // reemplaza por la versión anterior
+                        }
                         out.print("<form action='Registro?opc=9&irg=" + id_registro + "' method='post' id='FormModificar'>");
                         out.print("<table class='table' style='width:100%'>");
                         out.print("<tr>");
@@ -1013,11 +1028,11 @@ public class Tag_registro extends TagSupport {
                                 + "<img src='Interfaz/Contenido/images/Logo.png' alt='Logo' style='width:180px;height:60px' />"
                                 + "</td>");
                         out.print("<td colspan='3' align='center'><b class='negro'>REGISTRO</b></td>");
-                        out.print("<td colspan='2' align='center'><b class='negro'>CODIGO<br />R-PRF-023</b></td>");
+                        out.print("<td colspan='2' align='center'><b class='negro'>CODIGO<br />" + registro + "</b></td>");
                         out.print("</tr>");
                         out.print("<tr>");
                         out.print("<td colspan='3' align='center'><b class='negro'>RESULTADO DE PRUEBAS<br />DE CALIDAD</b></td>");
-                        out.print("<td colspan='2' align='center'><b class='negro'>VERSION 1</b></td>");
+                        out.print("<td colspan='2' align='center'><b class='negro'>VERSION " + version + "</b></td>");
                         out.print("</tr>");
                         out.print("<tr>");
                         out.print("<td align='center'><b>FECHA</b></td>");
