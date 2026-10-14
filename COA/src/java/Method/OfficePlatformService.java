@@ -25,7 +25,7 @@ import java.nio.charset.StandardCharsets;
 public class OfficePlatformService {
 
     public static String SERVER_URL = "http://172.16.1.182:8080";
-    private static String API_KEY = "opk_VjxckrMO0CmPWAL1-Lfre_V4M_MejXshbU4Lgs6cltY";
+    private static String API_KEY = "opk_i0ss8GlbDqYFBNwCOkK7Dh_xfs4RHXYM_FbYPucENKA";
 
     // Cache en memoria de carpetas ya resueltas/creadas (clave = ruta completa,
     // ej. "COA/ClienteX/2026/OC-123/L-45") para no repetir /api/folders/search

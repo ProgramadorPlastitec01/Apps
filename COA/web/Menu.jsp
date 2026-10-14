@@ -59,6 +59,12 @@
     </head>
     <body>
         <Menu:Menu/>
+
+        <!-- Footer global: indicador de entorno de pruebas -->
+        <div style="position: fixed; left: 0; bottom: 0; width: 100%; z-index: 9998; padding: 6px 12px; background: #fff3cd; border-top: 1px solid #ffe08a; color: #7a5b00; font-size: 12px; text-align: center;">
+            ⚠ Entorno de pruebas — Los datos y acciones aquí registrados no son de producción.
+        </div>
+
         <script type="text/javascript" language="javascript">
             function mostrarConvencion(id) {
                 const body = document.body;
