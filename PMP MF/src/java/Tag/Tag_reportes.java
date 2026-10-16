@@ -15,7 +15,7 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 
 public class Tag_reportes extends TagSupport {
-    
+
     @Override
     public int doStartTag() throws JspException {
         JspWriter out = pageContext.getOut();
@@ -25,7 +25,7 @@ public class Tag_reportes extends TagSupport {
             OrdenTrabajoJpaController jpacotb = new OrdenTrabajoJpaController();
             TipoMttoJpaController jpactmt = new TipoMttoJpaController();
             GeneralJpaController jpacgjc = new GeneralJpaController();
-             EquipoJpaController jpaceqp = new EquipoJpaController();
+            EquipoJpaController jpaceqp = new EquipoJpaController();
             ///VARIABLES
             Calendar cal = Calendar.getInstance();
             List lst_lineas = jpaclna.Lineas();
@@ -52,10 +52,16 @@ public class Tag_reportes extends TagSupport {
             int id_linea = 0;
             int anio_report = 0;
             int semana = 0;
+            int estado = 0;
             try {
                 anio_report = Integer.parseInt(pageContext.getRequest().getAttribute("anio").toString());
             } catch (Exception e) {
                 anio = cal.get(Calendar.YEAR);
+            }
+            try {
+                estado = Integer.parseInt(pageContext.getRequest().getAttribute("estado").toString());
+            } catch (Exception e) {
+                estado = 1;
             }
             String titulo = "PROGRAMA DE MANTENIMIENTO PREVENTIVO";
             String arg_meses[] = {"1 ENERO", "2 FEBRERO", "3 MARZO", "4 ABRIL", "5 MAYO", "6 JUNIO", "7 JULIO", "8 AGOSTO", "9 SEPTIEMBRE", "10 OCTUBRE", "11 NOVIEMBRE", "12 DICIEMBRE"};
@@ -71,7 +77,7 @@ public class Tag_reportes extends TagSupport {
                     out.print("<div class=\"card-body\" >");
                     out.print("<form action='Reportes?opc=5' method='post'  id='FormReporte' >");
                     out.print("<div style='width:40%;float:left;margin-left:3%;margin-right:2%'>");
-                    out.print("<tr><td><b>Año :</b>");
+                    out.print("<tr><td><b>Año:</b>");
                     lst_filtro_anio = jpaclna.filtro_anio();
                     out.print("<select class='form-control' name='Cbx_anio' id='Cbx_anio'>");
                     out.print("<option value='0' >Seleccionar año</option>");
@@ -83,11 +89,11 @@ public class Tag_reportes extends TagSupport {
                     }
                     out.print("</select><script type='text/javascript'>var mySelect = new LiveValidation('Cbx_anio');"
                             + "mySelect.add(Validate.Exclusion, { within: ['0'], failureMessage: \"\"});</script>");
-                    out.print("<b>Valor a Buscar :</b>");
+                    out.print("<b>Valor a Buscar:</b>");
                     out.print("<input class='form-control' type='text' name='Txt_filtro' id='Txt_filtro' placeholder='Ingresar numero de OT' title='Valor a buscar'/>");
                     out.print("</div>");
                     out.print("<div style='width:40%;float:left;margin-left:3%;margin-right:2%'>");
-                    out.print("<b>Lineas :</b>");
+                    out.print("<b>Lineas:</b>");
                     out.print("<select class='form-control' name='Cbx_linea' id='Cbx_linea' title='Lineas'>");
                     out.print("<option value='0' >Seleccionar linea</option>");
                     for (int i = 0; i < lst_lineas.size(); i++) {
@@ -97,8 +103,21 @@ public class Tag_reportes extends TagSupport {
                     out.print("</select><script type='text/javascript'>var mySelect = new LiveValidation('Cbx_linea');"
                             + "mySelect.add(Validate.Exclusion, { within: ['0'], failureMessage: \"\"});</script>");
                     out.print("</div>");
+                    out.print("<div style='width:40%;float:left;margin-left:3%;margin-right:2%'>");
+                    out.print("<b>Estado:</b>");
+                    out.print("<select class='form-control' name='Cbx_estado' id='Cbx_estado' title='Estado'>");
+                    if (estado == 1) {
+                        out.print("<option value='1' selected><b style='color:green'>Activo</b></option>");
+                        out.print("<option value='0'>Inactivo</option>");
+                    } else {
+                        out.print("<option value='1'>Activo</option>");
+                        out.print("<option value='0' selected>Inactivo</option>");
+                    }
+                    out.print("</select><script type='text/javascript'>var mySelect = new LiveValidation('Cbx_estado');"
+                            + "mySelect.add(Validate.Exclusion, { within: [''], failureMessage: \"\"});</script>");
+                    out.print("</div>");
                     out.print("<br><br><div style='width:50%;margin-left:41%;margin-top:3%'>");
-                    out.print("<span onclick=\"javascript:document.getElementById('Btn_accion').click()\" class='fas fa-filter fa-size_small' title='Registrar'></span>&nbsp;&nbsp;");
+                    out.print("<span onclick=\"javascript:document.getElementById('Btn_accion').click()\" class='fas fa-search fa-size_small' title='Registrar'></span>&nbsp;&nbsp;");
                     out.print("<span onclick=\"javascript:location.href='Reportes?opc=1'\" class='far fa-times-circle fa-size_small' title='Cancelar'></span>");
                     out.print("<br /><div style='display:none'><input type='submit' value='Registrar' id='Btn_accion' /></div>");
                     out.print("</div>");
@@ -117,6 +136,7 @@ public class Tag_reportes extends TagSupport {
                     } catch (Exception e) {
                         filtro = "";
                     }
+
                     out.print("<table id='resultados' class='table3'>");
                     out.print("<tr><td colspan='7' style='background-color:#CCC; text-align:center;'><b style='color:white;'>COPIA NO CONTROLADA PROTOTIPO</b></td></tr>");
                     out.print("<tr>");
@@ -156,7 +176,7 @@ public class Tag_reportes extends TagSupport {
                     out.print("</tr>");
                     if (anio_report != 0) {
                         if (id_linea != 0) {
-                            lst_cronograma = jpaclna.Cronograma_linea_anio_filtro(anio_report, id_linea, filtro);
+                            lst_cronograma = jpaclna.Cronograma_linea_anio_filtro(anio_report, id_linea, filtro, estado);
                         }
                         if (id_linea != 0) {
                             //<editor-fold defaultstate="collapsed" desc="CRONOGRAMA FILTRO LINEA">
@@ -226,7 +246,7 @@ public class Tag_reportes extends TagSupport {
                             //<editor-fold defaultstate="collapsed" desc="CRONOGRAMA GENERAL">
                             for (int i = 0; i < lst_lineas.size(); i++) {
                                 Object[] obj_lineas = (Object[]) lst_lineas.get(i);
-                                lst_cronograma = jpaclna.Cronograma_linea_anio(anio_report, Integer.parseInt(obj_lineas[0].toString()));
+                                lst_cronograma = jpaclna.Cronograma_linea_anio(anio_report, Integer.parseInt(obj_lineas[0].toString()), estado);
                                 if (lst_cronograma != null) {
                                     for (int j = 0; j < lst_cronograma.size(); j++) {
                                         out.print("<tr>");
@@ -293,7 +313,7 @@ public class Tag_reportes extends TagSupport {
                         //<editor-fold defaultstate="collapsed" desc="CRONOGRAMA GENERAL">
                         for (int i = 0; i < lst_lineas.size(); i++) {
                             Object[] obj_lineas = (Object[]) lst_lineas.get(i);
-                            lst_cronograma = jpaclna.Cronograma_linea_anio(anio, Integer.parseInt(obj_lineas[0].toString()));
+                            lst_cronograma = jpaclna.Cronograma_linea_anio(anio, Integer.parseInt(obj_lineas[0].toString()), estado);
                             if (lst_cronograma != null) {
                                 for (int j = 0; j < lst_cronograma.size(); j++) {
                                     out.print("<tr>");
@@ -393,6 +413,19 @@ public class Tag_reportes extends TagSupport {
                     }
                     out.print("</select><script type='text/javascript'>var mySelect = new LiveValidation('Cbx_linea');"
                             + "mySelect.add(Validate.Exclusion, { within: ['0'], failureMessage: \"\"});</script>");
+                    out.print("</div>");
+                    out.print("<div style='width:40%;float:left;margin-left:3%;margin-right:2%'>");
+                    out.print("<b>Estado:</b>");
+                    out.print("<select class='form-control' name='Cbx_estado' id='Cbx_estado' title='Estado'>");
+                    if (estado == 1) {
+                        out.print("<option value='1' selected><b style='color:green'>Activo</b></option>");
+                        out.print("<option value='0'>Inactivo</option>");
+                    } else {
+                        out.print("<option value='1'>Activo</option>");
+                        out.print("<option value='0' selected>Inactivo</option>");
+                    }
+                    out.print("</select><script type='text/javascript'>var mySelect = new LiveValidation('Cbx_estado');"
+                            + "mySelect.add(Validate.Exclusion, { within: [''], failureMessage: \"\"});</script>");
                     out.print("</div>");
                     out.print("<br><br><div style='width:50%;margin-left:41%;margin-top:3%'>");
                     out.print("<span onclick=\"javascript:document.getElementById('Btn_accion').click()\" class='fas fa-filter fa-size_small' title='Registrar'></span>&nbsp;&nbsp;");

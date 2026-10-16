@@ -30,7 +30,8 @@ public class Visual extends TagSupport {
         SettingJpaController SettingJpa = new SettingJpaController();
         CertificatesJpaController CertificatesJpa = new CertificatesJpaController();
         ConnectionGeneracionLotes GeneracionLotesJpa = new ConnectionGeneracionLotes();
-        String Type = "", Product = "", ProductFact = "", Batch = "", DataTechnicalSheet = "", Html = "", BatchLay = "", Record = "", FormatName = "", Message = "", IdSig = "", Permission = "", Client = "", DateI = "", DateF = "";
+        String Type = "", Product = "", ProductFact = "", Batch = "", DataTechnicalSheet = "", Html = "", BatchLay = "", Record = "", FormatName = "", Message = "", IdSig = "", Permission = "", Client = "", 
+                DateI = "", DateF = "", Cycle = "";
         String[] BatchCycle = {};
         int Order = 0, IdForm = 0, Count = 1, Count2 = 1, IdCertificates = 0, State = 0, TempDelete = 0, StateCerti = 0, TempM = 0, AmoutReg = 0;
         List lst_content = null;
@@ -121,6 +122,7 @@ public class Visual extends TagSupport {
             if (Batch.contains("///")) {
                 BatchCycle = Batch.split("///");
                 Batch = BatchCycle[0];
+                Cycle = BatchCycle[1];
             }
             Client = Optional.ofNullable(pageContext.getRequest().getParameter("Client")).orElse("");
 
@@ -443,11 +445,11 @@ public class Visual extends TagSupport {
                             if (lst_RLab != null && !lst_RLab.isEmpty() && lst_RLab.size() > 0) {
                                 //<editor-fold defaultstate="collapsed" desc="MATERIAL REGISTROS LAB AND GENERACION DE LOTES">
                                 String[] ArgMaterials = Util.parseResult(lst_RLab.get(0));
-                                out.print("<input type='hidden' id='ErrorCount' value='" + ArgMaterials[16] + "'>");
+                                out.print("<input type='hidden' id='ErrorCount' value='" + ArgMaterials[14] + "'>");
                                 String[] etiquetas = {
                                     "REF1", "LBT1", "REF2", "LBT2", "REF3", "LBT3",
                                     "REF4", "LBT4", "REF5", "LBT5", "REF6", "LBT6",
-                                    "REF7", "LBT7", "LBT8", "LBT9"
+                                    "LBT7", "LBT8"
                                 };
 
                                 for (int i = 0; i < etiquetas.length; i++) {
@@ -462,10 +464,11 @@ public class Visual extends TagSupport {
                                 }
 
                                 BatchLay = ArgMaterials[1];
-                                String[] ArgImP = {ArgMaterials[1], ArgMaterials[3], ArgMaterials[5], ArgMaterials[7], ArgMaterials[9], ArgMaterials[11], ArgMaterials[13]};
+                                String[] ArgImP = {ArgMaterials[1], ArgMaterials[3], ArgMaterials[5], ArgMaterials[7], ArgMaterials[9], ArgMaterials[11]};
+                                String[] ArgProc = {"MANGA PVC", "DUCTO PVC", "DUCTO PVC", "DUCTO PVC", "CONECTOR", "CONECTOR"};
                                 int Cnt = 1;
                                 for (int i = 0; i < ArgImP.length; i++) {
-                                    lst_Glotes1 = GeneracionLotesJpa.ConsultarCC_GeneracionLote(ArgImP[i]);
+                                    lst_Glotes1 = GeneracionLotesJpa.ConsultarCC_GeneracionLote(ArgImP[i], ArgProc[i]);
                                     if (lst_Glotes1 != null && !lst_Glotes1.isEmpty() && lst_Glotes1.size() > 0) {
                                         String[] ArgLay = lst_Glotes1.get(0).toString().replace("]", "").replace("[", "").split("///");
                                         Html = Html.replace("COS" + Cnt + "", "CC" + ArgLay[0]);
@@ -484,8 +487,8 @@ public class Visual extends TagSupport {
                                     Cnt++;
                                 }
 
-                                String[] ArgTnt = {ArgMaterials[14], ArgMaterials[15]};
-                                int Cnt2 = 8;
+                                String[] ArgTnt = {ArgMaterials[12], ArgMaterials[13]};
+                                int Cnt2 = 7;
                                 for (int o = 0; o < ArgTnt.length; o++) {
                                     if (ArgTnt[o].equals("N/A")) {
                                         //<editor-fold defaultstate="collapsed" desc="VALIDATION">
@@ -802,6 +805,9 @@ public class Visual extends TagSupport {
                                 //</editor-fold>
                             }
                             Html = Html.replace("XxRINVIMAxX", "<select><option>2016DM-0014249</option><option>2025DM-0014249-R1</option></select>");
+                            if (!Cycle.equals("")) {
+                                Html = Html.replace("XxCyclexX", Cycle);
+                            }
                             //</editor-fold>
                             break;
                         case 3:
@@ -827,9 +833,10 @@ public class Visual extends TagSupport {
 
                                 BatchLay = ArgMaterials[1];
                                 String[] ArgImP = {ArgMaterials[1], ArgMaterials[3], ArgMaterials[5], ArgMaterials[7]};
+                                String[] ArgProc = {"MANGA PVC", "DUCTO PVC", "DUCTO PVC", "CONECTOR"};
                                 int Cnt = 1;
                                 for (int i = 0; i < ArgImP.length; i++) {
-                                    lst_Glotes1 = GeneracionLotesJpa.ConsultarCC_GeneracionLote(ArgImP[i]);
+                                    lst_Glotes1 = GeneracionLotesJpa.ConsultarCC_GeneracionLote(ArgImP[i], ArgProc[i]);
                                     if (lst_Glotes1 != null && !lst_Glotes1.isEmpty() && lst_Glotes1.size() > 0) {
                                         String[] ArgLay = lst_Glotes1.get(0).toString().replace("]", "").replace("[", "").split("///");
                                         Html = Html.replace("COS" + Cnt + "", "CC" + ArgLay[0]);
@@ -1007,9 +1014,10 @@ public class Visual extends TagSupport {
 
                                 BatchLay = ArgMaterials[1];
                                 String[] ArgImP = {ArgMaterials[1], ArgMaterials[3], ArgMaterials[5], ArgMaterials[7]};
+                                String[] ArgProc = {"MANGA PVC", "DUCTO PVC", "DUCTO PVC", "CONECTOR"};
                                 int Cnt = 1;
                                 for (int i = 0; i < ArgImP.length; i++) {
-                                    lst_Glotes1 = GeneracionLotesJpa.ConsultarCC_GeneracionLote(ArgImP[i]);
+                                    lst_Glotes1 = GeneracionLotesJpa.ConsultarCC_GeneracionLote(ArgImP[i], ArgProc[i]);
                                     if (lst_Glotes1 != null && !lst_Glotes1.isEmpty() && lst_Glotes1.size() > 0) {
                                         String[] ArgLay = lst_Glotes1.get(0).toString().replace("]", "").replace("[", "").split("///");
                                         Html = Html.replace("COS" + Cnt + "", "CC" + ArgLay[0]);

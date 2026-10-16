@@ -57,6 +57,7 @@ public class Orden extends HttpServlet {
             int documento = 0;
             int tipo_firma = 0;
             int id_general = 0;
+            int estado = 0;
             int tipo_mtto = 0;
             int verificacion = 0;
             List lst_empleado = null;
@@ -229,12 +230,18 @@ public class Orden extends HttpServlet {
                     request.setAttribute("Orden", tipo);
                     id_tipo_mtto = Integer.parseInt(request.getParameter("Id_tipo_mtto"));
                     try {
+                        estado = Integer.parseInt(request.getParameter("estado"));
+                    } catch (Exception e) {
+                        estado = 1;
+                    }
+                    try {
                         id_origen = Integer.parseInt(request.getParameter("Id_origen"));
                     } catch (Exception e) {
                         id_origen = 0;
                     }
                     request.setAttribute("Id_tipo_mtto", id_tipo_mtto);
                     request.setAttribute("Id_origen", id_origen);
+                    request.setAttribute("estado", estado);
                     request.getRequestDispatcher("Orden_trabajo.jsp").forward(request, response);
                     break;
                 //</editor-fold>

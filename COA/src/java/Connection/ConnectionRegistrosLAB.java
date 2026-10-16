@@ -19,7 +19,7 @@ public class ConnectionRegistrosLAB {
     static String url = "";
 
     public List ConsultMaterials(int Order, String Product, String Batch) throws Exception {
-        //<editor-fold defaultstate="collapsed" desc="CONSULT_MATERIALS R-GC-064">
+        //<editor-fold defaultstate="collapsed" desc="CONSULT_MATERIALS R-GC-04">
         List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerRegistrosLab");
         if (lst_parameter != null) {
             Object[] obj_data = (Object[]) lst_parameter.get(0);
@@ -27,8 +27,8 @@ public class ConnectionRegistrosLAB {
             login = arr_data[0];
             password = arr_data[1];
             url = "jdbc:mysql://" + arr_data[2];
-        } else {
-            return null;
+        } else { 
+           return null;
         }
         Connection conn = null;
         try {
@@ -41,9 +41,6 @@ public class ConnectionRegistrosLAB {
                         + " "
                         + "        SUBSTRING(r.lote_manga_p, 1, 4) AS `FUNDA / LAY FLAT`, "
                         + "        r.lote_manga_c AS `Lote LF`, "
-                        + " "
-                        + "        SUBSTRING(r.lote_manga_p, 1, 4) AS `PP FILM CTS-DW`, "
-                        + "        r.lote_manga_c AS `Lote PP`, "
                         + " "
                         + "        SUBSTRING(r.lote_dto_drc_p, 1, 4) AS `DUCTO DERECHO / RIGHT TUBE`, "
                         + "        r.lote_dto_drc_c AS `Lote DD`, "
@@ -270,25 +267,6 @@ public class ConnectionRegistrosLAB {
                         + "        ELSE `Lote LF` "
                         + "    END AS `Lote LF`, "
                         + " "
-                        + "    `PP FILM CTS-DW`, "
-                        + " "
-                        + "    CASE "
-                        + "        WHEN `Lote PP` LIKE '%/%' THEN `Lote PP` "
-                        + " "
-                        + "        WHEN `Lote PP` REGEXP '[VERP]' THEN "
-                        + "            REGEXP_REPLACE( "
-                        + "                REGEXP_REPLACE( "
-                        + "                    `Lote PP`, "
-                        + "                    '^[A-Z0-9]+-', "
-                        + "                    '' "
-                        + "                ), "
-                        + "                'V[0-9A-Z]+', "
-                        + "                '' "
-                        + "            ) "
-                        + " "
-                        + "        ELSE `Lote PP` "
-                        + "    END AS `Lote PP`, "
-                        + " "
                         + "    `DUCTO DERECHO / RIGHT TUBE`, "
                         + " "
                         + "    CASE "
@@ -375,7 +353,6 @@ public class ConnectionRegistrosLAB {
                 int count = 0;
                 while (rs.next()) {
                     lst_user.add(count, rs.getString("FUNDA / LAY FLAT").trim() + " /// " + rs.getString("Lote LF").trim() + " /// "
-                            + rs.getString("PP FILM CTS-DW").trim() + " /// " + rs.getString("Lote PP").trim() + " /// "
                             + rs.getString("DUCTO DERECHO / RIGHT TUBE").trim() + "///" + rs.getString("Lote DD").trim() + "///"
                             + rs.getString("DUCTO IZQUIERDO / LEFT TUBE").trim() + "///" + rs.getString("Lote DI").trim() + "///"
                             + rs.getString("DUCTO CENTRAL / CENTRAL TUBE").trim() + "///" + rs.getString("Lote CL").trim() + "///"

@@ -37,11 +37,11 @@ public class ZonaJpaController implements Serializable {
         }
     }
 
-    public List Zonas_ot() {
+    public List Zonas_ot(int estado) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
         try {
-            Query q = etm.createNativeQuery("CALL `sp_zna_c_zonas_ot`()");
+            Query q = etm.createNativeQuery("CALL `sp_zna_c_zonas_ot`('" + estado + "')");
             List consulta = q.getResultList();
             etm.getTransaction().commit();
             etm.clear();
@@ -75,7 +75,7 @@ public class ZonaJpaController implements Serializable {
         }
     }
 
-    public boolean Registrar_zona(String zna, int fec, int fal, String crg,String urg) {
+    public boolean Registrar_zona(String zna, int fec, int fal, String crg, String urg) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
         try {

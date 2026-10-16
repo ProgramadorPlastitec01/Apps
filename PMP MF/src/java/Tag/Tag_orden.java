@@ -61,6 +61,7 @@ public class Tag_orden extends TagSupport {
             int id_orden = 0;
             int id_origen = 0;
             int estado_ot = 0;
+            int estado = 0;
             int documento = 0;
             int id_equipo = 0;
             int id_tipo_mtto = 0;
@@ -434,6 +435,11 @@ public class Tag_orden extends TagSupport {
                     //<editor-fold defaultstate="collapsed" desc="Orden_zona_general">
                     id_tipo_mtto = Integer.parseInt(pageContext.getRequest().getAttribute("Id_tipo_mtto").toString());
                     id_origen = Integer.parseInt(pageContext.getRequest().getAttribute("Id_origen").toString());
+                    try {
+                        estado = Integer.parseInt(pageContext.getRequest().getAttribute("estado").toString());
+                    } catch (Exception e) {
+                        estado = 1;
+                    }
                     if (nombre_rol.equals("Administrador") || nombre_rol.equals("Jefe_Mtto") || nombre_rol.equals("Asistente")) {
                         //<editor-fold defaultstate="collapsed" desc="Orden de trabajo">
                         if (id_origen > 0) {
@@ -528,6 +534,7 @@ public class Tag_orden extends TagSupport {
                     out.print("<th>" + ((id_tipo_mtto == 3) ? "Zona" : "Actividad General") + "</th>");
                     out.print("<th style='width:" + ((id_tipo_mtto == 3) ? "50%" : "20%") + "'>" + ((id_tipo_mtto == 3) ? "Lineas" : "Descripcion") + "</th>");
                     out.print("<th colspan='3'>OT</th>");
+                    out.print("<th colspan='3'>Estado</th>");
                     out.print("</tr>");
                     out.print("</thead>");
                     out.print("<tfoot>");
@@ -536,11 +543,12 @@ public class Tag_orden extends TagSupport {
                     out.print("<th>" + ((id_tipo_mtto == 3) ? "Zona" : "Actividad General") + "</th>");
                     out.print("<th style='width:" + ((id_tipo_mtto == 3) ? "50%" : "20%") + "'>" + ((id_tipo_mtto == 3) ? "Lineas" : "Descripcion") + "</th>");
                     out.print("<th colspan='3'>OT</th>");
+                    out.print("<th colspan='3'>Estado</th>");
                     out.print("</tr>");
                     out.print("</tfoot>");
                     out.print("<tbody>");
                     if (id_tipo_mtto == 3) {
-                        lst_origenes = jpaczna.Zonas_ot();
+                        lst_origenes = jpaczna.Zonas_ot(estado);
                     } else {
                         lst_origenes = jpacgnr.Actividades_generales_ot();
                     }
@@ -562,6 +570,21 @@ public class Tag_orden extends TagSupport {
                                 out.print("<td align='center'><span class='fa fa-plus fa-size_small' title='Nueva OT inhabilitado'></span></td>");
                             }
                             out.print("<td align='center'><span onclick=\"location.href='Orden?opc=10&Id_origen=" + obj_origenes[0] + "&Id_tipo_mtto=" + id_tipo_mtto + "'\" class='fa fa-bars fa-size_small' title='Ver OT'></span></td>");
+                            if (Integer.parseInt(obj_origenes[5].toString()) == 1) {
+                                out.print("<td align='center'><span "
+                                        + ((nombre_rol.equals("Administrador") || nombre_rol.equals("Jefe_Mtto")
+                                        || nombre_rol.equals("Asistente"))
+                                        ? "onclick='DesactivarEquipo(" + obj_origenes[0] + ")'"
+                                        : "style='cursor:not-allowed'")
+                                        + " class='fa fa-check fa-size_small' title='Desactivar Equipo'></span></td>");
+                            } else {
+                                out.print("<td align='center'><span "
+                                        + ((nombre_rol.equals("Administrador") || nombre_rol.equals("Jefe_Mtto")
+                                        || nombre_rol.equals("Asistente"))
+                                        ? "onclick='ActivarEquipo(" + obj_origenes[0] + ")'"
+                                        : "style='cursor:not-allowed'")
+                                        + " class='fa fa-times fa-size_small' title='Activar Equipo'></span></td>");
+                            }
                             out.print("</tr>");
                         }
                     }

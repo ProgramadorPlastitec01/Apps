@@ -56,11 +56,11 @@ public class LineaJpaController implements Serializable {
         }
     }
 
-    public List Cronograma_linea_anio(int anio, int iln) {
+    public List Cronograma_linea_anio(int anio, int iln, int estado) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
         try {
-            Query q = etm.createNativeQuery("CALL `sp_rpt_cronograma_anio`('" + anio + "','" + iln + "')");
+            Query q = etm.createNativeQuery("CALL `sp_rpt_cronograma_anio`('" + anio + "','" + iln + "','" + estado + "')");
             List consulta = q.getResultList();
             etm.getTransaction().commit();
             etm.clear();
@@ -74,6 +74,7 @@ public class LineaJpaController implements Serializable {
             return null;
         }
     }
+
     public List Cronograma_linea_anio_actividad(int anio, int agn) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
@@ -93,11 +94,11 @@ public class LineaJpaController implements Serializable {
         }
     }
 
-    public List Cronograma_linea_anio_filtro(int anio, int iln, String filtro) {
+    public List Cronograma_linea_anio_filtro(int anio, int iln, String filtro, int estado) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
         try {
-            Query q = etm.createNativeQuery("CALL `sp_rpt_cronograma_linea_filtro`('" + anio + "','" + iln + "','" + filtro + "')");
+            Query q = etm.createNativeQuery("CALL `sp_rpt_cronograma_linea_filtro`('" + anio + "','" + iln + "','" + filtro + "','" + estado + "')");
             List consulta = q.getResultList();
             etm.getTransaction().commit();
             etm.clear();
@@ -111,6 +112,7 @@ public class LineaJpaController implements Serializable {
             return null;
         }
     }
+
     public List Cronograma_linea_anio_filtro_ag(int anio, int agn, String filtro) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
@@ -129,6 +131,7 @@ public class LineaJpaController implements Serializable {
             return null;
         }
     }
+
     public List Cronograma_anio_filtro(int anio, String filtro) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
@@ -147,6 +150,7 @@ public class LineaJpaController implements Serializable {
             return null;
         }
     }
+
     public List Cronograma_anio_filtro_ag(int anio, String filtro) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
@@ -222,6 +226,7 @@ public class LineaJpaController implements Serializable {
             return null;
         }
     }
+
     public List filtro_anio_ag() {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();

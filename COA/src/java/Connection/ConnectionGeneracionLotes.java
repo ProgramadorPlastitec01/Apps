@@ -18,6 +18,10 @@ public class ConnectionGeneracionLotes {
     static String url = "";
 
     public List ConsultarCC_GeneracionLote(String Lote) throws Exception {
+        return ConsultarCC_GeneracionLote(Lote, null);
+    }
+
+    public List ConsultarCC_GeneracionLote(String Lote, String Proceso) throws Exception {
         List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerGeneracionLotes");
         if (lst_parameter != null) {
             Object[] obj_data = (Object[]) lst_parameter.get(0);
@@ -33,6 +37,9 @@ public class ConnectionGeneracionLotes {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             conn = DriverManager.getConnection(url, login, password);
             if (conn != null) {
+                String procesoFilter = (Proceso != null && !Proceso.trim().isEmpty())
+                        ? "INNER JOIN procesos p ON p.id_procesos = c.id_proceso AND p.nombre = '" + Proceso.trim() + "' "
+                        : "";
                 String query = "";
                 if (Lote.contains("/")) {
                     String[] BatchN = Lote.split("/");
@@ -42,9 +49,12 @@ public class ConnectionGeneracionLotes {
                             + "    SEPARATOR ' - CC' "
                             + ") AS consecutivo "
                             + "FROM control_consecutivos c "
+                            + procesoFilter
                             + "WHERE c.lote IN ('" + BatchN[0].trim() + "', '" + BatchN[1].trim() + "');";
                 } else {
-                    query = "SELECT c.consecutivo FROM control_consecutivos c WHERE c.lote LIKE '%" + Lote.trim() + "%'";
+                    query = "SELECT c.consecutivo FROM control_consecutivos c "
+                            + procesoFilter
+                            + "WHERE c.lote LIKE '%" + Lote.trim() + "%'";
                 }
                 Statement sttm = conn.createStatement();
                 ResultSet rs = sttm.executeQuery(query);

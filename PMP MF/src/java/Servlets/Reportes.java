@@ -51,8 +51,14 @@ public class Reportes extends HttpServlet {
             switch (opc) {
                 case 1:
                     //<editor-fold defaultstate="collapsed" desc="CRONOGRAMA">
+                    try {
+                        estado = Integer.parseInt(request.getParameter("estado"));
+                    } catch (NumberFormatException e) {
+                        estado = 1;
+                    }
                     tipo = "Cronograma";
                     request.setAttribute("Reportes", tipo);
+                    request.setAttribute("estado", estado);
                     request.getRequestDispatcher("Reportes.jsp").forward(request, response);
                     break;
                 //</editor-fold>
@@ -103,11 +109,17 @@ public class Reportes extends HttpServlet {
                     anio_report = Integer.parseInt(request.getParameter("Cbx_anio"));
                     linea = Integer.parseInt(request.getParameter("Cbx_linea"));
                     filtro = request.getParameter("Txt_filtro");
+                    try {
+                        estado = Integer.parseInt(request.getParameter("Cbx_estado"));
+                    } catch (NumberFormatException e) {
+                        estado = 1;
+                    }
                     tipo = "Cronograma";
                     request.setAttribute("id_linea", linea);
                     request.setAttribute("anio", anio_report);
                     request.setAttribute("filtro", filtro);
                     request.setAttribute("Reportes", tipo);
+                    request.setAttribute("estado", estado);
                     request.getRequestDispatcher("Reportes.jsp").forward(request, response);
                     break;
                 //</editor-fold>
@@ -137,8 +149,14 @@ public class Reportes extends HttpServlet {
                 //</editor-fold>
                 case 7:
                     //<editor-fold defaultstate="collapsed" desc="CRONOGRAMA AGN">
+                    try {
+                        estado = Integer.parseInt(request.getParameter("estado"));
+                    } catch (NumberFormatException e) {
+                        estado = 1;
+                    }
                     tipo = "Cronograma_actividad";
                     request.setAttribute("Reportes", tipo);
+                    request.setAttribute("estado", estado);
                     request.getRequestDispatcher("Reportes.jsp").forward(request, response);
                     break;
                 //</editor-fold>
@@ -148,10 +166,16 @@ public class Reportes extends HttpServlet {
                     linea = Integer.parseInt(request.getParameter("Cbx_linea"));
                     filtro = request.getParameter("Txt_filtro");
                     tipo = "Cronograma_actividad";
+                    try {
+                        estado = Integer.parseInt(request.getParameter("Cbx_estado"));
+                    } catch (NumberFormatException e) {
+                        estado = 1;
+                    }
                     request.setAttribute("id_linea", linea);
                     request.setAttribute("anio", anio_report);
                     request.setAttribute("filtro", filtro);
                     request.setAttribute("Reportes", tipo);
+                    request.setAttribute("estado", estado);
                     request.getRequestDispatcher("Reportes.jsp").forward(request, response);
                     break;
                 //</editor-fold>
