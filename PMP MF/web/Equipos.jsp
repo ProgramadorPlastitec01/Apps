@@ -6,12 +6,12 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
         <title></title>
-                <script type = "text/javascript" >
-                    history.pushState(null, null, 'Equipos.jsp');
-                    window.addEventListener('popstate', function (event) {
-                        history.pushState(null, null, 'Inicio.jsp');
-                    });
-                </script>
+        <script type = "text/javascript" >
+            history.pushState(null, null, 'Equipos.jsp');
+            window.addEventListener('popstate', function (event) {
+                history.pushState(null, null, 'Inicio.jsp');
+            });
+        </script>
         <jsp:include page='Contenedor_head.jsp'></jsp:include>
             <script type="text/javascript">
                 function DesactivarEquipo(id_equipo) {
@@ -115,6 +115,30 @@
             <script>
                 function CambiarListadoEquipos(temp) {
                     location.href = "Equipo?opc=1&temp=" + temp + "";
+                }
+            </script>
+            <script>
+                function ToggleEstadoEquipos(btn, temp) {
+                    var estado = btn.getAttribute('data-estado');
+                    var nuevoEstado = (estado === '1') ? '0' : '1';
+                    if (estado === '1') {
+                        btn.setAttribute('data-estado', '0');
+                        btn.classList.remove('btn-success');
+                        btn.classList.add('btn-secondary');
+                        btn.innerHTML = '<i class="fas fa-toggle-off"></i>&nbsp;Inactivo';
+                        if (typeof FiltrarEquiposEstado === 'function') {
+                            FiltrarEquiposEstado(0);
+                        }
+                    } else {
+                        btn.setAttribute('data-estado', '1');
+                        btn.classList.remove('btn-secondary');
+                        btn.classList.add('btn-success');
+                        btn.innerHTML = '<i class="fas fa-toggle-on"></i>&nbsp;Activo';
+                        if (typeof FiltrarEquiposEstado === 'function') {
+                            FiltrarEquiposEstado(1);
+                        }
+                    }
+                    location.href = "Equipo?opc=1&estado=" + nuevoEstado + "&temp=" + temp;
                 }
             </script>
         </head>

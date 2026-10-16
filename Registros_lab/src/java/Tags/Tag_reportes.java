@@ -3205,7 +3205,7 @@ public class Tag_reportes extends TagSupport {
                             out.print("</tr>");
                             for (int i = 0; i < lst_lotes.size(); i++) {
                                 Object[] obj_lote = (Object[]) lst_lotes.get(i);
-                                if (obj_lote[0].toString().equals(lote) && (Integer) obj_lote[16] == id_linea && obj_lote[25].equals(ciclo)) {
+                                if (obj_lote[0].toString().toUpperCase().equals(lote.toUpperCase()) && (Integer) obj_lote[16] == id_linea && obj_lote[25].equals(ciclo)) {
                                     out.print("<tr>");
                                     if (fecha_version_decimal >= 2015.0526) {
                                         if (obj_lote[17] != null) {

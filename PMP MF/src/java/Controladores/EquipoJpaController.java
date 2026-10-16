@@ -18,11 +18,11 @@ public class EquipoJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public List Equipos() {
+    public List Equipos(int estado) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
         try {
-            Query q = etm.createNativeQuery("CALL `sp_eqp_c_equipos`()");
+            Query q = etm.createNativeQuery("CALL `sp_eqp_c_equipos`(" + estado + ")");
             List consulta = q.getResultList();
             etm.getTransaction().commit();
             etm.clear();
@@ -37,11 +37,11 @@ public class EquipoJpaController implements Serializable {
         }
     }
 
-    public List Equipos_mm() {
+    public List Equipos_mm(int estado) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
         try {
-            Query q = etm.createNativeQuery("CALL `sp_eqp_c_equipos_mm`()");
+            Query q = etm.createNativeQuery("CALL `sp_eqp_c_equipos_mm`(" + estado + ")");
             List consulta = q.getResultList();
             etm.getTransaction().commit();
             etm.clear();
@@ -56,11 +56,11 @@ public class EquipoJpaController implements Serializable {
         }
     }
 
-    public List Equipos_insp() {
+    public List Equipos_insp(int estado) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
         try {
-            Query q = etm.createNativeQuery("CALL `sp_eqp_c_equipos_insp`()");
+            Query q = etm.createNativeQuery("CALL `sp_eqp_c_equipos_insp`(" + estado + ")");
             List consulta = q.getResultList();
             etm.getTransaction().commit();
             etm.clear();
@@ -75,11 +75,11 @@ public class EquipoJpaController implements Serializable {
         }
     }
 
-    public List Equipos_lub() {
+    public List Equipos_lub(int estado) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
         try {
-            Query q = etm.createNativeQuery("CALL `sp_eqp_c_equipos_lub`()");
+            Query q = etm.createNativeQuery("CALL `sp_eqp_c_equipos_lub`(" + estado + ")");
             List consulta = q.getResultList();
             etm.getTransaction().commit();
             etm.clear();
@@ -188,7 +188,6 @@ public class EquipoJpaController implements Serializable {
             return null;
         }
     }
-
 
     public boolean Activar_equipo(int ieq) {
         EntityManager etm = getEntityManager();

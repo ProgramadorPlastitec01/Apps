@@ -39,6 +39,7 @@ public class Equipo extends HttpServlet {
             int numero_contacto = 0, item = 0, id_ficha_tecnica = 0;
             int id_tipo_equipo = 0, ano_fabricacion = 0;
             int id_equipo = 0, tipo_ficha = 0, id_linea = 0, temp = 0, id_nota = 0, temp1 = 0;
+            int estadoEqp = 0;
             switch (opc) {
                 case 1:
                     //<editor-fold defaultstate="collapsed" desc="CONTROL MODULO EQUIPO">
@@ -52,16 +53,22 @@ public class Equipo extends HttpServlet {
                     try {
                         estado = Integer.parseInt(request.getParameter("etd").toString());
                     } catch (Exception e) {
-                        estado = 0;
+                        estado = 1;
                     }
                     try {
                         temp = Integer.parseInt(request.getParameter("temp"));
                     } catch (Exception e) {
                         temp = 0;
                     }
+                    try {
+                        estadoEqp = Integer.parseInt(request.getParameter("estado"));
+                    } catch (Exception e) {
+                        estadoEqp = 1;
+                    }
                     request.setAttribute("Id_equipo", id_equipo);
                     request.setAttribute("Estado", estado);
                     request.setAttribute("temp", temp);
+                    request.setAttribute("EstadoEqp", estadoEqp);
                     request.getRequestDispatcher("Equipos.jsp").forward(request, response);
                     break;
 //</editor-fold>
