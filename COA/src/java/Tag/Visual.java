@@ -11,6 +11,8 @@ import Connection.ConnectionRegistrosLAB;
 import Connection.ConnectionGeneracionLotes;
 import Controller.SettingJpaController;
 import Controller.CertificatesJpaController;
+import Controller.CertificateFileJpaController;
+import Method.SupportDocumentUi;
 import java.util.List;
 import Method.Util;
 import java.io.IOException;
@@ -29,6 +31,7 @@ public class Visual extends TagSupport {
         ConnectionRegistrosLAB RegistrosLabJpa = new ConnectionRegistrosLAB();
         SettingJpaController SettingJpa = new SettingJpaController();
         CertificatesJpaController CertificatesJpa = new CertificatesJpaController();
+        CertificateFileJpaController CertificateFilesJpa = new CertificateFileJpaController();
         ConnectionGeneracionLotes GeneracionLotesJpa = new ConnectionGeneracionLotes();
         String Type = "", Product = "", ProductFact = "", Batch = "", DataTechnicalSheet = "", Html = "", BatchLay = "", Record = "", FormatName = "", Message = "", IdSig = "", Permission = "", Client = "", 
                 DateI = "", DateF = "", Cycle = "";
@@ -261,10 +264,11 @@ public class Visual extends TagSupport {
                     out.print("</div>");
 
                 }
-                // Estado 3 → Imprimir
+                // Estado 3 → Imprimir / Documento de soporte
                 if (StateCerti == 3) {
+                    out.print("<div class='d-flex align-items-center'>");
                     if (Permission.contains("[26]")) {
-                        out.print("<div>"
+                        out.print("<div class='mr-2'>"
                                 + "<button class='btn btn-outline-primary btn-sm' "
                                 + "style='border-radius: 4px; padding: 2px 9px;' "
                                 + "onclick='descargarPDFCarta()' data-toggle='tooltip' "
@@ -272,6 +276,21 @@ public class Visual extends TagSupport {
                                 + "<i class='fas fa-print'></i>"
                                 + "</button></div>");
                     }
+                    if (IdCertificates > 0 && Permission.contains("[39]")) {
+                        List lstIdSoporte = CertificatesJpa.ConsultCertificatesId(Type, IdCertificates);
+                        if (lstIdSoporte != null) {
+                            Object[] ObjIdSoporte = (Object[]) lstIdSoporte.get(0);
+                            String returnToSoporte = "Generate?opt=2&Type=" + Type + "&IdCertificates=" + IdCertificates
+                                    + "&TempDelete=" + TempDelete + "&StateCerti=3&TempM=" + TempM;
+                            SupportDocumentUi.renderCertificateAction(out, CertificateFilesJpa, IdCertificates,
+                                    ObjIdSoporte[4] == null ? "" : ObjIdSoporte[4].toString(),
+                                    ObjIdSoporte[12] == null ? "" : ObjIdSoporte[12].toString(),
+                                    ObjIdSoporte[5] == null ? "" : ObjIdSoporte[5].toString(),
+                                    ObjIdSoporte[7] == null ? "" : ObjIdSoporte[7].toString(),
+                                    Type, true, returnToSoporte, Permission.contains("[4]"));
+                        }
+                    }
+                    out.print("</div>");
                 }
                 if (IdCertificates == 0) {
                     out.print("<div class='d-flex'>");
@@ -1292,6 +1311,42 @@ public class Visual extends TagSupport {
                 out.print("</div>");
                 out.print("</div>");
                 out.print("</div>");
+            }
+            if (Permission.contains("[39]")) {
+                SupportDocumentUi.renderModal(out);
+
+                // Sugerencia post-firma: Generate.java (opt=4, firma única) forward
+                // encadena hasta acá dejando SigUnique=true en el mismo request; si
+                // el certificado recién firmado aún no tiene soporte, se sugiere
+                // adjuntarlo de una vez, reusando el mismo modal/flujo de arriba.
+                Boolean sigUnique = (Boolean) pageContext.getRequest().getAttribute("SigUnique");
+                if (Boolean.TRUE.equals(sigUnique) && StateCerti == 3 && IdCertificates > 0) {
+                    List lstIdSugerencia = CertificatesJpa.ConsultCertificatesId(Type, IdCertificates);
+                    if (lstIdSugerencia != null
+                            && CertificateFilesJpa.consultSupportFileByCertificate(IdCertificates) == null) {
+                        Object[] ObjIdSugerencia = (Object[]) lstIdSugerencia.get(0);
+                        String returnToSugerencia = "Generate?opt=2&Type=" + Type + "&IdCertificates=" + IdCertificates
+                                + "&TempDelete=" + TempDelete + "&StateCerti=3&TempM=" + TempM;
+                        out.print("<script>");
+                        out.print("$(document).ready(function () {");
+                        out.print("swal({");
+                        out.print("title: '¿Adjuntar documento de soporte?',");
+                        out.print("text: 'El certificado quedó firmado. ¿Desea adjuntar y firmar un documento de soporte para este certificado?',");
+                        out.print("icon: 'question',");
+                        out.print("buttons: { cancel: { text: 'Ahora no', visible: true, className: 'btn btn-secondary' },"
+                                + "confirm: { text: 'Adjuntar', value: true, className: 'btn btn-primary' } }");
+                        out.print("}).then(function (confirmado) {");
+                        out.print("if (confirmado) {");
+                        out.print("abrirModalSoporte(" + IdCertificates + ",'" + Util.jsAttr(ObjIdSugerencia[4]) + "','"
+                                + Util.jsAttr(ObjIdSugerencia[12]) + "','" + Util.jsAttr(ObjIdSugerencia[5]) + "','"
+                                + Util.jsAttr(ObjIdSugerencia[7]) + "','" + Util.jsAttr(Type) + "','"
+                                + Util.jsAttr(returnToSugerencia) + "');");
+                        out.print("}");
+                        out.print("});");
+                        out.print("});");
+                        out.print("</script>");
+                    }
+                }
             }
             out.print("</section>");
         } catch (Exception ex) {

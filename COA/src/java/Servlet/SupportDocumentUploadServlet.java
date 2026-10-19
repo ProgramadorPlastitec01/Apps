@@ -63,10 +63,24 @@ public class SupportDocumentUploadServlet extends HttpServlet {
         String orden = request.getParameter("orden");
         String lote = request.getParameter("lote");
 
+        Long idCertificate = null;
+        try {
+            idCertificate = Long.parseLong(request.getParameter("idCertificate"));
+        } catch (Exception e) {
+            idCertificate = null;
+        }
+
+        // returnTo permite reusar este servlet desde otras pantallas (p.ej. el
+        // módulo de Generación, GenerateReport/Visual) sin volver siempre a
+        // FileManager.jsp; si no viene, se mantiene el comportamiento histórico.
+        String returnTo = request.getParameter("returnTo");
+        String redirectBase = (returnTo != null && !returnTo.trim().isEmpty())
+                ? returnTo
+                : "FileManager.jsp?cliente=" + cliente + "&anio=" + anio + "&orden=" + orden + "&lote=" + lote;
+        String separator = redirectBase.contains("?") ? "&" : "?";
+
         if (!permission.contains(PERMISSION_CODE)) {
-            response.sendRedirect("FileManager.jsp"
-                    + "?cliente=" + cliente + "&anio=" + anio + "&orden=" + orden + "&lote=" + lote
-                    + "&msg=error_permission");
+            response.sendRedirect(redirectBase + separator + "msg=error_permission");
             return;
         }
 
@@ -130,7 +144,7 @@ public class SupportDocumentUploadServlet extends HttpServlet {
 
                     certificateFiles.registerFile(cliente, anio, orden, lote, "SupportDocs", finalName,
                             resultado.fileId, resultado.uuid, resultado.mimeType, resultado.size,
-                            uploadedById, uploadedByName);
+                            uploadedById, uploadedByName, idCertificate);
                 }
                 uploaded = true;
             } catch (IOException ex) {
@@ -149,8 +163,6 @@ public class SupportDocumentUploadServlet extends HttpServlet {
         String msg = uploaded ? (rejected ? "support_upload_partial" : "support_upload_success")
                 : (rejected ? "error_extension" : "error_upload");
 
-        response.sendRedirect("FileManager.jsp"
-                + "?cliente=" + cliente + "&anio=" + anio + "&orden=" + orden + "&lote=" + lote
-                + "&msg=" + msg);
+        response.sendRedirect(redirectBase + separator + "msg=" + msg);
     }
 }

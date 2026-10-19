@@ -581,9 +581,10 @@
             }
         </script> 
         <script>
-            function DuplicateReg(url) {
+            function DuplicateReg(url, firmado) {
                 swal({
                     title: "¿Está seguro de duplicar?",
+                    text: firmado ? "Este certificado ya está firmado: el duplicado quedará en estado de gestión y sin la firma." : undefined,
                     icon: "warning",
                     buttons: {
                         cancel: {

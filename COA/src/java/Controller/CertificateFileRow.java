@@ -16,13 +16,19 @@ public class CertificateFileRow {
     private final long lastModifiedMillis;
     private final String uploadedById;
     private final String uploadedByName;
+    private final Long idCertificate;
 
     public CertificateFileRow(long id, long officeFileId, String name, String mimeType, Long sizeBytes, long lastModifiedMillis) {
-        this(id, officeFileId, name, mimeType, sizeBytes, lastModifiedMillis, null, null);
+        this(id, officeFileId, name, mimeType, sizeBytes, lastModifiedMillis, null, null, null);
     }
 
     public CertificateFileRow(long id, long officeFileId, String name, String mimeType, Long sizeBytes, long lastModifiedMillis,
             String uploadedById, String uploadedByName) {
+        this(id, officeFileId, name, mimeType, sizeBytes, lastModifiedMillis, uploadedById, uploadedByName, null);
+    }
+
+    public CertificateFileRow(long id, long officeFileId, String name, String mimeType, Long sizeBytes, long lastModifiedMillis,
+            String uploadedById, String uploadedByName, Long idCertificate) {
         this.id = id;
         this.officeFileId = officeFileId;
         this.name = name;
@@ -31,6 +37,7 @@ public class CertificateFileRow {
         this.lastModifiedMillis = lastModifiedMillis;
         this.uploadedById = uploadedById;
         this.uploadedByName = uploadedByName;
+        this.idCertificate = idCertificate;
     }
 
     public long getId() {
@@ -63,5 +70,9 @@ public class CertificateFileRow {
 
     public String getUploadedByName() {
         return uploadedByName;
+    }
+
+    public Long getIdCertificate() {
+        return idCertificate;
     }
 }

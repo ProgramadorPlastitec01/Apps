@@ -7,7 +7,9 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 import Controller.CertificatesJpaController;
+import Controller.CertificateFileJpaController;
 import Controller.FormatJpaController;
+import Method.SupportDocumentUi;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 
@@ -19,6 +21,7 @@ public class GenerateReport extends TagSupport {
         HttpSession sesion = pageContext.getSession();
         CertificatesJpaController CertificateJpa = new CertificatesJpaController();
         FormatJpaController FormatJpa = new FormatJpaController();
+        CertificateFileJpaController CertificateFilesJpa = new CertificateFileJpaController();
         List lst_ceriticate = null;
         List lst_format = null;
         String Type = "";
@@ -364,7 +367,33 @@ public class GenerateReport extends TagSupport {
                     }
                     if (State == 3) {
                         if (Permission.contains("[39]")) {
-                            out.print("<button class='btn btn-primary btn-sm mr-2' style='border-radius: 4px;' onclick=\"javascript:location.href='FileManager.jsp?cliente=" + ObjCerti[4] + "&anio=" + ObjCerti[12] + "&orden=" + ObjCerti[5] + "&lote=" + ObjCerti[7] + "'\" data-toggle='tooltip' data-placement='top' title='Batch Record'><i class=\"fas fa-folder\"></i></button>");
+                            String returnToSoporte = "Generate?opt=1&Type=" + Type + "&IdCertificate=" + ObjCerti[0];
+                            SupportDocumentUi.renderCertificateAction(out, CertificateFilesJpa,
+                                    Long.parseLong(ObjCerti[0].toString()),
+                                    ObjCerti[4] == null ? "" : ObjCerti[4].toString(),
+                                    ObjCerti[12] == null ? "" : ObjCerti[12].toString(),
+                                    ObjCerti[5] == null ? "" : ObjCerti[5].toString(),
+                                    ObjCerti[7] == null ? "" : ObjCerti[7].toString(),
+                                    Type, true, returnToSoporte, Permission.contains("[4]"));
+                        }
+                        // Batch Record y Duplicar son acciones secundarias: se agrupan en
+                        // un menú para no saturar la fila con botones sueltos.
+                        if (Permission.contains("[39]") || Permission.contains("[34]")) {
+                            out.print("<div class='dropdown d-inline'>");
+                            out.print("<button class='btn btn-outline-secondary btn-sm' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' data-placement='top' title='Más acciones'>");
+                            out.print("<i class=\"fas fa-ellipsis-v\"></i></button>");
+                            out.print("<div class='dropdown-menu menuDropdow'>");
+                            if (Permission.contains("[39]")) {
+                                out.print("<a class='dropdown-item has-icon' onclick=\"javascript:location.href='FileManager.jsp?cliente=" + ObjCerti[4] + "&anio=" + ObjCerti[12] + "&orden=" + ObjCerti[5] + "&lote=" + ObjCerti[7] + "'\"><i class='fas fa-folder'></i> Batch Record</a>");
+                            }
+                            if (Permission.contains("[34]")) {
+                                // Lo usan cuando necesitan reemitir el mismo certificado en otro
+                                // momento: el duplicado queda en gestión (state=1) y sin la firma
+                                // del original (Sp_ctf_r_RegistrerDuplicate ya no la copia).
+                                out.print("<a class='dropdown-item has-icon' onclick=\"DuplicateReg('Generate?opt=10&Type=" + Type + "&IdCertificates=" + ObjCerti[0] + "', true)\"><i class='fas fa-copy'></i> Duplicar</a>");
+                            }
+                            out.print("</div>");
+                            out.print("</div>");
                         }
                     }
                     if (State == 1) {
@@ -394,6 +423,10 @@ public class GenerateReport extends TagSupport {
             out.print("</div>");
             out.print("</div>");
             out.print("</div>");
+
+            if (Permission.contains("[39]")) {
+                SupportDocumentUi.renderModal(out);
+            }
 
         } catch (IOException ex) {
             Logger.getLogger(GenerateReport.class.getName()).log(Level.SEVERE, null, ex);

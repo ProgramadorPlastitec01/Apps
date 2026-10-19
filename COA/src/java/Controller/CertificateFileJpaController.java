@@ -36,11 +36,23 @@ public class CertificateFileJpaController implements Serializable {
     public boolean registerFile(String cliente, String anio, String orden, String lote, String carpeta,
             String originalFileName, long officeFileId, String officeUuid, String mimeType, Long sizeBytes,
             String uploadedById, String uploadedByName) {
+        return registerFile(cliente, anio, orden, lote, carpeta, originalFileName, officeFileId, officeUuid,
+                mimeType, sizeBytes, uploadedById, uploadedByName, null);
+    }
+
+    /**
+     * @param idCertificate Certificado COA (certificates.id_certificate) al que queda ligado
+     * el documento de soporte; null para archivos que no se asocian a un certificado puntual
+     * (Físico, Batch Record unificado).
+     */
+    public boolean registerFile(String cliente, String anio, String orden, String lote, String carpeta,
+            String originalFileName, long officeFileId, String officeUuid, String mimeType, Long sizeBytes,
+            String uploadedById, String uploadedByName, Long idCertificate) {
 
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
-            Query q = em.createNativeQuery("CALL `Sp_cff_r_RegisterCertificateFile`(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            Query q = em.createNativeQuery("CALL `Sp_cff_r_RegisterCertificateFile`(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             q.setParameter(1, cliente);
             q.setParameter(2, anio);
             q.setParameter(3, orden);
@@ -53,6 +65,7 @@ public class CertificateFileJpaController implements Serializable {
             q.setParameter(10, sizeBytes);
             q.setParameter(11, uploadedById);
             q.setParameter(12, uploadedByName);
+            q.setParameter(13, idCertificate);
             q.executeUpdate();
             em.getTransaction().commit();
             return true;
@@ -106,6 +119,24 @@ public class CertificateFileJpaController implements Serializable {
             return mapRows(filas);
         } catch (Exception e) {
             return new ArrayList<CertificateFileRow>();
+        } finally {
+            em.close();
+        }
+    }
+
+    /** Documento de soporte vigente (pendiente o firmado) de un Certificado COA, o null si no tiene. */
+    public CertificateFileRow consultSupportFileByCertificate(long idCertificate) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        try {
+            Query q = em.createNativeQuery("CALL `Sp_cff_c_ConsultSupportFileByCertificate`(?)");
+            q.setParameter(1, idCertificate);
+            List filas = q.getResultList();
+            em.getTransaction().commit();
+            List<CertificateFileRow> mapeadas = mapRows(filas);
+            return mapeadas.isEmpty() ? null : mapeadas.get(0);
+        } catch (Exception e) {
+            return null;
         } finally {
             em.close();
         }
@@ -208,7 +239,8 @@ public class CertificateFileJpaController implements Serializable {
                     ? ((Timestamp) fila[5]).getTime() : System.currentTimeMillis();
             String uploadedById = (fila.length > 6 && fila[6] != null) ? String.valueOf(fila[6]) : null;
             String uploadedByName = (fila.length > 7 && fila[7] != null) ? String.valueOf(fila[7]) : null;
-            resultado.add(new CertificateFileRow(id, officeFileId, name, mimeType, sizeBytes, lastModified, uploadedById, uploadedByName));
+            Long idCertificate = (fila.length > 8 && fila[8] instanceof Number) ? Long.valueOf(((Number) fila[8]).longValue()) : null;
+            resultado.add(new CertificateFileRow(id, officeFileId, name, mimeType, sizeBytes, lastModified, uploadedById, uploadedByName, idCertificate));
         }
         return resultado;
     }

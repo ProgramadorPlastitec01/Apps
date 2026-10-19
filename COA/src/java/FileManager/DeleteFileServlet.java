@@ -23,6 +23,12 @@ public class DeleteFileServlet extends HttpServlet {
         String lote    = request.getParameter("lote");
         String idParam = request.getParameter("id");
 
+        String returnTo = request.getParameter("returnTo");
+        String redirectBase = (returnTo != null && !returnTo.trim().isEmpty())
+                ? returnTo
+                : "FileManager.jsp?cliente=" + cliente + "&anio=" + anio + "&orden=" + orden + "&lote=" + lote;
+        String separator = redirectBase.contains("?") ? "&" : "?";
+
         String msg = "error_delete";
 
         if (idParam != null) {
@@ -48,13 +54,6 @@ public class DeleteFileServlet extends HttpServlet {
             msg = "invalid_params";
         }
 
-        response.sendRedirect(
-            "FileManager.jsp"
-            + "?cliente=" + cliente
-            + "&anio=" + anio
-            + "&orden=" + orden
-            + "&lote=" + lote
-            + "&msg=" + msg
-        );
+        response.sendRedirect(redirectBase + separator + "msg=" + msg);
     }
 }

@@ -19,6 +19,7 @@
     String orden = request.getParameter("orden");
     String lote = request.getParameter("lote");
     String id = request.getParameter("id");
+    String returnTo = request.getParameter("returnTo");
 
     CertificateFileRow fila = null;
     try {
@@ -118,6 +119,7 @@
             <input type="hidden" name="orden" value="<%= orden%>">
             <input type="hidden" name="lote" value="<%= lote%>">
             <input type="hidden" name="id" value="<%= id%>">
+            <input type="hidden" name="returnTo" value="<%= returnTo == null ? "" : returnTo%>">
             <input type="hidden" name="firmas" id="Txt_firmas">
         </form>
 

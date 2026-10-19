@@ -565,11 +565,6 @@
                                             <i class="fas fa-upload"></i> <span class="batch-record-btn-label">Subir archivos</span>
                                         </button>
                                         <% } %>
-                                        <% if (Permission.contains("[39]")) { %>
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#supportUploadModal">
-                                            <i class="fas fa-file-signature"></i> <span class="batch-record-btn-label">Adjuntar documento de soporte</span>
-                                        </button>
-                                        <% } %>
                                     </div>
 
                                     <!-- ================== BATCH RECORD: TABS DE CATEGORÍA ================== -->
@@ -627,57 +622,6 @@
                                                         </button>
                                                         <button type="submit" class="btn btn-green">
                                                             <i class="fas fa-cloud-upload-alt"></i> Subir
-                                                        </button>
-                                                    </div>
-
-                                                </form>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <% } %>
-                                    <% if (Permission.contains("[39]")) { %>
-                                    <div class="modal fade" id="supportUploadModal" tabindex="-1" role="dialog">
-                                        <div class="modal-dialog modal-md modal-dialog-centered" role="document">
-                                            <div class="modal-content">
-
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title">
-                                                        <i class="fas fa-file-signature text-primary"></i>
-                                                        Adjuntar documento de soporte
-                                                    </h5>
-                                                    <button type="button" class="close" data-dismiss="modal">
-                                                        <span>&times;</span>
-                                                    </button>
-                                                </div>
-
-                                                <form id="supportUploadForm" action="SupportDocumentUploadServlet" method="post" enctype="multipart/form-data">
-
-                                                    <div class="modal-body">
-
-                                                        <input type="hidden" name="cliente" value="<%= cliente%>">
-                                                        <input type="hidden" name="anio" value="<%= anio%>">
-                                                        <input type="hidden" name="orden" value="<%= orden%>">
-                                                        <input type="hidden" name="lote" value="<%= lote%>">
-
-                                                        <div class="form-group">
-                                                            <label>Documento (carta de cliente u otro soporte)</label>
-                                                            <input type="file" id="supportFileInput" name="file" class="form-control"
-                                                                   accept=".pdf,.png,.jpg,.jpeg,.gif">
-                                                            <small class="form-text text-muted">
-                                                                Solo pdf, png, jpg, jpeg, gif. Quedará vinculado al lote y disponible
-                                                                para firmar con la firma registrada del Director de Calidad.
-                                                            </small>
-                                                        </div>
-
-                                                    </div>
-
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                                                            Cancelar
-                                                        </button>
-                                                        <button type="submit" class="btn btn-primary">
-                                                            <i class="fas fa-cloud-upload-alt"></i> Adjuntar
                                                         </button>
                                                     </div>
 
@@ -1432,22 +1376,6 @@
                         e.preventDefault();
                         avisarInvalidos(invalidos);
                         filesInput.value = '';
-                    }
-                });
-            })();
-
-            (function () {
-                var supportFileInput = document.getElementById('supportFileInput');
-                var supportUploadForm = document.getElementById('supportUploadForm');
-                if (!supportFileInput || !supportUploadForm) {
-                    return;
-                }
-
-                supportUploadForm.addEventListener('submit', function (e) {
-                    if (supportFileInput.files.length > 0 && !extensionPermitida(supportFileInput.files[0].name)) {
-                        e.preventDefault();
-                        avisarInvalidos([supportFileInput.files[0].name]);
-                        supportFileInput.value = '';
                     }
                 });
             })();

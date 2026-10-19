@@ -83,11 +83,14 @@ public class SupportDocumentSignServlet extends HttpServlet {
         String lote = request.getParameter("lote");
         String idParam = request.getParameter("id");
 
-        String redirectBase = "FileManager.jsp"
-                + "?cliente=" + cliente + "&anio=" + anio + "&orden=" + orden + "&lote=" + lote;
+        String returnTo = request.getParameter("returnTo");
+        String redirectBase = (returnTo != null && !returnTo.trim().isEmpty())
+                ? returnTo
+                : "FileManager.jsp?cliente=" + cliente + "&anio=" + anio + "&orden=" + orden + "&lote=" + lote;
+        String separator = redirectBase.contains("?") ? "&" : "?";
 
         if (!permission.contains(PERMISSION_CODE) || firma == null || firma.trim().isEmpty()) {
-            response.sendRedirect(redirectBase + "&msg=error_permission");
+            response.sendRedirect(redirectBase + separator + "msg=error_permission");
             return;
         }
 
@@ -95,7 +98,7 @@ public class SupportDocumentSignServlet extends HttpServlet {
         try {
             id = Long.parseLong(idParam);
         } catch (Exception ex) {
-            response.sendRedirect(redirectBase + "&msg=error_sign");
+            response.sendRedirect(redirectBase + separator + "msg=error_sign");
             return;
         }
 
@@ -104,13 +107,13 @@ public class SupportDocumentSignServlet extends HttpServlet {
 
         if (fila == null || fila.getName().contains("_FIRMADO_")) {
             // El documento ya está firmado (o no se encontró): nada que firmar de nuevo.
-            response.sendRedirect(redirectBase + "&msg=error_sign");
+            response.sendRedirect(redirectBase + separator + "msg=error_sign");
             return;
         }
 
         String firmasParam = request.getParameter("firmas");
         if (firmasParam == null || firmasParam.trim().isEmpty()) {
-            response.sendRedirect(redirectBase + "&msg=error_sign");
+            response.sendRedirect(redirectBase + separator + "msg=error_sign");
             return;
         }
 
@@ -122,7 +125,7 @@ public class SupportDocumentSignServlet extends HttpServlet {
             signatureBytes = null;
         }
         if (signatureBytes == null) {
-            response.sendRedirect(redirectBase + "&msg=error_sign");
+            response.sendRedirect(redirectBase + separator + "msg=error_sign");
             return;
         }
 
@@ -147,13 +150,13 @@ public class SupportDocumentSignServlet extends HttpServlet {
                 }
             } catch (IOException ex) {
                 getServletContext().log("No se pudo descargar el documento de soporte pendiente de Office Platform: " + archivo, ex);
-                response.sendRedirect(redirectBase + "&msg=file_not_found");
+                response.sendRedirect(redirectBase + separator + "msg=file_not_found");
                 return;
             }
 
             boolean firmadoOk = estamparFirma(origen, destino, signatureBytes, firma, firmasParam);
             if (!firmadoOk) {
-                response.sendRedirect(redirectBase + "&msg=error_sign");
+                response.sendRedirect(redirectBase + separator + "msg=error_sign");
                 return;
             }
 
@@ -163,11 +166,12 @@ public class SupportDocumentSignServlet extends HttpServlet {
                     OfficePlatformService.OfficeUploadResult resultado = OfficePlatformService.subirArchivo(
                             folderId, nombreFirmado, null, contenido, "application/pdf", userId, userName);
                     certificateFiles.registerFile(cliente, anio, orden, lote, "SupportDocs", nombreFirmado,
-                            resultado.fileId, resultado.uuid, resultado.mimeType, resultado.size, userId, userName);
+                            resultado.fileId, resultado.uuid, resultado.mimeType, resultado.size, userId, userName,
+                            fila.getIdCertificate());
                 }
             } catch (IOException ex) {
                 getServletContext().log("No se pudo subir el documento de soporte firmado a Office Platform: " + nombreFirmado, ex);
-                response.sendRedirect(redirectBase + "&msg=error_sign");
+                response.sendRedirect(redirectBase + separator + "msg=error_sign");
                 return;
             }
 
@@ -186,7 +190,7 @@ public class SupportDocumentSignServlet extends HttpServlet {
             }
             certificateFiles.deleteFile(id);
 
-            response.sendRedirect(redirectBase + "&msg=support_sign_success");
+            response.sendRedirect(redirectBase + separator + "msg=support_sign_success");
         } finally {
             origen.delete();
             destino.delete();
