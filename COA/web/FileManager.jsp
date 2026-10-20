@@ -286,7 +286,6 @@
                 border-radius:20px; font-size:11px; font-weight:600;
             }
             .batch-record-pill-fisico { background:#f1f2f4; color:#4b5563; }
-            .batch-record-pill-soporte { background:#ffedd5; color:#c2410c; }
             .batch-record-pill-lab { background:#dbeafe; color:#1d4ed8; }
             .batch-record-pill-coa { background:#f3e8ff; color:#7e22ce; }
             .batch-record-pill-lotes { background:#e0f2fe; color:#0369a1; }
@@ -451,19 +450,11 @@
                                             /* ================== ARCHIVOS (LOTE) ================== */
                                             if (lote != null) {
                                                 List<CertificateFileRow> archivos = certController.consultFilesByLote(cliente, anio, orden, lote, "");
-                                                List<CertificateFileRow> soportes = certController.consultFilesByLote(cliente, anio, orden, lote, "SupportDocs");
                                                 List<CertificateFileRow> batchRecords = certController.consultFilesByLote(cliente, anio, orden, lote, "BatchRecord");
 
                                                 long ultimaActualizacionMillis = 0L;
                                                 if (archivos != null) {
                                                     for (CertificateFileRow f : archivos) {
-                                                        if (f.lastModified() > ultimaActualizacionMillis) {
-                                                            ultimaActualizacionMillis = f.lastModified();
-                                                        }
-                                                    }
-                                                }
-                                                if (soportes != null) {
-                                                    for (CertificateFileRow f : soportes) {
                                                         if (f.lastModified() > ultimaActualizacionMillis) {
                                                             ultimaActualizacionMillis = f.lastModified();
                                                         }
@@ -537,22 +528,6 @@
                                                 <div class="batch-record-summary-label">Total documentos</div>
                                             </div>
                                         </div>
-                                        <div class="batch-record-summary-card">
-                                            <div class="batch-record-summary-icon batch-record-summary-icon-firmados"><i class="fas fa-check-circle"></i></div>
-                                            <div>
-                                                <div class="batch-record-summary-value" id="brFirmados">0</div>
-                                                <div class="batch-record-summary-label">Soportes firmados</div>
-                                                <div class="batch-record-summary-sub" id="brFirmadosPct"></div>
-                                            </div>
-                                        </div>
-                                        <div class="batch-record-summary-card">
-                                            <div class="batch-record-summary-icon batch-record-summary-icon-pendientes"><i class="fas fa-clock"></i></div>
-                                            <div>
-                                                <div class="batch-record-summary-value" id="brPendientes">0</div>
-                                                <div class="batch-record-summary-label">Soportes pendientes de firma</div>
-                                                <div class="batch-record-summary-sub" id="brPendientesPct"></div>
-                                            </div>
-                                        </div>
                                     </div>
 
                                     <!-- ================== BATCH RECORD: ACCIONES ================== -->
@@ -571,7 +546,6 @@
                                     <ul class="nav nav-tabs batch-record-tabs" id="batchRecordTabs">
                                         <li class="nav-item"><a class="nav-link active" href="#" data-br-tab="todos" onclick="brFiltrarCategoria('todos'); return false;">Todos <span class="batch-record-tab-count" id="brCountTodos">0</span></a></li>
                                         <li class="nav-item"><a class="nav-link" href="#" data-br-tab="fisico" onclick="brFiltrarCategoria('fisico'); return false;"><i class="fas fa-file"></i> Archivos físicos <span class="batch-record-tab-count" id="brCountFisico">0</span></a></li>
-                                        <li class="nav-item"><a class="nav-link" href="#" data-br-tab="soporte" onclick="brFiltrarCategoria('soporte'); return false;"><i class="fas fa-paperclip"></i> Soporte <span class="batch-record-tab-count" id="brCountSoporte">0</span></a></li>
                                         <li class="nav-item"><a class="nav-link" href="#" data-br-tab="batchrecord" onclick="brFiltrarCategoria('batchrecord'); return false;"><i class="fas fa-file-pdf"></i> Batch Record <span class="batch-record-tab-count" id="brCountBatchRecord">0</span></a></li>
                                         <li class="nav-item"><a class="nav-link" href="#" data-br-tab="lab" onclick="brFiltrarCategoria('lab'); return false;"><img class="batch-record-src-icon" src="Interface/Imagen/Registros_lab_Logo.png" alt=""> Registros LAB <span class="batch-record-tab-count" id="brCountLab">0</span></a></li>
                                         <li class="nav-item"><a class="nav-link" href="#" data-br-tab="coa" onclick="brFiltrarCategoria('coa'); return false;"><img class="batch-record-src-icon" src="Interface/Imagen/LogoSText.fw.png" alt=""> Certificados COA <span class="batch-record-tab-count" id="brCountCoa">0</span></a></li>
@@ -783,11 +757,24 @@
                                             %>
                                             <%
                                                 String MaterialBatch = "";
+                                                StringBuilder MaterialCodigosBuilder = new StringBuilder();
                                                 lst_certificate = CertificatesJpa.ConsultCertificatesBatchRecord(orden, lote);
                                                 if (lst_certificate != null) {
                                                     for (int i = 0; i < lst_certificate.size(); i++) {
                                                         Object[] ArgCertificate = (Object[]) lst_certificate.get(i);
                                                         MaterialBatch += ArgCertificate[4];
+                                                        if (ArgCertificate.length > 5 && ArgCertificate[5] != null) {
+                                                            // Codigos de recepción de material (tinta) seleccionados al
+                                                            // crear el certificado: el tab de Generación de Lotes solo
+                                                            // debe mostrar los anexos de esa recepción puntual, no todas
+                                                            // las que comparten el mismo lote.
+                                                            for (String codigo : Util.extractSelectedReceptionCodes(ArgCertificate[5].toString())) {
+                                                                if (MaterialCodigosBuilder.length() > 0) {
+                                                                    MaterialCodigosBuilder.append(",");
+                                                                }
+                                                                MaterialCodigosBuilder.append(codigo);
+                                                            }
+                                                        }
                                             %>
                                             <tr class="file-row batch-record-row" data-category="coa" data-status="na">
                                                 <td class="batch-record-doc-name" style="cursor:pointer;" onclick="brVerEnPanel(this, '<%= Util.jsAttr(ArgCertificate[2])%>', 'Certificados COA', '<%= Util.jsAttr(ArgCertificate[3])%>')"><span class="batch-record-src-box batch-record-src-box-coa"><img src="Interface/Imagen/LogoSText.fw.png" alt=""></span> <%= ArgCertificate[1]%> — <%= ArgCertificate[2]%></td>
@@ -812,7 +799,7 @@
                                             }
                                             %>
                                             <%
-                                                lst_material = LinkBatch.AttachmentBatchRecord(MaterialBatch);
+                                                lst_material = LinkBatch.AttachmentBatchRecord(MaterialBatch, MaterialCodigosBuilder.toString());
                                                 if (lst_material != null) {
                                                     for (int i = 0; i < lst_material.size(); i++) {
                                                         String[] ArgBatchRaw = Util.parseResult(lst_material.get(i));
@@ -964,62 +951,6 @@
                                                     }
                                                 }
                                             %>
-                                            <%
-                                                if (soportes != null) {
-                                                    for (CertificateFileRow soporte : soportes) {
-                                                        String nombreSoporte = soporte.getName();
-                                                        boolean firmado = nombreSoporte.contains("_FIRMADO_");
-                                                        String relPathSoporte = "FileDownloadProxyServlet?id=" + soporte.getId() + "&modo=inline";
-                                                        String relPathSoporteDescarga = "FileDownloadProxyServlet?id=" + soporte.getId() + "&modo=adjunto";
-                                                        String soporteExtLower = nombreSoporte.toLowerCase();
-                                                        String soporteExtClass = "batch-record-ext-img";
-                                                        String soporteExtLabel = "IMG";
-                                                        if (soporteExtLower.endsWith(".pdf")) {
-                                                            soporteExtClass = "batch-record-ext-pdf";
-                                                            soporteExtLabel = "PDF";
-                                                        } else if (soporteExtLower.endsWith(".png")) {
-                                                            soporteExtLabel = "PNG";
-                                                        } else if (soporteExtLower.endsWith(".jpg") || soporteExtLower.endsWith(".jpeg")) {
-                                                            soporteExtLabel = "JPG";
-                                                        } else if (soporteExtLower.endsWith(".gif")) {
-                                                            soporteExtLabel = "GIF";
-                                                        }
-                                            %>
-                                            <tr class="file-row batch-record-row" data-category="soporte" data-status="<%= firmado ? "firmado" : "pendiente"%>" data-timestamp="<%= soporte.lastModified()%>">
-                                                <td class="batch-record-doc-name" style="cursor:pointer;" onclick="brVerEnPanel(this, '<%= Util.jsAttr(nombreSoporte)%>', 'Documento de soporte', '<%= Util.jsAttr(relPathSoporte)%>')"><span class="batch-record-ext-chip <%= soporteExtClass%>"><%= soporteExtLabel%></span> <%= nombreSoporte%></td>
-                                                <td><span class="batch-record-pill batch-record-pill-soporte">Documento de soporte</span></td>
-                                                <td>
-                                                    <% if (firmado) { %>
-                                                    <span class="batch-record-status batch-record-status-firmado"><i class="fas fa-check-circle"></i> Firmado</span>
-                                                    <% } else { %>
-                                                    <span class="batch-record-status batch-record-status-pendiente"><i class="fas fa-clock"></i> Pendiente de firma</span>
-                                                    <% } %>
-                                                </td>
-                                                <td><%= new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(new java.util.Date(soporte.lastModified()))%></td>
-                                                <td>Soporte</td>
-                                                <td class="text-center">
-                                                    <div class="batch-record-menu">
-                                                        <button type="button" class="batch-record-menu-btn" onclick="brToggleMenu(event, this)" title="Acciones">
-                                                            <i class="fas fa-ellipsis-v"></i>
-                                                        </button>
-                                                        <div class="dropdown-menu batch-record-menu-list">
-                                                            <a class="dropdown-item" href="<%= relPathSoporte%>" target="_blank" onclick="brVerEnPanel(this, '<%= Util.jsAttr(nombreSoporte)%>', 'Documento de soporte', '<%= Util.jsAttr(relPathSoporte)%>'); return false;"><i class="fas fa-eye"></i> Ver documento</a>
-                                                            <a class="dropdown-item" href="<%= relPathSoporteDescarga%>" download><i class="fas fa-download"></i> Descargar</a>
-                                                            <% if (!firmado && Permission.contains("[39]")) { %>
-                                                            <a class="dropdown-item" href="#" onclick="window.open('SupportDocumentSign.jsp?cliente=<%= cliente%>&anio=<%= anio%>&orden=<%= orden%>&lote=<%= lote%>&id=<%= soporte.getId()%>', '_blank'); return false;"><i class="fas fa-file-signature"></i> Firmar</a>
-                                                            <% } %>
-                                                            <% if (Permission.contains("[4]")) { %>
-                                                            <div class="dropdown-divider"></div>
-                                                            <a class="dropdown-item text-danger" href="#" onclick="confirmDeleteSupportFile('<%= cliente%>','<%= anio%>','<%= orden%>','<%= lote%>','<%= soporte.getId()%>'); return false;"><i class="fas fa-trash"></i> Eliminar</a>
-                                                            <% } %>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <%
-                                                    }
-                                                }
-                                            %>
                                         </tbody>
                                     </table>
                                     </div>
@@ -1150,40 +1081,6 @@
 
                 swal({
                     title: "¿Eliminar archivo?",
-                    text: "Esta acción no se puede deshacer",
-                    icon: "warning",
-                    buttons: {
-                        cancel: {
-                            text: "Cancelar",
-                            visible: true,
-                            className: "btn btn-secondary"
-                        },
-                        confirm: {
-                            text: "Sí, eliminar",
-                            value: true,
-                            className: "btn btn-danger"
-                        }
-                    },
-                    dangerMode: true
-                }).then(function (confirm) {
-
-                    if (confirm) {
-                        window.location.href =
-                                "DeleteFileServlet"
-                                + "?cliente=" + encodeURIComponent(cliente)
-                                + "&anio=" + encodeURIComponent(anio)
-                                + "&orden=" + encodeURIComponent(orden)
-                                + "&lote=" + encodeURIComponent(lote)
-                                + "&id=" + encodeURIComponent(id);
-                    }
-
-                });
-            }
-
-            function confirmDeleteSupportFile(cliente, anio, orden, lote, id) {
-
-                swal({
-                    title: "¿Eliminar documento de soporte?",
                     text: "Esta acción no se puede deshacer",
                     icon: "warning",
                     buttons: {

@@ -59,7 +59,7 @@ public class ActualizarDiferenciasRegistro extends HttpServlet {
                     }
                 }
             } else {
-                List<Object[]> datos = conexion.ConsultLotesRegistroVerificar(
+                List<Object[]> datos = conexion.ConsultLotesRegistroVerificarDirecto(
                         idProducto, lote, idLinea, ciclo);
                 List<DiferenciaRegistro> diferencias =
                         ConsultarDiferenciasRegistro.analizarDiferencias(datos);
@@ -91,7 +91,7 @@ public class ActualizarDiferenciasRegistro extends HttpServlet {
             }
 
             // Capturar estado previo (Antes)
-            List<Object[]> datosAntes = conexion.ConsultLotesRegistroVerificar(idProducto, lote, idLinea, ciclo);
+            List<Object[]> datosAntes = conexion.ConsultLotesRegistroVerificarDirecto(idProducto, lote, idLinea, ciclo);
             Map<String, String> mapAntes = new LinkedHashMap<String, String>();
             if (datosAntes != null) {
                 for (DiferenciaRegistro diff : ConsultarDiferenciasRegistro.analizarDiferencias(datosAntes)) {
@@ -110,7 +110,7 @@ public class ActualizarDiferenciasRegistro extends HttpServlet {
                 conexion.RegistrarLogDiferencia(idProducto, lote, idLinea, ciclo, campoName, valAntes, valDespues, usuarioResponsable);
             }
 
-            List<Object[]> datosActualizados = conexion.ConsultLotesRegistroVerificar(
+            List<Object[]> datosActualizados = conexion.ConsultLotesRegistroVerificarDirecto(
                     idProducto, lote, idLinea, ciclo);
             int restantes = ConsultarDiferenciasRegistro
                     .analizarDiferencias(datosActualizados).size();

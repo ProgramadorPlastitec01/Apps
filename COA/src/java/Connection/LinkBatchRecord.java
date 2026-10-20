@@ -82,6 +82,19 @@ public class LinkBatchRecord {
     }
 
     public List AttachmentBatchRecord(String DataBatch) throws Exception {
+        return AttachmentBatchRecord(DataBatch, null);
+    }
+
+    /**
+     * @param DataCodigos valores crudos de recepcion_material.codigo (ver
+     * Util.extractSelectedReceptionCodes) capturados en los certificados del
+     * lote consultado, separados por coma; cuando viene vacío/null se
+     * mantiene el comportamiento histórico (solo filtra por lote). Cuando
+     * trae datos, restringe los anexos ligados a recepcion_material a
+     * exactamente esos codigos, para no mezclar anexos de otras recepciones
+     * del mismo lote que el usuario no seleccionó en el certificado.
+     */
+    public List AttachmentBatchRecord(String DataBatch, String DataCodigos) throws Exception {
         //<editor-fold defaultstate="collapsed" desc="LinkBatchRecord GENERACION LOTES">
         List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerGeneracionLotes");
         if (lst_parameter != null) {
@@ -129,6 +142,30 @@ public class LinkBatchRecord {
                     }
                     Batch += ")";
                     Qry = Qry.replace("XDataBatchX", Batch);
+
+                    String codigosCond = "";
+                    if (DataCodigos != null && !DataCodigos.trim().isEmpty()) {
+                        List<String> lst_codigos = new ArrayList<String>();
+                        for (String codigo : DataCodigos.split(",")) {
+                            String c = codigo.trim();
+                            if (!c.isEmpty()) {
+                                lst_codigos.add(c);
+                            }
+                        }
+                        if (!lst_codigos.isEmpty()) {
+                            StringBuilder codigosIn = new StringBuilder("(");
+                            for (int i = 0; i < lst_codigos.size(); i++) {
+                                if (i > 0) {
+                                    codigosIn.append(",");
+                                }
+                                codigosIn.append("'").append(lst_codigos.get(i).replace("'", "''")).append("'");
+                            }
+                            codigosIn.append(")");
+                            codigosCond = "AND r.codigo IN " + codigosIn;
+                        }
+                    }
+                    Qry = Qry.replace("XDataCodigosCondX", codigosCond);
+
                     Statement sttm = conn.createStatement();
                     ResultSet rs = sttm.executeQuery(Qry);
                     List<String> lst_batch = new ArrayList<String>();

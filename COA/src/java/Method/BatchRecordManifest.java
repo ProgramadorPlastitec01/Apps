@@ -103,6 +103,7 @@ public class BatchRecordManifest {
 
         // 2. Certificados COA
         String materialBatch = "";
+        StringBuilder materialCodigos = new StringBuilder();
         int idCertificateManga = 0;
         List lstCert = certJpa.ConsultCertificatesBatchRecord(orden, lote);
         if (lstCert != null) {
@@ -110,6 +111,17 @@ public class BatchRecordManifest {
                 Object[] arg = (Object[]) item;
                 if (arg.length >= 5) {
                     materialBatch += arg[4];
+                    if (arg.length >= 6 && arg[5] != null) {
+                        // Codigos de recepción de material (tinta) seleccionados al
+                        // crear el certificado, para no mezclar anexos de otra
+                        // recepción del mismo lote que el usuario no eligió.
+                        for (String codigo : Util.extractSelectedReceptionCodes(arg[5].toString())) {
+                            if (materialCodigos.length() > 0) {
+                                materialCodigos.append(",");
+                            }
+                            materialCodigos.append(codigo);
+                        }
+                    }
                     if (idCertificateManga == 0) {
                         try {
                             idCertificateManga = Integer.parseInt(String.valueOf(arg[0]));
@@ -129,7 +141,7 @@ public class BatchRecordManifest {
 
         // 3. Anexos Generación de Lotes
         if (!materialBatch.isEmpty()) {
-            List lstMat = linkBatch.AttachmentBatchRecord(materialBatch);
+            List lstMat = linkBatch.AttachmentBatchRecord(materialBatch, materialCodigos.toString());
             if (lstMat != null) {
                 for (Object item : lstMat) {
                     String[] arg = Util.parseResult(item);

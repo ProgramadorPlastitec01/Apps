@@ -55,7 +55,7 @@ protected void doGet(
                 new ConnectionRegistrosLAB();
 
         List<Object[]> datos =
-                conexion.ConsultLotesRegistroVerificar(
+                conexion.ConsultLotesRegistroVerificarDirecto(
                         idProducto,
                         lote,
                         idLinea,
@@ -103,6 +103,16 @@ protected void doGet(
     private static List<DiferenciaRegistro> analizarCampo(List<Object[]> datos,
             String nombreCampo, int indiceC, int indiceP) {
 
+        // Se agrupa por una clave insensible a mayúsculas: MySQL compara
+        // strings con una collation case-insensitive (utf8_general_ci), así
+        // que ConsultMaterials (el badge "Diferencias encontradas") no
+        // cuenta como diferencia un valor que solo cambia de mayúscula
+        // ("7203-36I24-2" vs "7203-36i24-2"). Si aquí se comparara con
+        // igualdad exacta de Java, se marcarían diferencias falsas que el
+        // badge nunca reportó. El valor MOSTRADO conserva el casing
+        // original (el primero visto para esa clave), solo la agrupación es
+        // insensible a mayúsculas.
+        Map<String, String> valoresMostrados = new LinkedHashMap<String, String>();
         Map<String, Integer> frecuencias = new LinkedHashMap<String, Integer>();
 
         for (Object[] dato : datos) {
@@ -117,29 +127,33 @@ protected void doGet(
 
             String valor = "C: " + normalizarValor(dato[indiceC])
                     + " | P: " + normalizarValor(dato[indiceP]);
-            Integer acumulado = frecuencias.get(valor);
-            frecuencias.put(valor, (acumulado == null ? 0 : acumulado) + cantidad);
+            String clave = valor.toLowerCase();
+            if (!valoresMostrados.containsKey(clave)) {
+                valoresMostrados.put(clave, valor);
+            }
+            Integer acumulado = frecuencias.get(clave);
+            frecuencias.put(clave, (acumulado == null ? 0 : acumulado) + cantidad);
         }
 
         if (frecuencias.size() <= 1) {
             return Collections.emptyList();
         }
 
-        String valorCorrecto = null;
+        String claveCorrecta = null;
         int cantidadCorrecto = -1;
         for (Map.Entry<String, Integer> entrada : frecuencias.entrySet()) {
             if (entrada.getValue() > cantidadCorrecto) {
-                valorCorrecto = entrada.getKey();
+                claveCorrecta = entrada.getKey();
                 cantidadCorrecto = entrada.getValue();
             }
         }
 
         List<DiferenciaRegistro> diferencias = new ArrayList<DiferenciaRegistro>();
         for (Map.Entry<String, Integer> entrada : frecuencias.entrySet()) {
-            if (!entrada.getKey().equals(valorCorrecto)) {
+            if (!entrada.getKey().equals(claveCorrecta)) {
                 diferencias.add(new DiferenciaRegistro(nombreCampo,
-                        valorCorrecto, entrada.getKey(), cantidadCorrecto,
-                        entrada.getValue()));
+                        valoresMostrados.get(claveCorrecta), valoresMostrados.get(entrada.getKey()),
+                        cantidadCorrecto, entrada.getValue()));
             }
         }
         return diferencias;

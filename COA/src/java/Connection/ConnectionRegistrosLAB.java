@@ -19,7 +19,7 @@ public class ConnectionRegistrosLAB {
     static String url = "";
 
     public List ConsultMaterials(int Order, String Product, String Batch) throws Exception {
-        //<editor-fold defaultstate="collapsed" desc="CONSULT_MATERIALS R-GC-04">
+        //<editor-fold defaultstate="collapsed" desc="CONSULT_MATERIALS R-GC-046">
         List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerRegistrosLab");
         if (lst_parameter != null) {
             Object[] obj_data = (Object[]) lst_parameter.get(0);
@@ -27,8 +27,8 @@ public class ConnectionRegistrosLAB {
             login = arr_data[0];
             password = arr_data[1];
             url = "jdbc:mysql://" + arr_data[2];
-        } else { 
-           return null;
+        } else {
+            return null;
         }
         Connection conn = null;
         try {
@@ -376,6 +376,7 @@ public class ConnectionRegistrosLAB {
         }
         //</editor-fold>
     }
+
     public List ConsultMaterialsRGC74(int Order, String Product, String Batch) throws Exception {
         //<editor-fold defaultstate="collapsed" desc="CONSULT MATERIALS R-GC-074">
         List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerRegistrosLab");
@@ -515,7 +516,7 @@ public class ConnectionRegistrosLAB {
                         + "    WHERE o.numero = " + Order + " "
                         + "      AND p.codigo LIKE CONCAT('%','" + Product + "', '%') "
                         + "      AND r.lote_producto LIKE CONCAT('%', '" + ((BatchCicle.length == 2) ? BatchCicle[0] : Batch) + "', '%') "
-                        + ((BatchCicle.length == 2) ? "AND r.ciclo_esterilizacion = '" + BatchCicle[1] + "'" : "")
+                        + ((BatchCicle.length == 2) ? "      AND r.ciclo_esterilizacion = '" + BatchCicle[1] + "' " : "")
                         + "      AND l.nombre NOT LIKE '%SCREEN%' "
                         + "), "
                         + " "
@@ -524,25 +525,25 @@ public class ConnectionRegistrosLAB {
                         + "        *, "
                         + "        CASE  "
                         + "            WHEN `Lote LF` LIKE '%/%' THEN `Lote LF` "
-                        + "            WHEN `Lote LF` REGEXP '[VERP]' THEN  "
+                        + "            WHEN `Lote LF` REGEXP 'V[0-9A-Z]+$' THEN  "
                         + "                REGEXP_REPLACE(REGEXP_REPLACE(`Lote LF`, '^[A-Z0-9]+-', ''), 'V[0-9A-Z]+', '') "
                         + "            ELSE `Lote LF` "
                         + "        END AS lote_lf_normalizado, "
                         + "        CASE  "
                         + "            WHEN `Lote PP` LIKE '%/%' THEN `Lote PP` "
-                        + "            WHEN `Lote PP` REGEXP '[VERP]' THEN  "
+                        + "            WHEN `Lote PP` REGEXP 'V[0-9A-Z]+$' THEN  "
                         + "                REGEXP_REPLACE(REGEXP_REPLACE(`Lote PP`, '^[A-Z0-9]+-', ''), 'V[0-9A-Z]+', '') "
                         + "            ELSE `Lote PP` "
                         + "        END AS lote_pp_normalizado, "
                         + "        CASE  "
                         + "            WHEN `Lote DD` LIKE '%/%' THEN `Lote DD` "
-                        + "            WHEN `Lote DD` REGEXP '[VERP]' THEN  "
+                        + "            WHEN `Lote DD` REGEXP 'V[0-9A-Z]+$' THEN  "
                         + "                REGEXP_REPLACE(REGEXP_REPLACE(`Lote DD`, '^[A-Z0-9]+-', ''), 'V[0-9A-Z]+', '') "
                         + "            ELSE `Lote DD` "
                         + "        END AS lote_dd_normalizado, "
                         + "        CASE  "
                         + "            WHEN `Lote DI` LIKE '%/%' THEN `Lote DI` "
-                        + "            WHEN `Lote DI` REGEXP '[VERP]' THEN  "
+                        + "            WHEN `Lote DI` REGEXP 'V[0-9A-Z]+$' THEN  "
                         + "                REGEXP_REPLACE(REGEXP_REPLACE(`Lote DI`, '^[A-Z0-9]+-', ''), 'V[0-9A-Z]+', '') "
                         + "            ELSE `Lote DI` "
                         + "        END AS lote_di_normalizado "
@@ -563,49 +564,13 @@ public class ConnectionRegistrosLAB {
                         + ") "
                         + "SELECT "
                         + "    `CAPA INTERNA / INNER LAYER`, "
-                        + "    CASE  "
-                        + "        WHEN `Lote LF` LIKE '%/%' THEN `Lote LF` "
-                        + "        WHEN `Lote LF` REGEXP '[VERP]' THEN  "
-                        + "            REGEXP_REPLACE( "
-                        + "                REGEXP_REPLACE(`Lote LF`, '^[A-Z0-9]+-', ''), "
-                        + "                'V[0-9A-Z]+', '' "
-                        + "            ) "
-                        + "        ELSE `Lote LF` "
-                        + "    END AS `Lote LF`, "
-                        + " "
+                        + "    lote_lf_normalizado AS `Lote LF`, "
                         + "    `CAPA EXTERNA / OUTER LAYER`, "
-                        + "    CASE  "
-                        + "        WHEN `Lote PP` LIKE '%/%' THEN `Lote PP` "
-                        + "        WHEN `Lote PP` REGEXP '[VERP]' THEN  "
-                        + "            REGEXP_REPLACE( "
-                        + "                REGEXP_REPLACE(`Lote PP`, '^[A-Z0-9]+-', ''), "
-                        + "                'V[0-9A-Z]+', '' "
-                        + "            ) "
-                        + "        ELSE `Lote PP` "
-                        + "    END AS `Lote PP`, "
-                        + " "
+                        + "    lote_pp_normalizado AS `Lote PP`, "
                         + "    `DUCTOS CAPA EXTERNA / OUTER LAYER TUBE`, "
-                        + "    CASE  "
-                        + "        WHEN `Lote DD` LIKE '%/%' THEN `Lote DD` "
-                        + "        WHEN `Lote DD` REGEXP '[VERP]' THEN  "
-                        + "            REGEXP_REPLACE( "
-                        + "                REGEXP_REPLACE(`Lote DD`, '^[A-Z0-9]+-', ''), "
-                        + "                'V[0-9A-Z]+', '' "
-                        + "            ) "
-                        + "        ELSE `Lote DD` "
-                        + "    END AS `Lote DD`, "
-                        + " "
+                        + "    lote_dd_normalizado AS `Lote DD`, "
                         + "    `DUCTOS CAPA INTERNA / INNER LAYER TUBE`, "
-                        + "    CASE  "
-                        + "        WHEN `Lote DI` LIKE '%/%' THEN `Lote DI` "
-                        + "        WHEN `Lote DI` REGEXP '[VERP]' THEN  "
-                        + "            REGEXP_REPLACE( "
-                        + "                REGEXP_REPLACE(`Lote DI`, '^[A-Z0-9]+-', ''), "
-                        + "                'V[0-9A-Z]+', '' "
-                        + "            ) "
-                        + "        ELSE `Lote DI` "
-                        + "    END AS `Lote DI`, "
-                        + " "
+                        + "    lote_di_normalizado AS `Lote DI`, "
                         + "    `CONECTOR / CONNECTOR`, "
                         + "    `Lote CONNECTOR`, "
                         + "    `SITIO INYECCION / INJECTION SITE`, "
@@ -615,7 +580,6 @@ public class ConnectionRegistrosLAB {
                         + "    `SISTEMA DE 3 VIAS PN`, "
                         + "    `Lote SISTEMA VIAS`, "
                         + "    `FOIL NEGRO / BLACK FOIL`, "
-                        + " "
                         + "    ( "
                         + "        c.diferencias_lote_lf + "
                         + "        c.diferencias_lote_pp + "
@@ -627,10 +591,8 @@ public class ConnectionRegistrosLAB {
                         + "        c.diferencias_sistemavias + "
                         + "        c.diferencias_foil "
                         + "    ) AS total_diferencias "
-                        + " "
                         + "FROM datos_normalizados "
                         + "CROSS JOIN conteos c "
-                        + " "
                         + "LIMIT 1;";
                 sttm = conn.createStatement();
                 rs = sttm.executeQuery(Qry);
@@ -688,6 +650,7 @@ public class ConnectionRegistrosLAB {
         }
         //</editor-fold>
     }
+
     public List ConsultMaterialsRGC194(int Order, String Product, String Batch) throws Exception {
         //<editor-fold defaultstate="collapsed" desc="CONSULT_MATERIALS R-GC-194">
         List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerRegistrosLab");
@@ -837,6 +800,7 @@ public class ConnectionRegistrosLAB {
         }
         //</editor-fold>
     }
+
     public List ConsultMaterialsRGC220(int Order, String Product, String Batch) throws Exception {
         //<editor-fold defaultstate="collapsed" desc="CONSULT_MATERIALS R-GC-220">
         List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerRegistrosLab");
@@ -1361,6 +1325,7 @@ public class ConnectionRegistrosLAB {
         }
         //</editor-fold>
     }
+
     public List DimensionalQueryRGC220(int Order, String Product, String Batch, String Comparator, String OrderBy) throws Exception {
         //<editor-fold defaultstate="collapsed" desc="DIMESIONAL_QUERY R-GC-220">
         List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerRegistrosLab");
@@ -1633,6 +1598,7 @@ public class ConnectionRegistrosLAB {
         }
         //</editor-fold>
     }
+
     public List QueryTechnicalSheetRGC220(int Order, String Product, String Qrt) throws Exception {
         //<editor-fold defaultstate="collapsed" desc="QUERY TECHNICALSHEET R-GC-220">
         List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerRegistrosLab");
@@ -1992,6 +1958,115 @@ public class ConnectionRegistrosLAB {
         }
 
         // </editor-fold>
+    }
+
+    /**
+     * Igual que {@link #ConsultLotesRegistroVerificar}, pero consulta
+     * directamente la tabla `registro` en vez del procedimiento externo
+     * `sp_rgt_t_lotes_registro_verificar`, que filtra `resumido = 0 AND
+     * estado = 0`. Un lote ya finalizado en Registros LAB normalmente tiene
+     * TODOS sus registros con resumido = 1, así que ese procedimiento
+     * siempre devolvía cero filas para un certificado ya firmado — el modal
+     * "Comprobar Errores" nunca encontraba nada, aunque el badge de
+     * "Diferencias encontradas" (ConsultMaterials, que no filtra por
+     * resumido/estado) sí las contara. Esta consulta replica exactamente el
+     * mismo criterio de ConsultMaterials (sin resumido/estado), pero
+     * acotado a un id_linea/ciclo puntual, para que badge y modal miren los
+     * mismos datos. Devuelve una fila por id_registro (cantidad_registros=1
+     * cada una); analizarDiferencias() ya suma por valor, así que da igual
+     * si viene pre-agrupado o no.
+     */
+    public List<Object[]> ConsultLotesRegistroVerificarDirecto(
+            int idProducto, String lote, int idLinea, String cicloEsterilizacion) throws Exception {
+
+        List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerRegistrosLab");
+        if (lst_parameter == null || lst_parameter.isEmpty()) {
+            return null;
+        }
+        Object[] obj_data = (Object[]) lst_parameter.get(0);
+        String[] arr_data = obj_data[2].toString().replace("][", "///")
+                .replace("[", "").replace("]", "").split("///");
+        login = arr_data[0];
+        password = arr_data[1];
+        url = "jdbc:mysql://" + arr_data[2];
+
+        String ciclo = cicloEsterilizacion == null ? "" : cicloEsterilizacion;
+
+        String query = "SELECT r.id_registro, r.lote_producto, r.id_linea, l.nombre, "
+                + "r.lote_manga_c, r.lote_manga_p, "
+                + "r.lote_dto_drc_c, r.lote_dto_drc_p, "
+                + "r.lote_dto_iqe_c, r.lote_dto_iqe_p, "
+                + "r.lote_dto_ctl_c, r.lote_dto_ctl_p, "
+                + "r.ensamble, r.lote_ensamble, "
+                + "r.ensamble_2, r.lote_ensamble_2, "
+                + "r.ensamble_3, r.lote_ensamble_3, "
+                + "r.ensamble_4, r.lote_ensamble_4, "
+                + "r.lote_tinta, r.color_tinta, "
+                + "COALESCE(r.ciclo_esterilizacion, '') AS ciclo_esterilizacion, "
+                + "CONCAT(r.fecha_turno, ' ', DATE_FORMAT(r.fecha_registro, '%H:%i %p')) AS hora "
+                + "FROM registro r "
+                + "INNER JOIN linea l ON l.id_linea = r.id_linea "
+                + "WHERE r.id_producto = " + idProducto + " "
+                + "  AND r.lote_producto = '" + lote.replace("'", "''") + "' "
+                + "  AND r.id_linea = " + idLinea + " "
+                + "  AND COALESCE(r.ciclo_esterilizacion, '') = '" + ciclo.replace("'", "''") + "' "
+                + "ORDER BY r.fecha_registro ASC";
+
+        Connection conn = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            conn = DriverManager.getConnection(url, login, password);
+            if (conn == null) {
+                return null;
+            }
+            Statement sttm = conn.createStatement();
+            ResultSet rs = sttm.executeQuery(query);
+            List<Object[]> lstDatos = new ArrayList<Object[]>();
+            while (rs.next()) {
+                // Mismo layout de índices que ConsultLotesRegistroVerificar, para
+                // que ConsultarDiferenciasRegistro.analizarDiferencias() funcione
+                // sin cambios sobre cualquiera de las dos fuentes.
+                Object[] dato = new Object[30];
+                dato[0] = rs.getString("lote_producto");
+                dato[1] = 1; // cantidad_registros: una fila = un registro, sin agrupar.
+                dato[2] = rs.getString("lote_manga_c");
+                dato[3] = rs.getString("lote_manga_p");
+                dato[4] = rs.getString("lote_dto_drc_c");
+                dato[5] = rs.getString("lote_dto_drc_p");
+                dato[6] = rs.getString("lote_dto_iqe_c");
+                dato[7] = rs.getString("lote_dto_iqe_p");
+                dato[8] = rs.getString("ensamble");
+                dato[9] = rs.getString("lote_ensamble");
+                dato[10] = rs.getString("lote_tinta");
+                dato[11] = rs.getString("nombre");
+                dato[12] = rs.getString("hora");
+                dato[13] = rs.getString("hora");
+                dato[14] = rs.getString("color_tinta");
+                dato[15] = rs.getInt("id_linea");
+                dato[16] = rs.getString("ensamble_2");
+                dato[17] = rs.getString("lote_ensamble_2");
+                dato[19] = rs.getString("lote_dto_ctl_c");
+                dato[20] = rs.getString("lote_dto_ctl_p");
+                dato[24] = rs.getString("ciclo_esterilizacion");
+                dato[25] = rs.getString("ensamble_3");
+                dato[26] = rs.getString("lote_ensamble_3");
+                dato[27] = rs.getString("ensamble_4");
+                dato[28] = rs.getString("lote_ensamble_4");
+                dato[29] = rs.getInt("id_registro");
+                lstDatos.add(dato);
+            }
+            conn.close();
+            return lstDatos;
+        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+            return null;
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (Exception ignored) {
+                }
+            }
+        }
     }
 
     /**

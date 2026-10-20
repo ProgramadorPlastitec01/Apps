@@ -113,38 +113,93 @@ public class Util {
     // entre sí, se deja un <select> para que el usuario elija cuál aplica; el
     // COS asociado se actualiza con el onchange inline del propio select.
     public static String replaceLoteReception(String html, List lst_GlotesRep, int cnt2, boolean cosEditable) {
-        LinkedHashMap<String, String> distinct = new LinkedHashMap<String, String>();
+        // Clave de deduplicación: ref+cos no basta (dos recepciones distintas
+        // del mismo lote pueden compartir "consecutivo", ver código real
+        // producción), así que se incluye el codigo crudo (r.codigo) también.
+        // Ese codigo crudo es la única columna que permite, más adelante,
+        // filtrar los anexos de Generación de Lotes por la recepción exacta
+        // que el usuario seleccionó aquí (no solo por lote): queda grabado en
+        // el atributo data-ref del span COSn, que sí persiste al guardar el
+        // certificado (a diferencia del estado "selected" de un <select>).
+        LinkedHashMap<String, String[]> distinct = new LinkedHashMap<String, String[]>();
         for (Object o : lst_GlotesRep) {
             String[] arg = parseResult(o);
-            String ref = arg[1].replace("M", "");
+            String codigoRaw = arg[1];
+            String ref = codigoRaw.replace("M", "");
             String cos = "CC" + arg[0];
-            distinct.put(ref + "|" + cos, ref + "|" + cos);
+            distinct.put(ref + "|" + cos + "|" + codigoRaw, new String[]{ref, cos, codigoRaw});
         }
         if (distinct.size() == 1) {
-            String[] only = distinct.keySet().iterator().next().split("\\|");
+            String[] only = distinct.values().iterator().next();
             html = html.replace("REF" + cnt2, only[0]);
+            String cosSpan = "<span id='COS" + cnt2 + "' data-ref='" + htmlAttr(only[2]) + "'>" + only[1] + "</span>";
             html = html.replace("COS" + cnt2, cosEditable
-                    ? "<span  class='editable pending' contenteditable='true'>" + only[1] + "</span>"
-                    : only[1]);
+                    ? "<span  class='editable pending' contenteditable='true'>" + cosSpan + "</span>"
+                    : cosSpan);
             return html;
         }
         StringBuilder options = new StringBuilder();
         String firstCos = null;
-        for (String key : distinct.keySet()) {
-            String[] parts = key.split("\\|");
+        String firstRef = null;
+        for (String[] vals : distinct.values()) {
             if (firstCos == null) {
-                firstCos = parts[1];
+                firstCos = vals[1];
+                firstRef = vals[2];
             }
-            options.append("<option data-cos='").append(parts[1]).append("'>").append(parts[0]).append("</option>");
+            options.append("<option data-cos='").append(vals[1]).append("' data-ref='").append(htmlAttr(vals[2]))
+                    .append("'>").append(vals[0]).append("</option>");
         }
         // El COS se reemplaza primero: el <select> que se inserta abajo para
         // REF menciona "COS" + cnt2 dentro de su onchange, y si el reemplazo
         // de COS se hiciera después volvería a matchear (y corromper) ese
         // texto recién insertado en vez de solo el placeholder original.
-        html = html.replace("COS" + cnt2, "<span id='COS" + cnt2 + "'>" + firstCos + "</span>");
+        html = html.replace("COS" + cnt2, "<span id='COS" + cnt2 + "' data-ref='" + htmlAttr(firstRef) + "'>" + firstCos + "</span>");
         html = html.replace("REF" + cnt2,
-                "<select class='editable-select' onchange=\"document.getElementById('COS" + cnt2 + "').textContent=this.options[this.selectedIndex].dataset.cos;\">" + options + "</select>");
+                "<select class='editable-select' onchange=\"var o=this.options[this.selectedIndex];var s=document.getElementById('COS"
+                + cnt2 + "');s.textContent=o.dataset.cos;s.setAttribute('data-ref', o.dataset.ref);\">" + options + "</select>");
         return html;
+    }
+
+    /** Escapa un valor para insertarlo dentro de un atributo HTML simple-comillado (data-ref='...'). */
+    private static String htmlAttr(String s) {
+        if (s == null) {
+            return "";
+        }
+        return s.replace("&", "&amp;")
+                .replace("'", "&#39;")
+                .replace("\"", "&quot;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;");
+    }
+
+    /**
+     * Extrae los codigos de recepción de material (r.codigo, Generación de
+     * Lotes) que quedaron seleccionados en un certificado ya guardado, leyendo
+     * los spans id='COSn' data-ref='...' que deja {@link #replaceLoteReception}.
+     * Se usa en FileManager.jsp para que el tab "Generación de Lotes" muestre
+     * solo los anexos de la recepción puntual elegida, no todas las que
+     * comparten el mismo lote.
+     */
+    public static java.util.List<String> extractSelectedReceptionCodes(String html) {
+        java.util.List<String> codigos = new java.util.ArrayList<String>();
+        if (html == null) {
+            return codigos;
+        }
+        java.util.regex.Matcher m = java.util.regex.Pattern
+                .compile("id=['\"]COS\\d+['\"]\\s+data-ref=['\"]([^'\"]*)['\"]")
+                .matcher(html);
+        while (m.find()) {
+            String codigo = m.group(1)
+                    .replace("&#39;", "'")
+                    .replace("&quot;", "\"")
+                    .replace("&lt;", "<")
+                    .replace("&gt;", ">")
+                    .replace("&amp;", "&");
+            if (!codigo.isEmpty()) {
+                codigos.add(codigo);
+            }
+        }
+        return codigos;
     }
 
     private static String selectedOptionText(String optionsHtml) {
