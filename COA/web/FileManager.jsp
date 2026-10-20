@@ -1171,46 +1171,6 @@
                 position: 'bottomRight'
             });
             <%
-            } else if ("support_upload_success".equals(msg)) {
-            %>
-            iziToast.success({
-                title: 'Éxito',
-                message: 'Documento de soporte adjuntado correctamente. Ya puede firmarlo.',
-                position: 'bottomRight'
-            });
-            <%
-            } else if ("support_upload_partial".equals(msg)) {
-            %>
-            iziToast.warning({
-                title: 'Formato no permitido',
-                message: 'El documento no se adjuntó: solo se permiten pdf, png, jpg, jpeg, gif.',
-                position: 'bottomRight'
-            });
-            <%
-            } else if ("support_sign_success".equals(msg)) {
-            %>
-            iziToast.success({
-                title: 'Documento firmado',
-                message: 'El documento de soporte fue firmado correctamente.',
-                position: 'bottomRight'
-            });
-            <%
-            } else if ("error_permission".equals(msg)) {
-            %>
-            iziToast.error({
-                title: 'Sin permiso',
-                message: 'No tiene permiso para realizar esta acción, o no tiene una firma registrada.',
-                position: 'bottomRight'
-            });
-            <%
-            } else if ("error_sign".equals(msg)) {
-            %>
-            iziToast.error({
-                title: 'Error al firmar',
-                message: 'No se pudo firmar el documento de soporte.',
-                position: 'bottomRight'
-            });
-            <%
                 }
             %>
         </script>
@@ -1360,23 +1320,12 @@
 
             function brActualizarResumen() {
                 const filas = document.querySelectorAll('.batch-record-row');
-                const conteos = {fisico: 0, soporte: 0, batchrecord: 0, lab: 0, coa: 0, lotes: 0, manga: 0, formula: 0};
-                let firmados = 0;
-                let pendientesSoporte = 0;
-                let totalSoporte = 0;
+                const conteos = {fisico: 0, batchrecord: 0, lab: 0, coa: 0, lotes: 0, manga: 0, formula: 0};
 
                 filas.forEach(function (row) {
                     const categoria = row.getAttribute('data-category');
                     if (conteos.hasOwnProperty(categoria)) {
                         conteos[categoria]++;
-                    }
-                    if (categoria === 'soporte') {
-                        totalSoporte++;
-                        if (row.getAttribute('data-status') === 'firmado') {
-                            firmados++;
-                        } else {
-                            pendientesSoporte++;
-                        }
                     }
                 });
 
@@ -1385,24 +1334,12 @@
                 // "Todos" no cuenta los Batch Record (ver brAplicarVisibilidad): mismo criterio.
                 document.getElementById('brCountTodos').textContent = total - conteos.batchrecord;
                 document.getElementById('brCountFisico').textContent = conteos.fisico;
-                document.getElementById('brCountSoporte').textContent = conteos.soporte;
                 document.getElementById('brCountBatchRecord').textContent = conteos.batchrecord;
                 document.getElementById('brCountLab').textContent = conteos.lab;
                 document.getElementById('brCountCoa').textContent = conteos.coa;
                 document.getElementById('brCountLotes').textContent = conteos.lotes;
                 document.getElementById('brCountManga').textContent = conteos.manga;
                 document.getElementById('brCountFormula').textContent = conteos.formula;
-
-                document.getElementById('brFirmados').textContent = firmados;
-                document.getElementById('brPendientes').textContent = pendientesSoporte;
-
-                if (totalSoporte > 0) {
-                    document.getElementById('brFirmadosPct').textContent = Math.round((firmados / totalSoporte) * 100) + '% de los soportes';
-                    document.getElementById('brPendientesPct').textContent = Math.round((pendientesSoporte / totalSoporte) * 100) + '% de los soportes';
-                } else {
-                    document.getElementById('brFirmadosPct').textContent = 'Sin documentos de soporte';
-                    document.getElementById('brPendientesPct').textContent = '';
-                }
             }
 
             document.addEventListener('DOMContentLoaded', function () {
