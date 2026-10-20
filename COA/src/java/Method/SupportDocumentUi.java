@@ -113,7 +113,13 @@ public final class SupportDocumentUi {
 
     /** Imprime el modal de carga y su JS una sola vez por página. */
     public static void renderModal(JspWriter out) throws IOException {
-        out.print("<div class='modal fade' id='supportCertModal' tabindex='-1' role='dialog'>");
+        // Menu.jsp agrega una barra fija "Entorno de pruebas" con z-index:9998,
+        // más alto que el modal de Bootstrap (1050 por defecto): sin esto esa
+        // barra queda por encima del modal y tapa sus botones (Cancelar/
+        // Adjuntar). Sin backdrop (data-backdrop='false' más abajo) no hace
+        // falta subir el z-index del fondo oscuro: no se usa ninguno.
+        out.print("<style>#supportCertModal { z-index: 10050; }</style>");
+        out.print("<div class='modal fade' id='supportCertModal' tabindex='-1' role='dialog' data-backdrop='false'>");
         out.print("<div class='modal-dialog modal-md modal-dialog-centered' role='document'>");
         out.print("<div class='modal-content'>");
         out.print("<div class='modal-header'>");

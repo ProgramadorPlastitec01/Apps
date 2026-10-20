@@ -16,7 +16,6 @@ import Method.SupportDocumentUi;
 import java.util.List;
 import Method.Util;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Optional;
 import javax.servlet.http.HttpSession;
 
@@ -33,7 +32,7 @@ public class Visual extends TagSupport {
         CertificatesJpaController CertificatesJpa = new CertificatesJpaController();
         CertificateFileJpaController CertificateFilesJpa = new CertificateFileJpaController();
         ConnectionGeneracionLotes GeneracionLotesJpa = new ConnectionGeneracionLotes();
-        String Type = "", Product = "", ProductFact = "", Batch = "", DataTechnicalSheet = "", Html = "", BatchLay = "", Record = "", FormatName = "", Message = "", IdSig = "", Permission = "", Client = "", 
+        String Type = "", Product = "", ProductFact = "", Batch = "", DataTechnicalSheet = "", Html = "", BatchLay = "", Record = "", FormatName = "", Message = "", IdSig = "", Permission = "", Client = "",
                 DateI = "", DateF = "", Cycle = "";
         String[] BatchCycle = {};
         int Order = 0, IdForm = 0, Count = 1, Count2 = 1, IdCertificates = 0, State = 0, TempDelete = 0, StateCerti = 0, TempM = 0, AmoutReg = 0;
@@ -207,7 +206,7 @@ public class Visual extends TagSupport {
                                     + "data-placement='top' title='Código'>"
                                     + "<i class=\"fas fa-list-ol\"></i>"
                                     + "</button></div>");
-                            
+
                             out.print("<div class='ml-4'>"
                                     + "<button class='btn btn-outline-info btn-sm' "
                                     + "style='border-radius: 4px; padding: 2px 9px;' "
@@ -216,7 +215,6 @@ public class Visual extends TagSupport {
                                     + "data-placement='top' title='Clientes'>"
                                     + "<i class=\"fas fa-id-card\"></i>"
                                     + "</button></div>");
-
 
                             out.print("<div class='ml-4'>"
                                     + "<button class='btn btn-outline-success btn-sm' "
@@ -492,16 +490,25 @@ public class Visual extends TagSupport {
                                         String[] ArgLay = lst_Glotes1.get(0).toString().replace("]", "").replace("[", "").split("///");
                                         Html = Html.replace("COS" + Cnt + "", "CC" + ArgLay[0]);
                                     } else {
-                                        Html = Html.replace("COS" + Cnt, "<span  class='editable pending' contenteditable='true'>----</span>");
+                                        // Salvedad: si no se encontró por lote + familia de proceso
+                                        // (el proceso puede tener un nombre que variantesProceso()
+                                        // todavía no conoce, o el material de Registros LAB está
+                                        // nombrado distinto al de Generación de Lotes), se busca de
+                                        // nuevo solo por lote antes de rendirse. Si hay un único
+                                        // consecutivo se usa directo; si hay varios, se deja elegir.
+                                        List<String> lst_GlotesSinProceso = GeneracionLotesJpa.ConsultarCC_GeneracionLoteDetalle(ArgImP[i]);
+                                        Html = Util.resolverConsecutivoAmbiguo(Html, Cnt, lst_GlotesSinProceso);
 
-                                        Message = "No se encuentra información en Generacion de lotes en el módulo de Control consecutivos por el lote, favor verifique";
+                                        if (lst_GlotesSinProceso == null || lst_GlotesSinProceso.isEmpty()) {
+                                            Message = "No se encuentra información en Generacion de lotes en el módulo de Control consecutivos por el lote, favor verifique";
 
-                                        // ✅ Ejecutar automáticamente cuando todo esté cargado
-                                        out.print("<script>"
-                                                + "window.addEventListener('load',function(){"
-                                                + " registrarEvento('Generacion de lotes / Control Consecutivos','" + Order + "','" + ProductFact + "','" + ArgImP[i] + "','" + Message.replace("'", "\\'") + "');"
-                                                + "});"
-                                                + "</script>");
+                                            // ✅ Ejecutar automáticamente cuando todo esté cargado
+                                            out.print("<script>"
+                                                    + "window.addEventListener('load',function(){"
+                                                    + " registrarEvento('Generacion de lotes / Control Consecutivos','" + Order + "','" + ProductFact + "','" + ArgImP[i] + "','" + Message.replace("'", "\\'") + "');"
+                                                    + "});"
+                                                    + "</script>");
+                                        }
                                     }
                                     Cnt++;
                                 }
@@ -569,7 +576,7 @@ public class Visual extends TagSupport {
                                 //<editor-fold defaultstate="collapsed" desc="TECNHNICAL SHEET">
                                 Object[] ObjSheet = (Object[]) lst_sheet.get(0);
                                 if (ObjSheet[2] != null && !ObjSheet[2].equals("")) {
-                                    lst_prm = RegistrosLabJpa.QueryTechnicalSheet(Order, Product, ObjSheet[2].toString());
+                                    lst_prm = RegistrosLabJpa.QueryTechnicalSheet(Order, Product, Batch, ObjSheet[2].toString());
                                     if (lst_prm != null && lst_prm.size() > 0) {
                                         String[] ArgPrm = Util.parseResult(lst_prm.get(0));
                                         // Prioriza Soldadura bocas/colas "alt" sobre el valor normal cuando trae dato
@@ -754,7 +761,7 @@ public class Visual extends TagSupport {
                                 //<editor-fold defaultstate="collapsed" desc="TECNHNICAL SHEET">
                                 Object[] ObjSheet = (Object[]) lst_sheet.get(0);
                                 if (!ObjSheet[2].equals("") || ObjSheet[2] != null) {
-                                    lst_prm = RegistrosLabJpa.QueryTechnicalSheetRGC74(Order, Product, ObjSheet[2].toString());
+                                    lst_prm = RegistrosLabJpa.QueryTechnicalSheetRGC74(Order, Product, Batch, ObjSheet[2].toString());
                                     if (lst_prm != null) {
                                         String[] ArgPrm = Util.parseResult(lst_prm.get(0));
                                         DataTechnicalSheet = ArgPrm[11];
@@ -860,16 +867,25 @@ public class Visual extends TagSupport {
                                         String[] ArgLay = lst_Glotes1.get(0).toString().replace("]", "").replace("[", "").split("///");
                                         Html = Html.replace("COS" + Cnt + "", "CC" + ArgLay[0]);
                                     } else {
-                                        Html = Html.replace("COS" + Cnt, "<span  class='editable pending' contenteditable='true'>----</span>");
+                                        // Salvedad: si no se encontró por lote + familia de proceso
+                                        // (el proceso puede tener un nombre que variantesProceso()
+                                        // todavía no conoce, o el material de Registros LAB está
+                                        // nombrado distinto al de Generación de Lotes), se busca de
+                                        // nuevo solo por lote antes de rendirse. Si hay un único
+                                        // consecutivo se usa directo; si hay varios, se deja elegir.
+                                        List<String> lst_GlotesSinProceso = GeneracionLotesJpa.ConsultarCC_GeneracionLoteDetalle(ArgImP[i]);
+                                        Html = Util.resolverConsecutivoAmbiguo(Html, Cnt, lst_GlotesSinProceso);
 
-                                        Message = "No se encuentra información en Generacion de lotes en el módulo de Control consecutivos por el lote, favor verifique";
+                                        if (lst_GlotesSinProceso == null || lst_GlotesSinProceso.isEmpty()) {
+                                            Message = "No se encuentra información en Generacion de lotes en el módulo de Control consecutivos por el lote, favor verifique";
 
-                                        // ✅ Ejecutar automáticamente cuando todo esté cargado
-                                        out.print("<script>"
-                                                + "window.addEventListener('load',function(){"
-                                                + " registrarEvento('Generacion de lotes / Control Consecutivos','" + Order + "','" + ProductFact + "','" + ArgImP[i] + "','" + Message.replace("'", "\\'") + "');"
-                                                + "});"
-                                                + "</script>");
+                                            // ✅ Ejecutar automáticamente cuando todo esté cargado
+                                            out.print("<script>"
+                                                    + "window.addEventListener('load',function(){"
+                                                    + " registrarEvento('Generacion de lotes / Control Consecutivos','" + Order + "','" + ProductFact + "','" + ArgImP[i] + "','" + Message.replace("'", "\\'") + "');"
+                                                    + "});"
+                                                    + "</script>");
+                                        }
                                     }
                                     Cnt++;
                                 }
@@ -938,7 +954,7 @@ public class Visual extends TagSupport {
                                 //<editor-fold defaultstate="collapsed" desc="TECNHNICAL SHEET">
                                 Object[] ObjSheet = (Object[]) lst_sheet.get(0);
                                 if (ObjSheet[2] != null && !ObjSheet[2].equals("")) {
-                                    lst_prm = RegistrosLabJpa.QueryTechnicalSheetRGC194(Order, Product, ObjSheet[2].toString());
+                                    lst_prm = RegistrosLabJpa.QueryTechnicalSheetRGC194(Order, Product, Batch, ObjSheet[2].toString());
                                     if (lst_prm != null) {
                                         String[] ArgPrm = Util.parseResult(lst_prm.get(0));
                                         DataTechnicalSheet = ArgPrm[13];
@@ -1041,16 +1057,25 @@ public class Visual extends TagSupport {
                                         String[] ArgLay = lst_Glotes1.get(0).toString().replace("]", "").replace("[", "").split("///");
                                         Html = Html.replace("COS" + Cnt + "", "CC" + ArgLay[0]);
                                     } else {
-                                        Html = Html.replace("COS" + Cnt, "<span  class='editable pending' contenteditable='true'>----</span>");
+                                        // Salvedad: si no se encontró por lote + familia de proceso
+                                        // (el proceso puede tener un nombre que variantesProceso()
+                                        // todavía no conoce, o el material de Registros LAB está
+                                        // nombrado distinto al de Generación de Lotes), se busca de
+                                        // nuevo solo por lote antes de rendirse. Si hay un único
+                                        // consecutivo se usa directo; si hay varios, se deja elegir.
+                                        List<String> lst_GlotesSinProceso = GeneracionLotesJpa.ConsultarCC_GeneracionLoteDetalle(ArgImP[i]);
+                                        Html = Util.resolverConsecutivoAmbiguo(Html, Cnt, lst_GlotesSinProceso);
 
-                                        Message = "No se encuentra información en Generacion de lotes en el módulo de Control consecutivos por el lote, favor verifique";
+                                        if (lst_GlotesSinProceso == null || lst_GlotesSinProceso.isEmpty()) {
+                                            Message = "No se encuentra información en Generacion de lotes en el módulo de Control consecutivos por el lote, favor verifique";
 
-                                        // ✅ Ejecutar automáticamente cuando todo esté cargado
-                                        out.print("<script>"
-                                                + "window.addEventListener('load',function(){"
-                                                + " registrarEvento('Generacion de lotes / Control Consecutivos','" + Order + "','" + ProductFact + "','" + ArgImP[i] + "','" + Message.replace("'", "\\'") + "');"
-                                                + "});"
-                                                + "</script>");
+                                            // ✅ Ejecutar automáticamente cuando todo esté cargado
+                                            out.print("<script>"
+                                                    + "window.addEventListener('load',function(){"
+                                                    + " registrarEvento('Generacion de lotes / Control Consecutivos','" + Order + "','" + ProductFact + "','" + ArgImP[i] + "','" + Message.replace("'", "\\'") + "');"
+                                                    + "});"
+                                                    + "</script>");
+                                        }
                                     }
                                     Cnt++;
                                 }
@@ -1118,7 +1143,7 @@ public class Visual extends TagSupport {
                                 //<editor-fold defaultstate="collapsed" desc="TECNHNICAL SHEET">
                                 Object[] ObjSheet = (Object[]) lst_sheet.get(0);
                                 if (ObjSheet[2] != null && !ObjSheet[2].equals("")) {
-                                    lst_prm = RegistrosLabJpa.QueryTechnicalSheetRGC220(Order, Product, ObjSheet[2].toString());
+                                    lst_prm = RegistrosLabJpa.QueryTechnicalSheetRGC220(Order, Product, Batch, ObjSheet[2].toString());
                                     if (lst_prm != null && lst_prm.size() > 0) {
                                         String[] ArgPrm = Util.parseResult(lst_prm.get(0));
                                         DataTechnicalSheet = ArgPrm[9];
@@ -1332,15 +1357,18 @@ public class Visual extends TagSupport {
                         out.print("swal({");
                         out.print("title: '¿Adjuntar documento de soporte?',");
                         out.print("text: 'El certificado quedó firmado. ¿Desea adjuntar y firmar un documento de soporte para este certificado?',");
-                        out.print("icon: 'question',");
+                        out.print("icon: 'warning',");
                         out.print("buttons: { cancel: { text: 'Ahora no', visible: true, className: 'btn btn-secondary' },"
                                 + "confirm: { text: 'Adjuntar', value: true, className: 'btn btn-primary' } }");
                         out.print("}).then(function (confirmado) {");
                         out.print("if (confirmado) {");
-                        out.print("abrirModalSoporte(" + IdCertificates + ",'" + Util.jsAttr(ObjIdSugerencia[4]) + "','"
-                                + Util.jsAttr(ObjIdSugerencia[12]) + "','" + Util.jsAttr(ObjIdSugerencia[5]) + "','"
-                                + Util.jsAttr(ObjIdSugerencia[7]) + "','" + Util.jsAttr(Type) + "','"
-                                + Util.jsAttr(returnToSugerencia) + "');");
+                        // Esto es JS dentro de <script>, no un atributo HTML: usar
+                        // Util.jsString (no jsAttr, que deja "&amp;" literal aquí al
+                        // no pasar por el decodificador de entidades del navegador).
+                        out.print("abrirModalSoporte(" + IdCertificates + ",'" + Util.jsString(ObjIdSugerencia[4]) + "','"
+                                + Util.jsString(ObjIdSugerencia[12]) + "','" + Util.jsString(ObjIdSugerencia[5]) + "','"
+                                + Util.jsString(ObjIdSugerencia[7]) + "','" + Util.jsString(Type) + "','"
+                                + Util.jsString(returnToSugerencia) + "');");
                         out.print("}");
                         out.print("});");
                         out.print("});");

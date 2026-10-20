@@ -1,4 +1,5 @@
 <%@page import="Controller.CertificatesJpaController"%>
+<%@page import="Method.Util"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Optional"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -45,9 +46,9 @@
                 <div class="card-header d-flex" style="justify-content: space-between;">
                     <h4><%= Code%></h4>
                     <div>
-                        <button class="btn btn-outline-info btn-sm"
+                        <button class="btn btn-outline-primary btn-sm"
                                 style="border-radius: 4px; padding: 2px 9px;"
-                                onclick="PrintHtml()"
+                                onclick="descargarPDFCarta()"
                                 data-toggle="tooltip"
                                 data-placement="top"
                                 title="Imprimir">
@@ -59,6 +60,14 @@
             <div id="Imprimir">
                 <div id="HtmlContent">
                     <%
+                        // Vista de solo lectura (Batch Record, opt=9): igual que el
+                        // cierre de certificado en Tag.Visual, hay que congelar los
+                        // <select> y <input type="date"> a texto plano, no solo
+                        // deshabilitar los contenteditable — si no, el select de
+                        // consecutivo ambiguo (Util.resolverConsecutivoAmbiguo) y la
+                        // fecha de despacho siguen viéndose como controles editables.
+                        Html = Util.collapseSelects(Html);
+                        Html = Util.collapseDateInputs(Html);
                         Html = Html.replace("contenteditable=\"true\"", "contenteditable=\"false\"");
                         Html = Html.replaceAll("<input type=\"checkbox\"", "<input type=\"checkbox\" class=\"disabled\" ");
                         Html = Html.replaceAll("<input name=\"result\" type=\"radio\"", "<input name=\"result\" type=\"radio\" class=\"disabled\"");
@@ -71,7 +80,10 @@
                                 "<button class=\"btn btn-sm btn-danger me-2 mr-2\" title=\"Eliminar fila o grupo\"><i class=\"fas fa-times\"></i></button>",
                                 ""
                         );
-                        Html = Html.replaceAll("editable pending", "editable");
+                        // Igual que en Tag.Visual: quita la clase "pending" (resaltado
+                        // gris de campo sin llenar) sin depender del orden ni de qué
+                        // otras clases la acompañen.
+                        Html = Html.replaceAll("class=\"([^\"]*)\\bpending\\b\\s*([^\"]*)\"", "class=\"$1$2\"");
                         out.print(Html);
                     %>
                 </div>
@@ -83,6 +95,8 @@
             }
         %>
         <script src="Interface/Content/Assets/js/Print.js"></script>
+        <script src="Interface/Content/Assets/js/html2canvas.min.js"></script>
+        <script src="Interface/Content/Assets/js/jspdf.umd.min.js"></script>
     </body>
 
 </html>

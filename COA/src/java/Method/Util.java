@@ -54,6 +54,28 @@ public class Util {
                 .replace("\r", " ");
     }
 
+    /**
+     * Escapa un valor para insertarlo en un literal JS de comilla simple
+     * dentro de un bloque &lt;script&gt; (no un atributo HTML): a diferencia
+     * de {@link #jsAttr}, NO hay que convertir "&" a "&amp;" aquí, porque el
+     * contenido de &lt;script&gt; nunca pasa por el decodificador de
+     * entidades HTML del navegador — si se usa jsAttr ahí, el "&amp;" queda
+     * como texto literal dentro del string JS (visto en vivo: una URL de
+     * redirect con "&amp;Type=..." en vez de "&Type=...", porque el valor
+     * quedaba mal armado desde el JS antes de llegar siquiera al servidor).
+     */
+    public static String jsString(String s) {
+        if (s == null) return "";
+        return s.replace("\\", "\\\\")
+                .replace("'", "\\'")
+                .replace("\n", " ")
+                .replace("\r", " ");
+    }
+
+    public static String jsString(Object o) {
+        return jsString(o == null ? null : o.toString());
+    }
+
     // Algunos registros heredados de Generación de Lotes traen el nombre del
     // archivo como una etiqueta <a href="...">texto</a> completa en vez de un
     // nombre plano. Si trae ese formato, se usa el href real; si no, el valor
@@ -158,6 +180,52 @@ public class Util {
                 "<select class='editable-select' onchange=\"var o=this.options[this.selectedIndex];var s=document.getElementById('COS"
                 + cnt2 + "');s.textContent=o.dataset.cos;s.setAttribute('data-ref', o.dataset.ref);\">" + options + "</select>");
         return html;
+    }
+
+    /**
+     * Salvedad para cuando Tag.Visual no encuentra el consecutivo de un
+     * material buscando por lote + familia de proceso (Connection.
+     * ConnectionGeneracionLotes.ConsultarCC_GeneracionLote): el nombre de
+     * proceso puede variar más de lo que el código conoce, y el material de
+     * Registros LAB puede estar nombrado distinto al de Generación de Lotes.
+     * En vez de mostrar "----" directamente, el llamador vuelve a buscar solo
+     * por lote (ConsultarCC_GeneracionLoteDetalle) y pasa el resultado aquí:
+     * si hay un solo consecutivo, se usa directo; si hay varios (lote
+     * compartido entre procesos), se deja elegir — nunca se pierde el dato
+     * solo porque el proceso no calzó.
+     *
+     * @param detalle filas "consecutivo///proceso///fecha" (puede ser null/vacío).
+     */
+    public static String resolverConsecutivoAmbiguo(String html, int cnt, List<String> detalle) {
+        LinkedHashMap<String, String> opciones = new LinkedHashMap<String, String>();
+        if (detalle != null) {
+            for (String fila : detalle) {
+                String[] arg = parseResult(fila);
+                if (arg.length == 0 || arg[0].isEmpty() || opciones.containsKey(arg[0])) {
+                    continue;
+                }
+                String proceso = arg.length > 1 ? arg[1] : "";
+                String fecha = arg.length > 2 ? arg[2] : "";
+                String etiqueta = "CC" + arg[0]
+                        + (proceso.isEmpty() ? "" : " - " + proceso)
+                        + (fecha.isEmpty() ? "" : " (" + fecha + ")");
+                opciones.put(arg[0], etiqueta);
+            }
+        }
+
+        if (opciones.isEmpty()) {
+            return html.replace("COS" + cnt, "<span  class='editable pending' contenteditable='true'>----</span>");
+        }
+        if (opciones.size() == 1) {
+            return html.replace("COS" + cnt, "CC" + opciones.keySet().iterator().next());
+        }
+
+        StringBuilder select = new StringBuilder("<select class='editable-select'>");
+        for (String etiqueta : opciones.values()) {
+            select.append("<option>").append(htmlAttr(etiqueta)).append("</option>");
+        }
+        select.append("</select>");
+        return html.replace("COS" + cnt, select.toString());
     }
 
     /** Escapa un valor para insertarlo dentro de un atributo HTML simple-comillado (data-ref='...'). */

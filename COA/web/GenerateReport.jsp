@@ -249,10 +249,28 @@
 
                         selected.dataset.lotes.split(",").forEach(lote => {
 
+                            const valor = lote.trim();
+
                             const opt = document.createElement("option");
 
-                            opt.value = lote.trim();
-                            opt.text = lote.trim();
+                            // El valor que se envía al backend debe conservar
+                            // la estructura original "lote///ciclo" tal cual
+                            // la arma ProductDAO (CONCAT(lote_producto,'///',
+                            // ciclo_esterilizacion)); solo el texto mostrado
+                            // al usuario se reformatea para que se lea como
+                            // "Lote ... — Ciclo ...".
+                            opt.value = valor;
+
+                            const sep = valor.indexOf("///");
+                            if (sep === -1) {
+                                opt.text = valor;
+                            } else {
+                                const lotePart = valor.substring(0, sep);
+                                const cicloPart = valor.substring(sep + 3);
+                                opt.text = cicloPart
+                                        ? "Lote " + lotePart + " — Ciclo " + cicloPart
+                                        : lotePart;
+                            }
 
                             lotesSelect.appendChild(opt);
 

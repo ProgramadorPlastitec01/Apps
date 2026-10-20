@@ -1428,7 +1428,7 @@ public class ConnectionRegistrosLAB {
         //</editor-fold>
     }
 
-    public List QueryTechnicalSheet(int Order, String Product, String Qrt) throws Exception {
+    public List QueryTechnicalSheet(int Order, String Product, String Batch, String Qrt) throws Exception {
         //<editor-fold defaultstate="collapsed" desc="QUERY TECHNICALSHEET R-GC-064">
         List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerRegistrosLab");
         if (lst_parameter != null) {
@@ -1448,6 +1448,7 @@ public class ConnectionRegistrosLAB {
                 String Qry = Qrt;
                 Qry = Qry.replace("XorderX", String.valueOf(Order));
                 Qry = Qry.replace("XproductX", Product);
+                Qry = Qry.replace("XbatchX", Batch);
                 Statement sttm = conn.createStatement();
                 ResultSet rs = sttm.executeQuery(Qry);
                 List<String> lst_param = new ArrayList<String>();
@@ -1489,7 +1490,7 @@ public class ConnectionRegistrosLAB {
         //</editor-fold>
     }
 
-    public List QueryTechnicalSheetRGC74(int Order, String Product, String Qrt) throws Exception {
+    public List QueryTechnicalSheetRGC74(int Order, String Product, String Batch, String Qrt) throws Exception {
         //<editor-fold defaultstate="collapsed" desc="QUERY TECHNICALSHEET R-GC-074">
         List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerRegistrosLab");
         if (lst_parameter != null) {
@@ -1509,6 +1510,7 @@ public class ConnectionRegistrosLAB {
                 String Qry = Qrt;
                 Qry = Qry.replace("XorderX", String.valueOf(Order));
                 Qry = Qry.replace("XproductX", Product);
+                Qry = Qry.replace("XbatchX", Batch);
                 Statement sttm = conn.createStatement();
                 ResultSet rs = sttm.executeQuery(Qry);
                 List<String> lst_param = new ArrayList<String>();
@@ -1543,7 +1545,7 @@ public class ConnectionRegistrosLAB {
         //</editor-fold>
     }
 
-    public List QueryTechnicalSheetRGC194(int Order, String Product, String Qrt) throws Exception {
+    public List QueryTechnicalSheetRGC194(int Order, String Product, String Batch, String Qrt) throws Exception {
         //<editor-fold defaultstate="collapsed" desc="QUERY TECHNICALSHEET R-GC-194">
         List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerRegistrosLab");
         if (lst_parameter != null) {
@@ -1599,7 +1601,7 @@ public class ConnectionRegistrosLAB {
         //</editor-fold>
     }
 
-    public List QueryTechnicalSheetRGC220(int Order, String Product, String Qrt) throws Exception {
+    public List QueryTechnicalSheetRGC220(int Order, String Product, String Batch, String Qrt) throws Exception {
         //<editor-fold defaultstate="collapsed" desc="QUERY TECHNICALSHEET R-GC-220">
         List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerRegistrosLab");
         if (lst_parameter != null) {
@@ -1963,18 +1965,17 @@ public class ConnectionRegistrosLAB {
     /**
      * Igual que {@link #ConsultLotesRegistroVerificar}, pero consulta
      * directamente la tabla `registro` en vez del procedimiento externo
-     * `sp_rgt_t_lotes_registro_verificar`, que filtra `resumido = 0 AND
-     * estado = 0`. Un lote ya finalizado en Registros LAB normalmente tiene
-     * TODOS sus registros con resumido = 1, así que ese procedimiento
-     * siempre devolvía cero filas para un certificado ya firmado — el modal
-     * "Comprobar Errores" nunca encontraba nada, aunque el badge de
-     * "Diferencias encontradas" (ConsultMaterials, que no filtra por
-     * resumido/estado) sí las contara. Esta consulta replica exactamente el
-     * mismo criterio de ConsultMaterials (sin resumido/estado), pero
-     * acotado a un id_linea/ciclo puntual, para que badge y modal miren los
-     * mismos datos. Devuelve una fila por id_registro (cantidad_registros=1
-     * cada una); analizarDiferencias() ya suma por valor, así que da igual
-     * si viene pre-agrupado o no.
+     * `sp_rgt_t_lotes_registro_verificar`, que filtra `resumido = 0 AND estado
+     * = 0`. Un lote ya finalizado en Registros LAB normalmente tiene TODOS sus
+     * registros con resumido = 1, así que ese procedimiento siempre devolvía
+     * cero filas para un certificado ya firmado — el modal "Comprobar Errores"
+     * nunca encontraba nada, aunque el badge de "Diferencias encontradas"
+     * (ConsultMaterials, que no filtra por resumido/estado) sí las contara.
+     * Esta consulta replica exactamente el mismo criterio de ConsultMaterials
+     * (sin resumido/estado), pero acotado a un id_linea/ciclo puntual, para que
+     * badge y modal miren los mismos datos. Devuelve una fila por id_registro
+     * (cantidad_registros=1 cada una); analizarDiferencias() ya suma por valor,
+     * así que da igual si viene pre-agrupado o no.
      */
     public List<Object[]> ConsultLotesRegistroVerificarDirecto(
             int idProducto, String lote, int idLinea, String cicloEsterilizacion) throws Exception {
