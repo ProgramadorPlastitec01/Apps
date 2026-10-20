@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import Controller.CertificatesJpaController;
 import Controller.CertificateFileJpaController;
+import Controller.CertificateDuplicationJpaController;
 import Controller.EventsJpaController;
 import Controller.UserControllerJpa;
 import Method.Mail;
@@ -508,9 +509,13 @@ public class Generate extends HttpServlet {
                     } catch (Exception e) {
                         IdCertificates = 0;
                     }
-                    result = CertificatesJpa.DuplicateRegister(IdCertificates, UserName);
+                    Integer NewCertificateId = CertificatesJpa.DuplicateRegister(IdCertificates, UserName);
+                    result = NewCertificateId != null;
                     if (result) {
                         request.setAttribute("DuplicateCertificate", result);
+                        String userId = session.getAttribute("Documento") != null ? session.getAttribute("Documento").toString() : null;
+                        new CertificateDuplicationJpaController().registerDuplication(
+                                IdCertificates, NewCertificateId, userId, UserName);
                     }
                     request.setAttribute("Type", Type);
                     request.getRequestDispatcher("GenerateReport.jsp").forward(request, response);

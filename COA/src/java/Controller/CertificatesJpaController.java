@@ -285,22 +285,24 @@ public class CertificatesJpaController implements Serializable {
         }
     }
 
-    public boolean DuplicateRegister(int IdC, String UserReg) {
+    /** @return el id_certificate del duplicado recién creado, o null si falló. */
+    public Integer DuplicateRegister(int IdC, String UserReg) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
-            Query q = em.createNativeQuery("CALL `Sp_ctf_r_RegistrerDuplicate`('" + IdC + "','" + UserReg + "')");
-            int resultado = q.executeUpdate();
+            Query q = em.createNativeQuery("CALL `Sp_ctf_r_RegistrerDuplicate`(?, ?)");
+            q.setParameter(1, IdC);
+            q.setParameter(2, UserReg);
+            List filas = q.getResultList();
             em.getTransaction().commit();
             em.clear();
             em.close();
-            if (resultado == 1) {
-                return true;
-            } else {
-                return false;
+            if (filas != null && !filas.isEmpty() && filas.get(0) != null) {
+                return ((Number) filas.get(0)).intValue();
             }
+            return null;
         } catch (Exception e) {
-            return false;
+            return null;
         }
     }
 
