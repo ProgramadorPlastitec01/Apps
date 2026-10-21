@@ -62,10 +62,14 @@ public class ConnectionGeneracionLotes {
                 String query = "";
                 if (Lote.contains("/")) {
                     String[] BatchN = Lote.split("/");
+                    // El separador deja un salto de línea (en vez de " - ")
+                    // para que el consecutivo de un lote compuesto ("A/B")
+                    // quede alineado, línea por línea, con el lote (ver
+                    // Tag.Visual, reemplazo de los placeholders "LBTn").
                     query = "SELECT GROUP_CONCAT( "
                             + "    c.consecutivo "
                             + "    ORDER BY FIELD(c.lote, '" + BatchN[0].trim() + "', '" + BatchN[1].trim() + "') "
-                            + "    SEPARATOR ' - CC' "
+                            + "    SEPARATOR '<br>CC' "
                             + ") AS consecutivo "
                             + "FROM control_consecutivos c "
                             + procesoFilter

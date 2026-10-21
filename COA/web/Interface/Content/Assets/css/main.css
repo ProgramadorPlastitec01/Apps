@@ -3313,7 +3313,7 @@ thead.sticky-top {
     background-color: #28a745;
 }
 .editable {
-    padding: 2px 6px;
+    padding: 2px 1px;
     border-radius: 4px;
     outline: none;
     min-width: 40px;

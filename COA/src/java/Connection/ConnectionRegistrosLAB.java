@@ -1565,6 +1565,7 @@ public class ConnectionRegistrosLAB {
                 String Qry = Qrt;
                 Qry = Qry.replace("XorderX", String.valueOf(Order));
                 Qry = Qry.replace("XproductX", Product);
+                Qry = Qry.replace("XbatchX", Batch);
                 Statement sttm = conn.createStatement();
                 ResultSet rs = sttm.executeQuery(Qry);
                 List<String> lst_param = new ArrayList<String>();
@@ -1621,6 +1622,7 @@ public class ConnectionRegistrosLAB {
                 String Qry = Qrt;
                 Qry = Qry.replace("XorderX", String.valueOf(Order));
                 Qry = Qry.replace("XproductX", Product);
+                Qry = Qry.replace("XbatchX", Batch);
                 Statement sttm = conn.createStatement();
                 ResultSet rs = sttm.executeQuery(Qry);
                 List<String> lst_param = new ArrayList<String>();

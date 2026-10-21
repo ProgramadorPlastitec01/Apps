@@ -374,6 +374,7 @@ public class Visual extends TagSupport {
                         Html = Html.replace("XQuatityGenX", "<span  class='editable' contenteditable='true'>" + ((ArgHead[11].equals("NULL") || ArgHead[11] == null) ? "----" : ArgHead[11]) + " UNIDADES </span>");
                         Html = Html.replace("XClient_OrderX", (ArgHead[12].equals("NULL") || ArgHead[12] == null) ? "<span class='editable pending' contenteditable='true'>----</span>" : "<span class='editable' contenteditable='true'>" + ArgHead[12] + "</span>");
                         Html = Html.replace("<h3 id=\"consValue\" class=\"mb-0\">XConsX</h3>", "<h3 id=\"consValue\" class=\"mb-0 editable\" contenteditable='true' pending>CC----</h3>");
+                        Html = Html.replace("XCodeSpeedX", (ArgHead[13].equals("NULL") || ArgHead[13] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" + ArgHead[13] + "</span>");
 
                         Html = Html.replace("XSampleX", "<span  class='editable pending' contenteditable='true'>----</span>");
                         Html = Html.replace("XNumberPartX", "<span  class='editable pending' contenteditable='true'>----</span>");
@@ -476,6 +477,12 @@ public class Visual extends TagSupport {
                                     if (valor.equals("N/A")) {
                                         Html = Html.replace(etiqueta, "<span  class='editable pending' contenteditable='true'>----</span>");
                                     } else {
+                                        // Un lote compuesto ("A/B", dos recepciones distintas para el
+                                        // mismo material) debe verse en líneas separadas, no pegado con
+                                        // "/" en una sola línea.
+                                        if (etiqueta.startsWith("LBT") && valor.contains("/")) {
+                                            valor = valor.replace("/", "<br>");
+                                        }
                                         Html = Html.replace(etiqueta, valor);
                                     }
                                 }
@@ -673,6 +680,12 @@ public class Visual extends TagSupport {
                                     if (valor.equals("N/A")) {
                                         Html = Html.replace(etiqueta, "<span  class='editable pending' contenteditable='true'>----</span>");
                                     } else {
+                                        // Un lote compuesto ("A/B", dos recepciones distintas para el
+                                        // mismo material) debe verse en líneas separadas, no pegado con
+                                        // "/" en una sola línea.
+                                        if (etiqueta.startsWith("LBT") && valor.contains("/")) {
+                                            valor = valor.replace("/", "<br>");
+                                        }
                                         Html = Html.replace(etiqueta, valor);
                                     }
                                 }
@@ -853,6 +866,12 @@ public class Visual extends TagSupport {
                                     if (valor.equals("N/A")) {
                                         Html = Html.replace(etiqueta, "<span  class='editable pending' contenteditable='true'>----</span>");
                                     } else {
+                                        // Un lote compuesto ("A/B", dos recepciones distintas para el
+                                        // mismo material) debe verse en líneas separadas, no pegado con
+                                        // "/" en una sola línea.
+                                        if (etiqueta.startsWith("LBT") && valor.contains("/")) {
+                                            valor = valor.replace("/", "<br>");
+                                        }
                                         Html = Html.replace(etiqueta, valor);
                                     }
                                 }
@@ -1043,6 +1062,12 @@ public class Visual extends TagSupport {
                                     if (valor.equals("N/A")) {
                                         Html = Html.replace(etiqueta, "<span  class='editable pending' contenteditable='true'>----</span>");
                                     } else {
+                                        // Un lote compuesto ("A/B", dos recepciones distintas para el
+                                        // mismo material) debe verse en líneas separadas, no pegado con
+                                        // "/" en una sola línea.
+                                        if (etiqueta.startsWith("LBT") && valor.contains("/")) {
+                                            valor = valor.replace("/", "<br>");
+                                        }
                                         Html = Html.replace(etiqueta, valor);
                                     }
                                 }
