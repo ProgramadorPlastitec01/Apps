@@ -170,11 +170,11 @@ public class CertificatesJpaController implements Serializable {
         }
     }
 
-    public boolean CertificatesRegister(String Tpe, String Cde, int Ord, String Pdt, String Btc, String Cql, String Ctm, String Amt, String Ddt, String Urg, String Mbt, int Arg ,String Fmt) {
+    public boolean CertificatesRegister(String Tpe, String Cde, int Ord, String Pdt, String Btc, String Cql, String Ctm, String Amt, String Ddt, String Urg, String Mbt, int Arg ,String Fmt, int IdUserReg) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
-            Query q = em.createNativeQuery("CALL `Sp_cft_r_RegisterCertificates`(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            Query q = em.createNativeQuery("CALL `Sp_cft_r_RegisterCertificates`(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             q.setParameter(1, Tpe);
             q.setParameter(2, Cde);
             q.setParameter(3, Ord);
@@ -188,6 +188,7 @@ public class CertificatesJpaController implements Serializable {
             q.setParameter(11, Mbt);
             q.setParameter(12, Arg);
             q.setParameter(13, Fmt);
+            q.setParameter(14, IdUserReg);
             int resultado = q.executeUpdate();
             em.getTransaction().commit();
             em.clear();
@@ -202,17 +203,18 @@ public class CertificatesJpaController implements Serializable {
         }
     }
 
-    public boolean CertificatesUpdate(int IdC, String Cql, String Amt, String Ddt, String Mbt, String Fmt) {
+    public boolean CertificatesUpdate(int IdC, String Cql, String Amt, String Ddt, String Mbt, String Fmt, int IdUser) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
-            Query q = em.createNativeQuery("CALL `Sp_ctf_u_UpdateCertificates`(?, ?, ?, ?, ?, ?)");
+            Query q = em.createNativeQuery("CALL `Sp_ctf_u_UpdateCertificates`(?, ?, ?, ?, ?, ?, ?)");
             q.setParameter(1, IdC);
             q.setParameter(2, Cql);
             q.setParameter(3, Amt);
             q.setParameter(4, Ddt);
             q.setParameter(5, Mbt);
             q.setParameter(6, Fmt);
+            q.setParameter(7, IdUser);
             int resultado = q.executeUpdate();
             em.getTransaction().commit();
             em.clear();
@@ -286,13 +288,14 @@ public class CertificatesJpaController implements Serializable {
     }
 
     /** @return el id_certificate del duplicado recién creado, o null si falló. */
-    public Integer DuplicateRegister(int IdC, String UserReg) {
+    public Integer DuplicateRegister(int IdC, String UserReg, int IdUserReg) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
-            Query q = em.createNativeQuery("CALL `Sp_ctf_r_RegistrerDuplicate`(?, ?)");
+            Query q = em.createNativeQuery("CALL `Sp_ctf_r_RegistrerDuplicate`(?, ?, ?)");
             q.setParameter(1, IdC);
             q.setParameter(2, UserReg);
+            q.setParameter(3, IdUserReg);
             List filas = q.getResultList();
             em.getTransaction().commit();
             em.clear();
@@ -302,6 +305,26 @@ public class CertificatesJpaController implements Serializable {
             }
             return null;
         } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /** @return [0]=email, [1]=nombre del usuario responsable del certificado, o null si no hay dato. */
+    public List ConsultCertificateResponsible(int IdCertificate) {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_ctf_c_ConsultCertificateResponsible`('" + IdCertificate + "')");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (!consulta.isEmpty()) {
+                return consulta;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
             return null;
         }
     }

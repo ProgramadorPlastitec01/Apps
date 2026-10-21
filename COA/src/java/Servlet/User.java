@@ -24,7 +24,7 @@ public class User extends HttpServlet {
 
         int opt = Integer.parseInt(request.getParameter("opt"));
         int idUser = 0, state = 0, document = 0, code = 0, idrol = 0;
-        String name = "", lastname = "", user = "";
+        String name = "", lastname = "", user = "", email = "";
         boolean result = false;
         try {
             switch (opt) {
@@ -53,11 +53,16 @@ public class User extends HttpServlet {
                     code = Integer.parseInt(request.getParameter("NmbCode").toString());
                     user = request.getParameter("txtUser");
                     idrol = Integer.parseInt(request.getParameter("cbxRol").toString());
+                    try {
+                        email = request.getParameter("txtEmail").trim();
+                    } catch (Exception e) {
+                        email = "";
+                    }
                     if (idUser > 0) {
-                        result = UserJpa.UpdtaeUser(idUser, name, lastname, document, code, user, idrol);
+                        result = UserJpa.UpdtaeUser(idUser, name, lastname, document, code, user, idrol, email);
                         request.setAttribute("UserUpdate", result);
                     } else {
-                        result = UserJpa.UserRegister(name, lastname, document, code, user, idrol, name_user);
+                        result = UserJpa.UserRegister(name, lastname, document, code, user, idrol, name_user, email);
                         request.setAttribute("UserRegister", result);
                     }
 

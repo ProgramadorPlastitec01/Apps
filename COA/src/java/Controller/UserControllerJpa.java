@@ -252,11 +252,19 @@ public class UserControllerJpa implements Serializable {
 
 //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="PROCESS">
-    public boolean UserRegister(String nmb, String lnme, int dcm, int code, String user, int id_rol, String urg) {
+    public boolean UserRegister(String nmb, String lnme, int dcm, int code, String user, int id_rol, String urg, String email) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
-            Query q = em.createNativeQuery("CALL `Sp_usr_r_RegisterUser`('" + nmb + "','" + lnme + "','" + dcm + "','" + code + "','" + user + "','" + id_rol + "','" + urg + "')");
+            Query q = em.createNativeQuery("CALL `Sp_usr_r_RegisterUser`(?, ?, ?, ?, ?, ?, ?, ?)");
+            q.setParameter(1, nmb);
+            q.setParameter(2, lnme);
+            q.setParameter(3, dcm);
+            q.setParameter(4, code);
+            q.setParameter(5, user);
+            q.setParameter(6, id_rol);
+            q.setParameter(7, urg);
+            q.setParameter(8, email);
             int resultado = q.executeUpdate();
             em.getTransaction().commit();
             em.clear();
@@ -271,11 +279,19 @@ public class UserControllerJpa implements Serializable {
         }
     }
 
-    public boolean UpdtaeUser(int idUser, String nmb, String lnme, int dcm, int code, String user, int id_rol) {
+    public boolean UpdtaeUser(int idUser, String nmb, String lnme, int dcm, int code, String user, int id_rol, String email) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
-            Query q = em.createNativeQuery("CALL `Sp_usr_u_UpdateUser`(" + idUser + ",'" + nmb + "','" + lnme + "','" + dcm + "','" + code + "','" + user + "','" + id_rol + "')");
+            Query q = em.createNativeQuery("CALL `Sp_usr_u_UpdateUser`(?, ?, ?, ?, ?, ?, ?, ?)");
+            q.setParameter(1, idUser);
+            q.setParameter(2, nmb);
+            q.setParameter(3, lnme);
+            q.setParameter(4, dcm);
+            q.setParameter(5, code);
+            q.setParameter(6, user);
+            q.setParameter(7, id_rol);
+            q.setParameter(8, email);
             int resultado = q.executeUpdate();
             em.getTransaction().commit();
             em.clear();

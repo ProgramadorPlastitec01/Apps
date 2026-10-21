@@ -314,10 +314,31 @@ public class GenerateReport extends TagSupport {
                     } catch (Exception e) {
                         State = 1;
                     }
+                    // El driver de MySQL mapea TINYINT(1) a java.lang.Boolean (no a
+                    // Integer/String), por eso no se puede comparar contra "1" directo.
+                    Object ObjReturned = (ObjCerti.length > 15) ? ObjCerti[15] : null;
+                    boolean Returned = (ObjReturned instanceof Boolean) ? (Boolean) ObjReturned
+                            : (ObjReturned != null && ("1".equals(ObjReturned.toString()) || "true".equalsIgnoreCase(ObjReturned.toString())));
+                    // El motivo que escribió quien devolvió el certificado
+                    // (tabla novelty, vía Sp_ctf_c_ConsultCertificates...),
+                    // para mostrarlo como tooltip en vez de un texto genérico.
+                    // Se sanea la comilla simple porque el atributo title va
+                    // delimitado con comillas simples.
+                    Object ObjReturnReason = (ObjCerti.length > 16) ? ObjCerti[16] : null;
+                    String ReturnReason = (ObjReturnReason == null || ObjReturnReason.toString().trim().isEmpty())
+                            ? "Certificado devuelto: pendiente de corrección"
+                            : "Motivo de devolución: " + ObjReturnReason.toString().trim().replace("'", "&#39;");
                     // Solo las filas en gestión (state 1) se pueden seleccionar
-                    // para la finalización masiva.
-                    if (State == 1 && TempDelete == 0 && Permission.contains("[28]")) {
-                        out.print("<tr class='fila-seleccionable' data-idcerti='" + ObjCerti[0] + "'>");
+                    // para la finalización masiva. Las devueltas se resaltan con
+                    // un rosa tenue (en vez de amontonar otro ícono en la celda
+                    // de Estado, que ya tiene el spinner de "En gestión").
+                    // Amarillo/naranja/verde quedan reservados para Finalizar/Firmar.
+                    boolean Selectable = State == 1 && TempDelete == 0 && Permission.contains("[28]");
+                    if (Selectable) {
+                        out.print("<tr class='fila-seleccionable'" + (Returned ? " style='background-color:#ff383814;'" : "") + " data-idcerti='" + ObjCerti[0] + "'"
+                                + (Returned ? " data-toggle='tooltip' data-placement='top' title='" + ReturnReason + "'" : "") + ">");
+                    } else if (Returned) {
+                        out.print("<tr style='background-color:#ff383814;' data-toggle='tooltip' data-placement='top' title='" + ReturnReason + "'>");
                     } else {
                         out.print("<tr>");
                     }

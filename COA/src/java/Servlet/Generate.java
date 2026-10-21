@@ -32,6 +32,7 @@ public class Generate extends HttpServlet {
             String RolName = session.getAttribute("Rol/Nombres").toString();
             String UserName = session.getAttribute("Nombres").toString();
             int IdRol = Integer.parseInt(session.getAttribute("idRol").toString());
+            int IdUsuario = Integer.parseInt(session.getAttribute("idUsuario").toString());
             int opt = Integer.parseInt(request.getParameter("opt"));
             String Signature = "";
             try {
@@ -216,7 +217,7 @@ public class Generate extends HttpServlet {
                     }
                     if (IdCertificates > 0) {
                         //<editor-fold defaultstate="collapsed" desc="UPDATE">
-                        result = CertificatesJpa.CertificatesUpdate(IdCertificates, Consecutive, Amount, DateDispatch, MaterialBatches, Html);
+                        result = CertificatesJpa.CertificatesUpdate(IdCertificates, Consecutive, Amount, DateDispatch, MaterialBatches, Html, IdUsuario);
                         request.setAttribute("UpdateCertificate", result);
                         request.getRequestDispatcher("Generate?opt=2&Type=" + Type + "&IdCertificates=" + IdCertificates)
                                 .forward(request, response);
@@ -258,7 +259,7 @@ public class Generate extends HttpServlet {
                         } catch (Exception e) {
                             AmoutReg = 0;
                         }
-                        result = CertificatesJpa.CertificatesRegister(Type, Code, Order, Product, Batch, Consecutive, Customer, Amount, DateDispatch, RolName, MaterialBatches, AmoutReg, Html);
+                        result = CertificatesJpa.CertificatesRegister(Type, Code, Order, Product, Batch, Consecutive, Customer, Amount, DateDispatch, RolName, MaterialBatches, AmoutReg, Html, IdUsuario);
                         if (result) {
                             lst_id = CertificatesJpa.ConsultCertificatesIdType(Type);
                             if (lst_id != null) {
@@ -386,7 +387,17 @@ public class Generate extends HttpServlet {
                         } catch (Exception e) {
                             NumberCertificate = "";
                         }
-                        MailConn.CertificateReturn(NumberCertificate, UserName, Justification, Category, getServletContext());
+                        String ResponsibleEmail = null;
+                        try {
+                            List lst_responsible = CertificatesJpa.ConsultCertificateResponsible(IdCertificates);
+                            if (lst_responsible != null) {
+                                Object[] ObjResponsible = (Object[]) lst_responsible.get(0);
+                                ResponsibleEmail = (ObjResponsible[0] == null) ? null : ObjResponsible[0].toString().trim();
+                            }
+                        } catch (Exception e) {
+                            ResponsibleEmail = null;
+                        }
+                        MailConn.CertificateReturn(NumberCertificate, UserName, Justification, Category, ResponsibleEmail, getServletContext());
                     }
                     request.getRequestDispatcher("Generate?opt=1&Type=" + Type).forward(request, response);
                     //</editor-fold>
@@ -509,7 +520,7 @@ public class Generate extends HttpServlet {
                     } catch (Exception e) {
                         IdCertificates = 0;
                     }
-                    Integer NewCertificateId = CertificatesJpa.DuplicateRegister(IdCertificates, UserName);
+                    Integer NewCertificateId = CertificatesJpa.DuplicateRegister(IdCertificates, UserName, IdUsuario);
                     result = NewCertificateId != null;
                     if (result) {
                         request.setAttribute("DuplicateCertificate", result);

@@ -116,6 +116,17 @@ public class Mail {
     }
 
     public void CertificateReturn(String Certificate, String NameSender, String Justification, String Category, ServletContext context) throws MessagingException {
+        CertificateReturn(Certificate, NameSender, Justification, Category, null, context);
+    }
+
+    /**
+     * @param ResponsibleEmail correo del usuario que registró/editó el certificado por última vez
+     * (resuelto desde Controller.CertificatesJpaController.ConsultCertificateResponsible). Si es
+     * nulo o vacío, se conserva el comportamiento anterior (avisar a los correos de TI). Para
+     * "Delete" siempre se notifica a TI, ya que es una acción administrativa, no una devolución al
+     * responsable del certificado.
+     */
+    public void CertificateReturn(String Certificate, String NameSender, String Justification, String Category, String ResponsibleEmail, ServletContext context) throws MessagingException {
         if (lst_mail != null) {
             Object[] obj_mail = (Object[]) lst_mail.get(0);
             String[] ArrMail = obj_mail[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
@@ -130,14 +141,30 @@ public class Mail {
             Session session = Session.getDefaultInstance(propiedades);
 
             try {
+                boolean isDelete = Category.equals("Delete");
+                String ActionTitle = isDelete ? "Eliminación de Certificado de Calidad" : "Devolución de Certificado de Calidad";
+                String ActionVerb = isDelete ? "ELIMINADO" : "DEVUELTO";
+                String ActionAlertText = isDelete
+                        ? "El certificado de calidad ha sido <b>" + ActionVerb + "</b>."
+                        : "El certificado de calidad ha sido <b>" + ActionVerb + "</b> y requiere revisión.";
+                String ActionBodyText = isDelete
+                        ? "Se informa que el certificado de calidad ha sido eliminado del sistema."
+                        : "Se informa que el certificado de calidad enviado ha sido devuelto para corrección.";
+                String ActionReasonLabel = isDelete ? "Motivo de eliminación" : "Motivo de devolución";
+
                 MimeMessage message = new MimeMessage(session);
                 message.setFrom(new InternetAddress(ArrMail[4]));
-                if (Category.equals("Delete")) {
+                if (isDelete) {
                     message.setSubject("Aplicativo COA - Certificado Eliminado #" + Certificate);
                 } else {
                     message.setSubject("Aplicativo COA - Devolucion Certificado #" + Certificate);
                 }
-                message.addRecipient(Message.RecipientType.TO, new InternetAddress("p.ti@plastitec-sa.com"));
+                boolean notifyResponsible = Category.equals("Return") && ResponsibleEmail != null && !ResponsibleEmail.trim().isEmpty();
+                if (notifyResponsible) {
+                    message.addRecipient(Message.RecipientType.TO, new InternetAddress(ResponsibleEmail.trim()));
+                } else {
+                    message.addRecipient(Message.RecipientType.TO, new InternetAddress("p.ti@plastitec-sa.com"));
+                }
 
                 // HTML content
                 MimeBodyPart htmlPart = new MimeBodyPart();
@@ -158,7 +185,7 @@ public class Mail {
                         + "<tr>"
                         + "   <td style='padding:30px;'>"
                         + "      <h2 style='margin:0; text-align:center; color:#120031; font-size:24px;'>"
-                        + "         Devolución de Certificado de Calidad"
+                        + ActionTitle
                         + "      </h2>"
                         + "   </td>"
                         + "</tr>"
@@ -168,7 +195,7 @@ public class Mail {
                         + "      <div style='background:#fff4e5; border-left:5px solid #ff9800; "
                         + "      padding:15px; border-radius:5px;'>"
                         + "         <p style='margin:0; color:#8a5a00; font-size:15px;'>"
-                        + "            El certificado de calidad ha sido <b>DEVUELTO</b> y requiere revisión."
+                        + ActionAlertText
                         + "         </p>"
                         + "      </div>"
                         + "   </td>"
@@ -180,7 +207,7 @@ public class Mail {
                         + "         Hola,"
                         + "      </p>"
                         + "      <p style='font-size:15px; color:#555; line-height:1.6;'>"
-                        + "         Se informa que el certificado de calidad enviado ha sido devuelto para corrección."
+                        + ActionBodyText
                         + "      </p>"
                         /* DETALLES */
                         + "      <table width='100%' cellspacing='0' cellpadding='10' "
@@ -196,7 +223,7 @@ public class Mail {
                         + "      </table>"
                         /* JUSTIFICACION */
                         + "      <div style='margin-top:25px;'>"
-                        + "         <h3 style='color:#120031; font-size:16px;'>Motivo de devolución</h3>"
+                        + "         <h3 style='color:#120031; font-size:16px;'>" + ActionReasonLabel + "</h3>"
                         + "         <div style='background:#f4f4f4; padding:15px; border-radius:5px; "
                         + "         border-left:4px solid #4D4AE8;'>"
                         + "            <p style='margin:0; font-size:14px; color:#555; line-height:1.5;'>"
@@ -306,6 +333,7 @@ public class Mail {
                 message.setFrom(new InternetAddress(ArrMail[4]));
                 message.setSubject("Aplicativo COA - " + ((Total > 1) ? "Certificados Finalizados: " : "Certificado Finalizado #") + SubjectList);
                 message.addRecipient(Message.RecipientType.TO, new InternetAddress("p.ti@plastitec-sa.com"));
+                message.addRecipient(Message.RecipientType.TO, new InternetAddress("w.hernandez@plastitec-sa.com"));
 
                 // HTML content
                 MimeBodyPart htmlPart = new MimeBodyPart();

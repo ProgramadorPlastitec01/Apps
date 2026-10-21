@@ -59,6 +59,9 @@ public class User extends TagSupport {
                     out.print("<div class='d-flex'>");
                     out.print("<input type='number' class='form-control' name='NmbCode' id='' placeholder='Codigo' data-toggle='tooltip' data-placement='top' title='Codigo' value='" + ObjUser[4] + "'>");
                     out.print("<input type='text' class='form-control' name='txtUser' id='' placeholder='Usuario' data-toggle='tooltip' data-placement='top' title='Usuario' value='" + ObjUser[5] + "'>");
+                    out.print("</div>");
+                    out.print("<div class='d-flex'>");
+                    out.print("<input type='email' class='form-control' name='txtEmail' id='' placeholder='Correo electrónico' data-toggle='tooltip' data-placement='top' title='Correo electrónico (para notificaciones)' value='" + ((ObjUser[14] == null) ? "" : ObjUser[14]) + "'>");
                     out.print("<div class='col-lg-4' data-toggle='tooltip' data-placemente='top' title='Rol usuario'>");
                     lst_role = RoleJpa.ConsultRole();
                     out.print("<select class='form-control' name='cbxRol' style='margin-top: 12px;margin-left: -3px;'>");
@@ -114,6 +117,9 @@ public class User extends TagSupport {
             out.print("<div class='d-flex'>");
             out.print("<input type='number' class='form-control' name='NmbCode' id='' placeholder='Codigo' data-toggle='tooltip' data-placement='top' title='Codigo' >");
             out.print("<input type='text' class='form-control' name='txtUser' id='' placeholder='Usuario' data-toggle='tooltip' data-placement='top' title='Usuario' >");
+            out.print("</div>");
+            out.print("<div class='d-flex'>");
+            out.print("<input type='email' class='form-control' name='txtEmail' id='' placeholder='Correo electrónico' data-toggle='tooltip' data-placement='top' title='Correo electrónico (para notificaciones)' >");
             out.print("<div class='col-lg-4' data-toggle='tooltip' data-placemente='top' title='Rol usuario'>");
             lst_role = RoleJpa.ConsultRole();
             out.print("<select class='form-control' name='cbxRol' style='margin-top: 12px;margin-left: -3px;'>");
@@ -167,6 +173,7 @@ public class User extends TagSupport {
             out.print("<th>Documento</th>");
             out.print("<th>Codigo</th>");
             out.print("<th>Usuario</th>");
+            out.print("<th>Correo</th>");
             out.print("<th>Rol</th>");
             out.print("<th>Estado</th>");
             out.print("<th>OPC</th>");
@@ -182,6 +189,7 @@ public class User extends TagSupport {
                     out.print("<td>" + ObjUser[3] + "</td>");
                     out.print("<td>" + ObjUser[4] + "</td>");
                     out.print("<td>" + ObjUser[5] + "</td>");
+                    out.print("<td>" + ((ObjUser[12] == null) ? "" : ObjUser[12]) + "</td>");
                     out.print("<td>" + ObjUser[8] + "</td>");
                     int state = Integer.parseInt(ObjUser[9].toString());
                     out.print("<td><div class='badge badge-" + ((state == 1) ? "success'>Activo" : "danger'>Inactivo") + "</div></td>");
