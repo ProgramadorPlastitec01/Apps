@@ -16,11 +16,17 @@ public class Setting extends TagSupport {
         HttpSession sesion = pageContext.getSession();
         JspWriter out = pageContext.getOut();
         String Permission = "";
+        String NombreRol = "";
         try {
             try {
                 Permission = sesion.getAttribute("Permisos").toString();
             } catch (Exception e) {
                 Permission = "";
+            }
+            try {
+                NombreRol = sesion.getAttribute("NombreRol").toString();
+            } catch (Exception e) {
+                NombreRol = "";
             }
             out.print("<section class='section'>");
             out.print("<div class='section-header'>");
@@ -87,6 +93,20 @@ public class Setting extends TagSupport {
                 out.print("<h4>Rol</h4>");
                 out.print("<p>Módulo encargado de gestionar los roles del sistema, ademas incluye la seleccion y parametrización de los registros.</p>");
                 out.print("<a href='Role?opt=1' class='card-cta' onclick='cargarDatos()'>Configurar <i class='fas fa-chevron-right'></i></a>");
+                out.print("</div>");
+                out.print("</div>");
+                out.print("</div>");
+            }
+            if ("Administrador".equalsIgnoreCase(NombreRol.trim())) {
+                out.print("<div class='col-lg-6'>");
+                out.print("<div class='card card-large-icons'>");
+                out.print("<div class='card-icon bg-primary text-white'>");
+                out.print("<i class='fas fa-network-wired'></i>");
+                out.print("</div>");
+                out.print("<div class='card-body'>");
+                out.print("<h4>Estado de Conexiones</h4>");
+                out.print("<p>Módulo exclusivo del rol Administrador: verifica en tiempo real la disponibilidad de los aplicativos externos (LAB, Generación de Lotes, Inspección Manga, Control Fórmulas, ERP, Office Platform).</p>");
+                out.print("<a href='SystemStatus?opt=1' class='card-cta' onclick='cargarDatos()'>Verificar <i class='fas fa-chevron-right'></i></a>");
                 out.print("</div>");
                 out.print("</div>");
                 out.print("</div>");

@@ -17,6 +17,10 @@
         <servlet-class>Servlet.AdvConfig</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>SystemStatus</servlet-name>
+        <servlet-class>Servlet.SystemStatus</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>User</servlet-name>
         <servlet-class>Servlet.User</servlet-class>
     </servlet>
@@ -67,6 +71,10 @@
     <servlet-mapping>
         <servlet-name>AdvConfig</servlet-name>
         <url-pattern>/AdvConfig</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SystemStatus</servlet-name>
+        <url-pattern>/SystemStatus</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>User</servlet-name>
