@@ -33,6 +33,44 @@
 
             gtag('config', 'UA-94034622-3');
         </script>
+        <style>
+            /* ================================================================
+               Sidebar responsivo para portatiles y proyectores.
+               Va aqui y no en style.css: style.css es la hoja compartida de
+               toda la plantilla Stisla y estas reglas son propias del menu.
+               ================================================================ */
+
+            /* Los submenus abren EN FLUJO (static), empujando el resto hacia
+               abajo, no flotando encima. El acordeon lo maneja scripts.js con
+               slideToggle sobre .dropdown-menu; el data-toggle de Bootstrap
+               (que los posicionaba absolutos) se quito del marcado. */
+            .main-sidebar .sidebar-menu li ul.dropdown-menu {
+                position: static !important;
+                float: none !important;
+                display: none;
+                width: 100% !important;
+                box-shadow: none;
+                border: 0;
+            }
+
+            /* Columna flexible de alto completo: el area del menu scrollea sola
+               y el logo queda anclado al pie. Sin esto, en pantallas de 768px
+               de alto (o al 125% de escala) los ultimos items se cortaban. */
+            .main-sidebar.sidebar-style-2 {
+                height: 100vh !important;
+                display: flex;
+                flex-direction: column;
+            }
+            .main-sidebar.sidebar-style-2 .sidebar-scroll {
+                flex: 1 1 auto;
+                min-height: 0;   /* imprescindible: habilita el scroll del hijo flex */
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
+            .main-sidebar.sidebar-style-2 .sidebar-footer {
+                flex-shrink: 0;
+            }
+        </style>
     </head>
     <body>
         <menu:Menu/>

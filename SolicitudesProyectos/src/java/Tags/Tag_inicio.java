@@ -61,7 +61,7 @@ public class Tag_inicio extends TagSupport {
             out.print("<tbody>");
             lst_plano = InicioJpa.ContadorPlano();
             if (lst_anio != null) {
-                for (int i = 0; i < lst_plano.size(); i++) {
+                for (int i = 0; lst_plano != null && i < lst_plano.size(); i++) {
                     Object[] obj_plano = (Object[]) lst_plano.get(i);
                     out.print("<tr>");
                     out.print("<td>" + obj_plano[0] + "</td>");

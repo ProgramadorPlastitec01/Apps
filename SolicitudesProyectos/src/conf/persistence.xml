@@ -4,13 +4,17 @@
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3308/solicitudes_proyectos?zeroDateTimeBehavior=convertToNull"/>
-      <!--<property name="javax.persistence.jdbc.url" value="jdbc:mysql://172.16.2.117:3306/solicitudes_proyectos?zeroDateTimeBehavior=convertToNull"/>-->
+      <!-- 127.0.0.1 y no localhost: la maquina esta en el dominio, el archivo hosts tiene
+           comentadas las entradas de localhost y el nombre resuelve por DNS a ::1. Con
+           skip_name_resolve=OFF en el motor, cada conexion nueva paga esa resolucion mas
+           el DNS inverso: medido, 273 ms contra 7 ms usando la IP literal. -->
+      <!--<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/solicitudes_proyectos?zeroDateTimeBehavior=convertToNull"/>-->
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://172.16.2.117:3306/solicitudes_proyectos?zeroDateTimeBehavior=convertToNull"/>
       <property name="javax.persistence.jdbc.user" value="root"/>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
-      <property name="javax.persistence.jdbc.password" value=""/>
-      <!--<property name="javax.persistence.jdbc.password" value="c0b0Ma"/>-->
-      <property name="javax.persistence.schema-generation.database.action" value="create"/>
+      <!--<property name="javax.persistence.jdbc.password" value=""/>-->
+      <property name="javax.persistence.jdbc.password" value="c0b0Ma"/>
+      <property name="javax.persistence.schema-generation.database.action" value="none"/>
     </properties>
   </persistence-unit>
 </persistence>

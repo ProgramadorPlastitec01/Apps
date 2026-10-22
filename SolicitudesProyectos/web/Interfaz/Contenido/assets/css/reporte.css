@@ -1,0 +1,225 @@
+/* =========================================================================
+   Informe de Gestion - Taller de Proyectos
+   Layout de PANTALLA. La hoja de impresion/PDF es reporte-print.css.
+
+   Paleta corporativa, sin inventar colores:
+     #B72E27 primario  ·  #101010 negro  ·  #ADB5BD gris
+     #34395e texto     ·  #a9b1bd apagado
+   ========================================================================= */
+
+:root {
+    --rojo: #B72E27;
+    --negro: #101010;
+    --gris: #ADB5BD;
+    --texto: #34395e;
+    --apagado: #a9b1bd;
+    --verde: #47c363;
+}
+
+/* --- Filtro fijo arriba ------------------------------------------------- */
+/* Sticky y no fixed: acompania el scroll sin salirse del flujo ni tapar el
+   contenido cuando el navegador no soporta position:sticky. */
+.filtroSticky {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+}
+
+/* --- Tarjetas de indicadores ------------------------------------------- */
+/* auto-fit + minmax deja que el navegador decida cuantas caben: en escritorio
+   las cinco entran en una fila y en movil se apilan solas, sin media query. */
+.kpiGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.kpiCard {
+    background: #fff;
+    border-radius: 6px;
+    border-left: 4px solid var(--rojo);
+    box-shadow: 0 1px 3px rgba(16, 16, 16, .10);
+    padding: 14px 16px;
+    min-width: 0;   /* sin esto un valor largo desborda la celda del grid */
+}
+
+.kpiValor {
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--negro);
+    line-height: 1.1;
+    white-space: nowrap;
+}
+
+.kpiEtiqueta {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+    color: var(--apagado);
+    margin-top: 2px;
+}
+
+.kpiDelta {
+    font-size: 11px;
+    margin-top: 6px;
+}
+
+.kpiSube  { color: var(--verde); }
+.kpiBaja  { color: var(--rojo); }
+.kpiPlano { color: var(--apagado); }
+
+/* --- Graficos ----------------------------------------------------------- */
+/* Los tres en fila cuando hay ancho; de a dos en tablet; uno en movil. */
+.graficoGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.graficoCard {
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(16, 16, 16, .10);
+    padding: 14px 16px;
+    min-width: 0;
+}
+
+.graficoCard h4 {
+    font-size: 14px;
+    color: var(--negro);
+    margin: 0 0 10px 0;
+}
+
+/* La altura del grafico la fija ESTE contenedor, no el canvas.
+   Chart.js con maintainAspectRatio:false toma el alto del padre; sin un padre
+   con altura definida el canvas crece sin techo (llego a miles de pixeles) y la
+   pagina queda con un scroll infinito. Position relative es requisito de
+   Chart.js para poder redimensionar dentro del contenedor. */
+.graficoCanvasWrap {
+    position: relative;
+    height: 260px;
+    width: 100%;
+}
+
+.graficoCanvasWrap > canvas {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100%;
+    display: block;
+}
+
+.leyendaLista {
+    margin-top: 10px;
+    font-size: 12px;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.leyendaFila {
+    padding: 2px 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.leyendaColor {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    margin-right: 6px;
+    flex: none;
+}
+
+/* --- Tablas ------------------------------------------------------------- */
+/* El scroll horizontal vive DENTRO de la tabla, nunca en el body: una tabla
+   ancha no puede correr toda la pagina. */
+.tablaScroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+}
+
+.tablaScroll table {
+    min-width: 640px;
+    width: 100%;
+}
+
+.bloqueCard {
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(16, 16, 16, .10);
+    padding: 14px 16px;
+    margin-bottom: 18px;
+    min-width: 0;
+}
+
+.bloqueCard h4 {
+    font-size: 14px;
+    color: var(--negro);
+    margin: 0 0 10px 0;
+}
+
+.bloqueGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    gap: 14px;
+}
+
+.notaBloque {
+    font-size: 11px;
+    color: var(--apagado);
+    margin-top: 8px;
+}
+
+/* --- Barra de cobertura ------------------------------------------------- */
+.barraCobertura {
+    background: #eee;
+    border-radius: 4px;
+    height: 18px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.barraCobertura > div {
+    height: 18px;
+    border-radius: 4px;
+}
+
+/* --- Semaforo ----------------------------------------------------------- */
+.pastilla {
+    display: inline-block;
+    color: #fff;
+    border-radius: 10px;
+    padding: 2px 10px;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+/* --- Nada de scroll horizontal en el cuerpo ----------------------------- */
+.section-body {
+    overflow-x: hidden;
+}
+
+/* --- Tablet ------------------------------------------------------------- */
+@media (max-width: 992px) {
+    .kpiValor { font-size: 25px; }
+    .graficoCanvasWrap { height: 230px; }
+    .graficoGrid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+    .bloqueGrid  { grid-template-columns: 1fr; }
+    /* En tablet el filtro ocupa demasiado alto para quedarse pegado. */
+    .filtroSticky { position: static; }
+}
+
+/* --- Movil -------------------------------------------------------------- */
+@media (max-width: 576px) {
+    .kpiGrid { grid-template-columns: 1fr; gap: 10px; }
+    .graficoCanvasWrap { height: 200px; }
+    .kpiCard { padding: 10px 12px; }
+    .kpiValor { font-size: 22px; }
+    .graficoGrid { grid-template-columns: 1fr; }
+    .graficoCard, .bloqueCard { padding: 10px 12px; }
+    .leyendaLista { max-height: 120px; }
+}

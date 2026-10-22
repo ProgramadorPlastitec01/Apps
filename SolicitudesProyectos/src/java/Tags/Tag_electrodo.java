@@ -36,10 +36,10 @@ public class Tag_electrodo extends TagSupport {
             out.print("<div class='col-12' style='  margin-left:4.2% !important;' data-toggle='tooltip' data-placemente='top' title='Plano al que pertenece'>");
             out.print("<select class='form-control select2'  required name='slc_plano'>");
             out.print("<option selected disabled value=''>Seleccione Plano</option>");
-            for (int i = 0; i < lst_tipoP.size(); i++) {
+            for (int i = 0; lst_tipoP != null && i < lst_tipoP.size(); i++) {
                 Object[] obj_tipo = (Object[]) lst_tipoP.get(i);
                 out.print("<optgroup label='" + obj_tipo[0] + "'>");
-                for (int j = 0; j < lst_plano.size(); j++) {
+                for (int j = 0; lst_plano != null && j < lst_plano.size(); j++) {
                     Object[] obj_plano = (Object[]) lst_plano.get(j);
                     if (obj_tipo[0].equals(obj_plano[2])) {
                         out.print("<option value='" + obj_plano[0] + "'>" + obj_plano[1] + "</option>");

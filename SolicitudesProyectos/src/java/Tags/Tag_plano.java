@@ -20,6 +20,9 @@ public class Tag_plano extends TagSupport {
         JspWriter out = pageContext.getOut();
         HttpSession sesion = pageContext.getSession();
         PlanoJpaController jpa_plano = new PlanoJpaController();
+        // Consecutivo siguiente para 'Generales Varios' (convencion GV-XXX),
+        // calculado en BD y usado para autocompletar el numero en el modal.
+        String siguienteGv = jpa_plano.siguienteConsecutivoGV();
         VerificarEtdJpaController jpa_itemVer = new VerificarEtdJpaController();
         String rol = sesion.getAttribute("Rol").toString();
         Date fechaActual = new Date();
@@ -62,6 +65,10 @@ public class Tag_plano extends TagSupport {
                 out.print("</div>");
 
                 out.print("<div class='cont_form_user'>");
+                // Quinta columna de sp_pno_c_plano_id; se agrego al final para no
+                // correr los indices que ya usaban los otros campos del formulario.
+                String numeroParte = (obj_plano.length > 4 && obj_plano[4] != null)
+                        ? Metodos.Render.html(obj_plano[4]) : "";
                 out.print("<form action='Plano?opc=3' onsubmit='modificarP();' method='post' class='needs-validation' novalidate=''>");
                 out.print("<input type='hidden' name='idP' value='" + id_plano + "'>");
 
@@ -80,6 +87,9 @@ public class Tag_plano extends TagSupport {
                 out.print("<option value='Platinas'>Platinas</option>");
                 out.print("<option value='Moldes'>Moldes</option>");
                 out.print("<option value='Grafadoras'>Grafadoras</option>");
+                // Convencion GV-00X: trabajos generales de taller que no
+                // corresponden a un plano de ingenieria.
+                out.print("<option value='Generales Varios'>Generales Varios</option>");
                 out.print("<option value='Otros'>Otros</option>");
                 out.print("</select>");
                 out.print("</div>");
@@ -109,6 +119,14 @@ public class Tag_plano extends TagSupport {
                     out.print("</div>");
                 }
 
+
+                //<editor-fold defaultstate="collapsed" desc="NO. DE PARTE">
+                // Opcional a proposito: los planos existentes lo tienen en NULL
+                // y hay que poder guardarlos sin obligar a inventar un numero.
+                out.print("<div class='col-lg-12 col-md-12'>");
+                out.print("<input type='text' class='form-control' name='txt_numero_parte' id='txt_numero_parte' maxlength='45' placeholder='No. de parte (ej. 026.1 o 026.1-027.2)' value='" + numeroParte + "' autocomplete='off' data-toggle='tooltip' data-placement='top' title='No. de parte(s) del R-PM-001. Si ampara varias partes, separar con guion (-)'>");
+                out.print("</div>");
+                //</editor-fold>
                 out.print("<div class='' style='width: 100%; text-align:center;'>");
                 out.print("<button class='btn btn-red btn-lg'>Modificar</button>");
                 out.print("</div>");
@@ -140,12 +158,15 @@ public class Tag_plano extends TagSupport {
 
             out.print("<div class='col-lg-12 col-md-12' style='display: flex;'>");
             out.print("<div class='col-lg-12' data-toggle='tooltip' data-placemente='top' title='Tipo'>");
-            out.print("<select class='form-control' name='slc_tipo' required style='margin-top: 12px;margin-bottom: 12px;'>");
+            out.print("<select class='form-control' name='slc_tipo' id='slc_tipo_reg' onchange='validarTipoPlano(this.value);' required style='margin-top: 12px;margin-bottom: 12px;'>");
             out.print("<option selected disabled value=''>Seleccione tipo</option>");
             out.print("<option value='Electrodo'>Electrodo</option>");
             out.print("<option value='Platinas'>Platinas</option>");
             out.print("<option value='Moldes'>Moldes</option>");
             out.print("<option value='Grafadoras'>Grafadoras</option>");
+            // Convencion GV-00X: trabajos generales de taller que no
+            // corresponden a un plano de ingenieria.
+            out.print("<option value='Generales Varios'>Generales Varios</option>");
             out.print("<option value='Otros'>Otros</option>");
             out.print("</select>");
             out.print("<div class='invalid-feedback invalid_data_rll'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp;Debe seleccionar un valor!</div>");
@@ -154,15 +175,21 @@ public class Tag_plano extends TagSupport {
 
             out.print("<div class='col-lg-12 col-md-12' style='display: flex;'>");
             out.print("<div class='col-lg-6'>");
-            out.print("<input type='text' class='form-control' name='txt_letraP' id='txt_letraP' placeholder='Letra' required data-toggle='tooltip' autocomplete='off' data-placemente='top' title='Letra del plano'>");
+            out.print("<input type='text' class='form-control' name='txt_letraP' id='txt_letraP_reg' placeholder='Letra' required data-toggle='tooltip' autocomplete='off' data-placemente='top' title='Letra del plano'>");
             out.print("<div class='invalid-feedback invalid_data_rll'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp;Debe ingresar un valor!</div>");
             out.print("</div>");
             out.print("<div class='col-lg-6'>");
-            out.print("<input type='text' class='form-control' name='txt_numeroP' id='txt_numeroP' placeholder='Numero' required='' data-toggle='tooltip' autocomplete='off' data-placemente='top' title='Numero del plano'>");
+            out.print("<input type='text' class='form-control' name='txt_numeroP' id='txt_numeroP_reg' placeholder='Numero' required='' data-toggle='tooltip' autocomplete='off' data-placemente='top' title='Numero del plano'>");
             out.print("<div class='invalid-feedback invalid_data_rll'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp;Debe ingresar un valor!</div>");
             out.print("</div>");
             out.print("</div>");
 
+
+            //<editor-fold defaultstate="collapsed" desc="NO. DE PARTE">
+            out.print("<div class='col-lg-12 col-md-12'>");
+            out.print("<input type='text' class='form-control' name='txt_numero_parte' id='txt_numero_parte' maxlength='45' placeholder='No. de parte (ej. 026.1 o 026.1-027.2)' autocomplete='off' data-toggle='tooltip' data-placement='top' title='No. de parte(s) del R-PM-001. Si ampara varias partes, separar con guion (-)'>");
+            out.print("</div>");
+            //</editor-fold>
             out.print("<div class='' style='width: 100%; text-align:center;'>");
             out.print("<button class='btn btn-red btn-lg'>Registrar</button>");
             out.print("</div>");
@@ -219,7 +246,7 @@ public class Tag_plano extends TagSupport {
             }
             out.print("</tbody>");
             out.print("</table>");
-            for (int i = 0; i < lst_planos.size(); i++) {
+            for (int i = 0; lst_planos != null && i < lst_planos.size(); i++) {
                 Object[] obj_plano = (Object[]) lst_planos.get(i);
                 //<editor-fold defaultstate="collapsed" desc="Mostrar Plano - Calificacion Plano">
                 out.print("<div class='sweet-local' tabindex='-1' id='Plano" + i + "' style='opacity: 1.03; display:none;'>");
@@ -258,7 +285,7 @@ public class Tag_plano extends TagSupport {
                             int cont = 0;
                             out.print("<form action='Plano?opc=4&idP=" + obj_plano[0] + "&nomP=" + obj_plano[1] + "' method='post' id='form1_" + i + "' name='form1_" + i + "'>");
                             out.print("<input type='hidden' name='numI' value='" + (cont + 1) + "'>");
-                            for (int j = 0; j < lst_items.size(); j++) {
+                            for (int j = 0; lst_items != null && j < lst_items.size(); j++) {
                                 Object[] obj_items = (Object[]) lst_items.get(j);
                                 if (cont <= (Integer.parseInt(obj_itmVerPln[1].toString()) - 1)) {
                                     Object[] obj_itmPln = (Object[]) lst_itemsPln.get(cont);
@@ -292,7 +319,7 @@ public class Tag_plano extends TagSupport {
                     } else {
                         out.print("<form action='Plano?opc=4&idP=" + obj_plano[0] + "&nomP=" + obj_plano[1] + "' method='post' id='form1_" + i + "' name='form1_" + i + "'>");
                         out.print("<input type='hidden' name='numI' value='0'>");
-                        for (int j = 0; j < lst_items.size(); j++) {
+                        for (int j = 0; lst_items != null && j < lst_items.size(); j++) {
                             Object[] obj_items = (Object[]) lst_items.get(j);
                             out.print("<tr scope=\"row\">");
                             out.print("<td>" + obj_items[1] + "</td>");
@@ -325,6 +352,43 @@ public class Tag_plano extends TagSupport {
             out.print("</div>");
             out.print("</div>");
             out.print("</div>");
+            //<editor-fold defaultstate="collapsed" desc="AUTOCOMPLETADO GENERALES VARIOS">
+            // Al elegir 'Generales Varios' se bloquea la Letra en GV y el Numero
+            // en el consecutivo calculado en BD. readOnly (no disabled) para que
+            // ambos campos VIAJEN en el POST del formulario.
+            out.print("<script>");
+            out.print("function validarTipoPlano(tipo) {");
+            out.print("    var letra = document.getElementById('txt_letraP_reg');");
+            out.print("    var num = document.getElementById('txt_numeroP_reg');");
+            out.print("    if (!letra || !num) return;");
+            out.print("    if (tipo === 'Generales Varios') {");
+            out.print("        letra.value = 'GV';");
+            out.print("        num.value = '" + siguienteGv + "';");
+            out.print("        letra.readOnly = true;");
+            out.print("        num.readOnly = true;");
+            out.print("        letra.style.backgroundColor = '#e9ecef';");
+            out.print("        num.style.backgroundColor = '#e9ecef';");
+            out.print("        letra.style.cursor = 'not-allowed';");
+            out.print("        num.style.cursor = 'not-allowed';");
+            out.print("        letra.title = 'Autogenerado: Prefijo oficial GV';");
+            out.print("        num.title = 'Autogenerado: Siguiente consecutivo disponible';");
+            out.print("    } else {");
+            out.print("        if (letra.value === 'GV') {");
+            out.print("            letra.value = '';");
+            out.print("            num.value = '';");
+            out.print("        }");
+            out.print("        letra.readOnly = false;");
+            out.print("        num.readOnly = false;");
+            out.print("        letra.style.backgroundColor = '';");
+            out.print("        num.style.backgroundColor = '';");
+            out.print("        letra.style.cursor = '';");
+            out.print("        num.style.cursor = '';");
+            out.print("        letra.title = 'Letra del plano';");
+            out.print("        num.title = 'Numero del plano';");
+            out.print("    }");
+            out.print("}");
+            out.print("</script>");
+            //</editor-fold>
             out.print("</section>");
         } catch (IOException ex) {
             Logger.getLogger(Tag_plano.class.getName()).log(Level.SEVERE, null, ex);

@@ -34,7 +34,9 @@ public class Tag_pendiente extends TagSupport {
             } catch (Exception e) {
                 id_solicitud = 0;
             }
-            if (pageContext.getRequest().getAttribute("Pendiente").toString().equals("Herramental")) {
+            Object pdtAttr = pageContext.getRequest().getAttribute("Pendiente");
+            String pdtTipo = (pdtAttr != null) ? pdtAttr.toString() : "Herramental";
+            if (pdtTipo.equals("Herramental")) {
                 //<editor-fold defaultstate="collapsed" desc="HERRAMENTAL">
                 out.print("<section class='section'>");
                 out.print("<div class='section-header'>");
@@ -71,7 +73,9 @@ public class Tag_pendiente extends TagSupport {
                         int test = Integer.parseInt(obj_pendientes[0].toString());
                         List lst_solicitud = jpa_solicitud.consultaSolicitudIdPendiente(test);
                         if (lst_plano == null) {
-                            jpa_plano.registroPlano("Moldes", obj_pendientes[1].toString(), FechaYHora.format(fecha));
+                            // El alta automatica desde Pendientes no conoce el No. de parte: se crea
+                            // vacio y el usuario lo carga despues desde el modulo de Planos.
+                            jpa_plano.registroPlano("Moldes", obj_pendientes[1].toString(), FechaYHora.format(fecha), "");
                             lst_plano = jpa_plano.consultaPlanoNombre(obj_pendientes[1].toString());
                         }
                         Object[] obj_plano = (Object[]) lst_plano.get(0);
@@ -109,7 +113,7 @@ public class Tag_pendiente extends TagSupport {
                 out.print("</div>");
                 out.print("</section>");
                 //</editor-fold>
-            } else if (pageContext.getRequest().getAttribute("Pendiente").toString().equals("Visual_solicitud")) {
+            } else if (pdtTipo.equals("Visual_solicitud")) {
                 //<editor-fold defaultstate="collapsed" desc="VISUAL DE SOLICITUD APP HERRAMENTAL">
                 try {
                     var = Integer.parseInt(pageContext.getRequest().getAttribute("var").toString());
@@ -142,7 +146,7 @@ public class Tag_pendiente extends TagSupport {
                     out.print("<div class='StyleDiv4'>" + obj_solicitud[13] + " " + obj_solicitud[14] + "</div>"
                             + "<div class='StyleDiv4'>" + obj_solicitud[4] + "</div>"
                             + "<div class='StyleDiv4'>" + obj_solicitud[5] + "</div>"
-                            + "<div class='StyleDiv4'>" + obj_solicitud[8] + "</div>");
+                            + "<div class='StyleDiv4'>" + obj_solicitud[6] + "</div>");
 
                     out.print("</div>");
 
@@ -155,7 +159,7 @@ public class Tag_pendiente extends TagSupport {
                     out.print("</div>");
 
                     out.print("<div class='DivFlex2' style='margin-bottom:6px;'>");
-                    out.print("<div class='StyleDiv4'>" + obj_solicitud[6] + "</div>"
+                    out.print("<div class='StyleDiv4'>" + obj_solicitud[8] + "</div>"
                             + "<div class='StyleDiv4'>" + (Integer.parseInt(obj_solicitud[10].toString()) == 100 ? "<a style=\"color:white;\" class=\"btn btn-info btn-icon btn-sm\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\" data-original-title=\"Estado Cerrado\"><i class=\"fas fa-lock\"></i></a>" : "<a style=\"color:white;\" class=\"btn btn-info btn-icon btn-sm\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\" data-original-title=\"Estado Pendiente\"><i class=\"fas fa-lock-open\"></i></a>") + "</div>"
                             + "<div class='StyleDiv4'>" + obj_solicitud[7] + "</div>"
                             + "<div class='StyleDiv4'>" + obj_solicitud[9] + "</div>");

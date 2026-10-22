@@ -70,10 +70,6 @@ public class Soporte extends HttpServlet {
                     idUsuario = Integer.parseInt(request.getParameter("idUser"));
                     txt_case = request.getParameter("txt_case");
                     txtPriori = request.getParameter("cbx_priori");
-                    try {
-                        
-                    } catch (Exception e) {
-                    }
                     result = ConsulRedeac.RegisterCase(idArea, txtTecnicos, idUsuario, txt_case, txtPriori);
                     if (result) {
                         lst_mail = ConsulRedeac.consul_caseMail(idArea, idUsuario);

@@ -4,6 +4,7 @@ import Controladores.CabeceraEtdJpaController;
 import Controladores.ElectrodoJpaController;
 import Controladores.PlanoJpaController;
 import Controladores.SolicitudJpaController;
+import Metodos.Render;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,6 +18,13 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 public class Tag_solicitud extends TagSupport {
 
+    private static final ThreadLocal<SimpleDateFormat> FORMATO_FECHA = new ThreadLocal<SimpleDateFormat>() {
+        @Override
+        protected SimpleDateFormat initialValue() {
+            return new SimpleDateFormat("yyyy-MM-dd");
+        }
+    };
+
     @Override
     public int doStartTag() throws JspException {
         JspWriter out = pageContext.getOut();
@@ -28,9 +36,10 @@ public class Tag_solicitud extends TagSupport {
         String rol = sesion.getAttribute("Rol").toString();
         int area = Integer.parseInt(sesion.getAttribute("Area").toString());
         int id_usuario = Integer.parseInt(sesion.getAttribute("id").toString());
+        // SimpleDateFormat NO es thread-safe. Se usa ThreadLocal para
+        // consistencia con la correccion de Reporte.java (ver commit 44949aa).
         Date fechaActual = new Date();
-        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
-        String fechaFormateada = formato.format(fechaActual);
+        String fechaFormateada = FORMATO_FECHA.get().format(fechaActual);
         String nombre = sesion.getAttribute("Nombre").toString();
         List lst_planos = jpa_plano.consultaPlanos();
         List lst_tipoP = jpa_plano.consultaTipoPlano();
@@ -46,44 +55,51 @@ public class Tag_solicitud extends TagSupport {
         int id_pendiente_ft = 0;
         int rgt_proyectos = 0;
         int btn_filter = 0, id_solicitud = 0, id_plano = 0, id_ficha = 0, estado = 0, temp = 0, tempC = 0;
-        String nsolicitud = "", fechaI = "", fechaF, filtro = "", busqueda = "";
+        String nsolicitud = "", fechaI = "", fechaF, filtro = "", busqueda = "", tipoPlano = "";
         try {
             try {
-                rgt_proyectos = Integer.parseInt(pageContext.getRequest().getAttribute("registro").toString());
-            } catch (NumberFormatException e) {
+                Object rgtObj = pageContext.getRequest().getAttribute("registro");
+                rgt_proyectos = (rgtObj != null) ? Integer.parseInt(rgtObj.toString()) : 0;
+            } catch (Exception e) {
                 rgt_proyectos = 0;
             }
             if (rgt_proyectos == 0) {
                 //<editor-fold defaultstate="collapsed" desc="MÓDULO DE SOLICITUDES PROYECTOS">
                 //<editor-fold defaultstate="collapsed" desc="VARIABLES">
                 try {
-                    id_solicitud = Integer.parseInt(pageContext.getRequest().getAttribute("id_solicitud").toString());
-                } catch (NumberFormatException e) {
+                    Object sObj = pageContext.getRequest().getAttribute("id_solicitud");
+                    id_solicitud = (sObj != null) ? Integer.parseInt(sObj.toString()) : 0;
+                } catch (Exception e) {
                     id_solicitud = 0;
                 }
                 try {
-                    id_plano = Integer.parseInt(pageContext.getRequest().getAttribute("id_plano").toString());
-                } catch (NumberFormatException e) {
+                    Object pObj = pageContext.getRequest().getAttribute("id_plano");
+                    id_plano = (pObj != null) ? Integer.parseInt(pObj.toString()) : 0;
+                } catch (Exception e) {
                     id_plano = 0;
                 }
                 try {
-                    id_ficha = Integer.parseInt(pageContext.getRequest().getAttribute("id_ficha").toString());
-                } catch (NumberFormatException e) {
+                    Object fObj = pageContext.getRequest().getAttribute("id_ficha");
+                    id_ficha = (fObj != null) ? Integer.parseInt(fObj.toString()) : 0;
+                } catch (Exception e) {
                     id_ficha = 0;
                 }
                 try {
-                    id_pendiente_ft = Integer.parseInt(pageContext.getRequest().getAttribute("id_pendiente").toString());
-                } catch (NumberFormatException e) {
+                    Object pdObj = pageContext.getRequest().getAttribute("id_pendiente");
+                    id_pendiente_ft = (pdObj != null) ? Integer.parseInt(pdObj.toString()) : 0;
+                } catch (Exception e) {
                     id_pendiente_ft = 0;
                 }
                 try {
-                    btn_filter = Integer.parseInt(pageContext.getRequest().getAttribute("filtro_btns").toString());
-                } catch (NumberFormatException e) {
+                    Object bObj = pageContext.getRequest().getAttribute("filtro_btns");
+                    btn_filter = (bObj != null) ? Integer.parseInt(bObj.toString()) : 1;
+                } catch (Exception e) {
                     btn_filter = 1;
                 }
                 try {
-                    estado = Integer.parseInt(pageContext.getRequest().getAttribute("estado").toString());
-                } catch (NumberFormatException e) {
+                    Object eObj = pageContext.getRequest().getAttribute("estado");
+                    estado = (eObj != null) ? Integer.parseInt(eObj.toString()) : 0;
+                } catch (Exception e) {
                     estado = 0;
                 }
                 //</editor-fold>
@@ -130,10 +146,10 @@ public class Tag_solicitud extends TagSupport {
                         out.print("<div class='col-lg-12 pb-2' data-toggle='tooltip' data-placemente='top' title='Plano al que pertenece'>");
                         out.print("<select class='select2' name='idP' required id='plano-id' style='margin-top: 12px;margin-bottom: 12px;' onchange='Javascript:document.formPlano1.submit();'>");
                         out.print("<option style='display:none;' value='" + obj_solicitud[18] + "'>" + obj_solicitud[6] + "</option>");
-                        for (int i = 0; i < lst_tipoP.size(); i++) {
+                        for (int i = 0; lst_tipoP != null && i < lst_tipoP.size(); i++) {
                             Object[] obj_tipo = (Object[]) lst_tipoP.get(i);
                             out.print("<optgroup label='" + obj_tipo[0] + "'>");
-                            for (int j = 0; j < lst_planos.size(); j++) {
+                            for (int j = 0; lst_planos != null && j < lst_planos.size(); j++) {
                                 Object[] obj_planos = (Object[]) lst_planos.get(j);
                                 if (obj_tipo[0].equals(obj_planos[2])) {
                                     out.print("<option value='" + obj_planos[0] + "'>" + obj_planos[1] + "</opction>");
@@ -216,6 +232,26 @@ public class Tag_solicitud extends TagSupport {
                     //</editor-fold>                    
                 }
                 //<editor-fold defaultstate="collapsed" desc="REGISTRAR SOLICITUD">
+                // GV-001 es el plano sombrilla para labores sin plano de ingenieria.
+                // Se resuelve su id desde lst_planos (ya en memoria) para el boton de
+                // acceso directo, sin una consulta extra. Preferencia por nombre exacto
+                // GV-001; si no, el primero de tipo 'Generales Varios'.
+                int idPlanoGV = 0;
+                if (lst_planos != null) {
+                    for (int j = 0; j < lst_planos.size(); j++) {
+                        Object[] obj_p = (Object[]) lst_planos.get(j);
+                        String nom = (obj_p[1] != null) ? obj_p[1].toString().trim() : "";
+                        if ("GV-001".equalsIgnoreCase(nom)) {
+                            idPlanoGV = Integer.parseInt(obj_p[0].toString());
+                            break;
+                        } else if (idPlanoGV == 0 && "Generales Varios".equalsIgnoreCase(obj_p[2] != null ? obj_p[2].toString().trim() : "")) {
+                            idPlanoGV = Integer.parseInt(obj_p[0].toString());
+                        }
+                    }
+                }
+                if (idPlanoGV == 0) {
+                    idPlanoGV = 221; // GV-001 historico (ex N/A) como fallback
+                }
                 out.print("<div class='sweet-local' tabindex='-1' id='Ventana1' style='opacity: 1.03; display:none;'>");
                 out.print("<div class='cont_solicitud'>");
                 //<editor-fold defaultstate="collapsed" desc="PARTE 1 - CONSULTA">
@@ -231,13 +267,44 @@ public class Tag_solicitud extends TagSupport {
                 out.print("<div class='invalid-feedback invalid_data_rll'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp;Debe ingresar un valor!</div>");
                 out.print("</div>");
 
+                //<editor-fold defaultstate="collapsed" desc="ACCESO DIRECTO GENERALES VARIOS">
+                // Boton de acceso directo a Generales Varios
+                out.print("<div class='col-12 pb-2' style='text-align: center;'>");
+                out.print("<button type='button' class='btn btn-outline-primary btn-block' style='border-style: dashed; border-width: 2px; font-weight: 600; padding: 10px; font-size: 13px; color: #1a5276; border-color: #2980b9;' onclick='seleccionarGV(" + idPlanoGV + ");'>");
+                out.print("<i class='fas fa-tools' style='margin-right: 8px; font-size: 15px;'></i>Actividad sin plano? Registrar como Generales Varios (GV-001)");
+                out.print("</button>");
+                out.print("</div>");
+                // Separador visual
+                out.print("<div class='col-12 pb-2' style='display: flex; align-items: center; text-align: center; color: #888;'>");
+                out.print("<div style='flex: 1; border-bottom: 1px solid #e0e0e0;'></div>");
+                out.print("<span style='padding: 0 10px; font-size: 11px; text-transform: uppercase; font-weight: bold; color: #7f8c8d;'>o seleccione un plano de ingenieria</span>");
+                out.print("<div style='flex: 1; border-bottom: 1px solid #e0e0e0;'></div>");
+                out.print("</div>");
+                // Autoselecciona GV en el combo y avanza. Con select2 usa su API para
+                // que dispare el onchange que ya envia el formulario; sin el, fija el
+                // value y hace submit a mano.
+                out.print("<script>");
+                out.print("function seleccionarGV(idPlano) {");
+                out.print("    var selectPlano = document.getElementById('plano-id');");
+                out.print("    if (selectPlano) {");
+                out.print("        if (window.jQuery && $(selectPlano).data('select2')) {");
+                out.print("            $(selectPlano).val(idPlano).trigger('change');");
+                out.print("        } else {");
+                out.print("            selectPlano.value = idPlano;");
+                out.print("            document.formPlano.submit();");
+                out.print("        }");
+                out.print("    }");
+                out.print("}");
+                out.print("</script>");
+                //</editor-fold>
+
                 out.print("<div class='col-lg-12 pb-3' data-toggle='tooltip' data-placemente='top' title='Plano al que pertenece'>");
                 out.print("<select class='select2 form-control'  name='idP' id='plano-id'  style='margin-top: 12px;margin-bottom: 12px;' onchange='Javascript:document.formPlano.submit();'>");
                 out.print("<option value='0'>Seleccione Plano</option>");
-                for (int i = 0; i < lst_tipoP.size(); i++) {
+                for (int i = 0; lst_tipoP != null && i < lst_tipoP.size(); i++) {
                     Object[] obj_tipo = (Object[]) lst_tipoP.get(i);
                     out.print("<optgroup label='" + obj_tipo[0] + "'>");
-                    for (int j = 0; j < lst_planos.size(); j++) {
+                    for (int j = 0; lst_planos != null && j < lst_planos.size(); j++) {
                         Object[] obj_plano = (Object[]) lst_planos.get(j);
                         if (obj_tipo[0].equals(obj_plano[2])) {
                             out.print("<option value='" + obj_plano[0] + "'>" + obj_plano[1] + "</option>");
@@ -295,10 +362,10 @@ public class Tag_solicitud extends TagSupport {
                         out.print("<div class='col-lg-12 pb-3' data-toggle='tooltip' data-placemente='top' title='Plano al que pertenece'>");
                         out.print("<select class='select2' name='idP' required id='plano-id' style='margin-top: 12px;margin-bottom: 12px;' onchange='Javascript:document.formPlano1.submit();'>");
                         out.print("<option style='display:none;' value='" + obj_plano[0] + "'>" + obj_plano[1] + "</option>");
-                        for (int i = 0; i < lst_tipoP.size(); i++) {
+                        for (int i = 0; lst_tipoP != null && i < lst_tipoP.size(); i++) {
                             Object[] obj_tipo = (Object[]) lst_tipoP.get(i);
                             out.print("<optgroup label='" + obj_tipo[0] + "'>");
-                            for (int j = 0; j < lst_planos.size(); j++) {
+                            for (int j = 0; lst_planos != null && j < lst_planos.size(); j++) {
                                 Object[] obj_planos = (Object[]) lst_planos.get(j);
                                 if (obj_tipo[0].equals(obj_planos[2])) {
                                     out.print("<option value='" + obj_planos[0] + "'>" + obj_planos[1] + "</option>");
@@ -330,7 +397,12 @@ public class Tag_solicitud extends TagSupport {
                             out.print("</div>");
                         }
                         out.print("<div class='col-12 pb-2'>");
-                        out.print("<textarea class='form-control' name='txt_pieza'  id='piezax-id' value='' required onchange='javascript:this.value=this.value.toUpperCase();' placeholder='Las piezas se deben separar con guiones (-)' autocomplete='off' data-toggle='tooltip' data-placemente='top' title='Piezas'></textarea>");
+                        // Generales Varios describe labores, no piezas de plano: el
+                        // placeholder se adapta para guiar al operario.
+                        String phPieza = "Generales Varios".equalsIgnoreCase(obj_plano[2] != null ? obj_plano[2].toString().trim() : "")
+                                ? "Indique pieza, repuesto o labor a realizar (ej. BUJE, AFILADO, REPARACION)"
+                                : "Las piezas se deben separar con guiones (-)";
+                        out.print("<textarea class='form-control' name='txt_pieza'  id='piezax-id' value='' required onchange='javascript:this.value=this.value.toUpperCase();' placeholder='" + phPieza + "' autocomplete='off' data-toggle='tooltip' data-placemente='top' title='Piezas'></textarea>");
                         out.print("<div class='invalid-feedback invalid_data_rll'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp;Debe ingresar un valor!</div>");
                         out.print("</div>");
 
@@ -449,7 +521,7 @@ public class Tag_solicitud extends TagSupport {
                 out.print("<div class='card'>");
                 out.print("<div class='card-header' style='justify-content: space-between;'>");
                 out.print("<h4>Listado de solicitudes</h4>");
-                if (rol.equals("JEFE.PR") || rol.equals("COORD.PR") || rol.equals("ADMIN") || rol.equals("MTF") || rol.equals("PI") || rol.equals("MI") || rol.equals("AU")) {
+                if (rol.equals("JEFE.PR") || rol.equals("COORD.PR") || rol.equals("ASIST.PR") || rol.equals("ADMIN") || rol.equals("MTF") || rol.equals("PI") || rol.equals("MI") || rol.equals("AU")) {
                     out.print("<button class='btn btn-red' style='border-radius: 4px;' onclick='mostrarConvencion(1);obtenerSolicitud()' data-toggle='tooltip' data-placement='top' title='Registrar Solicitud'><i class='fas fa-plus'></i></button>");
                 }
                 out.print("</div>");
@@ -459,7 +531,7 @@ public class Tag_solicitud extends TagSupport {
                 out.print("<input type='radio' name='btn_bus' value='3' id='option-3' style='display:none;' onclick='execute_form()' " + ((btn_filter == 3) ? "checked " : "") + ">");
                 out.print("</form>");
                 out.print("<div style='display:flex;justify-content:space-evenly;'>");
-                if (rol.equals("JEFE.PR") || rol.equals("COORD.PR") || rol.equals("ADMIN") || rol.equals("TEC.PR")) {
+                if (rol.equals("JEFE.PR") || rol.equals("COORD.PR") || rol.equals("ASIST.PR") || rol.equals("ADMIN") || rol.equals("TEC.PR")) {
                     out.print("<div style='display:flex;justify-content:space-evenly;width:48%;align-items:center'>");
                     out.print("<div><label for='option-1'><div class='btn btn-" + ((btn_filter == 1) ? "danger" : "outline-danger") + "' data-toggle='tooltip' data-placement='top' title='Solicitudes'><i style='font-size:18px;' class='fas fa-people-carry fa-lg'></i></div></label></div>");
                     out.print("<div><label for='option-2'><div class='btn btn-" + ((btn_filter == 2) ? "warning" : "outline-warning") + "' data-toggle='tooltip' data-placement='top' title='Pendiente(s) Herramental'><i style='font-size:18px;' class='fas fa-vote-yea fa-lg'></i></div></label></div>");
@@ -547,7 +619,13 @@ public class Tag_solicitud extends TagSupport {
                 out.print("</tr>");
                 out.print("</thead>");
                 out.print("<tbody>");
-                for (int i = 0; i < lst_solicitudes.size(); i++) {
+                // El controlador devuelve null cuando la consulta falla, no una
+                // lista vacia: sin esta guarda un procedimiento caido deja la
+                // pantalla en blanco en vez de mostrar la tabla sin filas.
+                if (lst_solicitudes == null) {
+                    out.print("<tr><td colspan='12' style='text-align:center;'>No existen datos registrados</td></tr>");
+                }
+                for (int i = 0; lst_solicitudes != null && i < lst_solicitudes.size(); i++) {
                     Object[] obj_solicitud = (Object[]) lst_solicitudes.get(i);
                     out.print("<tr>");
                     //<editor-fold defaultstate="collapsed" desc="# SOLICITUDES - RESPONSABLE">
@@ -563,7 +641,7 @@ public class Tag_solicitud extends TagSupport {
                     if (btn_filter == 1 || btn_filter == 2) {
                         if (btn_filter == 1) {
                             //<editor-fold defaultstate="collapsed" desc="FICHA">
-                            if (rol.equals("COORD.PR") || rol.equals("ADMIN")) {
+                            if (rol.equals("COORD.PR") || rol.equals("ASIST.PR") || rol.equals("ADMIN")) {
                                 if (obj_solicitud[5].equals(0)) {
                                     out.print("<td style='text-align:center;'>N/A</td>");
                                 } else if ((Integer) obj_solicitud[10] != 100) {
@@ -598,7 +676,7 @@ public class Tag_solicitud extends TagSupport {
                                         lst_cabecera = jpa_cabecera.consultarUltimaCabecera((String) obj_solicitud[3]);
                                         if (lst_cabecera == null) {
                                             lst_itmVerPln = jpa_plano.consultaItemsVerificadosIdPlano((Integer) obj_solicitud[18]);
-                                            for (int h = 0; h < lst_itmVerPln.size(); h++) {
+                                            for (int h = 0; lst_itmVerPln != null && h < lst_itmVerPln.size(); h++) {
                                                 Object[] objectVeri = (Object[]) lst_itmVerPln.get(h);
                                                 if (Integer.parseInt(objectVeri[0].toString()) == Integer.parseInt(objectVeri[1].toString())) {
                                                     out.print("<i class=\"fas fa-comment-alt fa-lg mr-1\" style=\"color: #d3a709;\"></i>");
@@ -670,7 +748,7 @@ public class Tag_solicitud extends TagSupport {
                     out.print("<td>");
                     out.print("<div style='display:flex;margin-left:12%;' class='mr-2'>");
                     if (btn_filter == 3) {
-                    } else if (obj_solicitud[15].equals(rol) || rol.equals("COORD.PR")) {
+                    } else if (obj_solicitud[15].equals(rol) || rol.equals("COORD.PR") || rol.equals("ASIST.PR")) {
                         if ((Integer) obj_solicitud[10] != 100) {
                             out.print("<div style='margin-right:10px;'><a href='Solicitud?opc=1&idS=" + obj_solicitud[0] + "&btn_bus=" + btn_filter + "' style='color:white;' class='btn btn-warning btn-icon btn-sm' data-toggle='tooltip' data-placement='top' title='Modificar'><i class='fas fa-pencil-alt'></i></a></div>");
                         } else {
@@ -711,34 +789,52 @@ public class Tag_solicitud extends TagSupport {
             } else {
                 //<editor-fold defaultstate="collapsed" desc="MÓDULO INDICADOR Y REGISTRO DE SOLICITUDES">
                 try {
-                    temp = Integer.parseInt(pageContext.getRequest().getAttribute("temp").toString());
-                } catch (NumberFormatException e) {
+                    Object tObj = pageContext.getRequest().getAttribute("temp");
+                    temp = (tObj != null) ? Integer.parseInt(tObj.toString()) : 0;
+                } catch (Exception e) {
                     temp = 0;
                 }
                 try {
-                    fechaI = pageContext.getRequest().getAttribute("fecha_inicio").toString();
+                    Object fiObj = pageContext.getRequest().getAttribute("fecha_inicio");
+                    fechaI = (fiObj != null) ? fiObj.toString() : "";
                 } catch (Exception e) {
                     fechaI = "";
                 }
                 try {
-                    fechaF = pageContext.getRequest().getAttribute("fecha_fin").toString();
+                    Object ffObj = pageContext.getRequest().getAttribute("fecha_fin");
+                    fechaF = (ffObj != null) ? ffObj.toString() : "";
                 } catch (Exception e) {
                     fechaF = "";
                 }
                 try {
-                    estado = Integer.parseInt(pageContext.getRequest().getAttribute("estado").toString());
-                } catch (NumberFormatException e) {
+                    Object estObj = pageContext.getRequest().getAttribute("estado");
+                    estado = (estObj != null) ? Integer.parseInt(estObj.toString()) : 0;
+                } catch (Exception e) {
                     estado = 0;
                 }
                 try {
-                    tempC = Integer.parseInt(pageContext.getRequest().getAttribute("tempC").toString());
-                } catch (NumberFormatException e) {
+                    Object tcObj = pageContext.getRequest().getAttribute("tempC");
+                    tempC = (tcObj != null) ? Integer.parseInt(tcObj.toString()) : 0;
+                } catch (Exception e) {
                     tempC = 0;
                 }
                 try {
-                    busqueda = pageContext.getRequest().getAttribute("busqueda").toString();
+                    Object busObj = pageContext.getRequest().getAttribute("busqueda");
+                    busqueda = (busObj != null) ? busObj.toString() : "";
                 } catch (Exception e) {
                     busqueda = "";
+                }
+                try {
+                    Object tpObj = pageContext.getRequest().getAttribute("tipo_plano");
+                    tipoPlano = (tpObj != null) ? tpObj.toString() : "";
+                } catch (Exception e) {
+                    tipoPlano = "";
+                }
+                try {
+                    Object pObj = pageContext.getRequest().getAttribute("id_plano");
+                    id_plano = (pObj != null) ? Integer.parseInt(pObj.toString()) : 0;
+                } catch (Exception e) {
+                    id_plano = 0;
                 }
                 out.print("<section class='section'>");
                 out.print("<div class='section-header'>");
@@ -792,6 +888,46 @@ public class Tag_solicitud extends TagSupport {
                     out.print("<div class='invalid-feedback invalid_data_rll'><i class='fas fa-exclamation-circle'></i>&nbsp;&nbsp;Debe ingresar un valor!</div>");
                     out.print("</div>");
 
+                    //<editor-fold defaultstate="collapsed" desc="FILTRO TOP DE PLANOS">
+                    // El combo de tipos se llena con lo que exista en la tabla
+                    // plano, no con una lista escrita a mano: hoy son siete
+                    // valores y una lista fija dejaria planos inalcanzables.
+                    out.print("<div class='col-12 pb-3'>");
+                    out.print("<select class='form-control' name='slc_tipo_plano' id='tipoPlanoF-id'>");
+                    out.print("<option value=''>Todos los tipos</option>");
+                    if (lst_tipoP != null) {
+                        for (int i = 0; i < lst_tipoP.size(); i++) {
+                            Object[] obj_tipo = (Object[]) lst_tipoP.get(i);
+                            // Se compara el valor CRUDO y se escapa solo al
+                            // imprimir: comparar el escapado perderia el
+                            // "selected" en cuanto un tipo traiga & o comillas.
+                            String vTipo = (obj_tipo[0] == null) ? "" : obj_tipo[0].toString();
+                            out.print("<option value='" + Render.html(vTipo) + "' "
+                                    + (vTipo.equals(tipoPlano) ? "selected" : "") + ">" + Render.html(vTipo) + "</option>");
+                        }
+                    }
+                    out.print("</select>");
+                    out.print("</div>");
+
+                    // Los planos se traen filtrados por el tipo ya seleccionado;
+                    // sin tipo el combo trae la tabla completa. Es un solo
+                    // select, no una consulta por fila.
+                    out.print("<div class='col-12 pb-3'>");
+                    out.print("<select class='select2 form-control' name='slc_plano' id='planoF-id' style='width:100%;'>");
+                    out.print("<option value='0'>Todos los planos</option>");
+                    List lst_planos_combo = jpa_plano.consultaPlanosTipo(tipoPlano);
+                    if (lst_planos_combo != null) {
+                        for (int i = 0; i < lst_planos_combo.size(); i++) {
+                            Object[] obj_pln = (Object[]) lst_planos_combo.get(i);
+                            int idPln = Integer.parseInt(obj_pln[0].toString());
+                            out.print("<option value='" + idPln + "' " + ((idPln == id_plano) ? "selected" : "") + ">"
+                                    + Render.html(obj_pln[1]) + " (" + Render.html(obj_pln[3]) + ")</option>");
+                        }
+                    }
+                    out.print("</select>");
+                    out.print("</div>");
+                    //</editor-fold>
+
                     out.print("<div class='col-12 pb-3'>");
                     out.print("<textarea class='form-control' name='txt_bus' placeholder='Busqueda' data-toggle='tooltip' data-placemente='top' title='Busqueda'></textarea>");
                     out.print("</div>");
@@ -831,11 +967,177 @@ public class Tag_solicitud extends TagSupport {
                             out.print("<tr><td colspan='4' style='text-align:center;'>No existen datos registrados</td></tr>");
                         }
                         out.print("</table>");
-                        //</editor-fold>    
+                        //</editor-fold>
+
+                        //<editor-fold defaultstate="collapsed" desc="TOP 10 PLANOS - GRAFICO">
+                        // Dos vistas sobre el mismo lienzo: consolidado (pastel
+                        // de planos) y detalle de un plano (pastel de piezas).
+                        // id_plano 0 y -1 no son planos sino agregaciones del
+                        // procedimiento ('Varios' y 'Sin plano asignado'), por
+                        // eso solo se entra al detalle con id_plano > 0.
+                        String urlBase = "Solicitud?opc=4&temp=1&tempC=0&txt_fechaI=" + fechaI
+                                + "&txt_fechaF=" + fechaF + "&slc_estado=" + estado
+                                + "&slc_tipo_plano=" + tipoPlano;
+                        StringBuilder datosJson = new StringBuilder("[");
+
+                        out.print("<div class='card' style='margin:2%;width:95%;'>");
+                        out.print("<div class='card-header' style='justify-content: space-between;'>");
+
+                        if (id_plano > 0) {
+                            List lst_plano_sel = jpa_plano.consultaPlanoId(id_plano);
+                            String nombrePlanoSel = (lst_plano_sel != null)
+                                    ? Render.html(((Object[]) lst_plano_sel.get(0))[1]) : String.valueOf(id_plano);
+                            out.print("<h4><a href='" + urlBase + "&slc_plano=0' style='color:#a9b1bd;'>Todos los planos</a>"
+                                    + " <span style='color:#a9b1bd;'>/</span> " + nombrePlanoSel + "</h4>");
+                            out.print("<button class='btn btn-red' style='border-radius:4px;' onclick=\"javascript:location.href='" + urlBase + "&slc_plano=0'\">"
+                                    + "<i class='fas fa-arrow-left'></i>&nbsp;Volver al pastel de planos</button>");
+                            out.print("</div>");
+                            // Chip del filtro activo: la x lo quita y devuelve al consolidado.
+                            out.print("<div class='card-header'>");
+                            out.print("<span style='background-color:#B72E27;color:#fff;border-radius:12px;padding:4px 12px;font-size:12px;'>"
+                                    + "Plano: " + nombrePlanoSel
+                                    + " <a href='" + urlBase + "&slc_plano=0' style='color:#fff;font-weight:bold;'>&times;</a></span>");
+                            out.print("</div>");
+                        } else {
+                            out.print("<h4>Top 10 planos por horas entregadas</h4>");
+                            out.print("</div>");
+                        }
+
+                        out.print("<div class='card-body'>");
+                        out.print("<div class='row'>");
+                        out.print("<div class='col-md-5'><canvas id='chartPlanos' height='260'></canvas></div>");
+                        out.print("<div class='col-md-7' id='leyendaPlanos'>");
+
+                        if (id_plano > 0) {
+                            //<editor-fold defaultstate="collapsed" desc="DETALLE DE PIEZAS DEL PLANO">
+                            lst_piezas = jpa_solicitud.consultaPiezasPlano(fechaI, fechaF, id_plano);
+                            if (lst_piezas != null) {
+                                for (int i = 0; i < lst_piezas.size(); i++) {
+                                    Object[] obj_pza = (Object[]) lst_piezas.get(i);
+                                    // idPlano 0 en el detalle: las piezas no
+                                    // navegan a ningun lado, el clic no hace nada.
+                                    datosJson.append(i > 0 ? "," : "").append("{\"idPlano\":0,\"nombre\":\"")
+                                            .append(Render.json(obj_pza[1])).append("\",\"numeroParte\":\"")
+                                            .append(Render.json(obj_pza[0])).append("\",\"detalle\":\"")
+                                            .append(Render.json(obj_pza[4])).append("\",\"horas\":")
+                                            .append(obj_pza[5]).append(",\"porcentaje\":").append(obj_pza[6]).append("}");
+                                    out.print("<div style='padding:4px 0;border-bottom:1px solid #eee;'>");
+                                    out.print("<b>" + Render.html(obj_pza[1]) + "</b> " + Render.oRaya(obj_pza[0]));
+                                    out.print("<span style='float:right;'><b>" + obj_pza[5] + " h</b> "
+                                            + "<span style='color:#a9b1bd;'>(" + obj_pza[6] + "%)</span></span>");
+                                    out.print("<br /><span style='color:#a9b1bd;font-size:12px;'>Tecnico: " + Render.html(obj_pza[4]) + "</span>");
+                                    out.print("</div>");
+                                }
+                            }
+                            out.print("</div></div>");
+
+                            out.print("<table class='table-hover' style='width:100%;margin-top:15px;'>");
+                            out.print("<thead><tr>");
+                            out.print("<th class='th1Verificacion'>No. de parte</th>");
+                            out.print("<th class='th1Verificacion'>Pieza</th>");
+                            out.print("<th class='th1Verificacion'>Cantidad</th>");
+                            out.print("<th class='th1Verificacion'>Solicitudes</th>");
+                            out.print("<th class='th1Verificacion'>Tecnico</th>");
+                            out.print("<th class='th1Verificacion'>Horas</th>");
+                            out.print("<th class='th1Verificacion'>% del plano</th>");
+                            out.print("<th class='th1Verificacion'>Estado</th>");
+                            out.print("</tr></thead><tbody>");
+                            if (lst_piezas != null) {
+                                for (int i = 0; i < lst_piezas.size(); i++) {
+                                    Object[] obj_pza = (Object[]) lst_piezas.get(i);
+                                    out.print("<tr>");
+                                    out.print("<td class='PdgTd'>" + Render.oRaya(obj_pza[0]) + "</td>");
+                                    out.print("<td class='PdgTd'>" + Render.html(obj_pza[1]) + "</td>");
+                                    out.print("<td class='PdgTd' align='center'>" + obj_pza[2] + "</td>");
+                                    out.print("<td class='PdgTd' align='center'>" + obj_pza[3] + "</td>");
+                                    out.print("<td class='PdgTd'>" + Render.html(obj_pza[4]) + "</td>");
+                                    out.print("<td class='PdgTd' align='right'>" + obj_pza[5] + "</td>");
+                                    out.print("<td class='PdgTd' align='right'>" + obj_pza[6] + "%</td>");
+                                    out.print("<td class='PdgTd' align='center'>" + Render.html(obj_pza[7]) + "</td>");
+                                    out.print("</tr>");
+                                }
+                            } else {
+                                out.print("<tr><td colspan='8' style='text-align:center;'>No existen datos registrados</td></tr>");
+                            }
+                            out.print("</tbody></table>");
+                            //</editor-fold>
+                        } else {
+                            //<editor-fold defaultstate="collapsed" desc="CONSOLIDADO DE PLANOS">
+                            lst_plano = jpa_solicitud.consultaTopPlanos(fechaI, fechaF, estado, tipoPlano, "");
+                            if (lst_plano != null) {
+                                for (int i = 0; i < lst_plano.size(); i++) {
+                                    Object[] obj_pln = (Object[]) lst_plano.get(i);
+                                    int idPln = Integer.parseInt(obj_pln[0].toString());
+                                    datosJson.append(i > 0 ? "," : "").append("{\"idPlano\":").append(idPln)
+                                            .append(",\"nombre\":\"").append(Render.json(obj_pln[1]))
+                                            .append("\",\"numeroParte\":\"").append(Render.json(obj_pln[2]))
+                                            .append("\",\"detalle\":\"").append(Render.json(Render.textoPlano(obj_pln[4])))
+                                            .append("\",\"horas\":").append(obj_pln[7])
+                                            .append(",\"porcentaje\":").append(obj_pln[8]).append("}");
+                                    // Las agregaciones no son clicables: se
+                                    // renderizan sin cursor de mano ni onclick.
+                                    String clic = (idPln > 0)
+                                            ? " style='padding:4px 0;border-bottom:1px solid #eee;cursor:pointer;' onclick='irAPlano(" + idPln + ");'"
+                                            : " style='padding:4px 0;border-bottom:1px solid #eee;'";
+                                    out.print("<div" + clic + ">");
+                                    out.print("<b>" + Render.html(obj_pln[1]) + "</b> " + Render.oRaya(obj_pln[2]));
+                                    out.print("<span style='float:right;'><b>" + obj_pln[7] + " h</b> "
+                                            + "<span style='color:#a9b1bd;'>(" + obj_pln[8] + "%)</span></span>");
+                                    out.print("<br /><span style='color:#a9b1bd;font-size:12px;'>" + Render.textoPlano(obj_pln[4]) + "</span>");
+                                    out.print("</div>");
+                                }
+                            }
+                            out.print("</div></div>");
+
+                            out.print("<table class='table-hover' style='width:100%;margin-top:15px;'>");
+                            out.print("<thead><tr>");
+                            out.print("<th class='th1Verificacion'>Plano</th>");
+                            out.print("<th class='th1Verificacion'>No. de parte</th>");
+                            out.print("<th class='th1Verificacion'>Tipo</th>");
+                            out.print("<th class='th1Verificacion'>Descripcion</th>");
+                            out.print("<th class='th1Verificacion'>Solicitudes</th>");
+                            out.print("<th class='th1Verificacion'>Piezas</th>");
+                            out.print("<th class='th1Verificacion'>Horas</th>");
+                            out.print("<th class='th1Verificacion'>%</th>");
+                            out.print("</tr></thead><tbody>");
+                            if (lst_plano != null) {
+                                for (int i = 0; i < lst_plano.size(); i++) {
+                                    Object[] obj_pln = (Object[]) lst_plano.get(i);
+                                    int idPln = Integer.parseInt(obj_pln[0].toString());
+                                    out.print((idPln > 0)
+                                            ? "<tr style='cursor:pointer;' onclick='irAPlano(" + idPln + ");'>"
+                                            : "<tr>");
+                                    out.print("<td class='PdgTd'>" + Render.html(obj_pln[1]) + "</td>");
+                                    out.print("<td class='PdgTd'>" + Render.oRaya(obj_pln[2]) + "</td>");
+                                    out.print("<td class='PdgTd'>" + Render.html(obj_pln[3]) + "</td>");
+                                    out.print("<td class='PdgTd'>" + Render.textoPlano(obj_pln[4]) + "</td>");
+                                    out.print("<td class='PdgTd' align='center'>" + obj_pln[5] + "</td>");
+                                    out.print("<td class='PdgTd' align='center'>" + obj_pln[6] + "</td>");
+                                    out.print("<td class='PdgTd' align='right'>" + obj_pln[7] + "</td>");
+                                    out.print("<td class='PdgTd' align='right'>" + obj_pln[8] + "%</td>");
+                                    out.print("</tr>");
+                                }
+                            } else {
+                                out.print("<tr><td colspan='8' style='text-align:center;'>No existen datos registrados</td></tr>");
+                            }
+                            out.print("</tbody></table>");
+                            //</editor-fold>
+                        }
+
+                        out.print("</div>");
+                        out.print("</div>");
+
+                        // El arreglo lo consume initChartPlanos() en Solicitud.jsp.
+                        datosJson.append("]");
+                        out.print("<script>");
+                        out.print("var DATOS_PLANOS = " + datosJson.toString() + ";");
+                        out.print("var URL_PLANO = '" + urlBase + "&slc_plano=';");
+                        out.print("</script>");
+                        //</editor-fold>
                     } else {
                         lst_solicitudes_filtrada = jpa_solicitud.consultaSolicitudesRango(fechaI, fechaF, estado, busqueda);
                         //<editor-fold defaultstate="collapsed" desc="R-PM-009">
-                        if (rol.equals("ADMIN") || rol.equals("COORD.PR") || rol.equals("JEFE.PR")) {
+                        if (rol.equals("ADMIN") || rol.equals("COORD.PR") || rol.equals("ASIST.PR") || rol.equals("JEFE.PR")) {
                             out.print("<div class='card-header' style='justify-content: space-evenly;'>");
                             out.print("<button class='btn btn-info imprimir' onclick='Imprimir();' data-toggle='tooltip' data-placement='top' title='Imprimir / PDF'><i class='fas fa-print'></i></button>");
                             out.print("</div>");
@@ -888,7 +1190,7 @@ public class Tag_solicitud extends TagSupport {
                                     out.print("<td class='PdgTd'>" + obj_solicitudes[3] + "</td>");
                                     out.print("<td class='PdgTd'>" + obj_solicitudes[13] + " " + obj_solicitudes[14] + "</td>");
                                     out.print("<td class='PdgTd'>" + obj_solicitudes[4] + "</td>");
-                                    if (rol.equals("COORD.PR") || rol.equals("ADMIN")) {
+                                    if (rol.equals("COORD.PR") || rol.equals("ASIST.PR") || rol.equals("ADMIN")) {
                                         if (obj_solicitudes[5].equals(0)) {
                                             out.print("<td class='PdgTd'>N/A</td>");
                                         } else {
@@ -931,8 +1233,8 @@ public class Tag_solicitud extends TagSupport {
                 out.print("</section>");
                 //</editor-fold>
             }
-        } catch (IOException ex) {
-            Logger.getLogger(Tag_solicitud.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(Tag_solicitud.class.getName()).log(Level.SEVERE, "Error renderizando Tag_solicitud", ex);
         }
         return super.doStartTag();
     }

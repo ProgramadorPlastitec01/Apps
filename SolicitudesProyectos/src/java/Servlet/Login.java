@@ -41,10 +41,19 @@ public class Login extends HttpServlet {
                         if (lst_usuario != null || lst_usuarioE != null) {
                             Object[] obj_usuarios = (Object[]) ((lst_usuario != null) ? lst_usuario.get(0) : lst_usuarioE.get(0));
                             if (obj_usuarios[5].toString().length() == contrasenaE.length()) {
-                                List resultadoLogin = jpa_usuario.login(usuario, contrasenaE);
+                                // Se reutiliza lst_usuarioE: la consulta que
+                                // habia aqui era identica a la de arriba, con
+                                // los mismos parametros. Era un tercer viaje a
+                                // la base por cada intento de ingreso.
+                                List resultadoLogin = lst_usuarioE;
                                 if (resultadoLogin != null) {
                                     Object[] obj_usa = (Object[]) resultadoLogin.get(0);
-                                    if ((Integer) obj_usa[7] == 1) {
+                                    // estado es int(11) NULLABLE: el cast directo
+                                    // a Integer lanzaba NullPointerException con estado
+                                    // NULL, y el unboxing fallaba si el driver devolvia
+                                    // otro tipo numerico. Se lee via Number y se guarda
+                                    // el NULL como inactivo, no como caida.
+                                    if (obj_usa[7] != null && ((Number) obj_usa[7]).intValue() == 1) {
                                         sesion.setAttribute("id", obj_usa[0]);
                                         sesion.setAttribute("Nombre", obj_usa[1] + " " + obj_usa[2]);
                                         sesion.setAttribute("Rol", obj_usa[3]);
@@ -62,6 +71,7 @@ public class Login extends HttpServlet {
                                 }
                             } else {
                                 request.setAttribute("id_usa", obj_usuarios[0]);
+                                sesion.setAttribute("id_pendiente_cambio", obj_usuarios[0]);
                                 request.setAttribute("Cambio_contraseña", true);
                                 request.getRequestDispatcher("index.jsp").forward(request, response);
                             }
@@ -74,26 +84,46 @@ public class Login extends HttpServlet {
 
                 case 2:
                     id_usuario = Integer.parseInt(request.getParameter("id_usuario"));
+                    Object idPendiente = sesion.getAttribute("id_pendiente_cambio");
+                    Object idSesion = sesion.getAttribute("id");
+                    boolean autorizadoCambio = (idPendiente != null && Integer.parseInt(idPendiente.toString()) == id_usuario)
+                            || (idSesion != null && Integer.parseInt(idSesion.toString()) == id_usuario);
+                    if (!autorizadoCambio) {
+                        response.sendRedirect("index.jsp");
+                        return;
+                    }
+                    sesion.removeAttribute("id_pendiente_cambio");
                     try {
                         contrasena = request.getParameter("txt_passw");
                     } catch (Exception e) {
                         contrasena = "";
                     }
-                    id_usuario = Integer.parseInt(request.getParameter("id_usuario"));
-                    if (contrasena.equals("")) {
-                        resultado = jpa_usuario.modificarPasswordUsuario(id_usuario, contrasena);
-                        request.setAttribute("resultado_contraseñaR", resultado);
-                    } else {
-                        contrasenaE = md5.md5(contrasena);
-                        resultado = jpa_usuario.modificarPasswordUsuario(id_usuario, contrasenaE);
-                        request.setAttribute("resultado_contraseña", resultado);
-
+                    if (contrasena == null || contrasena.trim().isEmpty()) {
+                        request.setAttribute("CamposVacios", true);
+                        request.getRequestDispatcher("index.jsp").forward(request, response);
+                        return;
                     }
+                    contrasenaE = md5.md5(contrasena);
+                    resultado = jpa_usuario.modificarPasswordUsuario(id_usuario, contrasenaE);
+                    request.setAttribute("resultado_contraseña", resultado);
                     request.getRequestDispatcher("index.jsp").forward(request, response);
                     break;
 
                 case 3:
+                    // Restablecer contraseña: solo usuario autenticado para si mismo, o ADMIN
+                    Object idLogueado = sesion.getAttribute("id");
+                    Object rolLogueado = sesion.getAttribute("Rol");
+                    if (idLogueado == null) {
+                        response.sendRedirect("index.jsp");
+                        return;
+                    }
                     id_usuario = Integer.parseInt(request.getParameter("id_usuario"));
+                    int idSes = Integer.parseInt(idLogueado.toString());
+                    String rSes = (rolLogueado != null) ? rolLogueado.toString() : "";
+                    if (id_usuario != idSes && !rSes.equals("ADMIN")) {
+                        response.sendError(HttpServletResponse.SC_FORBIDDEN, "No autorizado");
+                        return;
+                    }
                     resultado = jpa_usuario.RestablecerContrasena(id_usuario);
                     request.setAttribute("resultado_contraseñaR", resultado);
                     request.getRequestDispatcher("Inicio.jsp").forward(request, response);

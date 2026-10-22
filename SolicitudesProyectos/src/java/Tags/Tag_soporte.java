@@ -153,7 +153,7 @@ public class Tag_soporte extends TagSupport {
             out.print("<div class='col-12' style='display: flex; margin-bottom: 12px;'>");
             out.print("<div class='col-6'>");
             lst_support = supportJpa.consulUserShift();
-            for (int i = 0; i < lst_support.size(); i++) {
+            for (int i = 0; lst_support != null && i < lst_support.size(); i++) {
                 String[] arr_users = lst_support.toString().replace("[", "").replace("]", "").split("////");
                 for (int j = 0; j < arr_users.length; j++) {
                     Object[] onj_user = (Object[]) arr_users[i].toString().split("---");

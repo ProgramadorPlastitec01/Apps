@@ -19,9 +19,20 @@ public class Usuario extends HttpServlet {
         try {
             HttpSession sesion = request.getSession();
             UsuarioJpaController jpa_usuario = new UsuarioJpaController();
-            String rolU = sesion.getAttribute("Rol").toString();
-            String nombreSession = sesion.getAttribute("Nombre").toString();
+            Object rolAttr = sesion.getAttribute("Rol");
+            String rolU = (rolAttr != null) ? rolAttr.toString() : "";
+            Object nomAttr = sesion.getAttribute("Nombre");
+            String nombreSession = (nomAttr != null) ? nomAttr.toString() : "";
             int opc = Integer.parseInt(request.getParameter("opc"));
+            // Autorizacion: la gestion de usuarios (alta/modificacion/estado) es
+            // exclusiva de ADMIN y COORD.PR. Un rol operativo que haga POST
+            // directo recibe 403 antes de tocar nada.
+            if ((opc == 2 || opc == 3 || opc == 4)
+                    && !rolU.equals("ADMIN") && !rolU.equals("COORD.PR")) {
+                response.sendError(HttpServletResponse.SC_FORBIDDEN,
+                        "No autorizado para gestionar usuarios.");
+                return;
+            }
             boolean resultado = false;
             String usuario = "", nombre = "", apellido = "", rol = "", user = "", correo = "";
             int id_usuario = 0, estado = 0, documento = 0;

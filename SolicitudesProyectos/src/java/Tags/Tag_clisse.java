@@ -24,11 +24,14 @@ public class Tag_clisse extends TagSupport {
             int estado_actual = 0, control = 0, id_clisse = 0, count = 0, id_detalle = 0, estado = 0, idInicial = 0, idFinal = 0, temp2 = 0;
             String ControlG = "", letra = "";
             try {
-                id_clisse = Integer.parseInt(pageContext.getRequest().getAttribute("id_clisse").toString());
-            } catch (NumberFormatException e) {
+                Object cObj = pageContext.getRequest().getAttribute("id_clisse");
+                id_clisse = (cObj != null) ? Integer.parseInt(cObj.toString()) : 0;
+            } catch (Exception e) {
                 id_clisse = 0;
             }
-            if (pageContext.getRequest().getAttribute("Clisse").toString().equals("ModuloConsulta")) {
+            Object clsAttr = pageContext.getRequest().getAttribute("Clisse");
+            String clsTipo = (clsAttr != null) ? clsAttr.toString() : "ModuloConsulta";
+            if (clsTipo.equals("ModuloConsulta")) {
                 //<editor-fold defaultstate="collapsed" desc="CONSULTA CISSE">
                 out.print("<section class='section'>");
                 out.print("<div class='section-header'>");
@@ -181,16 +184,18 @@ public class Tag_clisse extends TagSupport {
                 out.print("</div>");
                 out.print("</section>");
                 //</editor-fold>
-            } else if (pageContext.getRequest().getAttribute("Clisse").toString().equals("ModuloDetalle")) {
+            } else if (clsTipo.equals("ModuloDetalle")) {
                 //<editor-fold defaultstate="collapsed" desc="DETALLE CLISSE">
                 try {
-                    id_detalle = Integer.parseInt(pageContext.getRequest().getAttribute("id_detalle").toString());
-                } catch (NumberFormatException e) {
+                    Object dObj = pageContext.getRequest().getAttribute("id_detalle");
+                    id_detalle = (dObj != null) ? Integer.parseInt(dObj.toString()) : 0;
+                } catch (Exception e) {
                     id_detalle = 0;
                 }
                 try {
-                    temp2 = Integer.parseInt(pageContext.getRequest().getAttribute("temp2").toString());
-                } catch (NumberFormatException e) {
+                    Object t2Obj = pageContext.getRequest().getAttribute("temp2");
+                    temp2 = (t2Obj != null) ? Integer.parseInt(t2Obj.toString()) : 0;
+                } catch (Exception e) {
                     temp2 = 0;
                 }
                 try {

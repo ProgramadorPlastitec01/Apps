@@ -40,29 +40,34 @@ public class Tag_verificacion extends TagSupport {
         String numSolicitud = "";
         try {
             try {
-                id_pieza = Integer.parseInt(pageContext.getRequest().getAttribute("id_pieza").toString());
-            } catch (NumberFormatException e) {
+                Object pzaObj = pageContext.getRequest().getAttribute("id_pieza");
+                id_pieza = (pzaObj != null) ? Integer.parseInt(pzaObj.toString()) : 0;
+            } catch (Exception e) {
                 id_pieza = 0;
             }
             try {
-                IdEstandar = Integer.parseInt(this.pageContext.getRequest().getAttribute("IdEstandar").toString());
-            } catch (NumberFormatException e) {
+                Object estObj = this.pageContext.getRequest().getAttribute("IdEstandar");
+                IdEstandar = (estObj != null) ? Integer.parseInt(estObj.toString()) : 0;
+            } catch (Exception e) {
                 IdEstandar = 0;
             }
             if (id_pieza == 0) {
                 try {
-                    id_verificacion = Integer.parseInt(pageContext.getRequest().getAttribute("id_verificacion").toString());
-                } catch (NumberFormatException e) {
+                    Object vrfObj = pageContext.getRequest().getAttribute("id_verificacion");
+                    id_verificacion = (vrfObj != null) ? Integer.parseInt(vrfObj.toString()) : 0;
+                } catch (Exception e) {
                     id_verificacion = 0;
                 }
                 try {
-                    anio = Integer.parseInt(pageContext.getRequest().getAttribute("anio").toString());
-                } catch (NumberFormatException e) {
+                    Object anioObj = pageContext.getRequest().getAttribute("anio");
+                    anio = (anioObj != null) ? Integer.parseInt(anioObj.toString()) : 0;
+                } catch (Exception e) {
                     anio = 0;
                 }
                 try {
-                    val = Integer.parseInt(pageContext.getRequest().getAttribute("val").toString());
-                } catch (NumberFormatException e) {
+                    Object valObj = pageContext.getRequest().getAttribute("val");
+                    val = (valObj != null) ? Integer.parseInt(valObj.toString()) : 0;
+                } catch (Exception e) {
                     val = 0;
                 }
                 if (id_verificacion == 0) {
@@ -264,8 +269,9 @@ public class Tag_verificacion extends TagSupport {
             } else {
                 //<editor-fold defaultstate="collapsed" desc="R-MTF-013 VERIFICACIONES">
                 try {
-                    id_plano = Integer.parseInt(pageContext.getRequest().getAttribute("id_plano").toString());
-                } catch (NumberFormatException e) {
+                    Object pObj = pageContext.getRequest().getAttribute("id_plano");
+                    id_plano = (pObj != null) ? Integer.parseInt(pObj.toString()) : 0;
+                } catch (Exception e) {
                     id_plano = 0;
                 }
                 try {
@@ -409,8 +415,8 @@ public class Tag_verificacion extends TagSupport {
                 out.print("</section>");
                 //</editor-fold>
             }
-        } catch (IOException | NumberFormatException ex) {
-            Logger.getLogger(Tag_verificacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(Tag_verificacion.class.getName()).log(Level.SEVERE, "Error al renderizar Tag_verificacion", ex);
         }
         return super.doStartTag();
     }

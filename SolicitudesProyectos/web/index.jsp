@@ -9,6 +9,10 @@
         <link rel="stylesheet" href="Interfaz/Contenido/assets/modules/fontawesome/css/all.min.css">
         <link rel="shortcut icon" href="Interfaz/Contenido/Imagen/LogoSP.png" />
         <title>Login | SP</title>
+        <%-- jQuery va en el <head> y ANTES de Library.jsp: el fragmento carga
+             modules-toastr.js, que usa $ apenas se evalua. Las demas paginas del
+             sistema lo reciben de Menu.jsp, pero el login no incluye el menu. --%>
+        <script src="Interfaz/Contenido/assets/modules/jquery.min.js"></script>
     </head>
     <body>
         <jsp:include page="Library.jsp"></jsp:include>
@@ -63,7 +67,7 @@
                             <i class="fas fa-sign-in-alt"></i>
                         </button>
                     </form>
-                    <div style="float: right; bottom: 0;"><b style="font-size:15px; color:#03291d; ">VA</b><b style="font-size: 15px; color:#f70f03"> 11.45.15</b></div>
+                    <div style="float: right; bottom: 0;"><b style="font-size:15px; color:#03291d; ">VA</b><b style="font-size: 15px; color:#f70f03"> 13.49.16</b></div>
                 </div>
             </div>
         <Alerta:Alertas/>

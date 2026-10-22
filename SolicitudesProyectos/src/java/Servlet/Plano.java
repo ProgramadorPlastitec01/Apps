@@ -24,7 +24,7 @@ public class Plano extends HttpServlet {
             VerificarEtdJpaController jpa_itemVer = new VerificarEtdJpaController();
             int opc = Integer.parseInt(request.getParameter("opc"));
             boolean resultado = false;
-            String tipo = "", num_plano = "", let_plano = "", plano = "", fecha = "";
+            String tipo = "", num_plano = "", let_plano = "", plano = "", fecha = "", numeroParte = "";
             int id_plano = 0;
             switch (opc) {
                 case 1:
@@ -41,8 +41,24 @@ public class Plano extends HttpServlet {
                     tipo = request.getParameter("slc_tipo");
                     let_plano = request.getParameter("txt_letraP");
                     num_plano = request.getParameter("txt_numeroP");
+
+                    // Resguardo de consistencia para Generales Varios: aunque el
+                    // front bloquea los campos, el prefijo se fuerza a GV y, si el
+                    // numero no viaja, se recalcula el consecutivo en el servidor.
+                    if ("Generales Varios".equalsIgnoreCase(tipo)) {
+                        let_plano = "GV";
+                        if (num_plano == null || num_plano.trim().isEmpty()) {
+                            num_plano = jpa_plano.siguienteConsecutivoGV();
+                        }
+                    }
+
                     plano = let_plano + "-" + num_plano;
-                    resultado = jpa_plano.registroPlano(tipo, plano, fecha);
+                    // Campo opcional: si no viaja o viene vacio se guarda NULL.
+                    numeroParte = request.getParameter("txt_numero_parte");
+                    if (numeroParte == null) {
+                        numeroParte = "";
+                    }
+                    resultado = jpa_plano.registroPlano(tipo, plano, fecha, numeroParte);
                     request.setAttribute("Registro_Plano", resultado);
                     request.getRequestDispatcher("Plano?opc=1").forward(request, response);
                     break;
@@ -52,7 +68,14 @@ public class Plano extends HttpServlet {
                     let_plano = request.getParameter("txt_letraP");
                     num_plano = request.getParameter("txt_numeroP");
                     plano = let_plano + "-" + num_plano;
-                    resultado = jpa_plano.modificarPlano(id_plano, tipo, plano);
+                    numeroParte = request.getParameter("txt_numero_parte");
+                    if (numeroParte == null) {
+                        numeroParte = "";
+                    }
+                    // Auditoria TI: quien modifica el plano queda en log_plano_version.
+                    Object usrSesion = sesion.getAttribute("Nombre");
+                    String usuarioMod = (usrSesion != null) ? usrSesion.toString() : "";
+                    resultado = jpa_plano.modificarPlano(id_plano, tipo, plano, numeroParte, usuarioMod);
                     request.setAttribute("Modificar_Plano", resultado);
                     request.getRequestDispatcher("Plano?opc=1&idP=0").forward(request, response);
                     break;

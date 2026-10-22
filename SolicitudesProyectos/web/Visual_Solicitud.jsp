@@ -21,10 +21,14 @@
         </div>
         <script>
             function abrirVentana() {
-          // Abre una nueva ventana con una URL específica
-                window.open("http://172.16.2.117:8080/Solicitudes_Proyectos/", "_blank");
+                // Abre una nueva ventana con el contexto dinamico de la aplicacion
+                window.open("<%= request.getContextPath() %>/", "_blank");
             }
         </script>
+        <%-- jQuery debe ir antes de Bootstrap y modules-toastr.js: ambos
+             requieren $ en el nivel superior del archivo. Sin este orden se
+             lanza '$ is not defined' y ningun listener posterior se registra. --%>
+        <script src="Interfaz/Contenido/assets/modules/jquery.min.js"></script>
         <script src="Interfaz/Contenido/assets/modules/bootstrap/js/bootstrap.min.js"></script>
         <script src="Interfaz/Contenido/assets/modules/izitoast/js/iziToast.min.js"></script>
         <script src="Interfaz/Contenido/assets/js/page/modules-toastr.js"></script>

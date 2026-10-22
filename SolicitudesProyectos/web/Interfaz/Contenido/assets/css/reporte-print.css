@@ -1,0 +1,288 @@
+/* =========================================================================
+   Informe de Gestion - Taller de Proyectos
+   Hoja de impresion / PDF ajustada a 1 pagina limpia.
+   ========================================================================= */
+
+.soloImprimir {
+    display: none;
+}
+
+body.imprimiendo .noImprimir,
+body.imprimiendo .chartjs-size-monitor,
+body.imprimiendo .chartjs-size-monitor-shrink,
+body.imprimiendo .chartjs-size-monitor-expand {
+    display: none !important;
+}
+
+@media print {
+
+    @page {
+        size: portrait;
+        margin: 8mm;
+    }
+
+    /* --- Fuera el armazon de la aplicacion y elementos que no van en PDF --- */
+    .main-sidebar,
+    .navbar,
+    .navbar-bg,
+    .settingSidebar,
+    .main-footer,
+    .noImprimir,
+    .section-header,
+    .filtroSticky,
+    .divLogo,
+    .nicescroll-rails,
+    .nicescroll-cursors,
+    .sweet-overlay,
+    .sweet-alert,
+    .iziToast-wrapper,
+    button {
+        display: none !important;
+    }
+
+    /* --- Mitigacion critica: Chart.js size monitor (evita 442 paginas) --- */
+    .chartjs-size-monitor,
+    .chartjs-size-monitor-shrink,
+    .chartjs-size-monitor-expand,
+    .chartjs-size-monitor-expand > div,
+    .chartjs-size-monitor-shrink > div {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        width: 0 !important;
+        max-height: 0 !important;
+        max-width: 0 !important;
+        overflow: hidden !important;
+        position: fixed !important;
+        top: -9999px !important;
+        left: -9999px !important;
+    }
+
+    .soloImprimir {
+        display: block !important;
+        border-bottom: 2px solid #B72E27;
+        margin-bottom: 6px;
+        padding-bottom: 4px;
+    }
+
+    .soloImprimir h3 {
+        color: #B72E27;
+        font-size: 13pt;
+        margin: 0;
+    }
+
+    .soloImprimir p {
+        font-size: 7.5pt;
+        margin: 0;
+        color: #555;
+    }
+
+    /* --- El contenedor real del informe --- */
+    html,
+    body,
+    #app,
+    .main-wrapper,
+    .main-content,
+    .section,
+    .section-body,
+    #Imprimir {
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #fff !important;
+        min-height: 0 !important;
+        height: auto !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        float: none !important;
+        position: static !important;
+        overflow: visible !important;
+        box-sizing: border-box !important;
+    }
+
+    .tablaScroll,
+    .leyendaLista {
+        overflow: visible !important;
+        max-height: none !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* --- Desarmado de grids a bloques limpios --- */
+    .kpiGrid,
+    .graficoGrid,
+    .bloqueGrid {
+        display: block !important;
+    }
+
+    .kpiGrid::after,
+    .graficoGrid::after,
+    .bloqueGrid::after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+    /* Seis tarjetas de KPI equilibradas en la hoja */
+    .kpiCard {
+        float: left;
+        width: 15.8%;
+        margin: 0 0.4% 6px 0.4%;
+        padding: 4px 6px;
+        border: 1px solid #ddd;
+        border-left: 3px solid #B72E27;
+        box-shadow: none !important;
+        box-sizing: border-box;
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    .kpiValor {
+        font-size: 13pt;
+        font-weight: 700;
+        line-height: 1.1;
+    }
+
+    .kpiEtiqueta {
+        font-size: 6.5pt;
+        text-transform: uppercase;
+        color: #777;
+    }
+
+    .kpiDelta {
+        font-size: 6.5pt;
+    }
+
+    /* Tres graficos por fila */
+    .graficoCard {
+        float: left;
+        width: 32%;
+        margin: 0 0.4% 6px 0.4%;
+        padding: 4px 6px;
+        border: 1px solid #ddd;
+        box-shadow: none !important;
+        box-sizing: border-box;
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    .graficoCard h4 {
+        font-size: 8pt;
+        margin: 0 0 3px 0;
+    }
+
+    .graficoCard .graficoImpreso,
+    .graficoImpreso {
+        width: 100% !important;
+        height: auto !important;
+        max-height: 38mm !important;
+        object-fit: contain;
+    }
+
+    .graficoCanvasWrap {
+        height: 38mm !important;
+    }
+
+    canvas {
+        max-width: 100% !important;
+        max-height: 38mm !important;
+    }
+
+    .leyendaLista {
+        max-height: 22mm !important;
+        font-size: 6.5pt;
+    }
+
+    /* --- Bloques y tablas --- */
+    .bloqueCard {
+        border: 1px solid #ddd;
+        box-shadow: none !important;
+        padding: 4px 6px;
+        margin-bottom: 6px;
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    .bloqueCard h4 {
+        font-size: 8.5pt;
+        margin: 0 0 3px 0;
+    }
+
+    /* Las dos tablas de capacidad lado a lado */
+    .bloqueGrid > .bloqueCard {
+        float: left;
+        width: 49%;
+        margin: 0 0.5% 6px 0.5%;
+        box-sizing: border-box;
+    }
+
+    table {
+        width: 100% !important;
+        min-width: 0 !important;
+        table-layout: fixed;
+        font-size: 6.8pt;
+        border-collapse: collapse;
+        page-break-inside: auto;
+    }
+
+    th, td {
+        word-wrap: break-word;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+        padding: 1.5px 3px !important;
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tr {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    .saltoPagina {
+        display: none !important;
+        height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* Confiabilidad del dato compacta */
+    .barraCobertura {
+        height: 10px !important;
+        border-radius: 3px;
+    }
+
+    .barraCobertura > div {
+        height: 10px !important;
+        border-radius: 3px;
+    }
+
+    /* Colores e impresion fiel */
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    .th1Verificacion {
+        background-color: #B72E27 !important;
+        color: #fff !important;
+    }
+
+    .pastilla {
+        color: #fff !important;
+        padding: 1px 5px;
+    }
+
+    body {
+        font-family: Nunito, sans-serif;
+        color: #34395e;
+        font-size: 7.5pt;
+    }
+
+    .notaBloque {
+        font-size: 6pt;
+        margin-top: 3px;
+    }
+}

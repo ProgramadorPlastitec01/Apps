@@ -20,15 +20,45 @@ public class Tag_menu extends TagSupport {
         MaquinaJpaController jpa_maquina = new MaquinaJpaController();
         SolicitudJpaController jpa_solicitud = new SolicitudJpaController();
         try {
-            String nombre = pageContext.getSession().getAttribute("Nombre").toString();
-            String rol = pageContext.getSession().getAttribute("Rol").toString();
-            int id_usuario = Integer.parseInt(sesion.getAttribute("id").toString());
-            int Area = Integer.parseInt(sesion.getAttribute("Area").toString());
+            Object nomObj = pageContext.getSession().getAttribute("Nombre");
+            String nombre = (nomObj != null) ? nomObj.toString() : "";
+            Object rolObj = pageContext.getSession().getAttribute("Rol");
+            String rol = (rolObj != null) ? rolObj.toString() : "";
+            int id_usuario = 0;
+            try {
+                Object idObj = sesion.getAttribute("id");
+                if (idObj != null) {
+                    id_usuario = Integer.parseInt(idObj.toString());
+                }
+            } catch (Exception e) {
+                id_usuario = 0;
+            }
+            int Area = 0;
+            try {
+                Object areaObj = sesion.getAttribute("Area");
+                if (areaObj != null) {
+                    Area = Integer.parseInt(areaObj.toString());
+                }
+            } catch (Exception e) {
+                Area = 0;
+            }
             List lst_mqn = null;
             List lst_Fichas = null;
             List lst_pendientes = null;
-            lst_pendientes = jpa_solicitud.consultaPendientesHerramental();
-            lst_Fichas = jpa_solicitud.consultaSolicitudfichaPendientes();
+            try {
+                lst_pendientes = jpa_solicitud.consultaPendientesHerramental();
+            } catch (Exception e) {
+                Logger.getLogger(Tag_menu.class.getName()).log(Level.WARNING,
+                        "No se pudo consultar pendientes herramental para el menu", e);
+                lst_pendientes = null;
+            }
+            try {
+                lst_Fichas = jpa_solicitud.consultaSolicitudfichaPendientes();
+            } catch (Exception e) {
+                Logger.getLogger(Tag_menu.class.getName()).log(Level.WARNING,
+                        "No se pudo consultar fichas pendientes para el menu", e);
+                lst_Fichas = null;
+            }
             int Nro_Pendintes = 0;
             int contadorH = 0;
             int contadorF = 0;
@@ -212,8 +242,8 @@ public class Tag_menu extends TagSupport {
                     + "      </nav>");
             //</editor-fold>
             //<editor-fold defaultstate="collapsed" desc="MENU">
-            out.print("<div  class=\"main-sidebar sidebar-style-2\"  tabindex=\"1\" overflow: hidden; outline: none;\">");
-            out.print("<div style='height:92%;'>");
+            out.print("<div class=\"main-sidebar sidebar-style-2\" tabindex=\"1\" style=\"overflow: hidden; outline: none;\">");
+            out.print("<div class='sidebar-scroll'>");
             out.print("<aside id=\"sidebar-wrapper\">");
             out.print("<div class=\"sidebar-brand\">");
             out.print("<a style='color:#fff' href=\"Inicio.jsp\">Solicitudes Proyectos</a>");
@@ -229,13 +259,12 @@ public class Tag_menu extends TagSupport {
             out.print("</div>");
 
             out.print("<ul class=\"sidebar-menu\">");
-            out.print("</li>");
-            if (rol.equals("ADMIN") || rol.equals("MTF") || rol.equals("JEFE.PR") || rol.equals("AU") || rol.equals("MI") || rol.equals("PI") || rol.equals("COORD.PR")) {
+            if (rol.equals("ADMIN") || rol.equals("MTF") || rol.equals("JEFE.PR") || rol.equals("AU") || rol.equals("MI") || rol.equals("PI") || rol.equals("COORD.PR") || rol.equals("ASIST.PR")) {
                 out.print("<li class=\"menu-header\">Parametrización</li>");
                 out.print("<li class=\"dropdown\">");
-                out.print("<a  href=\"#\" class=\"nav-link has-dropdown\" data-toggle=\"dropdown\"><i class=\"fas fa-layer-group\"></i> <span>Complementos</span></a>");
+                out.print("<a href=\"#\" class=\"nav-link has-dropdown\"><i class=\"fas fa-layer-group\"></i> <span>Complementos</span></a>");
+                out.print("<ul class=\"dropdown-menu\">");
             }
-            out.print("<ul class=\"dropdown-menu\">");
             if (rol.equals("ADMIN")) {
                 out.print("<li><a class=\"nav-link\" href=\"Usuario?opc=1\"><i style='margin-right:4px' class=\"fas fa-user-astronaut\"></i>Usuario</a></li>");
             }
@@ -245,50 +274,55 @@ public class Tag_menu extends TagSupport {
             if (rol.equals("ADMIN") || rol.equals("MTF") || rol.equals("JEFE.PR")) {
                 out.print("<li><a class=\"nav-link\" href=\"Electrodo?opc=1\"><i style='margin-right:4px' class='fas fa-sliders-h'></i>Electrodos</a></li>");
             }
-            if (rol.equals("ADMIN") || rol.equals("MTF") || rol.equals("JEFE.PR") || rol.equals("AU") || rol.equals("MI") || rol.equals("PI")) {
+            if (rol.equals("ADMIN") || rol.equals("MTF") || rol.equals("JEFE.PR") || rol.equals("AU") || rol.equals("MI") || rol.equals("PI") || rol.equals("COORD.PR") || rol.equals("ASIST.PR")) {
                 out.print("<li><a class=\"nav-link\" href=\"Plano?opc=1\"><i style='margin-right:4px' class='fas fa-file-contract'></i>Planos</a></li>");
             }
             if (rol.equals("ADMIN") || rol.equals("MTF") || rol.equals("JEFE.PR") || rol.equals("AU")) {
                 out.print("<li><a class=\"nav-link\" href='Defecto?opc=1'><i style='margin-right:4px' class='fas fa-flag'></i>Defectos</a></li>");
             }
-            if (rol.equals("ADMIN") || rol.equals("COORD.PR") || rol.equals("JEFE.PR")) {
+            if (rol.equals("ADMIN") || rol.equals("COORD.PR") || rol.equals("ASIST.PR") || rol.equals("JEFE.PR")) {
                 out.print("<li><a class=\"nav-link\" href=\"Maquina?opc=1\"><i style='margin-right:4px' class='fas fa-industry'></i>Maquinas</a></li>");
             }
-            if (rol.equals("ADMIN") || rol.equals("COORD.PR") || rol.equals("JEFE.PR")) {
+            if (rol.equals("ADMIN") || rol.equals("COORD.PR") || rol.equals("ASIST.PR") || rol.equals("JEFE.PR")) {
                 out.print("<li><a class=\"nav-link\" href='Descripcion?opc=1'><i style='margin-right:4px' class='fas fa-file-word'></i>Descripcion</a></li>");
             }
-            if (rol.equals("ADMIN") || rol.equals("COORD.PR") || rol.equals("JEFE.PR")) {
+            if (rol.equals("ADMIN") || rol.equals("COORD.PR") || rol.equals("ASIST.PR") || rol.equals("JEFE.PR")) {
                 out.print("<li><a class=\"nav-link\" href='Herramienta?opc=1'><i style='margin-right:4px' class='fas fa-wrench'></i>Herramientas</a></li>");
             }
-            out.print("</ul>");
-            out.print("</li>");
+            if (rol.equals("ADMIN") || rol.equals("MTF") || rol.equals("JEFE.PR") || rol.equals("AU") || rol.equals("MI") || rol.equals("PI") || rol.equals("COORD.PR") || rol.equals("ASIST.PR")) {
+                out.print("</ul>");
+                out.print("</li>");
+            }
             out.print("<li class=\"menu-header\">Gestion</li>");
-            if (rol.equals("ADMIN") || rol.equals("COORD.PR") || rol.equals("MTF") || rol.equals("JEFE.PR") || rol.equals("AU") || rol.equals("TEC.PR") || rol.equals("MI") || rol.equals("PI")) {
+            if (rol.equals("ADMIN") || rol.equals("COORD.PR") || rol.equals("ASIST.PR") || rol.equals("MTF") || rol.equals("JEFE.PR") || rol.equals("AU") || rol.equals("TEC.PR") || rol.equals("MI") || rol.equals("PI")) {
                 out.print("<li><a class=\"nav-link\" href='Solicitud?opc=1&estado=1'><i style='margin-right:4px' class=\"fas fa-people-carry\"></i><span>Solicitudes</span></a></li>");
             }
-            if (rol.equals("ADMIN") || rol.equals("MTF") || rol.equals("COORD.PR") || rol.equals("TEC.PR") ) {
+            if (rol.equals("ADMIN") || rol.equals("MTF") || rol.equals("COORD.PR") || rol.equals("ASIST.PR") || rol.equals("TEC.PR") ) {
                 out.print("<li><a class=\"nav-link\" href=\"Verificacion?opc=1\"><i style='margin-right:4px' class=\"fas fa-clipboard-check\"></i><span>Verificacion</span></a></li>");
                 out.print("<li><a class=\"nav-link\" href=\"Clisse?opc=1\"><i style='margin-right:4px' class=\"fas fa-file-contract\"></i><span>Control R-MTF-059</span></a></li>");
             }
             out.print("<li class=\"menu-header\">Consulta</li>");
-            if (rol.equals("ADMIN") || rol.equals("COORD.PR") || rol.equals("JEFE.PR")) {
+            if (rol.equals("ADMIN") || rol.equals("COORD.PR") || rol.equals("ASIST.PR") || rol.equals("JEFE.PR")) {
+                // Pendientes es un acordeon: <li.dropdown> con su <a.has-dropdown>
+                // y su <ul.dropdown-menu>. Antes el <li> nunca se cerraba.
                 out.print("<li class=\"dropdown\">");
-                out.print("<a  href=\"#\" class=\"nav-link has-dropdown\" data-toggle=\"dropdown\"><i class=\"fas fa-tasks\"></i> <span>Pendientes</span><div class='notification-amount'><span style='display: block;'>" + SumContador + "</span></div></a>");
+                out.print("<a href=\"#\" class=\"nav-link has-dropdown\"><i class=\"fas fa-tasks\"></i> <span>Pendientes</span><div class='notification-amount'><span style='display: block;'>" + SumContador + "</span></div></a>");
                 out.print("<ul class=\"dropdown-menu\">");
                 out.print("<li><a class=\"nav-link\" href=\"Pendiente?opc=1\"><i style='margin-right:4px' class=\"fas fa-h-square\"></i><span>Herramental</span><div class='notification-amount'><span>" + contadorH + "</span></div></a></li>");
                 out.print("<li><a class=\"nav-link\" href=\"Pendiente?opc=2\"><i style='margin-right:4px' class=\"fas fa-file-alt\"></i><span>Ficha Tecnica</span><div class='notification-amount'><span>" + contadorF + "</span></div></a></li>");
                 out.print("</ul>");
+                out.print("</li>");
+                // R-PM-001, Indicador e Informe son enlaces DIRECTOS, cada uno en
+                // su propio <li>. Antes iban como <a> sueltos dentro de un
+                // <li class='dropdown'> sin sub-lista, lo que rompia la estructura.
+                out.print("<li><a href=\"Solicitud?opc=6\" class=\"nav-link\"><i class=\"fas fa-file-alt\"></i> <span>R-PM-001</span></a></li>");
+                out.print("<li><a href=\"Solicitud?opc=4&temp=0\" class=\"nav-link\"><i class=\"fas fa-chart-line\"></i> <span>Indicador</span></a></li>");
+                out.print("<li><a href=\"Reporte?opc=1\" class=\"nav-link\"><i class=\"fas fa-chart-pie\"></i> <span>Informe de Gestion</span></a></li>");
             }
-            out.print("<li class=\"dropdown\">");
-            if (rol.equals("ADMIN") || rol.equals("COORD.PR") || rol.equals("JEFE.PR")) {
-                out.print("<a href=\"Solicitud?opc=6\" class=\"nav-link\"><i class=\"fas fa-file-alt\"></i> <span>R-PM-001</span></a>");
-                out.print("<a href=\"Solicitud?opc=4&temp=0\" class=\"nav-link\"><i class=\"fas fa-chart-line\"></i> <span>Indicador</span></a>");
-            }
-            out.print("</li>");
             out.print("</ul>");
             out.print("</aside>");
             out.print("</div>");
-            out.print("<div style='text-align: center;\n"
+            out.print("<div class='sidebar-footer' style='text-align: center;\n"
                     + "    margin-bottom: 0px; height:50px;\n"
                     + "    background-color: white;border-top: 5px solid #00281b;\n"
                     + "    border-left: 5px solid #00281b;\n"
@@ -300,8 +334,8 @@ public class Tag_menu extends TagSupport {
             out.print("</div>");
 
             //</editor-fold>
-        } catch (IOException ex) {
-            Logger.getLogger(Tag_menu.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(Tag_menu.class.getName()).log(Level.SEVERE, "Error al renderizar el menu", ex);
         }
         return super.doStartTag();
 

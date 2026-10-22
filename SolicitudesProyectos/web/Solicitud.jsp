@@ -71,14 +71,92 @@
 
                             var solicitud = año + "" + mes + "" + dia + "" + hora + "" + minutos + "";
                             // Asigna el valor de la solicitud a los elementos deseados
-                            document.getElementById("solicitud-id").value = solicitud;
-                            document.getElementById("solicitud-id2").value = solicitud;
-                            document.getElementById("solicitud-id3").value = solicitud;
-                            document.getElementById("solicitud-id4").value = solicitud;
+                            // Validacion defensiva: cada id solo existe en el modo de
+                            // vista que lo renderiza; no todos estaran presentes a la vez.
+                            var el1 = document.getElementById("solicitud-id");
+                            var el2 = document.getElementById("solicitud-id2");
+                            var el3 = document.getElementById("solicitud-id3");
+                            var el4 = document.getElementById("solicitud-id4");
+                            if (el1) { el1.value = solicitud; }
+                            if (el2) { el2.value = solicitud; }
+                            if (el3) { el3.value = solicitud; }
+                            if (el4) { el4.value = solicitud; }
                         } catch (error) {
                             console.error("Error al obtener la solicitud:", error.message);
                         }
                     }
+                </script>
+                <script>
+                    // ---- Top de planos del indicador -------------------------------
+                    // El Tag emite DATOS_PLANOS y URL_PLANO; si no estamos en la
+                    // vista de contadores no existen y no hay nada que dibujar.
+
+                    // Rampa del rojo corporativo de mayor a menor. Las agrupaciones
+                    // ('Varios' con id 0 y 'Sin plano asignado' con id -1) van
+                    // siempre en el gris #ADB5BD: no son planos y no navegan.
+                    var RAMPA_PLANOS = ['#B72E27', '#C2453E', '#CD5B55', '#D8726C', '#E08983',
+                        '#E79F9A', '#EDB2AE', '#F1C3C0', '#F5D2D0', '#F8DFDD'];
+                    var GRIS_AGRUPACION = '#ADB5BD';
+
+                    function colorPlano(dato, indice) {
+                        return (dato.idPlano > 0) ? RAMPA_PLANOS[indice % RAMPA_PLANOS.length] : GRIS_AGRUPACION;
+                    }
+
+                    // Un solo destino para el clic en la porcion, en la leyenda y en
+                    // la fila de la tabla. Conserva fechas, estado y tipo porque
+                    // URL_PLANO ya viene armada con el filtro vigente.
+                    function irAPlano(id) {
+                        if (!id || id <= 0) {
+                            return;   // 'Varios' y 'Sin plano asignado' son agregaciones
+                        }
+                        location.href = URL_PLANO + id;
+                    }
+
+                    function initChartPlanos() {
+                        var lienzo = document.getElementById('chartPlanos');
+                        if (!lienzo || typeof DATOS_PLANOS === 'undefined' || !DATOS_PLANOS.length) {
+                            return;
+                        }
+                        var etiquetas = [], valores = [], colores = [];
+                        for (var i = 0; i < DATOS_PLANOS.length; i++) {
+                            etiquetas.push(DATOS_PLANOS[i].nombre);
+                            valores.push(DATOS_PLANOS[i].horas);
+                            colores.push(colorPlano(DATOS_PLANOS[i], i));
+                        }
+                        var grafico = new Chart(lienzo.getContext('2d'), {
+                            type: 'doughnut',
+                            data: {
+                                labels: etiquetas,
+                                datasets: [{data: valores, backgroundColor: colores, borderWidth: 1}]
+                            },
+                            options: {
+                                cutoutPercentage: 62,
+                                // La leyenda es HTML propia del Tag: lleva No. de
+                                // parte y descripcion, que Chart.js no sabe pintar.
+                                legend: {display: false},
+                                // duration 0 para que toBase64Image() del PDF no
+                                // capture el grafico a medio dibujar.
+                                animation: {duration: 0},
+                                tooltips: {
+                                    callbacks: {
+                                        label: function (item, data) {
+                                            var d = DATOS_PLANOS[item.index];
+                                            return d.nombre + ': ' + d.horas + ' h (' + d.porcentaje + '%)';
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                        lienzo.onclick = function (e) {
+                            var el = grafico.getElementAtEvent(e)[0];
+                            if (!el) {
+                                return;
+                            }
+                            irAPlano(DATOS_PLANOS[el._index].idPlano);
+                        };
+                    }
+
+                    document.addEventListener("DOMContentLoaded", initChartPlanos);
                 </script>
                 <script>
                     function execute_form() {

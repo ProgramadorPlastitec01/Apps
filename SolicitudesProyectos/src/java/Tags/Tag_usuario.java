@@ -67,6 +67,7 @@ public class Tag_usuario extends TagSupport {
                 out.print("<option value='Admin'>Administrador</option>");
                 out.print("<option value='AU'>Automatizacion</option>");
                 out.print("<option value='COORD.PR'>Coordinador Proyectos</option>");
+                out.print("<option value='ASIST.PR'>Asistente Proyectos</option>");
                 out.print("<option value='GC'>Gestion Calidad</option>");
                 out.print("<option value='MT'>Mantenimiento</option>");
                 out.print("<option value='MTF'>Mantenimiento Farmaceutico</option>");
@@ -143,6 +144,7 @@ public class Tag_usuario extends TagSupport {
             out.print("<option value='ADMIN'>Administrador</option>");
             out.print("<option value='AU'>Automatizacion</option>");
             out.print("<option value='COORD.PR'>Coordinador Proyectos</option>");
+            out.print("<option value='ASIST.PR'>Asistente Proyectos</option>");
             out.print("<option value='GC'>Gestion Calidad</option>");
             out.print("<option value='MT'>Mantenimiento</option>");
             out.print("<option value='MTF'>Mantenimiento Farmaceutico</option>");

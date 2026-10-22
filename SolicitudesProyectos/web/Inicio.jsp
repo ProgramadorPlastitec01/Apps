@@ -13,7 +13,6 @@
     </head>
     <body>
         <div id="app">
-            <jsp:include page="Library.jsp"></jsp:include>
             <div class="main-wrapper main-wrapper-1">
                 <jsp:include page="Menu.jsp"></jsp:include>
                     <div class="main-content" style="min-height: 694px;">
@@ -25,7 +24,9 @@
         <script src="Interfaz/Contenido/assets/modules/datatables/datatables.min.js"></script>
         <script src="Interfaz/Contenido/assets/modules/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js"></script>
         <script src="Interfaz/Contenido/assets/js/page/modules-datatables.js"></script>
-        <script src="Interfaz/Contenido/assets/js/page/modules-toastr.js"></script>
-        <script src="Interfaz/Contenido/assets/js/page/modules-toastr.js"></script>
+        <%-- Library.jsp va aqui, al final: depende de jQuery y en esta pagina
+             quien lo carga es Menu.jsp. Tambien aporta modules-toastr.js, que
+             antes se declaraba dos veces en este mismo archivo. --%>
+        <jsp:include page="Library.jsp"></jsp:include>
     </body>
 </html>

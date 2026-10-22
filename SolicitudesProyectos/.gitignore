@@ -1,0 +1,13 @@
+# Archivos compilados y empaquetados (.war)
+/build/
+/dist/
+
+# Configuraciones locales de NetBeans (rutas de usuario específicas)
+/nbproject/private/
+
+# Temporales de Windows y del sistema
+Thumbs.db
+*.DS_Store
+scratch/
+nbproject/build-impl.xml~
+.atl/

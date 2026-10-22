@@ -37,13 +37,15 @@ public class Tag_seguimiento extends TagSupport {
         List lst_seguimientos = null;
         int id_solicitud = 0, var = 0;
         try {
-            id_solicitud = Integer.parseInt(pageContext.getRequest().getAttribute("id_solicitud").toString());
-        } catch (NumberFormatException e) {
+            Object sObj = pageContext.getRequest().getAttribute("id_solicitud");
+            id_solicitud = (sObj != null) ? Integer.parseInt(sObj.toString()) : 0;
+        } catch (Exception e) {
             id_solicitud = 0;
         }
         try {
-            var = Integer.parseInt(pageContext.getRequest().getAttribute("var").toString());
-        } catch (NumberFormatException e) {
+            Object vObj = pageContext.getRequest().getAttribute("var");
+            var = (vObj != null) ? Integer.parseInt(vObj.toString()) : 0;
+        } catch (Exception e) {
             var = 0;
         }
         try {
@@ -66,7 +68,7 @@ public class Tag_seguimiento extends TagSupport {
                 lst_solicitud = jpa_solicitud.consultaSolicitudId(id_solicitud);
                 if (lst_solicitud != null || lst_solicitud.size() > 0) {
                     Object[] obj_solicitud = (Object[]) lst_solicitud.get(0);
-                    if (rol.equals("COORD.PR") || rol.equals("ADMIN")) {
+                    if (rol.equals("COORD.PR") || rol.equals("ASIST.PR") || rol.equals("ADMIN")) {
 //                        if (Integer.parseInt(obj_solicitud[10].toString()) < 100) {
 //                            out.print("<button class='btn btn-red' style='border-radius: 4px;' onclick='mostrarConvencion(1)' data-toggle=\"tooltip\" data-placement=\"top\" title=\"\" data-original-title=\"Registrar\"><i class='fas fa-plus'></i></button>");
 //                        }
@@ -81,7 +83,7 @@ public class Tag_seguimiento extends TagSupport {
                         }
                     }
                     out.print("</div>");
-                    if (rol.equals("COORD.PR") || rol.equals("ADMIN")) {
+                    if (rol.equals("COORD.PR") || rol.equals("ASIST.PR") || rol.equals("ADMIN")) {
                         //<editor-fold defaultstate="collapsed" desc="REGISTRAR SEGUIMIENTO - MOVIMIENTOS">
                         out.print("<div class='sweet-local' tabindex='-1' id='Ventana1' style='opacity: 1.03; display:none;'>");
                         out.print("<div class='cont_reg'>");
@@ -139,7 +141,7 @@ public class Tag_seguimiento extends TagSupport {
                         //</editor-fold>
                     }
                     out.print("<div class='card-body'>");
-                    if (rol.equals("COORD.PR") || rol.equals("ADMIN")) {
+                    if (rol.equals("COORD.PR") || rol.equals("ASIST.PR") || rol.equals("ADMIN")) {
                         out.print("<div class='divSpaceEvenly mb-4'>");
                         out.print("<div><a href='Seguimiento?opc=1&idS=" + id_solicitud + "&var=0' class='btn btn-rojo' data-toggle=\"tooltip\" data-placement=\"top\" title=\"\" data-original-title=\"Módulo Seguimiento\"><i class=\"fas fa-user-friends\"></i></a></div>");
                         out.print("<div><a href='Solicitud?opc=6&idS=" + id_solicitud + "&var=0' class='btn btn-outline-secondary' data-toggle=\"tooltip\" data-placement=\"top\" title=\"\" data-original-title=\"Módulo R-PM-001\"><i class=\"fas fa-wrench\"></i></a></div>");
@@ -159,7 +161,7 @@ public class Tag_seguimiento extends TagSupport {
                     out.print("<div class='StyleDiv4'>" + obj_solicitud[13] + " " + obj_solicitud[14] + "</div>"
                             + "<div class='StyleDiv4'>" + obj_solicitud[4] + "</div>"
                             + "<div class='StyleDiv4'>" + obj_solicitud[5] + "</div>"
-                            + "<div class='StyleDiv4'>" + obj_solicitud[8] + "</div>");
+                            + "<div class='StyleDiv4'>" + obj_solicitud[6] + "</div>");
 
                     out.print("</div>");
 
@@ -172,7 +174,7 @@ public class Tag_seguimiento extends TagSupport {
                     out.print("</div>");
 
                     out.print("<div class='DivFlex2' style='margin-bottom:6px;'>");
-                    out.print("<div class='StyleDiv4'>" + obj_solicitud[6] + "</div>"
+                    out.print("<div class='StyleDiv4'>" + obj_solicitud[8] + "</div>"
                             + "<div class='StyleDiv4'>" + (Integer.parseInt(obj_solicitud[10].toString()) == 100 ? "<a style=\"color:white;\" class=\"btn btn-info btn-icon btn-sm\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\" data-original-title=\"Estado Cerrado\"><i class=\"fas fa-lock\"></i></a>" : "<a style=\"color:white;\" class=\"btn btn-info btn-icon btn-sm\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\" data-original-title=\"Estado Pendiente\"><i class=\"fas fa-lock-open\"></i></a>") + "</div>"
                             + "<div class='StyleDiv4'>" + obj_solicitud[7] + "</div>"
                             + "<div class='StyleDiv4'>" + obj_solicitud[9] + "</div>");
@@ -339,13 +341,13 @@ public class Tag_seguimiento extends TagSupport {
                     Object[] obj_pendiente = (Object[]) lst_pendientes.get(0);
                     out.print("<div class='card-header' style='justify-content: space-between;'>");
                     out.print("<h4>Listado de seguimiento(s)</h4>");
-                    if (rol.equals("COORD.PR") || rol.equals("ADMIN")) {
+                    if (rol.equals("COORD.PR") || rol.equals("ASIST.PR") || rol.equals("ADMIN")) {
                         if (Integer.parseInt(obj_solicitud[10].toString()) < 100) {
                             out.print("<button class='btn btn-red' style='border-radius: 4px;' onclick='mostrarConvencion(1)'><i class='fas fa-plus'></i></button>");
                         }
                     }
                     out.print("</div>");
-                    if (rol.equals("COORD.PR") || rol.equals("ADMIN")) {
+                    if (rol.equals("COORD.PR") || rol.equals("ASIST.PR") || rol.equals("ADMIN")) {
                         //<editor-fold defaultstate="collapsed" desc="REGISTRAR SEGUIMIENTO - MOVIMIENTOS">
                         out.print("<div class='sweet-local' tabindex='-1' id='Ventana1' style='opacity: 1.03; display:none;'>");
                         out.print("<div class='cont_reg'>");
@@ -572,8 +574,8 @@ public class Tag_seguimiento extends TagSupport {
             out.print("</div>");
             out.print("</div>");
             out.print("</section>");
-        } catch (IOException ex) {
-            Logger.getLogger(Tag_seguimiento.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(Tag_seguimiento.class.getName()).log(Level.SEVERE, "Error al renderizar Tag_seguimiento", ex);
         }
         return super.doStartTag();
     }

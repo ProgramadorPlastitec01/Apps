@@ -127,7 +127,7 @@ public class Tag_alertas extends TagSupport {
                     out.print("$(\"#toastr-2\").ready(function() {\n"
                             + "  iziToast.success({\n"
                             + "    title: 'Correcto',\n"
-                            + "    message: Ingreso correcto al sistema ¡Bienvenido!.',\n"
+                            + "    message: 'Ingreso correcto al sistema ¡Bienvenido!.',\n"
                             + "    position: 'bottomRight'\n"
                             + "  });\n"
                             + "});");

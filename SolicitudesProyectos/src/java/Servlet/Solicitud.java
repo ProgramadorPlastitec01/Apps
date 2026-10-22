@@ -6,6 +6,8 @@ import Controladores.PlanoJpaController;
 import Controladores.SolicitudJpaController;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +32,8 @@ public class Solicitud extends HttpServlet {
             int opc = Integer.parseInt(request.getParameter("opc"));
             boolean resultado = false;
             String descripcion = "", solicitud = "", pieza = "", prioridad = "", cantidad = "", tipo = "", solicitante = "", justificacion = "",
-                    fechaI = "", fechaF = "", usuarioT = "", nsolicitud = "", busqueda = "", FI = "", FF = "", horaI = "", horaF = "";
+                    fechaI = "", fechaF = "", usuarioT = "", nsolicitud = "", busqueda = "", FI = "", FF = "", horaI = "", horaF = "",
+                    tipoPlano = "";
             int id_solicitud = 0, id_plano = 0, id_pendiente = 0, ficha, estado = 0, id_maquina = 0, cant = 0, id_ficha = 0, var = 0, id_usuari = 0, temp = 0,
                     tempC = 0;
             List lst_plano = null;
@@ -242,12 +245,27 @@ public class Solicitud extends HttpServlet {
                     } catch (Exception e) {
                         busqueda = "";
                     }
+                    // Los dos filtros del Top de planos son opcionales y llegan
+                    // tanto por POST (formulario) como por GET (drill-down del
+                    // pastel, que arma la URL). getParameter devuelve null
+                    // cuando no viajan: se normaliza a cadena vacia = "todos".
+                    tipoPlano = request.getParameter("slc_tipo_plano");
+                    if (tipoPlano == null) {
+                        tipoPlano = "";
+                    }
+                    try {
+                        id_plano = Integer.parseInt(request.getParameter("slc_plano"));
+                    } catch (NumberFormatException e) {
+                        id_plano = 0;
+                    }
                     request.setAttribute("fecha_inicio", fechaI);
                     request.setAttribute("fecha_fin", fechaF);
                     request.setAttribute("estado", estado);
                     request.setAttribute("temp", temp);
                     request.setAttribute("tempC", tempC);
                     request.setAttribute("busqueda", busqueda);
+                    request.setAttribute("tipo_plano", tipoPlano);
+                    request.setAttribute("id_plano", id_plano);
                     request.setAttribute("registro", 1);
                     request.getRequestDispatcher("Solicitud.jsp").forward(request, response);
                     //</editor-fold>
@@ -288,6 +306,8 @@ public class Solicitud extends HttpServlet {
                         FF = fechaF.split("T")[0];
                         horaF = FF + " " + fechaF.split("T")[1] + ":00";
                     } catch (Exception e) {
+                        Logger.getLogger(Solicitud.class.getName()).log(Level.WARNING,
+                                "Fecha/hora invalida en el registro de la solicitud " + id_solicitud, e);
                     }
                     if (!descripcion.equals("")) {
                         lst_descripcion = jpa_defecto.descripcionBusqueda(descripcion);
@@ -295,57 +315,134 @@ public class Solicitud extends HttpServlet {
                             jpa_defecto.registroDescripcion(descripcion);
                         }
                     }
-                    resultado = jpa_solicitud.registrarRegistro(usuario, id_solicitud, id_maquina, id_plano, pieza, cant, descripcion, horaI, horaF);
+                    // No. de parte elegido en el modal: se CONGELA en el registro
+                    // para inmutabilidad historica del R-PM-001 (SGC).
+                    String numParteReg = request.getParameter("txt_numero_parte");
+                    if (numParteReg == null) {
+                        numParteReg = "";
+                    }
+                    // Guarda de negocio: la cantidad debe ser positiva y la solicitud
+                    // no puede estar finalizada (estado 100). Sin esto, un POST podia
+                    // registrar cantidades negativas o trabajo sobre una solicitud cerrada.
+                    boolean solicitudCerrada = false;
+                    try {
+                        List lst_estado_slt = jpa_solicitud.consultaSolicitudId(id_solicitud);
+                        if (lst_estado_slt != null && !lst_estado_slt.isEmpty()) {
+                            Object estadoObj = ((Object[]) lst_estado_slt.get(0))[10];
+                            solicitudCerrada = estadoObj != null
+                                    && Integer.parseInt(estadoObj.toString().trim()) == 100;
+                        }
+                    } catch (Exception ex) {
+                        Logger.getLogger(Solicitud.class.getName()).log(Level.WARNING,
+                                "No se pudo verificar el estado de la solicitud " + id_solicitud, ex);
+                    }
+                    if (cant <= 0 || solicitudCerrada) {
+                        request.setAttribute("Registro_registro", false);
+                        request.getRequestDispatcher("Solicitud?opc=6&idS=" + id_solicitud).forward(request, response);
+                        return;
+                    }
+                    resultado = jpa_solicitud.registrarRegistro(usuario, id_solicitud, id_maquina, id_plano, pieza, cant, descripcion, horaI, horaF, numParteReg);
                     request.setAttribute("Registro_registro", resultado);
                     request.getRequestDispatcher("Solicitud?opc=6&idS=" + id_solicitud + "").forward(request, response);
                     //</editor-fold>
                     break;
                 case 8:
                     //<editor-fold defaultstate="collapsed" desc="FILTRO DINAMICO R-PM-001">
+                    // Parametrizado contra SQL Injection: la query se arma con
+                    // marcadores posicionales JPA (?1, ?2, ...) y los valores
+                    // viajan aparte en una lista. consultaRegistrosFiltro los
+                    // enlaza con setParameter antes de ejecutar.
                     fechaI = request.getParameter("fch_inicio");
                     fechaF = request.getParameter("fch_fin");
                     horaI = request.getParameter("horaI");
                     horaF = request.getParameter("horaF");
+                    if (fechaI == null) { fechaI = ""; }
+                    if (fechaF == null) { fechaF = ""; }
+                    if (horaI == null) { horaI = ""; }
+                    if (horaF == null) { horaF = ""; }
                     fechaI = fechaI + " " + ((horaI.equals("") ? "00:00:01" : horaI));
                     fechaF = fechaF + " " + ((horaF.equals("") ? "23:59:59" : horaF));
                     solicitud = request.getParameter("txt_sol");
-                    id_maquina = Integer.parseInt(request.getParameter("slc_maquina"));
-                    id_plano = Integer.parseInt(request.getParameter("slc_plano"));
+                    if (solicitud == null) { solicitud = ""; }
+                    try {
+                        id_maquina = Integer.parseInt(request.getParameter("slc_maquina"));
+                    } catch (NumberFormatException e) {
+                        id_maquina = 0;
+                    }
+                    try {
+                        id_plano = Integer.parseInt(request.getParameter("slc_plano"));
+                    } catch (NumberFormatException e) {
+                        id_plano = 0;
+                    }
                     pieza = request.getParameter("txt_pieza");
+                    if (pieza == null) { pieza = ""; }
                     usuarioT = request.getParameter("slc_tecnico");
-                    String condicion = "";
-                    int cont = 0;
+                    if (usuarioT == null) { usuarioT = "0"; }
+                    // Construir la query con parametros posicionales JPA
+                    StringBuilder sbCondicion = new StringBuilder();
+                    java.util.ArrayList<Object> parametros = new java.util.ArrayList<>();
+                    int contFiltro = 0;
+                    // Parametro 1 y 2 son siempre las fechas del BETWEEN
+                    parametros.add(fechaI);  // ?1
+                    parametros.add(fechaF);  // ?2
+                    int paramIdx = 3;
                     if (!solicitud.equals("")) {
-                        condicion = condicion + "s.Numero_Solicitud LIKE CONCAT('%','" + solicitud + "','%') ";
-                        cont++;
+                        sbCondicion.append("s.Numero_Solicitud LIKE ?" + paramIdx + " ");
+                        parametros.add("%" + solicitud + "%");
+                        paramIdx++;
+                        contFiltro++;
                     }
                     if (id_maquina != 0) {
-                        condicion = condicion + ((cont != 0) ? "AND " : "") + "m.id_maquina LIKE CONCAT('%','" + id_maquina + "','%') ";
-                        cont++;
+                        if (contFiltro > 0) { sbCondicion.append("AND "); }
+                        sbCondicion.append("m.id_maquina = ?" + paramIdx + " ");
+                        parametros.add(id_maquina);
+                        paramIdx++;
+                        contFiltro++;
                     }
                     if (id_plano != 0) {
-                        condicion = condicion + ((cont != 0) ? "AND " : "") + "p.id_plano = " + id_plano + " ";
-                        cont++;
+                        if (contFiltro > 0) { sbCondicion.append("AND "); }
+                        sbCondicion.append("p.id_plano = ?" + paramIdx + " ");
+                        parametros.add(id_plano);
+                        paramIdx++;
+                        contFiltro++;
                     }
                     if (!pieza.equals("")) {
-                        condicion = condicion + ((cont != 0) ? "OR " : "") + "r.pieza LIKE CONCAT('%','" + pieza + "','%') ";
-                        cont++;
+                        if (contFiltro > 0) { sbCondicion.append("AND "); }
+                        sbCondicion.append("r.pieza LIKE ?" + paramIdx + " ");
+                        parametros.add("%" + pieza + "%");
+                        paramIdx++;
+                        contFiltro++;
                     }
-                    if (!usuarioT.equals("0") || Integer.parseInt(usuarioT) != 0) {
-                        condicion = condicion + ((cont != 0) ? "AND" : "") + " r.usuario_registro LIKE CONCAT('%','" + usuarioT + "','%') ";
+                    if (usuarioT != null && !usuarioT.equals("0") && !usuarioT.isEmpty()) {
+                        if (contFiltro > 0) { sbCondicion.append("AND "); }
+                        sbCondicion.append("r.usuario_registro LIKE ?" + paramIdx + " ");
+                        parametros.add("%" + usuarioT + "%");
+                        paramIdx++;
                     }
-                    String query = "SELECT r.id_registro, r.fecha_registro, r.usuario_registro, r.id_solicitud, s.Numero_Solicitud, r.id_maquina, m.nombre, r.id_plano,p.nombre_plano,\n"
-                            + "r.pieza, r.cantidad, r.descripcion, DATE_FORMAT(r.fecha_inicio, '%Y/%m/%d-%H:%i'), DATE_FORMAT(r.fecha_fin, '%Y/%m/%d-%H:%i'), r.tiempo, r.herramienta,\n"
+                    String queryFiltro = "SELECT r.id_registro, r.fecha_registro, r.usuario_registro, r.id_solicitud, s.Numero_Solicitud, r.id_maquina, m.nombre, r.id_plano,p.nombre_plano,\n"
+                            + "r.pieza, r.cantidad, r.descripcion, DATE_FORMAT(r.fecha_inicio, '%Y/%m/%d-%H:%i'), DATE_FORMAT(r.fecha_fin, '%Y/%m/%d-%H:%i'), IF(TIMESTAMPDIFF(MINUTE, r.fecha_inicio, IF(r.fecha_fin < r.fecha_inicio AND DATE(r.fecha_fin) = DATE(r.fecha_inicio), r.fecha_fin + INTERVAL 1 DAY, r.fecha_fin)) <= 0, '0:00', CONCAT(FLOOR(TIMESTAMPDIFF(MINUTE, r.fecha_inicio, IF(r.fecha_fin < r.fecha_inicio AND DATE(r.fecha_fin) = DATE(r.fecha_inicio), r.fecha_fin + INTERVAL 1 DAY, r.fecha_fin)) / 60), ':', LPAD(MOD(TIMESTAMPDIFF(MINUTE, r.fecha_inicio, IF(r.fecha_fin < r.fecha_inicio AND DATE(r.fecha_fin) = DATE(r.fecha_inicio), r.fecha_fin + INTERVAL 1 DAY, r.fecha_fin)), 60), 2, '0'))) AS tiempo, r.herramienta,\n"
                             + "REPLACE(s.maquina_programada, ')', '-'),\n"
                             + "(SELECT LENGTH(s.maquina_programada) - LENGTH(\n"
                             + "REPLACE(s.maquina_programada, ')', ''))),\n"
-                            + "REPLACE(s.cantidad_programada, ')', '-')\n"
+                            + "REPLACE(s.cantidad_programada, ')', '-'),\n"
+                            // Columna nueva AL FINAL (indice 19). Agregarla en
+                            // el medio correria los indices 0..18 que
+                            // Tag_registro lee por posicion y descuadraria toda
+                            // la tabla del R-PM-001.
+                            + "COALESCE(NULLIF(TRIM(COALESCE(r.numero_parte, '')), ''), p.numero_parte, '')\n"
                             + "FROM registro r\n"
                             + "INNER JOIN solicitud s ON r.id_solicitud = s.idSolicitud\n"
                             + "INNER JOIN maquina m ON r.id_maquina = m.id_maquina\n"
                             + "INNER JOIN plano p ON r.id_plano = p.id_plano\n"
-                            + "WHERE r.fecha_registro BETWEEN '" + fechaI + "' AND '" + fechaF + "' " + (condicion.equals("") ? "" : "AND (" + condicion + ")") + " ORDER BY r.fecha_registro DESC";
-                    request.setAttribute("Query", query);
+                            + "WHERE r.fecha_registro BETWEEN ?1 AND ?2 "
+                            + (sbCondicion.length() > 0 ? "AND (" + sbCondicion.toString() + ")" : "")
+                            + " ORDER BY r.fecha_registro DESC";
+                    request.setAttribute("Query", queryFiltro);
+                    request.setAttribute("QueryParams", parametros);
+                    // La fecha inicial del rango define que version del formato
+                    // R-PM-001 se esta emitiendo. Atributo aparte para no tener
+                    // que parsear la fecha desde el SQL en el Tag.
+                    request.setAttribute("filtro_fecha_ini", fechaI);
                     request.getRequestDispatcher("Solicitud?opc=6&idS=" + id_solicitud + "").forward(request, response);
                     //</editor-fold>
                     break;
@@ -417,8 +514,12 @@ public class Solicitud extends HttpServlet {
                     break;
             }
         } catch (RuntimeException e) {
+            Logger.getLogger(Solicitud.class.getName()).log(Level.SEVERE,
+                    "Error inesperado en Solicitud servlet", e);
             request.getRequestDispatcher("Solicitud.jsp").forward(request, response);
         } catch (Exception ex) {
+            Logger.getLogger(Solicitud.class.getName()).log(Level.SEVERE,
+                    "Error general en Solicitud servlet", ex);
             request.getRequestDispatcher("Solicitud.jsp").forward(request, response);
         }
     }
