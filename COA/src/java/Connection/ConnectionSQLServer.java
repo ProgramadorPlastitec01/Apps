@@ -69,7 +69,7 @@ public class ConnectionSQLServer {
                     + "END AS [Volumen], "
                     + "FORMAT(d.CANT, 'N0', 'es-CO') AS [Cantidad], "
                     + "p.ORDEN as [OrdenC], "
-                    + "CASE WHEN pe.CMPBAR_CLIE IS NULL THEN 'N/A' ELSE pe.CMPBAR_CLIE END as [CodeSpeed] "
+                    + "CASE WHEN pe.CMPBAR_CLIE IS NULL THEN 'N/A' WHEN LTRIM(pe.CMPBAR_CLIE) = '' THEN 'N/A' ELSE pe.CMPBAR_CLIE END as [CodeSpeed] "
                     + "FROM PEDIDOS p "
                     + "INNER JOIN CLIENTES c ON p.CLIENTE = c.COD "
                     + "INNER JOIN [EMP001_INV].[dbo].[MAESTRO] m ON p.COD = m.COD "
