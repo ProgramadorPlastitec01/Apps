@@ -120,11 +120,12 @@ public class Mail {
     }
 
     /**
-     * @param ResponsibleEmail correo del usuario que registró/editó el certificado por última vez
-     * (resuelto desde Controller.CertificatesJpaController.ConsultCertificateResponsible). Si es
-     * nulo o vacío, se conserva el comportamiento anterior (avisar a los correos de TI). Para
-     * "Delete" siempre se notifica a TI, ya que es una acción administrativa, no una devolución al
-     * responsable del certificado.
+     * @param ResponsibleEmail correo del usuario que registró/editó el
+     * certificado por última vez (resuelto desde
+     * Controller.CertificatesJpaController.ConsultCertificateResponsible). Si
+     * es nulo o vacío, se conserva el comportamiento anterior (avisar a los
+     * correos de TI). Para "Delete" siempre se notifica a TI, ya que es una
+     * acción administrativa, no una devolución al responsable del certificado.
      */
     public void CertificateReturn(String Certificate, String NameSender, String Justification, String Category, String ResponsibleEmail, ServletContext context) throws MessagingException {
         if (lst_mail != null) {
@@ -162,6 +163,7 @@ public class Mail {
                 boolean notifyResponsible = Category.equals("Return") && ResponsibleEmail != null && !ResponsibleEmail.trim().isEmpty();
                 if (notifyResponsible) {
                     message.addRecipient(Message.RecipientType.TO, new InternetAddress(ResponsibleEmail.trim()));
+                    message.addRecipient(Message.RecipientType.TO, new InternetAddress("p.ti@plastitec-sa.com"));
                 } else {
                     message.addRecipient(Message.RecipientType.TO, new InternetAddress("p.ti@plastitec-sa.com"));
                 }
@@ -285,9 +287,9 @@ public class Mail {
     }
 
     /**
-     * Notifica la finalización de uno o varios certificados en un único
-     * correo. La finalización masiva selecciona N certificados y debe
-     * generar una sola notificación, no una por certificado.
+     * Notifica la finalización de uno o varios certificados en un único correo.
+     * La finalización masiva selecciona N certificados y debe generar una sola
+     * notificación, no una por certificado.
      */
     public void CertificateSend(List<String> Certificates, String NameSender, ServletContext context) throws MessagingException {
         if (Certificates == null || Certificates.isEmpty()) {
