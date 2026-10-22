@@ -24,6 +24,21 @@
                 </script>-->
     </head>
     <body class="sidebar-mini">
+        <%
+            // Un solo clic en "Sí, firmar también" (Visual.jsp, confirmarFirmaConSoporte)
+            // navega directo aquí para firmar el certificado; Generate.java (case 4) ya
+            // firmó el certificado y reenvía este parámetro si quedaba pendiente un
+            // documento de soporte. En vez de abrir una pestaña nueva (bloqueable por el
+            // navegador y poco confiable), esta misma pestaña se redirige de una vez al
+            // visor de firma del soporte, encadenando ambas firmas en una sola acción del
+            // usuario.
+            String autoOpenSupport = request.getParameter("AutoOpenSupport");
+        %>
+        <% if (autoOpenSupport != null && !autoOpenSupport.trim().isEmpty()) {
+            String autoOpenSupportJs = autoOpenSupport.replace("\\", "\\\\").replace("'", "\\'");
+        %>
+        <script>window.location.replace('<%= autoOpenSupportJs %>');</script>
+        <% } %>
         <jsp:include page="Menu.jsp"></jsp:include>
             <div class="main-content" style="min-height: 694px;">
                 <div style="
@@ -1143,6 +1158,46 @@
                     setTimeout(function () {
                         window.location.href = url + "&Justification=" + encodeURIComponent(razon);
                     }, 500);
+                });
+            }
+
+            // Al firmar un certificado que ya tiene un documento de soporte
+            // pendiente (subido por el gestor en Finalizado), se ofrece
+            // firmarlo de una vez, en un solo clic: se firma el certificado y,
+            // apenas termina, la misma pestaña redirige directo al visor de
+            // firma del soporte (ver AutoOpenSupport en Generate.java case 4 y
+            // en el <head> de esta página). Antes se intentaba abrir una
+            // pestaña nueva con window.open() en paralelo a la firma del
+            // certificado, pero el navegador la bloqueaba (o competía con la
+            // navegación) y el certificado terminaba sin firmarse.
+            function confirmarFirmaConSoporte(certUrl, soporteUrl) {
+                swal({
+                    title: "Firmar certificado",
+                    text: "Este certificado tiene un documento de soporte pendiente de firma. ¿Deseas firmarlo también?",
+                    icon: "info",
+                    buttons: {
+                        cancel: {
+                            text: "Solo certificado",
+                            visible: true,
+                            className: "btn btn-secondary"
+                        },
+                        confirm: {
+                            text: "Sí, firmar también",
+                            className: "btn btn-primary"
+                        }
+                    }
+                }).then((firmarSoporte) => {
+                    // cargarDatos()/showLoader() puede fallar aquí si el elemento del
+                    // loader no existe en este contexto de carga; no debe impedir la
+                    // navegación, que es lo importante de este flujo.
+                    try {
+                        cargarDatos();
+                    } catch (e) {
+                        // Se ignora: solo afecta el indicador visual de carga.
+                    }
+                    window.location.href = firmarSoporte
+                            ? certUrl + "&AutoOpenSupport=" + encodeURIComponent(soporteUrl)
+                            : certUrl;
                 });
             }
 

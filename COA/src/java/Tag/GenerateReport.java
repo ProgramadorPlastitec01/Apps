@@ -386,17 +386,23 @@ public class GenerateReport extends TagSupport {
                     } else {
                         out.print("<button class='btn btn-green disabled btn-sm mr-2' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Sin permiso'><i class=\"fas fa-eye\"></i></button>");
                     }
+                    // El documento de soporte se adjunta desde Finalizado (state 2), no
+                    // desde Firmado (state 3): así el firmante, al revisar el certificado
+                    // para firmarlo, firma de paso el soporte que ya dejó el gestor. En
+                    // state 3 el botón de "adjuntar" ya no aparece, pero si quedó un
+                    // soporte sin firmar debe seguir pudiéndose gestionar (ver/firmar/
+                    // descargar), por eso allowAttach solo se apaga, no todo el bloque.
+                    if ((State == 2 || State == 3) && Permission.contains("[39]")) {
+                        String returnToSoporte = "Generate?opt=1&Type=" + Type + "&IdCertificate=" + ObjCerti[0];
+                        SupportDocumentUi.renderCertificateAction(out, CertificateFilesJpa,
+                                Long.parseLong(ObjCerti[0].toString()),
+                                ObjCerti[4] == null ? "" : ObjCerti[4].toString(),
+                                ObjCerti[12] == null ? "" : ObjCerti[12].toString(),
+                                ObjCerti[5] == null ? "" : ObjCerti[5].toString(),
+                                ObjCerti[7] == null ? "" : ObjCerti[7].toString(),
+                                Type, true, returnToSoporte, Permission.contains("[4]"), State == 2);
+                    }
                     if (State == 3) {
-                        if (Permission.contains("[39]")) {
-                            String returnToSoporte = "Generate?opt=1&Type=" + Type + "&IdCertificate=" + ObjCerti[0];
-                            SupportDocumentUi.renderCertificateAction(out, CertificateFilesJpa,
-                                    Long.parseLong(ObjCerti[0].toString()),
-                                    ObjCerti[4] == null ? "" : ObjCerti[4].toString(),
-                                    ObjCerti[12] == null ? "" : ObjCerti[12].toString(),
-                                    ObjCerti[5] == null ? "" : ObjCerti[5].toString(),
-                                    ObjCerti[7] == null ? "" : ObjCerti[7].toString(),
-                                    Type, true, returnToSoporte, Permission.contains("[4]"));
-                        }
                         // Batch Record y Duplicar son acciones secundarias: se agrupan en
                         // un menú para no saturar la fila con botones sueltos.
                         if (Permission.contains("[39]") || Permission.contains("[34]")) {

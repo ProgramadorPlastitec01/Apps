@@ -97,6 +97,22 @@ public class Setting extends TagSupport {
                 out.print("</div>");
                 out.print("</div>");
             }
+            // Se movió aquí desde el menú lateral (grupo "Batch Record"), junto
+            // con las demás herramientas administrativas de Configuración.
+            if (Permission.contains("[40]")) {
+                out.print("<div class='col-lg-6'>");
+                out.print("<div class='card card-large-icons'>");
+                out.print("<div class='card-icon bg-primary text-white'>");
+                out.print("<i class='fas fa-folder'></i>");
+                out.print("</div>");
+                out.print("<div class='card-body'>");
+                out.print("<h4>Editor</h4>");
+                out.print("<p>Editor de archivos Office embebido, para crear y modificar documentos directamente desde el gestor documental.</p>");
+                out.print("<a href='EditorOffice.jsp' class='card-cta' onclick='cargarDatos()'>Abrir <i class='fas fa-chevron-right'></i></a>");
+                out.print("</div>");
+                out.print("</div>");
+                out.print("</div>");
+            }
             if ("Administrador".equalsIgnoreCase(NombreRol.trim())) {
                 out.print("<div class='col-lg-6'>");
                 out.print("<div class='card card-large-icons'>");

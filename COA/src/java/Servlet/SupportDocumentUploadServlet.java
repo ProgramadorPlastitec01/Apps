@@ -1,6 +1,7 @@
 package Servlet;
 
 import Controller.CertificateFileJpaController;
+import Controller.CertificatesJpaController;
 import Method.OfficePlatformService;
 import Method.PdfImageUtil;
 import java.io.File;
@@ -82,6 +83,26 @@ public class SupportDocumentUploadServlet extends HttpServlet {
         if (!permission.contains(PERMISSION_CODE)) {
             response.sendRedirect(redirectBase + separator + "msg=error_permission");
             return;
+        }
+
+        // El soporte solo se adjunta en Finalizado (state 2): así el firmante,
+        // al firmar el certificado, revisa y firma de paso el soporte que ya
+        // dejó el gestor. El frontend ya oculta el botón fuera de ese estado,
+        // pero esto evita que alguien arme el POST a mano contra un
+        // certificado Firmado/En gestión/Eliminado.
+        if (idCertificate != null) {
+            try {
+                List lstCerti = new CertificatesJpaController().ConsultCertificatesId("", idCertificate.intValue());
+                Object[] ObjCerti = (lstCerti == null) ? null : (Object[]) lstCerti.get(0);
+                int state = (ObjCerti == null) ? -1 : Integer.parseInt(ObjCerti[8].toString());
+                if (state != 2) {
+                    response.sendRedirect(redirectBase + separator + "msg=error_state");
+                    return;
+                }
+            } catch (Exception ex) {
+                response.sendRedirect(redirectBase + separator + "msg=error_state");
+                return;
+            }
         }
 
         String uploadedById = session.getAttribute("Documento") != null ? session.getAttribute("Documento").toString() : null;

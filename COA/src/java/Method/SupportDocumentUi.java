@@ -32,7 +32,7 @@ public final class SupportDocumentUi {
             long idCertificate, String cliente, String anio, String orden, String lote, String type,
             boolean canManage, String returnTo) throws IOException {
         renderCertificateAction(out, certificateFiles, idCertificate, cliente, anio, orden, lote, type,
-                canManage, returnTo, false);
+                canManage, returnTo, false, true);
     }
 
     /**
@@ -42,6 +42,23 @@ public final class SupportDocumentUi {
     public static void renderCertificateAction(JspWriter out, CertificateFileJpaController certificateFiles,
             long idCertificate, String cliente, String anio, String orden, String lote, String type,
             boolean canManage, String returnTo, boolean canDelete) throws IOException {
+        renderCertificateAction(out, certificateFiles, idCertificate, cliente, anio, orden, lote, type,
+                canManage, returnTo, canDelete, true);
+    }
+
+    /**
+     * @param allowAttach el certificado adjunta el soporte en estado 2
+     * (Finalizado) — así el firmante firma el certificado y, de paso, firma
+     * el soporte ya adjunto al revisarlo (SupportDocumentSign.jsp sigue
+     * siendo manual, solo cambia cuándo se puede empezar a adjuntar). En
+     * estado 3 (Firmado) ya no se debe poder adjuntar uno nuevo, pero si
+     * quedó uno pendiente de firmar debe seguir pudiéndose ver/firmar/
+     * descargar, por eso esto solo oculta el botón de "adjuntar" (soporte ==
+     * null), no el menú de gestión de uno ya existente.
+     */
+    public static void renderCertificateAction(JspWriter out, CertificateFileJpaController certificateFiles,
+            long idCertificate, String cliente, String anio, String orden, String lote, String type,
+            boolean canManage, String returnTo, boolean canDelete, boolean allowAttach) throws IOException {
 
         if (!canManage) {
             return;
@@ -50,6 +67,9 @@ public final class SupportDocumentUi {
         CertificateFileRow soporte = certificateFiles.consultSupportFileByCertificate(idCertificate);
 
         if (soporte == null) {
+            if (!allowAttach) {
+                return;
+            }
             String args = "'" + idCertificate + "','" + Util.jsAttr(cliente) + "','" + Util.jsAttr(anio) + "','"
                     + Util.jsAttr(orden) + "','" + Util.jsAttr(lote) + "','" + Util.jsAttr(type) + "','"
                     + Util.jsAttr(returnTo) + "'";

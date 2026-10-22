@@ -12,6 +12,7 @@ import Connection.ConnectionGeneracionLotes;
 import Controller.SettingJpaController;
 import Controller.CertificatesJpaController;
 import Controller.CertificateFileJpaController;
+import Controller.CertificateFileRow;
 import Method.SupportDocumentUi;
 import java.util.List;
 import Method.Util;
@@ -248,15 +249,61 @@ public class Visual extends TagSupport {
                         List lstId = CertificatesJpa.ConsultCertificatesId(Type, IdCertificates);
                         if (lstId != null) {
                             Object[] ObjId = (Object[]) lstId.get(0);
-                            out.print("<div>"
+                            String firmarCertUrl = "Generate?opt=4&Type=" + Type + "&Temp=1&IdCertiMasive=" + IdCertificates
+                                    + "&Customer=" + ObjId[4] + "&Anio=" + ObjId[12] + "&Order=" + ObjId[5] + "&Batch=" + ObjId[7];
+
+                            // Si ya hay un soporte pendiente de firma (lo dejó el gestor en
+                            // Finalizado), se ofrece firmarlo justo al firmar el certificado,
+                            // en vez de que el firmante tenga que acordarse de volver después.
+                            CertificateFileRow soportePendienteFirma = Permission.contains("[39]")
+                                    ? CertificateFilesJpa.consultSupportFileByCertificate(IdCertificates) : null;
+                            boolean hayPendiente = soportePendienteFirma != null
+                                    && !soportePendienteFirma.getName().contains("_FIRMADO_");
+
+                            String onclickFirmar;
+                            if (hayPendiente) {
+                                String returnToSoporte;
+                                try {
+                                    returnToSoporte = java.net.URLEncoder.encode(
+                                            "Generate?opt=2&Type=" + Type + "&IdCertificates=" + IdCertificates
+                                            + "&TempDelete=" + TempDelete + "&StateCerti=3&TempM=" + TempM, "UTF-8");
+                                } catch (Exception e) {
+                                    returnToSoporte = "";
+                                }
+                                String soporteUrl = "SupportDocumentSign.jsp?cliente=" + ObjId[4] + "&anio=" + ObjId[12]
+                                        + "&orden=" + ObjId[5] + "&lote=" + ObjId[7] + "&id=" + soportePendienteFirma.getId()
+                                        + "&returnTo=" + returnToSoporte;
+                                onclickFirmar = "confirmarFirmaConSoporte('" + firmarCertUrl + "','" + soporteUrl + "')";
+                            } else {
+                                onclickFirmar = "javascript:location.href='" + firmarCertUrl + "';cargarDatos()";
+                            }
+
+                            out.print("<div class='mr-2'>"
                                     + "<button class='btn btn-outline-warning btn-sm' "
                                     + "style='border-radius: 4px; padding: 2px 9px;' "
-                                    + "onclick=\"javascript:location.href='Generate?opt=4&Type="
-                                    + Type + "&Temp=1&IdCertiMasive=" + IdCertificates
-                                    + "&Customer=" + ObjId[4] + "&Anio=" + ObjId[12] + "&Order=" + ObjId[5] + "&Batch=" + ObjId[7] + "';cargarDatos()\" data-toggle='tooltip' "
+                                    + "onclick=\"" + onclickFirmar + "\" data-toggle='tooltip' "
                                     + "data-placement='top' title='Firmar'>"
                                     + "<i class='fas fa-signature'></i>"
                                     + "</button></div>");
+                        }
+                    }
+                    // El soporte se adjunta desde Finalizado, no desde Firmado: así el
+                    // firmante, al entrar aquí a firmar el certificado, de paso ve y
+                    // puede firmar el soporte que ya dejó el gestor.
+                    if (IdCertificates > 0 && Permission.contains("[39]")) {
+                        List lstIdSoporte = CertificatesJpa.ConsultCertificatesId(Type, IdCertificates);
+                        if (lstIdSoporte != null) {
+                            Object[] ObjIdSoporte = (Object[]) lstIdSoporte.get(0);
+                            String returnToSoporte = "Generate?opt=2&Type=" + Type + "&IdCertificates=" + IdCertificates
+                                    + "&TempDelete=" + TempDelete + "&StateCerti=2&TempM=" + TempM;
+                            out.print("<div class='ml-2 d-inline'>");
+                            SupportDocumentUi.renderCertificateAction(out, CertificateFilesJpa, IdCertificates,
+                                    ObjIdSoporte[4] == null ? "" : ObjIdSoporte[4].toString(),
+                                    ObjIdSoporte[12] == null ? "" : ObjIdSoporte[12].toString(),
+                                    ObjIdSoporte[5] == null ? "" : ObjIdSoporte[5].toString(),
+                                    ObjIdSoporte[7] == null ? "" : ObjIdSoporte[7].toString(),
+                                    Type, true, returnToSoporte, Permission.contains("[4]"), true);
+                            out.print("</div>");
                         }
                     }
                     out.print("</div>");
@@ -285,7 +332,7 @@ public class Visual extends TagSupport {
                                     ObjIdSoporte[12] == null ? "" : ObjIdSoporte[12].toString(),
                                     ObjIdSoporte[5] == null ? "" : ObjIdSoporte[5].toString(),
                                     ObjIdSoporte[7] == null ? "" : ObjIdSoporte[7].toString(),
-                                    Type, true, returnToSoporte, Permission.contains("[4]"));
+                                    Type, true, returnToSoporte, Permission.contains("[4]"), false);
                         }
                     }
                     out.print("</div>");

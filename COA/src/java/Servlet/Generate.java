@@ -295,6 +295,12 @@ public class Generate extends HttpServlet {
                     } catch (Exception e) {
                         Temp = 0;
                     }
+                    // Firma única + soporte pendiente, un solo clic desde
+                    // confirmarFirmaConSoporte (Visual.jsp): tras firmar el
+                    // certificado se reenvía esta URL (ya armada por el JS) para
+                    // que Visual.jsp redirija de una vez al visor de firma del
+                    // soporte, en vez de que el usuario tenga que volver a entrar.
+                    String AutoOpenSupport = request.getParameter("AutoOpenSupport");
                     // La firma se toma de user.signature (BD), no solo de la sesión:
                     // la sesión se carga al iniciar sesión, así que una firma
                     // registrada después en el Perfil no llegaba al certificado
@@ -343,7 +349,11 @@ public class Generate extends HttpServlet {
                     } else {
                         //<editor-fold defaultstate="collapsed" desc="SIGNATURE UNIQUE">
                         request.setAttribute("SigUnique", Signed == 1);
-                        request.getRequestDispatcher("Generate?opt=2&Type=" + Type + "&IdCertificates=" + IdCertificates + "&TempDelete=0&StateCerti=" + (Signed == 1 ? 3 : 2)).forward(request, response);
+                        String forwardUrl = "Generate?opt=2&Type=" + Type + "&IdCertificates=" + IdCertificates + "&TempDelete=0&StateCerti=" + (Signed == 1 ? 3 : 2);
+                        if (Signed == 1 && AutoOpenSupport != null && !AutoOpenSupport.trim().isEmpty()) {
+                            forwardUrl += "&AutoOpenSupport=" + java.net.URLEncoder.encode(AutoOpenSupport, "UTF-8");
+                        }
+                        request.getRequestDispatcher(forwardUrl).forward(request, response);
                         //</editor-fold>
                     }
                     //</editor-fold>

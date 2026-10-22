@@ -97,13 +97,10 @@ public class Menu extends TagSupport {
                 out.print("</li>");
             }
             // ===================== BatchRecord =====================
+            // "Editor" se movió a una tarjeta dentro de Configuración
+            // (Tag.Setting), junto a las demás herramientas administrativas.
             out.print("<li class=\"menu-header\">Batch Record</li>");
 
-            if (Permission.contains("[40]")) {
-                out.print("<li class=\"dropdown\">");
-                out.print("<a href='EditorOffice.jsp' class=\"nav-link\" onclick='cargarDatos()'><i class=\"fas fa-folder\"></i><span>Editor</span></a>");
-                out.print("</li>");
-            }
             if (Permission.contains("[12]")) {
                 out.print("<li class=\"dropdown\">");
                 out.print("<a href='FileManager.jsp' class=\"nav-link\" onclick='cargarDatos()'><i class=\"fas fa-folder\"></i><span>Batch Record</span></a>");
