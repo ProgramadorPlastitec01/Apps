@@ -913,6 +913,134 @@
             }
         </script>
         <script>
+            /* ======================================================
+             * ACTUALIZAR DESDE FACTORY (Borrador)
+             * Guarda el certificado tal como está (sin las validaciones
+             * de "Guardar", porque aquí solo se quiere persistir lo que
+             * ya hay) y, una vez guardado, le pide al backend que
+             * reconsulte Factory y complete únicamente los campos que
+             * sigan pendientes (Factura/Remisión, etc.), sin tocar lo
+             * que el usuario ya haya diligenciado a mano.
+             * ====================================================== */
+            function actualizarDesdeFactory(idCertificates) {
+
+                var boton = event ? event.currentTarget : null;
+                var form = document.getElementById('FormGenerate');
+                var htmlContainer = document.getElementById('HtmlContent');
+
+                if (!form || !htmlContainer) {
+                    iziToast.error({
+                        title: 'Error',
+                        message: 'Formulario no encontrado',
+                        position: 'bottomRight'
+                    });
+                    return;
+                }
+
+                if (boton) {
+                    boton.disabled = true;
+                }
+
+                // Sincronizar inputs/selects igual que al Guardar, para no
+                // perder lo que el usuario ya seleccionó o escribió.
+                htmlContainer.querySelectorAll('input').forEach(input => {
+                    if (input.type === 'radio' || input.type === 'checkbox') {
+                        input.checked
+                                ? input.setAttribute('checked', 'checked')
+                                : input.removeAttribute('checked');
+                    } else {
+                        input.setAttribute('value', input.value);
+                    }
+                });
+                htmlContainer.querySelectorAll('select').forEach(select => {
+                    Array.from(select.options).forEach(option => {
+                        option.value === select.value
+                                ? option.setAttribute('selected', 'selected')
+                                : option.removeAttribute('selected');
+                    });
+                });
+
+                var encodedHtml = encodeURIComponent(htmlContainer.innerHTML);
+                var clientText = document.getElementById('clientValue')?.textContent.trim() || '';
+                var amountRaw = document.getElementById('AmountValue')?.textContent.trim() || '';
+                var amountClean = amountRaw.replace(/[^\d]/g, '');
+                var dateInput = document.querySelector('#DateDispatch input');
+                var dateValue = dateInput?.value || '';
+                var consText = document.getElementById('consValue')?.textContent.trim() || '';
+                var Code = document.getElementById('codeValue')?.textContent.trim() || '';
+
+                var batchValues = [];
+                htmlContainer.querySelectorAll('[id^="IdBatchM"]').forEach(td => {
+                    var value = td.textContent.trim();
+                    if (value !== '') {
+                        batchValues.push(value);
+                    }
+                });
+                var uniqueBatches = [...new Set(batchValues)];
+
+                var datosGuardado = new URLSearchParams();
+                datosGuardado.append('Html', encodedHtml);
+                datosGuardado.append('Type', form.Type ? form.Type.value : '');
+                datosGuardado.append('IdCertificates', idCertificates);
+                datosGuardado.append('clientValue', clientText);
+                datosGuardado.append('AmountValue', amountClean);
+                datosGuardado.append('DateDispatch', dateValue);
+                datosGuardado.append('MaterialBatches', uniqueBatches.join(','));
+                if (consText) {
+                    datosGuardado.append('ConsValue', consText);
+                }
+                if (Code) {
+                    datosGuardado.append('codeValue', Code);
+                }
+
+                fetch('Generate?opt=3', {method: 'POST', body: datosGuardado})
+                        .then(function () {
+                            return fetch('Generate?opt=11&IdCertificates=' + idCertificates
+                                    + '&Type=' + encodeURIComponent(form.Type ? form.Type.value : ''));
+                        })
+                        .then(function (resp) {
+                            return resp.json();
+                        })
+                        .then(function (data) {
+                            if (boton) {
+                                boton.disabled = false;
+                            }
+                            if (data.success && data.updated > 0) {
+                                iziToast.success({
+                                    title: 'Actualizado',
+                                    message: data.message,
+                                    position: 'bottomRight'
+                                });
+                                setTimeout(function () {
+                                    location.reload();
+                                }, 900);
+                            } else if (data.success) {
+                                iziToast.info({
+                                    title: 'Sin cambios',
+                                    message: data.message,
+                                    position: 'bottomRight'
+                                });
+                            } else {
+                                iziToast.warning({
+                                    title: 'Atención',
+                                    message: data.message,
+                                    position: 'bottomRight'
+                                });
+                            }
+                        })
+                        .catch(function () {
+                            if (boton) {
+                                boton.disabled = false;
+                            }
+                            iziToast.error({
+                                title: 'Error',
+                                message: 'No fue posible actualizar desde Factory',
+                                position: 'bottomRight'
+                            });
+                        });
+            }
+        </script>
+        <script>
             /* ===================== ALERTA ===================== */
             function showWarning(element, message) {
                 iziToast.warning({

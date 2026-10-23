@@ -151,6 +151,33 @@ public class CertificatesJpaController implements Serializable {
         }
     }
 
+    /**
+     * Datos crudos del certificado necesarios para "Actualizar desde
+     * Factory": a diferencia de Sp_ctf_c_ConsultCertificatesId (que no trae
+     * material_batch), esta consulta directa permite reenviar
+     * CertificatesUpdate sin pisar el material_batch que usa Batch Record.
+     * Es una SELECT simple (no un procedimiento almacenado) porque solo lee
+     * columnas ya existentes en certificates, sin lógica de negocio.
+     */
+    public Object[] ConsultCertificateDataForUpdate(int IdCertificates) {
+        EntityManager etm = getEntityManager();
+        try {
+            Query q = etm.createNativeQuery(
+                    "SELECT consecutive_quality, amount, dispatch_date, material_batch, format, `order`, product, batch "
+                    + "FROM certificates WHERE id_certificate = ?");
+            q.setParameter(1, IdCertificates);
+            List consulta = q.getResultList();
+            if (consulta.isEmpty()) {
+                return null;
+            }
+            return (Object[]) consulta.get(0);
+        } catch (Exception ex) {
+            return null;
+        } finally {
+            etm.close();
+        }
+    }
+
     public List ConsultCertificatesBatchRecord(String Order, String Batch) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();

@@ -17,6 +17,11 @@ import Controller.CertificateDuplicationJpaController;
 import Controller.EventsJpaController;
 import Controller.UserControllerJpa;
 import Method.Mail;
+import Method.Util;
+import Connection.ConnectionSQLServer;
+import com.google.gson.Gson;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Generate extends HttpServlet {
 
@@ -540,6 +545,101 @@ public class Generate extends HttpServlet {
                     }
                     request.setAttribute("Type", Type);
                     request.getRequestDispatcher("GenerateReport.jsp").forward(request, response);
+                    //</editor-fold>
+                    break;
+                case 11:
+                    //<editor-fold defaultstate="collapsed" desc="ACTUALIZAR DESDE FACTORY (BORRADOR)">
+                    // Reconsulta Factory y completa SOLO los campos de cabecera que
+                    // sigan en 'pending' (ej. Factura/Remisión que aún no se habían
+                    // facturado al generar el Borrador). El frontend guarda el
+                    // certificado tal como está (opt=3) antes de llamar aquí, así
+                    // que esto siempre actúa sobre la última versión editada por el
+                    // usuario. No se usa en certificados ya finalizados/firmados.
+                    response.setContentType("application/json;charset=UTF-8");
+                    try {
+                        IdCertificates = Integer.parseInt(request.getParameter("IdCertificates"));
+                    } catch (Exception e) {
+                        IdCertificates = 0;
+                    }
+                    Map<String, Object> respuestaFactory = new HashMap<String, Object>();
+                    if (IdCertificates <= 0) {
+                        respuestaFactory.put("success", false);
+                        respuestaFactory.put("message", "Certificado inválido.");
+                        response.getWriter().print(new Gson().toJson(respuestaFactory));
+                        break;
+                    }
+                    Object[] datosCertificado = CertificatesJpa.ConsultCertificateDataForUpdate(IdCertificates);
+                    if (datosCertificado == null) {
+                        respuestaFactory.put("success", false);
+                        respuestaFactory.put("message", "No se encontró el certificado.");
+                        response.getWriter().print(new Gson().toJson(respuestaFactory));
+                        break;
+                    }
+                    String consecutiveActual = datosCertificado[0] == null ? "" : datosCertificado[0].toString();
+                    String amountActual = datosCertificado[1] == null ? "" : datosCertificado[1].toString();
+                    String dispatchActual = datosCertificado[2] == null ? "" : datosCertificado[2].toString();
+                    String materialBatchActual = datosCertificado[3] == null ? "" : datosCertificado[3].toString();
+                    String htmlActual = datosCertificado[4] == null ? "" : datosCertificado[4].toString();
+                    int ordenCertificado;
+                    try {
+                        ordenCertificado = Integer.parseInt(datosCertificado[5].toString().trim());
+                    } catch (Exception e) {
+                        ordenCertificado = 0;
+                    }
+                    String productoCertificado = datosCertificado[6] == null ? "" : datosCertificado[6].toString().trim();
+                    String loteCertificado = datosCertificado[7] == null ? "" : datosCertificado[7].toString().trim();
+                    if (ordenCertificado <= 0 || productoCertificado.isEmpty() || loteCertificado.isEmpty()) {
+                        respuestaFactory.put("success", false);
+                        respuestaFactory.put("message", "El certificado no tiene orden, producto o lote válidos.");
+                        response.getWriter().print(new Gson().toJson(respuestaFactory));
+                        break;
+                    }
+                    List lstHeadRefresh = null;
+                    try {
+                        lstHeadRefresh = new ConnectionSQLServer().Products(
+                                ordenCertificado, productoCertificado.replace("2C", "3C"), loteCertificado);
+                    } catch (Exception ex) {
+                        Logger.getLogger(Generate.class.getName()).log(Level.WARNING,
+                                "Error consultando Factory para refrescar certificado " + IdCertificates, ex);
+                    }
+                    if (lstHeadRefresh == null || lstHeadRefresh.isEmpty()) {
+                        respuestaFactory.put("success", false);
+                        respuestaFactory.put("message", "Factory aún no tiene información para esta orden, producto y lote.");
+                        response.getWriter().print(new Gson().toJson(respuestaFactory));
+                        break;
+                    }
+                    String[] argHeadRefresh = Util.parseResult(lstHeadRefresh.get(1));
+                    Map<String, String> valoresFrescos = new HashMap<String, String>();
+                    valoresFrescos.put("Client", Util.valorOrNull(argHeadRefresh, 1));
+                    valoresFrescos.put("Address", Util.valorOrNull(argHeadRefresh, 2));
+                    valoresFrescos.put("Phone", Util.valorOrNull(argHeadRefresh, 3));
+                    valoresFrescos.put("City", Util.valorOrNull(argHeadRefresh, 4));
+                    valoresFrescos.put("Country", Util.valorOrNull(argHeadRefresh, 5));
+                    valoresFrescos.put("Bill", Util.valorOrNull(argHeadRefresh, 6));
+                    valoresFrescos.put("ReissueList", Util.valorOrNull(argHeadRefresh, 7));
+                    valoresFrescos.put("Product", Util.valorOrNull(argHeadRefresh, 9));
+                    valoresFrescos.put("Ability", Util.valorOrNull(argHeadRefresh, 10));
+                    String cantidadRefresh = Util.valorOrNull(argHeadRefresh, 11);
+                    valoresFrescos.put("Quantity", cantidadRefresh == null ? null : cantidadRefresh + " UNIDADES ");
+                    valoresFrescos.put("ClientOrder", Util.valorOrNull(argHeadRefresh, 12));
+                    valoresFrescos.put("CodeSpeed", Util.valorOrNull(argHeadRefresh, 13));
+
+                    Util.ResultadoActualizacionPendientes resultadoMerge =
+                            Util.actualizarPendientesDesdeFactory(htmlActual, valoresFrescos);
+
+                    if (resultadoMerge.camposActualizados > 0) {
+                        CertificatesJpa.CertificatesUpdate(IdCertificates, consecutiveActual, amountActual,
+                                dispatchActual, materialBatchActual, resultadoMerge.html, IdUsuario);
+                        respuestaFactory.put("success", true);
+                        respuestaFactory.put("updated", resultadoMerge.camposActualizados);
+                        respuestaFactory.put("message", "Se actualizaron " + resultadoMerge.camposActualizados
+                                + " campo(s) pendiente(s) con la información de Factory.");
+                    } else {
+                        respuestaFactory.put("success", true);
+                        respuestaFactory.put("updated", 0);
+                        respuestaFactory.put("message", "No había campos pendientes, o Factory aún no tiene esos datos.");
+                    }
+                    response.getWriter().print(new Gson().toJson(respuestaFactory));
                     //</editor-fold>
                     break;
             }

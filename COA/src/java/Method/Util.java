@@ -3,8 +3,71 @@ package Method;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Util {
+
+    // Convierte "NULL" (o vacío) en null para que el merge de "Actualizar
+    // desde Factory" sepa que ese campo todavía no tiene dato real.
+    public static String valorOrNull(String[] arr, int idx) {
+        if (arr == null || idx >= arr.length || arr[idx] == null) {
+            return null;
+        }
+        String valor = arr[idx].trim();
+        return (valor.isEmpty() || valor.equalsIgnoreCase("NULL")) ? null : valor;
+    }
+
+    public static class ResultadoActualizacionPendientes {
+        public final String html;
+        public final int camposActualizados;
+
+        public ResultadoActualizacionPendientes(String html, int camposActualizados) {
+            this.html = html;
+            this.camposActualizados = camposActualizados;
+        }
+    }
+
+    /**
+     * Certificado en Borrador: algunos campos de cabecera quedaron en
+     * "pendiente" (class 'pending') porque Factory no tenía dato al momento
+     * de generar (ej. Factura/Remisión aún no facturadas). Esto permite
+     * reconsultar Factory más tarde y completar SOLO esos campos —
+     * identificados por el atributo data-field puesto al generar la
+     * cabecera— sin tocar nada que el usuario ya haya editado a mano.
+     */
+    public static ResultadoActualizacionPendientes actualizarPendientesDesdeFactory(
+            String html, Map<String, String> valoresFrescos) {
+        if (html == null || valoresFrescos == null) {
+            return new ResultadoActualizacionPendientes(html, 0);
+        }
+        int actualizados = 0;
+        for (Map.Entry<String, String> entrada : valoresFrescos.entrySet()) {
+            String campo = entrada.getKey();
+            String valor = entrada.getValue();
+            if (valor == null || valor.trim().isEmpty()) {
+                continue;
+            }
+            Pattern p = Pattern.compile(
+                    "<span(\\s+class='([^']*)')?\\s+data-field='" + Pattern.quote(campo) + "'([^>]*)>([^<]*)</span>");
+            Matcher m = p.matcher(html);
+            if (!m.find()) {
+                continue;
+            }
+            String claseActual = m.group(2) == null ? "" : m.group(2);
+            if (!claseActual.matches(".*\\bpending\\b.*")) {
+                continue;
+            }
+            String claseLimpia = claseActual.replaceAll("\\s*\\bpending\\b\\s*", " ").trim();
+            if (claseLimpia.isEmpty()) {
+                claseLimpia = "editable";
+            }
+            String nuevoSpan = "<span class='" + claseLimpia + "' data-field='" + campo + "'" + m.group(3) + ">" + valor + "</span>";
+            html = html.substring(0, m.start()) + nuevoSpan + html.substring(m.end());
+            actualizados++;
+        }
+        return new ResultadoActualizacionPendientes(html, actualizados);
+    }
     // Convierte "[a /// b /// c]" en {"a","b","c"} (los campos vienen unidos
     // con " /// ", así que hay que recortar el espacio que queda pegado a
     // cada lado tras el split; sin este trim una URL en el último campo

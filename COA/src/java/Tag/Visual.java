@@ -217,6 +217,18 @@ public class Visual extends TagSupport {
                                     + "<i class=\"fas fa-id-card\"></i>"
                                     + "</button></div>");
 
+                            // Borrador con Factura/Remisión (u otros campos de cabecera)
+                            // aún pendientes porque Factory no los tenía al generar: deja
+                            // reconsultar Factory sin perder lo ya diligenciado a mano.
+                            out.print("<div class='ml-4'>"
+                                    + "<button class='btn btn-outline-primary btn-sm' "
+                                    + "style='border-radius: 4px; padding: 2px 9px;' "
+                                    + "onclick=\"actualizarDesdeFactory(" + IdCertificates + ")\""
+                                    + " data-toggle='tooltip' "
+                                    + "data-placement='top' title='Actualizar desde Factory'>"
+                                    + "<i class=\"fas fa-industry\"></i>"
+                                    + "</button></div>");
+
                             out.print("<div class='ml-4'>"
                                     + "<button class='btn btn-outline-success btn-sm' "
                                     + "style='border-radius: 4px; padding: 2px 9px;' "
@@ -355,10 +367,28 @@ public class Visual extends TagSupport {
                             + "data-placement='top' title='Clientes'>"
                             + "<i class=\"fas fa-id-card\"></i>"
                             + "</button></div>");
+                    // Un location.reload() simple pierde Type/Product/Batch/Order/etc.
+                    // cuando la página se cargó con esos datos solo en el cuerpo del
+                    // formulario (POST) y no en la URL: el navegador vuelve a pedir la
+                    // misma URL, pero sin los parámetros, y el certificado llega vacío.
+                    // En su lugar se reconstruye la navegación con los mismos
+                    // parámetros que trajo esta carga (igual que hace el botón "Atrás").
+                    String BatchReload = Cycle.isEmpty() ? Batch : Batch + "///" + Cycle;
+                    String reloadUrl = "Generate?opt=2"
+                            + "&Type=" + urlEncode(Type)
+                            + "&Order=" + Order
+                            + "&Product=" + urlEncode(Product)
+                            + "&Batch=" + urlEncode(BatchReload)
+                            + "&FormatName=" + urlEncode(IdForm + "/" + Record)
+                            + "&Client=" + urlEncode(Client)
+                            + "&TempDelete=" + TempDelete
+                            + "&StateCerti=" + StateCerti
+                            + "&TempM=" + TempM
+                            + "&AmoutReg=" + AmoutReg;
                     out.print("<div class='ml-4'>"
                             + "<button class='btn btn-outline-primary btn-sm' "
                             + "style='border-radius: 4px; padding: 2px 9px;' "
-                            + "onclick='location.reload();' data-toggle='tooltip' "
+                            + "onclick=\"javascript:location.href='" + reloadUrl + "';cargarDatos()\" data-toggle='tooltip' "
                             + "data-placement='top' title='Recargar'>"
                             + "<i class='fas fa-sync-alt'></i>"
                             + "</button></div>");
@@ -384,6 +414,61 @@ public class Visual extends TagSupport {
                                 Html.length(),
                                 Html.length() > 300 ? Html.substring(Html.length() - 300) : Html
                             });
+                    // El Html guardado trae el badge "ErrorCount" congelado con el valor
+                    // calculado al momento de generar/registrar el certificado. Los
+                    // registros en Registros LAB pueden corregirse después (vía
+                    // "Comprobar Errores"), así que aquí se recalcula contra los datos
+                    // actuales y se actualiza el valor ya embebido en el Html, en vez de
+                    // mostrar el conteo congelado de cuando se generó.
+                    try {
+                        List lstCertificadoRow = CertificatesJpa.ConsultCertificatesId(Type, IdCertificates);
+                        if (lstCertificadoRow != null && !lstCertificadoRow.isEmpty()) {
+                            Object[] ObjCertificadoRow = (Object[]) lstCertificadoRow.get(0);
+                            String recordCertificado = ObjCertificadoRow[2] == null ? "" : ObjCertificadoRow[2].toString().trim();
+                            int orderCertificado = 0;
+                            try {
+                                orderCertificado = Integer.parseInt(ObjCertificadoRow[5].toString().trim());
+                            } catch (Exception ignore) {
+                            }
+                            String productCertificado = ObjCertificadoRow[6] == null ? "" : ObjCertificadoRow[6].toString().trim();
+                            String batchCertificado = ObjCertificadoRow[7] == null ? "" : ObjCertificadoRow[7].toString().trim();
+                            if (orderCertificado > 0 && !productCertificado.isEmpty() && !batchCertificado.isEmpty()) {
+                                String freshErrorCount = null;
+                                if ("R-GC-046".equals(recordCertificado)) {
+                                    List lstMaterialesCertificado = RegistrosLabJpa.ConsultMaterials(orderCertificado, productCertificado, batchCertificado);
+                                    if (lstMaterialesCertificado != null && !lstMaterialesCertificado.isEmpty()) {
+                                        String[] argMaterialesCertificado = Util.parseResult(lstMaterialesCertificado.get(0));
+                                        if (argMaterialesCertificado.length > 14) {
+                                            freshErrorCount = argMaterialesCertificado[14];
+                                        }
+                                    }
+                                } else if ("R-GC-220".equals(recordCertificado)) {
+                                    List lstMaterialesCertificado = RegistrosLabJpa.ConsultMaterialsRGC220(orderCertificado, productCertificado, batchCertificado);
+                                    if (lstMaterialesCertificado != null && !lstMaterialesCertificado.isEmpty()) {
+                                        String[] argMaterialesCertificado = Util.parseResult(lstMaterialesCertificado.get(0));
+                                        if (argMaterialesCertificado.length > 9) {
+                                            freshErrorCount = argMaterialesCertificado[9];
+                                        }
+                                    }
+                                } else if ("R-GC-194".equals(recordCertificado)) {
+                                    List lstMaterialesCertificado = RegistrosLabJpa.ConsultMaterialsRGC194(orderCertificado, productCertificado, batchCertificado);
+                                    if (lstMaterialesCertificado != null && !lstMaterialesCertificado.isEmpty()) {
+                                        String[] argMaterialesCertificado = Util.parseResult(lstMaterialesCertificado.get(0));
+                                        if (argMaterialesCertificado.length > 9) {
+                                            freshErrorCount = argMaterialesCertificado[9];
+                                        }
+                                    }
+                                }
+                                if (freshErrorCount != null) {
+                                    Html = Html.replaceAll("(id=['\"]ErrorCount['\"]\\s+value=['\"])[^'\"]*(['\"])",
+                                            "$1" + freshErrorCount + "$2");
+                                }
+                            }
+                        }
+                    } catch (Exception ex) {
+                        Logger.getLogger(Visual.class.getName()).log(Level.WARNING,
+                                "No fue posible refrescar el conteo de diferencias del certificado " + IdCertificates, ex);
+                    }
                     //</editor-fold>
                 } else {
                     //<editor-fold defaultstate="collapsed" desc="VALIDATION NEW">
@@ -408,48 +493,89 @@ public class Visual extends TagSupport {
                         //<editor-fold defaultstate="collapsed" desc="HEAD FACTORY">
                         String[] ArgHead = Util.parseResult(lst_headFact.get(1));
                         Html = Html.replace("XOrderX", (ArgHead[0].equals("NULL") || ArgHead[0] == null) ? "" + Order + "" : ArgHead[0]);
-                        Html = Html.replace("XClientX", (ArgHead[1].equals("NULL") || ArgHead[1] == null) ? "<span class='editable pending' contenteditable='true'>----</span>" : "<span class='editable' contenteditable='true'>" + ArgHead[1] + "</span>");
-                        Html = Html.replace("XAddressX", (ArgHead[2].equals("NULL") || ArgHead[2] == null) ? "<span class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" + ArgHead[2] + "</span>");
-                        Html = Html.replace("XPhoneX", (ArgHead[3].equals("NULL") || ArgHead[3] == null) ? "<span  class='editable' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" + ArgHead[3] + "</span>");
-                        Html = Html.replace("XCityX", (ArgHead[4].equals("NULL") || ArgHead[4] == null) ? "<span class='editable pending' contenteditable='true'>----</span>" : "<span class='editable' contenteditable='true'>" + ArgHead[4] + "</span>");
-                        Html = Html.replace("XCountryX", (ArgHead[5].equals("NULL") || ArgHead[5] == null) ? "<span class='editable pending' contenteditable='true'>----</span>" : "<span class='editable' contenteditable='true'>" + ArgHead[5] + "</span>");
-                        Html = Html.replace("XBillX", (ArgHead[6].equals("NULL") || ArgHead[6] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" + ArgHead[6] + "</span>");
-                        Html = Html.replace("XReissue_listX", (ArgHead[7].equals("NULL") || ArgHead[7] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable ' contenteditable='true'>" + ArgHead[7] + "</span>");
-                        Html = Html.replace("XProductX", (ArgHead[9].equals("NULL") || ArgHead[9] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable ' contenteditable='true'>" + ArgHead[9] + "</span>");
-                        Html = Html.replace("XAbilityX", (ArgHead[10].equals("NULL") || ArgHead[10] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" + ArgHead[10] + "</span>");
+                        Html = Html.replace("XClientX", (ArgHead[1].equals("NULL") || ArgHead[1] == null) ? "<span class='editable pending' data-field='Client' contenteditable='true'>----</span>" : "<span class='editable' data-field='Client' contenteditable='true'>" + ArgHead[1] + "</span>");
+                        Html = Html.replace("XAddressX", (ArgHead[2].equals("NULL") || ArgHead[2] == null) ? "<span class='editable pending' data-field='Address' contenteditable='true'>----</span>" : "<span  class='editable' data-field='Address' contenteditable='true'>" + ArgHead[2] + "</span>");
+                        Html = Html.replace("XPhoneX", (ArgHead[3].equals("NULL") || ArgHead[3] == null) ? "<span  class='editable' data-field='Phone' contenteditable='true'>----</span>" : "<span  class='editable' data-field='Phone' contenteditable='true'>" + ArgHead[3] + "</span>");
+                        Html = Html.replace("XCityX", (ArgHead[4].equals("NULL") || ArgHead[4] == null) ? "<span class='editable pending' data-field='City' contenteditable='true'>----</span>" : "<span class='editable' data-field='City' contenteditable='true'>" + ArgHead[4] + "</span>");
+                        Html = Html.replace("XCountryX", (ArgHead[5].equals("NULL") || ArgHead[5] == null) ? "<span class='editable pending' data-field='Country' contenteditable='true'>----</span>" : "<span class='editable' data-field='Country' contenteditable='true'>" + ArgHead[5] + "</span>");
+                        Html = Html.replace("XBillX", (ArgHead[6].equals("NULL") || ArgHead[6] == null) ? "<span  class='editable pending' data-field='Bill' contenteditable='true'>----</span>" : "<span  class='editable' data-field='Bill' contenteditable='true'>" + ArgHead[6] + "</span>");
+                        Html = Html.replace("XReissue_listX", (ArgHead[7].equals("NULL") || ArgHead[7] == null) ? "<span  class='editable pending' data-field='ReissueList' contenteditable='true'>----</span>" : "<span  class='editable ' data-field='ReissueList' contenteditable='true'>" + ArgHead[7] + "</span>");
+                        Html = Html.replace("XProductX", (ArgHead[9].equals("NULL") || ArgHead[9] == null) ? "<span  class='editable pending' data-field='Product' contenteditable='true'>----</span>" : "<span  class='editable ' data-field='Product' contenteditable='true'>" + ArgHead[9] + "</span>");
+                        Html = Html.replace("XAbilityX", (ArgHead[10].equals("NULL") || ArgHead[10] == null) ? "<span  class='editable pending' data-field='Ability' contenteditable='true'>----</span>" : "<span  class='editable' data-field='Ability' contenteditable='true'>" + ArgHead[10] + "</span>");
                         Html = Html.replace("XBatchX", Batch);
-                        Html = Html.replace("XQuatityGenX", "<span  class='editable' contenteditable='true'>" + ((ArgHead[11].equals("NULL") || ArgHead[11] == null) ? "----" : ArgHead[11]) + " UNIDADES </span>");
-                        Html = Html.replace("XClient_OrderX", (ArgHead[12].equals("NULL") || ArgHead[12] == null) ? "<span class='editable pending' contenteditable='true'>----</span>" : "<span class='editable' contenteditable='true'>" + ArgHead[12] + "</span>");
+                        Html = Html.replace("XQuatityGenX", "<span  class='editable" + ((ArgHead[11].equals("NULL") || ArgHead[11] == null) ? " pending" : "") + "' data-field='Quantity' contenteditable='true'>" + ((ArgHead[11].equals("NULL") || ArgHead[11] == null) ? "----" : ArgHead[11]) + " UNIDADES </span>");
+                        Html = Html.replace("XClient_OrderX", (ArgHead[12].equals("NULL") || ArgHead[12] == null) ? "<span class='editable pending' data-field='ClientOrder' contenteditable='true'>----</span>" : "<span class='editable' data-field='ClientOrder' contenteditable='true'>" + ArgHead[12] + "</span>");
                         Html = Html.replace("<h3 id=\"consValue\" class=\"mb-0\">XConsX</h3>", "<h3 id=\"consValue\" class=\"mb-0 editable\" contenteditable='true' pending>CC----</h3>");
-                        Html = Html.replace("XCodeSpeedX", (ArgHead[13].equals("NULL") || ArgHead[13] == null) ? "<span  class='editable pending' contenteditable='true'>----</span>" : "<span  class='editable' contenteditable='true'>" + ArgHead[13] + "</span>");
+                        Html = Html.replace("XCodeSpeedX", (ArgHead[13].equals("NULL") || ArgHead[13] == null) ? "<span  class='editable pending' data-field='CodeSpeed' contenteditable='true'>----</span>" : "<span  class='editable' data-field='CodeSpeed' contenteditable='true'>" + ArgHead[13] + "</span>");
 
                         Html = Html.replace("XSampleX", "<span  class='editable pending' contenteditable='true'>----</span>");
                         Html = Html.replace("XNumberPartX", "<span  class='editable pending' contenteditable='true'>----</span>");
                         //</editor-fold>
                     } else {
-                        //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA">
-                        Html = Html.replace("XOrderX", String.valueOf(Order));
-                        Html = Html.replace("XAddressX", "<span  class='editable pending' contenteditable='true'>----</span>");
-                        Html = Html.replace("XPhoneX", "<span  class='editable' contenteditable='true'>----</span>");
-                        Html = Html.replace("XCityX", "<span  class='editable pending' contenteditable='true'>----</span>");
-                        Html = Html.replace("XCountryX", "<span  class='editable pending' contenteditable='true'>----</span>");
-                        Html = Html.replace("XBillX", "<span  class='editable pending' contenteditable='true'>----</span>");
-                        Html = Html.replace("XReissue_listX", "<span  class='editable pending' contenteditable='true'>----</span>");
-                        Html = Html.replace("XProductX", ProductFact);
-                        Html = Html.replace("XAbilityX", "<span  class='editable pending' contenteditable='true'>----</span>");
-                        Html = Html.replace("XBatchX", Batch);
-                        Html = Html.replace("XQuatityGenX", "<span  class='editable pending' contenteditable='true'>---- UNIDADES</span>");
-                        Html = Html.replace("<h3 id=\"consValue\" class=\"mb-0\">XConsX</h3>", "<h3 id=\"consValue\" class=\"mb-0 editable\" contenteditable='true'>CC----</h3>");
-                        Html = Html.replace("XSampleX", "<span  class='editable pending' contenteditable='true'>----</span>");
+                        //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA - FALLBACK TAGS">
+                        lst_tags = FactoryJpa.ConsultTags(Order, ProductFact, Batch);
+                        if (lst_tags != null && !lst_tags.isEmpty() && lst_tags.size() > 0) {
+                            //<editor-fold defaultstate="collapsed" desc="HEAD TAGS">
+                            // Factory no tiene registro por orden/producto/lote: se completa la
+                            // cabecera con lo que haya en Tags (columnas directas + AI_* del JSON
+                            // de AdditionalInformation). XClientX y XClient_OrderX los resuelve más
+                            // abajo el segundo bloque de Tags (fechas), no se tocan aquí.
+                            String[] ArgTags = Util.parseResult(lst_tags.get(1));
+                            Html = Html.replace("XOrderX", (ArgTags[0].equals("NULL")) ? String.valueOf(Order) : ArgTags[0]);
+                            Html = Html.replace("XAddressX", (ArgTags[13].equals("NULL")) ? "<span class='editable pending' data-field='Address' contenteditable='true'>----</span>" : "<span  class='editable' data-field='Address' contenteditable='true'>" + ArgTags[13] + "</span>");
+                            Html = Html.replace("XPhoneX", "<span  class='editable' data-field='Phone' contenteditable='true'>----</span>");
+                            Html = Html.replace("XCityX", (ArgTags[14].equals("NULL")) ? "<span class='editable pending' data-field='City' contenteditable='true'>----</span>" : "<span class='editable' data-field='City' contenteditable='true'>" + ArgTags[14] + "</span>");
+                            Html = Html.replace("XCountryX", (ArgTags[15].equals("NULL")) ? "<span class='editable pending' data-field='Country' contenteditable='true'>----</span>" : "<span class='editable' data-field='Country' contenteditable='true'>" + ArgTags[15] + "</span>");
+                            Html = Html.replace("XBillX", "<span  class='editable pending' data-field='Bill' contenteditable='true'>----</span>");
+                            Html = Html.replace("XReissue_listX", "<span  class='editable pending' data-field='ReissueList' contenteditable='true'>----</span>");
+                            Html = Html.replace("XProductX", (ArgTags[10].equals("NULL")) ? "<span  class='editable' data-field='Product' contenteditable='true'>------</span>" : "<span  class='editable ' data-field='Product' contenteditable='true'>" + ArgTags[10] + "</span>");
+                            Html = Html.replace("XAbilityX", "<span  class='editable pending' data-field='Ability' contenteditable='true'>----</span>");
+                            Html = Html.replace("XBatchX", "<span  class='editable' contenteditable='true'>" + Batch + "</span>");
+                            String cantidadTags = "----";
+                            if (!ArgTags[16].equals("NULL")) {
+                                try {
+                                    long cantidadUnidades = (long) Double.parseDouble(ArgTags[16]);
+                                    cantidadTags = String.format("%,d", cantidadUnidades).replace(",", ".");
+                                } catch (NumberFormatException e) {
+                                    cantidadTags = ArgTags[16];
+                                }
+                            }
+                            Html = Html.replace("XQuatityGenX", "<span  class='editable' data-field='Quantity' contenteditable='true'>" + cantidadTags + " UNIDADES</span>");
+                            Html = Html.replace("<h3 id=\"consValue\" class=\"mb-0\">XConsX</h3>", "<h3 id=\"consValue\" class=\"mb-0 editable\" contenteditable='true'>CC----</h3>");
+                            Html = Html.replace("XSampleX", "<span  class='editable pending' contenteditable='true'>----</span>");
+                            Html = Html.replace("XCodeSpeedX", "<span  class='editable pending' contenteditable='true'>N/A</span>");
+                            Message = "No se encuentra información en Factory por orden, producto y lote; se completó la cabecera con datos de Tags, favor verifique";
+                            // ✅ Ejecutar automáticamente cuando todo esté cargado
+                            out.print("<script>"
+                                    + "window.addEventListener('load',function(){"
+                                    + " registrarEvento('Factory','" + Order + "','" + ProductFact + "','" + Batch + "','" + Message.replace("'", "\\'") + "');"
+                                    + "});"
+                                    + "</script>");
+                            //</editor-fold>
+                        } else {
+                            Html = Html.replace("XOrderX", String.valueOf(Order));
+                            Html = Html.replace("XAddressX", "<span  class='editable pending' data-field='Address' contenteditable='true'>----</span>");
+                            Html = Html.replace("XPhoneX", "<span  class='editable' data-field='Phone' contenteditable='true'>----</span>");
+                            Html = Html.replace("XCityX", "<span  class='editable pending' data-field='City' contenteditable='true'>----</span>");
+                            Html = Html.replace("XCountryX", "<span  class='editable pending' data-field='Country' contenteditable='true'>----</span>");
+                            Html = Html.replace("XBillX", "<span  class='editable pending' data-field='Bill' contenteditable='true'>----</span>");
+                            Html = Html.replace("XReissue_listX", "<span  class='editable pending' data-field='ReissueList' contenteditable='true'>----</span>");
+                            Html = Html.replace("XProductX", "<span  class='editable' data-field='Product' contenteditable='true'>------</span>");
+                            Html = Html.replace("XAbilityX", "<span  class='editable pending' data-field='Ability' contenteditable='true'>----</span>");
+                            Html = Html.replace("XBatchX", "<span  class='editable' contenteditable='true'>" + Batch + "</span>");
+                            Html = Html.replace("XQuatityGenX", "<span  class='editable pending' data-field='Quantity' contenteditable='true'>---- UNIDADES</span>");
+                            Html = Html.replace("<h3 id=\"consValue\" class=\"mb-0\">XConsX</h3>", "<h3 id=\"consValue\" class=\"mb-0 editable\" contenteditable='true'>CC----</h3>");
+                            Html = Html.replace("XSampleX", "<span  class='editable pending' contenteditable='true'>----</span>");
+                            Html = Html.replace("XCodeSpeedX", "<span  class='editable pending' contenteditable='true'>----</span>");
 
-                        Message = "No se encuentra información en Factory por orden, producto y lote, favor verifique";
-
-                        // ✅ Ejecutar automáticamente cuando todo esté cargado
-                        out.print("<script>"
-                                + "window.addEventListener('load',function(){"
-                                + " registrarEvento('Factory','" + Order + "','" + ProductFact + "','" + Batch + "','" + Message.replace("'", "\\'") + "');"
-                                + "});"
-                                + "</script>");
+                            Message = "No se encuentra información en Factory ni en Tags por orden, producto y lote, favor verifique";
+                            // ✅ Ejecutar automáticamente cuando todo esté cargado
+                            out.print("<script>"
+                                    + "window.addEventListener('load',function(){"
+                                    + " registrarEvento('Factory','" + Order + "','" + ProductFact + "','" + Batch + "','" + Message.replace("'", "\\'") + "');"
+                                    + "});"
+                                    + "</script>");
+                        }
                         //</editor-fold>
                     }
                     lst_tags = FactoryJpa.ConsultTags(Order, ProductFact, Batch);
@@ -476,9 +602,9 @@ public class Visual extends TagSupport {
                             Html = Html.replace("XMonthEXPX", "<span  class='editable pending' contenteditable='true'>----</span>");
                             Html = Html.replace("XDayEXPX", "<span  class='editable pending' contenteditable='true'>----</span>");
                         }
-                        Html = Html.replace("XClientX", ArgTags[8]);
-                        Html = Html.replace("XCodeX", ArgTags[9]);
-                        Html = Html.replace("XClient_OrderX", ArgTags[7]);
+                        Html = Html.replace("XClientX", "<span  class='editable' data-field='Client' contenteditable='true'>" + ArgTags[8] + "</span>");
+                        Html = Html.replace("XCodeX", "<span  class='editable' contenteditable='true'>" + ArgTags[7] + "</span>");
+                        Html = Html.replace("XClient_OrderX", "<span  class='editable' data-field='ClientOrder' contenteditable='true'>" + ArgTags[9] + "</span>");
                         //</editor-fold>
                     } else {
                         //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA">
@@ -489,9 +615,9 @@ public class Visual extends TagSupport {
                         Html = Html.replace("XMonthEXPX", "<span  class='editable pending' contenteditable='true'>----</span>");
                         Html = Html.replace("XDayEXPX", "<span  class='editable pending' contenteditable='true'>----</span>");
 
-                        Html = Html.replace("XClientX", "<span  class='editable pending' contenteditable='true'>----</span>");
+                        Html = Html.replace("XClientX", "<span  class='editable pending' data-field='Client' contenteditable='true'>----</span>");
                         Html = Html.replace("XCodeX", "<span  class='editable pending' contenteditable='true'>----</span>");
-                        Html = Html.replace("XClient_OrderX", "<span  class='editable pending' contenteditable='true'>----</span>");
+                        Html = Html.replace("XClient_OrderX", "<span  class='editable pending' data-field='ClientOrder' contenteditable='true'>----</span>");
 
                         Message = "No se encuentra información en Tags por orden, producto y lote, favor verifique";
 
@@ -902,6 +1028,7 @@ public class Visual extends TagSupport {
                             if (lst_RLab != null && !lst_RLab.isEmpty() && lst_RLab.size() > 0) {
                                 //<editor-fold defaultstate="collapsed" desc="MATERIAL REGISTROS LAB AND GENERACION DE LOTES">
                                 String[] ArgMaterials = Util.parseResult(lst_RLab.get(0));
+                                out.print("<input type='hidden' id='ErrorCount' value='" + ArgMaterials[9] + "'>");
                                 String[] etiquetas = {
                                     "REF1", "LBT1", "REF2", "LBT2", "REF3", "LBT3", "REF4", "LBT4", "LBT5"
                                 };
@@ -1466,5 +1593,13 @@ public class Visual extends TagSupport {
                 .replace("\"", "&quot;")
                 .replace("<", "&lt;")
                 .replace(">", "&gt;");
+    }
+
+    private String urlEncode(String value) {
+        try {
+            return java.net.URLEncoder.encode(value == null ? "" : value, "UTF-8");
+        } catch (java.io.UnsupportedEncodingException e) {
+            return "";
+        }
     }
 }

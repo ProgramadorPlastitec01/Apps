@@ -5,9 +5,12 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
+import Controller.SettingJpaController;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import Controller.SettingJpaController;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ConnectionSQLServer {
 
@@ -150,9 +153,14 @@ public class ConnectionSQLServer {
         }
     }
 
+    // Campos que se extraen del JSON de AdditionalInformation del cliente (od.AdditionalInformation)
+    private static final String[] CAMPOS_JSON = {"Code", "Name", "Address", "City", "Country"};
+    // Campos que se extraen del JSON de AdditionalInformation del producto (o.AdditionalInformation)
+    private static final String[] CAMPOS_JSON_PRODUCTO = {"Quantity"};
+
     public List<String> ConsultTags(int Orden, String Producto, String Lote) throws Exception {
         Connection con = null;
-        Statement sttm = null;
+        PreparedStatement sttm = null;
         ResultSet rs = null;
 
         try {
@@ -175,58 +183,86 @@ public class ConnectionSQLServer {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             con = DriverManager.getConnection(url, login, password);
 
-            // Consulta SQL
-            String query = "SELECT top(1) o.OrderNumber,e.OrderLineId, o.ProductCode ,e.BoxNumber, e.Batch,FORMAT( e.CreationDate, 'yyyy-MM-dd') AS CreationDate, FORMAT( e.ExpirationDate, 'yyyy-MM-dd') AS ExpirationDate,  od.AddresseeCode, od.CustomerName, od.PurchaseOrderNumber "
+            // Las dos últimas columnas son JSON: AdditionalInformation del cliente (od) y
+            // AdditionalInformation del producto (o), este último trae Quantity.
+            String query = "SELECT TOP(1) o.OrderNumber, e.OrderLineId, o.ProductCode, e.BoxNumber, e.Batch, "
+                    + "FORMAT(e.CreationDate, 'yyyy-MM-dd') AS CreationDate, "
+                    + "FORMAT(e.ExpirationDate, 'yyyy-MM-dd') AS ExpirationDate, "
+                    + "od.AddresseeCode, od.CustomerName, od.PurchaseOrderNumber, "
+                    + "o.ProductName, "
+                    + "od.AdditionalInformation AS CustomerInfo, "
+                    + "o.AdditionalInformation AS ProductInfo "
                     + "FROM ExternalTag e "
                     + "INNER JOIN OrderLine o ON e.OrderLineId = o.OrderLineId "
                     + "INNER JOIN [dbo].[Order] od ON o.OrderNumber = od.OrderNumber "
-                    + "WHERE o.OrderNumber = " + Orden + " AND o.ProductCode = '" + Producto + "' AND e.Batch = '" + Lote + "' "
-                    + "order by e.BoxNumber asc";
+                    + "WHERE o.OrderNumber = ? AND o.ProductCode = ? AND e.Batch = ? "
+                    + "ORDER BY e.BoxNumber ASC";
 
-            sttm = con.createStatement();
-            rs = sttm.executeQuery(query);
+            sttm = con.prepareStatement(query);
+            sttm.setInt(1, Orden);
+            sttm.setString(2, Producto);
+            sttm.setString(3, Lote);
+            rs = sttm.executeQuery();
 
             List<String> lst_resultado = new ArrayList<>();
             ResultSetMetaData metaData = rs.getMetaData();
             int columnCount = metaData.getColumnCount();
+            int columnaJsonCliente = columnCount - 1;
+            int columnaJsonProducto = columnCount;
 
-            // Crear cabecera
+            // Cabecera: columnas normales + campos de ambos JSON
             StringBuilder header = new StringBuilder();
-            for (int i = 1; i <= columnCount; i++) {
+            for (int i = 1; i < columnaJsonCliente; i++) {
                 if (i > 1) {
                     header.append("]///[");
                 }
                 header.append(metaData.getColumnName(i));
             }
+            for (String campo : CAMPOS_JSON) {
+                header.append("]///[").append("AI_").append(campo);
+            }
+            for (String campo : CAMPOS_JSON_PRODUCTO) {
+                header.append("]///[").append("PI_").append(campo);
+            }
             lst_resultado.add(header.toString());
 
-            // Crear filas
+            // Filas
             int rowCount = 0;
             while (rs.next()) {
                 StringBuilder row = new StringBuilder();
-                for (int i = 1; i <= columnCount; i++) {
+                for (int i = 1; i < columnaJsonCliente; i++) {
                     if (i > 1) {
                         row.append("]///[");
                     }
                     String value = rs.getString(i);
                     row.append(value != null ? value.trim() : "NULL");
                 }
+
+                String jsonCliente = rs.getString(columnaJsonCliente);
+                for (String campo : CAMPOS_JSON) {
+                    String valor = obtenerValorJson(jsonCliente, campo);
+                    row.append("]///[").append(valor != null ? valor : "NULL");
+                }
+
+                String jsonProducto = rs.getString(columnaJsonProducto);
+                for (String campo : CAMPOS_JSON_PRODUCTO) {
+                    String valor = obtenerValorJson(jsonProducto, campo);
+                    row.append("]///[").append(valor != null ? valor : "NULL");
+                }
+
                 lst_resultado.add(row.toString());
                 rowCount++;
             }
 
-            // Si hay cabecera pero no filas → devolver null
             if (rowCount == 0) {
                 return null;
             }
-
             return lst_resultado;
 
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
         } finally {
-            // Liberar recursos de forma segura
             if (rs != null) {
                 try {
                     rs.close();
@@ -246,6 +282,32 @@ public class ConnectionSQLServer {
                 }
             }
         }
+    }
+
+    /**
+     * Extrae el valor de una clave en un JSON simple, p. ej. "City":"BOGOTÁ
+     * (D.C)" o "Quantity":1478400.0. Tolera JSON mal formado (como la falta
+     * de '{') y comillas escapadas dentro del valor, y además valores
+     * numéricos/booleanos/null sin comillas. Devuelve null si la clave no
+     * existe o el valor está vacío.
+     */
+    private static String obtenerValorJson(String json, String clave) {
+        if (json == null || json.isEmpty()) {
+            return null;
+        }
+
+        Pattern p = Pattern.compile("\"" + Pattern.quote(clave) + "\"\\s*:\\s*"
+                + "(?:\"((?:[^\"\\\\]|\\\\.)*)\"|([^,}\\]]+))");
+        Matcher m = p.matcher(json);
+        if (!m.find()) {
+            return null;
+        }
+
+        String valor = m.group(1) != null
+                ? m.group(1).replace("\\\"", "\"").replace("\\\\", "\\")
+                : m.group(2);
+        valor = valor == null ? null : valor.trim();
+        return (valor == null || valor.isEmpty() || valor.equalsIgnoreCase("null")) ? null : valor;
     }
 
 }
