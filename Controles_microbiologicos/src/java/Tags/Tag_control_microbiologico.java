@@ -152,36 +152,40 @@ public class Tag_control_microbiologico extends TagSupport {
                     out.print("<th>Estado</th>");
 //                    out.print("<th>Generar <br> Graficas</th>");
                     out.print("</tr>");
-                    for (int i = 0; i < lst_controles_cabecera.size(); i++) {
-                        Object[] obj_control_cabecera = (Object[]) lst_controles_cabecera.get(i);
-                        lst_control_detalle = jpacapa.Consulta_detalle_analisis((Integer) obj_control_cabecera[0]);
-                        out.print("<tr>");
-                        out.print("<td align='center'><b>" + obj_control_cabecera[2] + "</b></td>");
-                        out.print("<td>" + obj_control_cabecera[4] + "</td>");
-                        out.print("<td>" + obj_control_cabecera[8] + "</td>");
-                        out.print("<td>" + obj_control_cabecera[7] + "</td>");
-                        out.print("<td>" + obj_control_cabecera[11] + "</td>");
-                        out.print("<td>" + obj_control_cabecera[5] + "</td>");
-                        out.print("<td>" + obj_control_cabecera[6] + "</td>");
-                        if (obj_control_cabecera[18] != null) {
-                            out.print("<td>" + obj_control_cabecera[18] + "</td>");
-                        } else {
-                            out.print("<td>N/A</td>");
-                        }
-                        if (lst_control_detalle != null) {
-                            out.print("<td align='center'><a href='Control_microbiologico?opc=3&icb=" + obj_control_cabecera[0] + "'><img src='Interfaz/Contenido/Iconos/Ver.png' width='25px' height='25px' alt='edit' title='Iniciar Registro' /></a></td>");
-                        } else {
-                            out.print("<td align='center'><a href='Control_microbiologico?opc=7&icb=" + obj_control_cabecera[0] + "&tipoN=" + obj_control_cabecera[14] + "&analisis=" + obj_control_cabecera[2] + "'><img src='Interfaz/Contenido/Iconos/Ver.png' width='25px' height='25px' alt='edit' title='Iniciar Registro' /></a></td>");
-                        }
+                    if (lst_controles_cabecera != null) {
+                        for (int i = 0; i < lst_controles_cabecera.size(); i++) {
+                            Object[] obj_control_cabecera = (Object[]) lst_controles_cabecera.get(i);
+                            lst_control_detalle = jpacapa.Consulta_detalle_analisis((Integer) obj_control_cabecera[0]);
+                            out.print("<tr>");
+                            out.print("<td align='center'><b>" + obj_control_cabecera[2] + "</b></td>");
+                            out.print("<td>" + obj_control_cabecera[4] + "</td>");
+                            out.print("<td>" + obj_control_cabecera[8] + "</td>");
+                            out.print("<td>" + obj_control_cabecera[7] + "</td>");
+                            out.print("<td>" + obj_control_cabecera[11] + "</td>");
+                            out.print("<td>" + obj_control_cabecera[5] + "</td>");
+                            out.print("<td>" + obj_control_cabecera[6] + "</td>");
+                            if (obj_control_cabecera[18] != null) {
+                                out.print("<td>" + obj_control_cabecera[18] + "</td>");
+                            } else {
+                                out.print("<td>N/A</td>");
+                            }
+                            if (lst_control_detalle != null) {
+                                out.print("<td align='center'><a href='Control_microbiologico?opc=3&icb=" + obj_control_cabecera[0] + "'><img src='Interfaz/Contenido/Iconos/Ver.png' width='25px' height='25px' alt='edit' title='Iniciar Registro' /></a></td>");
+                            } else {
+                                out.print("<td align='center'><a href='Control_microbiologico?opc=7&icb=" + obj_control_cabecera[0] + "&tipoN=" + obj_control_cabecera[14] + "&analisis=" + obj_control_cabecera[2] + "'><img src='Interfaz/Contenido/Iconos/Ver.png' width='25px' height='25px' alt='edit' title='Iniciar Registro' /></a></td>");
+                            }
 //                        out.print("<td align='center'><a href='Reporte1.jsp?cabecera=" + obj_control_cabecera[0] + "'><img src='Interfaz/Contenido/Iconos/Estadistica.png' width='26px' height='26px' alt='edit' title='Iniciar Registro' /></a></td>");
-                        if (Integer.parseInt(obj_control_cabecera[15].toString()) == 1) {
-                            // out.print("<td align='center'><a href='Control_microbiologico?opc=5&icb=" + obj_control_cabecera[0] + "&analisis=" + obj_control_cabecera[2] + "&est=0'><img src='Interfaz/Contenido/Iconos/Open.png' width='25px' height='25px' alt='edit' title='Estado' /></a></td>");
-                            out.print("<td align='center'><a href='#' onclick='Cerrar_Analisis(" + obj_control_cabecera[0] + ")'><img src='Interfaz/Contenido/Iconos/Open.png' width='25px' height='25px' alt='edit' title='Estado' /></a></td>");
-                        } else {
-                            // out.print("<td align='center'><a href='Control_microbiologico?opc=5&icb=" + obj_control_cabecera[0] + "&analisis=" + obj_control_cabecera[2] + "&est=1'><img src='Interfaz/Contenido/Iconos/Close.png' width='25px' height='25px' alt='edit' title='Estado' /></a></td>");
-                            out.print("<td align='center'><a href='#' onclick='Abrir_Analisis(" + obj_control_cabecera[0] + ")'><img src='Interfaz/Contenido/Iconos/Close.png' width='25px' height='25px' alt='edit' title='Abrir Analisis' /></a></td>");
+                            if (Integer.parseInt(obj_control_cabecera[15].toString()) == 1) {
+                                // out.print("<td align='center'><a href='Control_microbiologico?opc=5&icb=" + obj_control_cabecera[0] + "&analisis=" + obj_control_cabecera[2] + "&est=0'><img src='Interfaz/Contenido/Iconos/Open.png' width='25px' height='25px' alt='edit' title='Estado' /></a></td>");
+                                out.print("<td align='center'><a href='#' onclick='Cerrar_Analisis(" + obj_control_cabecera[0] + ")'><img src='Interfaz/Contenido/Iconos/Open.png' width='25px' height='25px' alt='edit' title='Estado' /></a></td>");
+                            } else {
+                                // out.print("<td align='center'><a href='Control_microbiologico?opc=5&icb=" + obj_control_cabecera[0] + "&analisis=" + obj_control_cabecera[2] + "&est=1'><img src='Interfaz/Contenido/Iconos/Close.png' width='25px' height='25px' alt='edit' title='Estado' /></a></td>");
+                                out.print("<td align='center'><a href='#' onclick='Abrir_Analisis(" + obj_control_cabecera[0] + ")'><img src='Interfaz/Contenido/Iconos/Close.png' width='25px' height='25px' alt='edit' title='Abrir Analisis' /></a></td>");
+                            }
+                            out.print("</tr>");
                         }
-                        out.print("</tr>");
+                    } else {
+                        out.print("<tr><td colspan='10' style='text-align:center'>Sin datos registrados</td></tr>");
                     }
                     out.print("</table>");
                     out.print("<script type='text/javascript'>");
@@ -248,7 +252,7 @@ public class Tag_control_microbiologico extends TagSupport {
                                 Object[] obj_tipos_area = (Object[]) lst_tipos_area.get(i);
                                 out.print("<option value='" + obj_tipos_area[0] + "'>" + obj_tipos_area[1] + "</option>");
                             }
-                             out.print("</select>"
+                            out.print("</select>"
                                     + "<script type='text/javascript'>var mySelect = new LiveValidation('Cbx_tipo_area');"
                                     + "mySelect.add(Validate.Exclusion, { within: ['0'], failureMessage: \"\"});</script>");
                         } else {
