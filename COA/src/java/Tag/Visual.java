@@ -488,7 +488,25 @@ public class Visual extends TagSupport {
                 out.print("<div class='p-3'>");
                 if (IdCertificates == 0) {
                     //<editor-fold defaultstate="collapsed" desc="GENERATION CERO">
-                    lst_headFact = FactoryJpa.Products(Order, ProductFact, Batch);
+                    // R-GC-074: el producto dimensional (Product/ProductFact) es el que
+                    // usan los controles (materiales, dimensional), pero Factory/Tags
+                    // identifican la orden por el producto terminado o complementario,
+                    // nunca por el dimensional. Se resuelve aparte y solo se usa para
+                    // las dos búsquedas de cabecera de más abajo; si no se puede
+                    // resolver, se cae al ProductFact de siempre (comportamiento actual).
+                    String ProductFactCabecera = ProductFact;
+                    if (IdForm == 2) {
+                        try {
+                            String productoTerminado = RegistrosLabJpa.ConsultProductoFactoryRGC74(Order, Product, Batch);
+                            if (productoTerminado != null && !productoTerminado.isEmpty()) {
+                                ProductFactCabecera = productoTerminado.replace("2C", "3C");
+                            }
+                        } catch (Exception ex) {
+                            Logger.getLogger(Visual.class.getName()).log(Level.WARNING,
+                                    "No fue posible resolver el producto terminado/complementario (R-GC-074) para Order=" + Order, ex);
+                        }
+                    }
+                    lst_headFact = FactoryJpa.Products(Order, ProductFactCabecera, Batch);
                     if (lst_headFact != null && !lst_headFact.isEmpty() && lst_headFact.size() > 0) {
                         //<editor-fold defaultstate="collapsed" desc="HEAD FACTORY">
                         String[] ArgHead = Util.parseResult(lst_headFact.get(1));
@@ -513,7 +531,7 @@ public class Visual extends TagSupport {
                         //</editor-fold>
                     } else {
                         //<editor-fold defaultstate="collapsed" desc="VALIDATION NO DATA - FALLBACK TAGS">
-                        lst_tags = FactoryJpa.ConsultTags(Order, ProductFact, Batch);
+                        lst_tags = FactoryJpa.ConsultTags(Order, ProductFactCabecera, Batch);
                         if (lst_tags != null && !lst_tags.isEmpty() && lst_tags.size() > 0) {
                             //<editor-fold defaultstate="collapsed" desc="HEAD TAGS">
                             // Factory no tiene registro por orden/producto/lote: se completa la
@@ -528,8 +546,18 @@ public class Visual extends TagSupport {
                             Html = Html.replace("XCountryX", (ArgTags[15].equals("NULL")) ? "<span class='editable pending' data-field='Country' contenteditable='true'>----</span>" : "<span class='editable' data-field='Country' contenteditable='true'>" + ArgTags[15] + "</span>");
                             Html = Html.replace("XBillX", "<span  class='editable pending' data-field='Bill' contenteditable='true'>----</span>");
                             Html = Html.replace("XReissue_listX", "<span  class='editable pending' data-field='ReissueList' contenteditable='true'>----</span>");
-                            Html = Html.replace("XProductX", (ArgTags[10].equals("NULL")) ? "<span  class='editable' data-field='Product' contenteditable='true'>------</span>" : "<span  class='editable ' data-field='Product' contenteditable='true'>" + ArgTags[10] + "</span>");
-                            Html = Html.replace("XAbilityX", "<span  class='editable pending' data-field='Ability' contenteditable='true'>----</span>");
+                            // Tags trae el volumen pegado al nombre ("...2000mL..."), a
+                            // diferencia de Factory que ya lo separa en SQL; se extrae aquí
+                            // para que CAPACIDAD/SIZE no quede pendiente cuando sí hay dato.
+                            String nombreProductoTags = ArgTags[10].equals("NULL") ? null : ArgTags[10];
+                            String capacidadTags = null;
+                            String[] volumenSeparado = Util.separarVolumenDelNombre(nombreProductoTags);
+                            if (volumenSeparado != null) {
+                                nombreProductoTags = volumenSeparado[0];
+                                capacidadTags = volumenSeparado[1];
+                            }
+                            Html = Html.replace("XProductX", (nombreProductoTags == null || nombreProductoTags.isEmpty()) ? "<span  class='editable' data-field='Product' contenteditable='true'>------</span>" : "<span  class='editable ' data-field='Product' contenteditable='true'>" + nombreProductoTags + "</span>");
+                            Html = Html.replace("XAbilityX", (capacidadTags == null) ? "<span  class='editable pending' data-field='Ability' contenteditable='true'>----</span>" : "<span  class='editable' data-field='Ability' contenteditable='true'>" + capacidadTags + "</span>");
                             Html = Html.replace("XBatchX", "<span  class='editable' contenteditable='true'>" + Batch + "</span>");
                             String cantidadTags = "----";
                             if (!ArgTags[16].equals("NULL")) {
@@ -578,7 +606,7 @@ public class Visual extends TagSupport {
                         }
                         //</editor-fold>
                     }
-                    lst_tags = FactoryJpa.ConsultTags(Order, ProductFact, Batch);
+                    lst_tags = FactoryJpa.ConsultTags(Order, ProductFactCabecera, Batch);
                     if (lst_tags != null && !lst_tags.isEmpty() && lst_tags.size() > 0) {
                         //<editor-fold defaultstate="collapsed" desc="DATE MANUFACTURE AND EXPIRATION">
                         String[] ArgTags = Util.parseResult(lst_tags.get(1));

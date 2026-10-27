@@ -46,8 +46,7 @@ public class SystemStatusChecker {
         resultados.add(checkMySql("Inspección Manga", "ServerInspeccionManga", "com.mysql.jdbc.Driver"));
         resultados.add(checkMySql("Control Fórmulas", "ServerControlFormulas", "com.mysql.jdbc.Driver"));
         resultados.add(checkMySql("Firmas digitales", "ServerSignature", "com.mysql.jdbc.Driver"));
-        resultados.add(checkSqlServer("ERP Plastitec (Productos)", "ServerSQLServerFactory"));
-        resultados.add(checkSqlServer("ERP Plastitec (Tags)", "ServerSQLServerTags"));
+        resultados.addAll(checkSqlServerPlastitec());
         resultados.add(checkOfficePlatform());
         return resultados;
     }
@@ -82,31 +81,85 @@ public class SystemStatusChecker {
         }
     }
 
-    private static CheckResult checkSqlServer(String nombre, String categoria) {
-        long inicio = System.currentTimeMillis();
-        try {
-            List lst_parameter = SETTING_JPA.ConsultSettingCategorie(categoria);
-            if (lst_parameter == null || lst_parameter.isEmpty()) {
-                return new CheckResult(nombre, false, "No hay configuración en Setting para la categoría '" + categoria + "'.", System.currentTimeMillis() - inicio);
-            }
-            Object[] obj_data = (Object[]) lst_parameter.get(0);
-            String[] arr_data = obj_data[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
-            String login = arr_data[0];
-            String password = arr_data[1];
-            String url = "jdbc:sqlserver://" + arr_data[2];
+    // Blips de red puntuales (ej. firewall que limita conexiones concurrentes
+    // por IP origen) pueden tumbar un solo intento aunque el host sí esté
+    // disponible. Un segundo intento, tras una espera corta, evita marcar
+    // "Sin conexión" por algo transitorio sin ocultar una caída real (si el
+    // segundo intento también falla, se reporta igual que antes).
+    private static final int INTENTOS_SQL_SERVER = 2;
+    private static final long ESPERA_ENTRE_INTENTOS_MS = 1000;
 
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            Connection conn = null;
+    // "ERP Plastitec (Productos)" y "ERP Plastitec (Tags)" son la MISMA instancia
+    // de SQL Server (mismo host:puerto), solo cambia la base de datos. Antes cada
+    // una abría su propio login contra el servidor, y era posible que al abrir una
+    // la otra se cayera por competir contra el mismo servidor. Ahora se abre una
+    // única conexión al servidor y, ya establecida, se distribuye hacia cada BD
+    // con setCatalog, sin volver a autenticar.
+    private static final String SETTING_CATEGORY_PLASTITEC = "ServerSQLServerPlastitec";
+    private static final String DB_FACTORY = "EMP001_FACT";
+    private static final String DB_TAGS = "TagsLogic";
+
+    private static List<CheckResult> checkSqlServerPlastitec() {
+        long inicio = System.currentTimeMillis();
+        String ultimoError = null;
+        for (int intento = 1; intento <= INTENTOS_SQL_SERVER; intento++) {
+            Connection con = null;
             try {
+                List lst_parameter = SETTING_JPA.ConsultSettingCategorie(SETTING_CATEGORY_PLASTITEC);
+                if (lst_parameter == null || lst_parameter.isEmpty()) {
+                    ultimoError = "No hay configuración en Setting para la categoría '" + SETTING_CATEGORY_PLASTITEC + "'.";
+                    break;
+                }
+                Object[] obj_data = (Object[]) lst_parameter.get(0);
+                String[] arr_data = obj_data[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                String login = arr_data[0];
+                String password = arr_data[1];
+                String url = "jdbc:sqlserver://" + arr_data[2];
+
+                Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
                 DriverManager.setLoginTimeout(5);
-                conn = DriverManager.getConnection(url, login, password);
-                boolean valido = conn.isValid(4);
-                return new CheckResult(nombre, valido, valido ? "Conexión establecida." : "La conexión no respondió a tiempo.", System.currentTimeMillis() - inicio);
+                con = DriverManager.getConnection(url, login, password);
+                if (!con.isValid(4)) {
+                    throw new Exception("La conexión al servidor no respondió a tiempo.");
+                }
+
+                List<CheckResult> resultados = new ArrayList<CheckResult>();
+                resultados.add(probarBaseDeDatos(con, "ERP Plastitec (Productos)", DB_FACTORY, inicio));
+                resultados.add(probarBaseDeDatos(con, "ERP Plastitec (Tags)", DB_TAGS, inicio));
+                return resultados;
+            } catch (Exception ex) {
+                ultimoError = ex.getMessage();
             } finally {
-                if (conn != null) {
-                    conn.close();
+                if (con != null) {
+                    try {
+                        con.close();
+                    } catch (Exception ignore) {
+                    }
                 }
             }
+            if (intento < INTENTOS_SQL_SERVER) {
+                try {
+                    Thread.sleep(ESPERA_ENTRE_INTENTOS_MS);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
+            }
+        }
+
+        String detalle = ultimoError + " (falló tras " + INTENTOS_SQL_SERVER + " intentos)";
+        long tiempoMs = System.currentTimeMillis() - inicio;
+        List<CheckResult> fallo = new ArrayList<CheckResult>();
+        fallo.add(new CheckResult("ERP Plastitec (Productos)", false, detalle, tiempoMs));
+        fallo.add(new CheckResult("ERP Plastitec (Tags)", false, detalle, tiempoMs));
+        return fallo;
+    }
+
+    private static CheckResult probarBaseDeDatos(Connection con, String nombre, String baseDatos, long inicio) {
+        try {
+            con.setCatalog(baseDatos);
+            boolean valido = con.isValid(4);
+            return new CheckResult(nombre, valido, valido ? "Conexión establecida." : "La conexión no respondió a tiempo.", System.currentTimeMillis() - inicio);
         } catch (Exception ex) {
             return new CheckResult(nombre, false, ex.getMessage(), System.currentTimeMillis() - inicio);
         }

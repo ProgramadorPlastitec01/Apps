@@ -20,30 +20,45 @@ public class ConnectionSQLServer {
     static String password = "";
     static String url = "";
 
+    // Factory y Tags son la MISMA instancia de SQL Server (mismo host:puerto),
+    // solo cambia la base de datos. Se unifica en una única categoría de Setting
+    // para no abrir dos conexiones/login independientes contra el mismo servidor
+    // (eso podía hacer que una se cayera al competir con la otra): primero se
+    // abre la conexión al servidor y luego se distribuye hacia la BD puntual
+    // con setCatalog.
+    private static final String SETTING_CATEGORY_PLASTITEC = "ServerSQLServerPlastitec";
+    private static final String DB_FACTORY = "EMP001_FACT";
+    private static final String DB_TAGS = "TagsLogic";
+
+    private Connection obtenerConexionPlastitec(String baseDatos) throws Exception {
+        List lst_parameter = SettingJpa.ConsultSettingCategorie(SETTING_CATEGORY_PLASTITEC);
+        if (lst_parameter == null || lst_parameter.isEmpty()) {
+            throw new Exception("No hay configuración en Setting para la categoría '" + SETTING_CATEGORY_PLASTITEC + "'.");
+        }
+
+        Object[] obj_data = (Object[]) lst_parameter.get(0);
+        String[] arr_data = obj_data[2].toString()
+                .replace("][", "///")
+                .replace("[", "")
+                .replace("]", "")
+                .split("///");
+        String login = arr_data[0];
+        String password = arr_data[1];
+        String url = "jdbc:sqlserver://" + arr_data[2];
+
+        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        Connection con = DriverManager.getConnection(url, login, password);
+        con.setCatalog(baseDatos);
+        return con;
+    }
+
     public List<String> Products(int Orden, String Producto, String Lote) throws Exception {
         Connection con = null;
         Statement sttm = null;
         ResultSet rs = null;
 
         try {
-            // Obtener parámetros de conexión
-            List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerSQLServerFactory");
-            if (lst_parameter == null || lst_parameter.isEmpty()) {
-                return null;
-            }
-
-            Object[] obj_data = (Object[]) lst_parameter.get(0);
-            String[] arr_data = obj_data[2].toString()
-                    .replace("][", "///")
-                    .replace("[", "")
-                    .replace("]", "")
-                    .split("///");
-            String login = arr_data[0];
-            String password = arr_data[1];
-            String url = "jdbc:sqlserver://" + arr_data[2];
-
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            con = DriverManager.getConnection(url, login, password);
+            con = obtenerConexionPlastitec(DB_FACTORY);
 
             // Consulta SQL
             String query = "SELECT "
@@ -164,24 +179,7 @@ public class ConnectionSQLServer {
         ResultSet rs = null;
 
         try {
-            // Obtener parámetros de conexión
-            List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerSQLServerTags");
-            if (lst_parameter == null || lst_parameter.isEmpty()) {
-                return null;
-            }
-
-            Object[] obj_data = (Object[]) lst_parameter.get(0);
-            String[] arr_data = obj_data[2].toString()
-                    .replace("][", "///")
-                    .replace("[", "")
-                    .replace("]", "")
-                    .split("///");
-            String login = arr_data[0];
-            String password = arr_data[1];
-            String url = "jdbc:sqlserver://" + arr_data[2];
-
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            con = DriverManager.getConnection(url, login, password);
+            con = obtenerConexionPlastitec(DB_TAGS);
 
             // Las dos últimas columnas son JSON: AdditionalInformation del cliente (od) y
             // AdditionalInformation del producto (o), este último trae Quantity.

@@ -18,6 +18,27 @@ public class Util {
         return (valor.isEmpty() || valor.equalsIgnoreCase("NULL")) ? null : valor;
     }
 
+    /**
+     * Tags trae el nombre del producto con el volumen embebido (ej. "BOLSA
+     * NUTRIBAG BB 2000mL 3V BCT-EE"), a diferencia de Factory, que ya lo
+     * separa en SQL (columnas Producto y Volumen). Devuelve
+     * {nombreSinVolumen, volumen}, o null si el nombre no trae un patrón
+     * "NNNmL" que separar.
+     */
+    public static String[] separarVolumenDelNombre(String nombreProducto) {
+        if (nombreProducto == null) {
+            return null;
+        }
+        Matcher m = Pattern.compile("\\d+\\s*mL", Pattern.CASE_INSENSITIVE).matcher(nombreProducto);
+        if (!m.find()) {
+            return null;
+        }
+        String volumen = m.group().trim();
+        String nombreSinVolumen = (nombreProducto.substring(0, m.start()) + nombreProducto.substring(m.end()))
+                .replaceAll("\\s+", " ").trim();
+        return new String[]{nombreSinVolumen, volumen};
+    }
+
     public static class ResultadoActualizacionPendientes {
         public final String html;
         public final int camposActualizados;

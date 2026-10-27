@@ -787,6 +787,111 @@ public class ConnectionRegistrosLAB {
         //</editor-fold>
     }
 
+    // Extrae el código de producto de un texto "FT-XXXX VN / CODIGO / NOMBRE ___ sufijo|"
+    // (como vienen producto.ft_terminado / producto.ft_complementario). Devuelve null si
+    // el texto es "N/A", viene vacío, o no tiene el formato esperado (al menos dos " / ").
+    private static String extraerCodigoProducto(String textoFt) {
+        if (textoFt == null) {
+            return null;
+        }
+        String limpio = textoFt.trim();
+        if (limpio.isEmpty() || limpio.equalsIgnoreCase("N/A")) {
+            return null;
+        }
+        // ft_complementario puede venir envuelto en corchetes: "[FT-... / COD / NOMBRE...]"
+        if (limpio.startsWith("[") && limpio.endsWith("]")) {
+            limpio = limpio.substring(1, limpio.length() - 1).trim();
+        }
+        String[] partes = limpio.split("/");
+        if (partes.length < 2) {
+            return null;
+        }
+        String codigo = partes[1].trim();
+        return codigo.isEmpty() ? null : codigo;
+    }
+
+    /**
+     * R-GC-074: el producto con el que se registra el material/control
+     * dimensional (producto.codigo) es el producto DIMENSIONAL, pero Factory
+     * y Tags identifican la orden por el producto TERMINADO o
+     * COMPLEMENTARIO (producto.ft_terminado / ft_complementario) — nunca por
+     * el dimensional. Esta consulta resuelve ese código para usarlo
+     * únicamente en las búsquedas de cabecera (Factory/Tags), sin mezclarlo
+     * con el producto dimensional que siguen usando los controles.
+     * Prioriza ft_terminado; si no hay o no se puede extraer, intenta con
+     * ft_complementario. Devuelve null si ninguno sirve (el llamador debe
+     * seguir usando el producto dimensional como respaldo).
+     */
+    public String ConsultProductoFactoryRGC74(int Order, String Product, String Batch) throws Exception {
+        List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerRegistrosLab");
+        if (lst_parameter == null) {
+            return null;
+        }
+        Object[] obj_data = (Object[]) lst_parameter.get(0);
+        String[] arr_data = obj_data[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+        login = arr_data[0];
+        password = arr_data[1];
+        url = "jdbc:mysql://" + arr_data[2];
+
+        String[] BatchCicle = {};
+        if (Batch.contains("///")) {
+            BatchCicle = Batch.split("///");
+        }
+
+        Connection conn = null;
+        Statement sttm = null;
+        ResultSet rs = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            conn = DriverManager.getConnection(url, login, password);
+            if (conn == null) {
+                return null;
+            }
+            String Qry = "SELECT p.ft_terminado, p.ft_complementario "
+                    + "FROM orden_produccion o "
+                    + "INNER JOIN producto p ON o.id_orden_produccion = p.id_orden_produccion "
+                    + "INNER JOIN registro r ON p.id_producto = r.id_producto "
+                    + "INNER JOIN linea l ON r.id_linea = l.id_linea "
+                    + "WHERE o.numero = " + Order + " "
+                    + "  AND p.codigo LIKE CONCAT('%','" + Product + "', '%') "
+                    + "  AND r.lote_producto LIKE CONCAT('%', '" + ((BatchCicle.length == 2) ? BatchCicle[0] : Batch) + "', '%') "
+                    + ((BatchCicle.length == 2) ? "  AND r.ciclo_esterilizacion = '" + BatchCicle[1] + "' " : "")
+                    + "  AND l.nombre NOT LIKE '%SCREEN%' "
+                    + "LIMIT 1";
+            sttm = conn.createStatement();
+            rs = sttm.executeQuery(Qry);
+            if (rs.next()) {
+                String codigoTerminado = extraerCodigoProducto(rs.getString("ft_terminado"));
+                if (codigoTerminado != null) {
+                    return codigoTerminado;
+                }
+                return extraerCodigoProducto(rs.getString("ft_complementario"));
+            }
+            return null;
+        } catch (Exception ex) {
+            return null;
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (Exception ignore) {
+                }
+            }
+            if (sttm != null) {
+                try {
+                    sttm.close();
+                } catch (Exception ignore) {
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (Exception ignore) {
+                }
+            }
+        }
+    }
+
     public List ConsultMaterialsRGC194(int Order, String Product, String Batch) throws Exception {
         //<editor-fold defaultstate="collapsed" desc="CONSULT_MATERIALS R-GC-194">
         List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerRegistrosLab");
