@@ -170,8 +170,6 @@ public class ConnectionSQLServer {
 
     // Campos que se extraen del JSON de AdditionalInformation del cliente (od.AdditionalInformation)
     private static final String[] CAMPOS_JSON = {"Code", "Name", "Address", "City", "Country"};
-    // Campos que se extraen del JSON de AdditionalInformation del producto (o.AdditionalInformation)
-    private static final String[] CAMPOS_JSON_PRODUCTO = {"Quantity"};
 
     public List<String> ConsultTags(int Orden, String Producto, String Lote) throws Exception {
         Connection con = null;
@@ -181,15 +179,19 @@ public class ConnectionSQLServer {
         try {
             con = obtenerConexionPlastitec(DB_TAGS);
 
-            // Las dos últimas columnas son JSON: AdditionalInformation del cliente (od) y
-            // AdditionalInformation del producto (o), este último trae Quantity.
+            // TotalQuantity suma las cajas (ExternalTag) de ese mismo OrderLine+Lote
+            // puntual, no el total de toda la orden de producción (que es lo que
+            // traía antes el campo Quantity del JSON AdditionalInformation del
+            // producto). La última columna sigue siendo JSON: AdditionalInformation
+            // del cliente (od).
             String query = "SELECT TOP(1) o.OrderNumber, e.OrderLineId, o.ProductCode, e.BoxNumber, e.Batch, "
                     + "FORMAT(e.CreationDate, 'yyyy-MM-dd') AS CreationDate, "
                     + "FORMAT(e.ExpirationDate, 'yyyy-MM-dd') AS ExpirationDate, "
                     + "od.AddresseeCode, od.CustomerName, od.PurchaseOrderNumber, "
                     + "o.ProductName, "
-                    + "od.AdditionalInformation AS CustomerInfo, "
-                    + "o.AdditionalInformation AS ProductInfo "
+                    + "(SELECT SUM(e2.Quantity) FROM ExternalTag e2 "
+                    + "     WHERE e2.OrderLineId = e.OrderLineId AND e2.Batch = e.Batch) AS TotalQuantity, "
+                    + "od.AdditionalInformation AS CustomerInfo "
                     + "FROM ExternalTag e "
                     + "INNER JOIN OrderLine o ON e.OrderLineId = o.OrderLineId "
                     + "INNER JOIN [dbo].[Order] od ON o.OrderNumber = od.OrderNumber "
@@ -205,10 +207,9 @@ public class ConnectionSQLServer {
             List<String> lst_resultado = new ArrayList<>();
             ResultSetMetaData metaData = rs.getMetaData();
             int columnCount = metaData.getColumnCount();
-            int columnaJsonCliente = columnCount - 1;
-            int columnaJsonProducto = columnCount;
+            int columnaJsonCliente = columnCount;
 
-            // Cabecera: columnas normales + campos de ambos JSON
+            // Cabecera: columnas normales + campos del JSON del cliente
             StringBuilder header = new StringBuilder();
             for (int i = 1; i < columnaJsonCliente; i++) {
                 if (i > 1) {
@@ -218,9 +219,6 @@ public class ConnectionSQLServer {
             }
             for (String campo : CAMPOS_JSON) {
                 header.append("]///[").append("AI_").append(campo);
-            }
-            for (String campo : CAMPOS_JSON_PRODUCTO) {
-                header.append("]///[").append("PI_").append(campo);
             }
             lst_resultado.add(header.toString());
 
@@ -239,12 +237,6 @@ public class ConnectionSQLServer {
                 String jsonCliente = rs.getString(columnaJsonCliente);
                 for (String campo : CAMPOS_JSON) {
                     String valor = obtenerValorJson(jsonCliente, campo);
-                    row.append("]///[").append(valor != null ? valor : "NULL");
-                }
-
-                String jsonProducto = rs.getString(columnaJsonProducto);
-                for (String campo : CAMPOS_JSON_PRODUCTO) {
-                    String valor = obtenerValorJson(jsonProducto, campo);
                     row.append("]///[").append(valor != null ? valor : "NULL");
                 }
 
@@ -284,8 +276,8 @@ public class ConnectionSQLServer {
 
     /**
      * Extrae el valor de una clave en un JSON simple, p. ej. "City":"BOGOTÁ
-     * (D.C)" o "Quantity":1478400.0. Tolera JSON mal formado (como la falta
-     * de '{') y comillas escapadas dentro del valor, y además valores
+     * (D.C)" o "Quantity":1478400.0. Tolera JSON mal formado (como la falta de
+     * '{') y comillas escapadas dentro del valor, y además valores
      * numéricos/booleanos/null sin comillas. Devuelve null si la clave no
      * existe o el valor está vacío.
      */

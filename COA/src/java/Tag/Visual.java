@@ -540,10 +540,10 @@ public class Visual extends TagSupport {
                             // abajo el segundo bloque de Tags (fechas), no se tocan aquí.
                             String[] ArgTags = Util.parseResult(lst_tags.get(1));
                             Html = Html.replace("XOrderX", (ArgTags[0].equals("NULL")) ? String.valueOf(Order) : ArgTags[0]);
-                            Html = Html.replace("XAddressX", (ArgTags[13].equals("NULL")) ? "<span class='editable pending' data-field='Address' contenteditable='true'>----</span>" : "<span  class='editable' data-field='Address' contenteditable='true'>" + ArgTags[13] + "</span>");
+                            Html = Html.replace("XAddressX", (ArgTags[14].equals("NULL")) ? "<span class='editable pending' data-field='Address' contenteditable='true'>----</span>" : "<span  class='editable' data-field='Address' contenteditable='true'>" + ArgTags[14] + "</span>");
                             Html = Html.replace("XPhoneX", "<span  class='editable' data-field='Phone' contenteditable='true'>----</span>");
-                            Html = Html.replace("XCityX", (ArgTags[14].equals("NULL")) ? "<span class='editable pending' data-field='City' contenteditable='true'>----</span>" : "<span class='editable' data-field='City' contenteditable='true'>" + ArgTags[14] + "</span>");
-                            Html = Html.replace("XCountryX", (ArgTags[15].equals("NULL")) ? "<span class='editable pending' data-field='Country' contenteditable='true'>----</span>" : "<span class='editable' data-field='Country' contenteditable='true'>" + ArgTags[15] + "</span>");
+                            Html = Html.replace("XCityX", (ArgTags[15].equals("NULL")) ? "<span class='editable pending' data-field='City' contenteditable='true'>----</span>" : "<span class='editable' data-field='City' contenteditable='true'>" + ArgTags[15] + "</span>");
+                            Html = Html.replace("XCountryX", (ArgTags[16].equals("NULL")) ? "<span class='editable pending' data-field='Country' contenteditable='true'>----</span>" : "<span class='editable' data-field='Country' contenteditable='true'>" + ArgTags[16] + "</span>");
                             Html = Html.replace("XBillX", "<span  class='editable pending' data-field='Bill' contenteditable='true'>----</span>");
                             Html = Html.replace("XReissue_listX", "<span  class='editable pending' data-field='ReissueList' contenteditable='true'>----</span>");
                             // Tags trae el volumen pegado al nombre ("...2000mL..."), a
@@ -559,13 +559,15 @@ public class Visual extends TagSupport {
                             Html = Html.replace("XProductX", (nombreProductoTags == null || nombreProductoTags.isEmpty()) ? "<span  class='editable' data-field='Product' contenteditable='true'>------</span>" : "<span  class='editable ' data-field='Product' contenteditable='true'>" + nombreProductoTags + "</span>");
                             Html = Html.replace("XAbilityX", (capacidadTags == null) ? "<span  class='editable pending' data-field='Ability' contenteditable='true'>----</span>" : "<span  class='editable' data-field='Ability' contenteditable='true'>" + capacidadTags + "</span>");
                             Html = Html.replace("XBatchX", "<span  class='editable' contenteditable='true'>" + Batch + "</span>");
+                            // Cantidad por lote (suma de cajas de ese Batch), no el total
+                            // de la orden de producción completa.
                             String cantidadTags = "----";
-                            if (!ArgTags[16].equals("NULL")) {
+                            if (!ArgTags[11].equals("NULL")) {
                                 try {
-                                    long cantidadUnidades = (long) Double.parseDouble(ArgTags[16]);
+                                    long cantidadUnidades = (long) Double.parseDouble(ArgTags[11]);
                                     cantidadTags = String.format("%,d", cantidadUnidades).replace(",", ".");
                                 } catch (NumberFormatException e) {
-                                    cantidadTags = ArgTags[16];
+                                    cantidadTags = ArgTags[11];
                                 }
                             }
                             Html = Html.replace("XQuatityGenX", "<span  class='editable' data-field='Quantity' contenteditable='true'>" + cantidadTags + " UNIDADES</span>");
