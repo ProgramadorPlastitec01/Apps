@@ -236,11 +236,11 @@ public class OrdenTrabajoJpaController {
         }
     }
 
-    public List Orden_trabajo_zona_id_zona(int izn) {
+    public List Orden_trabajo_zona_id_zona(int izn, int estado) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
         try {
-            Query q = etm.createNativeQuery("CALL `sp_otb_zna_t_orden_trabajo_id_zona`('" + izn + "')");
+            Query q = etm.createNativeQuery("CALL `sp_otb_zna_t_orden_trabajo_id_zona`('" + izn + "','" + estado + "')");
             List consulta = q.getResultList();
             etm.getTransaction().commit();
             etm.clear();
@@ -274,11 +274,11 @@ public class OrdenTrabajoJpaController {
         }
     }
 
-    public List Orden_trabajo_general_id_general(int ign) {
+    public List Orden_trabajo_general_id_general(int ign, int estado) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
         try {
-            Query q = etm.createNativeQuery("CALL `sp_otb_gnr_t_orden_trabajo_id_general`('" + ign + "')");
+            Query q = etm.createNativeQuery("CALL `sp_otb_gnr_t_orden_trabajo_id_general`('" + ign + "','" + estado + "')");
             List consulta = q.getResultList();
             etm.getTransaction().commit();
             etm.clear();
@@ -487,6 +487,43 @@ public class OrdenTrabajoJpaController {
         etm.getTransaction().begin();
         try {
             Query q = etm.createNativeQuery("CALL `sp_otb_m_tiempo_estimado`('" + iot + "','" + tet + "')");
+            int exitoso = q.executeUpdate();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (exitoso == 0) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+    
+    public boolean CambiarEstadoZona(int IdZ, int etd) {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_zna_m_zona_estado`('" + IdZ + "','" + etd + "')");
+            int exitoso = q.executeUpdate();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (exitoso == 0) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+    public boolean CambiarEstadoGeneral(int IdG, int etd) {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `Sp_gnr_m_general_estado`('" + IdG + "','" + etd + "')");
             int exitoso = q.executeUpdate();
             etm.getTransaction().commit();
             etm.clear();

@@ -6,13 +6,51 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
         <title></title>
-        <script type = "text/javascript" >
+<!--        <script type = "text/javascript" >
             history.pushState(null, null, 'Orden_trabajo.jsp');
             window.addEventListener('popstate', function (event) {
                 history.pushState(null, null, 'Orden_trabajo.jsp');
             });
-        </script>
+        </script>-->
         <jsp:include page='Contenedor_head.jsp'></jsp:include>
+            <script>
+                function ToggleEstadoZonas(btn) {
+                    var estado = btn.getAttribute('data-estado');
+                    var nuevoEstado = (estado === '1') ? '0' : '1';
+                    var idTipoMtto = btn.getAttribute('data-tipo-mtto');
+                    if (nuevoEstado === '0') {
+                        btn.setAttribute('data-estado', '0');
+                        btn.classList.remove('btn-success');
+                        btn.classList.add('btn-secondary');
+                        btn.innerHTML = '<i class="fas fa-toggle-off"></i>&nbsp;Inactivo';
+                    } else {
+                        btn.setAttribute('data-estado', '1');
+                        btn.classList.remove('btn-secondary');
+                        btn.classList.add('btn-success');
+                        btn.innerHTML = '<i class="fas fa-toggle-on"></i>&nbsp;Activo';
+                    }
+                    location.href = "Orden?opc=8&Id_tipo_mtto=" + idTipoMtto + "&Id_origen=0&estado=" + nuevoEstado;
+                }
+
+                function ToggleEstadoOrdenes(btn) {
+                    var estado = btn.getAttribute('data-estado');
+                    var nuevoEstado = (estado === '1') ? '0' : '1';
+                    var idTipoMtto = btn.getAttribute('data-tipo-mtto');
+                    var idOrigen = btn.getAttribute('data-origen');
+                    if (nuevoEstado === '0') {
+                        btn.setAttribute('data-estado', '0');
+                        btn.classList.remove('btn-success');
+                        btn.classList.add('btn-secondary');
+                        btn.innerHTML = '<i class="fas fa-toggle-off"></i>&nbsp;Inactivo';
+                    } else {
+                        btn.setAttribute('data-estado', '1');
+                        btn.classList.remove('btn-secondary');
+                        btn.classList.add('btn-success');
+                        btn.innerHTML = '<i class="fas fa-toggle-on"></i>&nbsp;Activo';
+                    }
+                    location.href = "Orden?opc=10&Id_tipo_mtto=" + idTipoMtto + "&Id_origen=" + idOrigen + "&estado=" + nuevoEstado;
+                }
+            </script>
             <script>
                 function ActividadEjecuto(id_actividad, valor) {
                     var valor_num = parseFloat(valor);
@@ -140,15 +178,46 @@
                         html: true
                     });
                 }
-                function ActualizarFechasProg(Id,Orden,Equipo) {
+                function ActualizarFechasProg(Id, Orden, Equipo) {
                     document.getElementById("Txt_id").value = Id;
                     document.getElementById("Txt_orden").value = Orden;
                     document.getElementById("Equipo").value = Equipo;
                 }
-                function FirmasProg(Id_orden,Id_equipo) {
+                function FirmasProg(Id_orden, Id_equipo) {
                     document.getElementById("Id_orden").value = Id_orden;
                     document.getElementById("Id_equipo").value = Id_equipo;
                 }
+                function DesactivarTipo(id_equipo) {
+                    swal({
+                        title: "Inactivar Equipo",
+                        text: "Seguro que desea desactivar el Equipo...!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "red",
+                        confirmButtonText: "Aceptar",
+                        cancelButtonText: "Cancelar",
+                        closeOnConfirm: false
+                    },
+                            function () {
+                                location.href = 'Equipo?opc=3&Id_equipo=' + id_equipo + '&Estado=0';
+                            });
+                }
+                function ActivarTipo(id_equipo) {
+                    swal({
+                        title: "Activar Equipo",
+                        text: "Seguro que desea activar el Equipo...!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "green",
+                        confirmButtonText: "Aceptar",
+                        cancelButtonText: "Cancelar",
+                        closeOnConfirm: false
+                    },
+                            function () {
+                                location.href = 'Equipo?opc=3&Id_equipo=' + id_equipo + '&Estado=1';
+                            });
+                }
+                
             </script>
         </head>
         <body id="page-top">
@@ -177,7 +246,7 @@
         <!-- Page level custom scripts -->
         <script src="Interfaz/StylePage/js/demo/datatables-demo.js"></script>
         <!-- Calendarios -->
-         <script src="Interfaz/Calendarios/Js_normal.js" type="text/javascript"></script>
+        <script src="Interfaz/Calendarios/Js_normal.js" type="text/javascript"></script>
         <script src="Interfaz/Calendarios/Js_range.js"></script>
         <script src="Interfaz/Acordeon/Js_accordeon.js"></script>
     </body>

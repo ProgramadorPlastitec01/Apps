@@ -285,9 +285,15 @@ public class Orden extends HttpServlet {
                     } catch (Exception e) {
                         id_orden = 0;
                     }
+                    try {
+                        estado = Integer.parseInt(request.getParameter("estado"));
+                    } catch (Exception e) {
+                        estado = 1;
+                    }
                     request.setAttribute("Id_tipo_mtto", id_tipo_mtto);
                     request.setAttribute("Id_origen", id_origen);
                     request.setAttribute("Id_orden", id_orden);
+                    request.setAttribute("estado", estado);
                     request.getRequestDispatcher("Orden_trabajo.jsp").forward(request, response);
                     break;
                 //</editor-fold>
@@ -471,6 +477,19 @@ public class Orden extends HttpServlet {
                     request.setAttribute("Alerta", "Firma_autorizacion");
                     request.getRequestDispatcher("Orden?opc=1&Id_equipo=" + id_equipo + "&Id_orden=0").forward(request, response);
                 //</editor-fold>
+                case 18:
+                    //<editor-fold defaultstate="collapsed" desc="CAMBIAR ESTADO ZONAS Y ORDENES DE TRABAJO">
+                    int id = Integer.parseInt(request.getParameter("id"));
+                    estado = Integer.parseInt(request.getParameter("Estado"));
+                    id_tipo_mtto = Integer.parseInt(request.getParameter("Id_tipo_mtto"));
+                    if (id_tipo_mtto == 3) {
+                        jpacotb.CambiarEstadoZona(id, estado);
+                    } else {
+                        jpacotb.CambiarEstadoGeneral(id, estado);
+                    }
+                    request.getRequestDispatcher("Orden?opc=8&Id_tipo_mtto=" + id_tipo_mtto + "&Id_origen=0").forward(request, response);
+                    //</editor-fold>
+                    break;
             }
         } catch (Exception ex) {
             request.setAttribute("Alerta", "Error_sesion");

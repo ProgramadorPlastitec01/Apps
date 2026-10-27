@@ -477,7 +477,7 @@ public class Tag_orden extends TagSupport {
                                     + "<script type='text/javascript'>var mySelect = new LiveValidation('Cbx_revisor');"
                                     + "mySelect.add(Validate.Exclusion, { within: ['0'], failureMessage: \"\"});</script>");
                             out.print("<span onclick=\"javascript:document.getElementById('Btn_accionO').click();\" class='far fa-check-circle fa-size_small verde' title='Registrar'></span>&nbsp;&nbsp;");
-                            out.print("<span onclick=\"javascript:location.href='Orden?opc=8&Id_tipo_mtto=" + id_tipo_mtto + "&Id_origen=0'\" class='far fa-times-circle fa-size_small rojo' title='Cancelar'></span>");
+                            out.print("<span onclick=\"javascript:location.href='Orden?opc=8&Id_tipo_mtto=" + id_tipo_mtto + "&Id_origen=0&estado=" + estado + "'\" class='far fa-times-circle fa-size_small rojo' title='Cancelar'></span>");
                             out.print("</div>");
                             out.print("<div style='width:40%;float:left;margin-left:3%;margin-right:2%'>");
                             out.print("<b>Numero OT: </b>");
@@ -522,8 +522,15 @@ public class Tag_orden extends TagSupport {
                     }
                     //<editor-fold defaultstate="collapsed" desc="Consulta ">
                     out.print("<div class=\"card shadow mb-4\">");
-                    out.print("<div class=\"card-header py-3\">");
+                    out.print("<div class=\"card-header py-3 d-flex justify-content-between align-items-center\">");
                     out.print("<h6 class=\"m-0 font-weight-bold text-primary\">Tabla Orden de Trabajo " + ((id_tipo_mtto == 3) ? "Zona" : "Actividad General") + "</h6>");
+                    out.print(
+                            "<button type=\"button\" id=\"BtnEstadoZonas\" class=\"btn btn-"
+                            + (estado == 1 ? "success" : "secondary")
+                            + " btn-sm\" data-estado=\"" + estado + "\" data-tipo-mtto=\"" + id_tipo_mtto
+                            + "\" style=\"border-radius:3px;min-width:100px;\" onclick=\"ToggleEstadoZonas(this)\" title='Cambiar entre " + ((id_tipo_mtto == 3) ? "zonas" : "actividades generales") + " activas e inactivas'><i class=\"fas fa-toggle-"
+                            + (estado == 1 ? "on" : "off") + "\"></i>&nbsp;"
+                            + (estado == 1 ? "Activo" : "Inactivo") + "</button>");
                     out.print("</div>");
                     out.print("<div class=\"card-body\">");
                     out.print("<div class=\"table-responsive\">");
@@ -534,7 +541,7 @@ public class Tag_orden extends TagSupport {
                     out.print("<th>" + ((id_tipo_mtto == 3) ? "Zona" : "Actividad General") + "</th>");
                     out.print("<th style='width:" + ((id_tipo_mtto == 3) ? "50%" : "20%") + "'>" + ((id_tipo_mtto == 3) ? "Lineas" : "Descripcion") + "</th>");
                     out.print("<th colspan='3'>OT</th>");
-                    out.print("<th colspan='3'>Estado</th>");
+                    out.print("<th>Estado</th>");
                     out.print("</tr>");
                     out.print("</thead>");
                     out.print("<tfoot>");
@@ -543,14 +550,14 @@ public class Tag_orden extends TagSupport {
                     out.print("<th>" + ((id_tipo_mtto == 3) ? "Zona" : "Actividad General") + "</th>");
                     out.print("<th style='width:" + ((id_tipo_mtto == 3) ? "50%" : "20%") + "'>" + ((id_tipo_mtto == 3) ? "Lineas" : "Descripcion") + "</th>");
                     out.print("<th colspan='3'>OT</th>");
-                    out.print("<th colspan='3'>Estado</th>");
+                    out.print("<th>Estado</th>");
                     out.print("</tr>");
                     out.print("</tfoot>");
                     out.print("<tbody>");
                     if (id_tipo_mtto == 3) {
                         lst_origenes = jpaczna.Zonas_ot(estado);
                     } else {
-                        lst_origenes = jpacgnr.Actividades_generales_ot();
+                        lst_origenes = jpacgnr.Actividades_generales_ot(estado);
                     }
                     if (lst_origenes != null) {
                         for (int i = 0; i < lst_origenes.size(); i++) {
@@ -564,26 +571,26 @@ public class Tag_orden extends TagSupport {
                             } else {
                                 out.print("<td><b class='naranja'>No se encuentran OT en el sistema</b></td>");
                             }
-                            if (Integer.parseInt(obj_origenes[5].toString()) == 1) {
-                                out.print("<td align='center'><span " + ((nombre_rol.equals("Administrador") || nombre_rol.equals("Jefe_Mtto") || nombre_rol.equals("Asistente")) ? "onclick=\"location.href='Orden?opc=8&Id_origen=" + obj_origenes[0] + "&Id_tipo_mtto=" + id_tipo_mtto + "'\"" : "style='cursor:not-allowed'") + " class='fa fa-plus fa-size_small' title='Nueva OT'></span></td>");
+                            if (estado == 1) {
+                                out.print("<td align='center'><span " + ((nombre_rol.equals("Administrador") || nombre_rol.equals("Jefe_Mtto") || nombre_rol.equals("Asistente")) ? "onclick=\"location.href='Orden?opc=8&Id_origen=" + obj_origenes[0] + "&Id_tipo_mtto=" + id_tipo_mtto + "&estado=" + estado + "'\"" : "style='cursor:not-allowed'") + " class='fa fa-plus fa-size_small' title='Nueva OT'></span></td>");
                             } else {
                                 out.print("<td align='center'><span class='fa fa-plus fa-size_small' title='Nueva OT inhabilitado'></span></td>");
                             }
                             out.print("<td align='center'><span onclick=\"location.href='Orden?opc=10&Id_origen=" + obj_origenes[0] + "&Id_tipo_mtto=" + id_tipo_mtto + "'\" class='fa fa-bars fa-size_small' title='Ver OT'></span></td>");
-                            if (Integer.parseInt(obj_origenes[5].toString()) == 1) {
+                            if (estado == 1) {
                                 out.print("<td align='center'><span "
                                         + ((nombre_rol.equals("Administrador") || nombre_rol.equals("Jefe_Mtto")
                                         || nombre_rol.equals("Asistente"))
-                                        ? "onclick='DesactivarEquipo(" + obj_origenes[0] + ")'"
+                                        ? "onclick='DesactivarTipo(" + obj_origenes[0] + "," + id_tipo_mtto + ")'"
                                         : "style='cursor:not-allowed'")
-                                        + " class='fa fa-check fa-size_small' title='Desactivar Equipo'></span></td>");
+                                        + " class='fa fa-check fa-size_small' title='Desactivar'></span></td>");
                             } else {
                                 out.print("<td align='center'><span "
                                         + ((nombre_rol.equals("Administrador") || nombre_rol.equals("Jefe_Mtto")
                                         || nombre_rol.equals("Asistente"))
-                                        ? "onclick='ActivarEquipo(" + obj_origenes[0] + ")'"
+                                        ? "onclick='ActivarTipo(" + obj_origenes[0] + "," + id_tipo_mtto + ")'"
                                         : "style='cursor:not-allowed'")
-                                        + " class='fa fa-times fa-size_small' title='Activar Equipo'></span></td>");
+                                        + " class='fa fa-times fa-size_small gris' title='Activar'></span></td>");
                             }
                             out.print("</tr>");
                         }
@@ -593,21 +600,26 @@ public class Tag_orden extends TagSupport {
                     out.print("</div>");
                     out.print("</div>");
                     out.print("</div>");
-//</editor-fold>
+                //</editor-fold>
                     //</editor-fold>
                 } else if (pageContext.getRequest().getAttribute("Orden").toString().equals("Orden_zona_general_historial")) {
                     //<editor-fold defaultstate="collapsed" desc="Orden_zona_general_historial">
                     id_tipo_mtto = Integer.parseInt(pageContext.getRequest().getAttribute("Id_tipo_mtto").toString());
                     id_origen = Integer.parseInt(pageContext.getRequest().getAttribute("Id_origen").toString());
                     id_orden = Integer.parseInt(pageContext.getRequest().getAttribute("Id_orden").toString());
+                    try {
+                        estado = Integer.parseInt(pageContext.getRequest().getAttribute("estado").toString());
+                    } catch (Exception e) {
+                        estado = 1;
+                    }
                     if (id_tipo_mtto == 3) {
                         lst_origen = jpaczna.Zona_id(id_origen);
                         lst_orden = jpacotb.Orden_trabajo_zona_id(id_orden);
-                        lst_ordenes = jpacotb.Orden_trabajo_zona_id_zona(id_origen);
+                        lst_ordenes = jpacotb.Orden_trabajo_zona_id_zona(id_origen, estado);
                     } else {
                         lst_origen = jpacgnr.Actividad_general_id(id_origen);
                         lst_orden = jpacotb.Orden_trabajo_general_id(id_orden);
-                        lst_ordenes = jpacotb.Orden_trabajo_general_id_general(id_origen);
+                        lst_ordenes = jpacotb.Orden_trabajo_general_id_general(id_origen, estado);
                     }
                     Object[] obj_origen = (Object[]) lst_origen.get(0);
                     out.print("<input type='hidden' id='Txt_enlace_volver' value='Orden?opc=8&Id_tipo_mtto=" + id_tipo_mtto + "&Id_origen=0' />");
@@ -690,8 +702,16 @@ public class Tag_orden extends TagSupport {
                     }
                     //<editor-fold defaultstate="collapsed" desc="Consulta">
                     out.print("<div class=\"card shadow mb-4\">");
-                    out.print("<div class=\"card-header py-3\">");
+                    out.print("<div class=\"card-header py-3 d-flex justify-content-between align-items-center\">");
                     out.print("<h6 class=\"m-0 font-weight-bold text-primary\">Tabla Ordenes de trabajo " + obj_origen[1] + "</h6>");
+                    out.print(
+                            "<button type=\"button\" id=\"BtnEstadoOrdenes\" class=\"btn btn-"
+                            + (estado == 1 ? "success" : "secondary")
+                            + " btn-sm\" data-estado=\"" + estado + "\" data-tipo-mtto=\"" + id_tipo_mtto
+                            + "\" data-origen=\"" + id_origen
+                            + "\" style=\"border-radius:3px;min-width:100px;\" onclick=\"ToggleEstadoOrdenes(this)\" title='Cambiar entre ordenes de trabajo activas e inactivas'><i class=\"fas fa-toggle-"
+                            + (estado == 1 ? "on" : "off") + "\"></i>&nbsp;"
+                            + (estado == 1 ? "Activo" : "Inactivo") + "</button>");
                     out.print("</div>");
                     out.print("<div class=\"card-body\">");
                     out.print("<div class=\"table-responsive\">");

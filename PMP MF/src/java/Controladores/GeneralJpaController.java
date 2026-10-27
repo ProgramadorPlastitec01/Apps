@@ -37,11 +37,11 @@ public class GeneralJpaController implements Serializable {
         }
     }
 
-    public List Actividades_generales_ot() {
+    public List Actividades_generales_ot(int estado) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
         try {
-            Query q = etm.createNativeQuery("CALL `sp_gnr_c_actividades_general_ot`()");
+            Query q = etm.createNativeQuery("CALL `sp_gnr_c_actividades_general_ot`('" + estado + "')");
             List consulta = q.getResultList();
             etm.getTransaction().commit();
             etm.clear();
