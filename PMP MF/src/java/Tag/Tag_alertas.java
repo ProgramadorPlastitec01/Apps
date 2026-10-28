@@ -403,6 +403,11 @@ public class Tag_alertas extends TagSupport {
                     out.print("swal('Error','No se ha actualizado el detalle de la orden de trabajo.','error');");
                     out.print("</script>");
                 }
+                if (pageContext.getRequest().getAttribute("Alerta").toString().equals("Sin_permiso_usuario_asignado")) {
+                    out.print("<script language='javascript' type='text/javascript'>");
+                    out.print("swal('Sin permiso','No puede realizar esta acción porque no es el usuario asignado a la OT en este estado.','warning');");
+                    out.print("</script>");
+                }
                 if (pageContext.getRequest().getAttribute("Alerta").toString().equals("Firma_OT")) {
                     String var = pageContext.getRequest().getAttribute("var1").toString();
                     String var1 = pageContext.getRequest().getAttribute("var2").toString();

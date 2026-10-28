@@ -1260,6 +1260,11 @@ public class Tag_orden extends TagSupport {
                         Object[] obj_equipo = (Object[]) lst_equipo.get(0);
                         estado_ot = Integer.parseInt(obj_orden[14].toString());
                         id_tipo_equipo = Integer.parseInt(obj_orden[26].toString());
+                        boolean autoclave_equipo = (id_equipo == 47 || id_equipo == 37 || id_equipo == 48);
+                        boolean es_ejecutor_asignado = nombre_rol.equals("Administrador") || (obj_orden[6] != null && obj_orden[6].toString().trim().equalsIgnoreCase(nombre_usuario.trim()));
+                        boolean es_verificador_asignado = nombre_rol.equals("Administrador") || (obj_orden[8] != null && obj_orden[8].toString().trim().equalsIgnoreCase(nombre_usuario.trim()));
+                        boolean es_aprobador_asignado = nombre_rol.equals("Administrador") || (obj_orden[37] != null && obj_orden[37].toString().trim().equalsIgnoreCase(nombre_usuario.trim()));
+                        boolean puede_aprobar_recibido = es_aprobador_asignado || (autoclave_equipo && es_ejecutor_asignado);
                         registro = ((id_tipo_mtto == 1) ? obj_orden[30].toString() : ((id_tipo_mtto == 2) ? obj_orden[31].toString() : obj_orden[32].toString()));
                         lst_registro = jpacrgt.Traer_registro_ot(registro, obj_orden[5].toString());
                         if (lst_registro != null) {
@@ -1348,7 +1353,7 @@ public class Tag_orden extends TagSupport {
                             out.print("<td colspan='3' align='center'>" + obj_orden[6] + "</td>");
                             out.print("<th>T.T. MIN:</th>");
                             if (estado_ot == 2) {
-                                if (nombre_rol.equals("Administrador") || nombre_rol.equals("Tecnico")) {
+                                if ((nombre_rol.equals("Administrador") || nombre_rol.equals("Tecnico")) && es_ejecutor_asignado) {
                                     out.print("<td align='center'><input style='width:150px' class='form-control' type='number' id='Txt_tiempo_trabajo' value='" + ((obj_orden[33] == null) ? 0 : obj_orden[33]) + "' /></td>");
                                 } else {
                                     out.print("<td align='center'><input style='width:150px' class='form-control' type='hidden' id='Txt_tiempo_trabajo' value='" + ((obj_orden[33] == null) ? 0 : obj_orden[33]) + "' />" + ((obj_orden[33] == null) ? 0 : obj_orden[33]) + "</td>");
@@ -1420,7 +1425,7 @@ public class Tag_orden extends TagSupport {
                                         out.print("<td align='center'>" + ((valor_ejecuto.equals("SI")) ? "X" : "") + "</td>");
                                         out.print("<td align='center'>" + ((valor_ejecuto.equals("NO")) ? "X" : "") + "</td>");
                                         out.print("<td align='center'>" + ((valor_ejecuto.equals("N/A")) ? "X" : "") + "</td>");
-                                    } else if (estado_ot <= 2 && nombre_rol.equals("Administrador") || nombre_rol.equals("Tecnico")) {
+                                    } else if (estado_ot <= 2 && (nombre_rol.equals("Administrador") || nombre_rol.equals("Tecnico")) && es_ejecutor_asignado) {
                                         out.print("<td align='center'><input type='radio' name='Cbx_ejecuto_" + obj_parametros[0] + "' " + ((valor_ejecuto.equals("SI")) ? "checked" : "") + " onclick='ActividadEjecuto(" + obj_parametros[0] + ",1)' value='1' /></td>");
                                         out.print("<td align='center'><input type='radio' name='Cbx_ejecuto_" + obj_parametros[0] + "' " + ((valor_ejecuto.equals("NO")) ? "checked" : "") + " onclick='ActividadEjecuto(" + obj_parametros[0] + ",2)' value='2' /></td>");
                                         out.print("<td align='center'><input type='radio' name='Cbx_ejecuto_" + obj_parametros[0] + "' " + ((valor_ejecuto.equals("N/A")) ? "checked" : "") + " onclick='ActividadEjecuto(" + obj_parametros[0] + ",3)' value='3' /></td>");
@@ -1598,7 +1603,7 @@ public class Tag_orden extends TagSupport {
                             out.print("<td align='center'>" + obj_orden[24] + "</td>");
                             out.print("<th>T.T. MIN:</th>");
                             if (estado_ot == 2) {
-                                if (nombre_rol.equals("Administrador") || nombre_rol.equals("Tecnico")) {
+                                if ((nombre_rol.equals("Administrador") || nombre_rol.equals("Tecnico")) && es_ejecutor_asignado) {
                                     out.print("<td align='center'><input style='width:150px' class='form-control' type='number' id='Txt_tiempo_trabajo' value='" + ((obj_orden[33] == null) ? 0 : obj_orden[33]) + "' /></td>");
                                 } else {
                                     out.print("<td align='center'><input style='width:150px' class='form-control' type='hidden' id='Txt_tiempo_trabajo' value='" + ((obj_orden[33] == null) ? 0 : obj_orden[33]) + "' />" + ((obj_orden[33] == null) ? 0 : obj_orden[33]) + "</td>");
@@ -1657,7 +1662,7 @@ public class Tag_orden extends TagSupport {
                                         out.print("<td align='center'>" + ((valor_ejecuto.equals("SI")) ? "X" : "") + "</td>");
                                         out.print("<td align='center'>" + ((valor_ejecuto.equals("NO")) ? "X" : "") + "</td>");
                                         out.print("<td align='center'>" + ((valor_ejecuto.equals("N/A")) ? "X" : "") + "</td>");
-                                    } else if (estado_ot <= 2 && nombre_rol.equals("Administrador") || nombre_rol.equals("Tecnico")) {
+                                    } else if (estado_ot <= 2 && (nombre_rol.equals("Administrador") || nombre_rol.equals("Tecnico")) && es_ejecutor_asignado) {
                                         out.print("<td align='center'><input type='radio' name='Cbx_ejecuto_" + obj_parametros[0] + "' " + ((valor_ejecuto.equals("SI")) ? "checked" : "") + " onclick='ActividadEjecuto(" + obj_parametros[0] + ",1)' value='1' /></td>");
                                         out.print("<td align='center'><input type='radio' name='Cbx_ejecuto_" + obj_parametros[0] + "' " + ((valor_ejecuto.equals("NO")) ? "checked" : "") + " onclick='ActividadEjecuto(" + obj_parametros[0] + ",2)' value='2' /></td>");
                                         out.print("<td align='center'><input type='radio' name='Cbx_ejecuto_" + obj_parametros[0] + "' " + ((valor_ejecuto.equals("N/A")) ? "checked" : "") + " onclick='ActividadEjecuto(" + obj_parametros[0] + ",3)' value='3' /></td>");
@@ -1739,7 +1744,7 @@ public class Tag_orden extends TagSupport {
                                 if (estado_ot >= 3) {
                                     out.print("<td colspan='5' style='color: #fff;background-color:#4e73df;border: 1px solid #fff;' align='center'>REPUESTOS UTILIZADOS</td>");
                                 } else {
-                                    out.print("<td style='color: #fff;background-color:#4e73df;border: 1px solid #fff;' align='center'><span class='fa fa-plus fa-size_small' " + ((estado_ot == 2 && nombre_rol.equals("Administrador") || nombre_rol.equals("Tecnico")) ? "onclick='AddRepuesto()'" : "style='cursor:not-allowed'") + "></span></td>");
+                                    out.print("<td style='color: #fff;background-color:#4e73df;border: 1px solid #fff;' align='center'><span class='fa fa-plus fa-size_small' " + ((estado_ot == 2 && (nombre_rol.equals("Administrador") || nombre_rol.equals("Tecnico")) && es_ejecutor_asignado) ? "onclick='AddRepuesto()'" : "style='cursor:not-allowed'") + "></span></td>");
                                     out.print("<td colspan='4' style='color: #fff;background-color:#4e73df;border: 1px solid #fff;' align='center'>REPUESTOS UTILIZADOS</td>");
                                 }
                                 out.print("</tr>");
@@ -1752,7 +1757,7 @@ public class Tag_orden extends TagSupport {
                                     }
                                 } else {
                                     out.print("<tr>");
-                                    out.print("<td align='center' style='width:5%'>1</td><td colspan='4' contenteditable='" + ((estado_ot >= 3 && nombre_rol.equals("Administrador") || nombre_rol.equals("Tecnico")) ? "true" : "false") + "'>N/A</td>");
+                                    out.print("<td align='center' style='width:5%'>1</td><td colspan='4' contenteditable='" + ((estado_ot >= 3 && (nombre_rol.equals("Administrador") || nombre_rol.equals("Tecnico")) && es_ejecutor_asignado) ? "true" : "false") + "'>N/A</td>");
                                     out.print("</tr>");
                                 }
                                 out.print("</tbody>");
@@ -1770,7 +1775,7 @@ public class Tag_orden extends TagSupport {
                                     out.print("<td>PRIORIDAD CALIDAD : " + ((obj_orden_detalle[10].equals("GC")) ? "<b class='negro'>X</b>" : "N/A") + "</td>");
                                     out.print("<td>FALTA DE PERSONAL : " + ((obj_orden_detalle[10].equals("PER")) ? "<b class='negro'>X</b>" : "N/A") + "</td>");
                                     out.print("<td>N/A : " + ((obj_orden_detalle[10].equals("N/A")) ? "<b class='negro'>X</b>" : "N/A") + "</td>");
-                                } else if (nombre_rol.equals("Administrador") || nombre_rol.equals("Tecnico")) {
+                                } else if ((nombre_rol.equals("Administrador") || nombre_rol.equals("Tecnico")) && es_ejecutor_asignado) {
                                     out.print("<td>PRIORIDAD PRODUCCIÓN : <input type='radio' name='Rdb_no_pmp' id='Rdb_no_pmp' value='1' onclick='NoPmp(1)' " + ((obj_orden_detalle[10].equals("PRF")) ? "checked" : "") + " " + ((estado_ot >= 3) ? "disabled" : "") + " /></td>");
                                     out.print("<td>PRIORIDAD CALIDAD : <input type='radio' name='Rdb_no_pmp' id='Rdb_no_pmp' value='2' onclick='NoPmp(2)' " + ((obj_orden_detalle[10].equals("GC")) ? "checked" : "") + " " + ((estado_ot >= 3) ? "disabled" : "") + " /></td>");
                                     out.print("<td>FALTA DE PERSONAL : <input type='radio' name='Rdb_no_pmp' id='Rdb_no_pmp' value='3' onclick='NoPmp(3)' " + ((obj_orden_detalle[10].equals("PER")) ? "checked" : "") + " " + ((estado_ot >= 3) ? "disabled" : "") + " /></td>");
@@ -1932,7 +1937,7 @@ public class Tag_orden extends TagSupport {
                         out.print("</div>");
                         out.print("<div class=\"modal-footer\">");
                         out.print("<button class=\"btn btn-secondary\" type=\"button\" data-dismiss=\"modal\">Cancelar</button>");
-                        if (nombre_rol.equals("Administrador") || nombre_rol.equals("Tecnico")) {
+                        if ((nombre_rol.equals("Administrador") || nombre_rol.equals("Tecnico")) && es_ejecutor_asignado) {
                             if (estado_ot == 2) {
                                 out.print("<a class=\"btn btn-primary\" href='#' onclick=\"javascript:document.getElementById('Btn_ot_estado').click();\">Avanzar</a>");
                             } else if (estado_ot == 3) {
@@ -1946,7 +1951,9 @@ public class Tag_orden extends TagSupport {
                             }
                         }
                         if (estado_ot >= 3) {
-                            if (nombre_rol.equals("Administrador") || nombre_rol.equals("Coordinador") || nombre_rol.equals("Asistente") || nombre_rol.equals("Jefe_Mtto")) {
+                            if (nombre_rol.equals("Administrador")
+                                    || (nombre_rol.equals("Coordinador") && estado_ot == 3 && es_verificador_asignado)
+                                    || ((nombre_rol.equals("Asistente") || nombre_rol.equals("Jefe_Mtto")) && estado_ot >= 4 && puede_aprobar_recibido)) {
                                 out.print("<a class=\"btn btn-primary\" href='#' onclick=\"javascript:document.getElementById('Btn_ot_estado').click();\">Avanzar</a>");
                             }
                         }
@@ -2421,6 +2428,9 @@ public class Tag_orden extends TagSupport {
                     }
                     Object[] obj_orden = (Object[]) lst_orden.get(0);
                     estado_ot = Integer.parseInt(obj_orden[14].toString());
+                    boolean es_ejecutor_asignado = nombre_rol.equals("Administrador") || (obj_orden[6] != null && obj_orden[6].toString().trim().equalsIgnoreCase(nombre_usuario.trim()));
+                    boolean es_verificador_asignado = nombre_rol.equals("Administrador") || (obj_orden[8] != null && obj_orden[8].toString().trim().equalsIgnoreCase(nombre_usuario.trim()));
+                    boolean es_aprobador_asignado = nombre_rol.equals("Administrador") || (obj_orden[20] != null && obj_orden[20].toString().trim().equalsIgnoreCase(nombre_usuario.trim()));
                     lst_orden_detalle = jpacotd.Consulta_detalle_orden_trabajo(id_orden);
                     Object[] obj_orden_detalle = (Object[]) lst_orden_detalle.get(0);
                     arg_grupos_ot = obj_orden_detalle[2].toString().replace("][", "_/_").replace("[", "").replace("]", "").split("_/_");
@@ -2494,7 +2504,7 @@ public class Tag_orden extends TagSupport {
                     out.print("<td align='center'><b>" + obj_orden[1] + "</b></td>");
                     out.print("<th>T.T. MIN:</th>");
                     if (estado_ot == 2) {
-                        if (nombre_rol.equals("Administrador") || nombre_rol.equals("Tecnico")) {
+                        if ((nombre_rol.equals("Administrador") || nombre_rol.equals("Tecnico")) && es_ejecutor_asignado) {
                             out.print("<td align='center'><input style='width:150px' class='form-control' type='number' id='Txt_tiempo_trabajo' value='" + ((obj_orden[27] == null) ? 0 : obj_orden[27]) + "' /></td>");
                         } else {
                             out.print("<td align='center'>" + ((obj_orden[27] == null) ? 0 : obj_orden[27]) + "<input type='hidden' id='Txt_tiempo_trabajo' value='" + ((obj_orden[27] == null) ? 0 : obj_orden[27]) + "' /></td>");
@@ -2558,7 +2568,7 @@ public class Tag_orden extends TagSupport {
                                 out.print("<td align='center'>" + ((valor_ejecuto.equals("SI")) ? "X" : "") + "</td>");
                                 out.print("<td align='center'>" + ((valor_ejecuto.equals("NO")) ? "X" : "") + "</td>");
                                 out.print("<td align='center'>" + ((valor_ejecuto.equals("N/A")) ? "X" : "") + "</td>");
-                            } else if (nombre_rol.equals("Administrador") || nombre_rol.equals("Tecnico")) {
+                            } else if ((nombre_rol.equals("Administrador") || nombre_rol.equals("Tecnico")) && es_ejecutor_asignado) {
                                 out.print("<td align='center'><input type='radio' name='Cbx_ejecuto_" + obj_parametros[0] + "' " + ((valor_ejecuto.equals("SI")) ? "checked" : "") + " onclick='ActividadEjecuto(" + obj_parametros[0] + ",1)' value='1' /></td>");
                                 out.print("<td align='center'><input type='radio' name='Cbx_ejecuto_" + obj_parametros[0] + "' " + ((valor_ejecuto.equals("NO")) ? "checked" : "") + " onclick='ActividadEjecuto(" + obj_parametros[0] + ",2)' value='2' /></td>");
                                 out.print("<td align='center'><input type='radio' name='Cbx_ejecuto_" + obj_parametros[0] + "' " + ((valor_ejecuto.equals("N/A")) ? "checked" : "") + " onclick='ActividadEjecuto(" + obj_parametros[0] + ",3)' value='3' /></td>");
@@ -2678,15 +2688,15 @@ public class Tag_orden extends TagSupport {
                     out.print("<div class=\"modal-footer\">");
                     out.print("<button class=\"btn btn-secondary\" type=\"button\" data-dismiss=\"modal\">Cancelar</button>");
                     if (nombre_rol.equals("Administrador") || nombre_rol.equals("Tecnico")) {
-                        if (estado_ot == 2) {
+                        if (estado_ot == 2 && es_ejecutor_asignado) {
                             out.print("<a class=\"btn btn-primary\" href='#' onclick=\"javascript:document.getElementById('Btn_ot_estado').click();\">Avanzar</a>");
                         }
                     } else if (estado_ot == 3) {
-                        if (nombre_rol.equals("Administrador") || nombre_rol.equals("Coordinador")) {
+                        if ((nombre_rol.equals("Administrador") || nombre_rol.equals("Coordinador")) && es_verificador_asignado) {
                             out.print("<a class=\"btn btn-primary\" href='#' onclick=\"javascript:document.getElementById('Btn_ot_estado').click();\">Avanzar</a>");
                         }
                     } else if (estado_ot >= 4) {
-                        if (nombre_rol.equals("Administrador") || nombre_rol.equals("Asistente") || nombre_rol.equals("Jefe_Mtto")) {
+                        if ((nombre_rol.equals("Administrador") || nombre_rol.equals("Asistente") || nombre_rol.equals("Jefe_Mtto")) && es_aprobador_asignado) {
                             out.print("<a class=\"btn btn-primary\" href='#' onclick=\"javascript:document.getElementById('Btn_ot_estado').click();\">Avanzar</a>");
                         }
                     }

@@ -25,6 +25,8 @@ public class Orden extends HttpServlet {
             //Sesion
             HttpSession sesion = request.getSession();
             String rol_usuario = sesion.getAttribute("Rol/Nombres").toString();
+            String nombre_rol = sesion.getAttribute("Nombre_rol").toString();
+            String nombre_usuario = sesion.getAttribute("Nombres").toString();
             //JPAS
             OrdenTrabajoJpaController jpacotb = new OrdenTrabajoJpaController();
             OrdenTrabajoDetalleJpaController jpacotd = new OrdenTrabajoDetalleJpaController();
@@ -141,23 +143,41 @@ public class Orden extends HttpServlet {
                         mtdccr.Correo_ot(id_orden, "PROGRAMACIÓN OT", rol_usuario);
                         request.getRequestDispatcher("Orden?opc=1&Id_equipo=" + id_equipo + "&Id_orden=0").forward(request, response);
                     } else if (estado_ot == 2) {
-                        jpacotb.Ejecutar_ot(id_orden);
-                        jpacotb.Cambiar_estado(id_orden, (estado_ot + 1));
-                        mtdccr.Correo_ot(id_orden, "EJECUCIÓN OT", rol_usuario);
+                        Object[] obj_asig2 = Obtener_orden_asignacion(jpacotb, id_orden, id_tipo_mtto);
+                        if (obj_asig2 != null && Validar_usuario_accion(nombre_rol, nombre_usuario, obj_asig2[6] == null ? null : obj_asig2[6].toString())) {
+                            jpacotb.Ejecutar_ot(id_orden);
+                            jpacotb.Cambiar_estado(id_orden, (estado_ot + 1));
+                            mtdccr.Correo_ot(id_orden, "EJECUCIÓN OT", rol_usuario);
+                        } else {
+                            request.setAttribute("Alerta", "Sin_permiso_usuario_asignado");
+                        }
                         request.getRequestDispatcher("Orden?opc=5&Id_orden=" + id_orden).forward(request, response);
                     } else if (estado_ot == 3) {
-                        jpacotb.Verificar_ot(id_orden);
-                        jpacotb.Cambiar_estado(id_orden, (estado_ot + 1));
+                        Object[] obj_asig3 = Obtener_orden_asignacion(jpacotb, id_orden, id_tipo_mtto);
+                        if (obj_asig3 != null && Validar_usuario_accion(nombre_rol, nombre_usuario, obj_asig3[8] == null ? null : obj_asig3[8].toString())) {
+                            jpacotb.Verificar_ot(id_orden);
+                            jpacotb.Cambiar_estado(id_orden, (estado_ot + 1));
+                        } else {
+                            request.setAttribute("Alerta", "Sin_permiso_usuario_asignado");
+                        }
                         request.getRequestDispatcher("Orden?opc=5&Id_orden=" + id_orden).forward(request, response);
                     } else if (estado_ot == 5) {
                         jpacotb.Cambiar_estado(id_orden, (estado_ot + 1));
                         mtdccr.Correo_ot(id_orden, "CERRAR OT", rol_usuario);
                         request.getRequestDispatcher("Orden?opc=5&Id_orden=" + id_orden).forward(request, response);
                     } else {
-                        if (id_equipo == 47 || id_equipo == 37 || id_equipo == 48) {
-                            jpacotb.Aprobar_ot(id_orden);
+                        boolean autoclave_equipo = (id_equipo == 47 || id_equipo == 37 || id_equipo == 48);
+                        Object[] obj_asig4 = Obtener_orden_asignacion(jpacotb, id_orden, id_tipo_mtto);
+                        boolean autorizado_aprobador = obj_asig4 != null && Validar_usuario_accion(nombre_rol, nombre_usuario, obj_asig4[37] == null ? null : obj_asig4[37].toString());
+                        boolean autorizado_tecnico_excepcion = autoclave_equipo && obj_asig4 != null && Validar_usuario_accion(nombre_rol, nombre_usuario, obj_asig4[6] == null ? null : obj_asig4[6].toString());
+                        if (autorizado_aprobador || autorizado_tecnico_excepcion) {
+                            if (autoclave_equipo) {
+                                jpacotb.Aprobar_ot(id_orden);
+                            }
+                            jpacotb.Cambiar_estado(id_orden, (estado_ot + 1));
+                        } else {
+                            request.setAttribute("Alerta", "Sin_permiso_usuario_asignado");
                         }
-                        jpacotb.Cambiar_estado(id_orden, (estado_ot + 1));
                         request.getRequestDispatcher("Orden?opc=5&Id_orden=" + id_orden).forward(request, response);
                     }
                     break;
@@ -326,17 +346,32 @@ public class Orden extends HttpServlet {
 //                        mtdccr.Correo_ot(id_orden, "PROGRAMACIÓN OT " + ((id_tipo_mtto == 3) ? "ZONA" : "GENERAL"), rol_usuario);
                         request.getRequestDispatcher("Orden?opc=10&Id_tipo_mtto=" + id_tipo_mtto + "&Id_origen=" + id_origen + "&Id_orden=0").forward(request, response);
                     } else if (estado_ot == 2) {
-                        jpacotb.Ejecutar_ot(id_orden);
-                        jpacotb.Cambiar_estado(id_orden, (estado_ot + 1));
+                        Object[] obj_asig_zg2 = Obtener_orden_asignacion(jpacotb, id_orden, id_tipo_mtto);
+                        if (obj_asig_zg2 != null && Validar_usuario_accion(nombre_rol, nombre_usuario, obj_asig_zg2[6] == null ? null : obj_asig_zg2[6].toString())) {
+                            jpacotb.Ejecutar_ot(id_orden);
+                            jpacotb.Cambiar_estado(id_orden, (estado_ot + 1));
+                        } else {
+                            request.setAttribute("Alerta", "Sin_permiso_usuario_asignado");
+                        }
 //                        mtdccr.Correo_ot(id_orden, "EJECUCIÓN OT " + ((id_tipo_mtto == 3) ? "ZONA" : "GENERAL"), rol_usuario);
                         request.getRequestDispatcher("Orden?opc=13&Id_tipo_mtto=" + id_tipo_mtto + "&Id_orden=" + id_orden).forward(request, response);
                     } else if (estado_ot == 3) {
-                        jpacotb.Verificar_ot(id_orden);
-                        jpacotb.Cambiar_estado(id_orden, (estado_ot + 1));
+                        Object[] obj_asig_zg3 = Obtener_orden_asignacion(jpacotb, id_orden, id_tipo_mtto);
+                        if (obj_asig_zg3 != null && Validar_usuario_accion(nombre_rol, nombre_usuario, obj_asig_zg3[8] == null ? null : obj_asig_zg3[8].toString())) {
+                            jpacotb.Verificar_ot(id_orden);
+                            jpacotb.Cambiar_estado(id_orden, (estado_ot + 1));
+                        } else {
+                            request.setAttribute("Alerta", "Sin_permiso_usuario_asignado");
+                        }
                         request.getRequestDispatcher("Orden?opc=13&Id_tipo_mtto=" + id_tipo_mtto + "&Id_orden=" + id_orden).forward(request, response);
                     } else if (estado_ot >= 4) {
-                        jpacotb.Aprobar_ot(id_orden);
-                        jpacotb.Cambiar_estado(id_orden, 6);
+                        Object[] obj_asig_zg4 = Obtener_orden_asignacion(jpacotb, id_orden, id_tipo_mtto);
+                        if (obj_asig_zg4 != null && Validar_usuario_accion(nombre_rol, nombre_usuario, obj_asig_zg4[20] == null ? null : obj_asig_zg4[20].toString())) {
+                            jpacotb.Aprobar_ot(id_orden);
+                            jpacotb.Cambiar_estado(id_orden, 6);
+                        } else {
+                            request.setAttribute("Alerta", "Sin_permiso_usuario_asignado");
+                        }
 //                        mtdccr.Correo_ot(id_orden, "CIERRE OT " + ((id_tipo_mtto == 3) ? "ZONA" : "GENERAL"), rol_usuario);
                         request.getRequestDispatcher("Orden?opc=13&Id_tipo_mtto=" + id_tipo_mtto + "&Id_orden=" + id_orden).forward(request, response);
                     }
@@ -495,6 +530,34 @@ public class Orden extends HttpServlet {
             request.setAttribute("Alerta", "Error_sesion");
             request.getRequestDispatcher("index.jsp").forward(request, response);
         }
+    }
+
+    /**
+     * Verifica que el usuario en sesión sea el usuario asignado para la
+     * acción, además de tener el rol requerido. El Administrador siempre
+     * está autorizado.
+     */
+    private boolean Validar_usuario_accion(String nombre_rol, String nombre_usuario, String usuario_asignado) {
+        if (nombre_rol.equals("Administrador")) {
+            return true;
+        }
+        return usuario_asignado != null && usuario_asignado.trim().equalsIgnoreCase(nombre_usuario.trim());
+    }
+
+    /**
+     * Trae la fila de la orden de trabajo (equipo, zona o general) con los
+     * usuarios asignados por estado, para validar la propiedad de la acción.
+     */
+    private Object[] Obtener_orden_asignacion(OrdenTrabajoJpaController jpacotb, int id_orden, int id_tipo_mtto) {
+        List lst;
+        if (id_tipo_mtto == 3) {
+            lst = jpacotb.Orden_trabajo_zona_id(id_orden);
+        } else if (id_tipo_mtto == 4) {
+            lst = jpacotb.Orden_trabajo_general_id(id_orden);
+        } else {
+            lst = jpacotb.Orden_trabajo_equipo_id(id_orden);
+        }
+        return (lst != null && !lst.isEmpty()) ? (Object[]) lst.get(0) : null;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

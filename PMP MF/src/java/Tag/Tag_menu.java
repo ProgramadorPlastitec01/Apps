@@ -28,6 +28,13 @@ public class Tag_menu extends TagSupport {
                 out.print("</a>");
                 out.print("<hr class=\"sidebar-divider my-0\">");
 //</editor-fold>
+                //<editor-fold defaultstate="collapsed" desc="Inicio">
+                out.print("<li class=\"nav-item\">");
+                out.print("<a class=\"nav-link\" href=\"Inicio.jsp\">");
+                out.print("<i class=\"fas fa-fw fa-home\"></i>");
+                out.print("<span>Inicio</span></a>");
+                out.print("</li>");
+//</editor-fold>
                 if (nombre_rol.equals("Administrador") || nombre_rol.equals("Jefe_Mtto") || nombre_rol.equals("Tecnico") || nombre_rol.equals("Asistente") || nombre_rol.equals("Coordinador")) {
                     //<editor-fold defaultstate="collapsed" desc="Dashboard">
                     out.print("<li class=\"nav-item\">");

@@ -179,6 +179,63 @@ public class OrdenTrabajoJpaController {
         }
     }
 
+    public List Panel_tecnico_usuario(String usuario) {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `sp_otb_t_panel_tecnico_usuario`('" + usuario + "')");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (consulta.isEmpty()) {
+                return null;
+            } else {
+                return consulta;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public List Kpi_usuario_mes(String usuario) {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `sp_otb_t_kpi_usuario_mes`('" + usuario + "')");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (consulta.isEmpty()) {
+                return null;
+            } else {
+                return consulta;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public List Estadistica_mensual_personal() {
+        EntityManager etm = getEntityManager();
+        etm.getTransaction().begin();
+        try {
+            Query q = etm.createNativeQuery("CALL `sp_otb_t_estadistica_mensual_personal`()");
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            etm.clear();
+            etm.close();
+            if (consulta.isEmpty()) {
+                return null;
+            } else {
+                return consulta;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
     public List Orden_trabajo_equipo_id(int iot) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();
