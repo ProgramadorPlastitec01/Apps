@@ -150,17 +150,18 @@ public class Tag_reportes extends TagSupport {
                     out.print("<td align='center' colspan='2'>VERSIÓN: 32</td>");
                     out.print("</tr>");
                     out.print("<th class='sticky'>CLASIFICACIÓN : </th>");
-                    out.print("<td align='center'><div class='crono_1' style='width:50px;'>MM</div> MTTO MAYOR</td>"
-                            + "<td align='center'><div class='crono_2' style='width:50px;'>INSP</div> INSPECCIÓN</td>"
-                            + "<td align='center' colspan='3'><div class='crono_3' style='width:70px;'>LIMP_AI</div> LIMPIEZA y AJUSTE DE INICIO</td>"
-                            + "<td align='center' colspan='2'><div class='crono_4' style='width:50px;'>GE</div> ACTIVIDAD GENERAL</td>");
+                    out.print("<td align='center' class='leyenda-crono'><div class='crono_1' data-tipo='1' onclick=\"filtrarCronograma(1,this)\" title='Filtrar por Mtto Mayor' style='width:50px;'>MM</div> MTTO MAYOR</td>"
+                            + "<td align='center' class='leyenda-crono'><div class='crono_2' data-tipo='2' onclick=\"filtrarCronograma(2,this)\" title='Filtrar por Inspección' style='width:50px;'>INSP</div> INSPECCIÓN</td>"
+                            + "<td align='center' colspan='3' class='leyenda-crono'><div class='crono_3' data-tipo='3' onclick=\"filtrarCronograma(3,this)\" title='Filtrar por Limpieza y Ajuste' style='width:70px;'>LIMP_AI</div> LIMPIEZA y AJUSTE DE INICIO</td>"
+                            + "<td align='center' colspan='2' class='leyenda-crono'><div class='crono_4' data-tipo='4' onclick=\"filtrarCronograma(4,this)\" title='Filtrar por Actividad General' style='width:50px;'>GE</div> ACTIVIDAD GENERAL</td>");
                     out.print("</tr>");
                     out.print("</table>");
-                    out.print("<div style=\"overflow-x:auto;\">");
-                    out.print("<table class='table2'>");
+                    out.print("<div class=\"cronograma-scroll\" id=\"cronograma-filtro-box\">");
+                    out.print("<table class='table2 table-cronograma'>");
+                    out.print("<thead>");
                     out.print("<tr>");
-                    out.print("<th rowspan='2' class='sticky'>LINEA</th>");
-                    out.print("<th rowspan='2' colspan='2'>ORIGEN</th>");
+                    out.print("<th rowspan='2' class='col-linea'>LINEA</th>");
+                    out.print("<th rowspan='2' colspan='2' class='col-origen'>ORIGEN</th>");
                     lst_cols_week = jpaclna.Cronograma_cols_week_anio(anio);
                     Object[] obj_cols_week = (Object[]) lst_cols_week.get(0);
                     for (int i = 0; i < 24; i += 2) {
@@ -171,9 +172,11 @@ public class Tag_reportes extends TagSupport {
                     lst_rango_week = jpaclna.Cronograma_rango_week_anio(anio);
                     Object[] obj_rango_week = (Object[]) lst_rango_week.get(0);
                     for (int i = Integer.parseInt(obj_rango_week[0].toString()); i <= Integer.parseInt(obj_rango_week[23].toString()); i++) {
-                        out.print("<td align='center'><b class='negro'>" + (i + 1) + "</b></td>");
+                        out.print("<th align='center' class='col-week'><b class='negro'>" + (i + 1) + "</b></th>");
                     }
                     out.print("</tr>");
+                    out.print("</thead>");
+                    out.print("<tbody>");
                     if (anio_report != 0) {
                         if (id_linea != 0) {
                             lst_cronograma = jpaclna.Cronograma_linea_anio_filtro(anio_report, id_linea, filtro, estado);
@@ -186,13 +189,13 @@ public class Tag_reportes extends TagSupport {
                                 for (int j = 0; j < lst_cronograma.size(); j++) {
                                     out.print("<tr>");
                                     if (j == 0) {
-                                        out.print("<td rowspan='" + lst_cronograma.size() + "'>" + obj_lineas[1] + "</td>");
+                                        out.print("<td class='col-linea' rowspan='" + lst_cronograma.size() + "'>" + obj_lineas[1] + "</td>");
                                     }
                                     Object[] obj_cronograma = (Object[]) lst_cronograma.get(j);
                                     if (obj_cronograma[10].toString().equals("N/A")) {
-                                        out.print("<td><a style='text-decoration:none; color:#2c3e50;'  href='Equipo?opc=10&Id_equipo=" + obj_cronograma[2] + "&id_nota=0&temp1=1'><div class='custom-cursor'>" + obj_cronograma[3] + "</div></a></td><td><b class='negro'>O.T</b></td>");
+                                        out.print("<td class='col-origen'><a style='text-decoration:none; color:#2c3e50;'  href='Equipo?opc=10&Id_equipo=" + obj_cronograma[2] + "&id_nota=0&temp1=1'><div class='custom-cursor'>" + obj_cronograma[3] + "</div></a></td><td class='col-ot'><b class='negro'>O.T</b></td>");
                                     } else {
-                                        out.print("<td>" + obj_cronograma[3] + "</td><td><b class='negro'>O.T</b></td>");
+                                        out.print("<td class='col-origen'>" + obj_cronograma[3] + "</td><td class='col-ot'><b class='negro'>O.T</b></td>");
                                     }
                                     try {
                                         String[] arg_id_ot = obj_cronograma[4].toString().split(",");
@@ -239,8 +242,9 @@ public class Tag_reportes extends TagSupport {
                             } else {
                                 out.print("<tr><td colspan='55' align='center'><b>NO EXISTEN OT</b></td></tr>");
                             }
+                            out.print("</tbody>");
                             out.print("</table>");
-                            out.print("<div>");
+                            out.print("</div>");
                             //</editor-fold>
                         } else {
                             //<editor-fold defaultstate="collapsed" desc="CRONOGRAMA GENERAL">
@@ -251,13 +255,13 @@ public class Tag_reportes extends TagSupport {
                                     for (int j = 0; j < lst_cronograma.size(); j++) {
                                         out.print("<tr>");
                                         if (j == 0) {
-                                            out.print("<td rowspan='" + lst_cronograma.size() + "'>" + obj_lineas[1] + "</td>");
+                                            out.print("<td class='col-linea' rowspan='" + lst_cronograma.size() + "'>" + obj_lineas[1] + "</td>");
                                         }
                                         Object[] obj_cronograma = (Object[]) lst_cronograma.get(j);
                                         if (obj_cronograma[10].toString().equals("N/A")) {
-                                            out.print("<td><a style='text-decoration:none; color:#2c3e50;'  href='Equipo?opc=10&Id_equipo=" + obj_cronograma[2] + "&id_nota=0&temp1=1'><div class='custom-cursor'>" + obj_cronograma[3] + "</div></a></td><td><b class='negro'>O.T</b></td>");
+                                            out.print("<td class='col-origen'><a style='text-decoration:none; color:#2c3e50;'  href='Equipo?opc=10&Id_equipo=" + obj_cronograma[2] + "&id_nota=0&temp1=1'><div class='custom-cursor'>" + obj_cronograma[3] + "</div></a></td><td class='col-ot'><b class='negro'>O.T</b></td>");
                                         } else {
-                                            out.print("<td>" + obj_cronograma[3] + "</td><td><b class='negro'>O.T</b></td>");
+                                            out.print("<td class='col-origen'>" + obj_cronograma[3] + "</td><td class='col-ot'><b class='negro'>O.T</b></td>");
                                         }
                                         try {
                                             String[] arg_id_ot = obj_cronograma[4].toString().split(",");
@@ -305,8 +309,9 @@ public class Tag_reportes extends TagSupport {
                                     }
                                 }
                             }
+                            out.print("</tbody>");
                             out.print("</table>");
-                            out.print("<div>");
+                            out.print("</div>");
                             //</editor-fold>
                         }
                     } else {
@@ -318,13 +323,13 @@ public class Tag_reportes extends TagSupport {
                                 for (int j = 0; j < lst_cronograma.size(); j++) {
                                     out.print("<tr>");
                                     if (j == 0) {
-                                        out.print("<td rowspan='" + lst_cronograma.size() + "'>" + obj_lineas[1] + "</td>");
+                                        out.print("<td class='col-linea' rowspan='" + lst_cronograma.size() + "'>" + obj_lineas[1] + "</td>");
                                     }
                                     Object[] obj_cronograma = (Object[]) lst_cronograma.get(j);
                                     if (obj_cronograma[10].toString().equals("N/A")) {
-                                        out.print("<td><a style='text-decoration:none; color:#2c3e50;'  href='Equipo?opc=10&Id_equipo=" + obj_cronograma[2] + "&id_nota=0&temp1=1'><div class='custom-cursor'>" + obj_cronograma[3] + "</div></a></td><td><b class='negro'>O.T</b></td>");
+                                        out.print("<td class='col-origen'><a style='text-decoration:none; color:#2c3e50;'  href='Equipo?opc=10&Id_equipo=" + obj_cronograma[2] + "&id_nota=0&temp1=1'><div class='custom-cursor'>" + obj_cronograma[3] + "</div></a></td><td class='col-ot'><b class='negro'>O.T</b></td>");
                                     } else {
-                                        out.print("<td>" + obj_cronograma[3] + "</td><td><b class='negro'>O.T</b></td>");
+                                        out.print("<td class='col-origen'>" + obj_cronograma[3] + "</td><td class='col-ot'><b class='negro'>O.T</b></td>");
                                     }
                                     try {
                                         String[] arg_id_ot = obj_cronograma[4].toString().split(",");
@@ -372,10 +377,31 @@ public class Tag_reportes extends TagSupport {
                                 }
                             }
                         }
+                        out.print("</tbody>");
                         out.print("</table>");
-                        out.print("<div>");
+                        out.print("</div>");
                         //</editor-fold>
                     }
+                    out.print("<script type='text/javascript'>");
+                    out.print("function filtrarCronograma(tipo, el){"
+                            + "var box=document.getElementById('cronograma-filtro-box');"
+                            + "if(!box){return;}"
+                            + "var activo=box.getAttribute('data-filtro-tipo');"
+                            + "var tipoStr=tipo+'';"
+                            + "var leyendas=document.querySelectorAll('.leyenda-crono > div[data-tipo]');"
+                            + "for(var i=0;i<leyendas.length;i++){leyendas[i].classList.remove('leyenda-activa');}"
+                            + "box.className=box.className.replace(/filtro-tipo-\\d/g,'').replace(/\\s+/g,' ').trim();"
+                            + "if(activo===tipoStr){"
+                            + "box.classList.remove('filtro-activo');"
+                            + "box.removeAttribute('data-filtro-tipo');"
+                            + "}else{"
+                            + "box.classList.add('filtro-activo');"
+                            + "box.classList.add('filtro-tipo-'+tipo);"
+                            + "box.setAttribute('data-filtro-tipo', tipoStr);"
+                            + "el.classList.add('leyenda-activa');"
+                            + "}"
+                            + "}");
+                    out.print("</script>");
                     //</editor-fold>
                 } else if (pageContext.getRequest().getAttribute("Reportes").toString().equals("Cronograma_actividad")) {
                     //<editor-fold defaultstate="collapsed" desc="CRONOGRAMA ACTIVIDAD">
@@ -460,17 +486,18 @@ public class Tag_reportes extends TagSupport {
                     out.print("<td align='center' colspan='2'>VERSIÓN: 32</td>");
                     out.print("</tr>");
                     out.print("<th>CLASIFICACIÓN : </th>");
-                    out.print("<td align='center'><div class='crono_1' style='width:50px;'>MM</div> MTTO MAYOR</td>"
-                            + "<td align='center'><div class='crono_2' style='width:50px;'>INSP</div> INSPECCIÓN</td>"
-                            + "<td align='center' colspan='3'><div class='crono_3' style='width:70px;'>LIMP_AI</div> LIMPIEZA y AJUSTE DE INICIO</td>"
-                            + "<td align='center' colspan='2'><div class='crono_4' style='width:50px;'>GE</div> ACTIVIDAD GENERAL</td>");
+                    out.print("<td align='center' class='leyenda-crono'><div class='crono_1' data-tipo='1' onclick=\"filtrarCronograma(1,this)\" title='Filtrar por Mtto Mayor' style='width:50px;'>MM</div> MTTO MAYOR</td>"
+                            + "<td align='center' class='leyenda-crono'><div class='crono_2' data-tipo='2' onclick=\"filtrarCronograma(2,this)\" title='Filtrar por Inspección' style='width:50px;'>INSP</div> INSPECCIÓN</td>"
+                            + "<td align='center' colspan='3' class='leyenda-crono'><div class='crono_3' data-tipo='3' onclick=\"filtrarCronograma(3,this)\" title='Filtrar por Limpieza y Ajuste' style='width:70px;'>LIMP_AI</div> LIMPIEZA y AJUSTE DE INICIO</td>"
+                            + "<td align='center' colspan='2' class='leyenda-crono'><div class='crono_4' data-tipo='4' onclick=\"filtrarCronograma(4,this)\" title='Filtrar por Actividad General' style='width:50px;'>GE</div> ACTIVIDAD GENERAL</td>");
                     out.print("</tr>");
                     out.print("</table>");
-                    out.print("<div style=\"overflow-x:auto;\">");
-                    out.print("<table class='table2'>");
+                    out.print("<div class=\"cronograma-scroll\" id=\"cronograma-filtro-box\">");
+                    out.print("<table class='table2 table-cronograma'>");
+                    out.print("<thead>");
                     out.print("<tr>");
-                    out.print("<th rowspan='2'>LINEA</th>");
-                    out.print("<th rowspan='2' colspan='2'>ORIGEN</th>");
+                    out.print("<th rowspan='2' class='col-linea'>LINEA</th>");
+                    out.print("<th rowspan='2' colspan='2' class='col-origen'>ORIGEN</th>");
                     lst_cols_week = jpaclna.Cronograma_cols_week_anio(anio);
                     Object[] obj_cols_week = (Object[]) lst_cols_week.get(0);
                     for (int i = 0; i < 24; i += 2) {
@@ -481,9 +508,11 @@ public class Tag_reportes extends TagSupport {
                     lst_rango_week = jpaclna.Cronograma_rango_week_anio(anio);
                     Object[] obj_rango_week = (Object[]) lst_rango_week.get(0);
                     for (int i = Integer.parseInt(obj_rango_week[0].toString()); i <= Integer.parseInt(obj_rango_week[23].toString()); i++) {
-                        out.print("<td align='center'><b class='negro'>" + (i + 1) + "</b></td>");
+                        out.print("<th align='center' class='col-week'><b class='negro'>" + (i + 1) + "</b></th>");
                     }
                     out.print("</tr>");
+                    out.print("</thead>");
+                    out.print("<tbody>");
                     if (anio_report != 0) {
                         if (id_linea != 0) {
                             lst_cronograma = jpaclna.Cronograma_linea_anio_filtro_ag(anio_report, id_linea, filtro);
@@ -497,9 +526,9 @@ public class Tag_reportes extends TagSupport {
                                     Object[] obj_cronograma = (Object[]) lst_cronograma.get(j);
                                     out.print("<tr>");
                                     if (j == 0) {
-                                        out.print("<td rowspan='" + lst_cronograma.size() + "'>" + obj_cronograma[1] + "</td>");
+                                        out.print("<td class='col-linea' rowspan='" + lst_cronograma.size() + "'>" + obj_cronograma[1] + "</td>");
                                     }
-                                    out.print("<td>" + obj_cronograma[3] + "</td><td><b class='negro'>O.T</b></td>");
+                                    out.print("<td class='col-origen'>" + obj_cronograma[3] + "</td><td class='col-ot'><b class='negro'>O.T</b></td>");
                                     try {
                                         String[] arg_id_ot = obj_cronograma[2].toString().split(",");
                                         String[] arg_num_ot = obj_cronograma[5].toString().split(",");
@@ -535,8 +564,9 @@ public class Tag_reportes extends TagSupport {
                             } else {
                                 out.print("<tr><td colspan='55' align='center'><b>NO EXISTEN OT</b></td></tr>");
                             }
+                            out.print("</tbody>");
                             out.print("</table>");
-                            out.print("<div>");
+                            out.print("</div>");
                             //</editor-fold>
                         } else if (id_linea != 0) {
                             //<editor-fold defaultstate="collapsed" desc="CRONOGRAMA FILTRO LINEA">
@@ -546,10 +576,10 @@ public class Tag_reportes extends TagSupport {
                                 for (int j = 0; j < lst_cronograma.size(); j++) {
                                     out.print("<tr>");
                                     if (j == 0) {
-                                        out.print("<td rowspan='" + lst_cronograma.size() + "'>" + obj_lineas[1] + "</td>");
+                                        out.print("<td class='col-linea' rowspan='" + lst_cronograma.size() + "'>" + obj_lineas[1] + "</td>");
                                     }
                                     Object[] obj_cronograma = (Object[]) lst_cronograma.get(j);
-                                    out.print("<td>" + obj_cronograma[3] + "</td><td><b class='negro'>O.T</b></td>");
+                                    out.print("<td class='col-origen'>" + obj_cronograma[3] + "</td><td class='col-ot'><b class='negro'>O.T</b></td>");
                                     try {
                                         String[] arg_id_ot = obj_cronograma[2].toString().split(",");
                                         String[] arg_num_ot = obj_cronograma[5].toString().split(",");
@@ -585,8 +615,9 @@ public class Tag_reportes extends TagSupport {
                             } else {
                                 out.print("<tr><td colspan='55' align='center'><b>NO EXISTEN OT</b></td></tr>");
                             }
+                            out.print("</tbody>");
                             out.print("</table>");
-                            out.print("<div>");
+                            out.print("</div>");
                             //</editor-fold>
                         } else {
                             //<editor-fold defaultstate="collapsed" desc="CRONOGRAMA GENERAL">
@@ -597,10 +628,10 @@ public class Tag_reportes extends TagSupport {
                                     for (int j = 0; j < lst_cronograma.size(); j++) {
                                         out.print("<tr>");
                                         if (j == 0) {
-                                            out.print("<td rowspan='" + lst_cronograma.size() + "'>" + obj_actividad[1] + "</td>");
+                                            out.print("<td class='col-linea' rowspan='" + lst_cronograma.size() + "'>" + obj_actividad[1] + "</td>");
                                         }
                                         Object[] obj_cronograma = (Object[]) lst_cronograma.get(j);
-                                        out.print("<td>" + obj_cronograma[3] + "</td><td><b class='negro'>O.T</b></td>");
+                                        out.print("<td class='col-origen'>" + obj_cronograma[3] + "</td><td class='col-ot'><b class='negro'>O.T</b></td>");
                                         try {
                                             String[] arg_id_ot = obj_cronograma[2].toString().split(",");
                                             String[] arg_num_ot = obj_cronograma[5].toString().split(",");
@@ -635,8 +666,9 @@ public class Tag_reportes extends TagSupport {
                                     }
                                 }
                             }
+                            out.print("</tbody>");
                             out.print("</table>");
-                            out.print("<div>");
+                            out.print("</div>");
                             //</editor-fold>
                         }
                     } else {
@@ -648,10 +680,10 @@ public class Tag_reportes extends TagSupport {
                                 for (int j = 0; j < lst_cronograma.size(); j++) {
                                     out.print("<tr>");
                                     if (j == 0) {
-                                        out.print("<td  rowspan='" + lst_cronograma.size() + "'>" + obj_actividad[1] + "</td>");
+                                        out.print("<td class='col-linea' rowspan='" + lst_cronograma.size() + "'>" + obj_actividad[1] + "</td>");
                                     }
                                     Object[] obj_cronograma = (Object[]) lst_cronograma.get(j);
-                                    out.print("<td>" + obj_cronograma[3] + "</td><td><b class='negro'>O.T</b></td>");
+                                    out.print("<td class='col-origen'>" + obj_cronograma[3] + "</td><td class='col-ot'><b class='negro'>O.T</b></td>");
                                     try {
                                         String[] arg_id_ot = obj_cronograma[2].toString().split(",");
                                         String[] arg_num_ot = obj_cronograma[5].toString().split(",");
@@ -686,10 +718,31 @@ public class Tag_reportes extends TagSupport {
                                 }
                             }
                         }
+                        out.print("</tbody>");
                         out.print("</table>");
-                        out.print("<div>");
+                        out.print("</div>");
                         //</editor-fold>
                     }
+                    out.print("<script type='text/javascript'>");
+                    out.print("function filtrarCronograma(tipo, el){"
+                            + "var box=document.getElementById('cronograma-filtro-box');"
+                            + "if(!box){return;}"
+                            + "var activo=box.getAttribute('data-filtro-tipo');"
+                            + "var tipoStr=tipo+'';"
+                            + "var leyendas=document.querySelectorAll('.leyenda-crono > div[data-tipo]');"
+                            + "for(var i=0;i<leyendas.length;i++){leyendas[i].classList.remove('leyenda-activa');}"
+                            + "box.className=box.className.replace(/filtro-tipo-\\d/g,'').replace(/\\s+/g,' ').trim();"
+                            + "if(activo===tipoStr){"
+                            + "box.classList.remove('filtro-activo');"
+                            + "box.removeAttribute('data-filtro-tipo');"
+                            + "}else{"
+                            + "box.classList.add('filtro-activo');"
+                            + "box.classList.add('filtro-tipo-'+tipo);"
+                            + "box.setAttribute('data-filtro-tipo', tipoStr);"
+                            + "el.classList.add('leyenda-activa');"
+                            + "}"
+                            + "}");
+                    out.print("</script>");
                     //</editor-fold>
                 } else if (pageContext.getRequest().getAttribute("Reportes").toString().equals("Indicador_actividades")) {
                     //<editor-fold defaultstate="collapsed" desc="INDICADOR">

@@ -2687,16 +2687,15 @@ public class Tag_orden extends TagSupport {
                     out.print("</div>");
                     out.print("<div class=\"modal-footer\">");
                     out.print("<button class=\"btn btn-secondary\" type=\"button\" data-dismiss=\"modal\">Cancelar</button>");
-                    if (nombre_rol.equals("Administrador") || nombre_rol.equals("Tecnico")) {
-                        if (estado_ot == 2 && es_ejecutor_asignado) {
+                    if ((nombre_rol.equals("Administrador") || nombre_rol.equals("Tecnico")) && es_ejecutor_asignado) {
+                        if (estado_ot == 2) {
                             out.print("<a class=\"btn btn-primary\" href='#' onclick=\"javascript:document.getElementById('Btn_ot_estado').click();\">Avanzar</a>");
                         }
-                    } else if (estado_ot == 3) {
-                        if ((nombre_rol.equals("Administrador") || nombre_rol.equals("Coordinador")) && es_verificador_asignado) {
-                            out.print("<a class=\"btn btn-primary\" href='#' onclick=\"javascript:document.getElementById('Btn_ot_estado').click();\">Avanzar</a>");
-                        }
-                    } else if (estado_ot >= 4) {
-                        if ((nombre_rol.equals("Administrador") || nombre_rol.equals("Asistente") || nombre_rol.equals("Jefe_Mtto")) && es_aprobador_asignado) {
+                    }
+                    if (estado_ot >= 3) {
+                        if (nombre_rol.equals("Administrador")
+                                || (nombre_rol.equals("Coordinador") && estado_ot == 3 && es_verificador_asignado)
+                                || ((nombre_rol.equals("Asistente") || nombre_rol.equals("Jefe_Mtto")) && estado_ot >= 4 && es_aprobador_asignado)) {
                             out.print("<a class=\"btn btn-primary\" href='#' onclick=\"javascript:document.getElementById('Btn_ot_estado').click();\">Avanzar</a>");
                         }
                     }
