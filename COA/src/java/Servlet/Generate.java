@@ -264,17 +264,9 @@ public class Generate extends HttpServlet {
                         } catch (Exception e) {
                             AmoutReg = 0;
                         }
-                        result = CertificatesJpa.CertificatesRegister(Type, Code, Order, Product, Batch, Consecutive, Customer, Amount, DateDispatch, RolName, MaterialBatches, AmoutReg, Html, IdUsuario);
+                        IdCertificates = CertificatesJpa.CertificatesRegister(Type, Code, Order, Product, Batch, Consecutive, Customer, Amount, DateDispatch, RolName, MaterialBatches, AmoutReg, Html, IdUsuario);
+                        result = IdCertificates > 0;
                         if (result) {
-                            lst_id = CertificatesJpa.ConsultCertificatesIdType(Type);
-                            if (lst_id != null) {
-                                try {
-                                    Object[] ObjId = (Object[]) lst_id.get(0);
-                                    IdCertificates = Integer.parseInt(ObjId[0].toString());
-                                } catch (Exception e) {
-                                    IdCertificates = 0;
-                                }
-                            }
                             request.setAttribute("RegisterCertificates", result);
                         }
                         request.getRequestDispatcher("Generate?opt=2&Type=" + Type + "&Order=" + Order + "&Product=" + Product + "&Batch=" + Batch + "&FormatName=" + FormatName + "&IdCertificates=" + IdCertificates + "&StateCerti=1&AmoutReg=" + AmoutReg)

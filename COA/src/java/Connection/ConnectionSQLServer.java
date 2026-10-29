@@ -52,7 +52,33 @@ public class ConnectionSQLServer {
         return con;
     }
 
+    // Cómo se llega del pedido al detalle por lote (DETALLER):
+    // - Por factura (consulta original): PEDIDOS -> FACTURAS (f.PEDID) -> REMISION (r.DCTOPP = factura).
+    // - Por remisión: PEDIDOS -> REMISION (r.PEDID) directamente, para pedidos
+    //   que ya tienen remisión pero aún no se han facturado. Si la remisión
+    //   apunta a una factura (r.DCTOPP) igual se trae su número. Una remisión
+    //   sin facturar tiene DCTOPP = 0, y en FACTURAS existe un registro con
+    //   NUMERO 0: se excluye para que la Factura quede pendiente y no "0".
+    private static final String JOIN_POR_FACTURA = "LEFT JOIN FACTURAS f ON p.NUM = f.PEDID "
+            + "LEFT JOIN REMISION r ON f.NUMERO = r.DCTOPP ";
+    private static final String JOIN_POR_REMISION = "INNER JOIN REMISION r ON p.NUM = r.PEDID "
+            + "LEFT JOIN FACTURAS f ON f.NUMERO = r.DCTOPP AND r.DCTOPP <> 0 ";
+
+    /**
+     * Cabecera del certificado desde Factory por orden, producto y lote.
+     * Primero busca por la factura del pedido; si no encuentra nada, repite
+     * la misma consulta por la remisión del pedido. Devuelve null si no hay
+     * datos por ninguna de las dos vías.
+     */
     public List<String> Products(int Orden, String Producto, String Lote) throws Exception {
+        List<String> resultado = consultarProducts(Orden, Producto, Lote, JOIN_POR_FACTURA);
+        if (resultado == null) {
+            resultado = consultarProducts(Orden, Producto, Lote, JOIN_POR_REMISION);
+        }
+        return resultado;
+    }
+
+    private List<String> consultarProducts(int Orden, String Producto, String Lote, String joinDocumento) throws Exception {
         Connection con = null;
         Statement sttm = null;
         ResultSet rs = null;
@@ -91,8 +117,7 @@ public class ConnectionSQLServer {
                     + "FROM PEDIDOS p "
                     + "INNER JOIN CLIENTES c ON p.CLIENTE = c.COD "
                     + "INNER JOIN [EMP001_INV].[dbo].[MAESTRO] m ON p.COD = m.COD "
-                    + "LEFT JOIN FACTURAS f ON p.NUM = f.PEDID "
-                    + "LEFT JOIN REMISION r ON f.NUMERO = r.DCTOPP "
+                    + joinDocumento
                     + "LEFT JOIN DETALLER d ON r.NUMERO = d.NUMERO "
                     + "LEFT JOIN PREC_ESP pe "
                     + "       ON REPLACE(pe.CLIENTE, ' ', '') "

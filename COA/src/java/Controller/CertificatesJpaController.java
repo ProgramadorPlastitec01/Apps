@@ -197,7 +197,14 @@ public class CertificatesJpaController implements Serializable {
         }
     }
 
-    public boolean CertificatesRegister(String Tpe, String Cde, int Ord, String Pdt, String Btc, String Cql, String Ctm, String Amt, String Ddt, String Urg, String Mbt, int Arg ,String Fmt, int IdUserReg) {
+    /**
+     * Registra el certificado y devuelve el id_certificate generado (0 si
+     * falla). El id se toma con LAST_INSERT_ID() dentro de la misma
+     * transacción (misma conexión): antes se buscaba "el último por tipo"
+     * con Sp_ctf_c_ConsultCertificatesIdType, que ordena por state ASC y
+     * devolvía un certificado eliminado (state 0) o el de otro usuario.
+     */
+    public int CertificatesRegister(String Tpe, String Cde, int Ord, String Pdt, String Btc, String Cql, String Ctm, String Amt, String Ddt, String Urg, String Mbt, int Arg ,String Fmt, int IdUserReg) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
@@ -217,16 +224,21 @@ public class CertificatesJpaController implements Serializable {
             q.setParameter(13, Fmt);
             q.setParameter(14, IdUserReg);
             int resultado = q.executeUpdate();
+            int idGenerado = 0;
+            if (resultado == 1) {
+                Object id = em.createNativeQuery("SELECT LAST_INSERT_ID()").getSingleResult();
+                idGenerado = (id == null) ? 0 : ((Number) id).intValue();
+            }
             em.getTransaction().commit();
             em.clear();
             em.close();
-            if (resultado == 1) {
-                return true;
-            } else {
-                return false;
-            }
+            return idGenerado;
         } catch (Exception e) {
-            return false;
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            em.close();
+            return 0;
         }
     }
 
