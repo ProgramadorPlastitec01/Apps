@@ -10,6 +10,8 @@ import Encript.ControlEncryption;
 import Controller.UserControllerJpa;
 import Method.Mail;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import Method.generateRandomPassword;
 
 import java.util.Properties;
@@ -52,6 +54,11 @@ public class Session extends HttpServlet {
                     } else {
                         user = request.getParameter("Txt_user");
                         password = request.getParameter("Txt_password");
+                        // Acceso directo a Session?opt=1 (recarga, atrás, favorito) sin formulario de login
+                        if (user == null || password == null) {
+                            response.sendRedirect(request.getContextPath() + "/");
+                            return;
+                        }
                         if (password.length() >= 8) {
                             passwordEncrypt = md5.md5(password);
                             lst_user = UserJpa.ConsultUsersUserPassword(user, passwordEncrypt);
@@ -131,6 +138,7 @@ public class Session extends HttpServlet {
             }
 
         } catch (Exception ex) {
+            Logger.getLogger(Session.class.getName()).log(Level.SEVERE, "Error en Session opt=" + request.getParameter("opt"), ex);
             request.setAttribute("errorMessage", "Ha ocurrido un error procesando tu solicitud: " + ex.getMessage());
             request.getRequestDispatcher("404.jsp").forward(request, response);
         }

@@ -21,6 +21,10 @@
                 no está disponible o ya no existe en COA.
                 <br><br>
                 No pasa nada, te ayudamos a continuar.
+                <% if (request.getAttribute("errorMessage") != null) { %>
+                <br><br>
+                <small style="opacity: .75"><%= String.valueOf(request.getAttribute("errorMessage")).replace("<", "&lt;").replace(">", "&gt;") %></small>
+                <% } %>
             </div>
 
             <div class="d-flex justify-content-center gap-3">
