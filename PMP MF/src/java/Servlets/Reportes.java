@@ -43,6 +43,8 @@ public class Reportes extends HttpServlet {
             int linea = 0;
             int anio_report = 0;
             int id_tipo_mtto = 0;
+            int mes_ini = 0;
+            int mes_fin = 0;
             String valor = "";
             String filtro = "";
             String fecha_inicio = "";
@@ -114,12 +116,24 @@ public class Reportes extends HttpServlet {
                     } catch (NumberFormatException e) {
                         estado = 1;
                     }
+                    try {
+                        mes_ini = Integer.parseInt(request.getParameter("Cbx_mes_ini"));
+                    } catch (Exception e) {
+                        mes_ini = 0;
+                    }
+                    try {
+                        mes_fin = Integer.parseInt(request.getParameter("Cbx_mes_fin"));
+                    } catch (Exception e) {
+                        mes_fin = 0;
+                    }
                     tipo = "Cronograma";
                     request.setAttribute("id_linea", linea);
                     request.setAttribute("anio", anio_report);
                     request.setAttribute("filtro", filtro);
                     request.setAttribute("Reportes", tipo);
                     request.setAttribute("estado", estado);
+                    request.setAttribute("mes_ini", mes_ini);
+                    request.setAttribute("mes_fin", mes_fin);
                     request.getRequestDispatcher("Reportes.jsp").forward(request, response);
                     break;
                 //</editor-fold>
@@ -171,11 +185,23 @@ public class Reportes extends HttpServlet {
                     } catch (NumberFormatException e) {
                         estado = 1;
                     }
+                    try {
+                        mes_ini = Integer.parseInt(request.getParameter("Cbx_mes_ini"));
+                    } catch (Exception e) {
+                        mes_ini = 0;
+                    }
+                    try {
+                        mes_fin = Integer.parseInt(request.getParameter("Cbx_mes_fin"));
+                    } catch (Exception e) {
+                        mes_fin = 0;
+                    }
                     request.setAttribute("id_linea", linea);
                     request.setAttribute("anio", anio_report);
                     request.setAttribute("filtro", filtro);
                     request.setAttribute("Reportes", tipo);
                     request.setAttribute("estado", estado);
+                    request.setAttribute("mes_ini", mes_ini);
+                    request.setAttribute("mes_fin", mes_fin);
                     request.getRequestDispatcher("Reportes.jsp").forward(request, response);
                     break;
                 //</editor-fold>

@@ -116,8 +116,26 @@ public class Tag_reportes extends TagSupport {
                     out.print("</select><script type='text/javascript'>var mySelect = new LiveValidation('Cbx_estado');"
                             + "mySelect.add(Validate.Exclusion, { within: [''], failureMessage: \"\"});</script>");
                     out.print("</div>");
+                    out.print("<div style='width:40%;float:left;margin-left:3%;margin-right:2%'>");
+                    out.print("<b>Rango de meses:</b>");
+                    out.print("<div style='display:flex;gap:6px;'>");
+                    out.print("<select class='form-control' name='Cbx_mes_ini' id='Cbx_mes_ini' title='Mes inicio'>");
+                    out.print("<option value='0'>Todo el año</option>");
+                    for (int i = 0; i < arg_meses.length; i++) {
+                        out.print("<option value='" + (i + 1) + "'>" + arg_meses[i] + "</option>");
+                    }
+                    out.print("</select>");
+                    out.print("<select class='form-control' name='Cbx_mes_fin' id='Cbx_mes_fin' title='Mes fin'>");
+                    out.print("<option value='0'>Todo el año</option>");
+                    for (int i = 0; i < arg_meses.length; i++) {
+                        out.print("<option value='" + (i + 1) + "'>" + arg_meses[i] + "</option>");
+                    }
+                    out.print("</select>");
+                    out.print("</div>");
+                    out.print("</div>");
                     out.print("<br><br><div style='width:50%;margin-left:41%;margin-top:3%'>");
                     out.print("<span onclick=\"javascript:document.getElementById('Btn_accion').click()\" class='fas fa-search fa-size_small' title='Registrar'></span>&nbsp;&nbsp;");
+                    out.print("<span onclick=\"javascript:document.getElementById('Cbx_mes_ini').value='0';document.getElementById('Cbx_mes_fin').value='0';document.getElementById('Btn_accion').click();\" class='fas fa-calendar-alt fa-size_small' title='Ver año completo'></span>&nbsp;&nbsp;");
                     out.print("<span onclick=\"javascript:location.href='Reportes?opc=1'\" class='far fa-times-circle fa-size_small' title='Cancelar'></span>");
                     out.print("<br /><div style='display:none'><input type='submit' value='Registrar' id='Btn_accion' /></div>");
                     out.print("</div>");
@@ -135,6 +153,25 @@ public class Tag_reportes extends TagSupport {
                         filtro = pageContext.getRequest().getAttribute("filtro").toString();
                     } catch (Exception e) {
                         filtro = "";
+                    }
+                    int mes_ini = 0;
+                    int mes_fin = 0;
+                    try {
+                        mes_ini = Integer.parseInt(pageContext.getRequest().getAttribute("mes_ini").toString());
+                    } catch (Exception e) {
+                        mes_ini = 0;
+                    }
+                    try {
+                        mes_fin = Integer.parseInt(pageContext.getRequest().getAttribute("mes_fin").toString());
+                    } catch (Exception e) {
+                        mes_fin = 0;
+                    }
+                    boolean rango_mes_valido = mes_ini >= 1 && mes_ini <= 12 && mes_fin >= mes_ini && mes_fin <= 12;
+                    int col_start = 0;
+                    int col_end = 22;
+                    if (rango_mes_valido) {
+                        col_start = (mes_ini - 1) * 2;
+                        col_end = (mes_fin - 1) * 2;
                     }
 
                     out.print("<table id='resultados' class='table3'>");
@@ -164,14 +201,16 @@ public class Tag_reportes extends TagSupport {
                     out.print("<th rowspan='2' colspan='2' class='col-origen'>ORIGEN</th>");
                     lst_cols_week = jpaclna.Cronograma_cols_week_anio(anio);
                     Object[] obj_cols_week = (Object[]) lst_cols_week.get(0);
-                    for (int i = 0; i < 24; i += 2) {
+                    for (int i = col_start; i <= col_end; i += 2) {
                         out.print("<th colspan='" + obj_cols_week[i + 1] + "'>" + obj_cols_week[i] + "</th>");
                     }
                     out.print("</tr>");
                     out.print("<tr>");
                     lst_rango_week = jpaclna.Cronograma_rango_week_anio(anio);
                     Object[] obj_rango_week = (Object[]) lst_rango_week.get(0);
-                    for (int i = Integer.parseInt(obj_rango_week[0].toString()); i <= Integer.parseInt(obj_rango_week[23].toString()); i++) {
+                    int week_start_idx = col_start;
+                    int week_end_idx = col_end + 1;
+                    for (int i = Integer.parseInt(obj_rango_week[week_start_idx].toString()); i <= Integer.parseInt(obj_rango_week[week_end_idx].toString()); i++) {
                         out.print("<th align='center' class='col-week'><b class='negro'>" + (i + 1) + "</b></th>");
                     }
                     out.print("</tr>");
@@ -206,7 +245,7 @@ public class Tag_reportes extends TagSupport {
                                         String week_ot_proxI = obj_cronograma[9].toString();
                                         String week_ot_proxZ = obj_cronograma[10].toString();
                                         String[] arg_week_ot = obj_cronograma[7].toString().replace("[", "").replace("]", "").split(",");
-                                        for (int k = Integer.parseInt(obj_rango_week[0].toString()); k <= Integer.parseInt(obj_rango_week[23].toString()); k++) {
+                                        for (int k = Integer.parseInt(obj_rango_week[week_start_idx].toString()); k <= Integer.parseInt(obj_rango_week[week_end_idx].toString()); k++) {
                                             if (week_ot.contains("[" + k + "]") || week_ot_proxM.equals(k + "") || week_ot_proxI.equals(k + "") || week_ot_proxZ.equals(k + "")) {
                                                 out.print("<td>");
                                                 for (int l = 0; l < arg_week_ot.length; l++) {
@@ -233,7 +272,7 @@ public class Tag_reportes extends TagSupport {
                                             }
                                         }
                                     } catch (Exception e) {
-                                        for (int z = Integer.parseInt(obj_rango_week[0].toString()); z <= Integer.parseInt(obj_rango_week[23].toString()); z++) {
+                                        for (int z = Integer.parseInt(obj_rango_week[week_start_idx].toString()); z <= Integer.parseInt(obj_rango_week[week_end_idx].toString()); z++) {
                                             out.print("<td></td>");
                                         }
                                     }
@@ -272,7 +311,7 @@ public class Tag_reportes extends TagSupport {
                                             String week_ot_proxI = obj_cronograma[9].toString();
                                             String week_ot_proxZ = obj_cronograma[10].toString();
                                             String[] arg_week_ot = obj_cronograma[7].toString().replace("[", "").replace("]", "").split(",");
-                                            for (int k = Integer.parseInt(obj_rango_week[0].toString()); k <= Integer.parseInt(obj_rango_week[23].toString()); k++) {
+                                            for (int k = Integer.parseInt(obj_rango_week[week_start_idx].toString()); k <= Integer.parseInt(obj_rango_week[week_end_idx].toString()); k++) {
                                                 if (week_ot.contains("[" + k + "]") || week_ot_proxM.equals(k + "") || week_ot_proxI.equals(k + "") || week_ot_proxZ.equals(k + "")) {
                                                     out.print("<td>");
                                                     for (int l = 0; l < arg_week_ot.length; l++) {
@@ -301,7 +340,7 @@ public class Tag_reportes extends TagSupport {
                                                 }
                                             }
                                         } catch (Exception e) {
-                                            for (int z = Integer.parseInt(obj_rango_week[0].toString()); z <= Integer.parseInt(obj_rango_week[23].toString()); z++) {
+                                            for (int z = Integer.parseInt(obj_rango_week[week_start_idx].toString()); z <= Integer.parseInt(obj_rango_week[week_end_idx].toString()); z++) {
                                                 out.print("<td></td>");
                                             }
                                         }
@@ -340,7 +379,7 @@ public class Tag_reportes extends TagSupport {
                                         String week_ot_proxI = obj_cronograma[9].toString();
                                         String week_ot_proxZ = obj_cronograma[10].toString();
                                         String[] arg_week_ot = obj_cronograma[7].toString().replace("[", "").replace("]", "").split(",");
-                                        for (int k = Integer.parseInt(obj_rango_week[0].toString()); k <= Integer.parseInt(obj_rango_week[23].toString()); k++) {
+                                        for (int k = Integer.parseInt(obj_rango_week[week_start_idx].toString()); k <= Integer.parseInt(obj_rango_week[week_end_idx].toString()); k++) {
                                             if (week_ot.contains("[" + k + "]") || week_ot_proxM.equals(k + "") || week_ot_proxI.equals(k + "") || week_ot_proxZ.equals(k + "")) {
                                                 out.print("<td>");
                                                 for (int l = 0; l < arg_week_ot.length; l++) {
@@ -369,7 +408,7 @@ public class Tag_reportes extends TagSupport {
                                             }
                                         }
                                     } catch (Exception e) {
-                                        for (int z = Integer.parseInt(obj_rango_week[0].toString()); z <= Integer.parseInt(obj_rango_week[23].toString()); z++) {
+                                        for (int z = Integer.parseInt(obj_rango_week[week_start_idx].toString()); z <= Integer.parseInt(obj_rango_week[week_end_idx].toString()); z++) {
                                             out.print("<td></td>");
                                         }
                                     }
@@ -453,8 +492,26 @@ public class Tag_reportes extends TagSupport {
                     out.print("</select><script type='text/javascript'>var mySelect = new LiveValidation('Cbx_estado');"
                             + "mySelect.add(Validate.Exclusion, { within: [''], failureMessage: \"\"});</script>");
                     out.print("</div>");
+                    out.print("<div style='width:40%;float:left;margin-left:3%;margin-right:2%'>");
+                    out.print("<b>Rango de meses:</b>");
+                    out.print("<div style='display:flex;gap:6px;'>");
+                    out.print("<select class='form-control' name='Cbx_mes_ini' id='Cbx_mes_ini' title='Mes inicio'>");
+                    out.print("<option value='0'>Todo el año</option>");
+                    for (int i = 0; i < arg_meses.length; i++) {
+                        out.print("<option value='" + (i + 1) + "'>" + arg_meses[i] + "</option>");
+                    }
+                    out.print("</select>");
+                    out.print("<select class='form-control' name='Cbx_mes_fin' id='Cbx_mes_fin' title='Mes fin'>");
+                    out.print("<option value='0'>Todo el año</option>");
+                    for (int i = 0; i < arg_meses.length; i++) {
+                        out.print("<option value='" + (i + 1) + "'>" + arg_meses[i] + "</option>");
+                    }
+                    out.print("</select>");
+                    out.print("</div>");
+                    out.print("</div>");
                     out.print("<br><br><div style='width:50%;margin-left:41%;margin-top:3%'>");
                     out.print("<span onclick=\"javascript:document.getElementById('Btn_accion').click()\" class='fas fa-filter fa-size_small' title='Registrar'></span>&nbsp;&nbsp;");
+                    out.print("<span onclick=\"javascript:document.getElementById('Cbx_mes_ini').value='0';document.getElementById('Cbx_mes_fin').value='0';document.getElementById('Btn_accion').click();\" class='fas fa-calendar-alt fa-size_small' title='Ver año completo'></span>&nbsp;&nbsp;");
                     out.print("<span onclick=\"javascript:location.href='Reportes?opc=7'\" class='far fa-times-circle fa-size_small' title='Cancelar'></span>");
                     out.print("<br /><div style='display:none'><input type='submit' value='Registrar' id='Btn_accion' /></div>");
                     out.print("</div>");
@@ -472,6 +529,25 @@ public class Tag_reportes extends TagSupport {
                         id_linea = Integer.parseInt(pageContext.getRequest().getAttribute("id_linea").toString());
                     } catch (Exception e) {
                         id_linea = 0;
+                    }
+                    int mes_ini = 0;
+                    int mes_fin = 0;
+                    try {
+                        mes_ini = Integer.parseInt(pageContext.getRequest().getAttribute("mes_ini").toString());
+                    } catch (Exception e) {
+                        mes_ini = 0;
+                    }
+                    try {
+                        mes_fin = Integer.parseInt(pageContext.getRequest().getAttribute("mes_fin").toString());
+                    } catch (Exception e) {
+                        mes_fin = 0;
+                    }
+                    boolean rango_mes_valido = mes_ini >= 1 && mes_ini <= 12 && mes_fin >= mes_ini && mes_fin <= 12;
+                    int col_start = 0;
+                    int col_end = 22;
+                    if (rango_mes_valido) {
+                        col_start = (mes_ini - 1) * 2;
+                        col_end = (mes_fin - 1) * 2;
                     }
                     out.print("<table id='resultados' class='table2'>");
                     out.print("<tr><td colspan='7' style='background-color:#CCC; text-align:center;'><b style='color:white;'>COPIA NO CONTROLADA PROTOTIPO</b></td></tr>");
@@ -500,14 +576,16 @@ public class Tag_reportes extends TagSupport {
                     out.print("<th rowspan='2' colspan='2' class='col-origen'>ORIGEN</th>");
                     lst_cols_week = jpaclna.Cronograma_cols_week_anio(anio);
                     Object[] obj_cols_week = (Object[]) lst_cols_week.get(0);
-                    for (int i = 0; i < 24; i += 2) {
+                    for (int i = col_start; i <= col_end; i += 2) {
                         out.print("<th colspan='" + obj_cols_week[i + 1] + "'>" + obj_cols_week[i] + "</th>");
                     }
                     out.print("</tr>");
                     out.print("<tr>");
                     lst_rango_week = jpaclna.Cronograma_rango_week_anio(anio);
                     Object[] obj_rango_week = (Object[]) lst_rango_week.get(0);
-                    for (int i = Integer.parseInt(obj_rango_week[0].toString()); i <= Integer.parseInt(obj_rango_week[23].toString()); i++) {
+                    int week_start_idx = col_start;
+                    int week_end_idx = col_end + 1;
+                    for (int i = Integer.parseInt(obj_rango_week[week_start_idx].toString()); i <= Integer.parseInt(obj_rango_week[week_end_idx].toString()); i++) {
                         out.print("<th align='center' class='col-week'><b class='negro'>" + (i + 1) + "</b></th>");
                     }
                     out.print("</tr>");
@@ -538,7 +616,7 @@ public class Tag_reportes extends TagSupport {
                                         String week_ot_proxI = obj_cronograma[9].toString();
                                         String week_ot_proxZ = obj_cronograma[10].toString();
                                         String[] arg_week_ot = obj_cronograma[7].toString().replace("[", "").replace("]", "").split(",");
-                                        for (int k = Integer.parseInt(obj_rango_week[0].toString()); k <= Integer.parseInt(obj_rango_week[23].toString()); k++) {
+                                        for (int k = Integer.parseInt(obj_rango_week[week_start_idx].toString()); k <= Integer.parseInt(obj_rango_week[week_end_idx].toString()); k++) {
                                             if (week_ot.contains("[" + k + "]") || week_ot_proxM.equals(k + "") || week_ot_proxI.equals(k + "") || week_ot_proxZ.equals(k + "")) {
                                                 out.print("<td>");
                                                 for (int l = 0; l < arg_week_ot.length; l++) {
@@ -555,7 +633,7 @@ public class Tag_reportes extends TagSupport {
                                             }
                                         }
                                     } catch (Exception e) {
-                                        for (int z = Integer.parseInt(obj_rango_week[0].toString()); z <= Integer.parseInt(obj_rango_week[23].toString()); z++) {
+                                        for (int z = Integer.parseInt(obj_rango_week[week_start_idx].toString()); z <= Integer.parseInt(obj_rango_week[week_end_idx].toString()); z++) {
                                             out.print("<td></td>");
                                         }
                                     }
@@ -589,7 +667,7 @@ public class Tag_reportes extends TagSupport {
                                         String week_ot_proxI = obj_cronograma[9].toString();
                                         String week_ot_proxZ = obj_cronograma[10].toString();
                                         String[] arg_week_ot = obj_cronograma[7].toString().replace("[", "").replace("]", "").split(",");
-                                        for (int k = Integer.parseInt(obj_rango_week[0].toString()); k <= Integer.parseInt(obj_rango_week[23].toString()); k++) {
+                                        for (int k = Integer.parseInt(obj_rango_week[week_start_idx].toString()); k <= Integer.parseInt(obj_rango_week[week_end_idx].toString()); k++) {
                                             if (week_ot.contains("[" + k + "]") || week_ot_proxM.equals(k + "") || week_ot_proxI.equals(k + "") || week_ot_proxZ.equals(k + "")) {
                                                 out.print("<td>");
                                                 for (int l = 0; l < arg_week_ot.length; l++) {
@@ -606,7 +684,7 @@ public class Tag_reportes extends TagSupport {
                                             }
                                         }
                                     } catch (Exception e) {
-                                        for (int z = Integer.parseInt(obj_rango_week[0].toString()); z <= Integer.parseInt(obj_rango_week[23].toString()); z++) {
+                                        for (int z = Integer.parseInt(obj_rango_week[week_start_idx].toString()); z <= Integer.parseInt(obj_rango_week[week_end_idx].toString()); z++) {
                                             out.print("<td></td>");
                                         }
                                     }
@@ -641,7 +719,7 @@ public class Tag_reportes extends TagSupport {
                                             String week_ot_proxI = obj_cronograma[9].toString();
                                             String week_ot_proxZ = obj_cronograma[10].toString();
                                             String[] arg_week_ot = obj_cronograma[7].toString().replace("[", "").replace("]", "").split(",");
-                                            for (int k = Integer.parseInt(obj_rango_week[0].toString()); k <= Integer.parseInt(obj_rango_week[23].toString()); k++) {
+                                            for (int k = Integer.parseInt(obj_rango_week[week_start_idx].toString()); k <= Integer.parseInt(obj_rango_week[week_end_idx].toString()); k++) {
                                                 if (week_ot.contains("[" + k + "]") || week_ot_proxM.equals(k + "") || week_ot_proxI.equals(k + "") || week_ot_proxZ.equals(k + "")) {
                                                     out.print("<td>");
                                                     for (int l = 0; l < arg_week_ot.length; l++) {
@@ -658,7 +736,7 @@ public class Tag_reportes extends TagSupport {
                                                 }
                                             }
                                         } catch (Exception e) {
-                                            for (int z = Integer.parseInt(obj_rango_week[0].toString()); z <= Integer.parseInt(obj_rango_week[23].toString()); z++) {
+                                            for (int z = Integer.parseInt(obj_rango_week[week_start_idx].toString()); z <= Integer.parseInt(obj_rango_week[week_end_idx].toString()); z++) {
                                                 out.print("<td></td>");
                                             }
                                         }
@@ -693,7 +771,7 @@ public class Tag_reportes extends TagSupport {
                                         String week_ot_proxI = obj_cronograma[9].toString();
                                         String week_ot_proxZ = obj_cronograma[10].toString();
                                         String[] arg_week_ot = obj_cronograma[7].toString().replace("[", "").replace("]", "").split(",");
-                                        for (int k = Integer.parseInt(obj_rango_week[0].toString()); k <= Integer.parseInt(obj_rango_week[23].toString()); k++) {
+                                        for (int k = Integer.parseInt(obj_rango_week[week_start_idx].toString()); k <= Integer.parseInt(obj_rango_week[week_end_idx].toString()); k++) {
                                             if (week_ot.contains("[" + k + "]") || week_ot_proxM.equals(k + "") || week_ot_proxI.equals(k + "") || week_ot_proxZ.equals(k + "")) {
                                                 out.print("<td>");
                                                 for (int l = 0; l < arg_week_ot.length; l++) {
@@ -710,7 +788,7 @@ public class Tag_reportes extends TagSupport {
                                             }
                                         }
                                     } catch (Exception e) {
-                                        for (int z = Integer.parseInt(obj_rango_week[0].toString()); z <= Integer.parseInt(obj_rango_week[23].toString()); z++) {
+                                        for (int z = Integer.parseInt(obj_rango_week[week_start_idx].toString()); z <= Integer.parseInt(obj_rango_week[week_end_idx].toString()); z++) {
                                             out.print("<td></td>");
                                         }
                                     }
