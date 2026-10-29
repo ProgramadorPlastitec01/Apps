@@ -95,13 +95,12 @@ public class Tag_reportes extends TagSupport {
                     out.print("<div style='width:40%;float:left;margin-left:3%;margin-right:2%'>");
                     out.print("<b>Lineas:</b>");
                     out.print("<select class='form-control' name='Cbx_linea' id='Cbx_linea' title='Lineas'>");
-                    out.print("<option value='0' >Seleccionar linea</option>");
+                    out.print("<option value='0' >Todas las lineas</option>");
                     for (int i = 0; i < lst_lineas.size(); i++) {
                         Object[] obj_lineas = (Object[]) lst_lineas.get(i);
                         out.print("<option value='" + obj_lineas[0] + "'>" + obj_lineas[1] + "</option>");
                     }
-                    out.print("</select><script type='text/javascript'>var mySelect = new LiveValidation('Cbx_linea');"
-                            + "mySelect.add(Validate.Exclusion, { within: ['0'], failureMessage: \"\"});</script>");
+                    out.print("</select>");
                     out.print("</div>");
                     out.print("<div style='width:40%;float:left;margin-left:3%;margin-right:2%'>");
                     out.print("<b>Estado:</b>");
@@ -471,13 +470,12 @@ public class Tag_reportes extends TagSupport {
                     out.print("<div style='width:40%;float:left;margin-left:3%;margin-right:2%'>");
                     out.print("<b>Actividad General :</b>");
                     out.print("<select class='form-control' name='Cbx_linea' id='Cbx_linea' title='Actividad'>");
-                    out.print("<option value='0' >Seleccionar Actividad</option>");
+                    out.print("<option value='0' >Todas las actividades</option>");
                     for (int i = 0; i < lst_actividad.size(); i++) {
                         Object[] obj_actividad = (Object[]) lst_actividad.get(i);
                         out.print("<option value='" + obj_actividad[0] + "'>" + obj_actividad[1] + "</option>");
                     }
-                    out.print("</select><script type='text/javascript'>var mySelect = new LiveValidation('Cbx_linea');"
-                            + "mySelect.add(Validate.Exclusion, { within: ['0'], failureMessage: \"\"});</script>");
+                    out.print("</select>");
                     out.print("</div>");
                     out.print("<div style='width:40%;float:left;margin-left:3%;margin-right:2%'>");
                     out.print("<b>Estado:</b>");
