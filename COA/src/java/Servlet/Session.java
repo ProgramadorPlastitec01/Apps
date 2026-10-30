@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import Encript.ControlEncryption;
 import Controller.UserControllerJpa;
 import Method.Mail;
+import Method.Util;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -96,6 +97,13 @@ public class Session extends HttpServlet {
                                 session.setAttribute("Permisos", obj_session[14]);
                                 session.setAttribute("Estado", obj_session[11]);
                                 session.setAttribute("Firma", obj_session[15]);
+                                // Llegó desde un enlace del correo (ej. certificado
+                                // finalizado por firmar): se abre ese destino.
+                                String next = request.getParameter("next");
+                                if (Util.esDestinoPostLogin(next)) {
+                                    response.sendRedirect(request.getContextPath() + "/" + next);
+                                    return;
+                                }
                                 request.setAttribute("welcome", true);
                                 request.getRequestDispatcher("Start?opc=1").forward(request, response);
                             }

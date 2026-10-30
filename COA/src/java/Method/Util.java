@@ -8,6 +8,17 @@ import java.util.regex.Pattern;
 
 public class Util {
 
+    // Destinos a los que se puede volver después del login (enlaces del correo
+    // de certificado finalizado): abrir un certificado (opt=2) o la lista de
+    // pendientes por firmar (opt=8). Solo rutas internas de Generate con
+    // parámetros simples, para que el login no sirva de redirección abierta.
+    private static final Pattern DESTINO_POST_LOGIN = Pattern.compile(
+            "^Generate\\?opt=(2|8)(&[A-Za-z0-9_]+=[A-Za-z0-9_%.\\-]*)*$");
+
+    public static boolean esDestinoPostLogin(String destino) {
+        return destino != null && DESTINO_POST_LOGIN.matcher(destino).matches();
+    }
+
     // Convierte "NULL" (o vacío) en null para que el merge de "Actualizar
     // desde Factory" sepa que ese campo todavía no tiene dato real.
     public static String valorOrNull(String[] arr, int idx) {

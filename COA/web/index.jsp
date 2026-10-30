@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="Method.Util"%>
 <%@taglib uri="/WEB-INF/tlds/alert" prefix="Alert" %>
 <!DOCTYPE html>
 <html>
@@ -34,6 +35,11 @@
                             </p>
 
                             <form action="Session?opt=1" method="post" autocomplete="off">
+                                <%-- Destino tras el login (enlace del correo); solo rutas internas validadas --%>
+                                <% String next = request.getParameter("next"); %>
+                                <% if (Util.esDestinoPostLogin(next)) { %>
+                                <input type="hidden" name="next" value="<%= next %>">
+                                <% } %>
 
                                 <div class="form-group">
                                     <div class="input-icon">

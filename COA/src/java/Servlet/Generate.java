@@ -31,6 +31,14 @@ public class Generate extends HttpServlet {
         request.setCharacterEncoding("utf-8");
         try {
             HttpSession session = request.getSession();
+            if (session.getAttribute("idUsuario") == null) {
+                // Sin sesión (p. ej. enlace del correo de certificado finalizado):
+                // al login, recordando el destino para abrirlo después de ingresar.
+                String destino = "Generate?" + request.getQueryString();
+                response.sendRedirect(request.getContextPath() + "/"
+                        + (Util.esDestinoPostLogin(destino) ? "?next=" + java.net.URLEncoder.encode(destino, "UTF-8") : ""));
+                return;
+            }
             CertificatesJpaController CertificatesJpa = new CertificatesJpaController();
             EventsJpaController EventConn = new EventsJpaController();
             Mail MailConn = new Mail();
@@ -461,7 +469,7 @@ public class Generate extends HttpServlet {
                     }
                     String[] IdsFinish = IdCertiMasive.trim().isEmpty() ? new String[0]
                             : IdCertiMasive.replace("][", "///").replace("[", "").replace("]", "").split("///");
-                    java.util.List<String> Finished = new java.util.ArrayList<String>();
+                    java.util.List<String[]> Finished = new java.util.ArrayList<String[]>();
                     int NotFinished = 0;
                     for (int i = 0; i < IdsFinish.length; i++) {
                         if (IdsFinish[i].trim().isEmpty()) {
@@ -473,11 +481,11 @@ public class Generate extends HttpServlet {
                             NotFinished++;
                             continue;
                         }
-                        NumberCertificate = finishCertificate(CertificatesJpa, IdCertificates);
-                        if (NumberCertificate == null) {
+                        String[] CertiFinished = finishCertificate(CertificatesJpa, IdCertificates);
+                        if (CertiFinished == null) {
                             NotFinished++;
                         } else {
-                            Finished.add(NumberCertificate);
+                            Finished.add(CertiFinished);
                         }
                     }
                     if (!Finished.isEmpty()) {
@@ -645,11 +653,12 @@ public class Generate extends HttpServlet {
 
     /**
      * Finaliza un certificado (state = 2) solo si está en estado 1 (En
-     * gestión) y devuelve su número de certificado (consecutive_quality)
-     * para la notificación. Devuelve null si no se pudo finalizar. El
-     * número se lee de BD porque la finalización masiva solo envía ids.
+     * gestión) y devuelve {número de certificado (consecutive_quality), id,
+     * tipo} para la notificación (el id y el tipo arman el enlace directo al
+     * certificado para firmarlo). Devuelve null si no se pudo finalizar. Los
+     * datos se leen de BD porque la finalización masiva solo envía ids.
      */
-    private String finishCertificate(CertificatesJpaController CertificatesJpa, int IdCertificates) {
+    private String[] finishCertificate(CertificatesJpaController CertificatesJpa, int IdCertificates) {
         List lstCerti = CertificatesJpa.ConsultCertificatesId("", IdCertificates);
         if (lstCerti == null) {
             return null;
@@ -665,7 +674,11 @@ public class Generate extends HttpServlet {
         if (!CertificatesJpa.UpdateCertificateFinish(IdCertificates)) {
             return null;
         }
-        return (ObjCerti[3] == null) ? String.valueOf(IdCertificates) : ObjCerti[3].toString().trim();
+        return new String[]{
+            (ObjCerti[3] == null) ? String.valueOf(IdCertificates) : ObjCerti[3].toString().trim(),
+            String.valueOf(IdCertificates),
+            (ObjCerti[1] == null) ? "" : ObjCerti[1].toString().trim()
+        };
     }
 
     /**

@@ -624,6 +624,14 @@ public class ConnectionRegistrosLAB {
                 if (Batch.contains("///")) {
                     BatchCicle = Batch.split("///");
                 }
+                // 1.7 BIG BORE / 1.8 SISTEMA 3 VIAS se asignan por material, no por
+                // la casilla de ensamble: hay registros donde el operario ingresó el
+                // 3 vías (6664) en ensamble_3 y el Big Bore en ensamble_4, y por
+                // posición quedaban invertidos en el certificado.
+                String tresViasEnEnsamble3 = "(COALESCE(UPPER(r.ensamble_3), '') LIKE '%VIAS%' OR COALESCE(r.lote_ensamble_3, '') LIKE '6664-%') "
+                        + "AND NOT (COALESCE(UPPER(r.ensamble_4), '') LIKE '%VIAS%' OR COALESCE(r.lote_ensamble_4, '') LIKE '6664-%')";
+                String loteBigBore = "CASE WHEN " + tresViasEnEnsamble3 + " THEN r.lote_ensamble_4 ELSE r.lote_ensamble_3 END";
+                String loteTresVias = "CASE WHEN " + tresViasEnEnsamble3 + " THEN r.lote_ensamble_3 ELSE r.lote_ensamble_4 END";
                 String Qry
                         = "WITH registros_base AS ( "
                         + "    SELECT  "
@@ -640,10 +648,10 @@ public class ConnectionRegistrosLAB {
                         + "        r.lote_ensamble AS `Lote CONNECTOR`, "
                         + "        SUBSTRING(r.lote_ensamble_2, 1, 4) AS `SITIO INYECCION / INJECTION SITE`, "
                         + "        r.lote_ensamble_2 AS `Lote INYECCION`, "
-                        + "        SUBSTRING(r.lote_ensamble_3, 1, 4) AS `ENSAMBLE BIG BORE`, "
-                        + "        r.lote_ensamble_3 AS `Lote BIG BORE`, "
-                        + "        SUBSTRING(r.lote_ensamble_4, 1, 4) AS `SISTEMA DE 3 VIAS PN`, "
-                        + "        r.lote_ensamble_4 AS `Lote SISTEMA VIAS`, "
+                        + "        SUBSTRING(" + loteBigBore + ", 1, 4) AS `ENSAMBLE BIG BORE`, "
+                        + "        " + loteBigBore + " AS `Lote BIG BORE`, "
+                        + "        SUBSTRING(" + loteTresVias + ", 1, 4) AS `SISTEMA DE 3 VIAS PN`, "
+                        + "        " + loteTresVias + " AS `Lote SISTEMA VIAS`, "
                         + "        r.lote_tinta AS `FOIL NEGRO / BLACK FOIL` "
                         + "    FROM orden_produccion o "
                         + "    INNER JOIN producto p ON o.id_orden_produccion = p.id_orden_produccion "

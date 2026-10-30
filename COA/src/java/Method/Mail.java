@@ -290,36 +290,54 @@ public class Mail {
      * Notifica la finalización de uno o varios certificados en un único correo.
      * La finalización masiva selecciona N certificados y debe generar una sola
      * notificación, no una por certificado.
+     *
+     * @param Certificates cada elemento es {número de certificado, id, tipo};
+     * el id y el tipo arman el enlace que abre el certificado listo para
+     * firmar (si no hay sesión, el login devuelve al usuario a ese enlace).
      */
-    public void CertificateSend(List<String> Certificates, String NameSender, ServletContext context) throws MessagingException {
+    public void CertificateSend(List<String[]> Certificates, String NameSender, ServletContext context) throws MessagingException {
         if (Certificates == null || Certificates.isEmpty()) {
             return;
         }
         if (lst_mail != null) {
             int Total = Certificates.size();
 
-            // Listado de certificados para el asunto y la tarjeta del correo.
+            Object[] obj_mail = (Object[]) lst_mail.get(0);
+            String[] ArrMail = obj_mail[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+            String BaseUrl = ArrMail[7].trim().endsWith("/") ? ArrMail[7].trim() : ArrMail[7].trim() + "/";
+
+            // Listado de certificados para el asunto y la tarjeta del correo;
+            // cada número abre ese certificado para firmarlo.
             StringBuilder Subject = new StringBuilder();
             StringBuilder Detail = new StringBuilder();
+            String LinkCertificate = "";
             for (int i = 0; i < Total; i++) {
-                String Number = (Certificates.get(i) == null) ? "" : Certificates.get(i).toString().trim();
+                String[] Certificate = Certificates.get(i);
+                String Number = (Certificate[0] == null) ? "" : Certificate[0].trim();
+                try {
+                    LinkCertificate = BaseUrl + "Generate?opt=2&Type=" + java.net.URLEncoder.encode(Certificate[2], "UTF-8")
+                            + "&IdCertificates=" + Certificate[1] + "&StateCerti=2";
+                } catch (java.io.UnsupportedEncodingException e) {
+                    LinkCertificate = BaseUrl;
+                }
                 if (i > 0) {
                     Subject.append(", ");
                 }
                 Subject.append(Number);
-                Detail.append("<div style='display:inline-block;"
+                Detail.append("<a href='" + LinkCertificate + "' style='display:inline-block;"
                         + "background:#eef2ff;"
                         + "border:1px solid #c7d2fe;"
                         + "color:#312e81;"
                         + "border-radius:6px;"
                         + "padding:5px 12px;"
                         + "margin:0 6px 6px 0;"
-                        + "font-size:14px;'>" + Number + "</div>");
+                        + "text-decoration:none;"
+                        + "font-size:14px;'>" + Number + "</a>");
             }
             String SubjectList = (Total > 3) ? (Total + " certificados") : Subject.toString();
-
-            Object[] obj_mail = (Object[]) lst_mail.get(0);
-            String[] ArrMail = obj_mail[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+            // Uno solo: el botón abre ese certificado. Varios: la lista de
+            // certificados finalizados pendientes por firmar.
+            String LinkButton = (Total > 1) ? BaseUrl + "Generate?opt=8&StateM=2" : LinkCertificate;
 
             Properties propiedades = new Properties();
             propiedades.setProperty("mail.smtp.host", ArrMail[0]);
@@ -415,9 +433,13 @@ public class Mail {
                         + "</td>"
                         + "</tr>"
                         + "</table>"
+                        + ((Total > 1)
+                                ? "<p style='font-size:13px;color:#6b7280;margin:12px 0 0;'>"
+                                + "Haga clic en un certificado para abrirlo y firmarlo.</p>"
+                                : "")
                         //==================== BOTON ====================
                         + "<div style='text-align:center;margin-top:40px;'>"
-                        + "<a href='" + ArrMail[7] + "' "
+                        + "<a href='" + LinkButton + "' "
                         + "style='display:inline-block;"
                         + "background:#4D4AE8;"
                         + "color:#ffffff;"
@@ -426,7 +448,7 @@ public class Mail {
                         + "border-radius:8px;"
                         + "font-size:16px;"
                         + "font-weight:bold;'>"
-                        + ((Total > 1) ? "Ver Certificados" : "Ver Certificado")
+                        + ((Total > 1) ? "Ver Certificados por Firmar" : "Ver y Firmar Certificado")
                         + "</a>"
                         + "</div>"
                         + "</td>"
