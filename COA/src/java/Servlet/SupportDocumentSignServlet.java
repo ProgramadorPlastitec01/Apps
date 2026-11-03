@@ -3,6 +3,7 @@ package Servlet;
 import Controller.CertificateFileJpaController;
 import Controller.CertificateFileRow;
 import Method.OfficePlatformService;
+import Method.SignatureHistory;
 import Method.SignatureStorage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -189,6 +190,12 @@ public class SupportDocumentSignServlet extends HttpServlet {
                 getServletContext().log("No se pudo purgar el documento de soporte pendiente original: " + archivo, ex);
             }
             certificateFiles.deleteFile(id);
+
+            if (fila.getIdCertificate() != null) {
+                SignatureHistory.registrar(request, SignatureHistory.TIPO_SOPORTE, String.valueOf(fila.getIdCertificate()),
+                        fila.getIdCertificate().intValue(), nombreFirmado, cliente, anio, orden, lote,
+                        SignatureHistory.EVENTO_FIRMADO, "Documento de soporte firmado.");
+            }
 
             response.sendRedirect(redirectBase + separator + "msg=support_sign_success");
         } finally {

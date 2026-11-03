@@ -114,6 +114,8 @@ public final class SupportDocumentUi {
         }
         out.print("<a class='dropdown-item has-icon' href='" + descargaUrl + "' download>"
                 + "<i class='fas fa-download'></i> Descargar</a>");
+        out.print("<a class='dropdown-item has-icon' href='#' onclick=\"abrirHistorialFirmas('SOPORTE', '" + idCertificate + "'); return false;\">"
+                + "<i class='fas fa-history'></i> Historial de firmas</a>");
         if (canDelete) {
             String returnToEncoded;
             try {

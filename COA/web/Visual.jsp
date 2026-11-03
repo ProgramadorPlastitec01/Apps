@@ -1908,5 +1908,6 @@
         <script src="Interface/Content/Assets/js/page/modules-toastr.js"></script>
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
         <script src="Interface/Content/Assets/modules/sweetalert/sweetalert.min.js"></script>
+        <script src="Interface/Content/Assets/js/signature-history.js"></script>
     </body>
 </html>

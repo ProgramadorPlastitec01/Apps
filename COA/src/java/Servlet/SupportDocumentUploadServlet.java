@@ -4,6 +4,7 @@ import Controller.CertificateFileJpaController;
 import Controller.CertificatesJpaController;
 import Method.OfficePlatformService;
 import Method.PdfImageUtil;
+import Method.SignatureHistory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -168,6 +169,11 @@ public class SupportDocumentUploadServlet extends HttpServlet {
                             uploadedById, uploadedByName, idCertificate);
                 }
                 uploaded = true;
+                if (idCertificate != null) {
+                    SignatureHistory.registrar(request, SignatureHistory.TIPO_SOPORTE, String.valueOf(idCertificate),
+                            idCertificate.intValue(), finalName, cliente, anio, orden, lote,
+                            SignatureHistory.EVENTO_REGISTRADO, "Documento de soporte adjuntado, pendiente de firma.");
+                }
             } catch (IOException ex) {
                 System.err.println("[SupportDocumentUploadServlet] Error subiendo '" + finalName + "' a Office Platform: " + ex.getMessage());
                 rejected = true;

@@ -17,6 +17,7 @@ import Controller.CertificateDuplicationJpaController;
 import Controller.EventsJpaController;
 import Controller.UserControllerJpa;
 import Method.Mail;
+import Method.SignatureHistory;
 import Method.Util;
 import Connection.ConnectionSQLServer;
 import com.google.gson.Gson;
@@ -276,6 +277,11 @@ public class Generate extends HttpServlet {
                         result = IdCertificates > 0;
                         if (result) {
                             request.setAttribute("RegisterCertificates", result);
+                            SignatureHistory.registrar(request, SignatureHistory.TIPO_CERTIFICADO,
+                                    String.valueOf(IdCertificates), IdCertificates, Consecutive, Customer,
+                                    String.valueOf(java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)),
+                                    String.valueOf(Order), Batch, SignatureHistory.EVENTO_REGISTRADO,
+                                    "Certificado " + Type + " registrado (producto " + Product + ").");
                         }
                         request.getRequestDispatcher("Generate?opt=2&Type=" + Type + "&Order=" + Order + "&Product=" + Product + "&Batch=" + Batch + "&FormatName=" + FormatName + "&IdCertificates=" + IdCertificates + "&StateCerti=1&AmoutReg=" + AmoutReg)
                                 .forward(request, response);
@@ -336,7 +342,7 @@ public class Generate extends HttpServlet {
                                 Failed++;
                                 continue;
                             }
-                            if (signCertificate(CertificatesJpa, IdCertificates, Signature)) {
+                            if (signCertificate(CertificatesJpa, IdCertificates, Signature, request, IdsCerti.length > 1)) {
                                 Signed++;
                             } else {
                                 Failed++;
@@ -481,7 +487,7 @@ public class Generate extends HttpServlet {
                             NotFinished++;
                             continue;
                         }
-                        String[] CertiFinished = finishCertificate(CertificatesJpa, IdCertificates);
+                        String[] CertiFinished = finishCertificate(CertificatesJpa, IdCertificates, request, IdsFinish.length > 1);
                         if (CertiFinished == null) {
                             NotFinished++;
                         } else {
@@ -658,7 +664,8 @@ public class Generate extends HttpServlet {
      * certificado para firmarlo). Devuelve null si no se pudo finalizar. Los
      * datos se leen de BD porque la finalización masiva solo envía ids.
      */
-    private String[] finishCertificate(CertificatesJpaController CertificatesJpa, int IdCertificates) {
+    private String[] finishCertificate(CertificatesJpaController CertificatesJpa, int IdCertificates,
+            HttpServletRequest request, boolean masivo) {
         List lstCerti = CertificatesJpa.ConsultCertificatesId("", IdCertificates);
         if (lstCerti == null) {
             return null;
@@ -674,6 +681,8 @@ public class Generate extends HttpServlet {
         if (!CertificatesJpa.UpdateCertificateFinish(IdCertificates)) {
             return null;
         }
+        registrarHistorialCertificado(request, ObjCerti, IdCertificates, SignatureHistory.EVENTO_FINALIZADO,
+                masivo ? "Finalizado y enviado a firma (finalización masiva)." : "Finalizado y enviado a firma.");
         return new String[]{
             (ObjCerti[3] == null) ? String.valueOf(IdCertificates) : ObjCerti[3].toString().trim(),
             String.valueOf(IdCertificates),
@@ -689,7 +698,8 @@ public class Generate extends HttpServlet {
      * envía (quedaba un lote '' / 0 / 0 / '') y que en masivo pueden ser
      * lotes distintos por certificado.
      */
-    private boolean signCertificate(CertificatesJpaController CertificatesJpa, int IdCertificates, String Signature) {
+    private boolean signCertificate(CertificatesJpaController CertificatesJpa, int IdCertificates, String Signature,
+            HttpServletRequest request, boolean masivo) {
         List lstCerti = CertificatesJpa.ConsultCertificatesId("", IdCertificates);
         if (lstCerti == null) {
             return false;
@@ -714,7 +724,22 @@ public class Generate extends HttpServlet {
                 (ObjCerti[12] == null) ? "" : ObjCerti[12].toString(),
                 (ObjCerti[5] == null) ? "" : ObjCerti[5].toString(),
                 (ObjCerti[7] == null) ? "" : ObjCerti[7].toString());
+        registrarHistorialCertificado(request, ObjCerti, IdCertificates, SignatureHistory.EVENTO_FIRMADO,
+                masivo ? "Certificado firmado (firma masiva)." : "Certificado firmado.");
         return true;
+    }
+
+    /** Evento del historial de firmas para un certificado, con los datos de lote leídos de BD (Sp_ctf_c_ConsultCertificatesId). */
+    private void registrarHistorialCertificado(HttpServletRequest request, Object[] ObjCerti, int IdCertificates,
+            String evento, String detalle) {
+        SignatureHistory.registrar(request, SignatureHistory.TIPO_CERTIFICADO, String.valueOf(IdCertificates),
+                IdCertificates,
+                (ObjCerti[3] == null) ? null : ObjCerti[3].toString().trim(),
+                (ObjCerti[4] == null) ? null : ObjCerti[4].toString(),
+                (ObjCerti[12] == null) ? null : ObjCerti[12].toString(),
+                (ObjCerti[5] == null) ? null : ObjCerti[5].toString(),
+                (ObjCerti[7] == null) ? null : ObjCerti[7].toString(),
+                evento, detalle);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

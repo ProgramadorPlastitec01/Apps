@@ -386,6 +386,7 @@ public class GenerateReport extends TagSupport {
                     } else {
                         out.print("<button class='btn btn-green disabled btn-sm mr-2' style='border-radius: 4px;' data-toggle='tooltip' data-placement='top' title='Sin permiso'><i class=\"fas fa-eye\"></i></button>");
                     }
+                    out.print("<button type='button' class='btn btn-outline-secondary btn-sm mr-2' style='border-radius: 4px;' onclick=\"abrirHistorialFirmas('CERTIFICADO', '" + ObjCerti[0] + "')\" data-toggle='tooltip' data-placement='top' title='Historial de firmas'><i class=\"fas fa-history\"></i></button>");
                     // El documento de soporte se adjunta desde Finalizado (state 2), no
                     // desde Firmado (state 3): así el firmante, al revisar el certificado
                     // para firmarlo, firma de paso el soporte que ya dejó el gestor. En

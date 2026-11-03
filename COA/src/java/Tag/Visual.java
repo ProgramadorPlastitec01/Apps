@@ -349,6 +349,16 @@ public class Visual extends TagSupport {
                     }
                     out.print("</div>");
                 }
+                // Historial de firmas (registrado / finalizado / firmado) del certificado.
+                if (IdCertificates > 0) {
+                    out.print("<div class='ml-2'>"
+                            + "<button type='button' class='btn btn-outline-secondary btn-sm' "
+                            + "style='border-radius: 4px; padding: 2px 9px;' "
+                            + "onclick=\"abrirHistorialFirmas('CERTIFICADO', '" + IdCertificates + "')\" data-toggle='tooltip' "
+                            + "data-placement='top' title='Historial de firmas'>"
+                            + "<i class='fas fa-history'></i>"
+                            + "</button></div>");
+                }
                 if (IdCertificates == 0) {
                     out.print("<div class='d-flex'>");
                     out.print("<div>"
