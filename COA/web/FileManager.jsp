@@ -704,13 +704,20 @@
                                                         String relPathBrDescarga = "FileDownloadProxyServlet?id=" + batchRecord.getId() + "&modo=adjunto";
                                                         String fechaBr = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(new java.util.Date(batchRecord.lastModified()));
                                                         String generadoPor = batchRecord.getUploadedByName() != null ? batchRecord.getUploadedByName() : "—";
+                                                        // Aprobación documental (Coordinadora Documental, permiso [41]):
+                                                        // BatchRecordSignServlet reemplaza el PDF por uno "_FIRMADO_".
+                                                        boolean brAprobado = batchRecord.getName().contains("_FIRMADO_");
                                             %>
-                                            <tr class="file-row batch-record-row" data-category="batchrecord" data-status="na" data-timestamp="<%= batchRecord.lastModified()%>">
+                                            <tr class="file-row batch-record-row" data-category="batchrecord" data-status="<%= brAprobado ? "firmado" : "pendiente"%>" data-timestamp="<%= batchRecord.lastModified()%>">
                                                 <td class="batch-record-doc-name" style="cursor:pointer;" onclick="brVerEnPanel(this, '<%= Util.jsAttr(batchRecord.getName())%>', 'Batch Record PDF Unificado', '<%= Util.jsAttr(relPathBr)%>')"><span class="batch-record-ext-chip batch-record-ext-pdf">PDF</span> <%= batchRecord.getName()%></td>
                                                 <td><span class="batch-record-pill batch-record-pill-batchrecord">Batch Record</span></td>
-                                                <td><span class="batch-record-status batch-record-status-na"><i class="fas fa-check-circle"></i> Disponible</span></td>
+                                                <% if (brAprobado) { %>
+                                                <td><span class="batch-record-status batch-record-status-firmado"><i class="fas fa-check-circle"></i> Aprobado</span></td>
+                                                <% } else { %>
+                                                <td><span class="batch-record-status batch-record-status-pendiente"><i class="fas fa-hourglass-half"></i> Pendiente de aprobación</span></td>
+                                                <% } %>
                                                 <td><%= fechaBr%></td>
-                                                <td>Generado por <%= generadoPor%></td>
+                                                <td><%= brAprobado ? "Aprobado por " : "Generado por "%><%= generadoPor%></td>
                                                 <td class="text-center">
                                                     <div class="batch-record-menu">
                                                         <button type="button" class="batch-record-menu-btn" onclick="brToggleMenu(event, this)" title="Acciones">
@@ -719,6 +726,11 @@
                                                         <div class="dropdown-menu batch-record-menu-list">
                                                             <a class="dropdown-item" href="<%= relPathBr%>" target="_blank" onclick="brVerEnPanel(this, '<%= Util.jsAttr(batchRecord.getName())%>', 'Batch Record PDF Unificado', '<%= Util.jsAttr(relPathBr)%>'); return false;"><i class="fas fa-eye"></i> Ver original</a>
                                                             <a class="dropdown-item" href="<%= relPathBrDescarga%>" download><i class="fas fa-download"></i> Descargar</a>
+                                                            <a class="dropdown-item" href="#" onclick="abrirHistorialFirmas('BATCH_RECORD', '<%= batchRecord.getId()%>'); return false;"><i class="fas fa-history"></i> Historial de firmas</a>
+                                                            <% if (!brAprobado && Permission.contains("[41]")) { %>
+                                                            <div class="dropdown-divider"></div>
+                                                            <a class="dropdown-item text-success" href="#" onclick="confirmFirmarBatchRecord('<%= Util.jsAttr(cliente)%>','<%= Util.jsAttr(anio)%>','<%= Util.jsAttr(orden)%>','<%= Util.jsAttr(lote)%>','<%= batchRecord.getId()%>'); return false;"><i class="fas fa-signature"></i> Firmar / Aprobar</a>
+                                                            <% } %>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -1110,6 +1122,45 @@
 
                 });
             }
+
+            // Aprobación documental del Batch Record (Coordinadora Documental, permiso [41]).
+            // POST porque modifica: reemplaza el PDF pendiente por el firmado.
+            function confirmFirmarBatchRecord(cliente, anio, orden, lote, id) {
+                swal({
+                    title: "¿Firmar y aprobar el Batch Record?",
+                    text: "Su firma se agregará en la portada (Revisión y aprobación documental) como aval de que el expediente del lote está correctamente parametrizado. El PDF pendiente será reemplazado por el aprobado.",
+                    icon: "info",
+                    buttons: {
+                        cancel: {
+                            text: "Cancelar",
+                            visible: true,
+                            className: "btn btn-secondary"
+                        },
+                        confirm: {
+                            text: "Sí, firmar",
+                            value: true,
+                            className: "btn btn-green"
+                        }
+                    }
+                }).then(function (confirm) {
+                    if (!confirm) {
+                        return;
+                    }
+                    var form = document.createElement('form');
+                    form.method = 'post';
+                    form.action = 'BatchRecordSignServlet';
+                    var campos = {cliente: cliente, anio: anio, orden: orden, lote: lote, id: id};
+                    for (var nombre in campos) {
+                        var input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = nombre;
+                        input.value = campos[nombre];
+                        form.appendChild(input);
+                    }
+                    document.body.appendChild(form);
+                    form.submit();
+                });
+            }
         </script>
         <script>
             <%
@@ -1168,6 +1219,55 @@
             iziToast.warning({
                 title: 'Atención',
                 message: '"El archivo no existe',
+                position: 'bottomRight'
+            });
+            <%
+            } else if ("br_sign_success".equals(msg)) {
+            %>
+            iziToast.success({
+                title: 'Batch Record aprobado',
+                message: 'Se firmó el Batch Record y quedó registrado como aprobado.',
+                position: 'bottomRight'
+            });
+            <%
+            } else if ("br_sign_permission".equals(msg)) {
+            %>
+            iziToast.error({
+                title: 'Sin permiso',
+                message: 'Su rol no tiene permiso para firmar / aprobar el Batch Record.',
+                position: 'bottomRight'
+            });
+            <%
+            } else if ("br_sign_no_signature".equals(msg)) {
+            %>
+            iziToast.warning({
+                title: 'Firma no registrada',
+                message: 'No tiene una firma registrada. Cárguela en Perfil > Actualizar Firma e inténtelo de nuevo.',
+                position: 'bottomRight'
+            });
+            <%
+            } else if ("br_sign_already".equals(msg)) {
+            %>
+            iziToast.info({
+                title: 'Ya aprobado',
+                message: 'Este Batch Record ya está firmado.',
+                position: 'bottomRight'
+            });
+            <%
+            } else if ("br_sign_legacy".equals(msg)) {
+            %>
+            iziToast.warning({
+                title: 'Vuelva a generarlo',
+                message: 'Este Batch Record se generó antes de habilitar la aprobación documental y no tiene el espacio de firma. Genere el Batch Record de nuevo y firme el nuevo PDF.',
+                position: 'bottomRight',
+                timeout: 9000
+            });
+            <%
+            } else if ("br_sign_error".equals(msg)) {
+            %>
+            iziToast.error({
+                title: 'Error',
+                message: 'No se pudo firmar el Batch Record.',
                 position: 'bottomRight'
             });
             <%
@@ -1394,6 +1494,7 @@
         <script src="Interface/Content/Assets/js/jspdf.umd.min.js"></script>
         <script src="Interface/Content/Assets/modules/izitoast/js/iziToast.min.js"></script>
         <script src="Interface/Content/Assets/modules/sweetalert/sweetalert.min.js"></script>
+        <script src="Interface/Content/Assets/js/signature-history.js"></script>
         <script src="Interface/Content/Assets/js/BoostratModel.js"></script>
 
         <script>

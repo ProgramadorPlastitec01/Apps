@@ -6,6 +6,7 @@ import Method.ChromeHeadlessPdf;
 import Method.OfficePlatformService;
 import Method.PdfImageUtil;
 import Method.RemoteHtmlFetcher;
+import Method.SignatureHistory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -168,6 +169,10 @@ public class BatchRecordPdfGenerateServlet extends HttpServlet {
                     new CertificateFileJpaController().registerFile(cliente, anio, orden, lote, "BatchRecord", fileName,
                             resultado.fileId, resultado.uuid, resultado.mimeType, resultado.size, userId, userName);
                 }
+                SignatureHistory.registrar(request, SignatureHistory.TIPO_BATCH_RECORD,
+                        SignatureHistory.batchRecordKey(fileName), null, fileName, cliente, anio, orden, lote,
+                        SignatureHistory.EVENTO_REGISTRADO,
+                        "Batch Record generado (" + documentos.size() + " documentos), pendiente de aprobación documental.");
             } catch (IOException exSubida) {
                 // No bloquea la respuesta al usuario: el PDF ya se generó y se le va a
                 // entregar igual, solo no quedó archivada la copia en el gestor.
@@ -357,12 +362,25 @@ public class BatchRecordPdfGenerateServlet extends HttpServlet {
                 + "<table style='margin-top:15px;font-size:13px;'>"
                 + "<tr><td><strong>Cliente / Destino:</strong> " + esc(manifest.get("cliente")) + "</td><td><strong>Orden de Producción:</strong> " + esc(manifest.get("orden")) + "</td></tr>"
                 + "<tr><td><strong>Año de Gestión:</strong> " + esc(manifest.get("anio")) + "</td><td><strong>Lote de Producto:</strong> " + esc(manifest.get("lote")) + "</td></tr>"
-                + "<tr><td><strong>Fecha Expedición:</strong> " + new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()) + "</td><td><strong>Estado:</strong> VERIFICADO / AUDITORÍA</td></tr>"
+                // El estado y el bloque de aprobación los completa BatchRecordSignServlet
+                // cuando la Coordinadora Documental firma: ubica estos textos en el PDF
+                // (no coordenadas fijas), así que deben coincidir con sus constantes.
+                + "<tr><td><strong>Fecha Expedición:</strong> " + new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()) + "</td><td><strong>Estado:</strong> " + BatchRecordSignServlet.ESTADO_PENDIENTE + "</td></tr>"
                 + "</table>"
                 + "<h4 style='margin-top:30px;background:#f0f4f8;padding:10px;color:#0b0025;border-radius:4px;'>INVENTARIO DE REGISTROS COMPILADOS</h4>"
                 + "<table style='margin-top:10px;'>"
                 + "<thead><tr><th>#</th><th>Origen del Sistema</th><th>Tipo de Registro</th><th>Nombre / Descripción</th></tr></thead>"
                 + "<tbody>" + rows + "</tbody></table>"
+                + "<div style='margin-top:24px;border:1px solid #0b0025;border-radius:4px;page-break-inside:avoid;break-inside:avoid;'>"
+                + "<div style='background:#0b0025;color:#fff;padding:8px 12px;font-weight:bold;font-size:13px;'>" + BatchRecordSignServlet.MARCA_BLOQUE + "</div>"
+                + "<table style='border:none;font-size:13px;'><tr>"
+                + "<td style='border:none;width:45%;height:90px;vertical-align:top;'><strong>" + BatchRecordSignServlet.LABEL_FIRMA + "</strong></td>"
+                + "<td style='border:none;vertical-align:top;line-height:26px;'>"
+                + "<strong>" + BatchRecordSignServlet.LABEL_APROBADO_POR + "</strong><br>"
+                + "<strong>" + BatchRecordSignServlet.LABEL_CARGO + "</strong><br>"
+                + "<strong>" + BatchRecordSignServlet.LABEL_FECHA + "</strong>"
+                + "</td></tr></table>"
+                + "</div>"
                 + "</body></html>";
     }
 
