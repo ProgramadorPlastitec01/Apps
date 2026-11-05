@@ -3,11 +3,15 @@ package Metodos;
 import Controladores.RegistroCampoJpaController;
 import Controladores.RegistroDetalleJpaController;
 import Controladores.ParametroJpaController;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.mail.Message;
 import javax.mail.Session;
 import javax.mail.Transport;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
@@ -21,6 +25,22 @@ public class Control_correo {
     List lst_parametro = null;
     List lst_parametroP = null;
 
+    /**
+     * Extrae los correos del parametro CorreoPersonas, sin importar el
+     * separador (coma, punto y coma, comillas, espacios).
+     */
+    private InternetAddress[] Destinatarios(String valor) throws AddressException {
+        List<InternetAddress> lista = new ArrayList<InternetAddress>();
+        Matcher m = Pattern.compile("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}").matcher(valor == null ? "" : valor);
+        while (m.find()) {
+            lista.add(new InternetAddress(m.group()));
+        }
+        if (lista.isEmpty()) {
+            throw new AddressException("Sin destinatarios en el parametro CorreoPersonas", valor);
+        }
+        return lista.toArray(new InternetAddress[lista.size()]);
+    }
+
     public void Resultado_cuarentena(int ird) throws javax.mail.MessagingException {
         try {
             lst_registro_detalle = jpacrdt.Correo_cuarentena(ird);
@@ -30,22 +50,19 @@ public class Control_correo {
             Object[] obj_registro_detalle = (Object[]) lst_registro_detalle.get(0);
             Object[] obj_parametro = (Object[]) lst_parametro.get(0);
             Object[] obj_personas = (Object[]) lst_parametroP.get(0);
-            String[] Arg_correo = obj_parametro[0].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+            String[] Arg_correo = obj_parametro[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
             Properties propiedades = new Properties();
             propiedades.setProperty("mail.smtp.host", Arg_correo[0]);
             propiedades.setProperty("mail.smtp.starttls.enable", "true");
             propiedades.setProperty("mail.smtp.port", Arg_correo[1]);
             propiedades.setProperty("mail.smtp.auth", "true");
             propiedades.setProperty("mail.smtp.user", Arg_correo[2]);
-            Session session = Session.getDefaultInstance(propiedades);
+            Session session = Session.getInstance(propiedades);
             try {
                 MimeMessage message = new MimeMessage(session);
-                String[] destino = {obj_personas[2].toString()};
-                InternetAddress[] addresto = new InternetAddress[destino.length];
-                for (int i = 0; i < destino.length; i++) {
-                    addresto[i] = new InternetAddress(destino[i]);
-                }
+                InternetAddress[] addresto = Destinatarios(obj_personas[2].toString());
                 message.setRecipients(Message.RecipientType.TO, addresto);// correo destinatario
+                message.setFrom(new InternetAddress(Arg_correo[2]));// remitente
                 message.setSubject("Prueba en cuarentena");// Asunto
                 String texto_mail = "<h3 style='color: #008063; font-weight: normal;'>Buen día</h3>";
                 texto_mail = texto_mail + "<h3 style='color: #292929; font-weight: normal;'>La prueba de " + obj_registro_detalle[15] + " en " + obj_registro_detalle[17] + " se encuentra en estado de CUARENTENA, ya que los resultados no cumplieron.<br /><br />Pendiente aprobación o rechazo de CALIDAD";
@@ -134,22 +151,19 @@ public class Control_correo {
             Object[] obj_registro_detalle = (Object[]) lst_registro_detalle.get(0);
             Object[] obj_parametro = (Object[]) lst_parametro.get(0);
             Object[] obj_personas = (Object[]) lst_parametroP.get(0);
-            String[] Arg_correo = obj_parametro[0].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+            String[] Arg_correo = obj_parametro[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
             Properties propiedades = new Properties();
             propiedades.setProperty("mail.smtp.host", Arg_correo[0]);
             propiedades.setProperty("mail.smtp.starttls.enable", "true");
             propiedades.setProperty("mail.smtp.port", Arg_correo[1]);
             propiedades.setProperty("mail.smtp.auth", "true");
             propiedades.setProperty("mail.smtp.user", Arg_correo[2]);
-            Session session = Session.getDefaultInstance(propiedades);
+            Session session = Session.getInstance(propiedades);
             try {
                 MimeMessage message = new MimeMessage(session);
-                String[] destino = {obj_personas[2].toString()};
-                InternetAddress[] addresto = new InternetAddress[destino.length];
-                for (int i = 0; i < destino.length; i++) {
-                    addresto[i] = new InternetAddress(destino[i]);
-                }
+                InternetAddress[] addresto = Destinatarios(obj_personas[2].toString());
                 message.setRecipients(Message.RecipientType.TO, addresto);// correo destinatario
+                message.setFrom(new InternetAddress(Arg_correo[2]));// remitente
                 message.setSubject("Resultado de seguimiento  " + obj_registro_detalle[15] + " en " + obj_registro_detalle[17] + "");// Asunto
                 String texto_mail = "<h3 style='color: #008063; font-weight: normal;'>Buen día</h3>";
                 texto_mail = texto_mail + "<h3 style='color: #292929; font-weight: normal;'>La prueba en seguimiento de " + obj_registro_detalle[15] + " en " + obj_registro_detalle[17] + " " + ((rst.equals("0")) ? "NO CUMPLIO" : " CUMPLE") + ".<br /><br />";
@@ -238,22 +252,19 @@ public class Control_correo {
             Object[] obj_registro_detalle = (Object[]) lst_registro_detalle.get(0);
             Object[] obj_parametro = (Object[]) lst_parametro.get(0);
             Object[] obj_personas = (Object[]) lst_parametroP.get(0);
-            String[] Arg_correo = obj_parametro[0].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
+            String[] Arg_correo = obj_parametro[2].toString().replace("][", "///").replace("[", "").replace("]", "").split("///");
             Properties propiedades = new Properties();
             propiedades.setProperty("mail.smtp.host", Arg_correo[0]);
             propiedades.setProperty("mail.smtp.starttls.enable", "true");
             propiedades.setProperty("mail.smtp.port", Arg_correo[1]);
             propiedades.setProperty("mail.smtp.auth", "true");
             propiedades.setProperty("mail.smtp.user", Arg_correo[2]);
-            Session session = Session.getDefaultInstance(propiedades);
+            Session session = Session.getInstance(propiedades);
             try {
                 MimeMessage message = new MimeMessage(session);
-                String[] destino = {obj_personas[2].toString()};
-                InternetAddress[] addresto = new InternetAddress[destino.length];
-                for (int i = 0; i < destino.length; i++) {
-                    addresto[i] = new InternetAddress(destino[i]);
-                }
+                InternetAddress[] addresto = Destinatarios(obj_personas[2].toString());
                 message.setRecipients(Message.RecipientType.TO, addresto);// correo destinatario
+                message.setFrom(new InternetAddress(Arg_correo[2]));// remitente
                 message.setSubject(((dcs == 0) ? "Rechazo de" : "Aprobación de") + " prueba");// Asunto
                 String texto_mail = "<h3 style='color: #008063; font-weight: normal;'>Buen día</h3>";
                 texto_mail = texto_mail + "<h3 style='color: #292929; font-weight: normal;'>La prueba de " + obj_registro_detalle[15] + " en " + obj_registro_detalle[17] + " se encuentra en estado " + ((dcs == 0) ? "RECHAZADO(A)" : "APROBADO(A)") + "  por verificación de CALIDAD.";

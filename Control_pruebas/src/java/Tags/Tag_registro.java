@@ -184,7 +184,7 @@ public class Tag_registro extends TagSupport {
                             if (cont_entrega > 0) {
                                 if (Integer.parseInt(obj_registros[7].toString()) == 1) {
                                     out.print("<td ROWSPAN='3' align='center'><span onclick='DesactivarRegistro(" + obj_registros[0] + ")' class='fa fa-unlock-alt fa-size_small' title='Sin permisos para Cerrar Orden' ></span></td>");
-                                } else if (rol.equals("Administrador")) {
+                                } else if (rol.equals("Administrador") || rol.equals("Coordinadora-Calidad")) {
                                     out.print("<td ROWSPAN='3' align='center'><span onclick='ActivarRegistro(" + obj_registros[0] + ")' class='fa fa-lock fa-size_small' title='Sin permisos para Abrir Orden' ></span></td>");
                                 } else {
                                     out.print("<td ROWSPAN='3' align='center'><span class='fa fa-lock fa-size_small' title='Sin permisos para Abrir Orden' ></span></td>");
@@ -556,7 +556,7 @@ public class Tag_registro extends TagSupport {
                             //<editor-fold defaultstate="collapsed" desc="REGISTROS DE SEGUIMIENTOS">
                             if (Integer.parseInt(obj_registro[7].toString()) == 1) {
 ////                                if ((Integer) obj_detalle_registro[18] == 0 && (Integer) obj_detalle_registro[21] == 0) {
-                                if (!(rol.equals("Inspectora-Calidad") || rol.equals("Coordinadora-Calidad"))) {
+                                if (!rol.equals("Inspectora-Calidad")) {
 //<editor-fold defaultstate="collapsed" desc="REGISTRAR SEGUIMIENTO">
                                     out.print("<button class='accordion'>REGISTRAR SEGUIMIENTO</button>");
                                     out.print("<div class='panel'>");
@@ -887,7 +887,7 @@ public class Tag_registro extends TagSupport {
                                                     out.print("<td colspan='2'><b>N/A</b></td>");
                                                 } else if ((Integer) obj_registro_seguimiento[18] == 0) {
                                                     if ((Integer) obj_registro_seguimiento[21] == 0) {
-                                                        if (rol.equals("Inspectora-Calidad") || rol.equals("Coordinadora-Calidad")) {
+                                                        if (rol.equals("Inspectora-Calidad")) {
                                                             out.print("<td colspan='2' valign='top'><b class='rojo'>RECHAZADO</b><br />" + obj_registro_seguimiento[22] + "</td>");
                                                         } else {
                                                             out.print("<td colspan='2' valign='top'><b class='rojo'>RECHAZADO</b><br />" + obj_registro_seguimiento[22] + ""
@@ -1300,7 +1300,7 @@ public class Tag_registro extends TagSupport {
                                         out.print("</td>");
                                     } else if ((Integer) obj_detalle_registro[18] == 0) {
                                         if ((Integer) obj_detalle_registro[21] == 0) {
-                                            if (rol.equals("Inspectora-Calidad") || rol.equals("Coordinadora-Calidad")) {
+                                            if (rol.equals("Inspectora-Calidad")) {
                                                 out.print("<td valign='top' colspan='2'><b class='rojo'>RECHAZADO</b><br />" + obj_detalle_registro[22] + "</td>");
                                             } else {
                                                 out.print("<td valign='top' colspan='2'><b class='rojo'>RECHAZADO</b><br />" + obj_detalle_registro[22] + ""

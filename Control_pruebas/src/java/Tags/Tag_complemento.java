@@ -37,7 +37,7 @@ public class Tag_complemento extends TagSupport {
                 if (pageContext.getRequest().getAttribute("Complemento").toString().equals("Registro_linea")) {
                     out.print("<div id='sidebar'>");
                     out.print("<h3>Registrar Línea</h3>");
-                    if (rol.equals("Encargada-operaria") || rol.equals("Inspectora-Calidad") || rol.equals("Consulta") || rol.equals("Coordinadora-Calidad")) {
+                    if (rol.equals("Encargada-operaria") || rol.equals("Inspectora-Calidad") || rol.equals("Consulta")) {
                         out.print("<center>");
                         out.print("<img src='Interfaz/Contenido/Iconos/Alert.png' style='width:126.5px;height:112.75px' alt='edit' title='Sin permisos' /><br />");
                         out.print("<b>Sin permisos de registro</b>");
@@ -81,7 +81,7 @@ public class Tag_complemento extends TagSupport {
                         out.print("<th>Línea</th>");
                         out.print("<th>Tipo de línea</th>");
                         out.print("<th>Código</th>");
-                        if (!(rol.equals("Encargada-operaria") || rol.equals("Inspectora-Calidad") || rol.equals("Consulta") || rol.equals("Coordinadora-Calidad"))) {
+                        if (!(rol.equals("Encargada-operaria") || rol.equals("Inspectora-Calidad") || rol.equals("Consulta"))) {
                             out.print("<th>Opciones</th>");
                         }
                         out.print("</tr>");
@@ -95,7 +95,7 @@ public class Tag_complemento extends TagSupport {
                             out.print("<td>" + obj_lineas[1] + "</td>");
                             out.print("<td align='center'>" + obj_lineas[3] + "</td>");
                             out.print("<td align='center'>" + obj_lineas[5] + "</td>");
-                            if (!(rol.equals("Encargada-operaria") || rol.equals("Inspectora-Calidad") || rol.equals("Consulta") || rol.equals("Coordinadora-Calidad"))) {
+                            if (!(rol.equals("Encargada-operaria") || rol.equals("Inspectora-Calidad") || rol.equals("Consulta"))) {
                                 out.print("<td align='center' style='width:10%'>");
                                 if (Integer.parseInt(obj_lineas[4].toString()) == 1) {
                                     out.print("<span onclick='DesactivarLinea(" + obj_lineas[0] + ")' class='fa fa-check-circle fa-size_small'></span>");
@@ -190,7 +190,7 @@ public class Tag_complemento extends TagSupport {
                         out.print("<th>Frecuencia (h)</th>");
                         out.print("<th>Proceso</th>");
                         out.print("<th>Tipos de línea</th>");
-                        if (!(rol.equals("Encargada-operaria") || rol.equals("Inspectora-Calidad") || rol.equals("Consulta") || rol.equals("Coordinadora-Calidad"))) {
+                        if (!(rol.equals("Encargada-operaria") || rol.equals("Inspectora-Calidad") || rol.equals("Consulta"))) {
                             out.print("<th>Opciones</th>");
                         }
                         out.print("</tr>");
@@ -205,7 +205,7 @@ public class Tag_complemento extends TagSupport {
                             out.print("<td align='center'>" + obj_prueba[2] + "</td>");
                             out.print("<td align='center'>" + obj_prueba[4] + "</td>");
                             out.print("<td>" + obj_prueba[5] + "</td>");
-                            if (!(rol.equals("Encargada-operaria") || rol.equals("Inspectora-Calidad") || rol.equals("Consulta") || rol.equals("Coordinadora-Calidad"))) {
+                            if (!(rol.equals("Encargada-operaria") || rol.equals("Inspectora-Calidad") || rol.equals("Consulta"))) {
                                 out.print("<td align='center' style='width:10%'>");
                                 if (Integer.parseInt(obj_prueba[6].toString()) == 1) {
                                     out.print("<span onclick='DesactivarPrueba(" + obj_prueba[0] + ")' class='fa fa-check-circle fa-size_small'></span>");
@@ -232,7 +232,7 @@ public class Tag_complemento extends TagSupport {
                 } else if (pageContext.getRequest().getAttribute("Complemento").toString().equals("Registro_proceso")) {
                     out.print("<div id='sidebar'>");
                     out.print("<h3>Registrar Proceso</h3>");
-                    if (rol.equals("Encargada-operaria") || rol.equals("Inspectora-Calidad") || rol.equals("Consulta") || rol.equals("Coordinadora-Calidad")) {
+                    if (rol.equals("Encargada-operaria") || rol.equals("Inspectora-Calidad") || rol.equals("Consulta")) {
                         out.print("<center>");
                         out.print("<img src='Interfaz/Contenido/Iconos/Alert.png' style='width:126.5px;height:112.75px' alt='edit' title='Sin permisos' /><br />");
                         out.print("<b>Sin permisos de registro</b>");
@@ -281,7 +281,7 @@ public class Tag_complemento extends TagSupport {
                         out.print("<tr>");
                         out.print("<th>Proceso</th>");
                         out.print("<th>Variables</th>");
-                        if (!(rol.equals("Encargada-operaria") || rol.equals("Inspectora-Calidad") || rol.equals("Consulta") || rol.equals("Coordinadora-Calidad"))) {
+                        if (!(rol.equals("Encargada-operaria") || rol.equals("Inspectora-Calidad") || rol.equals("Consulta"))) {
                             out.print("<th>Estado</th>");
                         }
                         out.print("</tr>");
@@ -294,7 +294,7 @@ public class Tag_complemento extends TagSupport {
                             }
                             out.print("<td>" + obj_procesos[1] + "</td>");
                             out.print("<td>" + obj_procesos[2] + "</td>");
-                            if (!(rol.equals("Encargada-operaria") || rol.equals("Inspectora-Calidad") || rol.equals("Consulta") || rol.equals("Coordinadora-Calidad"))) {
+                            if (!(rol.equals("Encargada-operaria") || rol.equals("Inspectora-Calidad") || rol.equals("Consulta"))) {
                                 out.print("<td align='center' style='width:10%'>");
                                 if (Integer.parseInt(obj_procesos[3].toString()) == 1) {
                                     out.print("<span onclick='DesactivarProceso(" + obj_procesos[0] + ")' class='fa fa-check-circle fa-size_small'></span>");

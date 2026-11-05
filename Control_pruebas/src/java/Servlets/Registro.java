@@ -270,9 +270,11 @@ public class Registro extends HttpServlet {
                     if ("".equals(justificacion)) {
                         request.setAttribute("Alerta", "Error_registro_prueba");
                     } else {
-                        jpacrdt.Registrar_detalle_registro_decision(id_detalle_registro, decision, justificacion, user_sesion);
+                        boolean decision_ok = jpacrdt.Registrar_detalle_registro_decision(id_detalle_registro, decision, justificacion, user_sesion);
+                        if (decision_ok && ("0".equals(decision) || "1".equals(decision))) {
+                            mtdcro.Decision_cuarentena(id_detalle_registro, Integer.parseInt(decision));
+                        }
                     }
-//                    mtdcro.Decision_cuarentena(id_detalle_registro, Integer.parseInt(decision));
                     if (activar_form > 0) {
                         request.getRequestDispatcher("Registro?opc=5&irg=" + id_registro + "&Cbx_proceso=" + id_proceso + "&Form=0&Seguimiento=" + id_seguimiento_registro + "&Txt_codigo_producto=0&Arg_pruebas=0&Arg_lineas=0").forward(request, response);
                     } else {
