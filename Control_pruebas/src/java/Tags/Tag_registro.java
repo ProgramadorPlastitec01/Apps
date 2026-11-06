@@ -556,7 +556,7 @@ public class Tag_registro extends TagSupport {
                             //<editor-fold defaultstate="collapsed" desc="REGISTROS DE SEGUIMIENTOS">
                             if (Integer.parseInt(obj_registro[7].toString()) == 1) {
 ////                                if ((Integer) obj_detalle_registro[18] == 0 && (Integer) obj_detalle_registro[21] == 0) {
-                                if (!rol.equals("Inspectora-Calidad")) {
+                                if (!rol.equals("Calidad-Pruebas")) {
 //<editor-fold defaultstate="collapsed" desc="REGISTRAR SEGUIMIENTO">
                                     out.print("<button class='accordion'>REGISTRAR SEGUIMIENTO</button>");
                                     out.print("<div class='panel'>");
@@ -887,7 +887,7 @@ public class Tag_registro extends TagSupport {
                                                     out.print("<td colspan='2'><b>N/A</b></td>");
                                                 } else if ((Integer) obj_registro_seguimiento[18] == 0) {
                                                     if ((Integer) obj_registro_seguimiento[21] == 0) {
-                                                        if (rol.equals("Inspectora-Calidad")) {
+                                                        if (rol.equals("Calidad-Pruebas")) {
                                                             out.print("<td colspan='2' valign='top'><b class='rojo'>RECHAZADO</b><br />" + obj_registro_seguimiento[22] + "</td>");
                                                         } else {
                                                             out.print("<td colspan='2' valign='top'><b class='rojo'>RECHAZADO</b><br />" + obj_registro_seguimiento[22] + ""
@@ -907,7 +907,7 @@ public class Tag_registro extends TagSupport {
                                                         out.print("<td colspan='2' valign='top'>");
                                                         out.print("<b class='verde'>APROBADO</b><br />" + obj_registro_seguimiento[22] + "");
                                                         out.print("</td>");
-                                                    } else if (rol.equals("Administrador") || rol.equals("Inspectora-Calidad") || rol.equals("Coordinadora-Calidad")) {
+                                                    } else if (rol.equals("Administrador") || rol.equals("Calidad-Pruebas") || rol.equals("Coordinadora-Calidad")) {
                                                         out.print("<form action='Registro?opc=8&Id_proceso=" + id_proceso + "&Form=1' method='post' id='Form_decision_" + obj_registro_seguimiento[0] + "'>"
                                                                 + "<td valign='top'>"
                                                                 + "<input type='hidden' name='Id_registro' value='" + id_registro + "' />"
@@ -1300,7 +1300,7 @@ public class Tag_registro extends TagSupport {
                                         out.print("</td>");
                                     } else if ((Integer) obj_detalle_registro[18] == 0) {
                                         if ((Integer) obj_detalle_registro[21] == 0) {
-                                            if (rol.equals("Inspectora-Calidad")) {
+                                            if (rol.equals("Calidad-Pruebas")) {
                                                 out.print("<td valign='top' colspan='2'><b class='rojo'>RECHAZADO</b><br />" + obj_detalle_registro[22] + "</td>");
                                             } else {
                                                 out.print("<td valign='top' colspan='2'><b class='rojo'>RECHAZADO</b><br />" + obj_detalle_registro[22] + ""
@@ -1320,7 +1320,7 @@ public class Tag_registro extends TagSupport {
                                             out.print("<td valign='top' colspan='2'>");
                                             out.print("<b class='verde'>APROBADO</b><br />" + obj_detalle_registro[22] + "");
                                             out.print("</td>");
-                                        } else if (rol.equals("Administrador") || rol.equals("Inspectora-Calidad") || rol.equals("Coordinadora-Calidad")) {
+                                        } else if (rol.equals("Administrador") || rol.equals("Calidad-Pruebas") || rol.equals("Coordinadora-Calidad")) {
                                             out.print("<form action='Registro?opc=8&Id_proceso=" + id_proceso + "&Form=0' method='post' id='Form_decision_" + obj_detalle_registro[0] + "'>"
                                                     + "<td valign='top' >"
                                                     + "<input type='hidden' name='Id_registro' value='" + id_registro + "' />"
