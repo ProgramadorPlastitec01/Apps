@@ -1,6 +1,9 @@
 package Controladores;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -128,6 +131,40 @@ public class RegistroJpaController {
             }
         } catch (Exception ex) {
             return null;
+        }
+    }
+
+    /**
+     * Comprobar errores R-GC-017: agrupa los datos de los registros del
+     * certificado (mismos filtros de RegistroFrecuenciaHoraJpaController.Registros_lote).
+     * Requiere sql/sp_rgt_t_lotes_registro_verificar_rango.sql
+     */
+    public List Traer_lotes_verificar_rango(int ipd, String lte, int iln, String cet, int nmr, String fin, String ffn) {
+        EntityManager etm = getEntityManager();
+        try {
+            etm.getTransaction().begin();
+            Query q = etm.createNativeQuery("CALL `sp_rgt_t_lotes_registro_verificar_rango`(?1, ?2, ?3, ?4, ?5, ?6, ?7)");
+            q.setParameter(1, ipd);
+            q.setParameter(2, lte);
+            q.setParameter(3, iln);
+            q.setParameter(4, cet);
+            q.setParameter(5, nmr);
+            q.setParameter(6, fin);
+            q.setParameter(7, ffn);
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            if (consulta.isEmpty()) {
+                return null;
+            } else {
+                return consulta;
+            }
+        } catch (Exception ex) {
+            if (etm.getTransaction().isActive()) {
+                etm.getTransaction().rollback();
+            }
+            return null;
+        } finally {
+            etm.close();
         }
     }
 
@@ -811,170 +848,71 @@ public class RegistroJpaController {
         }
     }
 
-    public boolean UpdateMasivoResumen(String IdsRegistro, String lote_cola, String ensamble, String ensamble_2, String lote_ensamble, String lote_ensamble_2, String ensamble_3, String ensamble_4, String lote_ensamble_3, String lote_ensamble_4, String ciclo_esterilizacion, String lote_tubo_refuerzo, String lote_manga_c, String lote_manga_p, String lote_dto_drc_c, String lote_dto_drc_p, String lote_dto_ctl_c, String lote_dto_ctl_p, String lote_dto_izq_c, String lote_dto_izq_p, String color_tinta, String lote_tinta) {
+    // Columnas de "registro" que se pueden corregir desde Comprobar errores (R-GC-017)
+    private static final List<String> COLUMNAS_CORREGIBLES = Arrays.asList(
+            "lote_cola", "ensamble", "ensamble_2", "lote_ensamble", "lote_ensamble_2",
+            "ensamble_3", "ensamble_4", "lote_ensamble_3", "lote_ensamble_4",
+            "ciclo_esterilizacion", "lote_tubo_refuerzo", "lote_manga_c", "lote_manga_p",
+            "lote_dto_drc_c", "lote_dto_drc_p", "lote_dto_ctl_c", "lote_dto_ctl_p",
+            "lote_dto_iqe_c", "lote_dto_iqe_p", "color_tinta", "lote_tinta");
+
+    /**
+     * Corrige datos de los registros de un certificado R-GC-017.
+     *
+     * @param ids_registro registros del certificado (calculados en el servidor
+     * con Registros_lote: orden, producto, lote, linea, ciclo y rango de fechas)
+     * @param cambios columna de registro -> nuevo valor
+     * @param usuario usuario que realiza la correccion (log_data)
+     */
+    public boolean UpdateMasivoResumen(List<Integer> ids_registro, Map<String, String> cambios, String usuario) {
+        if (ids_registro == null || ids_registro.isEmpty() || cambios == null || cambios.isEmpty()) {
+            return false;
+        }
+        StringBuilder set = new StringBuilder();
+        List<String> valores = new ArrayList<String>();
+        for (Map.Entry<String, String> cambio : cambios.entrySet()) {
+            if (!COLUMNAS_CORREGIBLES.contains(cambio.getKey())) {
+                return false;
+            }
+            if (set.length() > 0) {
+                set.append(", ");
+            }
+            valores.add(cambio.getValue());
+            set.append(cambio.getKey()).append(" = ?").append(valores.size());
+        }
+        StringBuilder ids = new StringBuilder();
+        for (Integer id : ids_registro) {
+            if (ids.length() > 0) {
+                ids.append(",");
+            }
+            ids.append(id.intValue());
+        }
+        // Copia del estado anterior de cada registro en log_data antes de modificarlo
+        String detalle = "Comprobar errores R-GC-017: " + cambios.keySet();
+        if (detalle.length() > 100) {
+            detalle = detalle.substring(0, 100);
+        }
+        for (Integer id : ids_registro) {
+            Log_data_registro("registro", "id_registro", id.intValue(), detalle, usuario);
+        }
         EntityManager etm = getEntityManager();
-        etm.getTransaction().begin();
         try {
-            int contador = 0;
-            String QueryInicial = "UPDATE registro r ";
-            if (!lote_cola.equals("")) {
-                QueryInicial = QueryInicial + "SET lote_cola = '" + lote_cola + "'";
-                contador++;
+            etm.getTransaction().begin();
+            Query q = etm.createNativeQuery("UPDATE registro SET " + set
+                    + " WHERE resumido = 0 AND id_registro IN (" + ids + ")");
+            for (int i = 0; i < valores.size(); i++) {
+                q.setParameter(i + 1, valores.get(i));
             }
-            if (!ensamble.equals("") && contador > 0) {
-                QueryInicial = QueryInicial + ", ensamble = '" + ensamble + "'";
-                contador++;
-            } else if (!ensamble.equals("")) {
-                QueryInicial = QueryInicial + "SET ensamble = '" + ensamble + "'";
-                contador++;
-            }
-            if (!ensamble_2.equals("") && contador > 0) {
-                QueryInicial = QueryInicial + ", ensamble_2 = '" + ensamble_2 + "'";
-                contador++;
-            } else if (!ensamble_2.equals("")) {
-                QueryInicial = QueryInicial + "SET ensamble_2 = '" + ensamble_2 + "'";
-                contador++;
-            }
-            if (!lote_ensamble.equals("") && contador > 0) {
-                QueryInicial = QueryInicial + ", lote_ensamble = '" + lote_ensamble + "'";
-                contador++;
-            } else if (!lote_ensamble.equals("")) {
-                QueryInicial = QueryInicial + "SET lote_ensamble = '" + lote_ensamble + "'";
-                contador++;
-            }
-            if (!lote_ensamble_2.equals("") && contador > 0) {
-                QueryInicial = QueryInicial + ",  lote_ensamble_2 = '" + lote_ensamble_2 + "'";
-                contador++;
-            } else if (!lote_ensamble_2.equals("")) {
-                QueryInicial = QueryInicial + "SET lote_ensamble_2 = '" + lote_ensamble_2 + "'";
-                contador++;
-            }
-            if (!ensamble_3.equals("") && contador > 0) {
-                QueryInicial = QueryInicial + ", ensamble_3 = '" + ensamble_3 + "'";
-                contador++;
-            } else if (!ensamble_3.equals("")) {
-                QueryInicial = QueryInicial + "SET ensamble_3 = '" + ensamble_3 + "'";
-                contador++;
-            }
-            if (!ensamble_4.equals("") && contador > 0) {
-                QueryInicial = QueryInicial + ", ensamble_4 = '" + ensamble_4 + "'";
-                contador++;
-            } else if (!ensamble_4.equals("")) {
-                QueryInicial = QueryInicial + "SET ensamble_4 = '" + ensamble_4 + "'";
-                contador++;
-            }
-            if (!lote_ensamble_3.equals("") && contador > 0) {
-                QueryInicial = QueryInicial + ", lote_ensamble_3 = '" + lote_ensamble_3 + "'";
-                contador++;
-            } else if (!lote_ensamble_3.equals("")) {
-                QueryInicial = QueryInicial + "SET lote_ensamble_3 = '" + lote_ensamble_3 + "'";
-                contador++;
-            }
-            if (!lote_ensamble_4.equals("") && contador > 0) {
-                QueryInicial = QueryInicial + ", lote_ensamble_4 = '" + lote_ensamble_4 + "'";
-                contador++;
-            } else if (!lote_ensamble_4.equals("")) {
-                QueryInicial = QueryInicial + "SET lote_ensamble_4 = '" + lote_ensamble_4 + "'";
-                contador++;
-            }
-            if (!ciclo_esterilizacion.equals("") && contador > 0) {
-                QueryInicial = QueryInicial + ", ciclo_esterilizacion = '" + ciclo_esterilizacion + "'";
-                contador++;
-            } else if (!ciclo_esterilizacion.equals("")) {
-                QueryInicial = QueryInicial + "SET ciclo_esterilizacion = '" + ciclo_esterilizacion + "'";
-                contador++;
-            }
-            if (!lote_tubo_refuerzo.equals("") && contador > 0) {
-                QueryInicial = QueryInicial + ", lote_tubo_refuerzo = '" + lote_tubo_refuerzo + "'";
-                contador++;
-            } else if (!lote_tubo_refuerzo.equals("")) {
-                QueryInicial = QueryInicial + "SET lote_tubo_refuerzo = '" + lote_tubo_refuerzo + "'";
-                contador++;
-            }
-            if (!lote_manga_c.equals("") && contador > 0) {
-                QueryInicial = QueryInicial + ", lote_manga_c = '" + lote_manga_c + "'";
-                contador++;
-            } else if (!lote_manga_c.equals("")) {
-                QueryInicial = QueryInicial + "SET lote_manga_c = '" + lote_manga_c + "'";
-                contador++;
-            }
-            if (!lote_manga_p.equals("") && contador > 0) {
-                QueryInicial = QueryInicial + ", lote_manga_c = '" + lote_manga_p + "'";
-                contador++;
-            } else if (!lote_manga_p.equals("")) {
-                QueryInicial = QueryInicial + "SET lote_manga_c = '" + lote_manga_p + "'";
-                contador++;
-            }
-            if (!lote_dto_drc_c.equals("") && contador > 0) {
-                QueryInicial = QueryInicial + ", lote_dto_drc_c = '" + lote_dto_drc_c + "'";
-                contador++;
-            } else if (!lote_dto_drc_c.equals("")) {
-                QueryInicial = QueryInicial + "SET lote_dto_drc_c = '" + lote_dto_drc_c + "'";
-                contador++;
-            }
-            if (!lote_dto_drc_p.equals("") && contador > 0) {
-                QueryInicial = QueryInicial + ", lote_dto_drc_p = '" + lote_dto_drc_p + "'";
-                contador++;
-            } else if (!lote_dto_drc_p.equals("")) {
-                QueryInicial = QueryInicial + "SET lote_dto_drc_p = '" + lote_dto_drc_p + "'";
-                contador++;
-            }
-            if (!lote_dto_ctl_c.equals("") && contador > 0) {
-                QueryInicial = QueryInicial + ", lote_dto_ctl_c = '" + lote_dto_ctl_c + "'";
-                contador++;
-            } else if (!lote_dto_ctl_c.equals("")) {
-                QueryInicial = QueryInicial + "SET lote_dto_ctl_c = '" + lote_dto_ctl_c + "'";
-                contador++;
-            }
-            if (!lote_dto_ctl_p.equals("") && contador > 0) {
-                QueryInicial = QueryInicial + ", lote_dto_ctl_p = '" + lote_dto_ctl_p + "'";
-                contador++;
-            } else if (!lote_dto_ctl_p.equals("")) {
-                QueryInicial = QueryInicial + "SET lote_dto_ctl_p = '" + lote_dto_ctl_p + "'";
-                contador++;
-            }
-            if (!lote_dto_izq_c.equals("") && contador > 0) {
-                QueryInicial = QueryInicial + ", lote_dto_iqe_c = '" + lote_dto_izq_c + "'";
-                contador++;
-            } else if (!lote_dto_izq_c.equals("")) {
-                QueryInicial = QueryInicial + "SET lote_dto_iqe_c = '" + lote_dto_izq_c + "'";
-                contador++;
-            }
-            if (!lote_dto_izq_p.equals("") && contador > 0) {
-                QueryInicial = QueryInicial + ", lote_dto_iqe_p = '" + lote_dto_izq_p + "'";
-                contador++;
-            } else if (!lote_dto_izq_p.equals("")) {
-                QueryInicial = QueryInicial + "SET lote_dto_iqe_p = '" + lote_dto_izq_p + "'";
-                contador++;
-            }
-            if (!color_tinta.equals("") && contador > 0) {
-                QueryInicial = QueryInicial + ", color_tinta = '" + color_tinta + "'";
-                contador++;
-            } else if (!color_tinta.equals("")) {
-                QueryInicial = QueryInicial + "SET color_tinta = '" + color_tinta + "'";
-                contador++;
-            }
-            if (!lote_tinta.equals("") && contador > 0) {
-                QueryInicial = QueryInicial + ", lote_tinta = '" + lote_tinta + "'";
-                contador++;
-            } else if (!lote_tinta.equals("")) {
-                QueryInicial = QueryInicial + "SET lote_tinta = '" + lote_tinta + "'";
-                contador++;
-            }
-            String QueryFinal = " WHERE lote_producto = '" + IdsRegistro + "'";
-            String Query = QueryInicial + QueryFinal;
-            Query q = etm.createNativeQuery(Query);
             int exitoso = q.executeUpdate();
             etm.getTransaction().commit();
-            etm.clear();
-            etm.close();
-            if (exitoso == 0) {
-                return false;
-            } else {
-                return true;
-            }
+            return exitoso > 0;
         } catch (Exception ex) {
+            if (etm.getTransaction().isActive()) {
+                etm.getTransaction().rollback();
+            }
             return false;
+        } finally {
+            etm.close();
         }
     }
 

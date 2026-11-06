@@ -82,12 +82,37 @@
                         if (document.getElementById('Edit_comprobar').style.display === "block") {
                             document.getElementById('Edit_comprobar').style.display = 'none';
                             document.getElementById('Div' + id).style.display = 'none';
+                            // Al cancelar se limpian los datos digitados para que no se envien en otra edicion
+                            var inputsDiv = document.getElementById('Div' + id).getElementsByTagName('input');
+                            for (var k = 0; k < inputsDiv.length; k++) {
+                                inputsDiv[k].value = '';
+                            }
                         } else if (document.getElementById('Edit_comprobar').style.display === "none") {
                             document.getElementById('Edit_comprobar').style.display = 'block';
                             document.getElementById('Div' + id).style.display = 'block';
                         }
                     }
                     function EnviarEdit() {
+                        // Solo se envian los campos del bloque de edicion abierto
+                        var hayDatos = false;
+                        for (var d = 1; d <= 12; d++) {
+                            var divEdit = document.getElementById('Div' + d);
+                            if (divEdit === null) {
+                                continue;
+                            }
+                            var abierto = divEdit.style.display === 'block';
+                            var inputsEdit = divEdit.getElementsByTagName('input');
+                            for (var k = 0; k < inputsEdit.length; k++) {
+                                inputsEdit[k].disabled = !abierto;
+                                if (abierto && inputsEdit[k].value.replace(/^\s+|\s+$/g, '') !== '') {
+                                    hayDatos = true;
+                                }
+                            }
+                        }
+                        if (!hayDatos) {
+                            swal("Sin cambios", "Ingrese al menos un dato a corregir.", "warning");
+                            return;
+                        }
                         swal({
                             title: "¡Confirmar Envio!",
                             text: "Se modificarán los datos pertenecientes a esta lote. ¿Estas seguro?",

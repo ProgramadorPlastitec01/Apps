@@ -689,7 +689,8 @@ public class Tag_reportes extends TagSupport {
                     if (orden > 0 && id_producto > 0 && id_linea > 0) {
                         lst_comparadores = jpacprm.Comparadores();
                         lst_lote_registro = jpacrfh.Registros_lote(lote, id_producto, orden, id_linea, ciclo, fecha_inicio + " " + hora_inicio, fecha_fin + " " + hora_fin);
-                        lst_lotes = jpacrgt.Traer_lotes_id_producto_verificar(id_producto, lote, id_linea, ciclo);
+                        // Mismos registros del certificado (orden + rango de fechas) que se corrigen en Reporte?opc=9
+                        lst_lotes = jpacrgt.Traer_lotes_verificar_rango(id_producto, lote, id_linea, ciclo, orden, fecha_inicio + " " + hora_inicio, fecha_fin + " " + hora_fin);
                     } else {
                         lst_comparadores = null;
                         lst_lote_registro = null;
@@ -700,7 +701,7 @@ public class Tag_reportes extends TagSupport {
                     //<editor-fold defaultstate="collapsed" desc="COMPROBAR ERRORES">
                     if (lst_lote_registro != null) {
                         out.print("<h3>Acciones R-GC-017</h3>");
-                        if (lst_lotes.size() > 0) {
+                        if (lst_lotes != null && lst_lotes.size() > 0) {
                             if (lst_lotes.size() > 1) {
                                 out.print("<span onclick=\"location.href='Reporte?opc=1&irs=0'\" class='fa fa-arrow-left fa-size_small' title='Volver'></span> Volver resumenes<br />");
                                 out.print("<span onclick='Form_comprobar_errores();EnviarIds();' class='far fa-eye fa-size_small' title='Comprobar errores'></span><b class='rojo'>Comprobar errores</b><br />");
@@ -719,8 +720,16 @@ public class Tag_reportes extends TagSupport {
                                 out.print("<input type='hidden' id='IdModificar' name='IdsRegistro' value=''>");
                                 out.print("<input type='hidden' name='Txt_orden' value='" + orden + "'>");
                                 out.print("<input type='hidden' name='Cbx_producto' value='" + id_producto + "'>");
+                                // Filtros del certificado: el servidor recalcula con ellos los registros a modificar
+                                out.print("<input type='hidden' name='Cbx_lote' value='" + lote + " / " + id_linea + " / " + ciclo + "'>");
+                                out.print("<input type='hidden' name='Txt_fecha_inicio' value='" + fecha_inicio + "'>");
+                                out.print("<input type='hidden' name='Txt_fecha_fin' value='" + fecha_fin + "'>");
+                                out.print("<input type='hidden' name='Txt_hora_inicio' value='" + hora_inicio + "'>");
+                                out.print("<input type='hidden' name='Txt_hora_fin' value='" + hora_fin + "'>");
+                                out.print("<input type='hidden' name='Txt_numero_certificado' value='" + numero_certificado + "'>");
+                                out.print("<input type='hidden' name='Txt_fecha_despacho' value='" + fecha_despacho + "'>");
 
-                                out.print("<div id='Div1' style='display:none;margin-bottom:7%'>");
+                                out.print("<div id='Div1'style='display:none;margin-bottom:7%'>");
                                 //<editor-fold defaultstate="collapsed" desc="LOTE COLA">
                                 out.print("<b>Lote Cola:</b>");
                                 out.print("<br><input type='text' name='lote_cola' placeholder='Ingrese dato a corregir ...' value=''>");
@@ -912,13 +921,13 @@ public class Tag_reportes extends TagSupport {
                                         //<editor-fold defaultstate="collapsed" desc="ENSAMBLE 3 - 4">
                                         out.print("<td align='center' colspan='3'><div style='display:flex;justify-content:space-between'><b>ENSAMBLE(s)</b><span class='fa fa-pencil-alt fa-size_small' onclick='FormEditError(4)' title='Editar'></div></td>");
                                         out.print("<td ><b>3°</b><i onclick='Resaltar(this.innerHTML);Resaltar_error(this.innerHTML);'> " + ((obj_lote[26] == null) ? "N/A" : obj_lote[26].toString().toUpperCase()) + "</i><br />"
-                                                + "<b>4°</b><i onclick='Resaltar(this.innerHTML);Resaltar_error(this.innerHTML);'> " + ((obj_lote[28] == null) ? "N/A" : obj_lote[28].toString().toUpperCase()) + "</i></td>");
+                                                + "<b>4°</b><i onclick='Resaltar(this.innerHTML);Resaltar_error(this.innerHTML);'> " + ((obj_lote[27] == null) ? "N/A" : obj_lote[27].toString().toUpperCase()) + "</i></td>");
                                         //</editor-fold>
                                         out.print("</tr>");
                                         out.print("<tr>");
                                         //<editor-fold defaultstate="collapsed" desc="LOTE ENSAMBLE 3 - 4">
                                         out.print("<td align='center' colspan='3'><div style='display:flex;justify-content:space-between'><b>LOTE(S)_ENSAMBLE</b><span class='fa fa-pencil-alt fa-size_small' onclick='FormEditError(5)' title='Editar'></div></td>");
-                                        out.print("<td ><b>3°</b><i onclick='Resaltar(this.innerHTML);Resaltar_error(this.innerHTML);'> " + ((obj_lote[27] == null) ? "N/A" : obj_lote[27].toString().toUpperCase()) + "</i><br />"
+                                        out.print("<td ><b>3°</b><i onclick='Resaltar(this.innerHTML);Resaltar_error(this.innerHTML);'> " + ((obj_lote[28] == null) ? "N/A" : obj_lote[28].toString().toUpperCase()) + "</i><br />"
                                                 + "<b>4°</b><i onclick='Resaltar(this.innerHTML);Resaltar_error(this.innerHTML);'> " + ((obj_lote[29] == null) ? "N/A" : obj_lote[29].toString().toUpperCase()) + "</i></td>");
                                         //</editor-fold>
                                         out.print("</tr>");
@@ -1007,10 +1016,10 @@ public class Tag_reportes extends TagSupport {
                                         ///EVA
                                         out.print("<tr>");
                                         out.print("<td ><b>3°</b><i onclick='Resaltar(this.innerHTML);Resaltar_error(this.innerHTML);'> " + ((obj_lote[26] == null) ? "N/A" : obj_lote[26].toString().toUpperCase()) + "</i><br />"
-                                                + "<b>4°</b><i onclick='Resaltar(this.innerHTML);Resaltar_error(this.innerHTML);'> " + ((obj_lote[28] == null) ? "N/A" : obj_lote[28].toString().toUpperCase()) + "</i></td>");
+                                                + "<b>4°</b><i onclick='Resaltar(this.innerHTML);Resaltar_error(this.innerHTML);'> " + ((obj_lote[27] == null) ? "N/A" : obj_lote[27].toString().toUpperCase()) + "</i></td>");
                                         out.print("</tr>");
                                         out.print("<tr>");
-                                        out.print("<td ><b>3°</b><i onclick='Resaltar(this.innerHTML);Resaltar_error(this.innerHTML);'> " + ((obj_lote[27] == null) ? "N/A" : obj_lote[27].toString().toUpperCase()) + "</i><br />"
+                                        out.print("<td ><b>3°</b><i onclick='Resaltar(this.innerHTML);Resaltar_error(this.innerHTML);'> " + ((obj_lote[28] == null) ? "N/A" : obj_lote[28].toString().toUpperCase()) + "</i><br />"
                                                 + "<b>4°</b><i onclick='Resaltar(this.innerHTML);Resaltar_error(this.innerHTML);'> " + ((obj_lote[29] == null) ? "N/A" : obj_lote[29].toString().toUpperCase()) + "</i></td>");
                                         out.print("</tr>");
                                         out.print("<tr>");

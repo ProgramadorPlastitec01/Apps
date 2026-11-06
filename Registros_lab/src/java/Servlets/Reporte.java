@@ -5,8 +5,11 @@ import Controladores.RegistroJpaController;
 import Controladores.ResumenJpaController;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -347,35 +350,9 @@ public class Reporte extends HttpServlet {
                     break;
                 case 9:
                     //<editor-fold defaultstate="collapsed" desc="MODIFICAR DATOS CORRECION ERRORES">
-                    //<editor-fold defaultstate="collapsed" desc="VARIABLES">
-                    String IdsRegistro = "",
-                     lote_cola = "",
-                     ensamble = "",
-                     ensamble_2 = "",
-                     lote_ensamble = "",
-                     lote_ensamble_2 = "",
-                     ensamble_3 = "",
-                     ensamble_4 = "",
-                     lote_ensamble_3 = "",
-                     lote_ensamble_4 = "",
-                     ciclo_esterilizacion = "",
-                     lote_tubo_refuerzo = "",
-                     lote_manga_c = "",
-                     lote_manga_p = "",
-                     lote_dto_drc_c = "",
-                     lote_dto_drc_p = "",
-                     lote_dto_ctl_c = "",
-                     lote_dto_ctl_p = "",
-                     lote_dto_izq_c = "",
-                     lote_dto_izq_p = "",
-                     color_tinta = "",
-                     lote_tinta = "";
-                    //</editor-fold>
-                    try {
-                        IdsRegistro = request.getParameter("IdsRegistro");
-                    } catch (Exception e) {
-                        IdsRegistro = "";
-                    }
+                    // Los cambios se aplican SOLO a los registros del certificado que se esta generando:
+                    // mismos filtros del R-GC-017 (orden, producto, lote / linea / ciclo y rango de fechas),
+                    // recalculados aqui en el servidor. Nunca solo por el texto del lote.
                     try {
                         orden = Integer.parseInt(request.getParameter("Txt_orden").toString());
                     } catch (Exception e) {
@@ -386,124 +363,83 @@ public class Reporte extends HttpServlet {
                     } catch (Exception e) {
                         id_producto = 0;
                     }
-                    if (!IdsRegistro.equals("")) {
-                        //<editor-fold defaultstate="collapsed" desc="RECIBIR VARIABLES">
-                        try {
-                            lote_cola = request.getParameter("lote_cola");
-                        } catch (Exception e) {
-                            lote_cola = "";
+                    try {
+                        lote_arg = request.getParameter("Cbx_lote").toString().split(" / ");
+                        lote = lote_arg[0];
+                        id_linea = Integer.parseInt(lote_arg[1].toString());
+                        ciclo = lote_arg[2].toString();
+                    } catch (Exception e) {
+                        lote = "";
+                        id_linea = 0;
+                        ciclo = "";
+                    }
+                    try {
+                        fecha_inicio = request.getParameter("Txt_fecha_inicio").toString();
+                        fecha_fin = request.getParameter("Txt_fecha_fin").toString();
+                        hora_inicio = request.getParameter("Txt_hora_inicio").toString();
+                        hora_fin = request.getParameter("Txt_hora_fin").toString();
+                    } catch (Exception e) {
+                        fecha_inicio = "";
+                        fecha_fin = "";
+                        hora_inicio = "";
+                        hora_fin = "";
+                    }
+                    //<editor-fold defaultstate="collapsed" desc="CAMPOS A CORREGIR (campo del formulario -> columna de registro)">
+                    String[][] campos_correccion = {
+                        {"lote_cola", "lote_cola"},
+                        {"ensamble", "ensamble"},
+                        {"ensamble_2", "ensamble_2"},
+                        {"lote_ensamble", "lote_ensamble"},
+                        {"lote_ensamble_2", "lote_ensamble_2"},
+                        {"ensamble_3", "ensamble_3"},
+                        {"ensamble_4", "ensamble_4"},
+                        {"lote_ensamble_3", "lote_ensamble_3"},
+                        {"lote_ensamble_4", "lote_ensamble_4"},
+                        {"ciclo_esterilizacion", "ciclo_esterilizacion"},
+                        {"lote_tubo_refuerzo", "lote_tubo_refuerzo"},
+                        {"lote_manga_c", "lote_manga_c"},
+                        {"lote_manga_p", "lote_manga_p"},
+                        {"lote_dto_drc_c", "lote_dto_drc_c"},
+                        {"lote_dto_drc_p", "lote_dto_drc_p"},
+                        {"lote_dto_ctl_c", "lote_dto_ctl_c"},
+                        {"lote_dto_ctl_p", "lote_dto_ctl_p"},
+                        {"lote_dto_izq_c", "lote_dto_iqe_c"},
+                        {"lote_dto_izq_p", "lote_dto_iqe_p"},
+                        {"color_tinta", "color_tinta"},
+                        {"lote_tinta", "lote_tinta"}
+                    };
+                    Map<String, String> cambios = new LinkedHashMap<String, String>();
+                    for (int c = 0; c < campos_correccion.length; c++) {
+                        String valor = request.getParameter(campos_correccion[c][0]);
+                        if (valor != null && !valor.trim().equals("")) {
+                            cambios.put(campos_correccion[c][1], valor.trim());
                         }
-                        try {
-                            ensamble = request.getParameter("ensamble");
-                        } catch (Exception e) {
-                            ensamble = "";
+                    }
+                    //</editor-fold>
+                    proceso = false;
+                    if (orden > 0 && id_producto > 0 && id_linea > 0 && !lote.equals("")
+                            && !fecha_inicio.equals("") && !fecha_fin.equals("") && !cambios.isEmpty()) {
+                        lst_registros = jpacrfh.Registros_lote(lote, id_producto, orden, id_linea, ciclo, fecha_inicio + " " + hora_inicio, fecha_fin + " " + hora_fin);
+                        if (lst_registros != null) {
+                            List<Integer> ids_registro = new ArrayList<Integer>();
+                            for (int r = 0; r < lst_registros.size(); r++) {
+                                Object[] obj_registro = (Object[]) lst_registros.get(r);
+                                Integer id_registro = Integer.valueOf(obj_registro[0].toString());
+                                if (!ids_registro.contains(id_registro)) {
+                                    ids_registro.add(id_registro);
+                                }
+                            }
+                            String usuario_log = sesion.getAttribute("Rol/Nombres").toString().split("/")[1];
+                            proceso = jpacrgt.UpdateMasivoResumen(ids_registro, cambios, usuario_log);
                         }
-                        try {
-                            ensamble_2 = request.getParameter("ensamble_2");
-                        } catch (Exception e) {
-                            ensamble_2 = "";
-                        }
-                        try {
-                            lote_ensamble = request.getParameter("lote_ensamble");
-                        } catch (Exception e) {
-                            lote_ensamble = "";
-                        }
-                        try {
-                            lote_ensamble_2 = request.getParameter("lote_ensamble_2");
-                        } catch (Exception e) {
-                            lote_ensamble_2 = "";
-                        }
-                        try {
-                            ensamble_3 = request.getParameter("ensamble_3");
-                        } catch (Exception e) {
-                            ensamble_3 = "";
-                        }
-                        try {
-                            ensamble_4 = request.getParameter("ensamble_4");
-                        } catch (Exception e) {
-                            ensamble_4 = "";
-                        }
-                        try {
-                            lote_ensamble_3 = request.getParameter("lote_ensamble_3");
-                        } catch (Exception e) {
-                            lote_ensamble_3 = "";
-                        }
-                        try {
-                            lote_ensamble_4 = request.getParameter("lote_ensamble_4");
-                        } catch (Exception e) {
-                            lote_ensamble_4 = "";
-                        }
-                        try {
-                            ciclo_esterilizacion = request.getParameter("ciclo_esterilizacion");
-                        } catch (Exception e) {
-                            ciclo_esterilizacion = "";
-                        }
-                        try {
-                            lote_tubo_refuerzo = request.getParameter("lote_tubo_refuerzo");
-                        } catch (Exception e) {
-                            lote_tubo_refuerzo = "";
-                        }
-                        try {
-                            lote_manga_c = request.getParameter("lote_manga_c");
-                        } catch (Exception e) {
-                            lote_manga_c = "";
-                        }
-                        try {
-                            lote_manga_p = request.getParameter("lote_manga_p");
-                        } catch (Exception e) {
-                            lote_manga_p = "";
-                        }
-                        try {
-                            lote_dto_drc_c = request.getParameter("lote_dto_drc_c");
-                        } catch (Exception e) {
-                            lote_dto_drc_c = "";
-                        }
-                        try {
-                            lote_dto_drc_p = request.getParameter("lote_dto_drc_p");
-                        } catch (Exception e) {
-                            lote_dto_drc_p = "";
-                        }
-                        try {
-                            lote_dto_ctl_c = request.getParameter("lote_dto_ctl_c");
-                        } catch (Exception e) {
-                            lote_dto_ctl_c = "";
-                        }
-                        try {
-                            lote_dto_ctl_p = request.getParameter("lote_dto_ctl_p");
-                        } catch (Exception e) {
-                            lote_dto_ctl_p = "";
-                        }
-                        try {
-                            lote_dto_izq_c = request.getParameter("lote_dto_izq_c");
-                        } catch (Exception e) {
-                            lote_dto_izq_c = "";
-                        }
-                        try {
-                            lote_dto_izq_p = request.getParameter("lote_dto_izq_p");
-                        } catch (Exception e) {
-                            lote_dto_izq_p = "";
-                        }
-                        try {
-                            color_tinta = request.getParameter("color_tinta");
-                        } catch (Exception e) {
-                            color_tinta = "";
-                        }
-                        try {
-                            lote_tinta = request.getParameter("lote_tinta");
-                        } catch (Exception e) {
-                            lote_tinta = "";
-                        }
-                        //</editor-fold>
-                        proceso = jpacrgt.UpdateMasivoResumen(IdsRegistro, lote_cola, ensamble, ensamble_2, lote_ensamble, lote_ensamble_2, ensamble_3, ensamble_4, lote_ensamble_3, lote_ensamble_4, ciclo_esterilizacion, lote_tubo_refuerzo, lote_manga_c, lote_manga_p, lote_dto_drc_c, lote_dto_drc_p, lote_dto_ctl_c, lote_dto_ctl_p, lote_dto_izq_c, lote_dto_izq_p, color_tinta, lote_tinta);
-                        if (proceso) {
-                            request.setAttribute("Alerta", "Datos_cambiados");
-                        } else {
-                            request.setAttribute("Alerta", "Error_comprobador");
-                        }
+                    }
+                    if (proceso) {
+                        request.setAttribute("Alerta", "Datos_cambiados");
                     } else {
                         request.setAttribute("Alerta", "Error_comprobador");
                     }
-                    request.getRequestDispatcher("Reporte?opc=8&Txt_orden=" + orden + "&Cbx_producto=" + id_producto + "").forward(request, response);
+                    // Se recarga el mismo certificado: los filtros (Cbx_lote, fechas, certificado) viajan en la peticion
+                    request.getRequestDispatcher("Reporte?opc=8").forward(request, response);
                     //</editor-fold>
                     break;
             }
