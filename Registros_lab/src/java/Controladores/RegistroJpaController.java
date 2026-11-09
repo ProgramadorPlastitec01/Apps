@@ -135,8 +135,9 @@ public class RegistroJpaController {
     }
 
     /**
-     * Comprobar errores R-GC-017: agrupa los datos de los registros del
-     * certificado (mismos filtros de RegistroFrecuenciaHoraJpaController.Registros_lote).
+     * Grupos de datos de los registros del certificado (orden + rango de fechas,
+     * mismos filtros de RegistroFrecuenciaHoraJpaController.Registros_lote).
+     * Se usa para pintar el contenido del R-GC-017.
      * Requiere sql/sp_rgt_t_lotes_registro_verificar_rango.sql
      */
     public List Traer_lotes_verificar_rango(int ipd, String lte, int iln, String cet, int nmr, String fin, String ffn) {
@@ -163,6 +164,71 @@ public class RegistroJpaController {
                 etm.getTransaction().rollback();
             }
             return null;
+        } finally {
+            etm.close();
+        }
+    }
+
+    /**
+     * Comprobar errores R-GC-017: agrupa todos los registros pendientes del lote
+     * (orden + producto + lote + linea + ciclo, sin filtro de fechas), es decir,
+     * los grupos que aparecen como opciones separadas en el selector de lote.
+     * Requiere sql/sp_rgt_t_lotes_registro_verificar_lote.sql
+     */
+    public List Traer_lotes_verificar_lote(int ipd, String lte, int iln, String cet, int nmr) {
+        EntityManager etm = getEntityManager();
+        try {
+            etm.getTransaction().begin();
+            Query q = etm.createNativeQuery("CALL `sp_rgt_t_lotes_registro_verificar_lote`(?1, ?2, ?3, ?4, ?5)");
+            q.setParameter(1, ipd);
+            q.setParameter(2, lte);
+            q.setParameter(3, iln);
+            q.setParameter(4, cet);
+            q.setParameter(5, nmr);
+            List consulta = q.getResultList();
+            etm.getTransaction().commit();
+            if (consulta.isEmpty()) {
+                return null;
+            } else {
+                return consulta;
+            }
+        } catch (Exception ex) {
+            if (etm.getTransaction().isActive()) {
+                etm.getTransaction().rollback();
+            }
+            return null;
+        } finally {
+            etm.close();
+        }
+    }
+
+    /**
+     * Ids de los registros que corrige Comprobar errores R-GC-017: los mismos
+     * que agrupa Traer_lotes_verificar_lote (pendientes del lote en esa orden,
+     * linea y ciclo).
+     */
+    public List<Integer> Ids_registros_lote_pendientes(int ipd, String lte, int iln, String cet, int nmr) {
+        EntityManager etm = getEntityManager();
+        try {
+            Query q = etm.createNativeQuery("SELECT r.id_registro FROM registro r"
+                    + " INNER JOIN producto p ON p.id_producto = r.id_producto"
+                    + " INNER JOIN orden_produccion o ON o.id_orden_produccion = p.id_orden_produccion"
+                    + " WHERE r.id_producto = ?1 AND r.resumido = 0 AND r.estado = 0"
+                    + " AND r.lote_producto = ?2 AND r.id_linea = ?3 AND r.ciclo_esterilizacion = ?4 AND o.numero = ?5");
+            q.setParameter(1, ipd);
+            q.setParameter(2, lte);
+            q.setParameter(3, iln);
+            q.setParameter(4, cet);
+            q.setParameter(5, nmr);
+            List consulta = q.getResultList();
+            List<Integer> ids = new ArrayList<Integer>();
+            for (Object fila : consulta) {
+                Object valor = (fila instanceof Object[]) ? ((Object[]) fila)[0] : fila;
+                ids.add(Integer.valueOf(valor.toString()));
+            }
+            return ids;
+        } catch (Exception ex) {
+            return new ArrayList<Integer>();
         } finally {
             etm.close();
         }

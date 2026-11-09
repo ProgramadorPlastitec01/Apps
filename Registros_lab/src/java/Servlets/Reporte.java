@@ -417,18 +417,11 @@ public class Reporte extends HttpServlet {
                     }
                     //</editor-fold>
                     proceso = false;
-                    if (orden > 0 && id_producto > 0 && id_linea > 0 && !lote.equals("")
-                            && !fecha_inicio.equals("") && !fecha_fin.equals("") && !cambios.isEmpty()) {
-                        lst_registros = jpacrfh.Registros_lote(lote, id_producto, orden, id_linea, ciclo, fecha_inicio + " " + hora_inicio, fecha_fin + " " + hora_fin);
-                        if (lst_registros != null) {
-                            List<Integer> ids_registro = new ArrayList<Integer>();
-                            for (int r = 0; r < lst_registros.size(); r++) {
-                                Object[] obj_registro = (Object[]) lst_registros.get(r);
-                                Integer id_registro = Integer.valueOf(obj_registro[0].toString());
-                                if (!ids_registro.contains(id_registro)) {
-                                    ids_registro.add(id_registro);
-                                }
-                            }
+                    if (orden > 0 && id_producto > 0 && id_linea > 0 && !lote.equals("") && !cambios.isEmpty()) {
+                        // Se corrigen todos los registros pendientes del lote (orden + linea + ciclo),
+                        // los mismos que compara Comprobar errores, para unificar los grupos del selector
+                        List<Integer> ids_registro = jpacrgt.Ids_registros_lote_pendientes(id_producto, lote, id_linea, ciclo, orden);
+                        if (!ids_registro.isEmpty()) {
                             String usuario_log = sesion.getAttribute("Rol/Nombres").toString().split("/")[1];
                             proceso = jpacrgt.UpdateMasivoResumen(ids_registro, cambios, usuario_log);
                         }

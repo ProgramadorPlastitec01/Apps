@@ -111,6 +111,7 @@ public class Tag_reportes extends TagSupport {
             List lst_volumenes = null;
             List lst_fichas_tecnicas = null;
             List lst_lotes = null;
+            List lst_lotes_certificado = null;
             List lst_orden_producto = null;
             List lst_lote_registro = null;
             List lst_comparadores = null;
@@ -689,8 +690,10 @@ public class Tag_reportes extends TagSupport {
                     if (orden > 0 && id_producto > 0 && id_linea > 0) {
                         lst_comparadores = jpacprm.Comparadores();
                         lst_lote_registro = jpacrfh.Registros_lote(lote, id_producto, orden, id_linea, ciclo, fecha_inicio + " " + hora_inicio, fecha_fin + " " + hora_fin);
-                        // Mismos registros del certificado (orden + rango de fechas) que se corrigen en Reporte?opc=9
-                        lst_lotes = jpacrgt.Traer_lotes_verificar_rango(id_producto, lote, id_linea, ciclo, orden, fecha_inicio + " " + hora_inicio, fecha_fin + " " + hora_fin);
+                        // Grupos del rango seleccionado: son los que se pintan en el R-GC-017
+                        lst_lotes_certificado = jpacrgt.Traer_lotes_verificar_rango(id_producto, lote, id_linea, ciclo, orden, fecha_inicio + " " + hora_inicio, fecha_fin + " " + hora_fin);
+                        // Comprobar errores compara todos los grupos pendientes del lote (mismos que corrige Reporte?opc=9)
+                        lst_lotes = jpacrgt.Traer_lotes_verificar_lote(id_producto, lote, id_linea, ciclo, orden);
                     } else {
                         lst_comparadores = null;
                         lst_lote_registro = null;
@@ -1215,8 +1218,8 @@ public class Tag_reportes extends TagSupport {
                             out.print("<td colspan='9' align='center'><b class='negro'>RESUMEN SELLADO LINEAS</b></td>");
                             out.print("<th colspan='2'>LINEA</th>");
                             out.print("<td align='center' colspan='3'>");
-                            for (int i = 0; i < lst_lotes.size(); i++) {
-                                Object[] obj_lote = (Object[]) lst_lotes.get(i);
+                            for (int i = 0; lst_lotes_certificado != null && i < lst_lotes_certificado.size(); i++) {
+                                Object[] obj_lote = (Object[]) lst_lotes_certificado.get(i);
                                 if (obj_lote[0].toString().equals(lote) && (Integer) obj_lote[16] == id_linea && obj_lote[25].equals(ciclo)) {
                                     if (contador > 0) {
                                         out.print("<br />");
@@ -1306,8 +1309,8 @@ public class Tag_reportes extends TagSupport {
                                 out.print("<td align='center' colspan='4'>" + obj_orden[10].toString().toUpperCase() + "<b> VERSION </b>" + obj_orden[11].toString().toUpperCase() + "</td>");
                             }
                             out.print("</tr>");
-                            for (int i = 0; i < lst_lotes.size(); i++) {
-                                Object[] obj_lote = (Object[]) lst_lotes.get(i);
+                            for (int i = 0; lst_lotes_certificado != null && i < lst_lotes_certificado.size(); i++) {
+                                Object[] obj_lote = (Object[]) lst_lotes_certificado.get(i);
                                 if (obj_lote[0].toString().equals(lote) && (Integer) obj_lote[16] == id_linea && obj_lote[25].toString().equals(ciclo)) {
                                     out.print("<tr>");
                                     if (obj_lote[17] != null) {
