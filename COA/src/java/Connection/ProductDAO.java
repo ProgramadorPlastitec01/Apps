@@ -91,7 +91,9 @@ public class ProductDAO {
             + "r.lote_producto=? "
             + "OR CONCAT(r.lote_producto,'///',r.ciclo_esterilizacion)=?"
             + ") "
-            + "AND DATE(r.fecha_turno) BETWEEN ? AND ?";
+            + "AND DATE(r.fecha_turno) BETWEEN ? AND ? "
+            // Los registros de lineas Screen no aplican en los certificados
+            + ConnectionRegistrosLAB.SIN_SCREEN;
 
     static {
         try {

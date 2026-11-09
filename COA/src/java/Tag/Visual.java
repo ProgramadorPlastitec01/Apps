@@ -166,6 +166,9 @@ public class Visual extends TagSupport {
                 out.print("<div class='row'>");
                 out.print("<div class='col-12'>");
                 out.print("<div class='card'>");
+                // Espacio para las tarjetas de alertas de Visual.jsp (#alertasCertificado);
+                // queda dentro de la tarjeta pero fuera de #HtmlContent (no va al certificado).
+                out.print("<div id='alertasCertificadoSlot' style='padding:15px 25px 0 25px;'></div>");
                 out.print("<div class='card-header' style='justify-content: space-between;'>");
                 out.print("<div class='d-flex justify-content-between' style='width:100%'>");
                 out.print("<div class='mr-2 d-flex align-items-baseline'>");
@@ -798,14 +801,10 @@ public class Visual extends TagSupport {
                                 if (ObjSheet[2] != null && !ObjSheet[2].equals("")) {
                                     lst_prm = RegistrosLabJpa.QueryTechnicalSheet(Order, Product, Batch, ObjSheet[2].toString());
                                     if (lst_prm != null && lst_prm.size() > 0) {
-                                        String[] ArgPrm = Util.parseResult(lst_prm.get(0));
-                                        // Prioriza Soldadura bocas/colas "alt" sobre el valor normal cuando trae dato
-                                        if (ArgPrm.length > 17 && !ArgPrm[17].isEmpty() && !ArgPrm[17].contains("0 +/- 0")) {
-                                            ArgPrm[14] = ArgPrm[17];
-                                        }
-                                        if (ArgPrm.length > 18 && !ArgPrm[18].isEmpty() && !ArgPrm[18].contains("0 +/- 0")) {
-                                            ArgPrm[15] = ArgPrm[18];
-                                        }
+                                        StringBuilder WeldWarn = new StringBuilder();
+                                        StringBuilder WeldPanel = new StringBuilder();
+                                        String[] ArgPrm = applyWeldingAlternative(lst_prm, 14, 15, 17, WeldWarn, WeldPanel);
+                                        printWeldingWarning(out, WeldWarn, WeldPanel, Order, ProductFact, Batch);
                                         DataTechnicalSheet = ArgPrm[16];
                                         int ForCant = Integer.parseInt(ArgPrm[0].trim());
                                         for (int i = 1; i < ForCant; i++) {
@@ -989,7 +988,10 @@ public class Visual extends TagSupport {
                                 if (!ObjSheet[2].equals("") || ObjSheet[2] != null) {
                                     lst_prm = RegistrosLabJpa.QueryTechnicalSheetRGC74(Order, Product, Batch, ObjSheet[2].toString());
                                     if (lst_prm != null) {
-                                        String[] ArgPrm = Util.parseResult(lst_prm.get(0));
+                                        StringBuilder WeldWarn = new StringBuilder();
+                                        StringBuilder WeldPanel = new StringBuilder();
+                                        String[] ArgPrm = applyWeldingAlternative(lst_prm, 9, 10, 12, WeldWarn, WeldPanel);
+                                        printWeldingWarning(out, WeldWarn, WeldPanel, Order, ProductFact, Batch);
                                         DataTechnicalSheet = ArgPrm[11];
                                         int ForCant = Integer.parseInt(ArgPrm[0].trim());
                                         for (int i = 1; i < ForCant; i++) {
@@ -1189,7 +1191,10 @@ public class Visual extends TagSupport {
                                 if (ObjSheet[2] != null && !ObjSheet[2].equals("")) {
                                     lst_prm = RegistrosLabJpa.QueryTechnicalSheetRGC194(Order, Product, Batch, ObjSheet[2].toString());
                                     if (lst_prm != null) {
-                                        String[] ArgPrm = Util.parseResult(lst_prm.get(0));
+                                        StringBuilder WeldWarn = new StringBuilder();
+                                        StringBuilder WeldPanel = new StringBuilder();
+                                        String[] ArgPrm = applyWeldingAlternative(lst_prm, 11, 12, 14, WeldWarn, WeldPanel);
+                                        printWeldingWarning(out, WeldWarn, WeldPanel, Order, ProductFact, Batch);
                                         DataTechnicalSheet = ArgPrm[13];
                                         int ForCant = Integer.parseInt(ArgPrm[0].trim());
                                         for (int i = 1; i < ForCant; i++) {
@@ -1625,6 +1630,155 @@ public class Visual extends TagSupport {
             }
         }
         return super.doStartTag();
+    }
+
+    /**
+     * Aplica los parametros de soldadura (bocas/colas) de la ficha tecnica.
+     * Se usan los alternativos ("X -min +max") solo si: la FT los tiene
+     * definidos, registro.parametros_alternativos = 1 y la linea del registro
+     * es tipo Colpitt (la consulta del setting entrega "Parametros Alt" = 1
+     * solo cuando se cumplen las dos ultimas); si no, los normales.
+     * Cada fila de lst_prm corresponde a un registro (turno) del lote; se
+     * aplica el valor que mas se repite y, si hay mezcla, se deja aviso en
+     * Warn para informar al usuario. Las columnas alternativas vienen en
+     * idxAlt (bocas), idxAlt+1 (colas) e idxAlt+2 (bandera).
+     */
+    private String[] applyWeldingAlternative(List lst_prm, int idxBocas, int idxColas, int idxAlt, StringBuilder Warn, StringBuilder Panel) {
+        String[] ArgPrm = Util.parseResult(lst_prm.get(0));
+        if (ArgPrm.length <= idxAlt + 2) {
+            return ArgPrm;
+        }
+        int alt = 0, normal = 0;
+        // Resumen por linea: nombre -> {tipo}, {registros, con parametro=1, aplican}
+        java.util.Map<String, String> lineType = new java.util.LinkedHashMap<String, String>();
+        java.util.Map<String, int[]> lineCount = new java.util.LinkedHashMap<String, int[]>();
+        for (Object row : lst_prm) {
+            String[] r = Util.parseResult(row);
+            String flag = r.length > idxAlt + 2 ? r[idxAlt + 2].trim() : "";
+            if (flag.equals("1")) {
+                alt++;
+            } else if (flag.equals("0")) {
+                normal++;
+            }
+            if (r.length > idxAlt + 3 && !r[idxAlt + 3].isEmpty()) {
+                String[] info = r[idxAlt + 3].split("\\|", -1);
+                String name = info.length > 0 && !info[0].trim().isEmpty() ? info[0].trim() : "N/A";
+                String type = info.length > 1 ? info[1].trim() : "";
+                String param = info.length > 2 ? info[2].trim() : "";
+                lineType.put(name, type);
+                int[] c = lineCount.get(name);
+                if (c == null) {
+                    c = new int[3];
+                    lineCount.put(name, c);
+                }
+                c[0]++;
+                if (param.equals("1")) {
+                    c[1]++;
+                }
+                if (flag.equals("1")) {
+                    c[2]++;
+                }
+            }
+        }
+        if (alt == 0 && normal == 0) {
+            return ArgPrm;
+        }
+        boolean useAlt = alt >= normal;
+        if (alt > 0 && normal > 0) {
+            Warn.append("El lote tiene ").append(alt).append(" registro(s) de línea Colpitt con parámetros alternativos de soldadura y ")
+                    .append(normal).append(" que no cumplen (otra línea o parámetros normales); se aplicaron los ")
+                    .append(useAlt ? "alternativos" : "normales")
+                    .append(alt == normal ? " (empate)" : " (mayoría)")
+                    .append(", favor verifique.");
+        }
+        if (useAlt) {
+            boolean bocasOk = hasWeldingValue(ArgPrm[idxAlt]);
+            boolean colasOk = hasWeldingValue(ArgPrm[idxAlt + 1]);
+            if (bocasOk) {
+                ArgPrm[idxBocas] = ArgPrm[idxAlt];
+            }
+            if (colasOk) {
+                ArgPrm[idxColas] = ArgPrm[idxAlt + 1];
+            }
+            if (!bocasOk || !colasOk) {
+                if (Warn.length() > 0) {
+                    Warn.append(" ");
+                }
+                Warn.append("El registro indica parámetros alternativos de soldadura pero la ficha técnica no los tiene definidos")
+                        .append(!bocasOk && !colasOk ? "" : (!bocasOk ? " para bocas" : " para colas"))
+                        .append("; se muestran los valores normales.");
+            }
+        }
+        if (!lineCount.isEmpty()) {
+            boolean applied = !ArgPrm[idxBocas].contains("+/-") || !ArgPrm[idxColas].contains("+/-");
+            // Resumen para la tarjeta, separado del detalle del modal por WELD_SPLIT
+            Panel.append("Parámetro aplicado: <b>").append(applied ? "Alternativo" : "Normal")
+                    .append("</b> &middot; ").append(lineCount.size()).append(" línea(s)")
+                    .append(WELD_SPLIT)
+                    .append("<div style='margin-bottom:10px;'>Parámetro aplicado: <b>")
+                    .append(applied ? "Alternativo" : "Normal (ficha técnica)")
+                    .append("</b> &mdash; Bocas: <b>").append(escapeHtmlAttribute(ArgPrm[idxBocas]))
+                    .append("</b> &middot; Colas: <b>").append(escapeHtmlAttribute(ArgPrm[idxColas]))
+                    .append("</b></div>")
+                    .append("<table style='width:100%;border-collapse:collapse;table-layout:fixed;'>")
+                    .append("<thead><tr>");
+            String th = "<th style='padding:10px;text-align:left;background:#f5f5f5;border:1px solid #ddd;color:#555;font-weight:600;'>";
+            Panel.append(th).append("Línea</th>").append(th).append("Tipo</th>")
+                    .append(th).append("Registros</th></tr></thead><tbody>");
+            String td = "<td style='padding:8px 10px;border:1px solid #ddd;'>";
+            for (java.util.Map.Entry<String, int[]> e : lineCount.entrySet()) {
+                Panel.append("<tr>")
+                        .append(td).append(escapeHtmlAttribute(e.getKey())).append("</td>")
+                        .append(td).append(escapeHtmlAttribute(lineType.get(e.getKey()))).append("</td>")
+                        .append(td).append(e.getValue()[0]).append("</td>")
+                        .append("</tr>");
+            }
+            Panel.append("</tbody></table>");
+        }
+        return ArgPrm;
+    }
+
+    private static final String WELD_SPLIT = "<!--WELD_SPLIT-->";
+
+    private String toJsString(String value) {
+        return value.replace("\\", "\\\\").replace("'", "\\'")
+                .replace("\r", "").replace("\n", " ").replace("</", "<\\/");
+    }
+
+    private boolean hasWeldingValue(String value) {
+        if (value == null || value.trim().isEmpty()) {
+            return false;
+        }
+        try {
+            return Double.parseDouble(value.trim().split("\\s+")[0].replace(",", ".")) != 0;
+        } catch (NumberFormatException ex) {
+            return false;
+        }
+    }
+
+    private void printWeldingWarning(JspWriter out, StringBuilder Warn, StringBuilder Panel, int Order, String ProductFact, String Batch) throws IOException {
+        if (Panel.length() > 0) {
+            // Tarjeta + modal solo en pantalla (#alertaSoldadura / #modalSoldadura
+            // en Visual.jsp), fuera de #HtmlContent, para no quedar en el certificado.
+            String[] parts = Panel.toString().split(java.util.regex.Pattern.quote(WELD_SPLIT), 2);
+            String resumen = toJsString(parts[0]);
+            String detalle = toJsString(parts.length > 1 ? parts[1] : "");
+            out.print("<script>"
+                    + "window.addEventListener('load',function(){"
+                    + " var r=document.getElementById('soldaduraResumen');if(r){r.innerHTML='" + resumen + "';}"
+                    + " var d=document.getElementById('soldaduraDetalle');if(d){d.innerHTML='" + detalle + "';}"
+                    + " var a=document.getElementById('alertaSoldadura');if(a){a.style.display='flex';}"
+                    + "});"
+                    + "</script>");
+        }
+        if (Warn.length() == 0) {
+            return;
+        }
+        out.print("<script>"
+                + "window.addEventListener('load',function(){"
+                + " registrarEvento('Soldadura - Parámetros alternativos','" + Order + "','" + ProductFact + "','" + Batch + "','" + Warn.toString().replace("'", "\\'") + "');"
+                + "});"
+                + "</script>");
     }
 
     private String escapeHtmlAttribute(Object value) {

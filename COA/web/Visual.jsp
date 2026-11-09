@@ -41,174 +41,134 @@
         <% } %>
         <jsp:include page="Menu.jsp"></jsp:include>
             <div class="main-content" style="min-height: 694px;">
-                <div style="
-                     display:flex;
-                     align-items:stretch;
-                     width:100%;
-                     margin-top:10px;
-                     border-radius:8px;
-                     overflow:hidden;
-                     box-shadow:0 2px 6px rgba(0,0,0,0.08);
-                     ">
-
+                <style>
+                    #alertasCertificado { display:flex; align-items:stretch; width:100%; margin-top:10px; gap:25px; }
+                    #alertasCertificado .cert-alert {flex:1;padding:6px 10px;border-radius:3px;box-shadow: 0 3px 6px rgb(0 0 0 / 42%);min-width:0;}
+                    #alertasCertificado .cert-alert-body { display:flex; align-items:center; gap:8px; width:100%; height:100%; }
+                    #alertasCertificado .cert-alert-icon { font-size:15px; flex-shrink:0; }
+                    #alertasCertificado .cert-alert-title { font-weight:600; font-size:12px; line-height:1.3; }
+                    #alertasCertificado .cert-alert-text { font-size:11px; line-height:1.3; }
+                    #alertasCertificado .cert-alert-btn { margin-left:auto; flex-shrink:0; padding:2px 7px; font-size:12px; line-height:1.4; border-radius:3px; }
+                </style>
+                <div id="alertasCertificado">
 
                     <!-- REGISTROS ASOCIADOS -->
-                    <div id="alertaRegistros"
-                         style="
-                         display:flex;
-                         flex:1;
-                         padding:12px 16px;
-                         background:#e8f5ff;
-                         border-left:4px solid #2196f3;
-                         color:#1f4f70;
-                         ">
-
-                        <div style="
-                             display:flex;
-                             align-items:center;
-                             gap:10px;
-                             width:100%;
-                             ">
-
-                            <span style="font-size:20px;">✔️</span>
-
+                    <div id="alertaRegistros" class="cert-alert" style="display:flex; background:#e8f5ff; color:#1f4f70;">
+                        <div class="cert-alert-body">
+                            <i class="fas fa-check cert-alert-icon" style="color:#7b5cc4;"></i>
                             <div>
-                                <div style="
-                                     font-weight:600;
-                                     font-size:14px;
-                                     ">
-                                    Registros asociados
-                                </div>
-
-                                <div style="
-                                     font-size:12px;
-                                     color:#52738a;
-                                     ">
-                                    <b id="AmoutRegDataText"
-                                       style="
-                                       font-size:16px;
-                                       color:#1769aa;
-                                       ">0</b>
+                                <div class="cert-alert-title">Registros asociados</div>
+                                <div class="cert-alert-text" style="color:#52738a;">
+                                    <b id="AmoutRegDataText" style="font-size:13px; color:#1769aa;">0</b>
                                     registros encontrados
                                 </div>
                             </div>
-
                         </div>
                     </div>
 
                     <!-- SIN INFORMACIÓN -->
-                    <div id="alerta"
-                         style="
-                         display:none;
-                         flex:1;
-                         padding:12px 16px;
-                         background:#fff4df;
-                         border-left:4px solid #f0ad4e;
-                         color:#5f4b32;
-                         ">
-
-                        <div style="
-                             display:flex;
-                             align-items:center;
-                             gap:10px;
-                             height:100%;
-                             ">
-
-                            <span style="font-size:20px;">⚠️</span>
-
+                    <div id="alerta" class="cert-alert" style="display:none; background:#fff4df; color:#5f4b32;">
+                        <div class="cert-alert-body">
+                            <i class="fas fa-exclamation-triangle cert-alert-icon" style="color:#f0ad4e;"></i>
                             <div>
-                                <div style="
-                                     font-weight:600;
-                                     font-size:14px;
-                                     ">
-                                    Sin información
-                                </div>
-
-                                <div style="
-                                     font-size:12px;
-                                     color:#806b50;
-                                     ">
-                                    No se encontró información para los datos ingresados.
-                                </div>
+                                <div class="cert-alert-title">Sin información</div>
+                                <div class="cert-alert-text" style="color:#806b50;">No se encontró información para los datos ingresados.</div>
                             </div>
-
-                            <button class="btn btn-sm btn-dark"
-                                    onclick="mostrarDetalles()"
-                                    style="
-                                    margin-left:auto;
-                                    white-space:nowrap;
-                                    ">
-                                Ver detalles
+                            <button type="button" class="btn btn-sm btn-dark cert-alert-btn" onclick="mostrarDetalles()" title="Ver detalles">
+                                <i class="fas fa-search"></i>
                             </button>
-
                         </div>
                     </div>
 
-
-
-
-
-
-
-
-
-
-
-
                     <!-- DIFERENCIAS -->
-                    <div id="alertaError"
-                         style="
-                         display:flex;
-                         flex:1;
-                         padding:12px 16px;
-                         background:#fff0f0;
-                         border-left:4px solid #dc3545;
-                         color:#6b2525;
-                         ">
-
-                        <div style="
-                             display:flex;
-                             align-items:center;
-                             gap:10px;
-                             width:100%;
-                             ">
-
-                            <i class="fas fa-times-circle" style="font-size:22px; color:#dc3545;"></i>
-
+                    <div id="alertaError" class="cert-alert" style="display:flex; background:#fff0f0; color:#6b2525;">
+                        <div class="cert-alert-body">
+                            <i class="fas fa-times-circle cert-alert-icon" style="color:#dc3545;"></i>
                             <div>
-                                <div style="
-                                     font-weight:600;
-                                     font-size:14px;
-                                     ">
-                                    Diferencias encontradas
-                                </div>
-
-                                <div style="
-                                     font-size:12px;
-                                     color:#8a5050;
-                                     ">
-                                    <b id="ErrorCountText"
-                                       style="
-                                       font-size:16px;
-                                       color:#c62828;
-                                       ">0</b>
+                                <div class="cert-alert-title">Diferencias encontradas</div>
+                                <div class="cert-alert-text" style="color:#8a5050;">
+                                    <b id="ErrorCountText" style="font-size:13px; color:#c62828;">0</b>
                                     diferencias
                                 </div>
                             </div>
-
-                            <button class="btn btn-sm btn-dark"
-                                    onclick="mostrarDetallesErrores()"
-                                    style="
-                                    margin-left:auto;
-                                    white-space:nowrap;
-                                    ">
-                                Ver detalles
+                            <button type="button" class="btn btn-sm btn-dark cert-alert-btn" onclick="mostrarDetallesErrores()" title="Ver detalles">
+                                <i class="fas fa-search"></i>
                             </button>
+                        </div>
+                    </div>
 
+                    <!-- LINEAS DE SOLDADURA -->
+                    <div id="alertaSoldadura" class="cert-alert" style="display:none; background:#eef0fb; color:#2f3670;">
+                        <div class="cert-alert-body">
+                            <i class="fas fa-burn cert-alert-icon" style="color:#5c6bc0;"></i>
+                            <div>
+                                <div class="cert-alert-title">Líneas de soldadura</div>
+                                <div id="soldaduraResumen" class="cert-alert-text" style="color:#5a6190;"></div>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-dark cert-alert-btn" onclick="abrirModalSoldadura()" title="Ver detalles">
+                                <i class="fas fa-search"></i>
+                            </button>
                         </div>
                     </div>
 
                 </div>
+
+                <!-- MODAL LINEAS DE SOLDADURA (solo pantalla, fuera de #HtmlContent; lo llena Tag.Visual) -->
+                <div id="modalSoldadura"
+                     onclick="if (event.target === this) cerrarModalSoldadura()"
+                     style="
+                     display:none;
+                     position:fixed;
+                     top:0;
+                     left:0;
+                     width:100%;
+                     height:100%;
+                     background:rgba(0,0,0,0.55);
+                     z-index:9999;
+                     justify-content:center;
+                     align-items:center;
+                     ">
+                    <div style="
+                         background:#fff;
+                         border-radius:10px;
+                         width:92%;
+                         max-width:800px;
+                         max-height:88vh;
+                         overflow:hidden;
+                         box-shadow:0 8px 30px rgba(0,0,0,0.25);
+                         ">
+                        <div style="
+                             padding:16px 20px;
+                             border-bottom:1px solid #ddd;
+                             display:flex;
+                             align-items:center;
+                             justify-content:space-between;
+                             background:#fafafa;
+                             ">
+                            <div>
+                                <h4 style="margin:0; font-size:18px; font-weight:600; color:#5c6bc0;">
+                                    Soldadura bocas / colas
+                                </h4>
+                                <div style="margin-top:3px; font-size:12px; color:#777;">
+                                    Líneas relacionadas en el certificado. El alternativo aplica solo en líneas Colpitt con parámetro alternativo = 1.
+                                </div>
+                            </div>
+                            <button type="button" onclick="cerrarModalSoldadura()" style="font-size:24px; border:none; background:none; cursor:pointer; color:#777;">&times;</button>
+                        </div>
+                        <div id="soldaduraDetalle" style="max-height:68vh; overflow-y:auto; padding:15px 20px; font-size:13px;"></div>
+                        <div style="padding:12px 20px; border-top:1px solid #ddd; text-align:right; background:#fafafa;">
+                            <button type="button" class="btn btn-sm btn-dark" onclick="cerrarModalSoldadura()">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    function abrirModalSoldadura() {
+                        document.getElementById('modalSoldadura').style.display = 'flex';
+                    }
+                    function cerrarModalSoldadura() {
+                        document.getElementById('modalSoldadura').style.display = 'none';
+                    }
+                </script>
 
                 <!-- ====================================================== -->
                 <!-- MODAL DE DIFERENCIAS (COMPROBAR ERRORES) -->
@@ -255,7 +215,7 @@
                                 </h4>
 
                                 <div style="margin-top:3px; font-size:12px; color:#777;">
-                                    Seleccione o edite el <b>Dato Real</b> para cada campo divergente para unificar los registros.
+                                    Todos los campos del lote (sin líneas Screen). Seleccione o edite el <b>Dato Real</b> de cualquier campo, tenga o no diferencias, y aplíquelo a todo el lote.
                                 </div>
                             </div>
 
@@ -326,6 +286,17 @@
                     </div>
                 </div>
             <Visual:Visual/>
+            <script>
+                // Ubica las tarjetas de alertas dentro de la tarjeta del certificado
+                (function () {
+                    var slot = document.getElementById('alertasCertificadoSlot');
+                    var alertas = document.getElementById('alertasCertificado');
+                    if (slot && alertas) {
+                        alertas.style.marginTop = '0';
+                        slot.appendChild(alertas);
+                    }
+                })();
+            </script>
             <Alert:Alert/>
 
         </div>
@@ -361,35 +332,30 @@
 
             });
 
-            function cargarTablaDiferencias(datos) {
+            function cargarTablaDiferencias(campos) {
                 const tbody = document.getElementById("tablaErroresBody");
                 const btnUnificar = document.getElementById("btnUnificarDiferencias");
 
                 if (!tbody) return;
                 tbody.innerHTML = "";
 
-                if (!datos || datos.length === 0) {
+                if (!campos || campos.length === 0) {
                     if (btnUnificar) btnUnificar.style.display = "none";
-                    tbody.innerHTML = '<tr><td colspan="3" style="padding:20px;text-align:center;color:#777;"><i class="fas fa-check-circle" style="color:#28a745;"></i> No se encontraron diferencias en los registros.</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="3" style="padding:20px;text-align:center;color:#777;"><i class="fas fa-info-circle"></i> No se encontraron datos de materiales para este lote.</td></tr>';
                     return;
                 }
 
                 if (btnUnificar) btnUnificar.style.display = "inline-block";
 
-                // Agrupar diferencias por el nombre de campo
-                const agrupados = {};
-                datos.forEach((diff) => {
-                    if (!agrupados[diff.campo]) {
-                        agrupados[diff.campo] = [];
-                    }
-                    agrupados[diff.campo].push(diff);
-                });
+                // Primero los campos con diferencias, luego los que están alineados
+                const ordenados = campos.slice().sort((a, b) => (b.diferencias > 0) - (a.diferencias > 0));
 
-                Object.keys(agrupados).forEach((campoName) => {
-                    const listaDiffs = agrupados[campoName];
-                    const primeraDiff = listaDiffs[0];
+                ordenados.forEach((info) => {
+                    const campoName = info.campo;
                     const campoKey = campoName.replace(/[^a-zA-Z0-9]/g, '_');
-                    const parCorrecto = extraerCP(primeraDiff.valorCorrecto);
+                    const valores = info.valores || [];
+                    const predominante = valores.length > 0 ? valores[0] : { c: "N/A", p: "N/A", cantidad: 0 };
+                    const conDiferencias = info.diferencias > 0;
 
                     const fila = document.createElement("tr");
                     fila.className = "fila-diferencia";
@@ -399,11 +365,13 @@
                     tdCampo.style.padding = "12px";
                     tdCampo.style.border = "1px solid #ddd";
                     tdCampo.style.verticalAlign = "middle";
-
-                    tdCampo.innerHTML = '<div style="display:flex; align-items:center; gap:8px;">'
-                        + '<i style="cursor:pointer; font-size:15px;" title="Editar dato real" onclick="focusCampo(\'' + campoKey + '\')"></i>'
-                        + '<strong style="color:#00bcd4; font-size:13px;">' + campoName + '</strong>'
-                        + '</div>';
+                    tdCampo.innerHTML = '<strong style="color:#00bcd4; font-size:13px; cursor:pointer;" title="Editar dato real" onclick="focusCampo(\'' + campoKey + '\')">' + campoName + '</strong>'
+                        + '<div style="margin-top:6px;">'
+                        + (conDiferencias
+                            ? '<span class="badge badge-danger" style="font-size:11px;"><i class="fas fa-times-circle"></i> ' + info.diferencias + ' registro(s) con diferencia</span>'
+                            : '<span class="badge badge-success" style="font-size:11px;"><i class="fas fa-check-circle"></i> Sin diferencias</span>')
+                        + '</div>'
+                        + '<small style="color:#888;">' + info.total + ' registro(s) en total</small>';
 
                     /* 2. VALORES ENCONTRADOS */
                     const tdValores = document.createElement("td");
@@ -412,45 +380,42 @@
                     tdValores.style.verticalAlign = "top";
                     tdValores.style.background = "#fbfbfb";
 
-                    let htmlValores = '<div style="margin-bottom:8px; padding:6px 10px; background:#eaf7ff; border-radius:4px; border:1px solid #bce4ff;">'
-                        + '<div style="font-weight:600; color:#1769aa; font-size:12px;">'
-                        + '<b>C:</b> ' + parCorrecto.c + ' &nbsp;|&nbsp; <b>P:</b> ' + parCorrecto.p
-                        + '</div>'
-                        + '<div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">'
-                        + '<small style="color:#666;">' + primeraDiff.cantidadCorrecto + ' registros (predominante)</small>'
-                        + '<button type="button" class="btn btn-xs btn-outline-primary" style="padding:2px 8px; font-size:11px;" onclick="setDatoReal(\'' + campoKey + '\', \'' + escapeJs(parCorrecto.c) + '\', \'' + escapeJs(parCorrecto.p) + '\')">Usar este</button>'
-                        + '</div>'
-                        + '</div>';
-
-                    listaDiffs.forEach((diff) => {
-                        const parDiff = extraerCP(diff.valorDiferente);
-                        htmlValores += '<div style="margin-bottom:6px; padding:6px 10px; background:#fff0f0; border-radius:4px; border:1px solid #ffcdd2;">'
-                            + '<div style="font-weight:600; color:#c62828; font-size:12px;">'
-                            + '<b>C:</b> ' + parDiff.c + ' &nbsp;|&nbsp; <b>P:</b> ' + parDiff.p
+                    let htmlValores = "";
+                    valores.forEach((v, i) => {
+                        const esPredominante = i === 0;
+                        const bg = esPredominante ? "#eaf7ff" : "#fff0f0";
+                        const borde = esPredominante ? "#bce4ff" : "#ffcdd2";
+                        const color = esPredominante ? "#1769aa" : "#c62828";
+                        const etiqueta = !conDiferencias ? "todos los registros" : (esPredominante ? "predominante" : "diferencia");
+                        const claseBtn = esPredominante ? "btn-outline-primary" : "btn-outline-danger";
+                        htmlValores += '<div style="margin-bottom:6px; padding:6px 10px; background:' + bg + '; border-radius:4px; border:1px solid ' + borde + ';">'
+                            + '<div style="font-weight:600; color:' + color + '; font-size:12px;">'
+                            + '<b>C:</b> ' + v.c + ' &nbsp;|&nbsp; <b>P:</b> ' + v.p
                             + '</div>'
                             + '<div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">'
-                            + '<small style="color:#666;">' + diff.cantidadDiferente + ' registros (diferencia)</small>'
-                            + '<button type="button" class="btn btn-xs btn-outline-danger" style="padding:2px 8px; font-size:11px;" onclick="setDatoReal(\'' + campoKey + '\', \'' + escapeJs(parDiff.c) + '\', \'' + escapeJs(parDiff.p) + '\')">Usar este</button>'
+                            + '<small style="color:#666;">' + v.cantidad + ' registro(s) (' + etiqueta + ')</small>'
+                            + '<button type="button" class="btn btn-xs ' + claseBtn + '" style="padding:2px 8px; font-size:11px;" onclick="setDatoReal(\'' + campoKey + '\', \'' + escapeJs(v.c) + '\', \'' + escapeJs(v.p) + '\')">Usar este</button>'
                             + '</div>'
                             + '</div>';
                     });
-
                     tdValores.innerHTML = htmlValores;
 
-                    /* 3. DATO REAL A APLICAR (CON BOTá“N DE ACCIá“N POR CAMPO) */
+                    /* 3. DATO REAL A APLICAR (CON BOTÓN DE ACCIÓN POR CAMPO) */
                     const tdDatoReal = document.createElement("td");
                     tdDatoReal.style.padding = "10px";
                     tdDatoReal.style.border = "1px solid #ddd";
                     tdDatoReal.style.verticalAlign = "middle";
                     tdDatoReal.style.background = "#fff";
 
-                    tdDatoReal.innerHTML = '<div data-campo="' + campoName + '" data-key="' + campoKey + '">'
+                    tdDatoReal.innerHTML = '<div data-campo="' + campoName + '" data-key="' + campoKey + '"'
+                        + ' data-diferencias="' + info.diferencias + '"'
+                        + ' data-original-c="' + escapeJs(predominante.c) + '" data-original-p="' + escapeJs(predominante.p) + '">'
                         + '<label style="font-size:11px; font-weight:700; color:#555; margin-bottom:2px; display:block;">Dato Real C (Lote C):</label>'
-                        + '<input type="text" id="input_c_' + campoKey + '" value="' + escapeJs(parCorrecto.c) + '" class="form-control form-control-sm mb-2" style="font-weight:600; color:#1769aa;">'
+                        + '<input type="text" id="input_c_' + campoKey + '" value="' + escapeJs(predominante.c) + '" class="form-control form-control-sm mb-2" style="font-weight:600; color:#1769aa;">'
                         + '<label style="font-size:11px; font-weight:700; color:#555; margin-bottom:2px; display:block;">Dato Real P (Lote P):</label>'
-                        + '<input type="text" id="input_p_' + campoKey + '" value="' + escapeJs(parCorrecto.p) + '" class="form-control form-control-sm mb-2" style="font-weight:600; color:#1769aa;">'
+                        + '<input type="text" id="input_p_' + campoKey + '" value="' + escapeJs(predominante.p) + '" class="form-control form-control-sm mb-2" style="font-weight:600; color:#1769aa;">'
                         + '<button type="button" class="btn btn-sm btn-success btn-block" style="padding:5px 10px; font-size:11px; font-weight:600; border-radius:4px;" onclick="unificarUnCampo(\'' + escapeJs(campoName) + '\', \'' + campoKey + '\')">'
-                        + '<i class="fas fa-check-circle"></i> Aplicar cambio a este campo'
+                        + '<i class="fas fa-check-circle"></i> Aplicar a todo el lote'
                         + '</button>'
                         + '</div>';
 
@@ -639,6 +604,12 @@
                     const inputP = document.getElementById("input_p_" + key);
 
                     if (campo && inputC && inputP) {
+                        const conDiferencias = parseInt(c.getAttribute("data-diferencias") || "0", 10) > 0;
+                        const modificado = inputC.value.trim() !== (c.getAttribute("data-original-c") || "")
+                                || inputP.value.trim() !== (c.getAttribute("data-original-p") || "");
+                        if (!conDiferencias && !modificado) {
+                            return;
+                        }
                         listaAjustes.push({
                             campo: campo,
                             c: inputC.value.trim(),
@@ -648,7 +619,7 @@
                 });
 
                 if (listaAjustes.length === 0) {
-                    alert("No hay datos para actualizar.");
+                    alert("No hay diferencias ni cambios para aplicar.");
                     return;
                 }
 

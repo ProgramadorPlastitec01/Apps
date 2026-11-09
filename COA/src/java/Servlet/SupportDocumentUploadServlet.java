@@ -3,13 +3,13 @@ package Servlet;
 import Controller.CertificateFileJpaController;
 import Controller.CertificatesJpaController;
 import Method.OfficePlatformService;
+import Method.PartUtil;
 import Method.PdfImageUtil;
 import Method.SignatureHistory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -122,7 +122,7 @@ public class SupportDocumentUploadServlet extends HttpServlet {
                 continue;
             }
 
-            String fileName = Paths.get(part.getSubmittedFileName()).getFileName().toString();
+            String fileName = PartUtil.getFileName(part);
             String nameLower = fileName.toLowerCase();
             int dot = nameLower.lastIndexOf('.');
             String ext = dot >= 0 ? nameLower.substring(dot) : "";

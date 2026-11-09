@@ -3,7 +3,6 @@ package FileManager;
 import Controller.CertificateFileJpaController;
 import Method.OfficePlatformService;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -61,8 +60,7 @@ public class FileManagerServlet extends HttpServlet {
 
             if ("files".equals(part.getName()) && part.getSize() > 0) {
 
-                String fileName = Paths.get(part.getSubmittedFileName())
-                                       .getFileName().toString();
+                String fileName = Method.PartUtil.getFileName(part);
 
                 String nameLower = fileName.toLowerCase();
                 int dot = nameLower.lastIndexOf('.');

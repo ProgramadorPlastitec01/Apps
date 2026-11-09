@@ -94,8 +94,18 @@ public class ActualizarDiferenciasRegistro extends HttpServlet {
             List<Object[]> datosAntes = conexion.ConsultLotesRegistroVerificarDirecto(idProducto, lote, idLinea, ciclo);
             Map<String, String> mapAntes = new LinkedHashMap<String, String>();
             if (datosAntes != null) {
-                for (DiferenciaRegistro diff : ConsultarDiferenciasRegistro.analizarDiferencias(datosAntes)) {
-                    mapAntes.put(diff.getCampo(), "Predominante: [" + diff.getValorCorrecto() + "] | Diferencia: [" + diff.getValorDiferente() + "]");
+                // Todos los valores del campo antes del cambio (con o sin diferencias)
+                for (Map<String, Object> campo : ConsultarDiferenciasRegistro.analizarCampos(datosAntes)) {
+                    StringBuilder antes = new StringBuilder();
+                    for (Object o : (List<?>) campo.get("valores")) {
+                        Map<?, ?> v = (Map<?, ?>) o;
+                        if (antes.length() > 0) {
+                            antes.append(" | ");
+                        }
+                        antes.append("[C: ").append(v.get("c")).append(" | P: ").append(v.get("p"))
+                                .append("] (").append(v.get("cantidad")).append(" reg.)");
+                    }
+                    mapAntes.put(String.valueOf(campo.get("campo")), antes.toString());
                 }
             }
 

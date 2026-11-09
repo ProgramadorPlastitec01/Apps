@@ -62,12 +62,14 @@ protected void doGet(
                         ciclo
                 );
 
-        List<DiferenciaRegistro> diferencias = analizarDiferencias(datos);
-
+        // Todos los campos con datos del lote, tengan o no diferencias, para
+        // poder corregir cualquiera (p.ej. un lote de manga mal digitado en
+        // todo el lote, que no aparece como diferencia).
+        List<Map<String, Object>> campos = analizarCampos(datos);
 
         Gson gson = new Gson();
 
-        response.getWriter().print(gson.toJson(diferencias));
+        response.getWriter().print(gson.toJson(campos));
 
     } catch (Exception ex) {
 
@@ -76,6 +78,85 @@ protected void doGet(
                 "No fue posible consultar las diferencias.");
     }
 }
+
+    /** Campos verificables: nombre, indice C e indice P en el layout de datos. */
+    private static final Object[][] CAMPOS = {
+        {"MANGA", 2, 3},
+        {"DUCTO DERECHO", 4, 5},
+        {"DUCTO IZQUIERDO", 6, 7},
+        {"DUCTO CENTRAL", 19, 20},
+        {"TINTA / COLOR", 10, 14},
+        {"ENSAMBLE 1", 8, 9},
+        {"ENSAMBLE 2", 16, 17},
+        {"ENSAMBLE 3", 25, 26},
+        {"ENSAMBLE 4", 27, 28}
+    };
+
+    /**
+     * Resume cada campo con todos sus valores C/P y la cantidad de registros
+     * de cada uno (agrupando sin distinguir mayusculas, igual que el badge).
+     * Se omiten los campos cuyo unico valor es "N/A | N/A" (componente que el
+     * producto no usa). El primer valor de la lista es el predominante.
+     */
+    public static List<Map<String, Object>> analizarCampos(List<Object[]> datos) {
+        List<Map<String, Object>> resultado = new ArrayList<Map<String, Object>>();
+        if (datos == null || datos.isEmpty()) {
+            return resultado;
+        }
+        for (Object[] def : CAMPOS) {
+            String nombreCampo = (String) def[0];
+            int indiceC = (Integer) def[1];
+            int indiceP = (Integer) def[2];
+            Map<String, String[]> pares = new LinkedHashMap<String, String[]>();
+            Map<String, Integer> frecuencias = new LinkedHashMap<String, Integer>();
+            int total = 0;
+            for (Object[] dato : datos) {
+                if (dato == null || dato.length <= Math.max(indiceC, indiceP)) {
+                    continue;
+                }
+                int cantidad = obtenerCantidad(dato.length > 1 ? dato[1] : null);
+                if (cantidad <= 0) {
+                    continue;
+                }
+                String c = normalizarValor(dato[indiceC]);
+                String p = normalizarValor(dato[indiceP]);
+                String clave = (c + "|" + p).toLowerCase();
+                if (!pares.containsKey(clave)) {
+                    pares.put(clave, new String[]{c, p});
+                }
+                Integer acumulado = frecuencias.get(clave);
+                frecuencias.put(clave, (acumulado == null ? 0 : acumulado) + cantidad);
+                total += cantidad;
+            }
+            if (frecuencias.isEmpty()
+                    || (frecuencias.size() == 1 && frecuencias.containsKey("n/a|n/a"))) {
+                continue;
+            }
+            List<Map.Entry<String, Integer>> orden = new ArrayList<Map.Entry<String, Integer>>(frecuencias.entrySet());
+            // Mayor frecuencia primero; en empate se conserva el orden de aparicion.
+            Collections.sort(orden, new java.util.Comparator<Map.Entry<String, Integer>>() {
+                @Override
+                public int compare(Map.Entry<String, Integer> a, Map.Entry<String, Integer> b) {
+                    return b.getValue() - a.getValue();
+                }
+            });
+            List<Map<String, Object>> valores = new ArrayList<Map<String, Object>>();
+            for (Map.Entry<String, Integer> e : orden) {
+                Map<String, Object> v = new LinkedHashMap<String, Object>();
+                v.put("c", pares.get(e.getKey())[0]);
+                v.put("p", pares.get(e.getKey())[1]);
+                v.put("cantidad", e.getValue());
+                valores.add(v);
+            }
+            Map<String, Object> campo = new LinkedHashMap<String, Object>();
+            campo.put("campo", nombreCampo);
+            campo.put("total", total);
+            campo.put("diferencias", total - orden.get(0).getValue());
+            campo.put("valores", valores);
+            resultado.add(campo);
+        }
+        return resultado;
+    }
 
     /**
      * Agrupa el par C/P por su frecuencia. En un empate se conserva el valor

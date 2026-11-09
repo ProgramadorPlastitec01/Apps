@@ -12,6 +12,16 @@ import java.util.List;
 
 public class ConnectionRegistrosLAB {
 
+    /**
+     * Excluye registros de lineas tipo Screen (tipo_linea.nombre = 'Screen'):
+     * no aplican en la generacion de certificados. Se filtra por tipo y no por
+     * nombre porque hay lineas Screen sin "SCREEN" o sin "COLAS" en el nombre.
+     * Requiere el alias "r" para la tabla registro.
+     */
+    public static final String SIN_SCREEN = " AND NOT EXISTS (SELECT 1 FROM linea lx "
+            + "INNER JOIN tipo_linea tx ON tx.id_tipo_linea = lx.id_tipo_linea "
+            + "WHERE lx.id_linea = r.id_linea AND UPPER(TRIM(tx.nombre)) = 'SCREEN') ";
+
     SettingJpaController SettingJpa = new SettingJpaController();
 
     static String login = "";
@@ -78,8 +88,7 @@ public class ConnectionRegistrosLAB {
                         + "    WHERE o.numero = " + Order + " "
                         + "      AND p.codigo LIKE CONCAT('%', '" + Product + "', '%') "
                         + "      AND r.lote_producto LIKE CONCAT('%', '" + Batch + "', '%') "
-                        + "      AND l.nombre NOT LIKE '%SCREEN%' "
-                        + "      AND l.nombre NOT LIKE '%COLAS%' "
+                        + SIN_SCREEN
                         + "), "
                         + " "
                         + "datos_normalizados AS ( "
@@ -661,7 +670,7 @@ public class ConnectionRegistrosLAB {
                         + "      AND p.codigo LIKE CONCAT('%','" + Product + "', '%') "
                         + "      AND r.lote_producto LIKE CONCAT('%', '" + ((BatchCicle.length == 2) ? BatchCicle[0] : Batch) + "', '%') "
                         + ((BatchCicle.length == 2) ? "      AND r.ciclo_esterilizacion = '" + BatchCicle[1] + "' " : "")
-                        + "      AND l.nombre NOT LIKE '%SCREEN%' "
+                        + SIN_SCREEN
                         + "), "
                         + " "
                         + "datos_normalizados AS ( "
@@ -864,7 +873,7 @@ public class ConnectionRegistrosLAB {
                     + "  AND p.codigo LIKE CONCAT('%','" + Product + "', '%') "
                     + "  AND r.lote_producto LIKE CONCAT('%', '" + ((BatchCicle.length == 2) ? BatchCicle[0] : Batch) + "', '%') "
                     + ((BatchCicle.length == 2) ? "  AND r.ciclo_esterilizacion = '" + BatchCicle[1] + "' " : "")
-                    + "  AND l.nombre NOT LIKE '%SCREEN%' "
+                    + SIN_SCREEN
                     + "LIMIT 1";
             sttm = conn.createStatement();
             rs = sttm.executeQuery(Qry);
@@ -939,7 +948,7 @@ public class ConnectionRegistrosLAB {
                         + "    WHERE o.numero = " + Order + " "
                         + "      AND p.codigo LIKE CONCAT('%', '" + Product + "', '%') "
                         + "      AND r.lote_producto LIKE CONCAT('%', '" + Batch + "', '%') "
-                        + "      AND (l.nombre NOT LIKE '%SCREEN%' OR l.nombre NOT LIKE '%COLAS%') "
+                        + SIN_SCREEN
                         + "), "
                         + " "
                         + "datos_normalizados AS ( "
@@ -1116,7 +1125,7 @@ public class ConnectionRegistrosLAB {
                         + "    WHERE o.numero = " + Order + " "
                         + "      AND p.codigo LIKE CONCAT('%', '" + Product + "', '%') "
                         + "      AND r.lote_producto LIKE CONCAT('%', '" + Batch + "', '%') "
-                        + "      AND (l.nombre NOT LIKE '%SCREEN%' OR l.nombre NOT LIKE '%COLAS%') "
+                        + SIN_SCREEN
                         + "), "
                         + " "
                         + "datos_normalizados AS ( "
@@ -1315,6 +1324,7 @@ public class ConnectionRegistrosLAB {
                         + "    WHERE o.numero = " + Order + " "
                         + "      AND pd.codigo LIKE '%" + Product + "%' "
                         + "      AND r.lote_producto LIKE '%" + Batch + "%' "
+                        + SIN_SCREEN
                         + "      AND p.comparador IN (" + ArgParameter + ") "
                         + "), "
                         + "todas_las_tomas AS ( "
@@ -1474,6 +1484,7 @@ public class ConnectionRegistrosLAB {
                         + "      AND pd.codigo LIKE '%" + Product + "%' "
                         + "      AND r.lote_producto LIKE CONCAT('%', '" + ((BatchCicle.length == 2) ? BatchCicle[0] : Batch) + "', '%') "
                         + ((BatchCicle.length == 2) ? "AND r.ciclo_esterilizacion = '" + BatchCicle[1] + "'" : "")
+                        + SIN_SCREEN
                         + "      AND p.comparador IN (" + ArgParameter + ") "
                         + "), "
                         + "todas_las_tomas AS ( "
@@ -1572,6 +1583,7 @@ public class ConnectionRegistrosLAB {
                         + "    WHERE o.numero = " + Order + " "
                         + "      AND pd.codigo LIKE '%" + Product + "%' "
                         + "      AND r.lote_producto LIKE '%" + Batch + "%' "
+                        + SIN_SCREEN
                         + "      AND p.comparador IN (" + ArgParameter + ") "
                         + "), "
                         + "todas_las_tomas AS ( "
@@ -1674,6 +1686,7 @@ public class ConnectionRegistrosLAB {
                         + "    WHERE o.numero = " + Order + " "
                         + "      AND pd.codigo LIKE '%" + Product + "%' "
                         + "      AND r.lote_producto LIKE '%" + Batch + "%' "
+                        + SIN_SCREEN
                         + "      AND p.comparador IN (" + ArgParameter + ") "
                         + "), "
                         + "todas_las_tomas AS ( "
@@ -1731,6 +1744,33 @@ public class ConnectionRegistrosLAB {
         //</editor-fold>
     }
 
+    /**
+     * Columnas opcionales de soldadura alternativa de la ficha tecnica:
+     * " /// Soldadura bocas Alt /// Soldadura colas Alt /// Parametros Alt /// Linea Info"
+     * (Linea Info = "nombre linea|tipo linea|parametros_alternativos").
+     * Si la consulta configurada no las trae se devuelven vacias, para no
+     * romper el formato mientras se actualiza el setting.
+     */
+    private String weldingAltColumns(ResultSet rs) throws SQLException {
+        java.sql.ResultSetMetaData md = rs.getMetaData();
+        String bocas = "", colas = "", flag = "", linea = "";
+        for (int c = 1; c <= md.getColumnCount(); c++) {
+            String name = md.getColumnLabel(c);
+            String val = rs.getString(c);
+            val = val == null ? "" : val.trim();
+            if (name.equalsIgnoreCase("Soldadura bocas Alt")) {
+                bocas = val;
+            } else if (name.equalsIgnoreCase("Soldadura colas Alt")) {
+                colas = val;
+            } else if (name.equalsIgnoreCase("Parametros Alt")) {
+                flag = val;
+            } else if (name.equalsIgnoreCase("Linea Info")) {
+                linea = val;
+            }
+        }
+        return " /// " + bocas + " /// " + colas + " /// " + flag + " /// " + linea;
+    }
+
     public List QueryTechnicalSheet(int Order, String Product, String Batch, String Qrt) throws Exception {
         //<editor-fold defaultstate="collapsed" desc="QUERY TECHNICALSHEET R-GC-064">
         List lst_parameter = SettingJpa.ConsultSettingCategorie("ServerRegistrosLab");
@@ -1773,9 +1813,8 @@ public class ConnectionRegistrosLAB {
                             + rs.getString("Ducto central").trim() + " /// "
                             + rs.getString("Soldadura bocas").trim() + " /// "
                             + rs.getString("Soldadura colas").trim() + " /// "
-                            + rs.getString("Ficha Tecnica").trim() + " /// "
-                            + rs.getString("Soldadura bocas alt").trim() + " /// "
-                            + rs.getString("Soldadura colas alt").trim() + "");
+                            + rs.getString("Ficha Tecnica").trim()
+                            + weldingAltColumns(rs));
                     count++;
                 }
                 conn.close();
@@ -1830,7 +1869,8 @@ public class ConnectionRegistrosLAB {
                             + rs.getString("Ducto derecho").trim() + " /// "
                             + rs.getString("Soldadura bocas").trim() + " /// "
                             + rs.getString("Soldadura colas").trim() + " /// "
-                            + rs.getString("Ficha Tecnica").trim() + "");
+                            + rs.getString("Ficha Tecnica").trim()
+                            + weldingAltColumns(rs));
                     count++;
                 }
                 conn.close();
@@ -1887,7 +1927,8 @@ public class ConnectionRegistrosLAB {
                             + rs.getString("Ducto izquierdo").trim() + " /// "
                             + rs.getString("Soldadura bocas").trim() + " /// "
                             + rs.getString("Soldadura colas").trim() + " /// "
-                            + rs.getString("Ficha Tecnica").trim() + "");
+                            + rs.getString("Ficha Tecnica").trim()
+                            + weldingAltColumns(rs));
                     count++;
                 }
                 conn.close();
@@ -1984,6 +2025,7 @@ public class ConnectionRegistrosLAB {
                         + "    WHERE o.numero = " + Order + " "
                         + "    AND pd.codigo LIKE '%" + Product + "%' "
                         + "    AND r.lote_producto LIKE '%" + Batch + "%' "
+                        + SIN_SCREEN
                         + ") "
                         + "SELECT  "
                         + "    MIN(valor) AS minimo_global, "
@@ -2063,7 +2105,8 @@ public class ConnectionRegistrosLAB {
                         + "INNER JOIN registro r ON rd.id_registro = r.id_registro "
                         + "INNER JOIN producto p ON r.id_producto = p.id_producto "
                         + "INNER JOIN orden_produccion o ON p.id_orden_produccion = o.id_orden_produccion "
-                        + "WHERE o.numero = " + Order + " AND r.lote_producto LIKE '%" + Batch + "%'";
+                        + "WHERE o.numero = " + Order + " AND r.lote_producto LIKE '%" + Batch + "%'"
+                        + SIN_SCREEN;
                 Statement sttm = conn.createStatement();
                 ResultSet rs = sttm.executeQuery(Qry);
                 List<String> lst_param = new ArrayList<String>();
@@ -2314,8 +2357,10 @@ public class ConnectionRegistrosLAB {
                 + "INNER JOIN linea l ON l.id_linea = r.id_linea "
                 + "WHERE r.id_producto = " + idProducto + " "
                 + "  AND r.lote_producto = '" + lote.replace("'", "''") + "' "
-                + "  AND r.id_linea = " + idLinea + " "
-                + "  AND COALESCE(r.ciclo_esterilizacion, '') = '" + ciclo.replace("'", "''") + "' "
+                // Todo el lote (todas las lineas menos Screen), igual que el badge
+                // "Diferencias encontradas" (ConsultMaterials); idLinea ya no acota.
+                + SIN_SCREEN
+                + "  AND ('" + ciclo.replace("'", "''") + "' = '' OR COALESCE(r.ciclo_esterilizacion, '') = '" + ciclo.replace("'", "''") + "') "
                 + "ORDER BY r.fecha_registro ASC";
 
         Connection conn = null;
@@ -2404,7 +2449,7 @@ public class ConnectionRegistrosLAB {
                 + "WHERE o.numero = ? AND p.codigo LIKE CONCAT('%', ?, '%') "
                 + "AND r.lote_producto = ? "
                 + "AND (? = '' OR COALESCE(r.ciclo_esterilizacion, '') = ?) "
-                + "AND l.nombre NOT LIKE '%SCREEN%' AND l.nombre NOT LIKE '%COLAS%' "
+                + SIN_SCREEN
                 + "ORDER BY r.id_linea, r.id_registro LIMIT 1";
 
         try {
@@ -2463,19 +2508,21 @@ public class ConnectionRegistrosLAB {
                     }
 
                     boolean updateAll = "%".equals(String.valueOf(ajuste[1])) && "%".equals(String.valueOf(ajuste[2]));
-                    String sql;
+                    // Aplica a todo el lote (todas las lineas menos Screen), igual
+                    // que la consulta del modal; idLinea solo queda para la auditoria.
+                    String sql = "UPDATE registro r SET r." + columnas[0] + " = ?, r."
+                            + columnas[1] + " = ? WHERE r.id_producto = ? "
+                            + "AND r.lote_producto = ? "
+                            + "AND (? = '' OR COALESCE(r.ciclo_esterilizacion, '') = ?) "
+                            + SIN_SCREEN;
                     if (updateAll) {
-                        sql = "UPDATE registro SET " + columnas[0] + " = ?, "
-                                + columnas[1] + " = ? WHERE id_producto = ? "
-                                + "AND lote_producto = ? AND id_linea = ? "
-                                + "AND (? = '' OR COALESCE(ciclo_esterilizacion, '') = ?)";
+                        // No se llenan registros cuyo par C/P esta completo en N/A
+                        // (lineas que no usan ese componente).
+                        sql += "AND NOT (COALESCE(NULLIF(TRIM(r." + columnas[0] + "), ''), 'N/A') = 'N/A' "
+                                + "AND COALESCE(NULLIF(TRIM(r." + columnas[1] + "), ''), 'N/A') = 'N/A')";
                     } else {
-                        sql = "UPDATE registro SET " + columnas[0] + " = ?, "
-                                + columnas[1] + " = ? WHERE id_producto = ? "
-                                + "AND lote_producto = ? AND id_linea = ? "
-                                + "AND (? = '' OR COALESCE(ciclo_esterilizacion, '') = ?) "
-                                + "AND COALESCE(NULLIF(TRIM(" + columnas[0] + "), ''), 'N/A') = ? "
-                                + "AND COALESCE(NULLIF(TRIM(" + columnas[1] + "), ''), 'N/A') = ?";
+                        sql += "AND COALESCE(NULLIF(TRIM(r." + columnas[0] + "), ''), 'N/A') = ? "
+                                + "AND COALESCE(NULLIF(TRIM(r." + columnas[1] + "), ''), 'N/A') = ?";
                     }
 
                     try (java.sql.PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -2483,12 +2530,11 @@ public class ConnectionRegistrosLAB {
                         stmt.setString(2, String.valueOf(ajuste[4]));
                         stmt.setInt(3, idProducto);
                         stmt.setString(4, lote);
-                        stmt.setInt(5, idLinea);
+                        stmt.setString(5, cicloEsterilizacion == null ? "" : cicloEsterilizacion);
                         stmt.setString(6, cicloEsterilizacion == null ? "" : cicloEsterilizacion);
-                        stmt.setString(7, cicloEsterilizacion == null ? "" : cicloEsterilizacion);
                         if (!updateAll) {
-                            stmt.setString(8, String.valueOf(ajuste[1]));
-                            stmt.setString(9, String.valueOf(ajuste[2]));
+                            stmt.setString(7, String.valueOf(ajuste[1]));
+                            stmt.setString(8, String.valueOf(ajuste[2]));
                         }
                         actualizados += stmt.executeUpdate();
                     }
@@ -2603,12 +2649,11 @@ public class ConnectionRegistrosLAB {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             try (Connection conn = DriverManager.getConnection("jdbc:mysql://" + arrData[2], arrData[0], arrData[1])) {
                 String sql = "SELECT id_log, campo, valor_antes, valor_despues, usuario_responsable, fecha_registro "
-                        + "FROM log_diferencias_registro WHERE id_producto = ? AND lote_producto = ? AND id_linea = ? "
+                        + "FROM log_diferencias_registro WHERE id_producto = ? AND lote_producto = ? "
                         + "ORDER BY fecha_registro DESC";
                 try (java.sql.PreparedStatement stmt = conn.prepareStatement(sql)) {
                     stmt.setInt(1, idProducto);
                     stmt.setString(2, lote == null ? "" : lote);
-                    stmt.setInt(3, idLinea);
                     try (ResultSet rs = stmt.executeQuery()) {
                         while (rs.next()) {
                             logs.add(new Object[]{
