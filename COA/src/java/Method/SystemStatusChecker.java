@@ -168,31 +168,11 @@ public class SystemStatusChecker {
     private static CheckResult checkOfficePlatform() {
         long inicio = System.currentTimeMillis();
         try {
-            URL url = new URL(OfficePlatformService.SERVER_URL + "/api/folders/search?q=__healthcheck__");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("X-Api-Key", getApiKey());
-            conn.setConnectTimeout(5000);
-            conn.setReadTimeout(6000);
-            int code = conn.getResponseCode();
-            InputStream stream = (code >= 200 && code < 400) ? conn.getInputStream() : conn.getErrorStream();
-            if (stream != null) {
-                leer(stream);
-            }
-            boolean ok = code >= 200 && code < 500;
-            return new CheckResult("Office Platform", ok, "HTTP " + code + " - " + OfficePlatformService.SERVER_URL, System.currentTimeMillis() - inicio);
+            OfficePlatformService.Verificacion v = OfficePlatformService.verificar();
+            String detalle = v.serverUrl + " [" + v.origen + "] - " + v.detalle;
+            return new CheckResult("Office Platform", v.isOk(), detalle, System.currentTimeMillis() - inicio);
         } catch (Exception ex) {
             return new CheckResult("Office Platform", false, ex.getMessage(), System.currentTimeMillis() - inicio);
-        }
-    }
-
-    private static String getApiKey() {
-        try {
-            java.lang.reflect.Field f = OfficePlatformService.class.getDeclaredField("API_KEY");
-            f.setAccessible(true);
-            return (String) f.get(null);
-        } catch (Exception ex) {
-            return "";
         }
     }
 

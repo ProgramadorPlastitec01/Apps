@@ -32,23 +32,29 @@ UBICACIÓN EN NETBEANS: Web Pages -> EditorOffice.jsp (o en tu JSP de vista)
                     --%>
 
                     <%
-                        // Si configuraste las variables en web.xml, se cargan de application (ServletContext):
-                        String ctxUrl = application.getInitParameter("OFFICE_PLATFORM_URL");
-                        String ctxKey = application.getInitParameter("OFFICE_PLATFORM_API_KEY");
-                        if (ctxUrl != null && ctxKey != null) {
-                            OfficePlatformService.init(ctxUrl, ctxKey);
-                        }
-
+                        // La URL y la API key se leen de la tabla Setting (categoria ServerOfficePlatform).
                         String token = (String) request.getAttribute("widgetToken");
-                        String server = (String) request.getAttribute("serverUrl");
+                        String server = OfficePlatformService.getServerUrl();
                         if (token == null || token.isEmpty()) {
                             String cedula = session.getAttribute("Documento") != null ? session.getAttribute("Documento").toString() : "12345678";
                             String nombre = session.getAttribute("Usuario") != null ? session.getAttribute("Usuario").toString() : "Usuario Sistema";
                             token = OfficePlatformService.obtenerToken(cedula, nombre);
-                            server = OfficePlatformService.SERVER_URL;
                         }
+                        boolean tokenOk = token != null && !token.isEmpty();
+                        OfficePlatformService.Verificacion verificacion = tokenOk ? null : OfficePlatformService.verificar();
                     %>
 
+                    <% if (!tokenOk) { %>
+                    <div class="alert alert-danger" style="margin-top: 20px;">
+                        <h6 style="margin-bottom: 8px;"><i class="fas fa-exclamation-triangle"></i> No fue posible cargar el editor de Office Platform</h6>
+                        <div><b>Servidor:</b> <%= verificacion.serverUrl%> <small>(<%= verificacion.origen%>)</small></div>
+                        <div><b>Servidor responde:</b> <%= verificacion.servidorOk ? "Sí" : "No"%></div>
+                        <div><b>API key válida:</b> <%= verificacion.apiKeyOk ? "Sí" : "No"%></div>
+                        <div><b>Widget del editor:</b> <%= verificacion.widgetOk ? "Disponible" : "No disponible"%></div>
+                        <div style="margin-top: 6px;"><small><%= verificacion.detalle.replace("<", "&lt;")%></small></div>
+                        <div style="margin-top: 6px;"><small>Revise la configuración en Setting, categoría <b><%= OfficePlatformService.SETTING_CATEGORIE%></b>, con el formato <code>[http://IP:PUERTO][API_KEY]</code>.</small></div>
+                    </div>
+                    <% } else { %>
                     <!-- Contenedor del Editor y Gestor Documental (Estilos responsivos listos) -->
                     <div id="office-platform" style="width: 100%; height: 85vh; border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden; background: #ffffff;"></div>
 
@@ -57,8 +63,10 @@ UBICACIÓN EN NETBEANS: Web Pages -> EditorOffice.jsp (o en tu JSP de vista)
                         src="<%= server%>/office-platform-widget.js"
                         data-container="office-platform"
                         data-server="<%= server%>"
-                        data-token="<%= token%>">
+                        data-token="<%= token%>"
+                        onerror="document.getElementById('office-platform').innerHTML = '<div class=\'alert alert-danger m-3\'>No se pudo descargar el widget del editor desde <%= server%>/office-platform-widget.js. Verifique que el servidor de Office Platform esté disponible desde este equipo.</div>';">
                     </script>
+                    <% } %>
                 </div>
             </div>
             <Alert:Alert/>

@@ -4,6 +4,7 @@
 // =========================================================================================
 package Method;
 
+import Controller.SettingJpaController;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -17,15 +18,35 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.nio.charset.StandardCharsets;
 
 public class OfficePlatformService {
 
-    public static String SERVER_URL = "http://172.16.1.182:8080";
-    private static String API_KEY = "opk_i0ss8GlbDqYFBNwCOkK7Dh_xfs4RHXYM_FbYPucENKA";
+    /**
+     * Categoria de la tabla Setting con la configuracion del servicio.
+     * Formato del value: [http://IP:PUERTO][API_KEY]
+     */
+    public static final String SETTING_CATEGORIE = "ServerOfficePlatform";
+
+    // Valores por defecto (solo si la tabla Setting no tiene la categoria).
+    private static final String DEFAULT_URL = "http://172.16.1.166:8080";
+    private static final String DEFAULT_API_KEY = "opk_i0ss8GlbDqYFBNwCOkK7Dh_xfs4RHXYM_FbYPucENKA";
+
+    /**
+     * Se mantiene publico por compatibilidad; usar {@link #getServerUrl()}
+     * para garantizar que la configuracion de Setting ya este cargada.
+     */
+    public static volatile String SERVER_URL = DEFAULT_URL;
+    private static volatile String API_KEY = DEFAULT_API_KEY;
+    private static volatile String CONFIG_ORIGEN = "Valor por defecto (no existe la categoria en Setting)";
+
+    // Se relee la configuracion de Setting cada 5 minutos, asi un cambio de
+    // IP/API key en la tabla aplica sin reiniciar Tomcat.
+    private static final long CONFIG_TTL_MS = 5 * 60 * 1000L;
+    private static volatile long configCargadaEn = 0L;
 
     // Cache en memoria de carpetas ya resueltas/creadas (clave = ruta completa,
     // ej. "COA/ClienteX/2026/OC-123/L-45") para no repetir /api/folders/search
@@ -36,34 +57,180 @@ public class OfficePlatformService {
     // /api/folders/search?q=nombre.
     private static final Map<String, Long> FOLDER_CACHE = new ConcurrentHashMap<String, Long>();
 
-    static {
-        try (InputStream is = OfficePlatformService.class.getClassLoader().getResourceAsStream("config.properties")) {
-            if (is != null) {
-                Properties prop = new Properties();
-                prop.load(is);
-                if (prop.getProperty("OFFICE_PLATFORM_URL") != null) {
-                    SERVER_URL = prop.getProperty("OFFICE_PLATFORM_URL").trim();
-                }
-                if (prop.getProperty("OFFICE_PLATFORM_API_KEY") != null) {
-                    API_KEY = prop.getProperty("OFFICE_PLATFORM_API_KEY").trim();
-                }
+    /**
+     * Carga la configuracion desde la tabla Setting (categoria
+     * {@link #SETTING_CATEGORIE}). Si no existe o falla la consulta, conserva
+     * los valores actuales.
+     */
+    public static synchronized void recargarConfiguracion() {
+        configCargadaEn = System.currentTimeMillis();
+        try {
+            List lst = new SettingJpaController().ConsultSettingCategorie(SETTING_CATEGORIE);
+            if (lst == null) {
+                return;
             }
-        } catch (Exception e) {
-            // Si no existe config.properties, conserva las URLs por defecto
+            for (Object fila : lst) {
+                Object[] obj = (Object[]) fila;
+                // Solo registros activos (state = 1)
+                if (obj.length > 4 && obj[4] != null
+                        && !"1".equals(obj[4].toString()) && !"true".equalsIgnoreCase(obj[4].toString())) {
+                    continue;
+                }
+                if (obj[2] == null) {
+                    continue;
+                }
+                String[] arr = obj[2].toString().trim().replace("][", "///").replace("[", "").replace("]", "").split("///");
+                String url = arr.length > 0 ? normalizarUrl(arr[0]) : "";
+                String key = arr.length > 1 ? arr[1].trim() : "";
+                if (url.isEmpty()) {
+                    continue;
+                }
+                String anterior = SERVER_URL;
+                SERVER_URL = url;
+                if (!key.isEmpty()) {
+                    API_KEY = key;
+                }
+                CONFIG_ORIGEN = "Setting (" + SETTING_CATEGORIE + ")";
+                if (!url.equals(anterior)) {
+                    // Los folderId cacheados pertenecen al servidor anterior.
+                    FOLDER_CACHE.clear();
+                }
+                return;
+            }
+        } catch (Exception ex) {
+            System.err.println("[OfficePlatformService] No se pudo leer la configuracion de Setting: " + ex.getMessage());
         }
     }
 
+    private static void asegurarConfiguracion() {
+        if (System.currentTimeMillis() - configCargadaEn > CONFIG_TTL_MS) {
+            recargarConfiguracion();
+        }
+    }
+
+    private static String normalizarUrl(String url) {
+        String u = url == null ? "" : url.trim();
+        while (u.endsWith("/")) {
+            u = u.substring(0, u.length() - 1);
+        }
+        if (!u.isEmpty() && !u.toLowerCase().startsWith("http://") && !u.toLowerCase().startsWith("https://")) {
+            u = "http://" + u;
+        }
+        return u;
+    }
+
+    public static String getServerUrl() {
+        asegurarConfiguracion();
+        return SERVER_URL;
+    }
+
+    public static String getApiKey() {
+        asegurarConfiguracion();
+        return API_KEY;
+    }
+
+    public static String getConfigOrigen() {
+        asegurarConfiguracion();
+        return CONFIG_ORIGEN;
+    }
+
     /**
-     * Inicializa o sobreescribe la configuracion (util si se lee desde web.xml
-     * en un Servlet o JSP).
+     * Sobreescribe la configuracion manualmente (pruebas). En operacion
+     * normal la fuente es la tabla Setting.
      */
-    public static void init(String serverUrl, String apiKey) {
+    public static synchronized void init(String serverUrl, String apiKey) {
         if (serverUrl != null && !serverUrl.trim().isEmpty()) {
-            SERVER_URL = serverUrl.trim();
+            SERVER_URL = normalizarUrl(serverUrl);
+            FOLDER_CACHE.clear();
         }
         if (apiKey != null && !apiKey.trim().isEmpty()) {
             API_KEY = apiKey.trim();
         }
+        CONFIG_ORIGEN = "Manual (init)";
+        configCargadaEn = System.currentTimeMillis();
+    }
+
+    // =====================================================================
+    // VERIFICACION DEL SERVICIO
+    // =====================================================================
+
+    public static class Verificacion {
+
+        public String serverUrl;
+        public String origen;
+        public boolean servidorOk;      // responde la API
+        public boolean apiKeyOk;        // la API key es aceptada (auth/resolve)
+        public boolean widgetOk;        // se descarga office-platform-widget.js
+        public String detalle = "";
+        public long tiempoMs;
+
+        public boolean isOk() {
+            return servidorOk && apiKeyOk && widgetOk;
+        }
+    }
+
+    /**
+     * Verifica en tres pasos que el editor pueda funcionar: el servidor
+     * responde, la API key es valida (se obtiene un widgetToken) y el script
+     * del widget es descargable (es lo que el navegador carga para pintar el
+     * editor).
+     */
+    public static Verificacion verificar() {
+        long inicio = System.currentTimeMillis();
+        recargarConfiguracion();
+        Verificacion v = new Verificacion();
+        v.serverUrl = SERVER_URL;
+        v.origen = CONFIG_ORIGEN;
+        StringBuilder det = new StringBuilder();
+
+        // 1. Servidor
+        try {
+            int code = codigoHttp(SERVER_URL + "/api/folders/search?q=__healthcheck__", true);
+            v.servidorOk = code >= 200 && code < 500;
+            det.append("Servidor: HTTP ").append(code);
+            if (code == 401 || code == 403) {
+                det.append(" (API key rechazada)");
+            }
+        } catch (Exception ex) {
+            det.append("Servidor: sin respuesta (").append(ex.getMessage()).append(")");
+        }
+
+        // 2. API key / token del widget
+        if (v.servidorOk) {
+            String token = obtenerToken("__healthcheck__", "Verificacion COA");
+            v.apiKeyOk = token != null && !token.isEmpty();
+            det.append(" | API key: ").append(v.apiKeyOk ? "valida" : "no se obtuvo token (verifique la API key)");
+        }
+
+        // 3. Script del widget del editor
+        try {
+            int code = codigoHttp(SERVER_URL + "/office-platform-widget.js", false);
+            v.widgetOk = code >= 200 && code < 300;
+            det.append(" | Widget editor: HTTP ").append(code);
+        } catch (Exception ex) {
+            det.append(" | Widget editor: sin respuesta (").append(ex.getMessage()).append(")");
+        }
+
+        v.detalle = det.toString();
+        v.tiempoMs = System.currentTimeMillis() - inicio;
+        return v;
+    }
+
+    private static int codigoHttp(String direccion, boolean conApiKey) throws IOException {
+        HttpURLConnection conn = (HttpURLConnection) new URL(direccion).openConnection();
+        conn.setRequestMethod("GET");
+        if (conApiKey) {
+            conn.setRequestProperty("X-Api-Key", API_KEY);
+        }
+        conn.setConnectTimeout(5000);
+        conn.setReadTimeout(6000);
+        int code = conn.getResponseCode();
+        try {
+            leerStream(code >= 200 && code < 400 ? conn.getInputStream() : conn.getErrorStream());
+        } catch (Exception ignore) {
+            // solo interesa el codigo HTTP
+        }
+        return code;
     }
 
     /**
@@ -81,11 +248,11 @@ public class OfficePlatformService {
             nombre = "Usuario " + cedula;
         }
         try {
-            URL url = new URL(SERVER_URL + "/api/auth/resolve");
+            URL url = new URL(getServerUrl() + "/api/auth/resolve");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-            conn.setRequestProperty("X-Api-Key", API_KEY);
+            conn.setRequestProperty("X-Api-Key", getApiKey());
             conn.setConnectTimeout(4000);
             conn.setReadTimeout(6000);
             conn.setDoOutput(true);
@@ -166,10 +333,10 @@ public class OfficePlatformService {
     }
 
     private static Long buscarCarpeta(Long parentId, String name) throws IOException {
-        URL url = new URL(SERVER_URL + "/api/folders/search?q=" + URLEncoder.encode(name, "UTF-8"));
+        URL url = new URL(getServerUrl() + "/api/folders/search?q=" + URLEncoder.encode(name, "UTF-8"));
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
-        conn.setRequestProperty("X-Api-Key", API_KEY);
+        conn.setRequestProperty("X-Api-Key", getApiKey());
         conn.setConnectTimeout(6000);
         conn.setReadTimeout(10000);
 
@@ -207,10 +374,10 @@ public class OfficePlatformService {
             body.addProperty("parentId", parentId);
         }
 
-        URL url = new URL(SERVER_URL + "/api/folders");
+        URL url = new URL(getServerUrl() + "/api/folders");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
-        conn.setRequestProperty("X-Api-Key", API_KEY);
+        conn.setRequestProperty("X-Api-Key", getApiKey());
         conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
         conn.setDoOutput(true);
         conn.setConnectTimeout(6000);
@@ -249,10 +416,10 @@ public class OfficePlatformService {
             query.append("&userName=").append(URLEncoder.encode(userName, "UTF-8"));
         }
 
-        URL url = new URL(SERVER_URL + query.toString());
+        URL url = new URL(getServerUrl() + query.toString());
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
-        conn.setRequestProperty("X-Api-Key", API_KEY);
+        conn.setRequestProperty("X-Api-Key", getApiKey());
         conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
         conn.setDoOutput(true);
         conn.setChunkedStreamingMode(64 * 1024);
@@ -310,10 +477,10 @@ public class OfficePlatformService {
      * llamador debe copiarlo a la respuesta y cerrarlo, sin pasar por disco.
      */
     public static OfficeDownload descargarArchivo(long fileId) throws IOException {
-        URL url = new URL(SERVER_URL + "/api/files/" + fileId + "/download");
+        URL url = new URL(getServerUrl() + "/api/files/" + fileId + "/download");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
-        conn.setRequestProperty("X-Api-Key", API_KEY);
+        conn.setRequestProperty("X-Api-Key", getApiKey());
         conn.setConnectTimeout(8000);
         conn.setReadTimeout(60000);
 
@@ -341,7 +508,7 @@ public class OfficePlatformService {
      * real del archivo, así que la operación no tiene sobre qué actuar.
      */
     public static boolean eliminarArchivo(long fileId, String userId, String userName) throws IOException {
-        return llamarBorradoArchivo(SERVER_URL + "/api/files/" + fileId, userId, userName);
+        return llamarBorradoArchivo(getServerUrl() + "/api/files/" + fileId, userId, userName);
     }
 
     /**
@@ -352,7 +519,7 @@ public class OfficePlatformService {
      * que {@link #eliminarArchivo(long, String, String)}.
      */
     public static boolean purgarArchivo(long fileId, String userId, String userName) throws IOException {
-        return llamarBorradoArchivo(SERVER_URL + "/api/files/" + fileId + "/purge", userId, userName);
+        return llamarBorradoArchivo(getServerUrl() + "/api/files/" + fileId + "/purge", userId, userName);
     }
 
     private static boolean llamarBorradoArchivo(String baseUrl, String userId, String userName) throws IOException {
@@ -368,7 +535,7 @@ public class OfficePlatformService {
 
         HttpURLConnection conn = (HttpURLConnection) new URL(url.toString()).openConnection();
         conn.setRequestMethod("DELETE");
-        conn.setRequestProperty("X-Api-Key", API_KEY);
+        conn.setRequestProperty("X-Api-Key", getApiKey());
         conn.setConnectTimeout(6000);
         conn.setReadTimeout(10000);
         int code = conn.getResponseCode();
@@ -404,17 +571,7 @@ public class OfficePlatformService {
 }
 
 // =========================================================================================
-// CÓMO CONSUMIRLO DESDE UN SERVLET (Source Packages -> Servlets -> TuServlet.java):
-// -----------------------------------------------------------------------------------------
-// // Si usas web.xml, puedes inicializar los parametros desde ServletContext:
-// String ctxUrl = getServletContext().getInitParameter("OFFICE_PLATFORM_URL");
-// String ctxKey = getServletContext().getInitParameter("OFFICE_PLATFORM_API_KEY");
-// Metodos.OfficePlatformService.init(ctxUrl, ctxKey);
-//
-// String cedula = (String) session.getAttribute("Documento");
-// String nombre = (String) session.getAttribute("Usuario");
-// String token  = Metodos.OfficePlatformService.obtenerToken(cedula, nombre);
-// request.setAttribute("widgetToken", token);
-// request.setAttribute("serverUrl", Metodos.OfficePlatformService.SERVER_URL);
-// request.getRequestDispatcher("Reporte.jsp").forward(request, response);
+// CONFIGURACION: tabla setting, categorie = 'ServerOfficePlatform',
+// value = '[http://172.16.1.166:8080][API_KEY]'. Se relee cada 5 minutos.
+// Uso: OfficePlatformService.getServerUrl(), obtenerToken(cedula, nombre), verificar().
 // =========================================================================================
