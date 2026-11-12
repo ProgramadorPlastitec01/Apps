@@ -193,6 +193,35 @@ public class RegistroJpaController {
         }
     }
 
+    /**
+     * Agrega "Rol/Nombre" a registro.responsable de un turno abierto, si no
+     * esta ya en la lista. Conserva fecha_registro (la columna tiene ON UPDATE).
+     */
+    public boolean Agregar_responsable(int irg, String rps) {
+        EntityManager etm = getEntityManager();
+        try {
+            etm.getTransaction().begin();
+            Query q = etm.createNativeQuery("UPDATE registro "
+                    + "SET responsable = CONCAT(responsable, ?), fecha_registro = fecha_registro "
+                    + "WHERE id_registro = ? AND estado = 1 "
+                    + "AND CONCAT(',', REPLACE(responsable, ', ', ','), ',') NOT LIKE CONCAT('%,', ?, ',%')");
+            q.setParameter(1, Metodos.Control_turno.SEPARADOR + rps);
+            q.setParameter(2, irg);
+            q.setParameter(3, rps);
+            int exitoso = q.executeUpdate();
+            etm.getTransaction().commit();
+            return exitoso > 0;
+        } catch (Exception ex) {
+            if (etm.getTransaction().isActive()) {
+                etm.getTransaction().rollback();
+            }
+            return false;
+        } finally {
+            etm.clear();
+            etm.close();
+        }
+    }
+
     public boolean Estado_registro(int irg, int etd) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();

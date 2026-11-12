@@ -173,24 +173,16 @@ public class Tag_registro extends TagSupport {
                             }
                             out.print("<td><b>TURNO : </b>" + obj_registros[2] + "</td>");
                             String responsables = obj_registros[3].toString();
-                            int cont_recibe = 0;
-                            int cont_entrega = 0;
-                            if (responsables.contains(user_rol)) {
-                                cont_entrega++;
-                            } else {
-                                cont_recibe++;
-                            }
-                            out.print("<td colspan='2'><b>RESPONSABLES : </b>" + ((obj_registros[3] == null) ? "---" : obj_registros[3]) + "</td>");
-                            if (cont_entrega > 0) {
-                                if (Integer.parseInt(obj_registros[7].toString()) == 1) {
-                                    out.print("<td ROWSPAN='3' align='center'><span onclick='DesactivarRegistro(" + obj_registros[0] + ")' class='fa fa-unlock-alt fa-size_small' title='Sin permisos para Cerrar Orden' ></span></td>");
-                                } else if (rol.equals("Administrador") || rol.equals("Coordinadora-Calidad")) {
-                                    out.print("<td ROWSPAN='3' align='center'><span onclick='ActivarRegistro(" + obj_registros[0] + ")' class='fa fa-lock fa-size_small' title='Sin permisos para Abrir Orden' ></span></td>");
-                                } else {
-                                    out.print("<td ROWSPAN='3' align='center'><span class='fa fa-lock fa-size_small' title='Sin permisos para Abrir Orden' ></span></td>");
-                                }
-                            } else if (Integer.parseInt(obj_registros[7].toString()) == 1) {
+                            boolean es_responsable = Metodos.Control_turno.esResponsable(responsables, user_rol);
+                            boolean turno_abierto = Integer.parseInt(obj_registros[7].toString()) == 1;
+                            out.print("<td colspan='2'><b>RESPONSABLES : </b>" + Metodos.Control_turno.nombresResponsables(obj_registros[3]) + "</td>");
+                            if (turno_abierto && es_responsable) {
+                                // Cualquier responsable del turno puede cerrarlo
+                                out.print("<td ROWSPAN='3' align='center'><span onclick='DesactivarRegistro(" + obj_registros[0] + ")' class='fa fa-unlock-alt fa-size_small' title='Cerrar turno' ></span></td>");
+                            } else if (turno_abierto) {
                                 out.print("<td ROWSPAN='3' align='center'><span class='fa fa-unlock-alt fa-size_small' title='Sin permisos para Cerrar Orden' ></span></td>");
+                            } else if (Metodos.Control_turno.puedeReabrirTurno(rol, obj_registros[9], es_responsable)) {
+                                out.print("<td ROWSPAN='3' align='center'><span onclick='ActivarRegistro(" + obj_registros[0] + ")' class='fa fa-lock fa-size_small' title='Abrir turno' ></span></td>");
                             } else {
                                 out.print("<td ROWSPAN='3' align='center'><span class='fa fa-lock fa-size_small' title='Sin permisos para Abrir Orden' ></span></td>");
                             }
@@ -210,31 +202,15 @@ public class Tag_registro extends TagSupport {
                             out.print("<td colspan='3'><b>OBSERVACIÓN : </b>" + ((obj_registros[6] == null) ? "---" : obj_registros[6]) + "</td>");
                             out.print("</tr>");
                             out.print("<tr>");
-                            if (cont_entrega > 0) {
-                                if (Integer.parseInt(obj_registros[7].toString()) == 1) {
-                                    if (rol_proceso.equals(obj_registros[9].toString())) {
-                                        out.print("<td ><form action='Registro?opc=4&irg=" + obj_registros[0] + "&etd=0' method='post' name='FormFirmar" + i + "'><b>ENTREGA : </b>" + ((obj_registros[4] == null) ? "---" : obj_registros[4]) + ""
-                                                + "<div style='float:right' title='Firmar como quien recibe'><span onclick='JAVASCRIPT:FormFirmar" + i + ".submit()' class='fa fa-pencil-alt fa-size_small'></span></div></form></td>");
-                                    } else {
-                                        out.print("<td ><b>ENTREGA : </b>" + ((obj_registros[4] == null) ? "---" : obj_registros[4]) + "</td>");
-                                    }
-                                } else {
-                                    out.print("<td ><b>ENTREGA : </b>" + ((obj_registros[4] == null) ? "---" : obj_registros[4]) + "</td>");
-                                }
+                            if (turno_abierto && Metodos.Control_turno.puedeFirmarEntrega(rol, rol_proceso, obj_registros[9], es_responsable)) {
+                                out.print("<td ><form action='Registro?opc=4&irg=" + obj_registros[0] + "&etd=0' method='post' name='FormFirmar" + i + "'><b>ENTREGA : </b>" + ((obj_registros[4] == null) ? "---" : obj_registros[4]) + ""
+                                        + "<div style='float:right' title='Firmar como quien entrega'><span onclick='JAVASCRIPT:FormFirmar" + i + ".submit()' class='fa fa-pencil-alt fa-size_small'></span></div></form></td>");
                             } else {
                                 out.print("<td ><b>ENTREGA : </b>" + ((obj_registros[4] == null) ? "---" : obj_registros[4]) + "</td>");
                             }
-                            if (cont_recibe > 0) {
-                                if (Integer.parseInt(obj_registros[7].toString()) == 1) {
-                                    if (rol_proceso.equals(obj_registros[9].toString())) {
-                                        out.print("<td ><form action='Registro?opc=4&irg=" + obj_registros[0] + "&etd=1' method='post' name='FormFirmar_" + i + "'><b>RECIBE : </b>" + ((obj_registros[5] == null) ? "---" : obj_registros[5]) + ""
-                                                + "<div style='float:right' title='Firmar como quien recibe'><span onclick='JAVASCRIPT:FormFirmar_" + i + ".submit()' class='fa fa-pencil-alt fa-size_small'></span></div></form></td>");
-                                    } else {
-                                        out.print("<td ><b>RECIBE : </b>" + ((obj_registros[5] == null) ? "---" : obj_registros[5]) + "</td>");
-                                    }
-                                } else {
-                                    out.print("<td ><b>RECIBE : </b>" + ((obj_registros[5] == null) ? "---" : obj_registros[5]) + "</td>");
-                                }
+                            if (turno_abierto && Metodos.Control_turno.puedeFirmarRecibe(rol, rol_proceso, obj_registros[9], es_responsable)) {
+                                out.print("<td ><form action='Registro?opc=4&irg=" + obj_registros[0] + "&etd=1' method='post' name='FormFirmar_" + i + "'><b>RECIBE : </b>" + ((obj_registros[5] == null) ? "---" : obj_registros[5]) + ""
+                                        + "<div style='float:right' title='Firmar como quien recibe'><span onclick='JAVASCRIPT:FormFirmar_" + i + ".submit()' class='fa fa-pencil-alt fa-size_small'></span></div></form></td>");
                             } else {
                                 out.print("<td ><b>RECIBE : </b>" + ((obj_registros[5] == null) ? "---" : obj_registros[5]) + "</td>");
                             }
@@ -267,6 +243,8 @@ public class Tag_registro extends TagSupport {
                     arg_lineas = pageContext.getRequest().getAttribute("Arg_lineas").toString();
                     lst_registro = jpacrgt.Traer_registro_id(id_registro);
                     Object[] obj_registro = (Object[]) lst_registro.get(0);
+                    // Responsables del turno o, en turnos de CALIDAD, cualquier usuario Calidad-Pruebas
+                    boolean puede_trabajar = Metodos.Control_turno.puedeTrabajarTurno(obj_registro[3], obj_registro[9], user_rol, rol);
                     if (activar_form != 0) {
                         //<editor-fold defaultstate="collapsed" desc="REFRESCAR">
                         out.print("<div style='display:none'>"
@@ -733,7 +711,7 @@ public class Tag_registro extends TagSupport {
                                                 out.print("<td align='center'><b>" + obj_registro_seguimiento[5] + "</b><br />");
                                                 if (Integer.parseInt(obj_registro[7].toString()) == 0) {
                                                     out.print("</td>");
-                                                } else if (!obj_registro[3].toString().contains(user_rol)) {
+                                                } else if (!puede_trabajar) {
                                                     out.print("</td>");
                                                 } else {
                                                     if ((Integer) obj_registro_seguimiento[18] == 2) {
@@ -744,7 +722,7 @@ public class Tag_registro extends TagSupport {
                                                     out.print("</td>");
                                                 }
                                             }
-                                            if (Integer.parseInt(obj_registro[7].toString()) == 0 || !obj_registro[3].toString().contains(user_rol) || (Integer) obj_registro_seguimiento[18] != 2) {
+                                            if (Integer.parseInt(obj_registro[7].toString()) == 0 || !puede_trabajar || (Integer) obj_registro_seguimiento[18] != 2) {
                                             } else {
                                                 out.print("<form action='Registro?opc=7&Form=1' method='post' id='Form_" + obj_registro_seguimiento[0] + "'>");
                                             }
@@ -784,7 +762,7 @@ public class Tag_registro extends TagSupport {
 //                                                for (int k = 0; k < lst_registro_campo.size(); k++) {
 //                                                    Object[] obj_registro_campo = (Object[]) lst_registro_campo.get(k);
                                             if (obj_titulos[2].equals("Electrodos")) {
-                                                if (Integer.parseInt(obj_registro[7].toString()) == 0 || !obj_registro[3].toString().contains(user_rol) || (Integer) obj_registro_seguimiento[18] != 2) {
+                                                if (Integer.parseInt(obj_registro[7].toString()) == 0 || !puede_trabajar || (Integer) obj_registro_seguimiento[18] != 2) {
                                                     out.print("<td align='left'>");
                                                     out.print("<b>B:</b>" + obj_registro_seguimiento[30] + "<hr />");
                                                     out.print("<b>C:</b>" + obj_registro_seguimiento[31] + "");
@@ -805,7 +783,7 @@ public class Tag_registro extends TagSupport {
                                                             + "<script type='text/javascript'>var val1 = new LiveValidation('Txt_valor_2_" + obj_registro_seguimiento[0] + "_v2');</script>");
                                                     out.print("</td>");
                                                 }
-                                            } else if (Integer.parseInt(obj_registro[7].toString()) == 0 || !obj_registro[3].toString().contains(user_rol) || (Integer) obj_registro_seguimiento[18] != 2) {
+                                            } else if (Integer.parseInt(obj_registro[7].toString()) == 0 || !puede_trabajar || (Integer) obj_registro_seguimiento[18] != 2) {
                                                 out.print("<td>");
                                                 out.print("" + obj_registro_seguimiento[30] + "");
                                                 out.print("</td>");
@@ -827,7 +805,7 @@ public class Tag_registro extends TagSupport {
 //                                                }
 //                                            }
 //</editor-fold>
-                                            if (Integer.parseInt(obj_registro[7].toString()) == 0 || !obj_registro[3].toString().contains(user_rol) || (Integer) obj_registro_seguimiento[18] != 2) {
+                                            if (Integer.parseInt(obj_registro[7].toString()) == 0 || !puede_trabajar || (Integer) obj_registro_seguimiento[18] != 2) {
                                                 out.print("<td align='center'>");
                                                 if ((Integer) obj_registro_seguimiento[18] == 1) {
                                                     out.print("<b class='verde'>CUMPLE<hr />" + obj_registro_seguimiento[17] + "</b>");
@@ -864,7 +842,7 @@ public class Tag_registro extends TagSupport {
                                             } else {
                                                 out.print("<td valign='top' align='left'><b class='rojo'>NO CUMPLE<hr />" + obj_registro_seguimiento[17] + "</b></td>");
                                             }
-                                            if (Integer.parseInt(obj_registro[7].toString()) == 0 || !obj_registro[3].toString().contains(user_rol) || (Integer) obj_registro_seguimiento[18] != 2) {
+                                            if (Integer.parseInt(obj_registro[7].toString()) == 0 || !puede_trabajar || (Integer) obj_registro_seguimiento[18] != 2) {
                                                 out.print("<td valign='top' align='left' colspan='2'>" + obj_registro_seguimiento[19] + "</td>");
                                             } else {
                                                 out.print("<td>"
@@ -985,7 +963,7 @@ public class Tag_registro extends TagSupport {
                         out.print("<div style='display:block'>");
                         out.print("<div style='float:left;width:200px'><form action='Registro?opc=1' method='post' name='FormVolver' id='FormVolver'><span onclick='JAVASCRIPT:FormVolver.submit()' class='fa fa-arrow-left fa-size_small'></span></a> Volver</form></div>");
                         out.print("<div style='float:right;'>");
-                        if (Integer.parseInt(obj_registro[7].toString()) == 1 && obj_registro[3].toString().contains(user_rol)) {
+                        if (Integer.parseInt(obj_registro[7].toString()) == 1 && puede_trabajar) {
                             out.print("<div style='float:left;width:140px'>"
                                     + "<form action='Registro?opc=5&irg=" + id_registro + "' method='post' id='FormRegistrar'>"
                                     + "<input type='hidden' name='Form' value='1' />"
@@ -1038,7 +1016,7 @@ public class Tag_registro extends TagSupport {
                         out.print("<td align='center'><b>FECHA</b></td>");
                         if (Integer.parseInt(obj_registro[7].toString()) == 0) {
                             out.print("<td align='center'>" + obj_registro[1] + "</td>");
-                        } else if (!obj_registro[3].toString().contains(user_rol)) {
+                        } else if (!puede_trabajar) {
                             out.print("<td align='center'>" + obj_registro[1] + "</td>");
                         } else {
                             out.print("<td align='center'><input type='text' name='Txt_fecha' id='datepicker' value='" + obj_registro[1] + "' "
@@ -1048,7 +1026,7 @@ public class Tag_registro extends TagSupport {
                         out.print("<td align='center'><b>TURNO</b></td>");
                         if (Integer.parseInt(obj_registro[7].toString()) == 0) {
                             out.print("<td align='center'>" + obj_registro[2] + "</td>");
-                        } else if (!obj_registro[3].toString().contains(user_rol)) {
+                        } else if (!puede_trabajar) {
                             out.print("<td align='center'>" + obj_registro[2] + "</td>");
                         } else {
                             out.print("<td align='center'>");
@@ -1068,13 +1046,13 @@ public class Tag_registro extends TagSupport {
                             out.print("</td>");
                         }
                         out.print("<td align='center'><b>RESPONSABLE(S)</b></td>");
-                        out.print("<td align='center' colspan='2'>" + obj_registro[3] + "</td>");
+                        out.print("<td align='center' colspan='2'>" + Metodos.Control_turno.nombresResponsables(obj_registro[3]) + "</td>");
                         out.print("</tr>");
                         out.print("<tr>");
                         out.print("<td align='center'><b>OBSERVACIONES</b></td>");
                         if (Integer.parseInt(obj_registro[7].toString()) == 0) {
                             out.print("<td align='center' colspan='4'>" + obj_registro[6] + "</td>");
-                        } else if (!obj_registro[3].toString().contains(user_rol)) {
+                        } else if (!puede_trabajar) {
                             out.print("<td align='center' colspan='4'>" + obj_registro[6] + "</td>");
                         } else {
                             out.print("<td align='center' colspan='4'><textarea name='Txt_observaciones' id='Txt_observaciones' value='" + obj_registro[6] + "' "
@@ -1150,7 +1128,7 @@ public class Tag_registro extends TagSupport {
                                     out.print("<td align='center'><b>" + obj_detalle_registro[5] + "</b><br />");
                                     if (Integer.parseInt(obj_registro[7].toString()) == 0) {
                                         out.print("</td>");
-                                    } else if (!obj_registro[3].toString().contains(user_rol)) {
+                                    } else if (!puede_trabajar) {
                                         out.print("</td>");
                                     } else {
                                         if ((Integer) obj_detalle_registro[18] == 2) {
@@ -1160,7 +1138,7 @@ public class Tag_registro extends TagSupport {
                                         out.print("</td>");
                                     }
                                 }
-                                if (Integer.parseInt(obj_registro[7].toString()) == 0 || !obj_registro[3].toString().contains(user_rol) || (Integer) obj_detalle_registro[18] != 2) {
+                                if (Integer.parseInt(obj_registro[7].toString()) == 0 || !puede_trabajar || (Integer) obj_detalle_registro[18] != 2) {
                                 } else {
                                     out.print("<form action='Registro?opc=7&Id_proceso=" + id_proceso + "&Form=0' method='post' id='Form_" + obj_detalle_registro[0] + "'>");
                                 }
@@ -1199,7 +1177,7 @@ public class Tag_registro extends TagSupport {
 //                                    for (int k = 0; k < lst_registro_campo.size(); k++) {
 //                                        Object[] obj_registro_campo = (Object[]) lst_registro_campo.get(k);
                                 if (obj_titulos[2].equals("Electrodos")) {
-                                    if (Integer.parseInt(obj_registro[7].toString()) == 0 || !obj_registro[3].toString().contains(user_rol) || (Integer) obj_detalle_registro[18] != 2) {
+                                    if (Integer.parseInt(obj_registro[7].toString()) == 0 || !puede_trabajar || (Integer) obj_detalle_registro[18] != 2) {
                                         out.print("<td>");
                                         out.print("<b>B:</b>" + obj_detalle_registro[30] + "<hr />");
                                         out.print("<b>C:</b>" + obj_detalle_registro[31] + "");
@@ -1219,7 +1197,7 @@ public class Tag_registro extends TagSupport {
                                                 + "<script type='text/javascript'>var val1 = new LiveValidation('Txt_valor_2_" + obj_detalle_registro[0] + "_v2');</script>");
                                         out.print("</td>");
                                     }
-                                } else if (Integer.parseInt(obj_registro[7].toString()) == 0 || !obj_registro[3].toString().contains(user_rol) || (Integer) obj_detalle_registro[18] != 2) {
+                                } else if (Integer.parseInt(obj_registro[7].toString()) == 0 || !puede_trabajar || (Integer) obj_detalle_registro[18] != 2) {
                                     out.print("<td>");
                                     out.print("" + obj_detalle_registro[30] + "");
                                     out.print("</td>");
@@ -1240,7 +1218,7 @@ public class Tag_registro extends TagSupport {
 //                                    }
 //                                }
 //</editor-fold>
-                                if (Integer.parseInt(obj_registro[7].toString()) == 0 || !obj_registro[3].toString().contains(user_rol) || (Integer) obj_detalle_registro[18] != 2) {
+                                if (Integer.parseInt(obj_registro[7].toString()) == 0 || !puede_trabajar || (Integer) obj_detalle_registro[18] != 2) {
                                     out.print("<td align='center'>");
                                     if ((Integer) obj_detalle_registro[18] == 1) {
                                         out.print("<b class='verde'>CUMPLE<hr />" + obj_detalle_registro[17] + "</b>");
@@ -1277,7 +1255,7 @@ public class Tag_registro extends TagSupport {
                                 } else {
                                     out.print("<td valign='top'><b class='rojo'>NO CUMPLE<hr />" + obj_detalle_registro[17] + "</b></td>");
                                 }
-                                if (Integer.parseInt(obj_registro[7].toString()) == 0 || !obj_registro[3].toString().contains(user_rol) || (Integer) obj_detalle_registro[18] != 2) {
+                                if (Integer.parseInt(obj_registro[7].toString()) == 0 || !puede_trabajar || (Integer) obj_detalle_registro[18] != 2) {
                                     out.print("<td valign='top' colspan='2'>" + obj_detalle_registro[19] + "</td>");
                                 } else {
                                     out.print("<td valign='top'>"
@@ -1300,9 +1278,10 @@ public class Tag_registro extends TagSupport {
                                         out.print("</td>");
                                     } else if ((Integer) obj_detalle_registro[18] == 0) {
                                         if ((Integer) obj_detalle_registro[21] == 0) {
-                                            if (rol.equals("Calidad-Pruebas")) {
-                                                out.print("<td valign='top' colspan='2'><b class='rojo'>RECHAZADO</b><br />" + obj_detalle_registro[22] + "</td>");
-                                            } else {
+                                            {
+                                                // Calidad-Pruebas no crea seguimientos (el formulario se oculta en la ventana),
+                                                // pero si los ve y registra sus resultados.
+                                                String texto_seguimiento = rol.equals("Calidad-Pruebas") ? "Ver Seguimiento" : "Abrir Seguimiento";
                                                 out.print("<td valign='top' colspan='2'><b class='rojo'>RECHAZADO</b><br />" + obj_detalle_registro[22] + ""
                                                         + "<form action='Registro?opc=5&irg=" + id_registro + "' method='post' id='FormRegistrarSeg" + obj_detalle_registro[0] + "'>"
                                                         + "<input type='hidden' name='Form' value='0' />"
@@ -1311,7 +1290,7 @@ public class Tag_registro extends TagSupport {
                                                         + "<input type='hidden' name='Arg_pruebas' value='" + obj_detalle_registro[4] + "' />"
                                                         + "<input type='hidden' name='Arg_lineas' value='0' />"
                                                         + "<input type='hidden' name='Txt_codigo_producto' value='" + obj_detalle_registro[13].toString().substring(0, 4) + "' />"
-                                                        + "<hr><a href='JAVASCRIPT:FormRegistrarSeg" + obj_detalle_registro[0] + ".submit()' style='color:#5dc1b9;font-weight:bold;'>Abrir Seguimiento</a>"
+                                                        + "<hr><a href='JAVASCRIPT:FormRegistrarSeg" + obj_detalle_registro[0] + ".submit()' style='color:#5dc1b9;font-weight:bold;'>" + texto_seguimiento + "</a>"
                                                         + "</form>");
 //                                                    out.print("<b class='rojo'>RECHAZADO</b><br />" + obj_detalle_registro[22] + "");
                                                 out.print("</td>");
@@ -1368,6 +1347,8 @@ public class Tag_registro extends TagSupport {
                                                     + "<form action='Registro?opc=5&irg=" + id_registro + "' method='post' id='FormRegistrarSeg" + obj_detalle_registro[0] + "'>"
                                                     + "<input type='hidden' name='Cbx_proceso' value='" + obj_detalle_registro[2] + "' />"
                                                     + "<input type='hidden' name='Cbx_prueba' value='" + obj_detalle_registro[4] + "' />"
+                                                    + "<input type='hidden' name='Arg_pruebas' value='" + obj_detalle_registro[4] + "' />"
+                                                    + "<input type='hidden' name='Arg_lineas' value='0' />"
                                                     + "<input type='hidden' name='Txt_codigo_producto' value='" + obj_detalle_registro[13].toString().substring(0, 4) + "' />"
                                                     + "<input type='hidden' name='Form' value='0' />"
                                                     + "<input type='hidden' name='Seguimiento' value='" + obj_detalle_registro[0] + "' />"

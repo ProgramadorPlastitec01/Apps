@@ -8,6 +8,7 @@ import Controladores.RegistroDetalleJpaController;
 import Controladores.RegistroJpaController;
 import Controladores.TipoLineaJpaController;
 import Metodos.Control_correo;
+import Metodos.Control_turno;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -21,6 +22,27 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class Registro extends HttpServlet {
+
+    /**
+     * Si un usuario Calidad-Pruebas trabaja en un turno abierto de CALIDAD que
+     * no creo, lo agrega a los responsables del turno.
+     */
+    private void Registrar_colaborador(RegistroJpaController jpacrgt, int id_registro, String user_sesion, String rol_sesion) {
+        try {
+            List lst_turno = jpacrgt.Traer_registro_id(id_registro);
+            if (lst_turno == null) {
+                return;
+            }
+            Object[] obj_turno = (Object[]) lst_turno.get(0);
+            if (Integer.parseInt(obj_turno[7].toString()) == 1
+                    && Control_turno.esColaborador(rol_sesion, obj_turno[9])
+                    && !Control_turno.esResponsable(obj_turno[3], user_sesion)) {
+                jpacrgt.Agregar_responsable(id_registro, user_sesion);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Registro.class.getName()).log(Level.WARNING, "No se pudo agregar responsable al turno " + id_registro, ex);
+        }
+    }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, MessagingException {
@@ -168,6 +190,12 @@ public class Registro extends HttpServlet {
                     codigo_producto = Integer.parseInt(request.getParameter("Txt_codigo_producto"));
                     arg_pruebas = request.getParameter("Arg_pruebas");
                     arg_lineas = request.getParameter("Arg_lineas");
+                    if (arg_pruebas == null || arg_pruebas.trim().isEmpty()) {
+                        arg_pruebas = "0";
+                    }
+                    if (arg_lineas == null || arg_lineas.trim().isEmpty()) {
+                        arg_lineas = "0";
+                    }
                     request.setAttribute("Registro", tipo);
                     request.setAttribute("Id_registro", id_registro);
                     request.setAttribute("Form", activar_form);
@@ -213,6 +241,7 @@ public class Registro extends HttpServlet {
                             }
                         }
                     }
+                    Registrar_colaborador(jpacrgt, id_registro, user_sesion, rol_sesion);
                     if (id_detalle_registro > 0) {
                         request.getRequestDispatcher("Registro?opc=5&irg=" + id_registro + "&Cbx_proceso=" + id_proceso + "&Form=0&Seguimiento=" + id_detalle_registro + "&Txt_codigo_producto=" + lote.substring(0, 4) + "&Arg_pruebas=" + Integer.parseInt(arg_pruebas) + "&Arg_lineas=" + Integer.parseInt(arg_lineas) + "").forward(request, response);
                     } else {
@@ -241,6 +270,7 @@ public class Registro extends HttpServlet {
                             request.setAttribute("Alerta", "Error_registro_prueba");
                         } else {
                             jpacrdt.Registrar_detalle_registro(id_detalle_registro, resultado, observacion, user_sesion, lote, cantidad_muestra, valor_1, valor_2);
+                            Registrar_colaborador(jpacrgt, id_registro, user_sesion, rol_sesion);
 //                                jpacrcp.Actualizar_variables(Integer.parseInt(obj_registro_campo[0].toString()), valor_1, valor_2);
                             if (resultado.equals("0")) {
                                 mtdcro.Resultado_cuarentena(id_detalle_registro);
