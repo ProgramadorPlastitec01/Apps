@@ -2297,15 +2297,19 @@ public class Tag_orden_prod extends TagSupport {
                                 if (rol.equals("Coordinadora-Produccion") || rol.equals("Encargada-operaria")) {
                                     out.print("<div id='Div_ductos_eva' style='display:none;visibility:hidden;'>");
 //                                out.print("<h3>Ductos</h3>");
-                                    out.print("<input type='hidden' name='Txt_ductos_eva_c' id='Txt_ductos_eva_c' value='" + obj_registro[9] + "' />");
-                                    out.print("<input type='hidden' name='Txt_ductos_eva_c_alt' id='Txt_ductos_eva_c_alt' value='" + (((obj_registro[104] == null)) ? "N/A" : obj_registro[104]) + "' />");
-                                    out.print("<input type='hidden' name='Txt_ductos_eva_p' id='Txt_ductos_eva_p' value='" + obj_registro[10] + "' />");
+                                    out.print("<input type='hidden' name='Txt_ductos_eva_c' id='Txt_ductos_eva_c' value='" + obj_registro[9].toString().trim() + "' />");
+                                    out.print("<input type='hidden' name='Txt_ductos_eva_c_alt' id='Txt_ductos_eva_c_alt' value='" + (((obj_registro[104].toString().trim() == null)) ? "N/A" : obj_registro[104].toString().trim()) + "' />");
+                                    out.print("<input type='hidden' name='Txt_ductos_eva_p' id='Txt_ductos_eva_p' value='" + obj_registro[10].toString().trim() + "' />");
                                     out.print("</div>");
                                 } else if (rol.equals("Administrador") || rol.equals("Documental")) {
+                                    // Ductos EVA C/P solo aplican a lineas R-PRF-019: en las demas lineas el panel esta oculto,
+                                    // es copia del ducto derecho y el servlet no lo lee. Deshabilitado no se valida ni se envia
+                                    // (un valor heredado con espacios bloqueaba el boton Modificar sin que el usuario lo viera).
+                                    String attr_ductos_eva = tipo_registro_seleccionado.equals("R-PRF-019") ? "" : "disabled='disabled' ";
                                     out.print("<div id='Div_ductos_eva' style='display:none;visibility:hidden;'>");
                                     out.print("<h3>Ductos</h3>");
                                     out.print("<b>Lote de ductoc C :</b><br />");
-                                    out.print("<input type='text' name='Txt_ductos_eva_c' id='Txt_ductos_eva_c' placeholder='Lote ductos eva C' title='Lote ductos eva C' value='" + (obj_registro[9].toString().length() < 9 ? "N/A" : obj_registro[9]) + "' onkeyup='javascript:this.value=this.value.toUpperCase();Ductos_eva()' onchange='Ductos_eva()' />"
+                                    out.print("<input " + attr_ductos_eva + "type='text' name='Txt_ductos_eva_c' id='Txt_ductos_eva_c' placeholder='Lote ductos eva C' title='Lote ductos eva C' value='" + (obj_registro[9].toString().trim().length() < 9 ? "N/A" : obj_registro[9].toString().trim()) + "' onkeyup='javascript:this.value=this.value.toUpperCase();Ductos_eva()' onchange='Ductos_eva()' />"
                                             + "<script type='text/javascript'>var val1 = new LiveValidation('Txt_ductos_eva_c');val1.add(Validate.Presence);val1.add(Validate.LoteXN);"
                                             + "val1.add( Validate.Inclusion, { within: [ ");
                                     for (int i = 0; i < lst_materiales.length; i++) {
@@ -2331,7 +2335,7 @@ public class Tag_orden_prod extends TagSupport {
                                     out.print("], partialMatch: true } );"
                                             + "</script>");
                                     out.print("<br /><b>Lote ductos eva P :</b><br />");
-                                    out.print("<input type='text' name='Txt_ductos_eva_p' id='Txt_ductos_eva_p' placeholder='Lote ductos eva P' title='Lote ductos eva P' value='" + (obj_registro[10].toString().length() < 9 ? "N/A" : obj_registro[10])+ "' onkeyup='javascript:this.value=this.value.toUpperCase();Ductos_eva()' onchange='Ductos_eva()' />"
+                                    out.print("<input " + attr_ductos_eva + "type='text' name='Txt_ductos_eva_p' id='Txt_ductos_eva_p' placeholder='Lote ductos eva P' title='Lote ductos eva P' value='" + (obj_registro[10].toString().length() < 9 ? "N/A" : obj_registro[10])+ "' onkeyup='javascript:this.value=this.value.toUpperCase();Ductos_eva()' onchange='Ductos_eva()' />"
                                             + "<script type='text/javascript'>var val1 = new LiveValidation('Txt_ductos_eva_p');val1.add(Validate.Presence);val1.add(Validate.LoteP);"
                                             + "val1.add( Validate.Inclusion, { within: [ ");
                                     for (int i = 0; i < lst_materiales.length; i++) {
