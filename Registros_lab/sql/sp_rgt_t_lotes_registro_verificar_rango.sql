@@ -12,9 +12,10 @@
 --     exactamente los registros del certificado y los mismos que se
 --     corrigen en Reporte?opc=9.
 --   * Exige registro_frecuencia_hora (igual que sp_rfh_t_registros_lote).
---   * lote_manga_p, lote_dto_drc_p y lote_dto_iqe_p salen del propio grupo
---     (antes: subconsulta "ultimo registro del lote", que ocultaba
---     diferencias) y forman parte del GROUP BY.
+--   * Los lotes P (lote_manga_p, lote_dto_drc_p, lote_dto_iqe_p y
+--     lote_dto_ctl_p) NO forman parte del GROUP BY: una diferencia en P no
+--     separa grupos (decision del usuario). Se muestra el valor del registro
+--     mas reciente del grupo.
 --   * La columna 14 devuelve r.lote_cola (antes: literal 'N/A').
 --
 -- El orden de columnas es IDENTICO al SP anterior (indices 0..36 que usa
@@ -42,11 +43,11 @@ BEGIN
         r.lote_producto,                                                    -- 0
         COUNT(r.id_registro),                                               -- 1
         r.lote_manga_c,                                                     -- 2
-        r.lote_manga_p,                                                     -- 3
+        SUBSTRING_INDEX(GROUP_CONCAT(COALESCE(r.lote_manga_p, 'N/A') ORDER BY r.fecha_registro DESC, r.id_registro DESC SEPARATOR '|~|'), '|~|', 1), -- 3
         r.lote_dto_drc_c,                                                   -- 4
-        r.lote_dto_drc_p,                                                   -- 5
+        SUBSTRING_INDEX(GROUP_CONCAT(COALESCE(r.lote_dto_drc_p, 'N/A') ORDER BY r.fecha_registro DESC, r.id_registro DESC SEPARATOR '|~|'), '|~|', 1), -- 5
         r.lote_dto_iqe_c,                                                   -- 6
-        r.lote_dto_iqe_p,                                                   -- 7
+        SUBSTRING_INDEX(GROUP_CONCAT(COALESCE(r.lote_dto_iqe_p, 'N/A') ORDER BY r.fecha_registro DESC, r.id_registro DESC SEPARATOR '|~|'), '|~|', 1), -- 7
         r.ensamble,                                                         -- 8
         r.lote_ensamble,                                                    -- 9
         r.lote_tinta,                                                       -- 10
@@ -60,7 +61,7 @@ BEGIN
         r.lote_ensamble_2,                                                  -- 18
         r.lote_manga_c_alt,                                                 -- 19
         r.lote_dto_ctl_c,                                                   -- 20
-        r.lote_dto_ctl_p,                                                   -- 21
+        SUBSTRING_INDEX(GROUP_CONCAT(COALESCE(r.lote_dto_ctl_p, 'N/A') ORDER BY r.fecha_registro DESC, r.id_registro DESC SEPARATOR '|~|'), '|~|', 1), -- 21
         MAX(r.lote_boca),                                                   -- 22
         r.lote_dto_c_alt,                                                   -- 23
         r.lote_tubo_refuerzo,                                               -- 24
@@ -93,11 +94,8 @@ BEGIN
         r.lote_producto,
         r.id_linea,
         r.lote_manga_c,
-        r.lote_manga_p,
         r.lote_dto_drc_c,
-        r.lote_dto_drc_p,
         r.lote_dto_iqe_c,
-        r.lote_dto_iqe_p,
         r.ensamble,
         r.lote_ensamble,
         r.lote_tinta,
@@ -107,7 +105,6 @@ BEGIN
         r.lote_ensamble_2,
         r.lote_manga_c_alt,
         r.lote_dto_ctl_c,
-        r.lote_dto_ctl_p,
         r.lote_dto_c_alt,
         r.lote_tubo_refuerzo,
         r.ciclo_esterilizacion,
