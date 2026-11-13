@@ -97,13 +97,15 @@ public class Tag_menu extends TagSupport {
                     out.print("<li><a href='Reporte?opc=1'>Reporte</a></li>");
                 } else {
                     out.print("<li><a href='Sesion?opc=2'>Inicio</a></li>");
-                    out.print("<li><a href='#'>Complementos</a>");
-                    out.print("<ul>");
-                    out.print("<li><a href='Complemento?opc=1'>Líneas</a></li>");
-                    out.print("<li><a href='Complemento?opc=4'>Pruebas</a></li>");
-                    out.print("<li><a href='Complemento?opc=7'>Proceso</a></li>");
-                    out.print("</ul>");
-                    out.print("</li>");
+                    if (Metodos.Control_turno.puedeGestionarComplementos(nombre_rol)) {
+                        out.print("<li><a href='#'>Complementos</a>");
+                        out.print("<ul>");
+                        out.print("<li><a href='Complemento?opc=1'>Líneas</a></li>");
+                        out.print("<li><a href='Complemento?opc=4'>Pruebas</a></li>");
+                        out.print("<li><a href='Complemento?opc=7'>Proceso</a></li>");
+                        out.print("</ul>");
+                        out.print("</li>");
+                    }
                     out.print("<li><a href='Registro?opc=1'>Turno</a></li>");
                     out.print("<li><a href='Reporte?opc=1'>Reporte</a></li>");
                 }

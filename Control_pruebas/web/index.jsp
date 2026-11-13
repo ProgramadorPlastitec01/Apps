@@ -28,9 +28,10 @@
             <input type="text" name="Txt_user" id="Txt_user" placeholder="Usuario" style="font-size: 16px;width: 90%;background-color:#f5f5f6;border-bottom:1px solid #15aabf;border-right: none;border-left: none;border-top: none;" autocomplete="off"/><br />
             <input type="password" name="Txt_password" id="Txt_password" placeholder="Contraseña" style="font-size: 16px;width: 90%;background-color:#f5f5f6;border-bottom:1px solid #15aabf;border-right: none;border-left: none;border-top: none;" autocomplete="off"/>
             <br /><br /><input type="submit" class='Iniciar_sesion' value="Iniciar" /><br/><br/>
-            <b>Va 02.07.03</b>
+            <b>Va 02.12.05</b>
+            <!--<b>Va 02.07.03</b>-->
         </form>
-        <p style="color: grey;font-size: 14px">&copy; PLASTITEC - 2022</p>
+        <p style="color: grey;font-size: 14px">&copy; PLASTITEC - 2026</p>
     </div>
     </body>
 </html>

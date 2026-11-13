@@ -91,6 +91,14 @@ public class Control_turno {
     }
 
     /**
+     * Acceso al menu Complementos (Lineas, Pruebas, Proceso): solo
+     * Administrador y Coordinadora-Calidad.
+     */
+    public static boolean puedeGestionarComplementos(String rol) {
+        return "Administrador".equals(rol) || "Coordinadora-Calidad".equals(rol);
+    }
+
+    /**
      * Firmar como quien ENTREGA un turno abierto: responsables del mismo
      * proceso, o cualquier Calidad-Pruebas en turnos de CALIDAD.
      */

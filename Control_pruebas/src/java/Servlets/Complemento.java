@@ -42,6 +42,11 @@ public class Complemento extends HttpServlet {
             int cantidad = 0;
             int tipo_estado = 0;
             int codigo_serial = 0;
+            Object rol_sesion = sesion.getAttribute("Nombre_rol");
+            if (rol_sesion != null && !Metodos.Control_turno.puedeGestionarComplementos(rol_sesion.toString())) {
+                request.getRequestDispatcher("Sesion?opc=2").forward(request, response);
+                return;
+            }
             switch (opc) {
                 case 1:
                     tipo = "Registro_linea";
