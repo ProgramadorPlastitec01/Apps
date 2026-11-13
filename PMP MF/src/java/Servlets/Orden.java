@@ -97,7 +97,9 @@ public class Orden extends HttpServlet {
                         usuario_aprobador = request.getParameter("Cbx_aprobador");
                     } catch (Exception e) {
                     }
-                    if (id_orden > 0) {
+                    if (!Es_rol_programador(nombre_rol)) {
+                        request.setAttribute("Alerta", "Sin_permiso_rol");
+                    } else if (id_orden > 0) {
                         if (usuario_aprobador != null) {
                             proceso = jpacotb.Modificar_orden_trabajo(id_orden, usuario_programador, usuario_ejecutor, "N/A", usuario_aprobador, rol_usuario, id_tipo_mtto);
                         } else {
@@ -108,7 +110,9 @@ public class Orden extends HttpServlet {
                     } else {
                         proceso = jpacotb.Registrar_orden_trabajo(numero_ot, id_tipo_mtto, id_equipo, usuario_programador, usuario_ejecutor, usuario_revisor, "N/A", 1, rol_usuario);
                     }
-                    if (proceso) {
+                    if (!Es_rol_programador(nombre_rol)) {
+                        // Alerta Sin_permiso_rol ya asignada
+                    } else if (proceso) {
                         request.setAttribute("Alerta", "" + ((id_orden == 0) ? "Registro" : "Modificar") + "_orden");
                     } else {
                         request.setAttribute("Alerta", "Error_" + ((id_orden == 0) ? "registro" : "modificar") + "_orden");
@@ -132,15 +136,19 @@ public class Orden extends HttpServlet {
                     id_equipo = Integer.parseInt(request.getParameter("Id_equipo"));
                     estado_ot = Integer.parseInt(request.getParameter("Estado_ot"));
                     if (estado_ot == 1) {
-                        arg_grupos = request.getParameter("Arg_grupos");
-                        arg_actividades_id = request.getParameter("Arg_id_actividades");
-                        arg_actividades_id_pendientes = request.getParameter("Arg_id_actividades_pendientes");
-                        arg_actividades = request.getParameter("Arg_actividades");
-                        cont_actividades_programadas = Integer.parseInt(request.getParameter("Cont_actividades_programadas"));
-                        arg_id_lineas_zonas = request.getParameter("Arg_id_lineas_zona");
-                        jpacotd.Registrar_detalle_orden_trabajo(id_orden, arg_grupos, arg_actividades_id, arg_actividades, cont_actividades_programadas, 0, "", "", "", "N/A", "", arg_actividades_id_pendientes, arg_id_lineas_zonas);
-                        jpacotb.Cambiar_estado(id_orden, (estado_ot + 1));
-                        mtdccr.Correo_ot(id_orden, "PROGRAMACIÓN OT", rol_usuario);
+                        if (Es_rol_programador(nombre_rol)) {
+                            arg_grupos = request.getParameter("Arg_grupos");
+                            arg_actividades_id = request.getParameter("Arg_id_actividades");
+                            arg_actividades_id_pendientes = request.getParameter("Arg_id_actividades_pendientes");
+                            arg_actividades = request.getParameter("Arg_actividades");
+                            cont_actividades_programadas = Integer.parseInt(request.getParameter("Cont_actividades_programadas"));
+                            arg_id_lineas_zonas = request.getParameter("Arg_id_lineas_zona");
+                            jpacotd.Registrar_detalle_orden_trabajo(id_orden, arg_grupos, arg_actividades_id, arg_actividades, cont_actividades_programadas, 0, "", "", "", "N/A", "", arg_actividades_id_pendientes, arg_id_lineas_zonas);
+                            jpacotb.Cambiar_estado(id_orden, (estado_ot + 1));
+                            mtdccr.Correo_ot(id_orden, "PROGRAMACIÓN OT", rol_usuario);
+                        } else {
+                            request.setAttribute("Alerta", "Sin_permiso_rol");
+                        }
                         request.getRequestDispatcher("Orden?opc=1&Id_equipo=" + id_equipo + "&Id_orden=0").forward(request, response);
                     } else if (estado_ot == 2) {
                         Object[] obj_asig2 = Obtener_orden_asignacion(jpacotb, id_orden, id_tipo_mtto);
@@ -162,8 +170,17 @@ public class Orden extends HttpServlet {
                         }
                         request.getRequestDispatcher("Orden?opc=5&Id_orden=" + id_orden).forward(request, response);
                     } else if (estado_ot == 5) {
-                        jpacotb.Cambiar_estado(id_orden, (estado_ot + 1));
-                        mtdccr.Correo_ot(id_orden, "CERRAR OT", rol_usuario);
+                        boolean autoclave_equipo5 = (id_equipo == 47 || id_equipo == 37 || id_equipo == 48);
+                        Object[] obj_asig5 = Obtener_orden_asignacion(jpacotb, id_orden, id_tipo_mtto);
+                        boolean autorizado_cierre = obj_asig5 != null
+                                && (Validar_usuario_accion(nombre_rol, nombre_usuario, Valor(obj_asig5, 37))
+                                || (autoclave_equipo5 && Validar_usuario_accion(nombre_rol, nombre_usuario, Valor(obj_asig5, 6))));
+                        if (autorizado_cierre) {
+                            jpacotb.Cambiar_estado(id_orden, (estado_ot + 1));
+                            mtdccr.Correo_ot(id_orden, "CERRAR OT", rol_usuario);
+                        } else {
+                            request.setAttribute("Alerta", "Sin_permiso_usuario_asignado");
+                        }
                         request.getRequestDispatcher("Orden?opc=5&Id_orden=" + id_orden).forward(request, response);
                     } else {
                         boolean autoclave_equipo = (id_equipo == 47 || id_equipo == 37 || id_equipo == 48);
@@ -200,19 +217,23 @@ public class Orden extends HttpServlet {
                     arg_actividades_id_pendientes = request.getParameter("Arg_id_actividades_pendientes");
                     arg_actividades = request.getParameter("Arg_actividades");
                     cont_actividades_programadas = Integer.parseInt(request.getParameter("Cont_actividades_programadas"));
-                    cont_actividades_ejecutadas = Integer.parseInt(request.getParameter("Cont_actividades_ejecutadas"));
+                    cont_actividades_ejecutadas = Contar_actividades_ejecutadas(arg_actividades, request.getParameter("Cont_actividades_ejecutadas"));
                     pendientes = request.getParameter("Txt_datos_pendientes");
                     descripcion = request.getParameter("Txt_datos_descripcion");
                     repuestos = request.getParameter("Txt_datos_repuestos");
                     no_pmp = request.getParameter("No_pmp");
                     arg_id_lineas_zonas = request.getParameter("Arg_id_lineas_zona");
                     tiempo_trabajo = Integer.parseInt(request.getParameter("Tiempo_trabajo"));
-                    jpacotb.Tiempo_estimado_ot(id_orden, tiempo_trabajo);
-                    proceso = jpacotd.Actualizar_detalle_orden_trabajo(id_orden_detalle, arg_grupos, arg_actividades_id, arg_actividades, cont_actividades_programadas, cont_actividades_ejecutadas, pendientes, descripcion, repuestos, no_pmp, ((no_pmp.equals("N/A") ? "" : rol_usuario)), arg_actividades_id_pendientes, arg_id_lineas_zonas);
-                    if (proceso) {
-                        request.setAttribute("Alerta", "Actualizar_orden_detalle");
+                    if (Validar_usuario_asignado_ot(nombre_rol, nombre_usuario, Obtener_orden_asignacion(jpacotb, id_orden, 0), 0)) {
+                        jpacotb.Tiempo_estimado_ot(id_orden, tiempo_trabajo);
+                        proceso = jpacotd.Actualizar_detalle_orden_trabajo(id_orden_detalle, arg_grupos, arg_actividades_id, arg_actividades, cont_actividades_programadas, cont_actividades_ejecutadas, pendientes, descripcion, repuestos, no_pmp, ((no_pmp.equals("N/A") ? "" : rol_usuario)), arg_actividades_id_pendientes, arg_id_lineas_zonas);
+                        if (proceso) {
+                            request.setAttribute("Alerta", "Actualizar_orden_detalle");
+                        } else {
+                            request.setAttribute("Alerta", "Error_actualizar_orden_detalle");
+                        }
                     } else {
-                        request.setAttribute("Alerta", "Error_actualizar_orden_detalle");
+                        request.setAttribute("Alerta", "Sin_permiso_usuario_asignado");
                     }
                     request.getRequestDispatcher("Orden?opc=5&Id_orden=" + id_orden).forward(request, response);
                     break;
@@ -222,7 +243,9 @@ public class Orden extends HttpServlet {
                     id_orden = Integer.parseInt(request.getParameter("Id_orden"));
                     tipo_firma = Integer.parseInt(request.getParameter("tfm"));
                     documento = Integer.parseInt(request.getParameter("Txt_documento"));
-                    if (documento > 0) {
+                    if (!Validar_usuario_asignado_ot(nombre_rol, nombre_usuario, Obtener_orden_asignacion(jpacotb, id_orden, 0), 0)) {
+                        request.setAttribute("Alerta", "Sin_permiso_usuario_asignado");
+                    } else if (documento > 0) {
                         lst_empleado = mtdcms.Empleado_sirh(documento + "");
                         String empleado = lst_empleado.get(0).toString();
                         if (tipo_firma == 0) {
@@ -276,12 +299,16 @@ public class Orden extends HttpServlet {
                     usuario_aprobador = request.getParameter("Cbx_aprobador");
                     id_tipo_mtto = Integer.parseInt(request.getParameter("Cbx_tipo_mtto"));
                     fecha_prog = request.getParameter("Txt_fecha_prog");
-                    if (id_orden > 0) {
+                    if (!Es_rol_programador(nombre_rol)) {
+                        proceso = false;
+                    } else if (id_orden > 0) {
                         proceso = jpacotb.Modificar_orden_trabajo_zona(id_orden, usuario_programador, usuario_ejecutor, usuario_revisor, usuario_aprobador, rol_usuario, id_tipo_mtto, fecha_prog);
                     } else {
                         proceso = jpacotb.Registrar_orden_trabajo(numero_ot, id_tipo_mtto, id_origen, usuario_programador, usuario_ejecutor, usuario_revisor, usuario_aprobador, 1, rol_usuario);
                     }
-                    if (proceso) {
+                    if (!Es_rol_programador(nombre_rol)) {
+                        request.setAttribute("Alerta", "Sin_permiso_rol");
+                    } else if (proceso) {
                         request.setAttribute("Alerta", "" + ((id_orden == 0) ? "Registro" : "Modificar") + "_orden");
                     } else {
                         request.setAttribute("Alerta", "Error_" + ((id_orden == 0) ? "registro" : "modificar") + "_orden");
@@ -341,8 +368,12 @@ public class Orden extends HttpServlet {
                         arg_actividades = request.getParameter("Arg_actividades");
                         cont_actividades_programadas = Integer.parseInt(request.getParameter("Cont_actividades_programadas"));
                         arg_id_lineas_zonas = request.getParameter("Arg_id_lineas_zona");
-                        jpacotd.Registrar_detalle_orden_trabajo(id_orden, arg_grupos, arg_actividades_id, arg_actividades, cont_actividades_programadas, 0, "", "", "", "N/A", "", arg_actividades_id_pendientes, arg_id_lineas_zonas);
-                        jpacotb.Cambiar_estado(id_orden, (estado_ot + 1));
+                        if (Es_rol_programador(nombre_rol)) {
+                            jpacotd.Registrar_detalle_orden_trabajo(id_orden, arg_grupos, arg_actividades_id, arg_actividades, cont_actividades_programadas, 0, "", "", "", "N/A", "", arg_actividades_id_pendientes, arg_id_lineas_zonas);
+                            jpacotb.Cambiar_estado(id_orden, (estado_ot + 1));
+                        } else {
+                            request.setAttribute("Alerta", "Sin_permiso_rol");
+                        }
 //                        mtdccr.Correo_ot(id_orden, "PROGRAMACIÓN OT " + ((id_tipo_mtto == 3) ? "ZONA" : "GENERAL"), rol_usuario);
                         request.getRequestDispatcher("Orden?opc=10&Id_tipo_mtto=" + id_tipo_mtto + "&Id_origen=" + id_origen + "&Id_orden=0").forward(request, response);
                     } else if (estado_ot == 2) {
@@ -398,19 +429,23 @@ public class Orden extends HttpServlet {
                     arg_actividades_id_pendientes = request.getParameter("Arg_id_actividades_pendientes");
                     arg_actividades = request.getParameter("Arg_actividades");
                     cont_actividades_programadas = Integer.parseInt(request.getParameter("Cont_actividades_programadas"));
-                    cont_actividades_ejecutadas = Integer.parseInt(request.getParameter("Cont_actividades_ejecutadas"));
+                    cont_actividades_ejecutadas = Contar_actividades_ejecutadas(arg_actividades, request.getParameter("Cont_actividades_ejecutadas"));
                     pendientes = request.getParameter("Txt_datos_pendientes");
                     descripcion = request.getParameter("Txt_datos_descripcion");
                     repuestos = request.getParameter("Txt_datos_repuestos");
                     no_pmp = request.getParameter("No_pmp");
                     arg_id_lineas_zonas = request.getParameter("Arg_id_lineas_zona");
                     tiempo_trabajo = Integer.parseInt(request.getParameter("Tiempo_trabajo"));
-                    jpacotb.Tiempo_estimado_ot(id_orden, tiempo_trabajo);
-                    proceso = jpacotd.Actualizar_detalle_orden_trabajo(id_orden_detalle, arg_grupos, arg_actividades_id, arg_actividades, cont_actividades_programadas, cont_actividades_ejecutadas, pendientes, descripcion, repuestos, no_pmp, ((no_pmp.equals("N/A") ? "" : rol_usuario)), arg_actividades_id_pendientes, arg_id_lineas_zonas);
-                    if (proceso) {
-                        request.setAttribute("Alerta", "Actualizar_orden_detalle");
+                    if (Validar_usuario_accion(nombre_rol, nombre_usuario, Valor(Obtener_orden_asignacion(jpacotb, id_orden, id_tipo_mtto), 6))) {
+                        jpacotb.Tiempo_estimado_ot(id_orden, tiempo_trabajo);
+                        proceso = jpacotd.Actualizar_detalle_orden_trabajo(id_orden_detalle, arg_grupos, arg_actividades_id, arg_actividades, cont_actividades_programadas, cont_actividades_ejecutadas, pendientes, descripcion, repuestos, no_pmp, ((no_pmp.equals("N/A") ? "" : rol_usuario)), arg_actividades_id_pendientes, arg_id_lineas_zonas);
+                        if (proceso) {
+                            request.setAttribute("Alerta", "Actualizar_orden_detalle");
+                        } else {
+                            request.setAttribute("Alerta", "Error_actualizar_orden_detalle");
+                        }
                     } else {
-                        request.setAttribute("Alerta", "Error_actualizar_orden_detalle");
+                        request.setAttribute("Alerta", "Sin_permiso_usuario_asignado");
                     }
                     request.getRequestDispatcher("Orden?opc=13&Id_tipo_mtto=" + id_tipo_mtto + "&Id_orden=" + id_orden).forward(request, response);
                     break;
@@ -422,6 +457,30 @@ public class Orden extends HttpServlet {
                     estado_ot = Integer.parseInt(request.getParameter("Estado_ot"));
                     justificacion = request.getParameter("Txt_justificacion");
                     tipo_mtto = Integer.parseInt(request.getParameter("Tipo_mt"));
+                    {
+                        // Devuelve solo el verificador (estado 3) o el aprobador (estados 4 y 5) asignado
+                        int id_tipo_dev = (tipo_mtto == 1) ? 0 : Integer.parseInt(request.getParameter("idTP"));
+                        Object[] obj_asig_dev = Obtener_orden_asignacion(jpacotb, id_orden, id_tipo_dev);
+                        boolean autorizado_dev;
+                        if (nombre_rol.equals("Tecnico") || nombre_rol.equals("Consulta")) {
+                            autorizado_dev = false;
+                        } else if (estado_ot == 3) {
+                            autorizado_dev = Validar_usuario_accion(nombre_rol, nombre_usuario, Valor(obj_asig_dev, 8));
+                        } else if (estado_ot == 4 || estado_ot == 5) {
+                            autorizado_dev = Validar_usuario_accion(nombre_rol, nombre_usuario, Valor(obj_asig_dev, Indice_aprobador(id_tipo_dev)));
+                        } else {
+                            autorizado_dev = nombre_rol.equals("Administrador");
+                        }
+                        if (!autorizado_dev) {
+                            request.setAttribute("Alerta", "Sin_permiso_usuario_asignado");
+                            if (tipo_mtto == 1) {
+                                request.getRequestDispatcher("Orden?opc=5&Id_orden=" + id_orden).forward(request, response);
+                            } else {
+                                request.getRequestDispatcher("Orden?opc=13&Id_orden=" + id_orden + "&Id_tipo_mtto=" + id_tipo_dev + "").forward(request, response);
+                            }
+                            break;
+                        }
+                    }
                     if (estado_ot == 2) {
                         jpacotb.Ejecutar_ot(id_orden);
                         jpacotb.Cambiar_estado(id_orden, (estado_ot - 1));
@@ -475,13 +534,18 @@ public class Orden extends HttpServlet {
                     arg_actividades_id_pendientes = request.getParameter("Arg_id_actividades_pendientes");
                     arg_actividades = request.getParameter("Arg_actividades");
                     cont_actividades_programadas = Integer.parseInt(request.getParameter("Cont_actividades_programadas"));
-                    cont_actividades_ejecutadas = Integer.parseInt(request.getParameter("Cont_actividades_ejecutadas"));
+                    cont_actividades_ejecutadas = Contar_actividades_ejecutadas(arg_actividades, request.getParameter("Cont_actividades_ejecutadas"));
                     pendientes = request.getParameter("Txt_datos_pendientes");
                     descripcion = request.getParameter("Txt_datos_descripcion");
                     repuestos = request.getParameter("Txt_datos_repuestos");
                     no_pmp = request.getParameter("No_pmp");
                     arg_id_lineas_zonas = request.getParameter("Arg_id_lineas_zona");
                     tiempo_trabajo = Integer.parseInt(request.getParameter("Tiempo_trabajo"));
+                    if (!Validar_usuario_asignado_ot(nombre_rol, nombre_usuario, Obtener_orden_asignacion(jpacotb, id_orden, 0), 0)) {
+                        request.setAttribute("Alerta", "Sin_permiso_usuario_asignado");
+                        request.getRequestDispatcher("Orden?opc=5&Id_orden=" + id_orden).forward(request, response);
+                        break;
+                    }
                     jpacotb.Tiempo_estimado_ot(id_orden, tiempo_trabajo);
                     try {
                         verificacion = Integer.parseInt(request.getParameter("Txt_ver_equipo"));
@@ -508,16 +572,23 @@ public class Orden extends HttpServlet {
                     firma_prf = Integer.parseInt(request.getParameter("Txt_documento_prf"));
                     String firma = "[" + firma_mtf + "]" + "[" + firma_prf + "]";
                     justificacion = request.getParameter("Txt_justificacion");
-                    proceso = jpacotb.Autorizacion(id_orden, firma, justificacion);
-                    request.setAttribute("Alerta", "Firma_autorizacion");
+                    if (Es_rol_programador(nombre_rol)) {
+                        proceso = jpacotb.Autorizacion(id_orden, firma, justificacion);
+                        request.setAttribute("Alerta", "Firma_autorizacion");
+                    } else {
+                        request.setAttribute("Alerta", "Sin_permiso_rol");
+                    }
                     request.getRequestDispatcher("Orden?opc=1&Id_equipo=" + id_equipo + "&Id_orden=0").forward(request, response);
+                    break;
                 //</editor-fold>
                 case 18:
                     //<editor-fold defaultstate="collapsed" desc="CAMBIAR ESTADO ZONAS Y ORDENES DE TRABAJO">
                     int id = Integer.parseInt(request.getParameter("id"));
                     estado = Integer.parseInt(request.getParameter("Estado"));
                     id_tipo_mtto = Integer.parseInt(request.getParameter("Id_tipo_mtto"));
-                    if (id_tipo_mtto == 3) {
+                    if (!Es_rol_programador(nombre_rol)) {
+                        request.setAttribute("Alerta", "Sin_permiso_rol");
+                    } else if (id_tipo_mtto == 3) {
                         jpacotb.CambiarEstadoZona(id, estado);
                     } else {
                         jpacotb.CambiarEstadoGeneral(id, estado);
@@ -542,6 +613,68 @@ public class Orden extends HttpServlet {
             return true;
         }
         return usuario_asignado != null && usuario_asignado.trim().equalsIgnoreCase(nombre_usuario.trim());
+    }
+
+    /**
+     * Roles que programan, emiten y modifican la asignación de las OT.
+     */
+    private boolean Es_rol_programador(String nombre_rol) {
+        return nombre_rol.equals("Administrador") || nombre_rol.equals("Jefe_Mtto") || nombre_rol.equals("Asistente");
+    }
+
+    /**
+     * Posición del aprobador en la fila de la OT: equipo (37) o zona/general
+     * (20).
+     */
+    private int Indice_aprobador(int id_tipo_mtto) {
+        return (id_tipo_mtto == 3 || id_tipo_mtto == 4) ? 20 : 37;
+    }
+
+    private String Valor(Object[] obj, int indice) {
+        return (obj == null || obj[indice] == null) ? null : obj[indice].toString();
+    }
+
+    /**
+     * Cuenta las actividades ejecutadas (SI o N/A) a partir del texto
+     * guardado [id_/_EJECUTO_/_OBSERVACION]. El contador que envía el
+     * navegador sumaba en cada clic y podía superar las programadas.
+     */
+    private int Contar_actividades_ejecutadas(String arg_actividades, String cont_navegador) {
+        if (arg_actividades == null || !arg_actividades.contains("_/_")) {
+            try {
+                return Integer.parseInt(cont_navegador);
+            } catch (NumberFormatException e) {
+                return 0;
+            }
+        }
+        int contador = 0;
+        String[] actividades = arg_actividades.split("\\]\\[");
+        for (String actividad : actividades) {
+            String[] partes = actividad.replace("[", "").replace("]", "").split("_/_", -1);
+            if (partes.length > 1) {
+                String ejecuto = partes[1].trim();
+                if (ejecuto.equals("SI") || ejecuto.equals("N/A")) {
+                    contador++;
+                }
+            }
+        }
+        return contador;
+    }
+
+    /**
+     * Verifica que el usuario en sesión esté asignado a la OT como ejecutor,
+     * verificador o aprobador. El Administrador siempre está autorizado.
+     */
+    private boolean Validar_usuario_asignado_ot(String nombre_rol, String nombre_usuario, Object[] obj_orden, int id_tipo_mtto) {
+        if (nombre_rol.equals("Administrador")) {
+            return true;
+        }
+        if (obj_orden == null) {
+            return false;
+        }
+        return Validar_usuario_accion(nombre_rol, nombre_usuario, Valor(obj_orden, 6))
+                || Validar_usuario_accion(nombre_rol, nombre_usuario, Valor(obj_orden, 8))
+                || Validar_usuario_accion(nombre_rol, nombre_usuario, Valor(obj_orden, Indice_aprobador(id_tipo_mtto)));
     }
 
     /**

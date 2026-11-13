@@ -15,19 +15,20 @@
         <jsp:include page='Contenedor_head.jsp'></jsp:include>
             <script type="text/javascript">
                 function DesactivarEquipo(id_equipo) {
-                    swal({
-                        title: "Inactivar Equipo",
-                        text: "Seguro que desea desactivar el Equipo...!",
-                        type: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "red",
-                        confirmButtonText: "Aceptar",
-                        cancelButtonText: "Cancelar",
-                        closeOnConfirm: false,
-                    },
-                            function () {
-                                location.href = 'Equipo?opc=3&Id_equipo=' + id_equipo + '&Estado=0';
-                            });
+                    // La inactivacion exige asunto y descripcion; se registran como nota del equipo
+                    document.getElementById('Id_equipo_inactivacion').value = id_equipo;
+                    document.getElementById('Txt_asunto_inactivacion').value = '';
+                    document.getElementById('Txt_descripcion_inactivacion').value = '';
+                    $('#InactivarEquipoModal').modal('show');
+                }
+                function ConfirmarInactivacionEquipo() {
+                    var asunto = document.getElementById('Txt_asunto_inactivacion').value.trim();
+                    var descripcion = document.getElementById('Txt_descripcion_inactivacion').value.trim();
+                    if (asunto === '' || descripcion === '') {
+                        swal('Datos incompletos', 'Diligencie el asunto y la descripción del motivo de la inactivación.', 'warning');
+                        return;
+                    }
+                    document.getElementById('FormInactivarEquipo').submit();
                 }
                 function ActivarEquipo(id_equipo) {
                     swal({
@@ -150,6 +151,31 @@
                     <Menu:Sesion />
                     <div class="container-fluid">
                         <Equipos:Equipos />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal inactivacion de equipo: asunto y descripcion quedan como nota del equipo -->
+        <div class="modal fade" id="InactivarEquipoModal" tabindex="-1" role="dialog" aria-labelledby="InactivarEquipoLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="InactivarEquipoLabel">Inactivar Equipo</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p>Indique el motivo de la inactivaci&oacute;n. Se registrar&aacute; como nota del equipo con la fecha, hora y responsable.</p>
+                        <form action="Equipo?opc=3" method="post" id="FormInactivarEquipo">
+                            <input type="hidden" name="Id_equipo" id="Id_equipo_inactivacion" value="0" />
+                            <input type="hidden" name="Estado" value="0" />
+                            <b>Asunto:</b>
+                            <input class="form-control" type="text" name="Txt_asunto_inactivacion" id="Txt_asunto_inactivacion" maxlength="180" required />
+                            <b>Descripci&oacute;n:</b>
+                            <textarea class="form-control" name="Txt_descripcion_inactivacion" id="Txt_descripcion_inactivacion" rows="5" required></textarea>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+                        <button class="btn btn-danger" type="button" onclick="ConfirmarInactivacionEquipo();">Inactivar</button>
                     </div>
                 </div>
             </div>

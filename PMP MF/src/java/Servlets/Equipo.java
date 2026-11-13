@@ -103,10 +103,38 @@ public class Equipo extends HttpServlet {
                     //<editor-fold defaultstate="collapsed" desc="ACTIVAR E INACTIVAR EQUIPO">
                     id_equipo = Integer.parseInt(request.getParameter("Id_equipo").toString());
                     estado = Integer.parseInt(request.getParameter("Estado").toString());
-                    if (estado > 0) {
+                    String nombre_rol_eqp = sesion.getAttribute("Nombre_rol").toString();
+                    if (!(nombre_rol_eqp.equals("Administrador") || nombre_rol_eqp.equals("Jefe_Mtto") || nombre_rol_eqp.equals("Asistente"))) {
+                        request.setAttribute("Alerta", "Sin_permiso_rol");
+                    } else if (estado > 0) {
                         jpaceqp.Activar_equipo(id_equipo);
                     } else {
-                        jpaceqp.Desactivar_equipo(id_equipo);
+                        // La inactivación exige asunto y descripción, que quedan como nota del equipo
+                        String asunto_inactivacion = request.getParameter("Txt_asunto_inactivacion");
+                        String descripcion_inactivacion = request.getParameter("Txt_descripcion_inactivacion");
+                        asunto_inactivacion = (asunto_inactivacion == null) ? "" : asunto_inactivacion.trim();
+                        descripcion_inactivacion = (descripcion_inactivacion == null) ? "" : descripcion_inactivacion.trim();
+                        if (asunto_inactivacion.isEmpty() || descripcion_inactivacion.isEmpty()) {
+                            request.setAttribute("Alerta", "Inactivar_equipo_sin_datos");
+                        } else if (jpaceqp.Desactivar_equipo(id_equipo)) {
+                            java.util.Date ahora = new java.util.Date();
+                            String fecha_hoy = new java.text.SimpleDateFormat("yyyy-MM-dd").format(ahora);
+                            String asunto_nota_inac = "INACTIVACIÓN: " + asunto_inactivacion.toUpperCase();
+                            if (asunto_nota_inac.length() > 200) {
+                                asunto_nota_inac = asunto_nota_inac.substring(0, 200);
+                            }
+                            String descripcion_nota_inac = Escapar_html(descripcion_inactivacion).replace("\r\n", "<br />").replace("\n", "<br />");
+                            boolean nota_ok = jpaceqp.Registrar_Nota(id_equipo, fecha_hoy, Escapar_sql(asunto_nota_inac), Escapar_sql(descripcion_nota_inac), rol_usuario);
+                            if (nota_ok) {
+                                request.setAttribute("Alerta", "Inactivar_equipo");
+                            } else {
+                                // Sin nota no hay trazabilidad: se revierte la inactivación
+                                jpaceqp.Activar_equipo(id_equipo);
+                                request.setAttribute("Alerta", "Error_inactivar_equipo");
+                            }
+                        } else {
+                            request.setAttribute("Alerta", "Error_inactivar_equipo");
+                        }
                     }
                     request.getRequestDispatcher("Equipo?opc=1&Id_equipo=0").forward(request, response);
                     break;
@@ -340,4 +368,16 @@ public class Equipo extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private String Escapar_html(String texto) {
+        return (texto == null) ? "" : texto.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;");
+    }
+
+    /**
+     * Los SP se invocan concatenando texto; se escapan comilla simple y barra
+     * invertida para que el asunto/descripción no rompa la sentencia.
+     */
+    private String Escapar_sql(String texto) {
+        return (texto == null) ? "" : texto.replace("\\", "\\\\").replace("'", "''");
+    }
 }

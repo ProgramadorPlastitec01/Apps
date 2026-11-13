@@ -408,6 +408,26 @@ public class Tag_alertas extends TagSupport {
                     out.print("swal('Sin permiso','No puede realizar esta acción porque no es el usuario asignado a la OT en este estado.','warning');");
                     out.print("</script>");
                 }
+                if (pageContext.getRequest().getAttribute("Alerta").toString().equals("Sin_permiso_rol")) {
+                    out.print("<script language='javascript' type='text/javascript'>");
+                    out.print("swal('Sin permiso','Su rol no tiene permiso para realizar esta acción.','warning');");
+                    out.print("</script>");
+                }
+                if (pageContext.getRequest().getAttribute("Alerta").toString().equals("Inactivar_equipo")) {
+                    out.print("<script language='javascript' type='text/javascript'>");
+                    out.print("swal('Correcto','El equipo se inactivó y se registró la nota con el motivo de la inactivación.','success');");
+                    out.print("</script>");
+                }
+                if (pageContext.getRequest().getAttribute("Alerta").toString().equals("Inactivar_equipo_sin_datos")) {
+                    out.print("<script language='javascript' type='text/javascript'>");
+                    out.print("swal('Datos incompletos','Para inactivar el equipo debe diligenciar el asunto y la descripción del motivo.','warning');");
+                    out.print("</script>");
+                }
+                if (pageContext.getRequest().getAttribute("Alerta").toString().equals("Error_inactivar_equipo")) {
+                    out.print("<script language='javascript' type='text/javascript'>");
+                    out.print("swal('Error','No fue posible inactivar el equipo o registrar la nota de trazabilidad. El equipo no fue inactivado.','error');");
+                    out.print("</script>");
+                }
                 if (pageContext.getRequest().getAttribute("Alerta").toString().equals("Firma_OT")) {
                     String var = pageContext.getRequest().getAttribute("var1").toString();
                     String var1 = pageContext.getRequest().getAttribute("var2").toString();

@@ -128,7 +128,7 @@ public class Tag_inicio extends TagSupport {
                     out.print("<td align='center'>" + obj_ot[9] + "</td>");
                     out.print("<td align='center'>" + obj_ot[10] + "</td>");
                     out.print("<td align='center' " + ((act_pendientes > 0) ? "style='color:red; font-weight:bold;'" : "") + ">" + act_pendientes + "</td>");
-                    out.print("<td align='center'><span onclick=\"location.href='Orden?opc=" + ((estado_ot > 1) ? 5 : 3) + "&Id_orden=" + obj_ot[0] + "'\" class='far fa-file-alt fa-size_small' title='Ver OT'></span></td>");
+                    out.print("<td align='center'><span onclick=\"location.href='" + Url_ot(obj_ot[0], obj_ot[2], estado_ot > 1) + "'\" class='far fa-file-alt fa-size_small' title='Ver OT'></span></td>");
                     out.print("</tr>");
                 }
                 out.print("</tbody>");
@@ -180,7 +180,7 @@ public class Tag_inicio extends TagSupport {
                         out.print("<td>" + ((obj_g[8] != null) ? obj_g[8] : "N/A") + "</td>");
                         out.print("<td>" + ((obj_g[9] != null) ? obj_g[9] : "N/A") + "</td>");
                         out.print("<td>" + ((obj_g[10] != null) ? obj_g[10] : "N/A") + "</td>");
-                        out.print("<td align='center'><span onclick=\"location.href='Orden?opc=5&Id_orden=" + obj_g[0] + "'\" class='far fa-file-alt fa-size_small' title='Ver OT'></span></td>");
+                        out.print("<td align='center'><span onclick=\"location.href='" + Url_ot(obj_g[0], obj_g[3], !"Programado".equals(String.valueOf(obj_g[6]))) + "'\" class='far fa-file-alt fa-size_small' title='Ver OT'></span></td>");
                         out.print("</tr>");
                     }
                     out.print("</tbody>");
@@ -249,5 +249,17 @@ public class Tag_inicio extends TagSupport {
         }
 
         return super.doStartTag();
+    }
+
+    /**
+     * Las OT de equipo (tipo 1, 2, 5) se abren con opc 3/5; las de zona (3) y
+     * general (4) con opc 11/13 y su Id_tipo_mtto, si no la vista queda en blanco.
+     */
+    private String Url_ot(Object id_orden, Object id_tipo_mtto, boolean emitida) {
+        int tipo = Integer.parseInt(id_tipo_mtto.toString());
+        if (tipo == 3 || tipo == 4) {
+            return "Orden?opc=" + (emitida ? 13 : 11) + "&Id_orden=" + id_orden + "&Id_tipo_mtto=" + tipo;
+        }
+        return "Orden?opc=" + (emitida ? 5 : 3) + "&Id_orden=" + id_orden;
     }
 }

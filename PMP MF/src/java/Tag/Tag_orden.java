@@ -1265,6 +1265,17 @@ public class Tag_orden extends TagSupport {
                         boolean es_verificador_asignado = nombre_rol.equals("Administrador") || (obj_orden[8] != null && obj_orden[8].toString().trim().equalsIgnoreCase(nombre_usuario.trim()));
                         boolean es_aprobador_asignado = nombre_rol.equals("Administrador") || (obj_orden[37] != null && obj_orden[37].toString().trim().equalsIgnoreCase(nombre_usuario.trim()));
                         boolean puede_aprobar_recibido = es_aprobador_asignado || (autoclave_equipo && es_ejecutor_asignado);
+                        // Permisos ligados al rol y al usuario asignado a la OT
+                        boolean es_asignado_ot = es_ejecutor_asignado || es_verificador_asignado || es_aprobador_asignado;
+                        boolean puede_ejecutar = estado_ot <= 2 && (nombre_rol.equals("Administrador") || nombre_rol.equals("Tecnico")) && es_ejecutor_asignado;
+                        boolean puede_avanzar_tecnico = (nombre_rol.equals("Administrador") || nombre_rol.equals("Tecnico")) && es_ejecutor_asignado
+                                && (estado_ot == 2 || (id_tipo_mtto == 1 && (estado_ot == 3 || estado_ot == 4)));
+                        boolean puede_avanzar_gestion = estado_ot >= 3 && (nombre_rol.equals("Administrador")
+                                || (nombre_rol.equals("Coordinador") && estado_ot == 3 && es_verificador_asignado)
+                                || ((nombre_rol.equals("Asistente") || nombre_rol.equals("Jefe_Mtto")) && estado_ot >= 4 && puede_aprobar_recibido));
+                        boolean puede_avanzar = puede_avanzar_tecnico || puede_avanzar_gestion;
+                        boolean puede_devolver = !nombre_rol.equals("Tecnico") && !nombre_rol.equals("Consulta")
+                                && ((estado_ot == 3 && es_verificador_asignado) || (estado_ot >= 4 && es_aprobador_asignado));
                         registro = ((id_tipo_mtto == 1) ? obj_orden[30].toString() : ((id_tipo_mtto == 2) ? obj_orden[31].toString() : obj_orden[32].toString()));
                         lst_registro = jpacrgt.Traer_registro_ot(registro, obj_orden[5].toString());
                         if (lst_registro != null) {
@@ -1297,11 +1308,11 @@ public class Tag_orden extends TagSupport {
                         out.print("&nbsp;&nbsp;&nbsp;<span class='fas fa-hard-hat fa-size_small' data-toggle=\"modal\" data-target=\"#SeguridadModal\" title='Instrucciones de Seguridad'></span>");
                         if (obj_orden[36] == null) {
                             if (estado_ot >= 3 && estado_ot <= 5) {
-                                if (!nombre_rol.equals("Tecnico") && !nombre_rol.equals("Consulta")) {
+                                if (puede_devolver) {
                                     out.print("&nbsp;&nbsp;&nbsp;<span class='fas fa-exchange-alt fa-size_small' onclick='Devolver(" + id_equipo + "," + id_orden + "," + estado_ot + "," + 1 + ")'  title='Devolver'></span>");
                                 }
                             }
-                            if (estado_ot <= 5) {
+                            if (estado_ot <= 5 && es_asignado_ot) {
                                 if (id_equipo == 47 || id_equipo == 37 || id_equipo == 48) {
                                     if (id_tipo_mtto == 1) {
                                         out.print("&nbsp;&nbsp;&nbsp;<span class='fa fa-save fa-size_small' onclick=\"ConstruirDatosAutoclaveMM('" + obj_orden_detalle[3] + "')\"></span>");
@@ -1312,7 +1323,7 @@ public class Tag_orden extends TagSupport {
                                     out.print("&nbsp;&nbsp;&nbsp;<span class='fa fa-save fa-size_small' onclick=\"ConstruirDatos('" + obj_orden_detalle[3] + "')\"></span>");
                                 }
                             }
-                            if (estado_ot <= 5) {
+                            if (estado_ot <= 5 && puede_avanzar) {
                                 out.print("&nbsp;&nbsp;&nbsp;<span class='fas fa-ellipsis-h fa-size_small' data-toggle=\"modal\" data-target=\"#ProgressBarModal\" title='Gestión OT'></span>");
                             }
                         }
@@ -1436,7 +1447,7 @@ public class Tag_orden extends TagSupport {
                                     }
                                     out.print("<i style='display:none' id='Txt_ejecuto_" + obj_parametros[0] + "'>" + valor_ejecuto + "</i>");
                                     if (id_tipo_mtto > 1) {
-                                        out.print("<td valign='top' id='Txt_observacion_" + obj_parametros[0] + "' contenteditable='" + ((estado_ot >= 3) ? "false" : "true") + "'>" + valor_observacion + "</td>");
+                                        out.print("<td valign='top' id='Txt_observacion_" + obj_parametros[0] + "' contenteditable='" + ((puede_ejecutar) ? "true" : "false") + "'>" + valor_observacion + "</td>");
                                     } else {
                                         out.print("<i style='display:none' id='Txt_observacion_" + obj_parametros[0] + "'>" + valor_observacion + "</i>");
                                     }
@@ -1459,7 +1470,13 @@ public class Tag_orden extends TagSupport {
                                 out.print("<table class='table2' style='font-size:12px; width:100%;margin:0px'>");
                                 out.print("<tr>");
                                 out.print("<td aling='center'>Indique con una (x) el estado del ciclo en el momento de la verificación del equipo</td>");
-                                if (obj_orden_detalle[16] != null) {
+                                if (!puede_ejecutar) {
+                                    int ver_equipo = (obj_orden_detalle[16] != null) ? Integer.parseInt(obj_orden_detalle[16].toString()) : 0;
+                                    out.print("<td>Esterilización</td>");
+                                    out.print("<td align='center'>" + ((ver_equipo == 1) ? "X" : "&nbsp;&nbsp;&nbsp;") + "</td>");
+                                    out.print("<td>Enfriamiento</td>");
+                                    out.print("<td align='center'>" + ((ver_equipo == 2) ? "X" : "&nbsp;&nbsp;&nbsp;") + "</td>");
+                                } else if (obj_orden_detalle[16] != null) {
                                     if (estado_ot >= 3) {
                                         out.print("<td>Esterilización</td>");
                                         out.print("<td align='center'>" + ((Integer.parseInt(obj_orden_detalle[16].toString()) == 1) ? "X" : "&nbsp;&nbsp;&nbsp;") + "</td>");
@@ -1673,7 +1690,7 @@ public class Tag_orden extends TagSupport {
                                     }
                                     out.print("<i style='display:none' id='Txt_ejecuto_" + obj_parametros[0] + "'>" + valor_ejecuto + "</i>");
                                     if (id_tipo_mtto > 1) {
-                                        out.print("<td valign='top' id='Txt_observacion_" + obj_parametros[0] + "' contenteditable='" + ((estado_ot >= 3) ? "false" : "true") + "'>" + valor_observacion + "</td>");
+                                        out.print("<td valign='top' id='Txt_observacion_" + obj_parametros[0] + "' contenteditable='" + ((puede_ejecutar) ? "true" : "false") + "'>" + valor_observacion + "</td>");
                                     } else {
                                         out.print("<i style='display:none' id='Txt_observacion_" + obj_parametros[0] + "'>" + valor_observacion + "</i>");
                                     }
@@ -1731,10 +1748,10 @@ public class Tag_orden extends TagSupport {
                                 out.print("<td style='color: #fff;background-color:#4e73df;border: 1px solid #fff;' align='center' colspan='5'>NOVEDADES GENERALES</td>");
                                 out.print("</tr>");
                                 out.print("<tr>");
-                                out.print("<td id='Td_pendientes_ot' colspan='5' contenteditable='" + ((estado_ot <= 5 && (nombre_rol.equals("Administrador") || nombre_rol.equals("Tecnico") || nombre_rol.equals("Coordinador"))) ? "true" : "false") + "' valign='top' style='height:100px;padding:20px'>" + obj_orden_detalle[7] + "</td>");
+                                out.print("<td id='Td_pendientes_ot' colspan='5' contenteditable='" + ((estado_ot <= 5 && es_asignado_ot && (nombre_rol.equals("Administrador") || nombre_rol.equals("Tecnico") || nombre_rol.equals("Coordinador"))) ? "true" : "false") + "' valign='top' style='height:100px;padding:20px'>" + obj_orden_detalle[7] + "</td>");
                                 out.print("</tr>");
                                 out.print("<tr style='display:none'>");
-                                out.print("<td id='Td_descripcion_ot' colspan='5' contenteditable='" + ((estado_ot <= 5 && (nombre_rol.equals("Administrador") || nombre_rol.equals("Tecnico") || nombre_rol.equals("Coordinador"))) ? "true" : "false") + "' valign='top' style='height:100px;;padding:20px'>" + obj_orden_detalle[8] + "</td>");
+                                out.print("<td id='Td_descripcion_ot' colspan='5' contenteditable='" + ((estado_ot <= 5 && es_asignado_ot && (nombre_rol.equals("Administrador") || nombre_rol.equals("Tecnico") || nombre_rol.equals("Coordinador"))) ? "true" : "false") + "' valign='top' style='height:100px;;padding:20px'>" + obj_orden_detalle[8] + "</td>");
                                 out.print("</tr>");
 //</editor-fold>
                                 //<editor-fold defaultstate="collapsed" desc="REPUESTOS">
@@ -1750,7 +1767,7 @@ public class Tag_orden extends TagSupport {
                                 out.print("</tr>");
                                 out.print("<tbody id='Tr_respuestos_ot'>");
                                 if (obj_orden_detalle[9].toString().length() > 0) {
-                                    if (estado_ot >= 3) {
+                                    if (estado_ot >= 3 || !puede_ejecutar) {
                                         out.print(obj_orden_detalle[9].toString().replace("true", "false"));
                                     } else {
                                         out.print(obj_orden_detalle[9]);
@@ -1807,8 +1824,8 @@ public class Tag_orden extends TagSupport {
                                 out.print("</tr>");
                                 out.print("<tr>");
                                 out.print("<td aling='center' style='height:50px;width:33%'>" + ((obj_orden[9] != null) ? "<u>" + obj_orden[8] + " " + obj_orden[9] + "</u>" : "<i>___________________________________________</i>") + "<br /><b>Verifico Mantenimiento</b></td>");
-                                out.print("<td aling='center' style='height:50px;width:33%' " + ((estado_ot == 4) ? "data-toggle=\"modal\" data-target=\"#SignaturePRFModal\"" : "style='cursor:not-allowed'") + ">" + ((obj_orden[11] != null) ? "<u>" + obj_orden[10] + " " + obj_orden[11] + "</u>" : "<i>___________________________________________</i>") + "<br /><b>Recibio Producción</b></td>");
-                                out.print("<td aling='center' style='height:50px;width:34%' " + ((estado_ot == 4) ? "data-toggle=\"modal\" data-target=\"#SignatureGCModal\"" : "style='cursor:not-allowed'") + ">" + ((obj_orden[13] != null) ? "<u>" + obj_orden[12] + " " + obj_orden[13] + "</u>" : "<i>___________________________________________</i>") + "<br /><b>Recibio Calidad</b></td>");
+                                out.print("<td aling='center' style='height:50px;width:33%' " + ((estado_ot == 4 && es_asignado_ot) ? "data-toggle=\"modal\" data-target=\"#SignaturePRFModal\"" : "style='cursor:not-allowed'") + ">" + ((obj_orden[11] != null) ? "<u>" + obj_orden[10] + " " + obj_orden[11] + "</u>" : "<i>___________________________________________</i>") + "<br /><b>Recibio Producción</b></td>");
+                                out.print("<td aling='center' style='height:50px;width:34%' " + ((estado_ot == 4 && es_asignado_ot) ? "data-toggle=\"modal\" data-target=\"#SignatureGCModal\"" : "style='cursor:not-allowed'") + ">" + ((obj_orden[13] != null) ? "<u>" + obj_orden[12] + " " + obj_orden[13] + "</u>" : "<i>___________________________________________</i>") + "<br /><b>Recibio Calidad</b></td>");
                                 out.print("</tr>");
                                 out.print("</table>");
 //</editor-fold>
@@ -2431,6 +2448,14 @@ public class Tag_orden extends TagSupport {
                     boolean es_ejecutor_asignado = nombre_rol.equals("Administrador") || (obj_orden[6] != null && obj_orden[6].toString().trim().equalsIgnoreCase(nombre_usuario.trim()));
                     boolean es_verificador_asignado = nombre_rol.equals("Administrador") || (obj_orden[8] != null && obj_orden[8].toString().trim().equalsIgnoreCase(nombre_usuario.trim()));
                     boolean es_aprobador_asignado = nombre_rol.equals("Administrador") || (obj_orden[20] != null && obj_orden[20].toString().trim().equalsIgnoreCase(nombre_usuario.trim()));
+                    // Permisos ligados al rol y al usuario asignado a la OT
+                    boolean puede_ejecutar = estado_ot <= 2 && (nombre_rol.equals("Administrador") || nombre_rol.equals("Tecnico")) && es_ejecutor_asignado;
+                    boolean puede_avanzar = ((nombre_rol.equals("Administrador") || nombre_rol.equals("Tecnico")) && es_ejecutor_asignado && estado_ot == 2)
+                            || (estado_ot >= 3 && (nombre_rol.equals("Administrador")
+                            || (nombre_rol.equals("Coordinador") && estado_ot == 3 && es_verificador_asignado)
+                            || ((nombre_rol.equals("Asistente") || nombre_rol.equals("Jefe_Mtto")) && estado_ot >= 4 && es_aprobador_asignado)));
+                    boolean puede_devolver = !nombre_rol.equals("Tecnico") && !nombre_rol.equals("Consulta")
+                            && ((estado_ot == 3 && es_verificador_asignado) || (estado_ot >= 4 && es_aprobador_asignado));
                     lst_orden_detalle = jpacotd.Consulta_detalle_orden_trabajo(id_orden);
                     Object[] obj_orden_detalle = (Object[]) lst_orden_detalle.get(0);
                     arg_grupos_ot = obj_orden_detalle[2].toString().replace("][", "_/_").replace("[", "").replace("]", "").split("_/_");
@@ -2464,15 +2489,15 @@ public class Tag_orden extends TagSupport {
                     out.print("<div style='float:right'>");
                     out.print("<span class='fas fa-print fa-size_small' onclick=\"Imprimir();\" title='Imprimir'></span>");
                     out.print("&nbsp;&nbsp;&nbsp;<span class='fas fa-hard-hat fa-size_small' data-toggle=\"modal\" data-target=\"#SeguridadModal\" title='Instrucciones de Seguridad'></span>");
-                    if (estado_ot <= 5) {
+                    if (estado_ot <= 5 && puede_ejecutar) {
                         out.print("&nbsp;&nbsp;&nbsp;<span class='fa fa-save fa-size_small' onclick=\"ConstruirDatos('" + obj_orden_detalle[3] + "')\"></span>");
                     }
                     if (estado_ot >= 3 && estado_ot <= 5) {
-                        if (!nombre_rol.equals("Tecnico") && !nombre_rol.equals("Consulta")) {
+                        if (puede_devolver) {
                             out.print("&nbsp;&nbsp;&nbsp;<span class='fas fa-exchange-alt fa-size_small' onclick='DevolverOTGZ(" + id_equipo + "," + id_orden + "," + estado_ot + "," + id_tipo_mtto + "," + 2 + ")'  title='Devolver'></span>");
                         }
                     }
-                    if (estado_ot <= 5) {
+                    if (estado_ot <= 5 && puede_avanzar) {
                         out.print("&nbsp;&nbsp;&nbsp;<span class='fas fa-ellipsis-h fa-size_small' data-toggle=\"modal\" data-target=\"#ProgressBarModal\" title='Gestión OT'></span>");
                     }
                     out.print("</div>");
@@ -2578,7 +2603,7 @@ public class Tag_orden extends TagSupport {
                                 out.print("<td align='center'>" + ((valor_ejecuto.equals("N/A")) ? "X" : "") + "</td>");
                             }
                             out.print("<i style='display:none' id='Txt_ejecuto_" + obj_parametros[0] + "'>" + valor_ejecuto + "</i>");
-                            out.print("<td valign='top' id='Txt_observacion_" + obj_parametros[0] + "' contenteditable='" + ((estado_ot >= 3) ? "false" : "true") + "'>" + valor_observacion + "</td>");
+                            out.print("<td valign='top' id='Txt_observacion_" + obj_parametros[0] + "' contenteditable='" + ((puede_ejecutar) ? "true" : "false") + "'>" + valor_observacion + "</td>");
                             out.print("</tr>");
                         }
                     }
