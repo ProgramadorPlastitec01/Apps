@@ -488,6 +488,7 @@ public class Seguimiento extends HttpServlet {
                                 }
 
                             } catch (Exception e) {
+                                System.out.println("GLPI no disponible al inactivar usuario " + documento + ": " + e.getMessage());
                             }
                         } else {
                             request.setAttribute("Alerta", "Error_retiro");

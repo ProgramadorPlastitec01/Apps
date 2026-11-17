@@ -33,6 +33,8 @@ public class GLPISession {
         URL url = new URL(urlBase + "/initSession");
 
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setConnectTimeout(GLPIClient.CONNECT_TIMEOUT_MS);
+        conn.setReadTimeout(GLPIClient.READ_TIMEOUT_MS);
 
         conn.setRequestMethod("POST");
         conn.setRequestProperty("App-Token", appToken);

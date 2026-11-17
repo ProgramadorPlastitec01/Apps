@@ -125,20 +125,21 @@ public class Personal extends HttpServlet {
                         if (proceso) {
                             request.setAttribute("Alerta", "Registro_empleado");
                             request.setAttribute("var1", nombres + " " + apellidos);
-                            String res = Glpi_Opc.crearUsuario(codigo, nombres, apellidos, "2026");
-
                             //<editor-fold defaultstate="collapsed" desc="REGISTER USER GLPI">
+                            // Si GLPI esta caido no debe afectar el registro en SIRH
                             int idGLPI = 0;
                             try {
+                                String res = Glpi_Opc.crearUsuario(codigo, nombres, apellidos, "2026");
                                 Pattern pattern = Pattern.compile("\"id\":(\\d+)");
                                 Matcher matcher = pattern.matcher(res);
                                 if (matcher.find()) {
                                     idGLPI = Integer.parseInt(matcher.group(1));
                                 }
                                 jpacpsn.Registrar_id_glpi(documento, idGLPI);
+                                System.out.print(res);
                             } catch (Exception e) {
+                                System.out.println("GLPI no disponible al crear usuario " + codigo + ": " + e.getMessage());
                             }
-                            System.out.print(res);
                             //</editor-fold>
                             
                             request.getRequestDispatcher("Personal?opc=4&mnu=22&abc=" + apellidos.charAt(0) + "&Txt_documento=").forward(request, response);
@@ -200,6 +201,7 @@ public class Personal extends HttpServlet {
                                     System.out.print(res);
                                 }
                             } catch (Exception e) {
+                                System.out.println("GLPI no disponible al editar usuario " + documento + ": " + e.getMessage());
                             }
                             //</editor-fold>
 

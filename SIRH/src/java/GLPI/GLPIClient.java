@@ -20,11 +20,31 @@ public class GLPIClient {
     GLPISession session = new GLPISession();
     String sessionToken;
 
-    public GLPIClient() throws Exception {
-        this.sessionToken = session.initSession();
+    // Tiempos maximos de espera para no bloquear SIRH si GLPI no responde
+    static final int CONNECT_TIMEOUT_MS = 5000;
+    static final int READ_TIMEOUT_MS = 10000;
+
+    /**
+     * No abre la sesion con GLPI al construir el objeto: si GLPI esta caido,
+     * los servlets de SIRH deben seguir funcionando. La sesion se inicia de
+     * forma diferida en la primera llamada real a la API.
+     */
+    public GLPIClient() {
+    }
+
+    private void asegurarSesion() throws Exception {
+        if (sessionToken == null || sessionToken.isEmpty()) {
+            try {
+                sessionToken = session.initSession();
+            } catch (Exception e) {
+                sessionToken = null;
+                throw new Exception("GLPI no disponible: " + e.getMessage(), e);
+            }
+        }
     }
 
     private HttpURLConnection createConnection(String endpoint, String method) throws Exception {
+        asegurarSesion();
         List lst_conf = config.Consultar_Configuracion_glpi("GlpiData");
 
         if (lst_conf != null) {
@@ -38,6 +58,8 @@ public class GLPIClient {
         URL url = new URL(urlBase + endpoint);
 
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setConnectTimeout(CONNECT_TIMEOUT_MS);
+        conn.setReadTimeout(READ_TIMEOUT_MS);
 
         conn.setRequestMethod(method);
 
