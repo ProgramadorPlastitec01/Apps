@@ -586,7 +586,7 @@ public class Visual extends TagSupport {
                             Html = Html.replace("XQuatityGenX", "<span  class='editable' data-field='Quantity' contenteditable='true'>" + cantidadTags + " UNIDADES</span>");
                             Html = Html.replace("<h3 id=\"consValue\" class=\"mb-0\">XConsX</h3>", "<h3 id=\"consValue\" class=\"mb-0 editable\" contenteditable='true'>CC----</h3>");
                             Html = Html.replace("XSampleX", "<span  class='editable pending' contenteditable='true'>----</span>");
-                            Html = Html.replace("XCodeSpeedX", "<span  class='editable pending' contenteditable='true'>N/A</span>");
+                            Html = Html.replace("XCodeSpeedX", "<span  class='editable pending' data-field='CodeSpeed' contenteditable='true'>N/A</span>");
                             Message = "No se encuentra información en Factory por orden, producto y lote; se completó la cabecera con datos de Tags, favor verifique";
                             // ✅ Ejecutar automáticamente cuando todo esté cargado
                             out.print("<script>"
@@ -609,7 +609,7 @@ public class Visual extends TagSupport {
                             Html = Html.replace("XQuatityGenX", "<span  class='editable pending' data-field='Quantity' contenteditable='true'>---- UNIDADES</span>");
                             Html = Html.replace("<h3 id=\"consValue\" class=\"mb-0\">XConsX</h3>", "<h3 id=\"consValue\" class=\"mb-0 editable\" contenteditable='true'>CC----</h3>");
                             Html = Html.replace("XSampleX", "<span  class='editable pending' contenteditable='true'>----</span>");
-                            Html = Html.replace("XCodeSpeedX", "<span  class='editable pending' contenteditable='true'>----</span>");
+                            Html = Html.replace("XCodeSpeedX", "<span  class='editable pending' data-field='CodeSpeed' contenteditable='true'>----</span>");
 
                             Message = "No se encuentra información en Factory ni en Tags por orden, producto y lote, favor verifique";
                             // ✅ Ejecutar automáticamente cuando todo esté cargado

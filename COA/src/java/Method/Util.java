@@ -80,25 +80,65 @@ public class Util {
             if (valor == null || valor.trim().isEmpty()) {
                 continue;
             }
+            // Acepta comillas simples (HTML recién generado) y dobles (HTML
+            // que el navegador re-serializa al guardar desde el editor), y
+            // cualquier orden de atributos.
             Pattern p = Pattern.compile(
-                    "<span(\\s+class='([^']*)')?\\s+data-field='" + Pattern.quote(campo) + "'([^>]*)>([^<]*)</span>");
+                    "<span\\b([^>]*\\bdata-field\\s*=\\s*(['\"])" + Pattern.quote(campo) + "\\2[^>]*)>([^<]*)</span>",
+                    Pattern.CASE_INSENSITIVE);
             Matcher m = p.matcher(html);
-            if (!m.find()) {
+            int inicio = -1, fin = -1;
+            String atributos = null, contenido = null;
+            if (m.find()) {
+                inicio = m.start();
+                fin = m.end();
+                atributos = m.group(1);
+                contenido = m.group(3);
+            } else if ("CodeSpeed".equals(campo)) {
+                // Certificados generados desde Tags antes de que el span del
+                // código de cliente llevara data-field: se ubica por su rótulo.
+                int rotulo = html.indexOf("CUSTOMER CODE");
+                if (rotulo >= 0) {
+                    Matcher mc = Pattern.compile("<span\\b([^>]*)>([^<]*)</span>").matcher(html);
+                    if (mc.find(rotulo) && mc.start() - rotulo < 400 && !mc.group(1).contains("data-field")) {
+                        inicio = mc.start();
+                        fin = mc.end();
+                        atributos = mc.group(1) + " data-field='CodeSpeed'";
+                        contenido = mc.group(2);
+                    }
+                }
+            }
+            if (atributos == null) {
                 continue;
             }
-            String claseActual = m.group(2) == null ? "" : m.group(2);
-            if (!claseActual.matches(".*\\bpending\\b.*")) {
+            Matcher mClase = Pattern.compile("\\bclass\\s*=\\s*(['\"])([^'\"]*)\\1").matcher(atributos);
+            String claseActual = mClase.find() ? mClase.group(2) : "";
+            boolean esPendiente = claseActual.matches(".*\\bpending\\b.*") || esValorVacio(contenido);
+            if (!esPendiente) {
                 continue;
             }
             String claseLimpia = claseActual.replaceAll("\\s*\\bpending\\b\\s*", " ").trim();
             if (claseLimpia.isEmpty()) {
                 claseLimpia = "editable";
             }
-            String nuevoSpan = "<span class='" + claseLimpia + "' data-field='" + campo + "'" + m.group(3) + ">" + valor + "</span>";
-            html = html.substring(0, m.start()) + nuevoSpan + html.substring(m.end());
+            String atributosNuevos = mClase.find(0)
+                    ? atributos.substring(0, mClase.start()) + "class='" + claseLimpia + "'" + atributos.substring(mClase.end())
+                    : " class='" + claseLimpia + "'" + atributos;
+            String nuevoSpan = "<span" + atributosNuevos + ">" + escaparHtml(valor.trim()) + "</span>";
+            html = html.substring(0, inicio) + nuevoSpan + html.substring(fin);
             actualizados++;
         }
         return new ResultadoActualizacionPendientes(html, actualizados);
+    }
+
+    // Contenido que la vista trata como "sin dato" (ver isEmpty en Visual.jsp).
+    private static boolean esValorVacio(String contenido) {
+        String t = contenido == null ? "" : contenido.replace("&nbsp;", " ").trim();
+        return t.isEmpty() || t.equals("-") || t.matches("-{2,}");
+    }
+
+    private static String escaparHtml(String s) {
+        return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
     }
     // Convierte "[a /// b /// c]" en {"a","b","c"} (los campos vienen unidos
     // con " /// ", así que hay que recortar el espacio que queda pegado a
