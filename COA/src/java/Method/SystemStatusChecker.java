@@ -47,7 +47,11 @@ public class SystemStatusChecker {
         resultados.add(checkMySql("Control Fórmulas", "ServerControlFormulas", "com.mysql.jdbc.Driver"));
         resultados.add(checkMySql("Firmas digitales", "ServerSignature", "com.mysql.jdbc.Driver"));
         resultados.addAll(checkSqlServerPlastitec());
-        resultados.add(checkOfficePlatform());
+        CheckResult office = checkOfficePlatform();
+        resultados.add(office);
+        if (office.ok) {
+            resultados.add(checkOfficeFileIds());
+        }
         return resultados;
     }
 
@@ -162,6 +166,17 @@ public class SystemStatusChecker {
             return new CheckResult(nombre, valido, valido ? "Conexión establecida." : "La conexión no respondió a tiempo.", System.currentTimeMillis() - inicio);
         } catch (Exception ex) {
             return new CheckResult(nombre, false, ex.getMessage(), System.currentTimeMillis() - inicio);
+        }
+    }
+
+    /** Verifica (y corrige por UUID) que los office_file_id de BD apunten al archivo correcto. */
+    private static CheckResult checkOfficeFileIds() {
+        long inicio = System.currentTimeMillis();
+        try {
+            OfficeFileIdSync.Resultado r = OfficeFileIdSync.sincronizar();
+            return new CheckResult("Office Platform (archivos y firmas)", r.isOk(), r.resumen(), System.currentTimeMillis() - inicio);
+        } catch (Exception ex) {
+            return new CheckResult("Office Platform (archivos y firmas)", false, ex.getMessage(), System.currentTimeMillis() - inicio);
         }
     }
 

@@ -119,9 +119,72 @@ public class OfficePlatformService {
         return u;
     }
 
+    // URL del servidor para la que ya se sincronizaron los office_file_id
+    // guardados en BD (ver OfficeFileIdSync).
+    private static volatile String urlSincronizada = null;
+
     public static String getServerUrl() {
         asegurarConfiguracion();
+        sincronizarIdsSiCambioServidor();
         return SERVER_URL;
+    }
+
+    /**
+     * Si el servidor cambió (o es el primer uso tras arrancar), re-mapea los
+     * office_file_id de BD por UUID antes de cualquier descarga/borrado: al
+     * migrar Office Platform los ids se renumeran y un id viejo puede
+     * apuntar a OTRO archivo.
+     */
+    private static void sincronizarIdsSiCambioServidor() {
+        String actual = SERVER_URL;
+        if (actual.equals(urlSincronizada)) {
+            return;
+        }
+        synchronized (OfficePlatformService.class) {
+            if (actual.equals(urlSincronizada)) {
+                return;
+            }
+            urlSincronizada = actual; // antes de sincronizar: evita recursión
+            try {
+                OfficeFileIdSync.Resultado r = OfficeFileIdSync.sincronizar();
+                System.out.println("[OfficePlatformService] Sincronizacion de ids con " + actual + ": " + r.resumen());
+            } catch (Exception ex) {
+                System.err.println("[OfficePlatformService] Error sincronizando ids por UUID: " + ex.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Busca el id actual de un archivo por su UUID (estable entre
+     * migraciones). La API no tiene consulta por UUID, así que se busca por
+     * nombre y se filtra por UUID. Devuelve null si no lo encuentra.
+     */
+    public static Long buscarIdPorUuid(String uuid, String nombreArchivo) throws IOException {
+        if (uuid == null || uuid.trim().isEmpty() || nombreArchivo == null || nombreArchivo.trim().isEmpty()) {
+            return null;
+        }
+        URL url = new URL(SERVER_URL + "/api/files/search?q=" + URLEncoder.encode(nombreArchivo.trim(), "UTF-8"));
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("X-Api-Key", API_KEY);
+        conn.setConnectTimeout(6000);
+        conn.setReadTimeout(10000);
+        int code = conn.getResponseCode();
+        if (code < 200 || code >= 300) {
+            leerStream(conn.getErrorStream());
+            throw new IOException("Búsqueda de '" + nombreArchivo + "' en Office Platform respondió HTTP " + code);
+        }
+        JsonObject json = JsonParser.parseString(leerStream(conn.getInputStream())).getAsJsonObject();
+        if (!json.has("data") || !json.get("data").isJsonArray()) {
+            return null;
+        }
+        for (JsonElement el : json.getAsJsonArray("data")) {
+            JsonObject f = el.getAsJsonObject();
+            if (f.has("uuid") && !f.get("uuid").isJsonNull() && uuid.trim().equalsIgnoreCase(f.get("uuid").getAsString())) {
+                return f.get("id").getAsLong();
+            }
+        }
+        return null;
     }
 
     public static String getApiKey() {
