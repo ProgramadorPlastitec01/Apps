@@ -35,6 +35,36 @@ public class BatchRecordManifest {
      *      contexts that don't have a ServletContext handy).
      */
     public static Map<String, Object> build(String orden, String lote, String cliente, String anio, String certificatesBasePath) throws Exception {
+        return build(orden, lote, cliente, anio, certificatesBasePath, true);
+    }
+
+    /**
+     * Fuente de cada documento del manifiesto (clave "fuente"), junto con su
+     * "codigo" (código del registro en el sistema de origen: tipo_registro /
+     * plantilla de Registros LAB, formato del certificado COA, etc.). Es lo
+     * que usa Method.BatchRecordChecklist para cruzar el manifiesto contra
+     * los ítems de la lista de verificación R-GC-094.
+     */
+    public static final String FUENTE_FISICO = "FISICO";
+    public static final String FUENTE_SOPORTE = "SOPORTE";
+    public static final String FUENTE_LAB_REGISTRO = "LAB_REGISTRO";
+    public static final String FUENTE_LAB_DESPEJE = "LAB_DESPEJE";
+    public static final String FUENTE_COA_CERTIFICADO = "COA_CERTIFICADO";
+    public static final String FUENTE_GL_ANEXO = "GL_ANEXO";
+    public static final String FUENTE_MANGA = "MANGA";
+    public static final String FUENTE_FORMULA = "FORMULA";
+
+    /** Logo de PLASTITEC como Data URI (null si no se pudo cargar), para otras portadas/HTML del Batch Record. */
+    public static String logoDataUri() {
+        return LOGO_DATA_URI;
+    }
+
+    /**
+     * @param incluirInspeccion false omite Inspección Manga y Control Fórmulas
+     *      (consultas remotas lentas que la lista de verificación no necesita).
+     */
+    public static Map<String, Object> build(String orden, String lote, String cliente, String anio, String certificatesBasePath,
+            boolean incluirInspeccion) throws Exception {
         LinkBatchRecord linkBatch = new LinkBatchRecord();
         CertificatesJpaController certJpa = new CertificatesJpaController();
 
@@ -56,7 +86,9 @@ public class BatchRecordManifest {
                     doc.put("nombre", archivo.getName());
                     doc.put("url", "FileDownloadProxyServlet?id=" + archivo.getId() + "&modo=inline");
                     doc.put("officeFileId", archivo.getOfficeFileId());
+                    doc.put("idFile", archivo.getId());
                     doc.put("categoria", "fisico");
+                    doc.put("fuente", FUENTE_FISICO);
                     listaDocumentos.add(doc);
                 }
             }
@@ -78,7 +110,9 @@ public class BatchRecordManifest {
                     doc.put("nombre", soporte.getName());
                     doc.put("url", "FileDownloadProxyServlet?id=" + soporte.getId() + "&modo=inline");
                     doc.put("officeFileId", soporte.getOfficeFileId());
+                    doc.put("idFile", soporte.getId());
                     doc.put("categoria", "soporte");
+                    doc.put("fuente", FUENTE_SOPORTE);
                     listaDocumentos.add(doc);
                 }
             }
@@ -96,6 +130,10 @@ public class BatchRecordManifest {
                     doc.put("nombre", arg[2]);
                     doc.put("url", arg[3]);
                     doc.put("categoria", "link");
+                    // arg[0] = "Link registro" / "Link Despeje" (consulta BatchRecordLAB en setting);
+                    // arg[1] = tipo_registro de la línea o código de la plantilla del despeje.
+                    doc.put("fuente", arg[0].toLowerCase().contains("despeje") ? FUENTE_LAB_DESPEJE : FUENTE_LAB_REGISTRO);
+                    doc.put("codigo", arg[1]);
                     listaDocumentos.add(doc);
                 }
             }
@@ -134,6 +172,8 @@ public class BatchRecordManifest {
                     doc.put("nombre", String.valueOf(arg[2]));
                     doc.put("url", String.valueOf(arg[3]));
                     doc.put("categoria", "coa");
+                    doc.put("fuente", FUENTE_COA_CERTIFICADO);
+                    doc.put("codigo", String.valueOf(arg[1]));
                     listaDocumentos.add(doc);
                 }
             }
@@ -160,10 +200,22 @@ public class BatchRecordManifest {
                         doc.put("archivo", archivoReal);
                         doc.put("url", "DownloadGL?File_name=" + java.net.URLEncoder.encode(archivoReal, "UTF-8"));
                         doc.put("categoria", "anexo");
+                        doc.put("fuente", FUENTE_GL_ANEXO);
+                        doc.put("codigo", arg[1]);
                         listaDocumentos.add(doc);
                     }
                 }
             }
+        }
+
+        if (!incluirInspeccion) {
+            Map<String, Object> resultado = new HashMap<String, Object>();
+            resultado.put("cliente", cliente != null ? cliente : "");
+            resultado.put("anio", anio != null ? anio : "");
+            resultado.put("orden", orden);
+            resultado.put("lote", lote);
+            resultado.put("documentos", listaDocumentos);
+            return resultado;
         }
 
         // 4. Resumen Estadístico Inspección Manga (ver consultarInspeccionManga).
@@ -287,6 +339,7 @@ public class BatchRecordManifest {
         }
         Map<String, Object> doc = new HashMap<String, Object>();
         doc.put("origen", "Inspección Manga");
+        doc.put("fuente", FUENTE_MANGA);
         doc.put("tipo", "Resumen Estadístico");
         doc.put("nombre", "Resumen Estadístico - Lote C " + lote.loteC);
         doc.put("categoria", "manga");
@@ -375,6 +428,7 @@ public class BatchRecordManifest {
             }
             Map<String, Object> doc = new HashMap<String, Object>();
             doc.put("origen", "Inspección Manga");
+            doc.put("fuente", FUENTE_MANGA);
             doc.put("tipo", "Registro de Despeje");
             doc.put("nombre", "Despeje - " + esc(despeje.get("fechaTurno")) + " - Turno " + esc(despeje.get("turnoProduccion"))
                     + " - Lote P " + esc(despeje.get("loteP")));
@@ -470,6 +524,7 @@ public class BatchRecordManifest {
         }
         Map<String, Object> doc = new HashMap<String, Object>();
         doc.put("origen", "Inspección Manga");
+        doc.put("fuente", FUENTE_MANGA);
         doc.put("tipo", "Registros de Cabecera");
         doc.put("nombre", "Registros de Cabecera - Lote C " + lote.loteC);
         doc.put("categoria", "manga");
@@ -653,6 +708,7 @@ public class BatchRecordManifest {
         for (Map<String, Object> registro : registros) {
             Map<String, Object> doc = new HashMap<String, Object>();
             doc.put("origen", "Control Fórmulas");
+            doc.put("fuente", FUENTE_FORMULA);
             doc.put("tipo", "R-PI-004");
             doc.put("nombre", "R-PI-004 - Lote " + esc(registro.get("loteGeneracion")) + " - " + esc(registro.get("nombreFormula")));
             doc.put("categoria", "manga");

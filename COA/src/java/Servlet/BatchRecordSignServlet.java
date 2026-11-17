@@ -2,6 +2,8 @@ package Servlet;
 
 import Controller.CertificateFileJpaController;
 import Controller.CertificateFileRow;
+import Method.BatchRecordChecklist;
+import Method.BatchRecordVersiones;
 import Method.OfficePlatformService;
 import Method.SignatureHistory;
 import Method.SignatureStorage;
@@ -128,6 +130,34 @@ public class BatchRecordSignServlet extends HttpServlet {
             response.sendRedirect(redirectBase + "&msg=br_sign_already");
             return;
         }
+        if (BatchRecordChecklist.esBorrador(fila.getName())) {
+            // Generado con la lista R-GC-094 incompleta: nunca se firma, se regenera.
+            response.sendRedirect(redirectBase + "&msg=br_sign_checklist_stale");
+            return;
+        }
+
+        // Lista de verificación R-GC-094 (requerimiento 1.1.U04): el Batch Record
+        // se puede generar con pendientes (borrador), pero no se aprueba hasta que
+        // todos los ítems obligatorios estén verificados o marcados N/A.
+        BatchRecordChecklist.Resultado checklist;
+        try {
+            checklist = BatchRecordChecklist.evaluar(cliente, anio, orden, lote);
+        } catch (Exception ex) {
+            getServletContext().log("No se pudo evaluar la lista de verificación R-GC-094 antes de firmar el lote " + lote, ex);
+            response.sendRedirect(redirectBase + "&msg=br_sign_error");
+            return;
+        }
+        if (checklist.aplica && checklist.pendientes > 0) {
+            response.sendRedirect(redirectBase + "&msg=br_sign_checklist_pending&pend=" + checklist.pendientes);
+            return;
+        }
+        // Solo se aprueba la versión vigente (la más reciente): una anterior ya
+        // quedó reemplazada por otra generada después.
+        BatchRecordVersiones.Estado versiones = BatchRecordVersiones.consultar(cliente, anio, orden, lote, checklist.aplica);
+        if (versiones.vigente == null || versiones.vigente.archivo.getId() != id) {
+            response.sendRedirect(redirectBase + "&msg=br_sign_outdated");
+            return;
+        }
 
         byte[] signatureBytes;
         try {
@@ -161,6 +191,14 @@ public class BatchRecordSignServlet extends HttpServlet {
             } catch (IOException ex) {
                 getServletContext().log("No se pudo descargar el Batch Record pendiente de Office Platform: " + archivo, ex);
                 response.sendRedirect(redirectBase + "&msg=file_not_found");
+                return;
+            }
+
+            // La lista ya está completa, pero el PDF a firmar debe haberse generado
+            // así: si su portada quedó INCOMPLETA (o es de antes de la lista), la
+            // aprobación avalaría un expediente desactualizado; se pide regenerarlo.
+            if (checklist.aplica && !"COMPLETA".equals(estadoListaPortada(origen))) {
+                response.sendRedirect(redirectBase + "&msg=br_sign_checklist_stale");
                 return;
             }
 
@@ -212,6 +250,36 @@ public class BatchRecordSignServlet extends HttpServlet {
     }
 
     /**
+     * Estado de la lista de verificación R-GC-094 impreso en la portada del
+     * PDF (ver BatchRecordPdfGenerateServlet.buildChecklistHtml): "COMPLETA",
+     * "INCOMPLETA" o "NINGUNA" (PDF anterior a la lista o ilegible). Se
+     * compara sin tildes para no depender de cómo extrae PDFBox la "Ó".
+     */
+    private String estadoListaPortada(File pdf) {
+        try (PDDocument doc = PDDocument.load(pdf)) {
+            PDFTextStripper stripper = new PDFTextStripper();
+            stripper.setStartPage(1);
+            stripper.setEndPage(Math.min(doc.getNumberOfPages(), MAX_PAGINAS_PORTADA));
+            String texto = sinTildes(stripper.getText(doc)).toUpperCase().replaceAll("\\s+", " ");
+            if (texto.contains(sinTildes(BatchRecordChecklist.PORTADA_INCOMPLETA))) {
+                return "INCOMPLETA";
+            }
+            if (texto.contains(sinTildes(BatchRecordChecklist.PORTADA_COMPLETA))) {
+                return "COMPLETA";
+            }
+            return "NINGUNA";
+        } catch (Exception ex) {
+            getServletContext().log("No se pudo leer el estado de la lista de verificación en la portada del Batch Record", ex);
+            return "NINGUNA";
+        }
+    }
+
+    private static String sinTildes(String texto) {
+        return java.text.Normalizer.normalize(texto == null ? "" : texto, java.text.Normalizer.Form.NFD)
+                .replaceAll("\\p{M}", "");
+    }
+
+    /**
      * Estampa la aprobación en la portada. Devuelve null si quedó firmado, o
      * el código de mensaje (msg) a mostrar si no se pudo.
      */
@@ -249,7 +317,7 @@ public class BatchRecordSignServlet extends HttpServlet {
             PDFont font = PDType1Font.HELVETICA;
 
             PDImageXObject signatureImage = PDImageXObject.createFromByteArray(doc, signatureBytes, signatureName);
-            float maxW = 210f, maxH = 52f;
+            float maxW = 210f, maxH = 44f;
             float escala = Math.min(maxW / signatureImage.getWidth(), maxH / signatureImage.getHeight());
             float imgW = signatureImage.getWidth() * escala;
             float imgH = signatureImage.getHeight() * escala;

@@ -235,14 +235,32 @@ public class CertificateFileJpaController implements Serializable {
             String name = fila[2] != null ? String.valueOf(fila[2]) : "";
             String mimeType = fila[3] != null ? String.valueOf(fila[3]) : null;
             Long sizeBytes = fila[4] != null ? Long.valueOf(toLong(fila[4])) : null;
-            long lastModified = (fila.length > 5 && fila[5] instanceof Timestamp)
-                    ? ((Timestamp) fila[5]).getTime() : System.currentTimeMillis();
+            long lastModified = fila.length > 5 ? toMillis(fila[5]) : System.currentTimeMillis();
             String uploadedById = (fila.length > 6 && fila[6] != null) ? String.valueOf(fila[6]) : null;
             String uploadedByName = (fila.length > 7 && fila[7] != null) ? String.valueOf(fila[7]) : null;
             Long idCertificate = (fila.length > 8 && fila[8] instanceof Number) ? Long.valueOf(((Number) fila[8]).longValue()) : null;
             resultado.add(new CertificateFileRow(id, officeFileId, name, mimeType, sizeBytes, lastModified, uploadedById, uploadedByName, idCertificate));
         }
         return resultado;
+    }
+
+    /**
+     * created_at según el driver: Connector/J 5 entrega java.sql.Timestamp,
+     * Connector/J 8 entrega java.time.LocalDateTime para DATETIME. Antes solo
+     * se reconocía Timestamp y con el driver 8 todas las fechas salían como
+     * "ahora".
+     */
+    private long toMillis(Object value) {
+        if (value instanceof Timestamp) {
+            return ((Timestamp) value).getTime();
+        }
+        if (value instanceof java.util.Date) {
+            return ((java.util.Date) value).getTime();
+        }
+        if (value instanceof java.time.LocalDateTime) {
+            return Timestamp.valueOf((java.time.LocalDateTime) value).getTime();
+        }
+        return System.currentTimeMillis();
     }
 
     private long toLong(Object value) {
