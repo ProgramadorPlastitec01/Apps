@@ -902,6 +902,15 @@ public class Visual extends TagSupport {
                                     }
                                 }
 
+                                // 1.7: nombre tal como está en Registros LAB (ensamble_3, o
+                                // ensamble_4 si el operario invirtió las casillas). Sin dato
+                                // válido se deja el texto de la plantilla ("ENSAMBLE BIG BORE").
+                                String nombre17 = ArgMaterials.length > 18 ? ArgMaterials[18].trim() : "";
+                                if (!nombre17.isEmpty() && !nombre17.equals("NULL")) {
+                                    Html = Html.replaceFirst(">\\s*ENSAMBLE BIG BORE\\s*<",
+                                            java.util.regex.Matcher.quoteReplacement(">" + escapeHtmlAttribute(nombre17) + "<"));
+                                }
+
                                 BatchLay = ArgMaterials[1];
                                 String[] ArgImP = {ArgMaterials[1], ArgMaterials[3], ArgMaterials[5], ArgMaterials[7], ArgMaterials[9], ArgMaterials[11], ArgMaterials[13], ArgMaterials[15]};
                                 int Cnt = 1;

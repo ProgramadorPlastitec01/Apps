@@ -641,6 +641,15 @@ public class ConnectionRegistrosLAB {
                         + "AND NOT (COALESCE(UPPER(r.ensamble_4), '') LIKE '%VIAS%' OR COALESCE(r.lote_ensamble_4, '') LIKE '6664-%')";
                 String loteBigBore = "CASE WHEN " + tresViasEnEnsamble3 + " THEN r.lote_ensamble_4 ELSE r.lote_ensamble_3 END";
                 String loteTresVias = "CASE WHEN " + tresViasEnEnsamble3 + " THEN r.lote_ensamble_3 ELSE r.lote_ensamble_4 END";
+                // Nombre del 1.7 tal como está en Registros LAB (ensamble_3, o ensamble_4 si
+                // están invertidos: misma casilla de donde sale el lote). Ej. "BIG BORE",
+                // "BB-2 BIG BORE CLAMP-ON-OFF".
+                String nombreBigBore = "TRIM(REPLACE(REPLACE(CASE WHEN " + tresViasEnEnsamble3
+                        + " THEN r.ensamble_4 ELSE r.ensamble_3 END, CHAR(13), ''), CHAR(10), ' '))";
+                String nombreBigBoreValido = "COALESCE(d2.`Nombre BIG BORE`, '') <> '' "
+                        + "AND UPPER(d2.`Nombre BIG BORE`) NOT IN ('N/A', 'NA') "
+                        + "AND UPPER(d2.`Nombre BIG BORE`) NOT LIKE 'INGRESAR%' "
+                        + "AND d2.`Nombre BIG BORE` NOT REGEXP '^[0-9]{4}-'";
                 String Qry
                         = "WITH registros_base AS ( "
                         + "    SELECT  "
@@ -659,6 +668,7 @@ public class ConnectionRegistrosLAB {
                         + "        r.lote_ensamble_2 AS `Lote INYECCION`, "
                         + "        SUBSTRING(" + loteBigBore + ", 1, 4) AS `ENSAMBLE BIG BORE`, "
                         + "        " + loteBigBore + " AS `Lote BIG BORE`, "
+                        + "        " + nombreBigBore + " AS `Nombre BIG BORE`, "
                         + "        SUBSTRING(" + loteTresVias + ", 1, 4) AS `SISTEMA DE 3 VIAS PN`, "
                         + "        " + loteTresVias + " AS `Lote SISTEMA VIAS`, "
                         + "        r.lote_tinta AS `FOIL NEGRO / BLACK FOIL` "
@@ -743,7 +753,9 @@ public class ConnectionRegistrosLAB {
                         + "        c.diferencias_bigbore + "
                         + "        c.diferencias_sistemavias + "
                         + "        c.diferencias_foil "
-                        + "    ) AS total_diferencias "
+                        + "    ) AS total_diferencias, "
+                        + "    (SELECT d2.`Nombre BIG BORE` FROM datos_normalizados d2 WHERE " + nombreBigBoreValido + " "
+                        + "     GROUP BY d2.`Nombre BIG BORE` ORDER BY COUNT(*) DESC LIMIT 1) AS nombre_bigbore "
                         + "FROM datos_normalizados "
                         + "CROSS JOIN conteos c "
                         + "LIMIT 1;";
@@ -763,7 +775,9 @@ public class ConnectionRegistrosLAB {
                             + safeTrim(rs.getString("ENSAMBLE BIG BORE")) + " /// " + safeTrim(rs.getString("Lote BIG BORE")) + " /// "
                             + safeTrim(rs.getString("SISTEMA DE 3 VIAS PN")) + " /// " + safeTrim(rs.getString("Lote SISTEMA VIAS")) + " /// "
                             + safeTrim(rs.getString("FOIL NEGRO / BLACK FOIL")) + " /// "
-                            + safeTrim(rs.getString("total_diferencias")));
+                            + safeTrim(rs.getString("total_diferencias")) + " /// "
+                            // [18] nombre del 1.7 (al final para no correr los índices anteriores)
+                            + safeTrim(rs.getString("nombre_bigbore")));
                     count++;
                 }
 
