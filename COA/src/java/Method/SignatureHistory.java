@@ -23,6 +23,8 @@ public final class SignatureHistory {
     public static final String EVENTO_REGISTRADO = "REGISTRADO";
     public static final String EVENTO_FINALIZADO = "FINALIZADO";
     public static final String EVENTO_FIRMADO = "FIRMADO";
+    /** Cambio de datos de cabecera del registro (p. ej. cliente/código desde el Visual). */
+    public static final String EVENTO_MODIFICADO = "MODIFICADO";
 
     /** Nombre del aplicativo que queda en el historial ("desde qué aplicativo"). */
     public static final String APLICATIVO = "COA - Certificados de Calidad";

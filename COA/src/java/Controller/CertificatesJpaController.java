@@ -268,6 +268,57 @@ public class CertificatesJpaController implements Serializable {
         }
     }
 
+    /**
+     * Cliente de la cabecera del registro (certificates.customer) de un
+     * certificado existente. Sp_ctf_u_UpdateCertificates solo guarda el HTML,
+     * así que el cliente que se cambia en el Visual (p. ej. en un certificado
+     * duplicado) no llegaba al registro y la lista principal mostraba el
+     * anterior. Devuelve el cliente ANTERIOR si cambió, o null si no hubo
+     * cambio o no se pudo actualizar. Un cliente vacío no reemplaza el
+     * existente.
+     */
+    public String CertificatesUpdateCustomer(int IdC, String Ctm) {
+        // Se comparan sin espacios repetidos: el cliente de Factory viene como
+        // "S.A.S.   CUCUTA" y el del HTML puede traer saltos de línea; solo
+        // es un cambio si difiere el texto, no los espacios.
+        String cliente = Ctm == null ? "" : Ctm.replaceAll("\\s+", " ").trim();
+        if (cliente.isEmpty()) {
+            return null;
+        }
+        EntityManager em = getEntityManager();
+        try {
+            String clienteAnterior;
+            try {
+                List filas = em.createNativeQuery("SELECT customer FROM certificates WHERE id_certificate = ?")
+                        .setParameter(1, IdC).getResultList();
+                if (filas == null || filas.isEmpty()) {
+                    return null;
+                }
+                clienteAnterior = filas.get(0) == null ? "" : filas.get(0).toString().trim();
+            } catch (Exception e) {
+                return null;
+            }
+            if (cliente.equalsIgnoreCase(clienteAnterior.replaceAll("\\s+", " "))) {
+                return null;
+            }
+            em.getTransaction().begin();
+            Query q = em.createNativeQuery("CALL `Sp_ctf_u_UpdateCertificateCustomer`(?, ?)");
+            q.setParameter(1, IdC);
+            q.setParameter(2, cliente);
+            q.executeUpdate();
+            em.getTransaction().commit();
+            return clienteAnterior;
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            return null;
+        } finally {
+            em.clear();
+            em.close();
+        }
+    }
+
     public boolean CertificatesUpdateSignature(int IdC, String Asg) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();

@@ -40,7 +40,8 @@
     var ICONOS = {
         REGISTRADO: {icono: 'fas fa-file-alt', texto: 'Registrado'},
         FINALIZADO: {icono: 'fas fa-paper-plane', texto: 'Finalizado'},
-        FIRMADO: {icono: 'fas fa-signature', texto: 'Firmado'}
+        FIRMADO: {icono: 'fas fa-signature', texto: 'Firmado'},
+        MODIFICADO: {icono: 'fas fa-user-edit', texto: 'Modificado'}
     };
 
     function esc(v) {

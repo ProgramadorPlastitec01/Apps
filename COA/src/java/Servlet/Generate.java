@@ -232,6 +232,9 @@ public class Generate extends HttpServlet {
                     if (IdCertificates > 0) {
                         //<editor-fold defaultstate="collapsed" desc="UPDATE">
                         result = CertificatesJpa.CertificatesUpdate(IdCertificates, Consecutive, Amount, DateDispatch, MaterialBatches, Html, IdUsuario);
+                        if (result) {
+                            actualizarCabeceraCliente(request, CertificatesJpa, IdCertificates);
+                        }
                         request.setAttribute("UpdateCertificate", result);
                         request.getRequestDispatcher("Generate?opt=2&Type=" + Type + "&IdCertificates=" + IdCertificates)
                                 .forward(request, response);
@@ -727,6 +730,38 @@ public class Generate extends HttpServlet {
         registrarHistorialCertificado(request, ObjCerti, IdCertificates, SignatureHistory.EVENTO_FIRMADO,
                 masivo ? "Certificado firmado (firma masiva)." : "Certificado firmado.");
         return true;
+    }
+
+    /**
+     * Al guardar un certificado existente (incluido un duplicado), lleva el
+     * cliente del HTML (clientValue, el que escoge el usuario en el Visual) a
+     * la cabecera del registro (certificates.customer). Antes solo se
+     * guardaba el HTML y la lista principal seguía mostrando el cliente
+     * anterior. Si cambia, queda en el historial del certificado con el valor
+     * anterior y el nuevo.
+     */
+    private void actualizarCabeceraCliente(HttpServletRequest request, CertificatesJpaController CertificatesJpa,
+            int IdCertificates) {
+        String cliente = textoCabecera(request.getParameter("clientValue"));
+        if (cliente.isEmpty()) {
+            return;
+        }
+        String anterior = CertificatesJpa.CertificatesUpdateCustomer(IdCertificates, cliente);
+        if (anterior == null) {
+            return;
+        }
+        List lstCerti = CertificatesJpa.ConsultCertificatesId("", IdCertificates);
+        if (lstCerti != null && !lstCerti.isEmpty()) {
+            registrarHistorialCertificado(request, (Object[]) lstCerti.get(0), IdCertificates,
+                    SignatureHistory.EVENTO_MODIFICADO,
+                    "Cliente actualizado: " + (anterior.isEmpty() ? "(vacío)" : anterior) + " → " + cliente + ".");
+        }
+    }
+
+    /** Cliente tal como viene del Visual; el marcador de pendiente ("----") cuenta como vacío. */
+    private static String textoCabecera(String valor) {
+        String texto = valor == null ? "" : valor.replace(' ', ' ').replaceAll("\\s+", " ").trim();
+        return texto.matches("-*") ? "" : texto;
     }
 
     /** Evento del historial de firmas para un certificado, con los datos de lote leídos de BD (Sp_ctf_c_ConsultCertificatesId). */
