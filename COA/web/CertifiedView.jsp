@@ -31,7 +31,7 @@
         <title><%= Code%></title>
         <link rel="stylesheet" href="Interface/Content/Assets/modules/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="Interface/Content/Assets/modules/fontawesome/css/all.min.css">
-        <link rel="stylesheet" href="Interface/Content/Assets/css/main.css">
+        <link rel="stylesheet" href="Interface/Content/Assets/css/main.css?v=20261120">
         <link rel="icon" type="image/png" href="Interface/Imagen/LogoSWhite.png">
         <script type="text/javascript">
             history.pushState(null, null, 'Certificado.jsp');
@@ -94,7 +94,7 @@
                 out.print("<div class='alert alert-danger'>Error al cargar los datos del certificado.</div>");
             }
         %>
-        <script src="Interface/Content/Assets/js/Print.js"></script>
+        <script src="Interface/Content/Assets/js/Print.js?v=20261120"></script>
         <script src="Interface/Content/Assets/js/html2canvas.min.js"></script>
         <script src="Interface/Content/Assets/js/jspdf.umd.min.js"></script>
     </body>

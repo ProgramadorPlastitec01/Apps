@@ -15,7 +15,7 @@
         <title>JSP Page</title>
         <link rel="stylesheet" href="Interface/Content/Assets/modules/izitoast/css/iziToast.min.css">
         <link rel="icon" type="image/png" href="Interface/Imagen/LogoSWhite.png">
-        <link rel="stylesheet" href="Interface/Content/Assets/css/main.css">
+        <link rel="stylesheet" href="Interface/Content/Assets/css/main.css?v=20261120">
         <!--        <script type="text/javascript">
                     history.pushState(null, null, 'Visual.jsp');
                     window.addEventListener('popstate', function (event) {
@@ -1872,7 +1872,7 @@
 
         </script> 
         <script src="Interface/Content/Assets/js/eventLogger.js"></script>
-        <script src="Interface/Content/Assets/js/Print.js"></script>
+        <script src="Interface/Content/Assets/js/Print.js?v=20261120"></script>
         <script src="Interface/Content/Assets/js/html2canvas.min.js"></script>
         <script src="Interface/Content/Assets/js/jspdf.umd.min.js"></script>
         <script src="Interface/Content/Assets/modules/izitoast/js/iziToast.min.js"></script>

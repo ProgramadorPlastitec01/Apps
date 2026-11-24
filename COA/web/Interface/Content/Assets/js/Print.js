@@ -167,6 +167,45 @@ function PrintHtml() {
 
 
 /* =====================================================
+ 📐 ANCHO DE CAPTURA PARA LA HOJA CARTA
+ ===================================================== */
+// Ancho mínimo (px) al que se puede angostar el certificado: por debajo las
+// columnas de las tablas empiezan a partir palabras.
+const PDF_ANCHO_MINIMO = 760;
+
+// Deja `el` con el ancho más angosto (letra más grande en el PDF) con el que
+// todavía cabe en una sola hoja: alto/ancho <= proporcionMax. Si ni siquiera
+// con el ancho actual cabe, no lo toca (se sigue reduciendo como antes).
+function ajustarAnchoParaCarta(el, proporcionMax) {
+    const anchoOriginal = el.style.width;
+    const anchoActual = Math.floor(el.getBoundingClientRect().width);
+    const cabe = (w) => {
+        el.style.width = w + 'px';
+        return el.scrollWidth <= w + 1 && el.offsetHeight / w <= proporcionMax;
+    };
+
+    if (anchoActual <= PDF_ANCHO_MINIMO || !cabe(anchoActual)) {
+        el.style.width = anchoOriginal;
+        return;
+    }
+    if (cabe(PDF_ANCHO_MINIMO)) {
+        return;
+    }
+    let lo = PDF_ANCHO_MINIMO; // no cabe
+    let hi = anchoActual;      // cabe
+    while (hi - lo > 8) {
+        const mid = Math.floor((lo + hi) / 2);
+        if (cabe(mid)) {
+            hi = mid;
+        } else {
+            lo = mid;
+        }
+    }
+    el.style.width = hi + 'px';
+}
+
+
+/* =====================================================
  📄 PDF CARTA PERFECTO (RECOMENDADO)
  ===================================================== */
 async function descargarPDFCarta() {
@@ -187,75 +226,70 @@ async function descargarPDFCarta() {
     if (canvasFirma && imgFirma)
         canvasFirma.replaceWith(imgFirma);
 
+    // 📄 Carta real (pt)
+    const pageWidth = 612;
+    const pageHeight = 792;
+    const margin = 5;
+    const usableWidth = pageWidth - margin * 2;
+    const usableHeight = pageHeight - margin * 2;
+
     // 🔹 Modo limpio PDF
     contenido.classList.add('pdf-mode');
 
-    const canvas = await html2canvas(contenido, {
-        scale: 3,
-        useCORS: true,
-        backgroundColor: '#FFFFFF',
-        removeContainer: true,
-        imageTimeout: 0,
-        logging: false,
-        onclone: (doc) => {
-            const root = doc.getElementById('Imprimir');
-            if (root)
-                root.classList.add('pdf-mode');
+    // 🔹 Letra más grande sin salirse de la hoja: la captura se reduce al ancho
+    // de la carta, así que entre más ancho esté el certificado en pantalla más
+    // pequeña sale la letra. Se angosta temporalmente al ancho mínimo con el que
+    // el contenido todavía cabe en UNA hoja (alto/ancho <= proporción útil de
+    // la carta) y se restaura al terminar.
+    const anchoOriginal = contenido.style.width;
+    ajustarAnchoParaCarta(contenido, usableHeight / usableWidth);
 
-            // 🔥 FIX VISUAL ROWSPAN
-            doc.querySelectorAll('td[rowspan], th[rowspan]').forEach(cell => {
-                cell.style.position = 'relative';
-                cell.style.zIndex = '1';
-                cell.style.backgroundClip = 'padding-box';
-            });
+    let canvas;
+    try {
+        canvas = await html2canvas(contenido, {
+            scale: 3,
+            useCORS: true,
+            backgroundColor: '#FFFFFF',
+            removeContainer: true,
+            imageTimeout: 0,
+            logging: false,
+            onclone: (doc) => {
+                const root = doc.getElementById('Imprimir');
+                if (root)
+                    root.classList.add('pdf-mode');
 
-            // 🔥 Forzar que la tabla se recalcule completa
-            doc.querySelectorAll('table').forEach(table => {
-                table.style.borderCollapse = 'collapse';
-                table.style.borderSpacing = '0';
-                table.style.tableLayout = 'fixed';
+                // 🔥 FIX VISUAL ROWSPAN
+                doc.querySelectorAll('td[rowspan], th[rowspan]').forEach(cell => {
+                    cell.style.position = 'relative';
+                    cell.style.zIndex = '1';
+                    cell.style.backgroundClip = 'padding-box';
+                });
 
-                // Truco: reflow real
-                table.style.display = 'none';
-                table.offsetHeight;
-                table.style.display = 'table';
-            });
+                // 🔥 Forzar que la tabla se recalcule completa
+                doc.querySelectorAll('table').forEach(table => {
+                    table.style.borderCollapse = 'collapse';
+                    table.style.borderSpacing = '0';
+                    table.style.tableLayout = 'fixed';
 
-            document.querySelectorAll('table').forEach(table => {
-                const colgroup = document.createElement('colgroup');
-
-                const col1 = document.createElement('col');
-                col1.className = 'col-num';
-
-                const col2 = document.createElement('col');
-                col2.className = 'col-text';
-
-                colgroup.appendChild(col1);
-                colgroup.appendChild(col2);
-
-                table.insertBefore(colgroup, table.firstChild);
-            });
-
-        }
-    });
-
-    contenido.classList.remove('pdf-mode');
+                    // Truco: reflow real
+                    table.style.display = 'none';
+                    table.offsetHeight;
+                    table.style.display = 'table';
+                });
+            }
+        });
+    } finally {
+        contenido.classList.remove('pdf-mode');
+        contenido.style.width = anchoOriginal;
+    }
 
     const imgData = canvas.toDataURL('image/jpeg', 1.0);
 
-    // 📄 Carta real
     const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'pt',
         format: 'letter'
     });
-
-    const pageWidth = 612;
-    const pageHeight = 792;
-    const margin = 5; // 0.5 inch
-
-    const usableWidth = pageWidth - margin * 2;
-    const usableHeight = pageHeight - margin * 2;
 
     const ratio = Math.min(
             usableWidth / canvas.width,

@@ -3391,11 +3391,14 @@ thead.sticky-top {
     border-collapse: collapse !important;
 }
 
+/* Letra más grande y filas más ajustadas: el PDF se ajusta para llenar una
+   hoja carta, así que entre menos alto ocupe cada fila respecto a su letra,
+   más grande sale el texto impreso. */
 .pdf-mode th,
 .pdf-mode td {
-    padding: 3px 5px !important;
-    font-size: 12px !important;
-    line-height: 1.2 !important;
+    padding: 1px 4px !important;
+    font-size: 14px !important;
+    line-height: 1.15 !important;
 }
 
 /* 🔹 Bordes más finos para PDF */
@@ -3405,7 +3408,23 @@ thead.sticky-top {
     border: 0.5px solid #dee2e6 !important;
 }
 
- /*🔹 Firma limpia*/ 
+ /*🔹 Campos vacíos: en pantalla se resaltan en rojo para llenarlos, pero en
+     el certificado impreso no (se ven como texto normal "----"). */
+.pdf-mode .editable.pending,
+.pdf-mode .field-pending {
+    background-color: transparent !important;
+    border: none !important;
+}
+
+ /*🔹 Recuadros de fecha (fabricación/esterilización y vencimiento): con el
+     ancho más angosto del PDF, "FECHA DE ESTERILIZACION /" partía la "/" en
+     otra línea y el recuadro quedaba más alto que el de vencimiento. */
+.pdf-mode .rounded.p-1 > p {
+    white-space: nowrap;
+    font-size: 0.9em;
+}
+
+ /*🔹 Firma limpia*/
 .pdf-mode .firma-img {
     border: none !important;
     background: transparent !important;
