@@ -187,7 +187,7 @@
                     document.getElementById("Id_orden").value = Id_orden;
                     document.getElementById("Id_equipo").value = Id_equipo;
                 }
-                function DesactivarTipo(id_equipo) {
+                function DesactivarTipo(id_origen, id_tipo_mtto) {
                     swal({
                         title: "Inactivar Equipo",
                         text: "Seguro que desea desactivar el Equipo...!",
@@ -199,10 +199,10 @@
                         closeOnConfirm: false
                     },
                             function () {
-                                location.href = 'Equipo?opc=3&Id_equipo=' + id_equipo + '&Estado=0';
+                                location.href = 'Orden?opc=18&id=' + id_origen + '&Estado=0&Id_tipo_mtto=' + id_tipo_mtto;
                             });
                 }
-                function ActivarTipo(id_equipo) {
+                function ActivarTipo(id_origen, id_tipo_mtto) {
                     swal({
                         title: "Activar Equipo",
                         text: "Seguro que desea activar el Equipo...!",
@@ -214,7 +214,7 @@
                         closeOnConfirm: false
                     },
                             function () {
-                                location.href = 'Equipo?opc=3&Id_equipo=' + id_equipo + '&Estado=1';
+                                location.href = 'Orden?opc=18&id=' + id_origen + '&Estado=1&Id_tipo_mtto=' + id_tipo_mtto;
                             });
                 }
                 
