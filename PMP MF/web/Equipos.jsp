@@ -163,7 +163,7 @@
                         <h5 class="modal-title" id="InactivarEquipoLabel">Inactivar Equipo</h5>
                     </div>
                     <div class="modal-body">
-                        <p>Indique el motivo de la inactivaci&oacute;n. Se registrar&aacute; como nota del equipo con la fecha, hora y responsable.</p>
+                        <p>Indique el motivo de la inactivaci&oacute;n. Se registrar&aacute; como nota del equipo con la fecha y el responsable.</p>
                         <form action="Equipo?opc=3" method="post" id="FormInactivarEquipo">
                             <input type="hidden" name="Id_equipo" id="Id_equipo_inactivacion" value="0" />
                             <input type="hidden" name="Estado" value="0" />
