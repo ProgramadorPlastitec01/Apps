@@ -220,13 +220,24 @@ public class ConnectionSQLServer {
                     + "FROM ExternalTag e "
                     + "INNER JOIN OrderLine o ON e.OrderLineId = o.OrderLineId "
                     + "INNER JOIN [dbo].[Order] od ON o.OrderNumber = od.OrderNumber "
-                    + "WHERE o.OrderNumber = ? AND o.ProductCode = ? AND e.Batch = ? "
-                    + "ORDER BY e.BoxNumber ASC";
+                    // El producto se busca igual que en Factory (Products: p.COD LIKE
+                    // '%producto%'): Registros LAB a veces guarda el código corto
+                    // ("8301") y Tags el completo ("3C01008301"); con igualdad exacta
+                    // Tags no encontraba nada (fechas, código y orden del cliente
+                    // quedaban pendientes). Si hay coincidencia exacta, se prefiere.
+                    + "WHERE o.OrderNumber = ? AND e.Batch = ? "
+                    + "  AND (o.ProductCode = ? OR o.ProductCode LIKE ?) "
+                    + "ORDER BY CASE WHEN o.ProductCode = ? THEN 0 ELSE 1 END, e.BoxNumber ASC";
 
+            String producto = Producto == null ? "" : Producto.trim();
+            String patronProducto = producto.isEmpty() ? producto
+                    : "%" + producto.replace("[", "[[]").replace("%", "[%]").replace("_", "[_]") + "%";
             sttm = con.prepareStatement(query);
             sttm.setInt(1, Orden);
-            sttm.setString(2, Producto);
-            sttm.setString(3, Lote);
+            sttm.setString(2, Lote);
+            sttm.setString(3, producto);
+            sttm.setString(4, patronProducto);
+            sttm.setString(5, producto);
             rs = sttm.executeQuery();
 
             List<String> lst_resultado = new ArrayList<>();
