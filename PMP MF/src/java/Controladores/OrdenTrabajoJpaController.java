@@ -198,6 +198,43 @@ public class OrdenTrabajoJpaController {
         }
     }
 
+    /**
+     * OT del mes en curso donde el usuario figura como ejecutor, verificador o
+     * aprobador. Columnas: 0 id, 1 numero, 2 id_tipo_mtto, 3 tipo, 4 origen,
+     * 5 estado, 6 estado_nombre, 7 fecha_programacion, 8 rol(es) del usuario.
+     * Consulta directa (no requiere procedimiento almacenado nuevo).
+     */
+    public List Ordenes_usuario_mes(String usuario) {
+        EntityManager etm = getEntityManager();
+        try {
+            Query q = etm.createNativeQuery(
+                    "SELECT o.id_orden_trabajo, o.numero, o.id_tipo_mtto, t.nombre AS tipo_mtto, "
+                    + "CASE WHEN o.id_tipo_mtto IN (1,2,5) THEN (SELECT e.nombre FROM equipo e WHERE e.id_equipo = o.id_origen) "
+                    + "WHEN o.id_tipo_mtto = 3 THEN (SELECT z.zona FROM zona z WHERE z.id_zona = o.id_origen) "
+                    + "ELSE (SELECT g.actividad FROM general g WHERE g.id_general = o.id_origen) END AS origen, "
+                    + "o.estado, "
+                    + "CASE o.estado WHEN 1 THEN 'Programado' WHEN 2 THEN 'Emitido' WHEN 3 THEN 'Ejecutado' "
+                    + "WHEN 4 THEN 'Verificado' WHEN 5 THEN 'Recibido' ELSE 'Cerrado' END AS estado_nombre, "
+                    + "o.fecha_programacion, "
+                    + "CONCAT_WS(', ', IF(o.usuario_ejecucion = ?1, 'Ejecuta', NULL), "
+                    + "IF(o.usuario_verificacion = ?1, 'Verifica', NULL), "
+                    + "IF(o.usuario_aprobador = ?1, 'Aprueba', NULL)) AS rol_usuario "
+                    + "FROM orden_trabajo o INNER JOIN tipo_mtto t ON o.id_tipo_mtto = t.id_tipo_mtto "
+                    + "WHERE o.justificacion IS NULL "
+                    + "AND (o.usuario_ejecucion = ?1 OR o.usuario_verificacion = ?1 OR o.usuario_aprobador = ?1) "
+                    + "AND MONTH(o.fecha_programacion) = MONTH(CURDATE()) "
+                    + "AND YEAR(o.fecha_programacion) = YEAR(CURDATE()) "
+                    + "ORDER BY IF(o.usuario_ejecucion = ?1, 0, 1) ASC, o.fecha_programacion ASC, o.numero ASC");
+            q.setParameter(1, usuario);
+            List consulta = q.getResultList();
+            etm.clear();
+            etm.close();
+            return consulta.isEmpty() ? null : consulta;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
     public List Kpi_usuario_mes(String usuario) {
         EntityManager etm = getEntityManager();
         etm.getTransaction().begin();

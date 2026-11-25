@@ -141,6 +141,54 @@ public class Tag_inicio extends TagSupport {
             out.print("</div>");
             //</editor-fold>
 
+            //<editor-fold defaultstate="collapsed" desc="MIS OT DEL MES">
+            List lst_mes = jpacotb.Ordenes_usuario_mes(usuario);
+            out.print("<div class=\"card shadow mb-4\">");
+            out.print("<div class=\"card-header py-3\">");
+            out.print("<h6 class=\"m-0 font-weight-bold text-primary\">Mis OT del mes" + ((lst_mes != null) ? " (" + lst_mes.size() + ")" : "") + "</h6>");
+            out.print("</div>");
+            out.print("<div class=\"card-body\">");
+            out.print("<p class=\"small text-muted\"><span style='display:inline-block;width:12px;height:12px;background-color:#dbe9fb;border:1px solid #b6cff0;vertical-align:middle;margin-right:4px;'></span><b>Asignadas a mí (Ejecuta)</b>: son las que cuentan las tarjetas <b>Asignadas</b> y <b>Ejecutadas</b>. Más abajo, sin color, están las OT donde solo <b>Verificas</b> o <b>Apruebas</b>.</p>");
+            if (lst_mes != null) {
+                out.print("<div class=\"table-responsive\">");
+                out.print("<table class=\"table2 table-bordered\" width=\"100%\" cellspacing=\"0\">");
+                out.print("<thead>");
+                out.print("<tr>");
+                out.print("<th style='width:5px'>No. OT</th>");
+                out.print("<th>Tipo Mtto</th>");
+                out.print("<th>Origen</th>");
+                out.print("<th>Fecha Programación</th>");
+                out.print("<th>Estado</th>");
+                out.print("<th>Mi participación</th>");
+                out.print("<th style='width:5px'>Ver</th>");
+                out.print("</tr>");
+                out.print("</thead>");
+                out.print("<tbody>");
+                for (int i = 0; i < lst_mes.size(); i++) {
+                    Object[] obj_mes = (Object[]) lst_mes.get(i);
+                    int estado_mes = Integer.parseInt(obj_mes[5].toString());
+                    String rol_mes = String.valueOf(obj_mes[8]);
+                    String fondo = rol_mes.contains("Ejecuta") ? " style='background-color:#dbe9fb;'" : "";
+                    out.print("<tr>");
+                    out.print("<td align='center'" + fondo + ">" + obj_mes[1] + "</td>");
+                    out.print("<td" + fondo + ">" + obj_mes[3] + "</td>");
+                    out.print("<td" + fondo + ">" + obj_mes[4] + "</td>");
+                    out.print("<td" + fondo + ">" + obj_mes[7].toString().substring(0, 10) + "</td>");
+                    out.print("<td" + fondo + ">" + obj_mes[6] + "</td>");
+                    out.print("<td" + (rol_mes.contains("Ejecuta") ? " style='background-color:#dbe9fb;font-weight:bold;'" : "") + ">" + rol_mes + "</td>");
+                    out.print("<td align='center'" + fondo + "><span onclick=\"location.href='" + Url_ot(obj_mes[0], obj_mes[2], estado_mes > 1) + "'\" class='far fa-file-alt fa-size_small' title='Ver OT'></span></td>");
+                    out.print("</tr>");
+                }
+                out.print("</tbody>");
+                out.print("</table>");
+                out.print("</div>");
+            } else {
+                out.print("<p class=\"text-center mb-0\">No tienes OT programadas este mes.</p>");
+            }
+            out.print("</div>");
+            out.print("</div>");
+            //</editor-fold>
+
             //<editor-fold defaultstate="collapsed" desc="SEGUIMIENTO GERENCIAL (JEFE_MTTO / ASISTENTE)">
             if (rol.equals("Jefe_Mtto") || rol.equals("Asistente")) {
                 //<editor-fold defaultstate="collapsed" desc="Trazabilidad general de ordenes pendientes">
