@@ -10,6 +10,13 @@
 <project name="PMP_MF" default="default" basedir=".">
     <description>Builds, tests, and runs the project PMP_MF.</description>
     <import file="nbproject/build-impl.xml"/>
+
+    <!-- jTDS: lo usa Connection_factory (consulta de productos al ERP). nbproject/build-impl.xml
+         no lo copia a WEB-INF/lib, asi que se incluye aqui antes de armar el .war. -->
+    <target name="-pre-dist">
+        <mkdir dir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="Librerias/jtds-1.3.1.jar" todir="${build.web.dir}/WEB-INF/lib"/>
+    </target>
     <!--
 
     There exist several targets which are by default empty and which can be 
