@@ -30,7 +30,8 @@
                                                         <input type="password" class="form-control_index form-control-user" id="exampleInputPassword" name="Txt_password" placeholder="Password">
                                                     </div>
                                                     <a onclick="javascript:document.getElementById('FormLogin').submit();" class="btn btn-primary btn-user btn-block"><b style="color:white">LOGIN</b></a>
-                                                    <br/><center><b>VA 13.06.08</b></center>
+                                                    <br/><center><b>VA 17.08.13</b></center>
+                                                    <!--<br/><center><b>VA 13.06.08</b></center>-->
                                                     <!--<br/><center><b>VA 09.05.04</b></center>-->
                                                     <!--<br/><center><b>VA 07.04.01</b></center>-->
                                                     <hr />
