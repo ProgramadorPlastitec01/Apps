@@ -7,6 +7,8 @@ import java.sql.Statement;
 //el resto
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Connection_factory {
 
@@ -27,6 +29,9 @@ public class Connection_factory {
             con.close();
             return lst_productos;
         } catch (Exception ex) {
+            // Queda en el log de Tomcat (catalina) para diagnosticar fallos de conexion al ERP
+            Logger.getLogger(Connection_factory.class.getName()).log(Level.SEVERE,
+                    "No se pudo consultar el producto '" + cdg + "' en el ERP (172.16.2.116): " + ex, ex);
             return null;
         }
     }

@@ -109,11 +109,17 @@ public class Reto extends HttpServlet {
                     Reto = request.getParameter("Cbx_reto");
                     Estado = Integer.parseInt(request.getParameter("Estado"));
                     Observacion = request.getParameter("Txt_observacion");
-                    if (Lote == null && Lote.equals("") && Lote.length() < 4) {
+                    if (Lote == null || Lote.equals("")) {
                         Producto = "N/A";
                     } else {
                         String[] CodigoPdt = Lote.split("-");
                         lst_producto = ConnFact.Productos(CodigoPdt[0]);
+                        if (lst_producto == null) {
+                            //El ERP no respondio: no se registra, porque el producto no se puede corregir despues
+                            request.setAttribute("Alerta", "Error_erp");
+                            request.getRequestDispatcher("Reto?opc=1&Modulo=" + Modulo + "&FechaReto=" + FechaReto + "&Tipo=" + Tipo + "&Validacion=" + request.getParameter("Validacion")).forward(request, response);
+                            break;
+                        }
                         if (lst_producto.size() > 0) {
                             String DataProducto = lst_producto.get(0).toString().replace("[", "").replace("]", "").replace("0,", "0.").replace(",", ".");
                             Producto = DataProducto.split("/")[1];
@@ -216,11 +222,17 @@ public class Reto extends HttpServlet {
                     Reto = request.getParameter("Cbx_reto");
                     Estado = Integer.parseInt(request.getParameter("Estado"));
                     Observacion = request.getParameter("Txt_observacion");
-                    if (Lote == null && Lote.equals("") && Lote.length() < 4) {
+                    if (Lote == null || Lote.equals("")) {
                         Producto = "N/A";
                     } else {
                         String[] CodigoPdt = Lote.split("-");
                         lst_producto = ConnFact.Productos(CodigoPdt[0]);
+                        if (lst_producto == null) {
+                            //El ERP no respondio: no se registra, porque el producto no se puede corregir despues
+                            request.setAttribute("Alerta", "Error_erp");
+                            request.getRequestDispatcher("Reto?opc=1&Modulo=" + Modulo + "&FechaReto=" + FechaReto + "&Tipo=" + Tipo + "&IdRetoDetalle=" + IdRetoDetalle).forward(request, response);
+                            break;
+                        }
                         if (lst_producto.size() > 0) {
                             String DataProducto = lst_producto.get(0).toString().replace("[", "").replace("]", "").replace("0,", "0.").replace(",", ".");
                             Producto = DataProducto.split("/")[1];
@@ -394,11 +406,17 @@ public class Reto extends HttpServlet {
                     Maquina = Integer.parseInt(request.getParameter("Cbx_maquina"));
                     Lote = request.getParameter("Txt_lote");
                     Cantidad = Integer.parseInt(request.getParameter("Cantidad"));
-                    if (Lote == null && Lote.equals("") && Lote.length() < 4) {
+                    if (Lote == null || Lote.equals("")) {
                         Producto = "N/A";
                     } else {
                         String[] CodigoPdt = Lote.split("-");
                         lst_producto = ConnFact.Productos(CodigoPdt[0]);
+                        if (lst_producto == null) {
+                            //El ERP no respondio: no se registra, porque el producto no se puede corregir despues
+                            request.setAttribute("Alerta", "Error_erp");
+                            request.getRequestDispatcher("Reto?opc=1&Modulo=" + Modulo + "&FechaReto=" + FechaReto + "&Tipo=" + Tipo + "&Validacion=" + Validacion).forward(request, response);
+                            break;
+                        }
                         if (lst_producto.size() > 0) {
                             String DataProducto = lst_producto.get(0).toString().replace("[", "").replace("]", "").replace("0,", "0.").replace(",", ".");
                             Producto = DataProducto.split("/")[1];
@@ -501,6 +519,9 @@ public class Reto extends HttpServlet {
                     break;
             }
         } catch (Exception ex) {
+            // Queda en el log de Tomcat: cualquier excepcion se muestra al usuario como "Sesion"
+            java.util.logging.Logger.getLogger(Reto.class.getName()).log(java.util.logging.Level.SEVERE,
+                    "Error en Reto?opc=" + request.getParameter("opc") + ": " + ex, ex);
             request.setAttribute("Alerta", "Error_sesion");
             request.getRequestDispatcher("Reto.jsp").forward(request, response);
         }

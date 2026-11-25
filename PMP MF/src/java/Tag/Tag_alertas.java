@@ -496,6 +496,11 @@ public class Tag_alertas extends TagSupport {
                     out.print("swal('Correcto','Se registro correctamente el reto del día','success');");
                     out.print("</script>");
                 }
+                if (pageContext.getRequest().getAttribute("Alerta").toString().equals("Error_erp")) {
+                    out.print("<script language='javascript' type='text/javascript'>");
+                    out.print("swal('Sin conexion al ERP','No se pudo consultar el producto en el servidor del ERP. El registro NO se guardo. Intente nuevamente o informe a T.I.','error');");
+                    out.print("</script>");
+                }
                 if (pageContext.getRequest().getAttribute("Alerta").toString().equals("Fallo_reto")) {
                     out.print("<script language='javascript' type='text/javascript'>");
                     out.print("swal('Fallo','Intente nuevamente o informe a T.I','error');");
