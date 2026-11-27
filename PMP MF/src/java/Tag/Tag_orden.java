@@ -1268,10 +1268,13 @@ public class Tag_orden extends TagSupport {
                         // Permisos ligados al rol y al usuario asignado a la OT
                         boolean es_asignado_ot = es_ejecutor_asignado || es_verificador_asignado || es_aprobador_asignado;
                         boolean puede_ejecutar = estado_ot <= 2 && (nombre_rol.equals("Administrador") || nombre_rol.equals("Tecnico")) && es_ejecutor_asignado;
+                        // El tecnico solo ejecuta (Emitido -> Ejecutado); en Recibido solo registra firmas, no avanza
                         boolean puede_avanzar_tecnico = (nombre_rol.equals("Administrador") || nombre_rol.equals("Tecnico")) && es_ejecutor_asignado
-                                && (estado_ot == 2 || (id_tipo_mtto == 1 && (estado_ot == 3 || estado_ot == 4)));
+                                && estado_ot == 2;
+                        // El coordinador verifica (3 -> 4), recibe (4 -> 5) y cierra (5 -> 6) cuando es el revisor o el aprobador asignado
                         boolean puede_avanzar_gestion = estado_ot >= 3 && (nombre_rol.equals("Administrador")
                                 || (nombre_rol.equals("Coordinador") && estado_ot == 3 && es_verificador_asignado)
+                                || (nombre_rol.equals("Coordinador") && (estado_ot == 4 || estado_ot == 5) && (es_verificador_asignado || es_aprobador_asignado))
                                 || ((nombre_rol.equals("Asistente") || nombre_rol.equals("Jefe_Mtto")) && estado_ot >= 4 && puede_aprobar_recibido));
                         boolean puede_avanzar = puede_avanzar_tecnico || puede_avanzar_gestion;
                         boolean puede_devolver = !nombre_rol.equals("Tecnico") && !nombre_rol.equals("Consulta")
@@ -1954,25 +1957,8 @@ public class Tag_orden extends TagSupport {
                         out.print("</div>");
                         out.print("<div class=\"modal-footer\">");
                         out.print("<button class=\"btn btn-secondary\" type=\"button\" data-dismiss=\"modal\">Cancelar</button>");
-                        if ((nombre_rol.equals("Administrador") || nombre_rol.equals("Tecnico")) && es_ejecutor_asignado) {
-                            if (estado_ot == 2) {
-                                out.print("<a class=\"btn btn-primary\" href='#' onclick=\"javascript:document.getElementById('Btn_ot_estado').click();\">Avanzar</a>");
-                            } else if (estado_ot == 3) {
-                                if (id_tipo_mtto == 1) {
-                                    out.print("<a class=\"btn btn-primary\" href='#' onclick=\"javascript:document.getElementById('Btn_ot_estado').click();\">Avanzar</a>");
-                                }
-                            } else if (estado_ot == 4) {
-                                if (id_tipo_mtto == 1) {
-                                    out.print("<a class=\"btn btn-primary\" href='#' onclick=\"javascript:document.getElementById('Btn_ot_estado').click();\">Avanzar</a>");
-                                }
-                            }
-                        }
-                        if (estado_ot >= 3) {
-                            if (nombre_rol.equals("Administrador")
-                                    || (nombre_rol.equals("Coordinador") && estado_ot == 3 && es_verificador_asignado)
-                                    || ((nombre_rol.equals("Asistente") || nombre_rol.equals("Jefe_Mtto")) && estado_ot >= 4 && puede_aprobar_recibido)) {
-                                out.print("<a class=\"btn btn-primary\" href='#' onclick=\"javascript:document.getElementById('Btn_ot_estado').click();\">Avanzar</a>");
-                            }
+                        if (puede_avanzar_tecnico || puede_avanzar_gestion) {
+                            out.print("<a class=\"btn btn-primary\" href='#' onclick=\"javascript:document.getElementById('Btn_ot_estado').click();\">Avanzar</a>");
                         }
                         out.print("</div>");
                         out.print("</div>");

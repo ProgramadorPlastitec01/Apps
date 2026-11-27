@@ -175,6 +175,10 @@ public class Orden extends HttpServlet {
                         boolean autorizado_cierre = obj_asig5 != null
                                 && (Validar_usuario_accion(nombre_rol, nombre_usuario, Valor(obj_asig5, 37))
                                 || (autoclave_equipo5 && Validar_usuario_accion(nombre_rol, nombre_usuario, Valor(obj_asig5, 6))));
+                        // El coordinador que verifico la OT tambien la cierra
+                        if (!autorizado_cierre && obj_asig5 != null && nombre_rol.equals("Coordinador")) {
+                            autorizado_cierre = Validar_usuario_accion(nombre_rol, nombre_usuario, Valor(obj_asig5, 8));
+                        }
                         if (autorizado_cierre) {
                             jpacotb.Cambiar_estado(id_orden, (estado_ot + 1));
                             mtdccr.Correo_ot(id_orden, "CERRAR OT", rol_usuario);
@@ -186,6 +190,10 @@ public class Orden extends HttpServlet {
                         boolean autoclave_equipo = (id_equipo == 47 || id_equipo == 37 || id_equipo == 48);
                         Object[] obj_asig4 = Obtener_orden_asignacion(jpacotb, id_orden, id_tipo_mtto);
                         boolean autorizado_aprobador = obj_asig4 != null && Validar_usuario_accion(nombre_rol, nombre_usuario, obj_asig4[37] == null ? null : obj_asig4[37].toString());
+                        // El coordinador que verifico la OT tambien la recibe (Verificado -> Recibido)
+                        if (!autorizado_aprobador && obj_asig4 != null && estado_ot == 4 && nombre_rol.equals("Coordinador")) {
+                            autorizado_aprobador = Validar_usuario_accion(nombre_rol, nombre_usuario, Valor(obj_asig4, 8));
+                        }
                         boolean autorizado_tecnico_excepcion = autoclave_equipo && obj_asig4 != null && Validar_usuario_accion(nombre_rol, nombre_usuario, obj_asig4[6] == null ? null : obj_asig4[6].toString());
                         if (autorizado_aprobador || autorizado_tecnico_excepcion) {
                             if (autoclave_equipo) {
